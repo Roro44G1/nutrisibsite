@@ -147,7 +147,90 @@
         </div>
 
     <script>
-        // Scripturile rămân identice
+<script>
+        // Script pentru controlul ferestrei modale
+        const privacyModal = document.getElementById('privacyModal');
+        const openPrivacyLink = document.getElementById('openPrivacyLink');
+        const closeModalButton = document.getElementById('closeModalButton');
+        const closeModalFooterButton = document.getElementById('closeModalFooterButton');
+
+        function openModal() {
+            if (privacyModal) {
+                privacyModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal() {
+            if (privacyModal) {
+                privacyModal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        if (openPrivacyLink) {
+            openPrivacyLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                openModal();
+            });
+        }
+
+        if (closeModalButton) {
+            closeModalButton.addEventListener('click', closeModal);
+        }
+        
+        if (closeModalFooterButton) {
+            closeModalFooterButton.addEventListener('click', closeModal);
+        }
+
+        if (privacyModal) {
+            privacyModal.addEventListener('click', (e) => {
+                if (e.target === privacyModal) {
+                    closeModal();
+                }
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && privacyModal && !privacyModal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+
+         // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey && e.key === 'c') || (e.ctrlKey && e.key === 'u') || e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.shiftKey && e.key === 'J')) {
+                e.preventDefault();
+            }
+        });
+
+         // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
+
+        document.addEventListener('keydown', function(e) {
+            // Blochează Ctrl+C (Copiere)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+            }
+            // Blochează F12 (Developer Tools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+            }
+             // Blochează Ctrl+Shift+J (Developer Tools Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>
