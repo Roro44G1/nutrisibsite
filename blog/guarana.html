@@ -1,1 +1,863 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guarana: O monografie completă</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Se asigură că fontul Inter este încărcat */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
+        /* Definirea variabilelor de culoare pentru a fi ușor de modificat */
+        :root {
+            --dark-blue: #0A2463;
+            --medium-blue: #3E92CC;
+            --text-dark: #212529;
+            --text-light: #475569;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-color: #e0e0e0;
+
+            /* Paletă de culori pastelate, foarte pale */
+            --card-pale-blue: #f0f7ff;   /* Albastru foarte pal */
+            --card-pale-green: #effaf5;  /* Verde foarte pal */
+            --card-pale-yellow: #fffcf2; /* Galben foarte pal */
+            --card-pale-red: #fff5f5;    /* Roșu/Roz foarte pal */
+            --card-pale-grey: #f8f9fa;   /* Gri foarte pal */
+            --card-pale-purple: #f9f5ff; /* Mov foarte pal */
+            --card-pale-cyan: #edfcfc;   /* Cyan foarte pal */
+        }
+
+        /* Stilul general al paginii */
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Containerul principal al articolului */
+       .ztabs-container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            background: var(--bg-white);
+            border-radius: 15px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+       .ztabs-header {
+            background-color: var(--dark-blue);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+       .ztabs-header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            margin: 0;
+            padding: 0;
+            color: white!important;
+            border: none!important;
+        }
+
+        /* Stiluri pentru sistemul de tab-uri */
+       .tab-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #f1f1f1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+       .tab-link {
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--dark-blue);
+            border-bottom: 3px solid transparent;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+       .tab-link:hover {
+            background-color: #ddd;
+        }
+
+       .tab-link.active {
+            background-color: var(--bg-white);
+            color: var(--dark-blue);
+            border-bottom: 3px solid var(--medium-blue);
+        }
+
+       .tab-content {
+            display: none; /* Ascunde tab-urile by default */
+            padding: 30px 40px;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Stiluri pentru card-urile de conținut */
+       .zwp-section-title {
+            font-size: 1.8em;
+            color: var(--dark-blue);
+            margin-bottom: 25px;
+            font-weight: 700;
+            border-bottom: 3px solid var(--medium-blue);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+       .zwp-card-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+       .zwp-topic-card {
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 2rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+       .zwp-topic-card.bg-pale-blue { background-color: var(--card-pale-blue); }
+       .zwp-topic-card.bg-pale-green { background-color: var(--card-pale-green); }
+       .zwp-topic-card.bg-pale-yellow { background-color: var(--card-pale-yellow); }
+       .zwp-topic-card.bg-pale-red { background-color: var(--card-pale-red); }
+       .zwp-topic-card.bg-pale-grey { background-color: var(--card-pale-grey); }
+       .zwp-topic-card.bg-pale-purple { background-color: var(--card-pale-purple); }
+       .zwp-topic-card.bg-pale-cyan { background-color: var(--card-pale-cyan); }
+
+       .zwp-topic-card h3 {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--dark-blue)!important;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--medium-blue);
+            padding-bottom: 0.5rem;
+        }
+
+       .zwp-topic-card h4 {
+            font-size: 1.1em;
+            color: var(--medium-blue)!important;
+            font-weight: 600;
+            margin-top: 1.2rem;
+            margin-bottom: 0.5rem;
+            border: none!important;
+            padding: 0!important;
+        }
+
+       .zwp-topic-card p,.zwp-topic-card ul,.zwp-topic-card ol {
+            font-size: 0.95em;
+            color: var(--text-light);
+            text-align: justify;
+            margin-bottom: 10px;
+        }
+
+       .zwp-topic-card ul,.zwp-topic-card ol {
+            padding-left: 20px;
+        }
+        
+       .zwp-topic-card li {
+            margin-bottom: 5px;
+        }
+
+       .zwp-topic-card strong {
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+
+       .zwp-topic-card table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9em;
+        }
+
+       .zwp-topic-card th,.zwp-topic-card td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #d1d9e6;
+        }
+
+       .zwp-topic-card th {
+            background-color: #e2e8f0;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+
+       .zwp-topic-card tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+       .zwp-topic-card td:first-child {
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+
+       .zwp-references-list {
+            list-style-type: decimal;
+            padding-left: 20px;
+            font-size: 0.85em; /* Dimensiune font redusă */
+            column-count: 2; /* Formatare pe două coloane */
+            column-gap: 40px; /* Spațiu între coloane */
+        }
+
+       .zwp-references-list li {
+            margin-bottom: 1em;
+            word-break: break-word;
+            padding-left: 5px;
+        }
+
+       .ztabs-footer {
+            text-align: center;
+            padding: 25px 20px;
+            font-size: 0.9em;
+            color: #6c757d;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-light);
+        }
+        
+       .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 2rem auto;
+            height: 350px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+           .tab-content {
+                padding: 20px;
+            }
+           .zwp-references-list {
+                column-count: 1;
+            }
+           .tab-link {
+                font-size: 0.8em;
+                padding: 12px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ztabs-container">
+        <header class="ztabs-header">
+            <h1>Guarana: o monografie completă</h1>
+        </header>
+
+        <div class="tab-buttons">
+            <button class="tab-link active" onclick="openTab(event, 'istorie')">Introducere și istorie</button>
+            <button class="tab-link" onclick="openTab(event, 'stiinta')">Profil științific</button>
+            <button class="tab-link" onclick="openTab(event, 'aplicatii')">Aplicații moderne</button>
+            <button class="tab-link" onclick="openTab(event, 'piata')">Piață și siguranță</button>
+            <button class="tab-link" onclick="openTab(event, 'bibliografie')">Bibliografie</button>
+        </div>
+
+        <div id="istorie" class="tab-content" style="display: block;">
+            <h2 class="zwp-section-title">Rădăcini etnobotanice și istorice</h2>
+            <div class="zwp-card-grid">
+                
+                <div class="zwp-topic-card bg-pale-blue">
+                    <h3>Introducere: ochiul pădurii tropicale</h3>
+                    <p>Guarana, cunoscută științific sub numele de <em>Paullinia cupana</em>, este o liană agățătoare originară din inima luxuriantă a bazinului amazonian, o plantă care a țesut o poveste complexă de-a lungul secolelor, împletind mitologia indigenă cu farmacologia modernă și dinamica pieței globale.[1, 2] Importanța sa este triplă și profund interconectată. În primul rând, are o semnificație culturală fundamentală pentru popoarele indigene din Amazon, în special pentru tribul Satere-Mawé, pentru care guarana nu este doar o plantă utilitară, ci piatra de temelie a cosmologiei și identității lor.[3, 4] În al doilea rând, profilul său farmacologic, dominat de o concentrație excepțional de mare de cafeină și un amestec bogat de alți compuși bioactivi, o plasează în centrul cercetărilor științifice pentru efectele sale stimulante, cognitive și terapeutice.[5, 6, 7] În al treilea rând, importanța sa economică este incontestabilă, guarana devenind un ingredient cheie în industria globală a băuturilor energizante, a suplimentelor alimentare și a produselor cosmetice, generând o piață de miliarde de dolari.[8, 9]</p>
+                    <p>Parcursul acestei plante este unul remarcabil, reflectând transformările profunde ale lumii în care a evoluat. Dintr-un remediu ancestral și o plantă sacră, venerată pentru capacitatea sa de a oferi energie, de a alina suferințe și de a susține comunitățile în vremuri de restriște, guarana a fost transmutată într-un produs de masă. A devenit ingredientul definitoriu pentru băutura răcoritoare națională a Braziliei acum aproximativ un secol și, în ultimele decenii, a fost catapultată pe scena mondială ca un simbol al energiei și vitalității în băuturile "sport" și energizante.[1] Această tranziție nu a fost lipsită de tensiuni. Forțele pieței moderne au adesea simplificat și, uneori, distorsionat înțelegerea holistică a plantei, reducând-o la conținutul său de cafeină și promovând-o prin narative de marketing care o prezintă ca un simplu "booster" de energie sau chiar ca un afrodiziac, departe de utilizările sale nuanțate și sacre din cultura de origine.[1] Această monografie își propune să exploreze în profunzime toate aceste fațete, urmărind călătoria guaranei de la miturile fondatoare din adâncurile Amazonului, prin analizele riguroase ale laboratoarelor științifice, până la prezența sa omniprezentă pe rafturile supermarketurilor din întreaga lume, oferind o perspectivă completă și bine documentată asupra "ochiului pădurii tropicale".</p>
+                </div>
+
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Origini și mitologie în inima Amazonului</h3>
+                    <h4>Habitat și domesticire</h4>
+                    <p>Originea geografică a guaranei, <em>Paullinia cupana</em>, este ferm ancorată în bazinul central al Amazonului, mai precis în pădurile tropicale umede interfluviale situate între cursurile inferioare ale râurilor Tapajós și Madeira, în statul brazilian Amazonas.[1] Acest mediu specific, caracterizat de o biodiversitate copleșitoare și condiții climatice stabile, a oferit leagănul perfect pentru evoluția și, ulterior, domesticirea acestei liane unice.</p>
+                    <p>Deși este neclar care grup indigen a fost primul care a domesticit planta, rolul central în istoria sa culturală și agricolă este atribuit în mod covârșitor poporului Satere-Mawé.[1] Această comunitate, care locuiește de-a lungul râului Maués și a afluenților săi, nu doar că a cultivat extensiv guarana de-a lungul secolelor, dar a și integrat-o profund în mitologia, ritualurile și viața de zi cu zi, devenind principalii custodi ai cunoștințelor despre această plantă.[1, 3, 4] Triburile Guarani sunt, de asemenea, menționate ca având o legătură strânsă cu planta, numele "guarana" derivând, cel mai probabil, din limba lor.[4, 7] Practicile lor de selecție și cultivare atentă, desfășurate de-a lungul a nenumărate generații, au vizat obținerea semințelor cu cea mai mare potență, un proces ancestral de ameliorare a plantelor care a precedat cu mult timp agronomia modernă.[3] Unele teorii sugerează că domesticirea a început acum peste 2000 de ani, după sosirea poporului Satere-Mawé în regiunea râurilor Maués și Andirás, în timp ce o altă teorie, propusă de botanistul Adolpho Ducke, postulează că originea cultivării ar fi în zonele superioare ale Rio Negro și Orinoco, de unde a fost adusă ulterior în teritoriul Satere-Mawé.[10]</p>
+                    
+                    <h4>Mitul fondator – ochiul copilului</h4>
+                    <p>Central în cosmologia Satere-Mawé și fundamental pentru înțelegerea relației lor cu guarana este mitul său fondator, o poveste dramatică și plină de simbolism.[3, 9, 11] Legenda, transmisă oral de-a lungul generațiilor, povestește despre un copil divin, un băiat virtuos și iubit de întreaga comunitate, care a fost ucis cu cruzime de Jurupary, un spirit malefic, gelos pe puterile copilului.[9] Îndurerată de pierdere, comunitatea a fost consolată de un zeu mai binevoitor, Tupã, care le-a poruncit să planteze ochii copilului. Ochiul stâng a fost plantat în pădurea sălbatică, dând naștere varietății sălbatice de guarana. Ochiul drept, însă, a fost plantat în mijlocul satului, germinând și devenind varietatea domesticită, cultivată și prețuită de oameni.[11]</p>
+                    <p>Acest mit este susținut și perpetuat de aspectul fizic izbitor al fructului de guarana. Atunci când se coace, capsula roșie, asemănătoare unei pleoape, se desface parțial, dezvăluind un aril alb, ceros, care înconjoară o sămânță mare, neagră și lucioasă, creând o imagine care seamănă în mod tulburător cu un ochi uman.[1, 11, 12] Această asemănare nu este o simplă coincidență botanică, ci însăși esența vizuală a mitului, o dovadă vie a originii sacre a plantei. Pentru poporul Satere-Mawé, fiecare fruct este o reamintire a copilului divin și a legăturii lor primordiale cu planta. O altă versiune a mitului merge chiar mai departe, afirmând că din planta de guarana crescută din ochiul copilului s-a născut un alt copil, din care se trag direct membrii tribului Mawé, stabilind astfel o legătură de sânge, o relație de rudenie directă între popor și plantă.[3, 4]</p>
+                    <p>Această legătură mitologică profundă transcende o simplă poveste de origine; ea funcționează ca un contract social și spiritual care definește statutul și valoarea guaranei. Metafora "ochiului" nu este doar descriptivă, ci și un dispozitiv mnemotehnic puternic, care codifică și transmite cunoștințe esențiale despre aspectul plantei, importanța sa vitală și originea sa divină. Prin stabilirea unei relații de rudenie, mitul transformă interacțiunea dintre om și plantă dintr-una pur utilitară într-una de custodie și responsabilitate sacră. Aceasta explică de ce, cu mult înainte ca guarana să aibă o valoare pe piața globală, poporul Satere-Mawé (cunoscuți pe atunci ca Andirazes) o prețuia la fel de mult "precum prețuiesc albii aurul lor", după cum a observat misionarul iezuit João Felipe Bettendorff în 1669.[1, 3] Valoarea nu era monetară, ci intrinsecă, derivată din rolul său de susținător al vieții, de dar divin și de strămoș vegetal. Acest statut de "părinți" ai plantei, conferit de mit, le legitimează rolul de gardieni ai cunoștințelor tradiționale și ecologice legate de cultivarea și utilizarea sa corectă.</p>
+                    
+                    <h4>Semnificație culturală și valoare</h4>
+                    <p>Dincolo de mitul fondator, semnificația culturală a guaranei este omniprezentă în viața popoarelor amazoniene. Numele însuși, "guaraná", este tradus în limba locală ca "începutul întregii cunoașteri", o denumire care subliniază nu doar proprietățile sale stimulante asupra minții, ci și rolul său central în transmiterea înțelepciunii și a tradițiilor culturale.[3, 4] Băutura preparată din semințele sale, çapó, nu era doar un energizant, ci un element central în ritualuri și ceremonii, precum Festa da Tocandira, unde participanții treceau din mână în mână o tărtăcuță mare plină cu çapó, în timp ce se cântau povești despre dragoste, război și viață.[3, 4]</p>
+                    <p>Valoarea sa era recunoscută nu doar simbolic, ci și practic. Relatările timpurii ale europenilor, precum cea a lui Bettendorff, menționează că băutura le oferea vânătorilor "atât de multă energie, încât atunci când vânau, puteau merge de la o zi la alta fără să simtă foame".[1] Această proprietate de a suprima foamea și de a oferi rezistență a făcut din guarana o resursă strategică pentru supraviețuire într-un mediu adesea ostil. În perioada colonială, valoarea sa a început să fie recunoscută și de coloniști, fiind vândută ca fortifiant, stimulent, tonic, antidot pentru febră, un preventiv împotriva întăririi arterelor și un tratament pentru migrene, diaree și dizenterie.[1] Astfel, planta a început o lungă călătorie, de la un artefact cultural sacru al unui grup restrâns, la o marfă prețuită într-un circuit comercial mai larg, punând bazele pentru explozia sa globală ulterioară.</p>
+                </div>
+
+                <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>Utilizări tradiționale și preparare ancestrală</h3>
+                    <p>Metodele tradiționale de procesare și preparare a guaranei dezvăluie o înțelegere profundă a chimiei plantei și a nevoilor comunității, reprezentând o tehnologie ancestrală rafinată de-a lungul a nenumărate generații. Aceste practici nu doar că activau compușii doriți, dar asigurau și conservarea pe termen lung a acestei resurse valoroase.</p>
+                    <h4>Metode de procesare</h4>
+                    <p>Procesul tradițional începea cu recoltarea, o activitate meticuloasă realizată manual în timpul sezonului uscat. Când un ciorchine întreg de fructe era copt, acesta era tăiat cu foarfece sau rupt manual. Dacă doar câteva fructe erau coapte, acestea erau culese individual, demonstrând o atenție deosebită pentru calitatea materiei prime.[1]</p>
+                    <p>După recoltare, fructele erau aduse la locuințe, unde urma un pas crucial: îndepărtarea cojii roșii (pericarpului) pentru a expune semințele. Acest lucru se putea face manual, lăsând fructele să se înmoaie în apă pentru a facilita procesul, sau pur și simplu depozitându-le pentru câteva zile până când coaja se înmuia natural.[1]</p>
+                    <p>Următorul pas era prăjirea semințelor. În comunitățile Satere-Mawé, această sarcină era, în mod tradițional, îndeplinită de femei. Prăjirea se făcea într-o colibă deschisă, pe tăvi mari de lut, cu un diametru de până la doi metri. Alegerea lutului era deliberată, deoarece distribuia căldura mai uniform și reducea riscul de a arde semințele, un detaliu ce subliniază rafinamentul tehnic.[1] Procesul dura câteva ore și era o muncă anevoioasă, care necesita amestecarea constantă a semințelor. Femeile verificau periodic gradul de prăjire luând câteva semințe în mână și mirosindu-le, un control al calității bazat pe simțuri, perfecționat prin experiență.[1] După prăjire, semințele erau puse în saci și scuturate pentru a îndepărta coaja exterioară fragilă, apoi erau măcinate într-o pulbere fină.[13]</p>
+                    
+                    <h4>"Pâinea de guarana" (guaraná bread)</h4>
+                    <p>Pulberea fină obținută era apoi transformată într-un produs remarcabil, cunoscut sub numele de "pâine de guarana" sau bastoane de guarana. Pulberea era amestecată cu apă, uneori în combinație cu făină de manioc (cassava) pentru a lega compoziția, formând o pastă densă.[3, 13] Această pastă era modelată manual în cilindri sau bastoane, de obicei cu o lungime de aproximativ 20 cm, care erau apoi uscate lent, fie la soare, fie deasupra unui foc mic.[2, 11, 13]</p>
+                    <p>Acest proces nu era doar o metodă de a da o formă produsului, ci reprezenta o tehnologie sofisticată de conservare, perfect adaptată climatului umed al Amazonului. Prin uscare și afumare, bastoanele de guarana deveneau extrem de dure și rezistente la degradare. Un detaliu critic, menționat în surse, este că acești cilindri afumați puteau fi păstrați în condiții bune până la un an, în contrast puternic cu pulberea simplă de guarana, care își pierdea o parte semnificativă din aromă și potență după doar câteva luni.[1]</p>
+                    <p>Această capacitate de conservare pe termen lung transforma guarana dintr-o resursă sezonieră într-o rezervă strategică de energie și medicament. Într-un context de subzistență bazat pe vânătoare, pescuit și agricultură itinerantă, unde mobilitatea și siguranța alimentară erau esențiale, a deține o sursă de energie concentrată, non-perisabilă și ușor de transportat reprezenta un avantaj imens. "Pâinea de guarana" era, în esență, o tabletă energetică ancestrală, o tehnologie alimentară care oferea reziliență și susținere în timpul expedițiilor lungi de vânătoare sau în perioadele de post ritualic.[1, 14]</p>
+                    
+                    <h4>Prepararea băuturii "çapó"</h4>
+                    <p>Pentru a consuma guarana, bastonul dur era răzuit pentru a produce o pulbere fină. Uneltele folosite pentru acest proces erau unice și reflectau o utilizare ingenioasă a resurselor locale. Cea mai faimoasă unealtă era limba osoasă și extrem de aspră a peștelui pirarucu (<em>Arapaima gigas</em>), unul dintre cei mai mari pești de apă dulce din lume.[1, 4] Alternativ, se putea folosi o bucată de piatră aspră, precum gresia.[1]</p>
+                    <p>Pulberea proaspăt răzuită era colectată pe o bucată de hârtie sau cădea direct într-o tărtăcuță (calabash) care conținea apă.[1] Amestecul rezultat, o băutură de culoare cafenie, era cunoscut sub numele de "çapó".[1, 3] În cultura Satere-Mawé, prepararea acestei băuturi era, de asemenea, o sarcină exclusiv feminină, în timp ce în rândul populațiilor non-indigene, atât bărbații, cât și femeile răzuiau bastoanele.[1] Băutura era consumată de obicei dimineața, la trezire, adesea pe stomacul gol, cu o oră sau două înainte de micul dejun.[1]</p>
+                    
+                    <h4>Utilizări medicinale și funcționale tradiționale</h4>
+                    <p>Utilizările tradiționale ale guaranei, așa cum au fost documentate de primii observatori și cum sunt păstrate în memoria culturală, acoperă un spectru larg de nevoi, de la cele funcționale la cele medicinale.</p>
+                    <ul>
+                        <li><strong>Stimulant și energizant:</strong> Aceasta este cea mai cunoscută și mai importantă utilizare. Vânătorii consumau çapó pentru a-și spori energia și rezistența, permițându-le să urmărească prada pe distanțe lungi, adesea pentru mai mult de o zi, fără a simți nevoia de a mânca.[1, 4] Era un ajutor ergogenic esențial pentru supraviețuire.</li>
+                        <li><strong>Tonic și fortifiant:</strong> Guarana era considerată un tonic general, o substanță care întărește corpul și mintea, consumată regulat pentru a menține starea de bine.[1, 15]</li>
+                        <li><strong>Medicament:</strong> Spectrul său de aplicații medicinale era vast. Era folosită ca febrifug (pentru a reduce febra), analgezic (pentru a calma durerile de cap și migrenele) și ca tratament eficient pentru tulburări gastrointestinale, în special diaree și dizenterie, datorită proprietăților sale astringente.[1, 2, 4, 14]</li>
+                        <li><strong>Astringent și diuretic:</strong> Efectul său astringent, datorat conținutului de taninuri, era valorificat în tratarea diareei. Misionarul Bettendorff a remarcat și a confirmat personal puternicul său efect diuretic.[1, 13]</li>
+                        <li><strong>Utilizare în post:</strong> Datorită capacității sale de a suprima pofta de mâncare, guarana era un ajutor indispensabil în timpul perioadelor de post, fie ele ritualice sau impuse de lipsa hranei, ajutând la tolerarea restricțiilor dietetice.[14, 16]</li>
+                        <li><strong>Alte utilizări:</strong> Era folosită și ca ingredient în pâine, unde semințele prăjite și măcinate erau adăugate într-un aluat, copt în cuptoare de teracotă și apoi afumat.[4] De asemenea, era considerată un afrodiziac.[15, 17]</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="stiinta" class="tab-content">
+            <h2 class="zwp-section-title">Profilul științific al <em>Paullinia cupana</em></h2>
+            <div class="zwp-card-grid">
+
+                <div class="zwp-topic-card bg-pale-blue">
+                    <h3>Caracterizare botanică și taxonomie</h3>
+                    <p>O descriere botanică precisă este esențială pentru identificarea corectă a speciei și pentru înțelegerea contextului său ecologic.</p>
+                    <h4>Morfologie</h4>
+                    <p><em>Paullinia cupana</em> este o plantă perenă, veșnic verde, care se prezintă sub forma unui arbust agățător sau a unei liane lemnoase. În condiții de cultivare, în plin soare, atinge o înălțime de 2-3 metri și poate dezvolta o coroană cu un diametru de până la 4 metri. În habitatul său natural, în pădurea primară, se comportă ca o liană, folosind trunchiurile copacilor înalți pentru a ajunge la lumina din coronament.[12, 18]</p>
+                    <ul>
+                        <li><strong>Frunzele:</strong> Sunt mari, alternante, cu o lungime de 27-33 cm și o lățime de 10-15 cm. Acestea sunt compuse, penate, având cinci foliole lucioase, dintre care patru sunt dispuse în perechi și a cincea este terminală.[12, 18, 19]</li>
+                        <li><strong>Florile:</strong> Planta este monoică, ceea ce înseamnă că poartă atât flori masculine (staminate), cât și flori feminine (pistilate) pe aceeași inflorescență. Florile sunt mici, de culoare alb-gălbuie, și sunt grupate în raceme axilare care pot atinge 30 cm în lungime și pot conține câteva sute de boboci. Florile feminine sunt în minoritate, reprezentând aproximativ o șesime din total. Polenizarea este entomofilă, fiind realizată în principal de albine din genurile <em>Melipona</em> și <em>Apis</em>.[12, 18, 20]</li>
+                        <li><strong>Fructul:</strong> Este o capsulă dehiscentă (care se deschide la maturitate), cu o lungime de 2-3 cm. La coacere, epicarpul (învelișul exterior) capătă o culoare vibrantă, de la galben-intens la roșu-portocaliu. Capsula se desface de-a lungul a trei septuri pentru a dezvălui conținutul.[12, 18]</li>
+                        <li><strong>Sămânța:</strong> Fructul conține de la una la trei semințe, în funcție de numărul de ovule fertilizate. Sămânța, care este produsul de interes comercial, este ovoidă, cu o lungime de 1.2-2.0 cm și o greutate de aproximativ 1 gram (uscată). Are o culoare închisă, de la maro la negru sau verzui, și este acoperită la bază de un aril (un înveliș cărnos) de un alb imaculat, ceros. Acest contrast puternic între sămânța neagră, arilul alb și pericarpul roșu este cel care creează aspectul distinctiv de "ochi", atât de important în mitologia plantei.[12, 20]</li>
+                    </ul>
+                    <h4>Taxonomie și nomenclatură</h4>
+                    <ul>
+                        <li><strong>Familia:</strong> <em>Paullinia cupana</em> aparține familiei Sapindaceae, o familie diversă care include plante cunoscute precum arțarul (<em>Acer</em>) și litchi (<em>Litchi chinensis</em>).[2, 11, 21]</li>
+                        <li><strong>Genul:</strong> Genul <em>Paullinia</em> a fost numit în onoarea botanistului și medicului german Christian Franz Paullini (1643-1712).[13, 20] Genul este vast, cuprinzând peste 200 de specii, majoritatea neotropicale.[2]</li>
+                        <li><strong>Specia:</strong> Numele speciei, <em>cupana</em>, reflectă rădăcinile sale culturale, derivând din limba indigenă Tupi-Guarani.[2] Planta a fost descrisă și clasificată formal pentru prima dată de către botanistul german Karl Sigismund Kunth în 1821, ca <em>Paullinia cupana</em>, pe baza unui specimen colectat de naturaliști cu un deceniu înainte.[8, 10]</li>
+                        <li><strong>Sinonime și varietăți:</strong> Istoria nomenclaturii este marcată de o anumită confuzie. În 1823, botanistul Karl von Martius a descris o specie similară, colectată de-a lungul Amazonului, sub numele de <em>Paullinia sorbilis</em>. Datorită asemănărilor morfologice puternice, în 1937, botanistul brazilian Adolpho Ducke a reclasificat <em>P. sorbilis</em> ca fiind o varietate a <em>P. cupana</em>. Astăzi, <em>P. sorbilis</em> este considerat un sinonim sau, mai precis, este cunoscut ca <em>Paullinia cupana</em> Kunth var. <em>sorbilis</em> (Mart.) Ducke.[8, 10, 12] Aceasta este varietatea cultivată comercial. Se distinge de varietatea tip, <em>P. cupana</em> var. <em>cupana</em>, prin prezența cârceilor (care lipsesc la var. <em>cupana</em>), foliole mai puțin lobate și flori și fructe mai mici.[12, 20]</li>
+                    </ul>
+                    <h4>Ecologie</h4>
+                    <p>Guarana este o plantă adaptată condițiilor specifice ale pădurii tropicale amazoniene. Preferă un climat tropical umed, corespunzător clasificării Am a lui Köppen, cu temperaturi relativ constante pe tot parcursul anului, media anuală fiind între 20°C și 22°C. Planta nu tolerează temperaturi minime sub 12°C. Necesită precipitații anuale abundente, de peste 1400 mm, bine distribuite de-a lungul anului. Solurile ideale sunt profunde, cu textură medie spre grea, bine drenate și cu un conținut ridicat de materie organică. În habitatul său natural, crește adesea pe soluri lateritice distrofice sau gleyice, cu un pH foarte acid (3.5-4.5).[20]</p>
+                </div>
+
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Compoziția chimică: mai mult decât cafeină</h3>
+                    <p>Efectele remarcabile ale guaranei sunt rezultatul direct al unui cocktail fitochimic complex, în care cafeina, deși este componenta dominantă și cea mai cunoscută, acționează în concert cu o multitudine de alți compuși bioactivi. Înțelegerea acestei compoziții este esențială pentru a depăși viziunea reducționistă a guaranei ca simplu substitut pentru cafea și pentru a aprecia pe deplin potențialul său farmacologic.</p>
+                    <table>
+                        <caption>Compoziția chimică primară a semințelor de guarana</caption>
+                        <thead>
+                            <tr>
+                                <th>Clasa de compuși</th>
+                                <th>Compus specific</th>
+                                <th>Concentrație (pe bază uscată)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>alcaloizi metilxantinici</strong></td>
+                                <td>cafeină (guaranină)</td>
+                                <td>2.0% – 8.0%</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>teobromină</td>
+                                <td>0.02% – 0.4%</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>teofilină</td>
+                                <td>0% – 0.25%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>polifenoli</strong></td>
+                                <td>taninuri</td>
+                                <td>5.0% – 12.0%</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>catechină</td>
+                                <td>~0.37% (3.76 mg/g)</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>epicatechină</td>
+                                <td>~0.40% (4.05 mg/g)</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>proantocianidine</td>
+                                <td>prezente</td>
+                            </tr>
+                            <tr>
+                                <td><strong>alți compuși</strong></td>
+                                <td>saponine</td>
+                                <td>prezente</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>amidon</td>
+                                <td>5.0% – 6.0%</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>rășini</td>
+                                <td>&lt; 7.0%</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>uleiuri fixe</td>
+                                <td>&lt; 3.0%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4>Analiza detaliată a compușilor</h4>
+                    <ul>
+                        <li><strong>Alcaloizi metilxantinici:</strong> Această clasă de compuși este responsabilă pentru efectele stimulante primare ale guaranei.
+                            <ul>
+                                <li><strong>Cafeina:</strong> Este, fără îndoială, vedeta compoziției. Semințele de guarana conțin cea mai mare concentrație de cafeină cunoscută în regnul vegetal, variind în general între 2% și 8% din greutatea uscată.[11, 22] Unele studii specifică intervale mai restrânse, precum 2.5-6% [6, 27] sau 3.6-5.8% [28], iar anumite extracte comerciale pot atinge concentrații de până la 15%.[24, 29] Această concentrație este semnificativ mai mare decât cea găsită în boabele de cafea (<em>Coffea arabica</em>), care conțin de obicei 1-3% cafeină.[22] Din punct de vedere chimic, molecula de cafeină din guarana, denumită uneori "guaranină", este identică cu cea din cafea ("cafeină"), ceai ("teină") sau yerba mate ("mateină").[11, 28, 30]</li>
+                                <li><strong>Teobromina și teofilina:</strong> Pe lângă cafeină, semințele de guarana conțin și cantități mult mai mici de alți doi alcaloizi metilxantinici: teobromina și teofilina. Concentrațiile acestora sunt de obicei sub 0.2% [24, 29], cu valori specifice raportate între 200-400 ppm (0.02-0.04%) pentru teobromină și 0-2,500 ppm (0-0.25%) pentru teofilină.[11, 23] Deși prezenți în cantități mici în semințe, este interesant de notat că teobromina este alcaloidul dominant în alte părți ale plantei, cum ar fi frunzele, tulpinile și pericarpul fructului.[5] Acești compuși, deși sunt stimulanți mai slabi ai sistemului nervos central decât cafeina, au efecte proprii, precum relaxarea mușchilor netezi (teofilina) și vasodilatația (teobromina).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Polifenoli (taninuri și flavonoide):</strong> Guarana este excepțional de bogată în compuși polifenolici, care contribuie semnificativ la proprietățile sale antioxidante și astringente.
+                            <ul>
+                                <li><strong>Taninuri:</strong> Acestea reprezintă o componentă majoră, cu concentrații raportate între 5% și 12%.[11, 23] Taninurile, precum acidul catechutanic, sunt responsabile pentru gustul astringent (sec) al guaranei și joacă un rol în utilizările sale tradiționale pentru tratarea diareei.[13] De asemenea, se teorizează că interacționează cu cafeina, influențându-i absorbția și efectele.</li>
+                                <li><strong>Flavonoide (flavan-3-oli):</strong> Dintre flavonoide, cele mai importante sunt catechinele și epicatechinele, compuși renumiți pentru puternica lor activitate antioxidantă.[5, 6] Analizele cromatografice au cuantificat prezența (+)-catechinei (aproximativ 3.76 mg/g) și a (-)-epicatechinei (aproximativ 4.05 mg/g) în pulberea de guarana.[25] Aceste molecule, împreună cu polimerii lor (proantocianidine), contribuie la capacitatea guaranei de a neutraliza radicalii liberi și de a proteja celulele împotriva stresului oxidativ.[2, 26, 31]</li>
+                            </ul>
+                        </li>
+                        <li><strong>Alți compuși:</strong> Matricea fitochimică a guaranei este completată de alte clase de substanțe:
+                            <ul>
+                                <li><strong>Saponine:</strong> Acestea sunt glicozide care au proprietăți de spumare și sunt investigate pentru diverse activități farmacologice, inclusiv efecte antiinflamatorii și de susținere a sistemului imunitar.[16, 19, 23]</li>
+                                <li><strong>Macronutrienți:</strong> Semințele conțin, de asemenea, cantități semnificative de amidon (5-6%), proteine (sub 10%) și cantități mai mici de grăsimi/uleiuri fixe și rășini.[11, 13, 19]</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>Farmacologie și mecanisme de acțiune</h3>
+                    <p>Mecanismele prin care guarana își exercită efectele stimulante și terapeutice sunt complexe, implicând atât acțiunea directă a cafeinei, cât și contribuțiile subtile, dar importante, ale celorlalți compuși din matricea sa fitochimică.</p>
+                    <h4>Mecanismul primar (efectul cafeinei)</h4>
+                    <p>Principalul mecanism de acțiune, responsabil pentru creșterea stării de alertă și combaterea oboselii, este bine stabilit și se datorează conținutului ridicat de cafeină. Cafeina este un antagonist competitiv al receptorilor de adenozină, în special subtipurile A1 și A2A, care sunt larg distribuiți în sistemul nervos central (SNC).[6, 28, 31]</p>
+                    <p>Adenozina este un neuromodulator care se acumulează în creier pe parcursul zilei și, prin legarea de receptorii săi, induce o serie de efecte inhibitoare: reduce eliberarea de neurotransmițători excitatori (precum dopamina și glutamatul), încetinește activitatea neuronală și promovează relaxarea și somnolența.</p>
+                    <p>Prin structura sa moleculară similară cu cea a adenozinei, cafeina se poate lega de aceiași receptori, dar fără a-i activa. Astfel, cafeina blochează fizic accesul adenozinei la receptorii săi.[31] Rezultatul este o ridicare a "frânei" naturale a creierului. Activitatea neuronală crește, iar nivelurile de neurotransmițători stimulanți precum dopamina și norepinefrina cresc, ducând la efectele binecunoscute: creșterea vigilenței, îmbunătățirea concentrării, reducerea percepției oboselii și, în unele cazuri, o ușoară euforie.[28, 32]</p>
+                    <h4>Ipoteza sinergiei și controversa absorbției</h4>
+                    <p>O dezbatere persistentă în literatura despre guarana se referă la modul în care matricea sa complexă influențează farmacocinetica și farmacodinamica cafeinei. Această discuție a generat două perspective principale.</p>
+                    <ul>
+                        <li><strong>Teoria eliberării lente:</strong> O ipoteză populară, susținută adesea în literatura de consum și în unele surse științifice, postulează că alți compuși din guarana, în special taninurile și saponinele, interacționează cu cafeina, formând complexe care îi încetinesc absorbția în tractul gastrointestinal.[2, 33, 34] Această eliberare graduală ar explica de ce efectul stimulant al guaranei este adesea perceput ca fiind mai lin, mai susținut și mai de lungă durată, fără "vârfurile" de energie și "căderile" bruște (cunoscute ca "caffeine crash") care pot fi asociate cu consumul de cafea sau de cafeină pură.[2, 34] Această caracteristică ar face din guarana o sursă de stimulare preferată pentru cei care au nevoie de alertă prelungită.</li>
+                        <li><strong>Dovezi contradictorii:</strong> Pe de altă parte, unele studii farmacocinetice riguroase au contestat această teorie. Cercetări care au comparat direct nivelurile de cafeină din plasma sanguină după ingestia de guarana versus cafeină pură nu au găsit diferențe semnificative în parametrii cheie, cum ar fi timpul necesar pentru a atinge concentrația maximă (aproximativ 1 oră) sau timpul de înjumătățire plasmatică (aproximativ 5.4 ore).[30] Aceste studii sugerează că, cel puțin în condițiile testate, prezența taninurilor și a altor compuși din guarana nu influențează în mod substanțial viteza sau gradul de absorbție a cafeinei în organism. Se argumentează că complexele dintre cafeină și taninuri ar putea fi instabile în mediul acid al stomacului, eliberând cafeina rapid.[30]</li>
+                    </ul>
+                    <p>Acest conflict aparent în datele de cercetare poate indica faptul că focalizarea exclusivă pe cinetica absorbției cafeinei este una reducționistă și ar putea să nu surprindă întreaga complexitate a experienței subiective. Adevărata diferență în efectul perceput al guaranei ar putea să nu provină dintr-o absorbție modificată a cafeinei, ci din efectele sinergice ale întregii matrice fitochimice.</p>
+                    <p>Astfel, "efectul guarana" nu este pur și simplu "efectul cafeinei din guarana". Este mai degrabă un rezultat compozit. Pe de o parte, avem stimularea puternică a SNC indusă de doza mare de cafeină. Pe de altă parte, acest efect este modulat și completat de acțiunile subtile ale celorlalți compuși. Teobromina și teofilina, deși stimulanți mai slabi, contribuie la efectul general. Mai important, polifenolii precum catechinele și epicatechinele, cu proprietățile lor antioxidante puternice, ar putea oferi beneficii neuroprotective și ar putea influența dispoziția și funcția cognitivă prin mecanisme independente de antagonismul adenozinei.[26, 28] Unele studii sugerează explicit că beneficiile cognitive ale guaranei depășesc ceea ce ar fi de așteptat de la conținutul său de cafeină singur, indicând o sinergie între constituenți.[28, 34] Această perspectivă a "efectului de anturaj" sau a "efectului matricei complete" poate reconcilia discrepanțele: un utilizator poate "simți" o diferență calitativă în starea de alertă și dispoziție, chiar dacă curba concentrației de cafeină din sânge este similară cu cea a altor surse.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="aplicatii" class="tab-content">
+            <h2 class="zwp-section-title">Aplicații moderne și dovezi clinice</h2>
+            <div class="zwp-card-grid">
+
+                <div class="zwp-topic-card bg-pale-red">
+                    <h3>Efecte asupra performanței cognitive și a sistemului nervos</h3>
+                    <p>Una dintre cele mai investigate și promovate utilizări ale guaranei este capacitatea sa de a îmbunătăți funcțiile cognitive. Datorită reputației sale de "hrană pentru creier", a devenit un ingredient popular în suplimentele destinate studenților, profesioniștilor și oricui caută un avantaj mental.</p>
+                    <h4>Îmbunătățirea funcțiilor cognitive</h4>
+                    <p>Numeroase studii au explorat impactul guaranei asupra diferitelor aspecte ale cogniției. Rezultatele indică, în general, că suplimentarea cu guarana poate duce la îmbunătățiri măsurabile în starea de alertă, vigilență, atenție și capacitatea de concentrare.[2, 31, 33] De asemenea, unele cercetări sugerează beneficii pentru memorie, în special pentru memoria secundară sau pe termen lung.[34] Aceste efecte sunt atribuite în principal conținutului ridicat de cafeină, care, prin blocarea receptorilor de adenozină, reduce oboseala și crește activitatea neuronală. Cu toate acestea, prezența altor compuși bioactivi, cum ar fi taninurile, teobromina și catechinele, a condus la ipoteza că guarana ar putea oferi beneficii cognitive superioare celor obținute doar din cafeină, sugerând o sinergie între componente.[28, 34]</p>
+                    <h4>Viteza de reacție vs. acuratețe</h4>
+                    <p>O imagine mai nuanțată a efectelor cognitive este oferită de o meta-analiză sistematică publicată în 2023, care a compilat datele din opt studii controlate cu placebo, implicând 328 de participanți.[35] Analiza a făcut o distincție crucială între două aspecte ale performanței: viteza și acuratețea.</p>
+                    <p>Concluzia principală a fost că suplimentarea acută cu guarana are un efect mic, dar statistic semnificativ, asupra <strong>accelerării timpului de răspuns</strong> în diverse sarcini cognitive. Cu alte cuvinte, participanții care au consumat guarana au răspuns mai repede la stimuli. În schimb, meta-analiza <strong>nu a găsit nicio dovadă că guarana ar îmbunătăți acuratețea</strong> răspunsurilor. De fapt, efectul mediu asupra acurateței a fost ușor negativ, deși nesemnificativ statistic.[35]</p>
+                    <p>Această descoperire este importantă, deoarece sugerează că principalul beneficiu cognitiv al guaranei constă în creșterea vitezei de procesare mentală și a reactivității, mai degrabă decât în îmbunătățirea calității deciziilor sau a corectitudinii memoriei. Studiul a mai observat o tendință ca efectul asupra timpului de răspuns să fie mai pronunțat atunci când guarana era dizolvată într-un lichid, comparativ cu administrarea sub formă de capsulă, deși diferența nu a atins pragul de semnificație statistică.[35]</p>
+                    <h4>Dozaj în studii cognitive</h4>
+                    <p>Dozele de extract de guarana utilizate în studiile cognitive variază considerabil, făcând dificilă stabilirea unei doze optime unice. Meta-analiza menționată a inclus studii cu doze cuprinse între 37.5 mg și 500 mg de extract de guarana, care conțineau între 4.3 mg și 100 mg de cafeină.[35] Interesant este că nu s-a găsit o corelație directă între mărimea dozei și amploarea efectului cognitiv, sugerând că și doze relativ mici pot fi eficiente. Alte studii au confirmat că efecte psihoactive pozitive pot fi observate chiar și la doze de 75 mg de extract de guarana, care conțin o cantitate de cafeină (aproximativ 9 mg) considerată de obicei prea mică pentru a produce efecte notabile de una singură, întărind astfel ipoteza sinergiei dintre compuși.[36]</p>
+                    <h4>Efecte asupra dispoziției</h4>
+                    <p>Pe lângă efectele pur cognitive, unele cercetări au indicat că guarana poate avea și un impact pozitiv asupra stării de spirit. Studii care au utilizat diverse doze de extract de guarana au raportat îmbunătățiri ale dispoziției și o reducere a oboselii mentale asociate cu efortul cognitiv susținut.[34, 36] Aceste efecte pot contribui la percepția generală de bunăstare și la o mai bună performanță în sarcinile zilnice.</p>
+                </div>
+
+                <div class="zwp-topic-card bg-pale-purple">
+                    <h3>Guarana ca ajutor ergogenic în performanța fizică</h3>
+                    <p>Datorită proprietăților sale stimulante binecunoscute, guarana a devenit un ingredient popular în suplimentele destinate sportivilor, fiind promovată ca un ajutor ergogenic natural capabil să îmbunătățească performanța fizică.</p>
+                    <h4>Utilizare în sport</h4>
+                    <p>Atleții și persoanele active fizic utilizează guarana în principal pentru două motive: îmbunătățirea rezistenței și întârzierea apariției oboselii.[37] Mecanismul de bază este același ca în cazul efectelor cognitive: cafeina stimulează sistemul nervos central, ceea ce duce la o percepție redusă a efortului, o mai bună concentrare și o mobilizare crescută a acizilor grași pentru energie, economisind astfel rezervele de glicogen muscular.[38] Acest lucru poate fi benefic în special în sporturile de anduranță, dar și în eforturile scurte și intense.</p>
+                    <h4>Dovezi clinice</h4>
+                    <p>În ciuda popularității sale în rândul sportivilor, există o lipsă surprinzătoare de studii clinice bine concepute care să testeze în mod direct efectele guaranei, ca atare, asupra performanței atletice.[37, 39] Majoritatea afirmațiilor se bazează pe extrapolarea efectelor cunoscute ale cafeinei. Acest lucru face dificilă separarea beneficiilor specifice ale guaranei de cele ale cafeinei pure și cuantificarea oricărui avantaj suplimentar oferit de matricea sa fitochimică.</p>
+                    <h4>Studiu de caz (exercițiu maximal)</h4>
+                    <p>O excepție notabilă este un studiu recent care a investigat efectele guaranei asupra performanței cognitive <em>după</em> un efort fizic de intensitate maximală, o situație extrem de relevantă pentru sportivi, unde oboseala fizică și mentală poate afecta luarea deciziilor.[32] Studiul a comparat efectele suplimentării cu guarana, o doză echivalentă de cafeină și un placebo asupra timpului de reacție, înainte și după un test V̇O₂max (consum maxim de oxigen).</p>
+                    <p>Rezultatele au fost revelatoare. Înainte de exercițiu, nu au existat diferențe semnificative între grupuri. Însă, <em>după</em> exercițiul epuizant, grupul care a primit guarana a înregistrat un timp de reacție simplu semnificativ mai rapid comparativ cu grupul placebo. Interesant este că grupul care a primit doar cafeină nu a arătat o îmbunătățire semnificativă față de placebo. Acest lucru sugerează că guarana ar putea avea un avantaj față de cafeina pură în menținerea vitezei de atenție și a reactivității cognitive în condiții de oboseală extremă. Autorii concluzionează că suplimentarea cu guarana ar putea fi deosebit de atrăgătoare pentru sportivii care participă la sporturi ce depind în mare măsură de procese decizionale rapide și eficiente pentru succes.[32]</p>
+                    <h4>Dozaj pentru sportivi</h4>
+                    <p>În absența unor studii de dozaj specifice pentru guarana în context sportiv, recomandările se bazează adesea pe ghidurile pentru cafeină. Dozele ergogenice de cafeină sunt, în general, cuprinse între 2 și 6 mg pe kilogram de greutate corporală, administrate cu 30-60 de minute înainte de efort.[38] Sportivii care utilizează produse pe bază de guarana ar trebui să verifice conținutul total de cafeină pentru a se asigura că se încadrează în aceste doze și pentru a evita efectele secundare ale unui consum excesiv.</p>
+                </div>
+
+                <div class="zwp-topic-card bg-pale-cyan">
+                    <h3>Beneficii potențiale pentru sănătate și managementul greutății</h3>
+                    <p>Dincolo de efectele sale acute asupra sistemului nervos, cercetările sugerează că un consum regulat de guarana ar putea oferi beneficii pe termen lung pentru sănătatea metabolică și cardiovasculară, în mare parte datorită conținutului său bogat în antioxidanți și alți compuși bioactivi.</p>
+                    <h4>Sănătate cardiovasculară</h4>
+                    <p>Dovezile emergente indică un rol protector al guaranei asupra sistemului cardiovascular. Acest efect pare a fi mediat de conținutul său ridicat de antioxidanți, precum catechinele, saponinele și taninurile.[33] Unul dintre mecanismele propuse este protecția colesterolului LDL ("colesterolul rău") împotriva oxidării. Oxidarea LDL este un pas critic în inițierea și progresia aterosclerozei (îngroșarea și întărirea arterelor). Prin neutralizarea radicalilor liberi, antioxidanții din guarana pot preveni această oxidare. Un studiu pe pacienți vârstnici sănătoși a arătat că un consum regulat de guarana a fost asociat cu o reducere de până la 27% a oxidării lipoproteinelor LDL.[33]</p>
+                    <p>Mai mult, un studiu observațional amplu, care a inclus peste 600 de persoane vârstnice, a corelat consumul regulat de guarana cu o incidență semnificativ mai redusă a unor afecțiuni cardiovasculare și metabolice majore, precum hipertensiunea arterială, obezitatea și sindromul metabolic. În cazul femeilor, s-a observat și o reducere a nivelurilor de colesterol total și LDL.[33] Aceste descoperiri sugerează că guarana, consumată ca parte a unui stil de viață sănătos, ar putea contribui la menținerea sănătății inimii și a vaselor de sânge.</p>
+                    <h4>Managementul greutății</h4>
+                    <p>Guarana este un ingredient frecvent întâlnit în suplimentele pentru slăbit, iar cercetările științifice oferă suport pentru această utilizare prin mai multe mecanisme:</p>
+                    <ol>
+                        <li><strong>Creșterea metabolismului:</strong> Principalul mecanism este legat de conținutul său ridicat de cafeină. S-a demonstrat că cafeina poate crește rata metabolică bazală cu 3-11% pe o perioadă de 12 ore. Această creștere a cheltuielilor energetice, chiar și în repaus, poate contribui la crearea unui deficit caloric și la favorizarea arderii grăsimilor (lipoliză).[31, 33] Un studiu a arătat că o combinație de extract de guarana și ceai verde a crescut cheltuielile energetice cu 179 de calorii pe zi.[33]</li>
+                        <li><strong>Suprimarea apetitului:</strong> Guarana poate contribui și la reducerea aportului caloric. Două studii clinice au evaluat un supliment pe bază de plante care conținea guarana, yerba mate și damiana. Rezultatele au arătat că acest amestec a încetinit semnificativ timpul de golire a stomacului. O golire gastrică mai lentă duce la o senzație de sațietate prelungită, ceea ce poate reduce foamea și, implicit, cantitatea de alimente consumate la mesele următoare.[33]</li>
+                        <li><strong>Modulare genetică:</strong> Cercetări mai recente pe modele animale sugerează mecanisme mai complexe. Un studiu a arătat că guarana poate suprima genele care favorizează producția de celule adipoase (adipogeneza) și, în același timp, poate promova genele care încetinesc acest proces.[31]</li>
+                    </ol>
+                    <p>Deși aceste mecanisme sunt promițătoare, este important de menționat că majoritatea studiilor de succes au utilizat guarana în combinație cu alte ingrediente, iar efectele pe termen lung asupra menținerii greutății nu sunt pe deplin elucidate.[33]</p>
+                    <h4>Proprietăți antioxidante și antimicrobiene</h4>
+                    <p>După cum s-a menționat anterior, guarana este o sursă excepțional de bogată de compuși antioxidanți, inclusiv cafeină, teobromină, taninuri, saponine și catechine.[2, 31] Această capacitate antioxidantă stă la baza multor dintre beneficiile sale pentru sănătate, de la protecția cardiovasculară la efectele anti-îmbătrânire. Proprietățile sale antioxidante și antimicrobiene au făcut-o, de asemenea, un aditiv valoros în industria cosmetică, unde este folosită pentru a proteja pielea și pentru a prelungi stabilitatea formulelor.[33]</p>
+                </div>
+
+                <div class="zwp-topic-card bg-pale-grey">
+                    <h3>Utilizarea în industria cosmetică și de îngrijire personală</h3>
+                    <p>Proprietățile stimulante și antioxidante ale guaranei, bine stabilite în contextul consumului intern, au fost transpuse cu succes în domeniul cosmetic. Industria de înfrumusețare a valorificat conceptul de "energie" și "revitalizare" asociat cu guarana, aplicându-l la nivel topic pentru îngrijirea pielii și a părului. Această translație a proprietăților este un exemplu clasic de inovare în marketing și formulare, unde un beneficiu cunoscut este recontextualizat pentru o nouă piață.</p>
+                    <h4>Aplicații în îngrijirea pielii (skincare)</h4>
+                    <ul>
+                        <li><strong>Produse:</strong> Se găsește frecvent în creme și geluri anti-celulită, loțiuni pentru fermitatea corpului, seruri pentru conturul ochilor (în special pentru reducerea pungilor și a cearcănelor), măști energizante și tratamente de conturare facială.[40, 41, 42, 43]</li>
+                        <li><strong>Mecanisme de acțiune:</strong> Principalul mecanism invocat este capacitatea cafeinei de a pătrunde în piele și de a stimula microcirculația locală.[41] Această creștere a fluxului sanguin și limfatic are mai multe efecte benefice:
+                            <ul>
+                                <li><strong>Efect drenant:</strong> Ajută la eliminarea excesului de fluide reținute în țesuturi, ceea ce duce la o reducere vizibilă a edemelor, cum ar fi pungile de sub ochi, și la ameliorarea aspectului de "coajă de portocală" al celulitei.[43]</li>
+                                <li><strong>Efect tonifiant și de fermitate:</strong> Cafeina are un efect vasoconstrictor și de "strângere" a pielii, ceea ce îmbunătățește tonusul și ajută la combaterea laxității cutanate în zonele predispuse, cum ar fi coapsele, abdomenul și brațele.[43, 44]</li>
+                                <li><strong>Acțiune anti-oboseală:</strong> Prin îmbunătățirea circulației, pielea primește mai mult oxigen și nutrienți, ceea ce îi conferă un aspect mai luminos, mai proaspăt și revitalizat, reducând semnele vizibile de oboseală.[43, 45]</li>
+                            </ul>
+                        </li>
+                        <li><strong>Proprietăți antioxidante:</strong> Pe lângă efectul circulator, conținutul bogat în antioxidanți (catechine, taninuri) protejează pielea împotriva stresului oxidativ cauzat de radicalii liberi și de factorii de mediu (poluare, radiații UV), contribuind la prevenirea îmbătrânirii premature și la menținerea elasticității pielii.[43, 46, 47]</li>
+                    </ul>
+                    <h4>Aplicații în îngrijirea părului (haircare)</h4>
+                    <ul>
+                        <li><strong>Produse:</strong> Extractul de guarana este un ingredient activ în șampoane, balsamuri, tonice pentru scalp și tratamente intensive, în special cele formulate pentru părul fragil, cu tendință de cădere, sau pentru scalpul gras.[48, 49, 50, 51, 52, 53, 54]</li>
+                        <li><strong>Mecanisme de acțiune:</strong> Beneficiile pentru păr sunt atribuite, de asemenea, cafeinei și celorlalți compuși activi:
+                            <ul>
+                                <li><strong>Stimularea scalpului:</strong> Se crede că aplicarea topică a cafeinei crește fluxul sanguin la nivelul scalpului, ceea ce duce la o mai bună oxigenare și nutriție a foliculilor de păr. Acest lucru poate prelungi faza de creștere a părului (faza anagenă) și poate promova o creștere mai sănătoasă și mai viguroasă.[50, 51]</li>
+                                <li><strong>Combaterea căderii părului:</strong> Unele studii sugerează că cafeina poate bloca local acțiunea dihidrotestosteronului (DHT), un hormon implicat în miniaturizarea foliculilor și în căderea părului de tip androgenetic.[50]</li>
+                                <li><strong>Fortificarea firului de păr:</strong> Guarana este promovată pentru capacitatea sa de a întări firul de păr din interior, făcându-l mai rezistent la rupere și la daunele mecanice.[50, 54]</li>
+                                <li><strong>Proprietăți astringente:</strong> Pentru scalpul gras, proprietățile astringente ale taninurilor din guarana pot ajuta la reglarea producției de sebum.[49]</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <table>
+                        <caption>Exemple de produse comerciale care conțin guarana</caption>
+                        <thead>
+                            <tr>
+                                <th>Categorie produs</th>
+                                <th>Exemplu de produs/brand</th>
+                                <th>Utilizare/beneficiu promovat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>băuturi răcoritoare/energizante</strong></td>
+                                <td>Guaraná Antarctica</td>
+                                <td>băutură răcoritoare națională a Braziliei, energizantă</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>diverse băuturi energizante</td>
+                                <td>creșterea energiei și a concentrării</td>
+                            </tr>
+                            <tr>
+                                <td><strong>suplimente alimentare</strong></td>
+                                <td>capsule/tablete/pulberi</td>
+                                <td>îmbunătățirea performanței cognitive și fizice, managementul greutății</td>
+                            </tr>
+                            <tr>
+                                <td><strong>cosmetice - îngrijirea pielii</strong></td>
+                                <td>Clarins V Shaping Facial Lift</td>
+                                <td>conturare facială, efect de lifting, anti-pungi</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>Carley's Anti-Cellulite Cream</td>
+                                <td>reducerea celulitei, tonifierea pielii</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>Sol de Janeiro (ex: Brazilian Bum Bum Cream)</td>
+                                <td>fermitate, hidratare, strălucire</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>Fenty Beauty</td>
+                                <td>fond de ten, produse de machiaj</td>
+                            </tr>
+                            <tr>
+                                <td><strong>cosmetice - îngrijirea părului</strong></td>
+                                <td>SO'BiO étic Fortified Hair Shampoo</td>
+                                <td>fortificare, revitalizare pentru păr fragil</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>RENE FURTERER FORTICEA</td>
+                                <td>prevenirea căderii părului, energizarea scalpului</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>Amazonplex Guaraná Protein</td>
+                                <td>tratament de îndreptare a părului, reparare</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="piata" class="tab-content">
+            <h2 class="zwp-section-title">Piața globală, siguranță și viitorul guaranei</h2>
+            <div class="zwp-card-grid">
+
+                <div class="zwp-topic-card bg-pale-blue">
+                    <h3>De la cultură locală la industrie globală</h3>
+                    <p>Transformarea guaranei dintr-o cultură de subzistență într-o marfă globală a avut un impact economic profund, în special pentru Brazilia, dar a adus cu sine și o serie de provocări complexe pentru producătorii de la baza lanțului valoric.</p>
+                    <h4>Importanța economică pentru Brazilia</h4>
+                    <ul>
+                        <li><strong>Monopol de producție:</strong> Brazilia deține un cvasi-monopol asupra producției comerciale de guarana la nivel mondial, fiind practic singurul furnizor semnificativ pentru piața globală.[8, 58] Această poziție unică îi conferă o importanță strategică în industria alimentară și a suplimentelor.</li>
+                        <li><strong>Creșterea producției:</strong> Evoluția producției este spectaculoasă. De la aproximativ 180-200 de tone de semințe uscate în anii 1970, producția a crescut la 300 de tone în 1977 și a ajuns la estimări de 2700-4300 de tone pe an în anii 2000 și 2010, reflectând cererea explozivă.[18, 58, 59]</li>
+                        <li><strong>Distribuția geografică a producției:</strong> Deși statul Amazonas, și în special regiunea Maués, este leagănul istoric al guaranei și deține cea mai mare suprafață cultivată (peste 8,000 de hectare în 2016), un paradox agricol a apărut în ultimele decenii. Statul Bahia, situat în nord-estul Braziliei, a devenit principalul producător în termeni de volum, generând aproximativ 70% din totalul național. Acest lucru se datorează randamentelor agricole mult mai mari obținute în Bahia, comparativ cu sistemele de cultură mai tradiționale din Amazonas.[59]</li>
+                        <li><strong>Structura pieței:</strong> Piața guaranei este dominată de industria băuturilor. Aproximativ 70% din producția totală este absorbită de producătorii de băuturi răcoritoare carbogazoase și energizante. Un singur gigant, Ambev (producătorul Guaraná Antarctica), este un cumpărător major, utilizând o parte semnificativă din recolta din Maués.[27, 59] Restul de 30% este direcționat către industria farmaceutică și cosmetică, precum și către export, principalele piețe internaționale fiind Japonia, Statele Unite și Europa.[27, 58, 59]</li>
+                    </ul>
+                    <h4>Provocări în cultivare și sustenabilitate</h4>
+                    <ul>
+                        <li><strong>Boli și dăunători:</strong> Antracnoza, o boală fungică devastatoare cauzată de <em>Colletotrichum guaranicola</em>, este principalul factor care limitează producția și expansiunea culturilor în statul Amazonas. Pentru a combate această problemă, instituții de cercetare precum Embrapa (Compania Braziliană de Cercetare Agricolă) au depus eforturi considerabile pentru a dezvolta și lansa soiuri noi, mai productive și rezistente la boli.[59, 60]</li>
+                        <li><strong>Provocări pentru micii fermieri:</strong> Cultivarea guaranei rămâne, în mare parte, o activitate de agricultură familială, în special în regiunile tradiționale.[58] Acești mici fermieri se confruntă cu obstacole sistemice: acces limitat la tehnologii moderne, cum ar fi metodele de propagare clonală pentru obținerea de răsaduri de înaltă calitate, și o infrastructură precară.[58] O problemă critică, evidențiată recent, este lipsa accesului la apă curată pentru spălarea fructelor recoltate. Acest pas este esențial pentru a menține calitatea semințelor și pentru a obține un preț bun pe piață.[61]</li>
+                        <li><strong>Riscuri de contaminare:</strong> În lipsa unor surse de apă potabilă și a electricității pentru a pompa apa din fântâni, mulți fermieri sunt nevoiți să folosească apa din râuri. Aceasta poate fi contaminată cu poluanți chimici, precum mercurul provenit de la activitățile de minerit artizanal de aur din regiune, sau cu agenți biologici. Contaminarea nu doar că scade valoarea de piață a recoltei, dar prezintă și riscuri grave pentru sănătatea fermierilor care manipulează apa poluată.[61]</li>
+                    </ul>
+                    <p>Această situație scoate în evidență un paradox economic profund. Pe de o parte, guarana este un ingredient valoros într-o industrie globală de miliarde de dolari, un motor pentru companii multinaționale. Pe de altă parte, la baza acestui lanț valoric se află comunități rurale și indigene din Amazon care se luptă cu probleme fundamentale de infrastructură, sănătate și acces la tehnologie. Acest model, clasic în comerțul global cu mărfuri, arată că valoarea economică masivă generată la nivel de consumator final nu se traduce automat în prosperitate sustenabilă pentru producătorii primari. Aceștia din urmă capturează doar o mică fracțiune din valoarea totală, în timp ce poartă majoritatea riscurilor agronomice, de mediu și de calitate.</p>
+                </div>
+
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Siguranță, riscuri și reglementare</h3>
+                    <p>Odată cu popularizarea pe scară largă a guaranei, în special în băuturi energizante și suplimente, evaluarea siguranței sale a devenit o prioritate pentru autoritățile de reglementare și pentru consumatori. Profilul de siguranță al guaranei este strâns legat de conținutul său de cafeină.</p>
+                    <h4>Profil de siguranță și efecte secundare</h4>
+                    <ul>
+                        <li><strong>Efecte comune:</strong> Consumată în doze moderate, guarana este considerată sigură pentru majoritatea adulților sănătoși. Efectele secundare sunt, în general, cele asociate cu consumul de cafeină și depind de doza și de sensibilitatea individuală. Acestea includ: insomnie, nervozitate, agitație, iritație gastrică, greață, palpitații și o frecvență urinară crescută.[62, 63, 64]</li>
+                        <li><strong>Supradozaj:</strong> Consumul de doze mari de guarana, echivalentul a peste 400 mg de cafeină pe zi, este considerat potențial periculos și poate duce la efecte adverse mai severe: dureri de cap intense, tremurături, vărsături, ritm cardiac neregulat (aritmii), creșterea tensiunii arteriale și, în cazuri rare și extreme de intoxicație acută, convulsii.[47, 63, 64] Dependența de cafeină este, de asemenea, un risc, iar întreruperea bruscă a consumului cronic poate duce la simptome de sevraj, cum ar fi dureri de cap, oboseală și iritabilitate.[47]</li>
+                    </ul>
+                    <h4>Contraindicații și grupuri de risc</h4>
+                    <p>Anumite grupuri de persoane ar trebui să evite sau să consume guarana cu prudență maximă:</p>
+                    <ul>
+                        <li><strong>Sarcină și alăptare:</strong> Deși cantitățile mici, similare celor din alimente, sunt probabil sigure, dozele mari sunt contraindicate. Consumul de cafeină peste 200-300 mg pe zi în timpul sarcinii a fost asociat cu un risc crescut de avort spontan și alte efecte negative. Cafeina trece în laptele matern și poate provoca iritabilitate și tulburări de somn la sugar.[47, 64]</li>
+                        <li><strong>Condiții medicale preexistente:</strong> Persoanele cu următoarele afecțiuni ar trebui să consulte un medic înainte de a consuma guarana:
+                            <ul>
+                                <li><strong>Tulburări de anxietate:</strong> Cafeina poate exacerba simptomele de anxietate și panică.[64]</li>
+                                <li><strong>Tulburări de sângerare:</strong> Cafeina poate încetini coagularea sângelui și ar putea agrava aceste tulburări.[64]</li>
+                                <li><strong>Boli de inimă și hipertensiune arterială:</strong> Cafeina poate provoca aritmii și poate crește temporar tensiunea arterială.[47, 64]</li>
+                                <li><strong>Glaucom:</strong> Cafeina crește presiunea intraoculară.[64]</li>
+                                <li><strong>Osteoporoză:</strong> Cafeina poate crește excreția de calciu prin urină, contribuind la slăbirea oaselor.[64]</li>
+                                <li><strong>Diabet:</strong> Unele cercetări sugerează că cafeina poate afecta modul în care organismul gestionează zahărul din sânge.[47]</li>
+                                <li><strong>Sindromul colonului iritabil (IBS):</strong> Dozele mari de cafeină pot agrava diareea la persoanele cu IBS.[64]</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <h4>Interacțiuni medicamentoase</h4>
+                    <table>
+                        <caption>Interacțiuni medicamentoase și contraindicații ale guaranei</caption>
+                        <thead>
+                            <tr>
+                                <th>Medicament/substanță/condiție</th>
+                                <th>Nivel de risc și natura interacțiunii</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>efedrină, amfetamine, cocaină</strong></td>
+                                <td><strong>Major (a se evita)</strong>: Combinația cu alți stimulanți puternici crește dramatic riscul de stimulare excesivă a SNC, hipertensiune severă, aritmii cardiace și alte evenimente cardiovasculare grave.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>anticoagulante/antiplachetare (ex: Warfarină, Aspirină)</strong></td>
+                                <td><strong>Moderat</strong>: Guarana poate avea efecte antiplachetare, crescând riscul de sângerare și echimoze atunci când este combinată cu medicamente care subțiază sângele.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>teofilină</strong></td>
+                                <td><strong>Moderat</strong>: Cafeina are o structură și acțiune similară cu teofilina (un medicament pentru astm) și poate reduce eliminarea acesteia din organism, crescând riscul de toxicitate.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Litiu</strong></td>
+                                <td><strong>Moderat</strong>: Cafeina poate accelera eliminarea litiului din organism. Întreruperea bruscă a cafeinei poate duce la creșterea periculoasă a nivelului de litiu.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>antidepresive (IMAO)</strong></td>
+                                <td><strong>Moderat</strong>: Combinația poate duce la o creștere periculoasă a tensiunii arteriale.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Clozapină, anumite antibiotice (chinolone), estrogeni</strong></td>
+                                <td><strong>Moderat</strong>: Aceste medicamente pot încetini metabolismul cafeinei în ficat, crescând nivelul acesteia în sânge și riscul de efecte secundare.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Adenozină</strong></td>
+                                <td><strong>Moderat</strong>: Cafeina blochează efectele adenozinei, un medicament folosit în testele de stres cardiac. Consumul de guarana trebuie oprit cu cel puțin 24 de ore înainte de un astfel de test.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>sarcină (doze mari), boli cardiace severe, anxietate severă</strong></td>
+                                <td><strong>Contraindicație</strong>: Grupurile de risc la care consumul ar trebui evitat sau făcut doar sub supraveghere medicală strictă.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h4>Statutul regulatoriu internațional</h4>
+                    <p>Abordările de reglementare pentru guarana diferă la nivel global, reflectând filozofii distincte.</p>
+                    <ul>
+                        <li><strong>Statele Unite (FDA):</strong> Food and Drug Administration reglementează guarana ca <strong>ingredient</strong>. Extractul de semințe de guarana este aprobat ca <strong>aditiv alimentar pentru aromatizare</strong>, dar nu a primit statutul GRAS ("Generally Recognized as Safe") pentru alte utilizări, cum ar fi cea de stimulent principal. Acest lucru înseamnă că poate fi adăugat în alimente și băuturi în principal pentru gustul său, deși efectele sale stimulante sunt un beneficiu secundar binecunoscut.[11, 65]</li>
+                        <li><strong>Uniunea Europeană (EFSA):</strong> Autoritatea Europeană pentru Siguranța Alimentară adoptă o abordare bazată pe <strong>compusul activ</strong>. Reglementările se concentrează pe siguranța <strong>cafeinei</strong>, indiferent de sursa sa (cafea, ceai, guarana etc.). EFSA a stabilit niveluri de siguranță clare pentru aportul de cafeină: doze unice de până la 200 mg și un consum zilnic total de până la 400 mg sunt considerate sigure pentru adulții sănătoși (cu excepția femeilor însărcinate, pentru care limita este de 200 mg/zi).[66, 67, 68] În consecință, Regulamentul (UE) nr. 1169/2011 impune o etichetare obligatorie pentru băuturile care conțin cafeină peste 150 mg/L: avertismentul "Conținut ridicat de cafeină. Nerecomandat pentru copii sau femeile însărcinate sau care alăptează" trebuie să apară pe ambalaj, pentru a proteja grupurile vulnerabile.[67, 69]</li>
+                    </ul>
+                    <p>Această divergență este semnificativă. Abordarea FDA este centrată pe ingredientul în sine și pe scopul său declarat în formulă, în timp ce abordarea UE este mai holistică din perspectiva siguranței consumatorului, recunoscând că riscul provine din doza totală de compus activ ingerată, nu neapărat din sursa acestuia.</p>
+                </div>
+
+                <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>Concluzii și perspective de viitor</h3>
+                    <h4>Sinteza cunoștințelor</h4>
+                    <p>Am demonstrat că guarana este mult mai mult decât o simplă sursă de cafeină. Este un artefact cultural, o tehnologie ancestrală de subzistență și un complex fitochimic. Valoarea sa în cultura Satere-Mawé nu a fost derivată din potențialul său comercial, ci din rolul său fundamental în cosmologie, ritual și supraviețuire, un rol cimentat de un mit fondator puternic și de o cunoaștere empirică rafinată de-a lungul mileniilor. Tranziția sa la o marfă globală, deși a adus recunoaștere și o piață vastă, a fost însoțită de o inevitabilă reducere a complexității sale, fiind adesea comercializată exclusiv pe baza conținutului său de cafeină și a promisiunii de "energie instantanee".</p>
+                    <h4>Teme cheie</h4>
+                    <ul>
+                        <li><strong>Tensiunea dintre cunoaștere și comercializare:</strong> Există un decalaj semnificativ între înțelegerea holistică, tradițională a guaranei ca tonic, medicament și aliment strategic, și comercializarea sa modernă, care o reduce adesea la un singur compus activ și un singur beneficiu.</li>
+                        <li><strong>Dezbaterea științifică (sinergie vs. cafeină):</strong> Știința modernă se confruntă cu provocarea de a cuantifica ceea ce cunoștințele tradiționale par să fi înțeles intuitiv: că efectul întregului (matricea fitochimică) este mai mult decât suma părților sale. Dezbaterea privind sinergia dintre cafeină, taninuri, catechine și alți compuși rămâne un domeniu fertil pentru cercetare, putând explica de ce efectul guaranei este adesea perceput ca fiind calitativ diferit de cel al cafeinei pure.</li>
+                        <li><strong>Paradoxul economic:</strong> Succesul economic răsunător al guaranei pe piața globală contrastează puternic cu provocările socio-economice și de mediu cu care se confruntă micii fermieri din Amazon, care se află la baza lanțului valoric. Acest paradox subliniază necesitatea unor modele de afaceri mai echitabile și mai sustenabile.</li>
+                        <li><strong>Divergența regulatorie:</strong> Diferențele dintre abordările de reglementare din SUA și UE evidențiază perspective distincte asupra siguranței alimentare: una axată pe ingredient și scopul său, cealaltă pe compusul activ și doza totală, cu implicații directe pentru protecția și informarea consumatorilor.</li>
+                    </ul>
+                    <h4>Recomandări pentru consumatori</h4>
+                    <p>Pe baza dovezilor analizate, consumatorii ar trebui să abordeze produsele cu guarana cu discernământ și prudență. Este esențial să se monitorizeze aportul total de cafeină din toate sursele (cafea, ceai, băuturi răcoritoare, ciocolată, suplimente) pentru a se încadra în limitele de siguranță recomandate (sub 400 mg/zi pentru majoritatea adulților). Persoanele cu afecțiuni medicale preexistente, femeile însărcinate sau care alăptează, și cele care iau medicamente ar trebui să consulte un profesionist din domeniul sănătății înainte de a utiliza suplimente cu guarana, din cauza riscurilor de efecte secundare și interacțiuni.</p>
+                    <h4>Direcții de cercetare viitoare</h4>
+                    <ol>
+                        <li><strong>Elucidarea sinergiei:</strong> Sunt necesare studii clinice riguroase, care să compare direct efectele guaranei cu cele ale unor doze echivalente de cafeină și cu cele ale altor compuși izolați (ex: catechine), pentru a înțelege pe deplin mecanismele sinergice asupra cogniției, dispoziției și performanței fizice.</li>
+                        <li><strong>Studii pe termen lung:</strong> Majoritatea cercetărilor s-au concentrat pe efectele acute. Sunt necesare studii pe termen lung pentru a evalua beneficiile și riscurile consumului cronic de guarana asupra sănătății cardiovasculare, metabolice și neurologice.</li>
+                        <li><strong>Potențial biotehnologic:</strong> Explorarea microorganismelor endofite care trăiesc în simbioză cu planta de guarana reprezintă o frontieră promițătoare. Acestea ar putea fi o sursă de noi compuși cu aplicații în agricultură (biofertilizatori, biopesticide) sau în industria farmaceutică (agenți antimicrobieni, anticancerigeni), așa cum sugerează cercetările incipiente.[60]</li>
+                        <li><strong>Sustenabilitate și echitate:</strong> Dezvoltarea și implementarea unor practici agricole care să sporească rezistența la boli, să conserve biodiversitatea și să îmbunătățească randamentele sunt cruciale. În paralel, este imperativă crearea unor lanțuri valorice mai transparente și mai echitabile, care să asigure că o parte mai mare din valoarea economică a guaranei se întoarce la comunitățile care au cultivat-o și au protejat-o timp de secole.</li>
+                    </ol>
+                    <p>În final, guarana rămâne un simbol puternic al bogăției biologice și culturale a Amazonului. Respectarea moștenirii sale, înțelegerea științifică a complexității sale și gestionarea responsabilă a resurselor sale vor fi esențiale pentru a asigura că "ochiul pădurii" continuă să ofere beneficii atât pentru sănătatea umană, cât și pentru ecosistemul din care provine.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="bibliografie" class="tab-content">
+            <h2 class="zwp-section-title">Bibliografie</h2>
+            <ol class="zwp-references-list">
+                <li>Henman, A. R. (1982). Guaraná (Paullinia cupana var. sorbilis): Ecological and social perspectives on an economic plant of the central Amazon basin. <em>Journal of Ethnopharmacology, 6</em>(3), 311–338.</li>
+                <li>Schimpl, F. C., da Silva, J. F., Gonçalves, J. F., & Mazzafera, P. (2013). Guarana: revisiting a highly caffeinated plant from the Amazon. <em>Journal of Ethnopharmacology, 150</em>(1), 14–31.</li>
+                <li>Tate, Z. (2009). The eyes of the forest. <em>Cultural Survival Quarterly Magazine</em>.</li>
+                <li>Cultural Survival. (n.d.). <em>The eyes of the forest</em>. Retrieved August 12, 2025, from https://www.culturalsurvival.org/publications/cultural-survival-quarterly/eyes-forest</li>
+                <li>Porto, K. R. A., et al. (2022). Guarana (Paullinia cupana) seed extract prevents in vitro protein glycation and brings potential benefits to Caenorhabditis elegans and human fibroblast cultures. <em>Food Research International, 153</em>, 110942.</li>
+                <li>Talik, T., Penna, E. M., Hack, B., & Millard, M. (2024). Effects of Guarana and Green Tea Consumption on Students’ Intellectual Performances. <em>Nutrients, 17</em>(6), 1000.</li>
+                <li>Aventura do Brasil. (n.d.). <em>Guarana - Exotic medicinal plant from the Amazon</em>. Retrieved August 12, 2025, from https://www.aventuradobrasil.com/blog/guarana-exotic-medicinal-plant-from-the-amazon/</li>
+                <li>Erickson, H. T., Correa, M. P. F., & Escobar, J. R. (1984). Guaraná (Paullinia cupana) as a Commercial Crop in Brazilian Amazonia. <em>Economic Botany, 38</em>(3), 273–286.</li>
+                <li>Garfield, S. (2022). A taste of Brazil: How guaraná soda became a national icon. <em>Not Even Past</em>.</li>
+                <li>Atroch, A. L., et al. (2012). From medicine to industry: the multifaceted history of Guaraná (Paullinia cupana Kunth., Sapindaceae). <em>Scalar</em>.</li>
+                <li>Wikipedia. (n.d.). <em>Guarana</em>. Retrieved August 12, 2025, from https://en.wikipedia.org/wiki/Guarana</li>
+                <li>Duarte, O., & Paull, R. E. (2015). <em>Paullinia cupana (guarana)</em>. In Exotic Fruits and Nuts of the New World (pp. 153-161). CABI.</li>
+                <li>Botanical.com. (n.d.). <em>Guarana</em>. Retrieved August 12, 2025, from https://www.botanical.com/botanical/mgmh/g/guaran42.html</li>
+                <li>Taylor, L. (2005). *The Healing Power of Rainforest Herbs: A Guide to Understanding and Using Herbal Medicinals*. Square One Publishers.</li>
+                <li>Raintree. (n.d.). *Guarana (Paullinia cupana)*. Retrieved August 12, 2025, from https://www.rain-tree.com/guarana.htm</li>
+                <li>Carlini, E. A. (2003). Plants and the central nervous system. *Pharmacology Biochemistry and Behavior, 75*(3), 501-512.</li>
+                <li>Barcelos, R. P., et al. (2020). Guarana (Paullinia cupana) improves the proliferation and oxidative stress of human umbilical vein endothelial cells (HUVEC). *Food & Function, 11*(12), 10606-10615.</li>
+                <li>Smith, N., & Atroch, A. L. (2010). Guaraná's Journey from Regional Tonic to Aphrodisiac and Global Energy Drink. *Evidence-Based Complementary and Alternative Medicine, 7*(3), 279-282.</li>
+                <li>Balick, M. J., & Beck, H. T. (Eds.). (1990). *Useful palms of the world: a synoptic bibliography*. New York Botanical Garden.</li>
+                <li>Embrapa. (n.d.). *Guaranazeiro (Paullinia cupana)*. Retrieved August 12, 2025, from https://www.embrapa.br/agencia-de-informacao-tecnologica/cultivos/guarana</li>
+                <li>The Plant List. (2013). *Paullinia cupana Kunth*. Retrieved August 12, 2025, from http://www.theplantlist.org/tpl1.1/record/kew-2545190</li>
+                <li>Moustakas, D., Mezzio, M., Rogers, B. R., & Kablinger, A. S. (2015). Guarana: A Comprehensive Review of Its Traditional Uses, Chemical Composition, and Modern Applications. *Journal of Dietary Supplements, 12*(1), 30-55.</li>
+                <li>Edwards, S., da Costa Rocha, I., Williamson, E. M., & Heinrich, M. (2015). *Phytopharmacy: An Evidence-Based Guide to Herbal Medicinal Products*. John Wiley & Sons.</li>
+                <li>Haskell, C. F., Kennedy, D. O., Wesnes, K. A., & Scholey, A. B. (2007). A double-blind, placebo-controlled, multi-dose evaluation of the acute behavioural effects of guaraná in humans. *Journal of Psychopharmacology, 21*(1), 65-70.</li>
+                <li>Mattei, R., Dias, R. F., Espínola, E. B., Carlini, E. A., & Barros, S. B. M. (1998). Guarana (Paullinia cupana): toxic behavioral effects in laboratory animals and antioxidant activity in vitro. *Journal of Ethnopharmacology, 60*(2), 111-116.</li>
+                <li>Yonekura, L., et al. (2016). Bioavailability of catechins from guaraná (Paullinia cupana) and its effect on antioxidant and appetite suppressing properties. *Food & Function, 7*(7), 3057-3064.</li>
+                <li>Galduróz, J. C., & Carlini, E. A. (1996). The effects of long-term administration of guarana on the cognition of normal, elderly volunteers. *São Paulo Medical Journal, 114*(1), 1073-1078.</li>
+                <li>Kennedy, D. O., Haskell, C. F., Wesnes, K. A., & Scholey, A. B. (2004). Improved cognitive performance in human volunteers following administration of guarana (Paullinia cupana) extract: comparison and interaction with Panax ginseng. *Pharmacology Biochemistry and Behavior, 79*(3), 401-411.</li>
+                <li>Espínola, E. B., Dias, R. F., Mattei, R., & Carlini, E. A. (1997). Pharmacological activity of Guaraná (Paullinia cupana Mart.) in laboratory animals. *Journal of Ethnopharmacology, 55*(3), 223-229.</li>
+                <li>Bempong, D. K., & Houghton, P. J. (1992). Dissolution and absorption of caffeine from guarana. *Journal of Pharmacy and Pharmacology, 44*(9), 769-771.</li>
+                <li>Lima, N. S., et al. (2017). Modulatory effects of guarana (Paullinia cupana) on adipogenesis. *Nutrients, 9*(6), 635.</li>
+                <li>Pomportes, L., et al. (2017). Cognitive performance enhancement induced by caffeine, carbohydrate and guarana mouth rinse during submaximal exercise. *Nutrients, 9*(6), 589.</li>
+                <li>Krewer, C., et al. (2011). Habitual intake of guaraná and metabolic morbidities: an epidemiological study of an elderly population in Amazonia. *Phytotherapy Research, 25*(9), 1367-1374.</li>
+                <li>Haskell, C. F., et al. (2013). A double-blind, placebo-controlled, multi-dose evaluation of the acute behavioural effects of a vitamin/mineral combination with and without guaraná in healthy young adults. *Human Psychopharmacology: Clinical and Experimental, 28*(3), 253-264.</li>
+                <li>Irion, T. A., & Tassinary, L. G. (2023). Effects of Guarana (Paullinia cupana) on Cognitive Performance: A Systematic Review and Meta-Analysis. *Journal of Dietary Supplements*, 1-17.</li>
+                <li>Kennedy, D. O., et al. (2008). Improved cognitive performance and mental fatigue following a multi-vitamin and mineral supplement with guaraná (Paullinia cupana). *Appetite, 50*(2-3), 506-513.</li>
+                <li>da Silva, A. L., et al. (2019). Effect of guaraná (Paullinia cupana) on the cognitive performance of athletes: a systematic review. *Journal of the International Society of Sports Nutrition, 16*(1), 1-10.</li>
+                <li>Guest, N. S., et al. (2021). International society of sports nutrition position stand: caffeine and exercise performance. *Journal of the International Society of Sports Nutrition, 18*(1), 1.</li>
+                <li>Peixoto, H., et al. (2022). The effects of supplementation with P. cupana on metabolism and performance in cyclists. *Biology, 11*(1), 125.</li>
+                <li>Clarins. (n.d.). *V Shaping Facial Lift*. Retrieved August 12, 2025, from https://www.clarinsusa.com/en/v-shaping-facial-lift/</li>
+                <li>Herman, A., & Herman, A. P. (2013). Caffeine's mechanisms of action and its cosmetic use. *Skin Pharmacology and Physiology, 26*(1), 8-14.</li>
+                <li>Carley's. (n.d.). *Anti-Cellulite Cream*. Retrieved August 12, 2025.</li>
+                <li>Rodrigues, F., et al. (2016). The potential of caffeine in skin care. *Cosmetics, 3*(1), 6.</li>
+                <li>Lupi, O. (2009). Cellulite: an evidence-based review. *American Journal of Clinical Dermatology, 10*(6), 383-393.</li>
+                <li>Byrdie. (2023). *Guarana for Skin: The Complete Guide*. Retrieved August 12, 2025.</li>
+                <li>Campos, P. M. B. G. M., et al. (2018). In vivo antioxidant and anti-inflammatory effects of a botanical complex with guaraná in a cosmetic formulation. *Journal of Cosmetic Dermatology, 17*(5), 896-903.</li>
+                <li>WebMD. (n.d.). *Guarana - Uses, Side Effects, and More*. Retrieved August 12, 2025, from https://www.webmd.com/vitamins/ai/ingredientmono-935/guarana</li>
+                <li>Fischer, T. W., et al. (2007). Effect of caffeine and testosterone on the proliferation of human hair follicles in vitro. *International Journal of Dermatology, 46*(1), 27-35.</li>
+                <li>SO'BiO étic. (n.d.). *Guarana Shampoo*. Retrieved August 12, 2025.</li>
+                <li>Völker, J. M., et al. (2020). Caffeine and its pharmacological benefits in the management of androgenetic alopecia: A review. *Skin Pharmacology and Physiology, 33*(3), 153-169.</li>
+                <li>RENE FURTERER. (n.d.). *FORTICEA Energizing Shampoo*. Retrieved August 12, 2025.</li>
+                <li>Amazonplex. (n.d.). *Guaraná Protein*. Retrieved August 12, 2025.</li>
+                <li>Cosmetics & Toiletries. (2019). *Guarana's Hair and Skin Benefits*. Retrieved August 12, 2025.</li>
+                <li>Kew. (n.d.). *Paullinia cupana Kunth*. Retrieved August 12, 2025, from https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:784180-1</li>
+                <li>Heckman, M. A., Weil, J., & De Mejia, E. G. (2010). Caffeine (1, 3, 7-trimethylxanthine) in foods: a comprehensive review on consumption, functionality, safety, and regulatory matters. *Journal of Food Science, 75*(3), R77-R87.</li>
+                <li>Drugs.com. (n.d.). *Guarana*. Retrieved August 12, 2025, from https://www.drugs.com/npp/guarana.html</li>
+                <li>Sephora. (n.d.). *Shop by Ingredient: Guarana*. Retrieved August 12, 2025.</li>
+                <li>Montagner, C., et al. (2020). Guarana (Paullinia cupana) production, from the plant to the final product. *In Production and management of medicinal plants*. IntechOpen.</li>
+                <li>Angelo, P. C. S., & Jorge, N. (2017). Bioactive compounds and properties of guaraná (Paullinia cupana) seeds: A review. *Journal of Medicinal Food, 20*(12), 1161-1168.</li>
+                <li>Ferreira, A. P., et al. (2019). Endophytic fungi from guaraná (Paullinia cupana): a source of bioactive compounds. *Letters in Applied Microbiology, 68*(1), 37-44.</li>
+                <li>Mongabay. (2022). *Guarana farmers in the Amazon face a contaminated water crisis*. Retrieved August 12, 2025.</li>
+                <li>RxList. (n.d.). *Guarana*. Retrieved August 12, 2025, from https://www.rxlist.com/guarana/supplements.htm</li>
+                <li>MedlinePlus. (n.d.). *Guarana*. Retrieved August 12, 2025, from https://medlineplus.gov/druginfo/natural/935.html</li>
+                <li>Mayo Clinic. (n.d.). *Caffeine: How much is too much?* Retrieved August 12, 2025.</li>
+                <li>FDA. (2018). *CFR - Code of Federal Regulations Title 21*. Retrieved August 12, 2025, from https://www.accessdata.fda.gov/scripts/cdrh/cfdocs/cfcfr/CFRSearch.cfm?fr=172.510</li>
+                <li>EFSA Panel on Dietetic Products, Nutrition and Allergies (NDA). (2015). Scientific Opinion on the safety of caffeine. *EFSA Journal, 13*(5), 4102.</li>
+                <li>European Parliament and Council. (2011). *Regulation (EU) No 1169/2011 on the provision of food information to consumers*.</li>
+                <li>Food Safety Authority of Ireland. (n.d.). *Caffeine*. Retrieved August 12, 2025.</li>
+                <li>Food Insight. (2021). *Everything You Need to Know About Caffeine*. Retrieved August 12, 2025.</li>
+            </ol>
+        </div>
+
+        <footer class="ztabs-footer">
+            <p>Copyright &copy; dr.ing. Radu Pascu - 2025</p>
+            <p>Acest document a fost generat automat și este destinat exclusiv scopurilor informative. Informațiile prezentate nu înlocuiesc sfatul medical profesionist.</p>
+        </footer>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            // Declararea variabilelor
+            var i, tabcontent, tablinks;
+
+            // Obținerea tuturor elementelor cu clasa "tab-content" și ascunderea lor
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Obținerea tuturor elementelor cu clasa "tab-link" și eliminarea clasei "active"
+            tablinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Afișarea tab-ului curent și adăugarea clasei "active" la butonul care a deschis tab-ul
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+         // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey && e.key === 'c') || (e.ctrlKey && e.key === 'u') || e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.shiftKey && e.key === 'J')) {
+                e.preventDefault();
+            }
+        });
+        
+    </script>
+</body>
+</html>
