@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ro" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluare Wellness - Nutriție Științifică</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e5e7eb; /* bg-gray-200 */
+        }
+        .site-container {
+            max-width: 1280px; /* max-w-screen-xl */
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #f9fafb; /* bg-gray-50 */
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); /* shadow-2xl */
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        /* Stiluri specifice paginii */
+        .page-header-blue {
+            background-color: #1e3a8a; /* Albastru închis */
+            color: white;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+        }
+        .section-title {
+            font-size: 2rem; /* text-3xl */
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .info-card {
+            background-color: #f0f9ff; /* bg-sky-50 */
+            border: 1px solid #dbeafe; /* border-blue-200 */
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .info-card h3 {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        .info-card p {
+            color: #374151; /* text-gray-700 */
+            line-height: 1.75;
+        }
+        /* Stiluri noi pentru cardurile cu parametri */
+        .parameter-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            background-color: #f0f9ff;
+            border: 1px solid #dbeafe;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+        .parameter-icon {
+            flex-shrink: 0;
+            width: 4rem; /* 64px */
+            height: 4rem; /* 64px */
+        }
+        .parameter-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e40af;
+            margin-bottom: 0.25rem;
+        }
+        .parameter-card p {
+            color: #374151;
+            line-height: 1.6;
+        }
+        .benefits-list {
+            list-style-type: '✓ ';
+            padding-left: 1.5rem;
+            color: #1e40af;
+            font-size: 1.125rem;
+        }
+        .benefits-list li {
+            padding-left: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .investment-box {
+            background-color: white;
+            border: 2px dashed #3b82f6; /* border-blue-500 */
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            max-width: 400px;
+            margin: auto;
+        }
+        .price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-200 text-gray-800">
+
+    <div class="site-container">
+
+        <!-- ===== Antet și Navigație ===== -->
+        <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+            <nav class="container mx-auto px-6 py-3">
+                <div class="flex justify-between items-center">
+                    <a href="index.html" class="flex items-center space-x-2">
+                        <img src="/imagini/sigla_NS.jpg" alt="Sigla Nutriție Științifică" class="h-12 w-12">
+                        <span class="text-xl font-bold text-blue-800">NutriSib</span>
+                    </a>
+                    <!-- Meniu Desktop -->
+                    <div class="hidden md:flex space-x-6 items-center">
+                        <a href="index.html" class="text-gray-600 hover:text-blue-600">Acasă</a>
+                        <a href="povestea.html" class="text-gray-600 hover:text-blue-600">Povestea mea</a>
+                        <a href="blog.html" class="text-gray-600 hover:text-blue-600">Blog</a>
+                        <a href="contact.html" class="text-gray-600 hover:text-blue-600">Contact</a>
+                    </div>
+                    <!-- Buton Meniu Mobil -->
+                    <div class="md:hidden">
+                        <button id="mobile-menu-button" class="text-gray-800 p-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                        </button>
+                    </div>
+                </div>
+                 <!-- Container Meniu Mobil (ascuns implicit) -->
+                <div id="mobile-menu" class="hidden md:hidden mt-4">
+                    <a href="index.html" class="block py-2 px-4 text-sm text-gray-700 hover:bg-blue-500 hover:text-white rounded">Acasă</a>
+                    <a href="povestea.html" class="block py-2 px-4 text-sm text-gray-700 hover:bg-blue-500 hover:text-white rounded">Povestea mea</a>
+                    <a href="blog.html" class="block py-2 px-4 text-sm text-gray-700 hover:bg-blue-500 hover:text-white rounded">Blog</a>
+                    <a href="contact.html" class="block py-2 px-4 text-sm text-gray-700 hover:bg-blue-500 hover:text-white rounded">Contact</a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="bg-white">
+            <header class="page-header-blue">
+                <h1 class="text-4xl md:text-5xl font-extrabold">Descoperă-ți adevărata stare de bine</h1>
+            </header>
+
+            <article class="py-12 px-6 container mx-auto max-w-4xl">
+                
+                <section class="my-8">
+                    <p class="text-center text-xl text-gray-700"><strong>Ești gata să preiei controlul asupra sănătății tale, să scapi de kilogramele în plus și să te simți plin(ă) de energie? Primul pas esențial este să înțelegi exact care este punctul tău de plecare.</strong></p>
+                </section>
+
+                <section class="my-16">
+                    <h2 class="section-title">Ce este evaluarea wellness?</h2>
+                    <p class="text-lg text-gray-700 text-justify">Evaluarea wellness este mult mai mult decât o simplă cântărire. Este o analiză corporală detaliată, non-invazivă, realizată cu un analizor profesional cu bioimpedanță (BIA). Această tehnologie avansată trimite un semnal electric de joasă frecvență, complet sigur, prin corp pentru a măsura compoziția acestuia și a crea o hartă personalizată către o viață mai sănătoasă.</p>
+                </section>
+
+                <section class="my-16">
+                    <h2 class="section-title">Cum se desfășoară?</h2>
+                    <div class="grid md:grid-cols-3 gap-6 text-center">
+                        <div class="info-card">
+                            <h3>1. Discuție inițială</h3>
+                            <p>Începem cu o conversație despre obiectivele, stilul de viață și obiceiurile tale, completăm documentele necesare.</p>
+                        </div>
+                        <div class="info-card">
+                            <h3>2. Măsurarea</h3>
+                            <p>Te vei urca desculț(ă) pe analizor. Procesul durează sub un minut și este nedureros. Aparatul folosește bioimpedanța pentru evaluare.</p>
+                        </div>
+                        <div class="info-card">
+                            <h3>3. Analiza rezultatelor</h3>
+                            <p>Îți voi explica clar și concis fiecare parametru măsurat și ce înseamnă pentru sănătatea ta.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="my-16">
+                    <h2 class="section-title">Parametrii esențiali măsurați</h2>
+                    <div class="space-y-6">
+                        
+                        <div class="parameter-card"><img src="tanita_012.png" alt="Icon" class="parameter-icon"><div><h3>1. Grăsime corporală (%)</h3><p><strong>Ce măsoară:</strong> Raportul dintre masa de grăsime și greutatea totală. <br><strong>De ce este important:</strong> Un nivel prea ridicat crește riscul de hipertensiune, boli de inimă, diabet și anumite tipuri de cancer.</p></div></div>
+                        <div class="parameter-card"><img src="tanita_012.png" alt="Icon" class="parameter-icon"><div><h3>2. Grăsime corporală segmentală (%)</h3><p><strong>Ce măsoară:</strong> Procentul de grăsime pentru fiecare dintre cele 5 segmente ale corpului: trunchi, brațul drept, brațul stâng, piciorul drept și piciorul stâng.<br><strong>De ce este important:</strong> Permite identificarea dezechilibrelor și personalizarea planului de antrenament.</p></div></div>
+                        <div class="parameter-card"><img src="tanita_003.png" alt="Icon" class="parameter-icon"><div><h3>3. Grăsime viscerală</h3><p><strong>Ce măsoară:</strong> Nivelul grăsimii "ascunse" care înconjoară organele vitale.<br><strong>De ce este important:</strong> Un nivel ridicat este direct asociat cu riscul de boli de inimă și diabet de tip 2. Reducerea ei este o prioritate absolută.</p></div></div>
+                        <div class="parameter-card"><img src="tanita_459.png" alt="Icon" class="parameter-icon"><div><h3>4. Masă musculară (kg)</h3><p><strong>Ce măsoară:</strong> Greutatea totală a mușchilor.<br><strong>De ce este important:</strong> Mușchii acționează ca motorul metabolic al corpului. Creșterea masei musculare ajută la accelerarea metabolismului și la arderea caloriilor.</p></div></div>
+                        <div class="parameter-card"><img src="tanita_459.png" alt="Icon" class="parameter-icon"><div><h3>5. Masă musculară segmentală</h3><p><strong>Ce măsoară:</strong> Masa musculară pentru fiecare dintre cele 5 segmente ale corpului.<br><strong>De ce este important:</strong> Este ideală pentru a monitoriza echilibrul muscular între partea stângă și dreaptă a corpului și progresul antrenamentelor.</p></div></div>
+                        <div class="parameter-card"><img src="tanita_006.png" alt="Icon" class="parameter-icon"><div><h3>6. Calitatea musculară</h3><p><strong>Ce măsoară:</strong> Indică starea (calitatea) mușchilor, care depinde de factori precum vârsta și exercițiile fizice.<br><strong>De ce este important:</strong> Un scor mai mare indică o densitate mai bună a fibrelor musculare și o calitate superioară a mușchilor.</p></div></div>
+                        <div class="parameter-card"><img src="tanita_007.png" alt="Icon" class="parameter-icon"><div><h3>7. Apă totală în corp (%)</h3><p><strong>Ce măsoară:</strong> Cantitatea totală de lichide din organism.<br><strong>De ce este important:</strong> O hidratare optimă susține nivelul de energie, funcțiile metabolice și ajută la eliminarea toxinelor.</p></div></div>
+                        <div class="parameter-card"><img src="tanita_008.png" alt="Icon" class="parameter-icon"><div><h3>8. Masă osoasă (kg)</h3><p><strong>Ce măsoară:</strong> Greutatea estimată a mineralelor din oase.<br><strong>De ce este important:</strong> Este importantă pentru a preveni osteoporoza, în special la femei și pe măsură ce înaintăm în vârstă.</p></div></div>
+                        <div class="parameter-card"><img src="tanita_459.png" alt="Icon" class="parameter-icon"><div><h3>9. Tipul fizic (Physique Rating)</h3><p><strong>Ce măsoară:</strong> Evaluează fizicul pe baza raportului dintre grăsime și mușchi.<br><strong>De ce este important:</strong> Oferă o imagine de ansamblu asupra compoziției corporale, clasificându-te într-una din cele 9 tipologii.</p></div></div>
+                        <div class="parameter-card"><img src="tanita_013.png" alt="Icon" class="parameter-icon"><div><h3>10. Rata metabolică bazală (BMR)</h3><p><strong>Ce măsoară:</strong> Numărul minim de calorii necesare corpului în repaus.<br><strong>De ce este important:</strong> Este esențială pentru a crea un plan alimentar eficient, care să susțină obiectivele de greutate fără a înfometa organismul.</p></div></div>
+                        <div class="parameter-card"><img src="tanita_013.png" alt="Icon" class="parameter-icon"><div><h3>11. Vârsta metabolică</h3><p><strong>Ce măsoară:</strong> Compară BMR-ul tău cu media pe grupe de vârstă.<br><strong>De ce este important:</strong> O vârstă metabolică mai mică decât cea reală indică un metabolism sănătos. Este un indicator excelent al progresului.</p></div></div>
+                        <div class="parameter-card"><img src="tanita_120.png" alt="Icon" class="parameter-icon"><div><h3>12. Indicele de masă corporală (IMC)</h3><p><strong>Ce măsoară:</strong> Un raport standard între greutate și înălțime.<br><strong>De ce este important:</strong> Este un indicator general, dar trebuie interpretat împreună cu ceilalți parametri, deoarece nu distinge între grăsime și mușchi.</p></div></div>
+                        <div class="parameter-card"><img src="tanita_013.png" alt="Icon" class="parameter-icon"><div><h3>13. Aportul caloric zilnic (DCI)</h3><p><strong>Ce măsoară:</strong> O estimare a numărului total de calorii pe care ar trebui să le consumi în 24 de ore pentru a-ți menține greutatea actuală, luând în calcul și activitatea fizică.<br><strong>De ce este important:</strong> Reprezintă punctul de plecare pentru a stabili un deficit caloric controlat pentru slăbire.</p></div></div>
+                        <div class="parameter-card"><img src="tanita_140.png" alt="Icon" class="parameter-icon"><div><h3>14. Ritmul cardiac în repaus</h3><p><strong>Ce măsoară:</strong> Numărul de bătăi ale inimii pe minut în stare de repaus.<br><strong>De ce este important:</strong> Este un indicator important al sănătății cardiovasculare. Poate fi monitorizat pentru a vedea îmbunătățirile condiției fizice.</p></div></div>
+
+                    </div>
+                </section>
+
+                <section class="my-16">
+                    <h2 class="section-title">Beneficiile tale clare și imediate</h2>
+                    <div class="max-w-md mx-auto">
+                        <ul class="benefits-list">
+                            <li>Claritate totală asupra situației tale actuale.</li>
+                            <li>Plan personalizat de nutriție și stil de viață.</li>
+                            <li>Plan de terapii complementare (după caz) individualizat.</li>
+                            <li>Plan particularizat de suplimente nutriționale.</li>
+                            <li>Motivație crescută pentru a acționa informat.</li>
+                            <li>Monitorizarea progresului real (grăsime vs. mușchi).</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="my-16">
+                    <h2 class="section-title">Investiția ta în sănătate</h2>
+                    <div class="investment-box">
+                        <div class="price">98 lei</div>
+                        <p class="text-gray-600">Această sumă acoperă o sesiune completă care include:</p>
+                        <ul class="list-none text-gray-700 mt-4">
+                            <li>Interviu detaliat de ~45 de minute</li>
+                            <li>Raportul complet al evaluării, explicat</li>
+                            <li>Plan de acțiune personalizat cu primii pași</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="text-center my-16">
+                    <h2 class="section-title">Ești gata să faci primul pas?</h2>
+                    <p class="text-lg text-gray-700 max-w-2xl mx-auto mb-8">Informația înseamnă putere. Odată ce ai această "radiografie" a stării tale de bine, drumul către atingerea obiectivelor devine clar și simplu.</p>
+                    <a href="https://tinyurl.com/ProfilWellness" class="bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg cta-button transition-all duration-300 inline-block" target="_blank" rel="noopener noreferrer">
+                        Programează acum evaluarea!
+                    </a>
+                </section>
+            </article>
+        </main>
+
+        <footer class="bg-gray-800 text-white">
+            <div class="container mx-auto px-6 py-8 text-center">
+                <p>&copy; 2025 NUTRISIB. Toate drepturile rezervate.</p>
+                <p class="text-sm text-gray-400 mt-2">dr.ing. Radu Pascu - 2025</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // Scripturile pentru meniu mobil
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+    
+</body>
+</html>
