@@ -725,20 +725,43 @@
 
     </div>
 
-    <script>
+     <script>
         function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
+            // Declararea variabilelor
+            let i, tabcontent, tablinks;
+
+            // Ascunde toate elementele cu clasa "tab-content"
             tabcontent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
             }
-            tablinks = document.getElementsByClassName("tab-button");
+
+            // Elimină clasa "active" de la toate butoanele cu clasa "tab-link"
+            tablinks = document.getElementsByClassName("tab-link");
             for (i = 0; i < tablinks.length; i++) {
                 tablinks[i].className = tablinks[i].className.replace(" active", "");
             }
+
+            // Afișează tab-ul curent și adaugă clasa "active" butonului care l-a deschis
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
         }
+
+        // Deschide primul tab în mod implicit la încărcarea paginii
+        document.addEventListener("DOMContentLoaded", function() {
+            // Caută primul buton și dă clic pe el pentru a afișa primul tab
+            document.getElementsByClassName('tab-link')[0].click();
+        });
+
+         // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey && e.key === 'c') || (e.ctrlKey && e.key === 'u') || e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.shiftKey && e.key === 'J')) {
+                e.preventDefault();
+            }
+        });
+        
     </script>
 
 </body>
