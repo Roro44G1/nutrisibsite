@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghidul valorilor de referință al principalelor analize medicale</title>
+    <style>
+        /* Se asigură că fontul Inter este încărcat */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        /* Definirea variabilelor de culoare pentru a fi ușor de modificat */
+        :root {
+            --dark-blue: #0A2463;
+            --medium-blue: #3E92CC;
+            --text-dark: #212529;
+            --text-light: #475569;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-color: #e0e0e0;
+
+            /* Paletă de culori pastelate, foarte pale */
+            --card-pale-blue: #f0f7ff;
+            --card-pale-green: #effaf5;
+            --card-pale-yellow: #fffcf2;
+            --card-pale-red: #fff5f5;
+            --card-pale-grey: #f8f9fa;
+            --card-pale-purple: #f9f5ff;
+            --card-pale-cyan: #edfcfc;
+        }
+
+        /* Stilul general al paginii */
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Containerul principal al articolului */
+        .ztabs-container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            background: var(--bg-white);
+            border-radius: 15px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .ztabs-header {
+            background-color: var(--dark-blue);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .ztabs-header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            margin: 0;
+            padding: 0;
+            color: white !important;
+            border: none !important;
+        }
+
+        /* Stiluri pentru sistemul de tab-uri */
+        .tab-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #f1f1f1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-link {
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 0.85em; /* Ajustat pentru a încăpea pe un rând */
+            font-weight: 600;
+            color: var(--dark-blue);
+            border-bottom: 3px solid transparent;
+            flex-grow: 1;
+            text-align: center;
+            white-space: nowrap; /* Previne trecerea pe rândul următor */
+        }
+
+        .tab-link:hover {
+            background-color: #ddd;
+        }
+
+        .tab-link.active {
+            background-color: var(--bg-white);
+            color: var(--dark-blue);
+            border-bottom: 3px solid var(--medium-blue);
+        }
+
+        .tab-content {
+            display: none; /* Ascunde tab-urile by default */
+            padding: 30px 40px;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Stiluri pentru card-urile de conținut */
+        .zwp-section-title {
+            font-size: 1.8em;
+            color: var(--dark-blue);
+            margin-bottom: 25px;
+            font-weight: 700;
+            border-bottom: 3px solid var(--medium-blue);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .zwp-card-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .zwp-topic-card {
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 2rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+        .zwp-topic-card.bg-pale-blue { background-color: var(--card-pale-blue); }
+        .zwp-topic-card.bg-pale-green { background-color: var(--card-pale-green); }
+        .zwp-topic-card.bg-pale-yellow { background-color: var(--card-pale-yellow); }
+        .zwp-topic-card.bg-pale-red { background-color: var(--card-pale-red); }
+        .zwp-topic-card.bg-pale-grey { background-color: var(--card-pale-grey); }
+        .zwp-topic-card.bg-pale-purple { background-color: var(--card-pale-purple); }
+        .zwp-topic-card.bg-pale-cyan { background-color: var(--card-pale-cyan); }
+
+        .zwp-topic-card h3 {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--dark-blue) !important;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--medium-blue);
+            padding-bottom: 0.5rem;
+        }
+
+        .zwp-topic-card h4 {
+            font-size: 1.1em;
+            color: var(--medium-blue) !important;
+            font-weight: 600;
+            margin-top: 1.2rem;
+            margin-bottom: 0.5rem;
+            border: none !important;
+            padding: 0 !important;
+        }
+
+        .zwp-topic-card p, .zwp-topic-card ul, .zwp-topic-card ol {
+            font-size: 0.95em;
+            color: var(--text-light);
+            text-align: justify;
+            margin-bottom: 10px;
+        }
+
+        .zwp-topic-card ul, .zwp-topic-card ol {
+            padding-left: 20px;
+        }
+        
+        .zwp-topic-card li {
+            margin-bottom: 5px;
+        }
+
+        .zwp-topic-card strong {
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+        
+        .note {
+            background-color: #fffde7;
+            border-left: 6px solid #fbc02d;
+            padding: 18px;
+            margin: 25px 0;
+            border-radius: 5px;
+        }
+
+        .zwp-topic-card table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9em;
+        }
+
+        .zwp-topic-card th, .zwp-topic-card td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #d1d9e6;
+        }
+
+        .zwp-topic-card th {
+            background-color: #e2e8f0;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+
+        .zwp-topic-card tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .zwp-topic-card td:first-child {
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        
+        .zwp-references-list {
+            list-style-type: decimal;
+            padding-left: 20px;
+            font-size: 0.85em; /* Dimensiune font redusă */
+            column-count: 2; /* Formatare pe două coloane */
+            column-gap: 40px; /* Spațiu între coloane */
+        }
+
+        .zwp-references-list li {
+            margin-bottom: 1em;
+            word-break: break-word;
+            padding-left: 5px;
+        }
+
+        .ztabs-footer {
+            text-align: center;
+            padding: 25px 20px;
+            font-size: 0.9em;
+            color: #6c757d;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-light);
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .tab-content {
+                padding: 20px;
+            }
+            .zwp-references-list {
+                column-count: 1;
+            }
+            .tab-link {
+                font-size: 0.8em;
+                padding: 12px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ztabs-container">
+        <header class="ztabs-header">
+            <h1>Ghidul valorilor de referință al principalelor analize medicale</h1>
+        </header>
+
+        <div class="tab-buttons">
+            <button class="tab-link active" onclick="openTab(event, 'Fundamente')">Fundamente</button>
+            <button class="tab-link" onclick="openTab(event, 'Sange')">Analize de sânge</button>
+            <button class="tab-link" onclick="openTab(event, 'Urina')">Analize de urină</button>
+            <button class="tab-link" onclick="openTab(event, 'Hormoni')">Profil hormonal</button>
+            <button class="tab-link" onclick="openTab(event, 'Special')">Analize speciale</button>
+            <button class="tab-link" onclick="openTab(event, 'Imagistica')">Imagistică</button>
+            <button class="tab-link" onclick="openTab(event, 'Concluzii')">Concluzii</button>
+            <button class="tab-link" onclick="openTab(event, 'Bibliografie')">Bibliografie</button>
+        </div>
+
+        <!-- Tab Content: Fundamente -->
+        <div id="Fundamente" class="tab-content" style="display: block;">
+            <h2 class="zwp-section-title">Fundamentele interpretării analizelor de laborator</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-blue">
+                    <h3>Rolul analizelor medicale în medicina modernă</h3>
+                    <p>Analizele de laborator reprezintă un pilon fundamental al practicii medicale contemporane, oferind o fereastră obiectivă asupra proceselor biochimice și fiziologice din organism. Aceste investigații sunt esențiale într-un spectru larg de contexte clinice, de la evaluările de rutină menite să prevină afecțiuni, până la diagnosticarea precisă a bolilor, monitorizarea eficacității unui tratament și evaluarea prognosticului.[1, 2] Un set de analize uzuale, efectuat anual, poate evalua funcțiile principalelor organe, precum ficatul, rinichii și glanda tiroidă, și poate identifica precoce factori de risc pentru boli cronice, cum ar fi diabetul zaharat sau afecțiunile cardiovasculare.[3, 4] Prin cuantificarea markerilor specifici, medicul obține indicii esențiale care, coroborate cu examenul clinic și istoricul pacientului, permit depistarea problemelor de sănătate în stadii incipiente, adesea înainte de manifestarea simptomelor.[5]</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Demistificarea "intervalului de referință": de ce "normal" este un concept relativ</h3>
+                    <p>Fiecare buletin de analize prezintă rezultatele pacientului în comparație cu un „interval de referință” sau „valori normale”. Este esențial de înțeles că acest interval nu reprezintă o limită absolută între sănătate și boală, ci un concept statistic. Aceste intervale sunt stabilite prin testarea unui număr mare de indivizi considerați sănătoși și reprezintă, de obicei, intervalul în care se încadrează 95% din rezultatele acestei populații. Prin urmare, o valoare situată ușor în afara acestui interval nu indică în mod automat prezența unei patologii. Interpretarea corectă depinde de o multitudine de factori, ceea ce face ca noțiunea de „normal” să fie extrem de relativă.</p>
+                    <p>Unul dintre cei mai importanți factori de variabilitate este metodologia utilizată de laborator. Diferite laboratoare pot folosi aparatură, reactivi și tehnici analitice distincte, ceea ce duce la intervale de referință diferite pentru același parametru.[6, 7] De exemplu, intervalul de referință pentru TSH (hormonul de stimulare tiroidiană) la un laborator poate fi 0.27-4.20 µUI/mL [8], în timp ce la altul poate fi 0.35-4.94 µUI/mL.[9] O persoană care își monitorizează funcția tiroidiană și efectuează analize la laboratoare diferite ar putea observa o modificare a valorii absolute a TSH-ului care nu reflectă o schimbare fiziologică reală, ci doar o diferență de calibrare. Din acest motiv, pentru monitorizarea pe termen lung a unei condiții medicale, este recomandată efectuarea analizelor la același laborator pentru a asigura consistența și comparabilitatea rezultatelor.</p>
+                    <p>Pe lângă variația inter-laborator, factorii fiziologici individuali joacă un rol crucial. Vârsta, sexul și statusul fiziologic, precum sarcina, influențează semnificativ majoritatea parametrilor biologici.[7, 8, 10] De exemplu, valorile normale ale hemoglobinei sunt diferite la bărbați față de femei [11], iar creatinina serică variază în funcție de masa musculară, fiind în general mai mare la bărbați.[10] În timpul sarcinii, mulți parametri se modifică fiziologic; progesteronul atinge niveluri foarte înalte [6], în timp ce TSH-ul tinde să scadă, în special în primul trimestru.[8]</p>
+                    <p>Stilul de viață are, de asemenea, un impact considerabil. Dieta, nivelul de activitate fizică, fumatul și stresul pot altera temporar sau cronic anumiți markeri.[6, 12] Un efort fizic intens poate duce la o creștere tranzitorie a proteinelor în urină [12], iar o dietă bogată în proteine poate crește nivelul ureei serice.[13] Rezultatele anormale sunt adesea marcate vizual pe buletinul de analize (încadrate într-un chenar sau colorate cu roșu) pentru a atrage atenția [11], însă semnificația clinică a acestor abateri trebuie stabilită exclusiv de către medic. Acesta va integra rezultatul în contextul clinic complet al pacientului, transformând o simplă cifră într-o informație relevantă pentru starea de sănătate individuală.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>Ghid de pregătire pentru recoltare: asigurarea acurateții rezultatelor</h3>
+                    <p>Acuratețea unui rezultat de laborator depinde în mod critic de calitatea probei recoltate. O pregătire necorespunzătoare a pacientului poate duce la rezultate eronate, care pot masca o problemă reală sau pot sugera una inexistentă. Respectarea instrucțiunilor de recoltare este, așadar, un pas esențial.</p>
+                    <h4>Pentru recoltarea de sânge:</h4>
+                    <p>Majoritatea analizelor de biochimie, în special profilul lipidic și glicemia, necesită o perioadă de repaus alimentar (`a jeun`) de 12-14 ore înainte de recoltare.[14, 15] În acest interval, este permis consumul de apă. Consumul de alimente, în special cele bogate în grăsimi, poate crește semnificativ nivelul trigliceridelor și poate afecta alți parametri, invalidând rezultatele. De asemenea, se recomandă abstinența de la consumul de alcool cu cel puțin 72 de ore înainte de recoltare [14] și evitarea efortului fizic intens în ziua premergătoare.</p>
+                    <h4>Pentru recoltarea de urină (sumar și urocultură):</h4>
+                    <p>Proba de urină ideală este prima urină de dimineață, deoarece este mai concentrată și reflectă mai fidel statusul metabolic și renal, nefiind influențată de aportul recent de lichide sau de activitatea fizică.[12, 16] Pentru a preveni contaminarea probei cu bacterii de pe piele, este crucială respectarea tehnicii de recoltare din "jetul mijlociu". Aceasta presupune o igienizare prealabilă a zonei genitale, eliminarea primului jet de urină în toaletă și colectarea porțiunii de mijloc a jetului direct în recipientul steril (urorecoltor).[16, 17] Proba trebuie transportată la laborator în maximum 2 ore de la recoltare. Dacă acest interval nu poate fi respectat, proba se poate păstra la frigider (la o temperatură de 2-8°C) pentru cel mult 6-8 ore pentru sumarul de urină și până la 24 de ore pentru urocultură.[12, 18]</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Analize Sânge -->
+        <div id="Sange" class="tab-content">
+            <h2 class="zwp-section-title">Analize de sânge uzuale</h2>
+            <div class="zwp-card-grid">
+                 <div class="zwp-topic-card bg-pale-blue">
+                    <p>Acestea sunt testele de bază, efectuate frecvent pentru a oferi o imagine de ansamblu asupra stării generale de sănătate, de la numărul de celule sanguine la funcția organelor vitale.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Hemoleucograma completă (HLC)</h3>
+                    <p>Hemoleucograma evaluează componentele celulare ale sângelui și este esențială în diagnosticarea anemiilor, infecțiilor sau a altor afecțiuni hematologice.</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parametru</th>
+                                <th>Valori normale (Interval de referință)</th>
+                                <th>Unitate de măsură</th>
+                                <th>Semnificație clinică detaliată</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Număr eritrocite (hematii)</strong></td><td>Femei: 4,2 - 5,4 / Bărbați: 4,7 - 6,1</td><td>mil./µL</td><td>Transportul oxigenului. <strong>Valori scăzute:</strong> Anemie. <strong>Valori crescute:</strong> Policitemie (poate indica deshidratare, boli pulmonare sau o afecțiune a măduvei osoase).</td></tr>
+                            <tr><td><strong>Hemoglobină (Hb)</strong></td><td>Femei: 12 - 16 / Bărbați: 14 - 18</td><td>g/dL</td><td>Proteina din eritrocite care leagă oxigenul. <strong>Valori scăzute:</strong> Anemie (diverse cauze: deficit de fier, sângerări etc.). <strong>Valori crescute:</strong> Policitemie.</td></tr>
+                            <tr><td><strong>Hematocrit (Ht)</strong></td><td>Femei: 37 - 47% / Bărbați: 42 - 52%</td><td>%</td><td>Procentul de eritrocite din volumul total de sânge. <strong>Valori scăzute:</strong> Anemie. <strong>Valori crescute:</strong> Deshidratare, policitemie.</td></tr>
+                            <tr><td><strong>Indici eritrocitari (VEM, HEM, CHEM, RDW)</strong></td><td>Variază</td><td>fL, pg, g/dL, %</td><td>Detalii despre mărimea și conținutul de hemoglobină al hematiilor, utile în clasificarea anemiilor.</td></tr>
+                            <tr><td><strong>Reticulocite</strong></td><td>0.5 - 2.5</td><td>%</td><td>Măsoară producția de noi globule roșii. <strong>Valori scăzute:</strong> Producție insuficientă de către măduvă (ex. anemie aplastică). <strong>Valori crescute:</strong> Răspunsul măduvei la o anemie (ex. după o sângerare).</td></tr>
+                            <tr><td><strong>Număr leucocite (globule albe)</strong></td><td>4.000 - 10.000</td><td>/µL</td><td>Rol în sistemul imunitar. <strong>Valori scăzute (leucopenie):</strong> Risc crescut de infecții (boli autoimune, afecțiuni ale măduvei). <strong>Valori crescute (leucocitoză):</strong> Infecții, inflamație, stres, leucemie.</td></tr>
+                            <tr><td>▸ Neutrofile</td><td>40 - 70%</td><td>%</td><td>Răspuns la infecții bacteriene. <strong>Valori scăzute (neutropenie):</strong> Risc sever de infecții. <strong>Valori crescute (neutrofilie):</strong> Infecții bacteriene acute.</td></tr>
+                            <tr><td>▸ Limfocite</td><td>20 - 40%</td><td>%</td><td>Răspuns la infecții virale. <strong>Valori scăzute (limfopenie):</strong> Boli autoimune, infecții (HIV). <strong>Valori crescute (limfocitoză):</strong> Infecții virale (mononucleoză), leucemie.</td></tr>
+                            <tr><td>▸ Monocite</td><td>2 - 8%</td><td>%</td><td>Fagocitoză. <strong>Valori crescute (monocitoză):</strong> Infecții cronice (tuberculoză), boli autoimune.</td></tr>
+                            <tr><td>▸ Eozinofile</td><td>1 - 4%</td><td>%</td><td>Răspuns la alergii și paraziți. <strong>Valori crescute (eozinofilie):</strong> Reacții alergice, astm, infecții parazitare.</td></tr>
+                            <tr><td>▸ Bazofile</td><td>0,5 - 1%</td><td>%</td><td>Rol în reacțiile alergice. <strong>Valori crescute (bazofilie):</strong> Reacții alergice, anumite leucemii.</td></tr>
+                            <tr><td><strong>Număr trombocite (plachete)</strong></td><td>150.000 - 450.000</td><td>/µL</td><td>Rol în coagulare. <strong>Valori scăzute (trombocitopenie):</strong> Risc de sângerare. <strong>Valori crescute (trombocitoză):</strong> Risc de tromboză.</td></tr>
+                            <tr><td><strong>VSH (Viteza de sedimentare a hematiilor)</strong></td><td>&lt; 15 (B) / &lt; 20 (F)</td><td>mm/h</td><td>Marker nespecific al inflamației. <strong>Valori crescute:</strong> Infecție, boli autoimune sau cancer.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>Biochimia serică</h3>
+                    <p>Aceste teste măsoară diverse substanțe chimice din sânge, oferind informații vitale despre metabolism și funcționarea unor organe cheie precum ficatul și rinichii.</p>
+                    
+                    <h4>Profilul renal și metabolic</h4>
+                    <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Valori normale (Interval de referință)</th><th>Unitate de măsură</th><th>Semnificație clinică detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Uree serică</strong></td><td>15 - 45</td><td>mg/dL</td><td>Produs de metabolism al proteinelor. <strong>Valori scăzute:</strong> Rar, poate indica malnutriție severă. <strong>Valori crescute:</strong> Insuficiență renală, deshidratare, dietă hiperproteică.</td></tr>
+                            <tr><td><strong>Creatinină serică</strong></td><td>Femei: 0,6 - 1,1 / Bărbați: 0,7 - 1,3</td><td>mg/dL</td><td>Produs de metabolism muscular, indicator al funcției renale. <strong>Valori scăzute:</strong> Masă musculară redusă. <strong>Valori crescute:</strong> Insuficiență renală.</td></tr>
+                            <tr><td><strong>Acid uric seric</strong></td><td>Femei: 2.4 - 5.7 / Bărbați: 3.4 - 7.0</td><td>mg/dL</td><td>Produs final al metabolismului purinelor. <strong>Valori scăzute:</strong> Rar. <strong>Valori crescute:</strong> Gută, insuficiență renală, chimioterapie.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Profilul hepatic și pancreatic</h4>
+                    <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Valori normale (Interval de referință)</th><th>Unitate de măsură</th><th>Semnificație clinică detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>TGO (AST)</strong></td><td>&lt; 40</td><td>U/L</td><td>Enzimă prezentă în ficat, inimă. <strong>Valori crescute:</strong> Leziuni hepatice, infarct miocardic, leziuni musculare.</td></tr>
+                            <tr><td><strong>TGP (ALT)</strong></td><td>&lt; 41</td><td>U/L</td><td>Enzimă specifică ficatului. <strong>Valori crescute:</strong> Leziuni hepatice (marker mai specific decât TGO).</td></tr>
+                            <tr><td><strong>GGT</strong></td><td>Femei: &lt; 38 / Bărbați: &lt; 55</td><td>U/L</td><td>Marker sensibil pentru afecțiuni hepatobiliare. <strong>Valori crescute:</strong> Boli hepatobiliare, consum de alcool.</td></tr>
+                            <tr><td><strong>Fosfataza alcalină (ALP)</strong></td><td>40 - 150</td><td>U/L</td><td><strong>Valori crescute:</strong> Boli hepatice colestatice, boli osoase, sarcină.</td></tr>
+                            <tr><td><strong>Bilirubină totală</strong></td><td>0,3 - 1,2</td><td>mg/dL</td><td>Pigment rezultat din descompunerea hemoglobinei. <strong>Valori crescute:</strong> Boli hepatice, obstrucție biliară, hemoliză.</td></tr>
+                            <tr><td><strong>Bilirubină directă</strong></td><td>0 - 0.3</td><td>mg/dL</td><td>Forma conjugată în ficat. <strong>Valori crescute:</strong> Obstrucție biliară, hepatită.</td></tr>
+                            <tr><td><strong>Bilirubină indirectă</strong></td><td>0.2 - 0.8</td><td>mg/dL</td><td>Forma neconjugată. <strong>Valori crescute:</strong> Hemoliză, sindrom Gilbert.</td></tr>
+                            <tr><td><strong>Amilaza serică</strong></td><td>28 - 100</td><td>U/L</td><td>Enzimă produsă de pancreas. <strong>Valori crescute:</strong> Pancreatită acută, oreion.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Profilul proteic</h4>
+                     <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Valori normale (Interval de referință)</th><th>Unitate de măsură</th><th>Semnificație clinică detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                           <tr><td><strong>Proteine totale serice</strong></td><td>6.4 - 8.3</td><td>g/dL</td><td>Măsoară suma tuturor proteinelor din sânge. <strong>Valori scăzute:</strong> Malnutriție, boli hepatice severe. <strong>Valori crescute:</strong> Deshidratare, inflamații cronice.</td></tr>
+                           <tr><td><strong>Albumina serică</strong></td><td>3.5 - 5.2</td><td>g/dL</td><td>Cea mai abundentă proteină. <strong>Valori scăzute:</strong> Boli hepatice, sindrom nefrotic, malnutriție.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Profilul glucidic și evaluarea rezistenței la insulină</h4>
+                    <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Valori normale (Interval de referință)</th><th>Unitate de măsură</th><th>Semnificație clinică detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Glicemie à jeun</strong></td><td>70 - 99</td><td>mg/dL</td><td>Nivelul zahărului în sânge. <strong>Valori scăzute (hipoglicemie):</strong> Poate cauza simptome severe. <strong>Valori crescute (hiperglicemie):</strong> Prediabet, diabet zaharat.</td></tr>
+                            <tr><td colspan="4"><strong>Hemoglobină glicozilată (HbA1c)</strong></td></tr>
+                            <tr><td>▸ Normal</td><td>&lt; 5,7%</td><td>%</td><td>Control glicemic bun.</td></tr>
+                            <tr><td>▸ Prediabet</td><td>5,7% - 6,4%</td><td>%</td><td>Risc crescut de a dezvolta diabet.</td></tr>
+                            <tr><td>▸ Diabet</td><td>≥ 6,5%</td><td>%</td><td>Confirmă diagnosticul de diabet.</td></tr>
+                            <tr><td><strong>Indice HOMA-IR</strong></td><td>&lt; 2.5 - 3.0</td><td>-</td><td>Evaluează rezistența la insulină. <strong>Valori crescute:</strong> Risc major pentru diabet tip 2 și boli cardiovasculare.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Profilul lipidic complet</h4>
+                    <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Nivel optim</th><th>Unitate de măsură</th><th>Semnificație clinică detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Colesterol total</strong></td><td>&lt; 200</td><td>mg/dL</td><td><strong>Crescut:</strong> Risc crescut de boală cardiovasculară aterosclerotică.</td></tr>
+                            <tr><td><strong>Colesterol LDL ("rău")</strong></td><td>&lt; 100</td><td>mg/dL</td><td><strong>Crescut:</strong> Principalul factor de risc pentru formarea plăcilor de aterom.</td></tr>
+                            <tr><td><strong>Colesterol HDL ("bun")</strong></td><td>≥ 60</td><td>mg/dL</td><td><strong>Scăzut:</strong> Risc crescut de boală cardiovasculară. Nivelurile ridicate sunt protectoare.</td></tr>
+                            <tr><td><strong>Colesterol VLDL</strong></td><td>5 - 40</td><td>mg/dL</td><td><strong>Crescut:</strong> Contribuie la ateroscleroză.</td></tr>
+                            <tr><td><strong>Trigliceride</strong></td><td>&lt; 150</td><td>mg/dL</td><td><strong>Crescute:</strong> Risc cardiovascular. Foarte crescute (>500) pot cauza pancreatită.</td></tr>
+                            <tr><td><strong>Lipide totale</strong></td><td>400 - 800</td><td>mg/dL</td><td><strong>Crescute:</strong> Indică o dislipidemie generală.</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Electroliți și markeri inflamatori</h4>
+                    <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Valori normale (Interval de referință)</th><th>Unitate de măsură</th><th>Semnificație clinică detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Sodiu (Na)</strong></td><td>136 - 145</td><td>mmol/L</td><td>Echilibrul hidric și nervos. <strong>Scăzut/Crescut:</strong> Dezechilibre hidrice severe, afecțiuni renale sau endocrine.</td></tr>
+                            <tr><td><strong>Potasiu (K)</strong></td><td>3,7 - 5,1</td><td>mmol/L</td><td>Funcția cardiacă și musculară. <strong>Scăzut/Crescut:</strong> Risc de aritmii cardiace severe.</td></tr>
+                            <tr><td><strong>Clor (Cl)</strong></td><td>97 - 105</td><td>mmol/L</td><td>Echilibrul hidric și acido-bazic. Variază de obicei împreună cu sodiul.</td></tr>
+                            <tr><td><strong>Calciu seric total</strong></td><td>8.6 - 10.2</td><td>mg/dL</td><td>Esențial pentru oase și mușchi. <strong>Scăzut:</strong> Tetanie, crampe. <strong>Crescut:</strong> Boli paratiroidiene, anumite cancere.</td></tr>
+                            <tr><td><strong>Calciu ionic</strong></td><td>4.65 - 5.25</td><td>mg/dL</td><td>Forma activă biologic a calciului. <strong>Scăzut/Crescut:</strong> Reflectă mai precis statusul calciului activ.</td></tr>
+                            <tr><td><strong>Magneziu (Mg)</strong></td><td>1,6 - 2,6</td><td>mg/dL</td><td>Rol în funcția musculară și nervoasă. <strong>Scăzut:</strong> Aritmii, crampe musculare.</td></tr>
+                            <tr><td><strong>Sideremie (Fier seric)</strong></td><td>Femei: 50 - 170 / Bărbați: 65 - 175</td><td>µg/dL</td><td>Componentă esențială a hemoglobinei. <strong>Scăzută:</strong> Anemie feriprivă. <strong>Crescută:</strong> Hemocromatoză.</td></tr>
+                             <tr><td><strong>Proteina C reactivă (CRP)</strong></td><td>&lt; 5</td><td>mg/L</td><td>Marker sensibil de inflamație. <strong>Crescută:</strong> Indică inflamație acută sau infecție.</td></tr>
+                        </tbody>
+                    </table>
+                     <h4>Profilul de coagulare</h4>
+                    <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Valori normale (Interval de referință)</th><th>Unitate de măsură</th><th>Semnificație clinică detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Timp Quick / Timp de protrombină (PT)</strong></td><td>11 - 13.5</td><td>secunde</td><td>Evaluează calea extrinsecă a coagulării. <strong>Prelungit:</strong> Deficit de factori de coagulare, boli hepatice, tratament anticoagulant.</td></tr>
+                            <tr><td><strong>Indice de protrombină (IP)</strong></td><td>> 70</td><td>%</td><td><strong>Scăzut:</strong> Risc crescut de sângerare.</td></tr>
+                            <tr><td><strong>INR (International Normalized Ratio)</strong></td><td>0.8 - 1.2</td><td>-</td><td>Standardizează timpul de protrombină. <strong>Crescut:</strong> Risc de sângerare. Este ținta terapeutică în tratamentul cu anticoagulante.</td></tr>
+                            <tr><td><strong>APTT (Timp de tromboplastină parțial activată)</strong></td><td>25 - 35</td><td>secunde</td><td>Evaluează calea intrinsecă a coagulării. <strong>Prelungit:</strong> Deficit de factori de coagulare, tratament cu heparină.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Analize Urină -->
+        <div id="Urina" class="tab-content">
+            <h2 class="zwp-section-title">Analize de urină</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-red">
+                    <p>Analiza urinei, o procedură non-invazivă, este o "biopsie lichidă" a organismului, oferind informații cruciale despre funcția renală, starea de hidratare, infecții urinare și afecțiuni sistemice precum diabetul sau bolile hepatice. Excreția anumitor substanțe (glucoză, proteine, corpi cetonici) sau celule (leucocite, eritrocite) în urină semnalează adesea o problemă metabolică sau o leziune la nivelul tractului urinar, permițând un diagnostic precoce.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-cyan">
+                    <h3>Sumarul de urină (examen biochimic)</h3>
+                    <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Valoare normală</th><th>Explicație detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Aspect / Culoare</strong></td><td>Clar / Galben-pai</td><td>Culoarea reflectă starea de hidratare. Aspectul tulbure poate indica prezența de celule (infecție) sau cristale.</td></tr>
+                            <tr><td><strong>pH</strong></td><td>5,0 - 8,0</td><td>Reflectă echilibrul acido-bazic al organismului. Un pH alcalin poate sugera o infecție urinară.</td></tr>
+                            <tr><td><strong>Densitate</strong></td><td>1.015 - 1.025</td><td>Măsoară capacitatea rinichilor de a concentra urina. O densitate fixă, scăzută, poate indica o boală renală cronică.</td></tr>
+                            <tr><td><strong>Leucocite, Nitriți</strong></td><td>Negativ</td><td>Prezența leucocitelor (piurie) și a nitriților (produși de bacterii) sunt semne clasice de infecție a tractului urinar.</td></tr>
+                            <tr><td><strong>Proteine, Glucoză</strong></td><td>Negativ / Absente</td><td>Proteinuria este un semn important de afectare renală. Glicozuria apare când nivelul de zahăr din sânge depășește capacitatea de reabsorbție a rinichilor, de obicei în diabet.</td></tr>
+                            <tr><td><strong>Corpi cetonici</strong></td><td>Negativ / Absenți</td><td>Apar în urină atunci când organismul folosește grăsimile ca sursă principală de energie, cum ar fi în diabetul necontrolat, înfometare sau diete ketogenice.</td></tr>
+                            <tr><td><strong>Bilirubină, Urobilinogen</strong></td><td>Negativ / Normal</td><td>Prezența bilirubinei în urină indică o afecțiune hepatică sau biliară. Urobilinogenul poate crește în boli hepatice sau hemoliză.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>Sedimentul urinar (examen microscopic)</h3>
+                     <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Valori normale (Interval de referință)</th><th>Unitate de măsură</th><th>Explicație detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Leucocite</strong></td><td>0 - 5</td><td>/câmp microscopic</td><td>Un număr crescut confirmă inflamația sau infecția tractului urinar.</td></tr>
+                            <tr><td><strong>Eritrocite</strong></td><td>0 - 2</td><td>/câmp microscopic</td><td>Prezența sângelui (hematuria) poate indica infecții, calculi, tumori sau boli glomerulare.</td></tr>
+                            <tr><td><strong>Celule epiteliale</strong></td><td>Rare</td><td>-</td><td>Prezența în număr mare a celulelor epiteliale renale poate indica o leziune tubulară.</td></tr>
+                            <tr><td><strong>Cilindri hialini</strong></td><td>Rari / Absenți</td><td>-</td><td>Pot apărea după efort fizic intens sau în deshidratare. Nu sunt specifici unei boli.</td></tr>
+                            <tr><td><strong>Cristale</strong></td><td>Absente sau rare</td><td>-</td><td>Prezența anumitor tipuri de cristale (ex. oxalat de calciu, acid uric) poate indica un risc crescut de formare a calculilor renali.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab Content: Profil hormonal -->
+        <div id="Hormoni" class="tab-content">
+            <h2 class="zwp-section-title">Profil hormonal</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-purple">
+                    <p>Hormonii sunt mesageri chimici care reglează procese complexe, de la metabolism și creștere, la reproducere și starea de spirit.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Funcția tiroidiană</h3>
+                     <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Valori normale (Interval de referință)</th><th>Unitate de măsură</th><th>Semnificație clinică detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>TSH</strong></td><td>0,27 - 4,2</td><td>µUI/mL</td><td>Cel mai important test de screening. <strong>Valori scăzute:</strong> Sugerează hipertiroidism. <strong>Valori crescute:</strong> Sugerează hipotiroidism.</td></tr>
+                            <tr><td><strong>FT4 (Tiroxina liberă)</strong></td><td>0,93 - 1,7</td><td>ng/dL</td><td>Principalul hormon produs de tiroidă. <strong>Valori scăzute:</strong> Sugerează hipotiroidism. <strong>Valori crescute:</strong> Sugerează hipertiroidism.</td></tr>
+                            <tr><td><strong>FT3 (Triiodotironina liberă)</strong></td><td>3.1 - 6.8</td><td>pmol/L</td><td>Forma cea mai activă a hormonului tiroidian. <strong>Valori scăzute:</strong> Hipotiroidism. <strong>Valori crescute:</strong> Hipertiroidism.</td></tr>
+                            <tr><td><strong>Anti-TPO</strong></td><td>&lt; 34</td><td>UI/mL</td><td>Anticorpi anti-tiroperoxidază. <strong>Valori crescute:</strong> Marker principal pentru tiroidita autoimună Hashimoto, cea mai frecventă cauză de hipotiroidism.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="zwp-topic-card bg-pale-blue">
+                    <h3>Hormonii sexuali</h3>
+                    <div class="note"><p>Notă: Valorile pentru hormonii feminini variază semnificativ în funcție de faza ciclului menstrual.</p></div>
+                    <h4>Explicația hormonilor sexuali</h4>
+                    <ul>
+                        <li><strong>Estradiol (E2):</strong> Principalul hormon estrogenic feminin, responsabil pentru dezvoltarea caracterelor sexuale secundare, reglarea ciclului menstrual și menținerea sănătății osoase. La bărbați, este prezent în cantități mici și are rol în funcția erectilă și producția de spermă.</li>
+                        <li><strong>Progesteron:</strong> Hormon esențial pentru pregătirea uterului pentru sarcină și menținerea acesteia. Nivelul său crește semnificativ după ovulație, în faza luteală a ciclului.</li>
+                        <li><strong>FSH (Hormonul foliculostimulant):</strong> La femei, stimulează creșterea și maturarea foliculilor ovarieni. La bărbați, este crucial pentru producția de spermă (spermatogeneză).</li>
+                        <li><strong>LH (Hormonul luteinizant):</strong> La femei, un vârf brusc al LH declanșează ovulația. La bărbați, stimulează celulele Leydig din testicule să producă testosteron.</li>
+                        <li><strong>Testosteron:</strong> Principalul hormon sexual masculin, responsabil pentru caracterele sexuale secundare, masa musculară, libidou și producția de spermă. La femei, este prezent în cantități mici și contribuie la libidou și la sănătatea oaselor și a mușchilor.</li>
+                    </ul>
+                    <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Fază / Sex</th><th>Valori normale</th><th>Unitate de măsură</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td rowspan="4"><strong>Estradiol (E2)</strong></td><td>Faza foliculară</td><td>12,5 - 166</td><td>pg/mL</td></tr>
+                            <tr><td>Faza ovulatorie</td><td>85,8 - 498</td><td>pg/mL</td></tr>
+                            <tr><td>Faza luteală</td><td>43,8 - 211</td><td>pg/mL</td></tr>
+                            <tr><td>Post-menopauză</td><td>&lt; 54,7</td><td>pg/mL</td></tr>
+                            <tr><td rowspan="3"><strong>Progesteron</strong></td><td>Faza foliculară</td><td>&lt; 0,1 - 0,3</td><td>ng/mL</td></tr>
+                            <tr><td>Faza luteală</td><td>1,2 - 15,9</td><td>ng/mL</td></tr>
+                            <tr><td>Post-menopauză</td><td>&lt; 0,1 - 0,2</td><td>ng/mL</td></tr>
+                            <tr><td><strong>FSH</strong></td><td>Faza foliculară</td><td>3,5 - 12,5</td><td>mUI/mL</td></tr>
+                            <tr><td><strong>LH</strong></td><td>Faza foliculară</td><td>2,4 - 12,6</td><td>mUI/mL</td></tr>
+                            <tr><td rowspan="2"><strong>Testosteron</strong></td><td>Bărbați (adulți)</td><td>2,8 - 8,0</td><td>ng/mL</td></tr>
+                            <tr><td>Femei (adulte)</td><td>0,06 - 0,82</td><td>ng/mL</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                 <div class="zwp-topic-card bg-pale-cyan">
+                    <h3>Hormonii suprarenalieni, renali și markeri tumorali specifici</h3>
+                    <p>Acești hormoni sunt implicați în reglarea tensiunii arteriale, a răspunsului la stres și a echilibrului hidric al organismului.</p>
+                     <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Valori normale (Interval de referință)</th><th>Unitate de măsură</th><th>Semnificație clinică detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Cortizol seric (ora 8:00)</strong></td><td>133 - 537</td><td>nmol/L</td><td>"Hormonul stresului". <strong>Valori scăzute:</strong> Insuficiență suprarenaliană (boala Addison). <strong>Valori crescute:</strong> Sindrom Cushing, stres.</td></tr>
+                            <tr><td><strong>Aldosteron</strong></td><td>Variază cu postura</td><td>ng/dL</td><td>Reglează tensiunea arterială. <strong>Valori scăzute:</strong> Hipoadosteronism. <strong>Valori crescute:</strong> Hiperaldosteronism primar, cauză de hipertensiune secundară.</td></tr>
+                            <tr><td><strong>Renina plasmatică directă</strong></td><td>Variază cu postura</td><td>µUI/mL</td><td>Enzimă renală. <strong>Valori scăzute:</strong> Hiperaldosteronism primar. <strong>Valori crescute:</strong> Hipertensiune renovasculară.</td></tr>
+                            <tr><td><strong>Metanefrine libere plasmatice</strong></td><td>Metanefrina: &lt;65 / Normetanefrina: &lt;196</td><td>pg/mL</td><td>Markeri pentru feocromocitom. <strong>Valori crescute:</strong> Foarte specific pentru această tumoră.</td></tr>
+                            <tr><td><strong>ADH (Hormon antidiuretic)</strong></td><td>0 - 13</td><td>pmol/L</td><td>Reglează echilibrul apei. <strong>Valori scăzute:</strong> Diabet insipid central. <strong>Valori crescute:</strong> Sindrom de secreție inadecvată de ADH (SIADH).</td></tr>
+                            <tr><td><strong>PSA (Antigen specific prostatic)</strong></td><td>&lt; 4.0</td><td>ng/mL</td><td>Marker pentru afecțiuni ale prostatei. <strong>Valori crescute:</strong> Hiperplazie benignă, prostatită, cancer de prostată.</td></tr>
+                            <tr><td><strong>Free PSA</strong></td><td>Raport > 0.25</td><td>-</td><td>Ajută la diferențierea între afecțiuni benigne și maligne. <strong>Raport scăzut:</strong> Risc crescut de cancer de prostată.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Analize Speciale -->
+        <div id="Special" class="tab-content">
+            <h2 class="zwp-section-title">Analize speciale din sânge și urină</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-grey">
+                    <p>Aceste teste avansate sunt recomandate de medic pentru a investiga afecțiuni specifice, de la statusul nutrițional și imunitar, la funcții endocrine complexe.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-blue">
+                    <h3>Markeri nutriționali și ai inflamației</h3>
+                    <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Valori normale (Interval de referință)</th><th>Unitate de măsură</th><th>Explicație detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Vitamina D (25-OH)</strong></td><td>Nivel optim: 30 - 100</td><td>ng/mL</td><td>Rol crucial în sănătatea oaselor și funcția imunitară. <strong>Valori scăzute:</strong> Risc crescut de osteoporoză. <strong>Valori crescute (toxicitate):</strong> Rară, poate cauza hipercalcemie.</td></tr>
+                            <tr><td><strong>Vitamina B12</strong></td><td>~200 - 900 (variază)</td><td>pg/mL</td><td>Esențială pentru sistemul nervos și sânge. <strong>Valori scăzute:</strong> Anemie megaloblastică. <strong>Valori crescute:</strong> Boli hepatice, anumite leucemii.</td></tr>
+                            <tr><td><strong>Index Omega-3</strong></td><td>Nivel optim: > 8%</td><td>%</td><td>Indicator al riscului cardiovascular. <strong>Valori scăzute:</strong> Risc cardiovascular crescut, status pro-inflamator.</td></tr>
+                            <tr><td><strong>Raport Omega-6 / Omega-3</strong></td><td>Raport optim: ~3:1</td><td>-</td><td>Marker al statusului inflamator. <strong>Valori crescute:</strong> Indică o dietă pro-inflamatorie.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Markeri ai sistemului imunitar și boli infecțioase</h3>
+                    <h4>Electroforeza proteinelor serice și imunofixarea</h4>
+                    <p>Electroforeza separă proteinele din sânge în fracțiuni. Când se suspectează prezența unei proteine anormale (componentă monoclonală, "vârf M"), se efectuează <strong>imunofixarea (imunotiparea)</strong>. Această tehnică identifică cu precizie tipul de proteină monoclonală (ex. IgG kappa), fiind esențială pentru diagnosticul mielomului multiplu.</p>
+                    <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Procent</th><th>Valoare absolută</th><th>Unitate de măsură</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Proteine totale</strong></td><td>-</td><td>6,0 – 8,3</td><td>g/dL</td></tr>
+                            <tr><td><strong>Albumină</strong></td><td>50 - 60%</td><td>3,5 – 5,0</td><td>g/dL</td></tr>
+                            <tr><td><strong>Globuline Gamma</strong></td><td>12 - 22%</td><td>0,7 – 1,6</td><td>g/dL</td></tr>
+                        </tbody>
+                    </table>
+                    <h4>Imunoglobulinele</h4>
+                     <p>Acestea sunt anticorpii produși de sistemul imunitar.</p>
+                    <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Valori normale (Interval de referință)</th><th>Unitate de măsură</th><th>Explicație detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Imunoglobulina A (IgA)</strong></td><td>70 - 400</td><td>mg/dL</td><td>Principalul anticorp de la nivelul mucoaselor. <strong>Scăzută:</strong> Imunodeficiență selectivă de IgA. <strong>Crescută:</strong> Boli hepatice.</td></tr>
+                            <tr><td><strong>Imunoglobulina G (IgG)</strong></td><td>700 - 1600</td><td>mg/dL</td><td>Reflectă imunitatea pe termen lung. <strong>Scăzută:</strong> Imunodeficiențe. <strong>Crescută:</strong> Infecții cronice, boli autoimune.</td></tr>
+                            <tr><td><strong>Imunoglobulina M (IgM)</strong></td><td>40 - 230</td><td>mg/dL</td><td>Marker de fază acută. <strong>Scăzută:</strong> Imunodeficiențe. <strong>Crescută:</strong> Infecție acută.</td></tr>
+                            <tr><td><strong>Imunoglobulina E (IgE)</strong></td><td>&lt; 100</td><td>kU/L</td><td>Implicată în reacțiile alergice. <strong>Crescută:</strong> Boli alergice, infecții parazitare.</td></tr>
+                        </tbody>
+                    </table>
+                    <h4>Markeri pentru boli infecțioase</h4>
+                     <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Rezultat normal</th><th>Semnificație clinică detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Ac HIV 1+2</strong></td><td>Negativ / Non-reactiv</td><td><strong>Pozitiv (Reactiv):</strong> Indică prezența anticorpilor împotriva virusului HIV, sugerând infecția. Necesită teste de confirmare.</td></tr>
+                            <tr><td><strong>Ac HCV</strong></td><td>Negativ / Non-reactiv</td><td><strong>Pozitiv (Reactiv):</strong> Indică prezența anticorpilor împotriva virusului hepatitic C. Necesită testare ARN-VHC pentru a confirma infecția activă.</td></tr>
+                            <tr><td><strong>RPR / VDRL</strong></td><td>Negativ / Non-reactiv</td><td><strong>Pozitiv (Reactiv):</strong> Test de screening pentru sifilis. Necesită teste de confirmare specifice.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>Analize din urina colectată pe 24 de ore</h3>
+                    <p>Aceste teste necesită colectarea întregii cantități de urină produsă într-un interval de 24 de ore și oferă o imagine mai precisă asupra excreției anumitor substanțe.</p>
+                     <table>
+                        <thead>
+                            <tr><th>Parametru</th><th>Valori normale (Interval de referință)</th><th>Unitate de măsură</th><th>Semnificație clinică detaliată</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Proteine totale</strong></td><td>&lt; 140</td><td>mg/24h</td><td>Detectarea pierderilor anormale de proteine. <strong>Crescute (proteinurie):</strong> Semn major de boală renală.</td></tr>
+                            <tr><td><strong>Clearance la creatinină</strong></td><td>Femei: 88 - 128 / Bărbați: 97 - 137</td><td>mL/min</td><td>Măsură precisă a ratei de filtrare a rinichilor. <strong>Scăzut:</strong> Indică insuficiență renală.</td></tr>
+                            <tr><td><strong>Cortizol liber urinar</strong></td><td>Femei: 2 - 15 / Bărbați: 3 - 23</td><td>mcg/24h</td><td>Evaluarea producției totale de cortizol. <strong>Crescut:</strong> Indicator pentru sindromul Cushing.</td></tr>
+                            <tr><td><strong>Metanefrine urinare</strong></td><td>Variază cu vârsta și sexul</td><td>µg/24h</td><td>Markeri pentru feocromocitom. <strong>Crescute:</strong> Foarte sugestiv pentru această tumoră.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- NEW TAB: Imagistica -->
+        <div id="Imagistica" class="tab-content">
+            <h2 class="zwp-section-title">Ghid de investigații imagistice</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-blue">
+                    <h3>Ecografia abdominală</h3>
+                    <p><strong>Ce investighează:</strong> Ecografia abdominală este o metodă de diagnostic neinvazivă, neiradiantă și larg accesibilă care utilizează ultrasunete pentru a vizualiza în timp real organele interne din abdomen. Este adesea prima investigație imagistică recomandată pentru o gamă largă de simptome abdominale.</p>
+                    <p><strong>Organe vizate:</strong> Ficatul, colecistul (vezica biliară), căile biliare, pancreasul, splina, rinichii, vezica urinară, prostata la bărbați, uterul și ovarele la femei, precum și vasele mari de sânge (aorta, vena cavă).</p>
+                    <p><strong>Ce diagnostice pot fi confirmate:</strong>
+                        <ul>
+                            <li><strong>Afecțiuni hepatice:</strong> Steatoza hepatică ("ficat gras"), ciroza, chisturi, hemangioame, tumori benigne sau maligne.</li>
+                            <li><strong>Afecțiuni biliare:</strong> Litiaza biliară (pietre la fiere), colecistita (inflamația colecistului), polipi, tumori.</li>
+                            <li><strong>Afecțiuni pancreatice:</strong> Pancreatita acută sau cronică (modificări de structură), chisturi, tumori.</li>
+                            <li><strong>Afecțiuni splenice:</strong> Splenomegalia (mărirea splinei) în contextul bolilor hepatice sau hematologice.</li>
+                            <li><strong>Afecțiuni renale:</strong> Litiaza renală (pietre la rinichi), hidronefroza (dilatarea rinichiului), chisturi, tumori.</li>
+                            <li><strong>Alte:</strong> Anevrism de aortă abdominală, prezența de lichid liber în abdomen (ascită).</li>
+                        </ul>
+                    </p>
+                    <p><strong>Ce nu poate confirma:</strong> Ecografia este limitată în vizualizarea structurilor pline cu aer (stomac, intestine), fiind mai puțin utilă pentru diagnosticul gastritei, ulcerului sau al tumorilor intestinale. De asemenea, vizualizarea poate fi dificilă la pacienții obezi sau cu mult gaz intestinal.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Ecografia tiroidiană</h3>
+                    <p><strong>Ce investighează:</strong> Este metoda de elecție pentru evaluarea structurii glandei tiroide. Utilizează ultrasunete pentru a măsura dimensiunile glandei și pentru a caracteriza orice leziune focală (nodul).</p>
+                    <p><strong>Organe vizate:</strong> Glanda tiroidă și ganglionii limfatici din regiunea cervicală.</p>
+                    <p><strong>Ce diagnostice pot fi confirmate:</strong>
+                        <ul>
+                            <li>Detectarea și caracterizarea nodulilor tiroidieni (solizi, chistici, micști), evaluarea riscului de malignitate pe baza unor caracteristici specifice (scor EU-TIRADS).</li>
+                            <li>Diagnosticul gușii (mărirea glandei tiroide).</li>
+                            <li>Evaluarea aspectului în tiroidite autoimune (ex. tiroidita Hashimoto, unde glanda are un aspect hipoecogen și neomogen).</li>
+                            <li>Ghidarea puncției-biopsie cu ac fin pentru nodulii suspecți.</li>
+                        </ul>
+                    </p>
+                    <p><strong>Ce nu poate confirma:</strong> Ecografia nu poate evalua funcția glandei tiroide. Un diagnostic de hipo- sau hipertiroidism se stabilește doar prin analize de sânge (TSH, FT4). De asemenea, nu poate confirma cu certitudine natura malignă a unui nodul; diagnosticul de certitudine se pune prin examen histopatologic (biopsie).</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-cyan">
+                    <h3>Ecografia renală, de artere renale și de glande suprarenale</h3>
+                    <p><strong>Ce investighează:</strong> Această investigație combină ecografia standard a rinichilor cu tehnica Doppler pentru a evalua fluxul de sânge în arterele renale. Glandele suprarenale, situate deasupra rinichilor, pot fi și ele vizualizate.</p>
+                    <p><strong>Organe vizate:</strong> Rinichii (parenchim, sistem colector), arterele și venele renale, glandele suprarenale.</p>
+                    <p><strong>Ce diagnostice pot fi confirmate:</strong>
+                        <ul>
+                            <li><strong>Rinichi:</strong> Litiază, chisturi, tumori, hidronefroză, semne de boală cronică (rinichi micșorați, parenchim subțiat).</li>
+                            <li><strong>Artere renale (Doppler):</strong> Stenoza de arteră renală, o cauză importantă de hipertensiune arterială secundară.</li>
+                            <li><strong>Glande suprarenale:</strong> Poate detecta tumori suprarenaliene de dimensiuni mai mari (adenoame, feocromocitoame), deși CT-ul sau RMN-ul sunt mai sensibile pentru leziuni mici.</li>
+                        </ul>
+                    </p>
+                    <p><strong>Ce nu poate confirma:</strong> Ecografia nu poate măsura direct funcția de filtrare a rinichilor (pentru aceasta sunt necesare creatinina serică și clearance-ul la creatinină). Vizualizarea glandelor suprarenale poate fi dificilă, în special la pacienții corpolenți.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-red">
+                    <h3>Ecografia transvaginală</h3>
+                    <p><strong>Ce investighează:</strong> Este o ecografie pelvină specializată, în care sonda ecografică se introduce în vagin. Această abordare permite obținerea unor imagini de înaltă rezoluție ale organelor genitale interne feminine, fiind superioară ecografiei abdominale pentru aceste structuri.</p>
+                    <p><strong>Organe vizate:</strong> Uterul, endometrul (mucoasa uterină), ovarele, trompele uterine (limitat), colul uterin.</p>
+                    <p><strong>Ce diagnostice pot fi confirmate:</strong>
+                        <ul>
+                            <li><strong>Afecțiuni uterine:</strong> Fibroame, aderențe, malformații uterine.</li>
+                            <li><strong>Afecțiuni endometriale:</strong> Polipi, hiperplazie endometrială, evaluarea grosimii endometrului în funcție de ciclul menstrual.</li>
+                            <li><strong>Afecțiuni ovariene:</strong> Chisturi ovariene, sindromul ovarelor polichistice, tumori ovariene.</li>
+                            <li>Confirmarea și monitorizarea sarcinii incipiente, inclusiv excluderea sarcinii extrauterine.</li>
+                        </ul>
+                    </p>
+                    <p><strong>Ce nu poate confirma:</strong> Nu poate evalua permeabilitatea trompelor uterine (pentru aceasta este necesară histerosalpingografia). Nu poate vizualiza organele abdominale superioare.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>Endoscopia digestivă superioară și colonoscopia</h3>
+                    <p><strong>Ce investighează:</strong> Sunt proceduri endoscopice care permit vizualizarea directă a mucoasei tractului digestiv. Endoscopia superioară examinează esofagul, stomacul și duodenul, în timp ce colonoscopia examinează întregul colon și porțiunea terminală a intestinului subțire.</p>
+                    <p><strong>Organe vizate:</strong> Esofag, stomac, duoden (endoscopia); Colon, rect, ileon terminal (colonoscopia).</p>
+                    <p><strong>Ce diagnostice pot fi confirmate:</strong>
+                        <ul>
+                            <li>Inflamații (esofagită, gastrită, duodenită, colită).</li>
+                            <li>Ulcer gastric sau duodenal.</li>
+                            <li>Infecția cu Helicobacter pylori (prin prelevare de biopsie).</li>
+                            <li>Boala de reflux gastroesofagian.</li>
+                            <li>Polipi colonici (care pot fi și îndepărtați în timpul procedurii - polipectomie), diverticuli.</li>
+                            <li>Boli inflamatorii intestinale (boala Crohn, colita ulcerativă).</li>
+                            <li>Tumori benigne sau maligne (cancer esofagian, gastric, colorectal). Permite prelevarea de biopsii pentru diagnostic de certitudine.</li>
+                        </ul>
+                    </p>
+                    <p><strong>Ce nu poate confirma:</strong> Aceste proceduri nu pot vizualiza intestinul subțire în totalitate (pentru aceasta se folosește video-capsula endoscopică). De asemenea, nu oferă informații despre structurile din afara peretelui digestiv (ficat, pancreas etc.).</p>
+                </div>
+                 <div class="zwp-topic-card bg-pale-purple">
+                    <h3>CT (Tomografie Computerizată) și RMN (Rezonanță Magnetică Nucleară)</h3>
+                    <p><strong>Ce investighează:</strong> Sunt metode imagistice avansate, "secționale", care oferă imagini detaliate, multi-planare, ale întregului corp. CT-ul folosește raze X, fiind rapid și excelent pentru oase, plămâni și evaluări de urgență. RMN-ul folosește câmpuri magnetice și unde radio, nu iradiază și oferă un contrast superior pentru țesuturile moi (creier, articulații, ficat, organe pelvine).</p>
+                    <p><strong>Organe vizate:</strong> Practic orice organ din corp, în funcție de regiunea scanată (cap, torace, abdomen, pelvis, membre).</p>
+                    <p><strong>Ce diagnostice pot fi confirmate:</strong>
+                        <ul>
+                            <li><strong>Neurologie (RMN):</strong> Accidente vasculare cerebrale, tumori cerebrale, scleroză multiplă, hernii de disc.</li>
+                            <li><strong>Oncologie (CT/RMN):</strong> Detectarea, stadializarea și monitorizarea răspunsului la tratament pentru majoritatea tipurilor de cancer.</li>
+                            <li><strong>Abdomen (CT/RMN):</strong> Caracterizarea detaliată a leziunilor hepatice, pancreatice, renale sau suprarenaliene, adesea descoperite la ecografie.</li>
+                            <li><strong>Traumatisme (CT):</strong> Metoda de elecție pentru evaluarea rapidă a leziunilor osoase și de organe interne în urgențe.</li>
+                        </ul>
+                    </p>
+                    <p><strong>Angio-CT și Angio-RMN:</strong> Sunt variante specializate ale acestor tehnici, realizate cu substanță de contrast intravenoasă, care permit vizualizarea detaliată a vaselor de sânge (artere și vene) din orice regiune a corpului. Sunt esențiale pentru diagnosticul anevrismelor, stenozelor (îngustărilor), disecțiilor sau trombozelor vasculare.</p>
+                    <p><strong>Ce nu poate confirma:</strong> Nu pot evalua funcția unui organ (ex. un RMN hepatic poate arăta ciroza, dar funcția hepatică este dată de analizele de sânge). De asemenea, nu pot oferi un diagnostic de certitudine pentru cancer; acesta necesită confirmare prin biopsie.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Concluzii -->
+        <div id="Concluzii" class="tab-content">
+            <h2 class="zwp-section-title">O perspectivă integrată asupra sănătății</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>Importanța screeningului periodic: Prevenție vs. Tratament</h3>
+                    <p>Medicina modernă se află într-un punct de inflexiune, în care accentul se mută din ce în ce mai mult de la tratarea bolilor deja instalate la prevenirea apariției lor. În acest context, screeningul periodic prin analize de laborator nu este un lux, ci o necesitate fundamentală. Multe dintre cele mai grave afecțiuni ale secolului XXI – bolile cardiovasculare, diabetul de tip 2, bolile renale cronice sau anumite tipuri de cancer – au o perioadă lungă de evoluție subclinică, "silențioasă", în care nu generează niciun simptom. În această fereastră de oportunitate, analizele de sânge și urină pot acționa ca un sistem de avertizare timpurie, detectând modificări subtile care semnalează un risc crescut.</p>
+                    <p>A identifica un nivel de colesterol LDL "borderline crescut" sau o valoare a hemoglobinei glicozilate în intervalul de prediabet nu înseamnă a pune un diagnostic de boală, ci a identifica o șansă de a acționa. Contrastul dintre intervenția în acest stadiu și managementul bolii declarate este uriaș. Prevenția, în acest caz, poate însemna modificări ale dietei și ale stilului de viață – intervenții accesibile, cu impact pozitiv asupra întregului organism. Tratamentul, pe de altă parte, implică adesea medicație cronică, costuri financiare semnificative, vizite medicale regulate și, cel mai important, managementul complicațiilor care pot reduce drastic calitatea și speranța de viață. Un accident vascular cerebral, un infarct miocardic sau necesitatea dializei sunt evenimente dramatice care ar fi putut fi, în multe cazuri, prevenite prin monitorizarea atentă și corectarea factorilor de risc cu ani sau chiar decenii înainte.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Pachetul de bază gratuit: un drept și o responsabilitate</h3>
+                    <p>În România, sistemul de asigurări de sănătate (prin Casa Națională de Asigurări de Sănătate - CNAS) oferă fiecărui asigurat dreptul la un set de analize medicale preventive, în mod gratuit, o dată pe an. Acest pachet de bază se obține pe baza unui bilet de trimitere de la medicul de familie și este conceput special pentru a acoperi principalii indicatori ai stării de sănătate. Deși lista exactă poate suferi modificări, în general, acest pachet include:</p>
+                    <ul>
+                        <li><strong>Hemoleucograma completă (HLG)</strong></li>
+                        <li><strong>Viteza de sedimentare a hematiilor (VSH)</strong></li>
+                        <li><strong>Glicemia</strong></li>
+                        <li><strong>Profilul lipidic: Colesterol total, Colesterol HDL, Trigliceride</strong></li>
+                        <li><strong>Profilul renal: Creatinină, Uree</strong></li>
+                        <li><strong>Profilul hepatic: TGO, TGP</strong></li>
+                        <li><strong>Examenul complet de urină (sumar și sediment)</strong></li>
+                    </ul>
+                    <p>Acest set de analize, deși pare simplu, este extrem de puternic. El poate depista anemia, semne de inflamație sau infecție, riscul de diabet și boli cardiovasculare, precum și indicii ale unor afecțiuni hepatice sau renale. Accesarea acestui drept este, în același timp, o responsabilitate individuală față de propria sănătate. A nu efectua acest control anual înseamnă a ignora cea mai simplă și eficientă metodă de a preveni boli grave. Este un instrument pe care statul îl pune la dispoziție tocmai pentru a reduce povara bolilor cronice la nivel de populație, iar utilizarea lui este un prim pas esențial în auto-îngrijire.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-blue">
+                    <h3>Medicul de familie: partenerul principal în managementul sănătății</h3>
+                    <p>O tendință îngrijorătoare în societatea modernă este auto-interpretarea analizelor și prezentarea la camera de gardă pentru valori considerate anormale, fără un context clinic. Camerele de gardă sunt destinate urgențelor medicale reale, care pun viața în pericol, nu pentru managementul pe termen lung al sănătății. Adevăratul partener al pacientului în acest demers este medicul de familie.</p>
+                    <p>Medicul de familie este singurul specialist care are o perspectivă completă și continuă asupra stării de sănătate a pacientului. El cunoaște istoricul medical, afecțiunile cronice, tratamentele urmate și contextul familial. Doar el poate interpreta corect o valoare de laborator, integrând-o în acest tablou complex. O creatinină ușor crescută poate fi nesemnificativă la un tânăr sportiv, dar alarmantă la un pacient vârstnic diabetic. O valoare a TGP la limita superioară poate fi un semnal de alarmă pentru steatoză hepatică la un pacient obez, dar poate fi o variație normală la altcineva. Medicul de familie este cel care centralizează informațiile, decide dacă sunt necesare investigații suplimentare, oferă trimiteri către specialiști și, cel mai important, urmărește evoluția în timp. Construirea unei relații de încredere și colaborare pe termen lung cu medicul de familie este piatra de temelie a unui management eficient al sănătății.</p>
+                </div>
+                 <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>Rolul central al consultului medical și al pacientului informat</h3>
+                    <p>Acest ghid a fost conceput ca un instrument educațional exhaustiv, menit să ofere o înțelegere aprofundată a semnificației analizelor medicale. Scopul său nu este de a înlocui medicul, ci de a transforma pacientul într-un partener de dialog mai competent și mai implicat. Un pacient informat, care înțelege de ce i se recomandă o anumită analiză și ce înseamnă, în linii mari, rezultatul, este mai probabil să adere la recomandările medicale, să înțeleagă importanța modificărilor stilului de viață și să participe activ la deciziile care îi privesc sănătatea.</p>
+                    <div class="note">
+                        <p><strong>Cu toate acestea, este imperativ să se sublinieze că acest ghid nu poate și nu trebuie să înlocuiască un consult medical specializat.</strong> Auto-diagnosticul pe baza unor valori de laborator izolate este periculos și poate duce la anxietate nejustificată sau, dimpotrivă, la ignorarea unor probleme reale. Interpretarea finală a oricărui rezultat de laborator aparține exclusiv medicului. Utilizarea responsabilă a acestor informații, în cadrul unui dialog deschis cu medicul de familie, poate contribui la o gestionare proactivă și eficientă a sănătății personale.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Bibliografie -->
+        <div id="Bibliografie" class="tab-content">
+            <h2 class="zwp-section-title">Bibliografie</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-blue">
+                    <ol class="zwp-references-list">
+                        <li>https://www.synevo.ro/ateroscleroza-profil-lipidic/</li>
+                        <li>https://binisan.ro/set-complet-analize-binisan/</li>
+                        <li>https://www.reginamaria.ro/analize-de-laborator/pachete-analize/setul-anual-de-analize-adulti</li>
+                        <li>https://www.synevo.ro/analize-de-sange/</li>
+                        <li>https://facias.ro/eng/ghid-practic-ce-ai-de-facut-pentru-a-beneficia-de-analize-medicale-chiar-daca-s-au-epuizat-fondurile-de-la-cnas/</li>
+                        <li>https://www.medlife.ro/glosar-medical/analize-medicale/progesteron</li>
+                        <li>https://www.medlife.ro/glosar-medical/analize-medicale/hemoleucograma</li>
+                        <li>https://www.synevo.ro/ask4help/</li>
+                        <li>https://ro.scribd.com/document/459462169/Analize-medlife-Dana-07-02-2020-pdf</li>
+                        <li>https://www.synevo.ro/shop/creatinina-serica/</li>
+                        <li>https://www.reginamaria.ro/articole-medicale/lucruri-mai-putin-cunoscute-despre-analizele-de-laborator</li>
+                        <li>https://www.synevo.ro/ghid/recoltare-teste-efectuate-din-urina-din-24-ore/</li>
+                        <li>https://www.synevo.ro/shop/uree-serica/</li>
+                        <li>https://www.synevo.ro/shop/profil-lipidic/</li>
+                        <li>https://www.medicover.ro/analize/hemoleucograma-completa/</li>
+                        <li>https://www.synevo.ro/shop/urina-biochimie-si-sediment/</li>
+                        <li>https://www.sanador.ro/ghid-recoltare-analize</li>
+                        <li>https://www.synevo.ro/ghid/</li>
+                        <li>https://nord.ro/hemoleucograma-completa/</li>
+                        <li>https://www.medlife.ro/glosar-medical/analize-medicale/eozinofile</li>
+                        <li>https://www.synevo.ro/shop/uree-serica/</li>
+                        <li>https://www.medlife.ro/glosar-medical/analize-medicale/creatinina-serica</li>
+                        <li>https://spitalulsebes.ro/wp-content/uploads/2023/12/Ghid-ANALIZE-MEDICALE.pdf</li>
+                        <li>https://bioclinica.ro/analize/biochimie/tgo-asat</li>
+                        <li>https://www.synevo.ro/shop/creatinina-urinara-24-ore/</li>
+                        <li>https://www.synevo.ro/ateroscleroza-profil-lipidic/</li>
+                        <li>https://synevo.md/shop/colesterol-ldl/</li>
+                        <li>https://www.synevo.ro/afectiuni/despre-profilul-lipidic/</li>
+                        <li>https://www.synevo.ro/shop/colesterol-ldl/</li>
+                        <li>https://www.poliana.ro/sanatatea-de-la-a-la-z/hemoglobina-glicata-glicozilata-hba1c/</li>
+                        <li>https://www.reginamaria.ro/articole-medicale/sanatatea-familiei/dincolo-de-diabet-ce-poate-spune-hemoglobina-glicozilata-hba1c-despre-sanatatea-ta</li>
+                        <li>https://www.medicover.ro/analize/hemoglobina-glicozilata/</li>
+                        <li>https://www.synevo.ro/shop/hemoglobina-glicata-hb-a1c/</li>
+                        <li>https://raportuldegarda.ro/studiu-cazurile-diabet-omise-diagnosticul-bazeaza-valorile-hemoglobinei-glicozilate/</li>
+                        <li>https://www.synevo.ro/shop/cortizol-seric/</li>
+                        <li>https://www.synevo.ro/ionograma-serica-si-echilibrul-metabolic/</li>
+                        <li>https://www.reginamaria.ro/articole-medicale/colectarea-urinei-din-24-de-ore</li>
+                        <li>https://www.sanador.ro/ionograma-serica</li>
+                        <li>https://www.poliana.ro/analiza/clor-seric/</li>
+                        <li>https://www.poliana.ro/analiza/sodiu-seric/</li>
+                        <li>https://www.medlife.ro/glosar-medical/analize-medicale/magneziu</li>
+                        <li>https://www.gralmedical.ro/analize/magneziu-seric</li>
+                        <li>https://www.drmax.ro/articole/sideremie-ce-este-valori-afectiuni-asociate</li>
+                        <li>https://www.poliana.ro/sanatatea-de-la-a-la-z/totul-despre-fier/</li>
+                        <li>https://www.sanador.ro/feritina</li>
+                        <li>https://www.medlife.ro/glosar-medical/analize-medicale/25-oh-vitamina-d</li>
+                        <li>https://www.poliana.ro/analiza/electroforeza-proteinelor-serice/</li>
+                        <li>https://www.medlife.ro/glosar-medical/analize-medicale/electroforeza-proteinelor-serice</li>
+                        <li>https://www.synevo.ro/shop/electroforeza-proteinelor-serice/</li>
+                        <li>https://www.sfatulmedicului.ro/arhiva_medicala/albumine-globuline</li>
+                        <li>https://www.medicover.ro/analize/imunoglobulina-g/</li>
+                        <li>https://www.synevo.ro/shop/imunoglobulina-iga/</li>
+                        <li>https://www.medlife.ro/glosar-medical/analize-medicale/igm</li>
+                        <li>https://www.exeterlaboratory.com/test/immunoglobulins-iga-igg-igm/</li>
+                        <li>https://www.reginamaria.ro/utile/dictionar-de-analize/sumarul-de-urina-biochimie-si-sediment-urinar</li>
+                        <li>https://www.drmax.ro/articole/totul-despre-examenul-de-urina</li>
+                        <li>https://www.synevo.ro/shop/urina-sediment/</li>
+                        <li>https://www.synevo.ro/shop/urocultura-cu-antibiograma-dupa-caz/</li>
+                        <li>https://www.catena.ro/cand-este-necesara-testarea-hormonilor-tiroidieni</li>
+                        <li>https://www.synevo.ro/ask4help-ft4/</li>
+                        <li>https://www.medicover.ro/analize/tiroxina-libera-ft4/</li>
+                        <li>https://www.poliana.ro/sanatatea-de-la-a-la-z/evaluare-hormonala/</li>
+                        <li>https://clinicaeminescu100.ro/analize-medicale-bucuresti/profil-hormonal/</li>
+                        <li>https://www.webmd.com/women/normal-testosterone-and-estrogen-levels-in-women</li>
+                        <li>https://www.medicover.ro/despre-sanatate/testosteronul-implicatii-fiziologice-si-valori-normale,1116,n,295</li>
+                        <li>https://www.sfatulmedicului.ro/arhiva_medicala/testosteron-analize</li>
+                        <li>https://www.reginamaria.ro/stiri/analize-de-sange-frecvente</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <footer class="ztabs-footer">
+            <p>Copyright &copy; 2025 dr.ing. Radu Pascu. Toate drepturile rezervate.</p>
+            <p>Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist.</p>
+        </footer>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        
+        // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
+
+        document.addEventListener('keydown', function(e) {
+            // Blochează Ctrl+C (Copiere)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+            }
+            // Blochează F12 (Developer Tools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+            }
+             // Blochează Ctrl+Shift+J (Developer Tools Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+            }
+        });
+    </script>
+
+</body>
+</html>
