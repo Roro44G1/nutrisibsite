@@ -248,54 +248,49 @@
 
         const ctxRiskFactors = document.getElementById('riskFactorsChart').getContext('2d');
         new Chart(ctxRiskFactors, {
-            type: 'bar',
+            type: 'doughnut',
             data: {
-                labels: ['Hipercolesterolemie'],
-                datasets: [
-                    {
-                        label: 'Genetică',
-                        data: [25],
-                        backgroundColor: brilliantBluesPalette.darkBlue,
-                    },
-                    {
-                        label: 'Dietă necorespunzătoare',
-                        data: [40],
-                        backgroundColor: brilliantBluesPalette.purple,
-                    },
-                    {
-                        label: 'Sedentarism',
-                        data: [20],
-                        backgroundColor: brilliantBluesPalette.pink,
-                    },
-                    {
-                        label: 'Alți factori (fumat, comorbidități)',
-                        data: [15],
-                        backgroundColor: brilliantBluesPalette.yellow,
-                    }
-                ]
+                labels: [
+                    'Dietă necorespunzătoare',
+                    'Genetică',
+                    'Sedentarism',
+                    'Alți factori (fumat, comorbidități)'
+                ],
+                datasets: [{
+                    label: 'Contribuția Factorilor de Risc (%)',
+                    data: [40, 25, 20, 15],
+                    backgroundColor: [
+                        brilliantBluesPalette.purple,
+                        brilliantBluesPalette.darkBlue,
+                        brilliantBluesPalette.pink,
+                        brilliantBluesPalette.yellow
+                    ],
+                    borderColor: '#FFFFFF',
+                    borderWidth: 4,
+                    hoverOffset: 8
+                }]
             },
             options: {
-                indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        stacked: true,
-                        max: 100,
-                        ticks: {
-                            callback: function(value) { return value + "%" }
-                        }
-                    },
-                    y: {
-                        stacked: true,
-                        grid: { display: false }
-                    }
-                },
+                cutout: '60%',
                 plugins: {
-                    legend: { position: 'bottom' },
+                    legend: {
+                        position: 'bottom',
+                    },
                     tooltip: {
                         callbacks: {
-                            title: tooltipTitleCallback
+                            title: tooltipTitleCallback,
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed + '%';
+                                }
+                                return label;
+                            }
                         }
                     }
                 }
