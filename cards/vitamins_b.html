@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carduri Flash - Deficitul Vitaminelor B</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .card-flip-enter {
+            opacity: 0;
+            transform: rotateY(90deg);
+        }
+        .card-flip-enter-active {
+            opacity: 1;
+            transform: rotateY(0deg);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        .btn-hover:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+        }
+        .btn-hover {
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="max-w-2xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-indigo-800 mb-2">Carduri Flash - Deficitul Vitaminelor B</h1>
+            <p class="text-indigo-600">Studiază conceptele de nutriție în mod eficient</p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-6 min-h-[300px]">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-sm font-medium text-gray-500" id="cardCounter">
+                    Cardul 1 din 15
+                </span>
+                <span class="text-sm font-medium bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full" id="cardCategory">
+                    B1 (Tiamină)
+                </span>
+            </div>
+
+            <div class="text-center">
+                <div class="mb-6 min-h-[120px] flex items-center justify-center">
+                    <p class="text-lg leading-relaxed text-gray-800" id="cardContent">
+                        Care este boala de carență cauzată de lipsa vitaminei B1 (Tiamină)?
+                    </p>
+                </div>
+
+                <button
+                    id="flipButton"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors mb-6 btn-hover"
+                >
+                    Arată Răspunsul
+                </button>
+
+                <div class="flex gap-4 justify-center" id="answerButtons" style="display: none;">
+                    <button
+                        id="practiceButton"
+                        class="flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 px-4 py-2 rounded-lg transition-colors btn-hover"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Trebuie Exercițiu
+                    </button>
+                    <button
+                        id="knownButton"
+                        class="flex items-center gap-2 bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-lg transition-colors btn-hover"
+                    >
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Știu!
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-between items-center mb-6">
+            <button
+                id="prevButton"
+                class="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition-colors btn-hover"
+            >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Anterior
+            </button>
+
+            <button
+                id="resetButton"
+                class="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-lg transition-colors btn-hover"
+            >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Resetează Progresul
+            </button>
+
+            <button
+                id="nextButton"
+                class="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition-colors btn-hover"
+            >
+                Următor
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
+
+        <div class="bg-white rounded-lg p-4 shadow-sm">
+            <h3 class="font-semibold text-gray-700 mb-2">Urmărirea Progresului</h3>
+            <div class="grid grid-cols-3 gap-4 text-center">
+                <div>
+                    <div class="text-2xl font-bold text-green-600" id="knownCount">0</div>
+                    <div class="text-sm text-gray-600">Cunoscute</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-red-600" id="practiceCount">0</div>
+                    <div class="text-sm text-gray-600">Trebuie Exercițiu</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-gray-600" id="unreviewedCount">15</div>
+                    <div class="text-sm text-gray-600">Nerevizuite</div>
+                </div>
+            </div>
+            
+            <div class="mt-3 bg-gray-200 rounded-full h-2">
+                <div 
+                    id="progressBar"
+                    class="bg-green-500 h-2 rounded-full progress-bar"
+                    style="width: 0%"
+                ></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const flashcards = [
+            {
+                id: 1,
+                question: "Care este boala de carență cauzată de lipsa vitaminei B1 (Tiamină)?",
+                answer: "Beriberi - caracterizată prin probleme cardiovasculare (beriberi umed) sau probleme neurologice (beriberi uscat). De asemenea, cauzează sindromul Wernicke-Korsakoff în cazuri severe.",
+                category: "B1 (Tiamină)"
+            },
+            {
+                id: 2,
+                question: "Care sunt principalele simptome ale deficitului de vitamina B1 (Tiamină)?",
+                answer: "Oboseală, iritabilitate, memorie slabă, slăbiciune musculară, probleme cardiovasculare, neuropatie periferică și, în cazuri severe - confuzie și ataxie.",
+                category: "B1 (Tiamină)"
+            },
+            {
+                id: 3,
+                question: "Ce afecțiune de carență este cauzată de lipsa vitaminei B2 (Riboflavină)?",
+                answer: "Ariboflavinoza - simptomele includ buze crăpate, durere în gât, tulburări ale pielii și cheilită angulară (fisuri la colțurile gurii).",
+                category: "B2 (Riboflavină)"
+            },
+            {
+                id: 4,
+                question: "Care sunt simptomele clasice ale deficitului de vitamina B3 (Niacină)?",
+                answer: "Cele 4 D ale Pelagrei: Diareea, Dermatita, Demența și Decesul (dacă nu este tratat). Include de asemenea pielea aspră, solzoasă și probleme digestive.",
+                category: "B3 (Niacină)"
+            },
+            {
+                id: 5,
+                question: "Care este boala de carență cauzată de deficitul de vitamina B3 (Niacină)?",
+                answer: "Pelagra - istoric comună în populațiile dependente de porumb ca aliment de bază fără procesare adecvată.",
+                category: "B3 (Niacină)"
+            },
+            {
+                id: 6,
+                question: "Care sunt simptomele deficitului de vitamina B5 (Acid Pantotenic)?",
+                answer: "Sindromul picioarelor care ard, oboseală, iritabilitate, amorțeală și furnicături în mâini și picioare, și probleme digestive. Deficitul este rar.",
+                category: "B5 (Acid Pantotenic)"
+            },
+            {
+                id: 7,
+                question: "Care sunt principalele simptome ale deficitului de vitamina B6 (Piridoxină)?",
+                answer: "Dermatită seboreică, anemie, depresie, confuzie, funcție imunitară slăbită și neuropatie periferică.",
+                category: "B6 (Piridoxină)"
+            },
+            {
+                id: 8,
+                question: "Ce afecțiune de carență este cauzată de lipsa vitaminei B7 (Biotină)?",
+                answer: "Deficitul de biotină - simptomele includ căderea părului, unghii fragile, erupții cutanate (în special în jurul ochilor, nasului, gurii) și simptome neurologice.",
+                category: "B7 (Biotină)"
+            },
+            {
+                id: 9,
+                question: "Care sunt consecințele deficitului de vitamina B9 (Folat/Acid Folic)?",
+                answer: "Anemie megaloblastică, defecte ale tubului neural la feții în dezvoltare, oboseală, slăbiciune și risc crescut de boli cardiovasculare.",
+                category: "B9 (Folat)"
+            },
+            {
+                id: 10,
+                question: "Care este cea mai gravă boală de carență cauzată de deficitul de vitamina B12 (Cobalamină)?",
+                answer: "Anemia pernicioasă - un tip de anemie megaloblastică. De asemenea, cauzează leziuni neurologice care pot fi ireversibile dacă nu sunt tratate.",
+                category: "B12 (Cobalamină)"
+            },
+            {
+                id: 11,
+                question: "Care sunt simptomele neurologice ale deficitului de B12?",
+                answer: "Neuropatie periferică, probleme de memorie, depresie, simptome asemănătoare demenței, probleme de echilibru și, în cazuri severe - degenerarea combinată subacută a măduvei spinării.",
+                category: "B12 (Cobalamină)"
+            },
+            {
+                id: 12,
+                question: "Ce deficit de vitamina B este cel mai comun la vegani și de ce?",
+                answer: "Deficitul de vitamina B12 - deoarece B12 se găsește în principal în produsele animale. Veganii au nevoie de suplimente sau alimente fortificate.",
+                category: "B12 (Cobalamină)"
+            },
+            {
+                id: 13,
+                question: "Ce este chelita angulară și ce deficit de vitamina B o cauzează?",
+                answer: "Chelita angulară sunt fisuri sau crăpături dureroase la colțurile gurii. Este cauzată în mod obișnuit de deficitul de vitamina B2 (Riboflavină).",
+                category: "B2 (Riboflavină)"
+            },
+            {
+                id: 14,
+                question: "Ce deficit de vitamina B este asociat cu alcoolismul și de ce?",
+                answer: "Deficitul de vitamina B1 (Tiamină) - alcoolul interferează cu absorbția și metabolismul tiaminei. Poate duce la sindromul Wernicke-Korsakoff.",
+                category: "B1 (Tiamină)"
+            },
+            {
+                id: 15,
+                question: "Care este diferența între beriberi umed și beriberi uscat?",
+                answer: "Beriberi umed afectează sistemul cardiovascular (insuficiență cardiacă, edem). Beriberi uscat afectează sistemul nervos (slăbiciune musculară, neuropatie periferică).",
+                category: "B1 (Tiamină)"
+            }
+        ];
+
+        // State variables
+        let currentCard = 0;
+        let showAnswer = false;
+        let knownCards = new Set();
+        let needPractice = new Set();
+
+        // DOM elements
+        const cardCounter = document.getElementById('cardCounter');
+        const cardCategory = document.getElementById('cardCategory');
+        const cardContent = document.getElementById('cardContent');
+        const flipButton = document.getElementById('flipButton');
+        const answerButtons = document.getElementById('answerButtons');
+        const practiceButton = document.getElementById('practiceButton');
+        const knownButton = document.getElementById('knownButton');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+        const resetButton = document.getElementById('resetButton');
+        const knownCount = document.getElementById('knownCount');
+        const practiceCount = document.getElementById('practiceCount');
+        const unreviewedCount = document.getElementById('unreviewedCount');
+        const progressBar = document.getElementById('progressBar');
+
+        // Functions
+        function updateDisplay() {
+            const current = flashcards[currentCard];
+            cardCounter.textContent = `Cardul ${currentCard + 1} din ${flashcards.length}`;
+            cardCategory.textContent = current.category;
+            cardContent.textContent = showAnswer ? current.answer : current.question;
+            flipButton.textContent = showAnswer ? 'Arată Întrebarea' : 'Arată Răspunsul';
+            answerButtons.style.display = showAnswer ? 'flex' : 'none';
+            updateProgress();
+        }
+
+        function updateProgress() {
+            knownCount.textContent = knownCards.size;
+            practiceCount.textContent = needPractice.size;
+            unreviewedCount.textContent = flashcards.length - knownCards.size - needPractice.size;
+            const progressPercentage = (knownCards.size / flashcards.length) * 100;
+            progressBar.style.width = progressPercentage + '%';
+        }
+
+        function nextCard() {
+            currentCard = (currentCard + 1) % flashcards.length;
+            showAnswer = false;
+            updateDisplay();
+        }
+
+        function prevCard() {
+            currentCard = (currentCard - 1 + flashcards.length) % flashcards.length;
+            showAnswer = false;
+            updateDisplay();
+        }
+
+        function flipCard() {
+            showAnswer = !showAnswer;
+            updateDisplay();
+        }
+
+        function markAsKnown() {
+            knownCards.add(currentCard);
+            needPractice.delete(currentCard);
+            nextCard();
+        }
+
+        function markForPractice() {
+            needPractice.add(currentCard);
+            knownCards.delete(currentCard);
+            nextCard();
+        }
+
+        function resetProgress() {
+            knownCards.clear();
+            needPractice.clear();
+            currentCard = 0;
+            showAnswer = false;
+            updateDisplay();
+        }
+
+        // Event listeners
+        flipButton.addEventListener('click', flipCard);
+        nextButton.addEventListener('click', nextCard);
+        prevButton.addEventListener('click', prevCard);
+        knownButton.addEventListener('click', markAsKnown);
+        practiceButton.addEventListener('click', markForPractice);
+        resetButton.addEventListener('click', resetProgress);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            switch(e.key) {
+                case 'ArrowLeft':
+                    prevCard();
+                    break;
+                case 'ArrowRight':
+                    nextCard();
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    flipCard();
+                    break;
+                case '1':
+                    if (showAnswer) markForPractice();
+                    break;
+                case '2':
+                    if (showAnswer) markAsKnown();
+                    break;
+            }
+        });
+
+        // Initialize
+        updateDisplay();
+    </script>
+</body>
+</html>
