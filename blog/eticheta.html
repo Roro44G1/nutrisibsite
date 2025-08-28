@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghid complet despre eticheta nutrițională</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Stilurile CSS + JavaScript pentru funcționalitatea tab-urilor -->
+    <style>
+        /* Se asigură că fontul Inter este încărcat */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        /* Definirea variabilelor de culoare */
+        :root {
+            --dark-blue: #073B4C;
+            --medium-blue: #118AB2;
+            --light-blue: #eaf2f8;
+            --text-dark: #212529;
+            --text-light: #475569;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-color: #e0e0e0;
+            
+            --color-red: #FF6B6B;
+            --color-green: #06D6A0;
+            --color-yellow: #FFD166;
+        }
+
+        /* Stilul general al paginii */
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Containerul principal al articolului */
+        .ztabs-container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            background: var(--bg-white);
+            border-radius: 15px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .ztabs-header {
+            background: linear-gradient(135deg, var(--dark-blue), var(--medium-blue));
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .ztabs-header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            margin: 0;
+            padding: 0;
+            color: white !important;
+            border: none !important;
+        }
+
+        /* Stiluri pentru sistemul de tab-uri */
+        .tab-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #f1f1f1;
+            border-bottom: 1px solid var(--border-color);
+            padding: 5px;
+            justify-content: center;
+        }
+
+        .tab-link {
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: background-color 0.3s, color 0.3s, border-bottom 0.3s;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--dark-blue);
+            border-bottom: 3px solid transparent;
+            flex-grow: 1;
+            text-align: center;
+            border-radius: 8px;
+            margin: 2px;
+        }
+
+        .tab-link:hover {
+            background-color: #ddd;
+        }
+
+        .tab-link.active {
+            background-color: var(--bg-white);
+            color: var(--dark-blue);
+            border-bottom: 3px solid var(--medium-blue);
+        }
+
+        .tab-content {
+            padding: 30px 40px;
+            animation: fadeIn 0.5s;
+            display: none; /* Ascunde tab-urile by default */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Stiluri pentru conținutul intern */
+        .tab-content h2 {
+            font-size: 1.8em;
+            color: var(--dark-blue);
+            margin-bottom: 25px;
+            font-weight: 700;
+            border-bottom: 3px solid var(--medium-blue);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .tab-content h3 {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--dark-blue) !important;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--medium-blue);
+            padding-bottom: 0.5rem;
+        }
+        
+        .tab-content h4 {
+             font-size: 1.1em;
+             color: var(--medium-blue) !important;
+             font-weight: 600;
+             margin-top: 1.2rem;
+             margin-bottom: 0.5rem;
+             border: none !important;
+             padding: 0 !important;
+        }
+
+        .tab-content p, .tab-content li {
+            font-size: 0.95em;
+            color: var(--text-light);
+            text-align: justify;
+            margin-bottom: 10px;
+        }
+
+        .tab-content ul, .tab-content ol {
+            padding-left: 20px;
+        }
+        
+        .tab-content ol.bibliography-list {
+            list-style-type: decimal;
+            padding-left: 20px;
+            font-size: 0.85em;
+            column-count: 2;
+            column-gap: 40px;
+        }
+        
+        .tab-content ol.bibliography-list li {
+            margin-bottom: 1em;
+            word-break: break-word;
+        }
+        
+        .tab-content strong {
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+
+        .tab-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .tab-content th, .tab-content td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #d1d9e6;
+            vertical-align: top;
+        }
+
+        .tab-content th {
+            background-color: #e2e8f0;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+
+        .tab-content tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        .ztabs-footer {
+            text-align: center;
+            padding: 25px 0;
+            font-size: 0.9em;
+            color: #6c757d;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-light);
+        }
+        
+        /* Stiluri pentru infografic */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        @media (max-width: 768px) {
+             body {
+                padding: 1rem;
+             }
+             .tab-content {
+                padding: 20px;
+             }
+             .tab-content ol.bibliography-list {
+                column-count: 1;
+             }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ztabs-container">
+        <header class="ztabs-header">
+            <h1>Ghid complet despre eticheta nutrițională</h1>
+        </header>
+
+        <!-- Butoanele pentru tab-uri -->
+        <div class="tab-buttons">
+            <button class="tab-link" onclick="openTab(event, 'rol')">Rol</button>
+            <button class="tab-link" onclick="openTab(event, 'legislatie')">Legislație</button>
+            <button class="tab-link" onclick="openTab(event, 'anatomie')">Anatomie</button>
+            <button class="tab-link" onclick="openTab(event, 'interpretare')">Interpretare</button>
+            <button class="tab-link" onclick="openTab(event, 'ghiduri')">Ghiduri</button>
+            <button class="tab-link" onclick="openTab(event, 'capcane')">Capcane</button>
+            <button class="tab-link" onclick="openTab(event, 'viitor')">Viitor</button>
+            <button class="tab-link" onclick="openTab(event, 'rezumat')">Rezumat</button>
+            <button class="tab-link" onclick="openTab(event, 'concluzii')">Concluzii</button>
+            <button class="tab-link" onclick="openTab(event, 'bibliografie')">Bibliografie</button>
+        </div>
+
+        <!-- Conținutul tab-urilor -->
+        <div id="rol" class="tab-content">
+            <h2>Rolul și importanța etichetei nutriționale în sănătatea publică</h2>
+            <h3>Eticheta ca instrument de educație și autonomizare a consumatorului</h3>
+            <p>În peisajul alimentar modern, caracterizat de o abundență de produse procesate și de mesaje de marketing complexe, eticheta nutrițională a evoluat dintr-o simplă formalitate legală într-un instrument fundamental pentru sănătatea publică. Interesul crescând al publicului larg pentru relația directă dintre alimentație și starea de sănătate a reprezentat principalul motor care a condus la dezvoltarea și standardizarea legislației actuale privind informarea consumatorilor.[1] Eticheta nu este doar o listă de ingrediente, ci o metodă esențială de informare, concepută pentru a oferi transparență și pentru a-i ajuta pe consumatori să facă alegeri în deplină cunoștință de cauză.[1, 2]</p>
+            <p>Prin furnizarea de date standardizate și clare, eticheta nutrițională devine un instrument de autonomizare. Ea transferă o parte din controlul asupra sănătății direct în mâinile consumatorului, permițându-i acestuia să evalueze, să compare și să selecteze produsele care se aliniază cel mai bine nevoilor sale nutriționale și obiectivelor de sănătate. Această posibilitate de a alege în mod informat este esențială nu doar pentru bunăstarea individuală, ci și pentru stimularea unei concurențe veritabile pe piață, în care calitatea nutrițională devine un factor de diferențiere.[1, 3] Scopul final al etichetei, dincolo de orice strategie de marketing, este de a asigura transparența și de a construi o relație de încredere între producător și consumator.[4]</p>
+            <p>Cu toate acestea, simpla prezență a datelor pe ambalaj nu garantează înțelegerea lor. Legislația europeană impune furnizarea de informații cantitative (grame de zahăr, sare, grăsimi etc.), dar eficacitatea acestora depinde în mod critic de nivelul de educație nutrițională al populației. Legiuitorii înșiși recunosc că simpla reglementare nu este suficientă, subliniind că programele și campaniile de educare reprezintă un mecanism complementar vital pentru a ajuta consumatorii să interpreteze corect informațiile de pe etichetă.[1] Fără un efort susținut de educare, eticheta riscă să devină un zgomot de fond pentru o mare parte a consumatorilor, un set de cifre și termeni tehnici lipsiți de relevanță practică, ceea ce îi subminează obiectivul fundamental de îmbunătățire a sănătății publice.</p>
+            <h3>Impactul etichetării asupra alegerilor alimentare și prevenirea bolilor cronice</h3>
+            <p>Etichetarea nutrițională joacă un rol crucial în strategiile de prevenire a bolilor cronice netransmisibile, precum obezitatea, diabetul zaharat de tip 2, bolile cardiovasculare și anumite tipuri de cancer. Aceste afecțiuni sunt strâns legate de dietele moderne, adesea bogate în zaharuri adăugate, sare (sodiu) și grăsimi saturate – exact nutrienții a căror declarare este obligatorie pe etichetă.[2, 5, 6]</p>
+            <p>Prin evidențierea acestor componente critice, eticheta permite consumatorilor să identifice și să limiteze produsele cu un profil nutrițional nefavorabil. De exemplu, un consumator conștient poate compara două tipuri de cereale pentru micul dejun și poate alege varianta cu un conținut mai redus de zaharuri. O persoană cu hipertensiune arterială poate folosi informația despre conținutul de sare pentru a selecta produse care se încadrează în recomandările medicale. Acest proces decizional, repetat la fiecare vizită la supermarket, are un impact cumulat semnificativ asupra calității generale a dietei. Recunoașterea etichetării nutriționale ca o metodă importantă în cadrul strategiilor europene de sănătate, precum "Cartea Albă a Comisiei referitoare la o Strategie pentru Europa privind problemele de sănătate legate de alimentație, excesul de greutate și obezitate", subliniază importanța sa la nivel de politici publice.[1]</p>
+            <h3>Corelația dintre transparența informațională și responsabilitatea producătorilor</h3>
+            <p>Impactul etichetării se extinde dincolo de consumator, influențând direct comportamentul producătorilor din industria alimentară. Obligația legală de a declara în mod transparent și standardizat compoziția produselor creează un mediu concurențial în care calitatea nutrițională devine vizibilă și comparabilă. Această transparență acționează ca un stimulent puternic pentru companii să-și reformuleze produsele, reducând cantitatea de sare, zahăr și grăsimi saturate pentru a oferi opțiuni mai sănătoase și mai atractive pentru un public din ce în ce mai informat.[7]</p>
+            <p>Responsabilitatea pentru acuratețea și conformitatea informațiilor de pe etichetă revine în mod direct operatorului din sectorul alimentar sub al cărui nume este comercializat produsul. În cazul produselor importate din afara Uniunii Europene, această responsabilitate este transferată importatorului.[3] Acest cadru legal asigură că informațiile prezentate nu sunt doar un ghid, ci o declarație asumată a compoziției produsului, supusă verificărilor și sancțiunilor autorităților competente. Astfel, eticheta devine o punte de legătură între cererea consumatorilor pentru produse mai sănătoase și oferta industriei, contribuind la modelarea unui mediu alimentar mai favorabil sănătății.</p>
+        </div>
+
+        <div id="legislatie" class="tab-content">
+            <h2>Cadrul legislativ european</h2>
+            <h3>Analiza detaliată a Regulamentului (UE) nr. 1169/2011: principii, obligații și excepții</h3>
+            <p>Piatra de temelie a etichetării alimentare în Uniunea Europeană este <strong>Regulamentul (UE) nr. 1169/2011 privind informarea consumatorilor cu privire la produsele alimentare</strong>. Intrat în vigoare la 13 decembrie 2014, acest act legislativ a avut ca scop principal consolidarea și simplificarea cadrului normativ anterior, care era fragmentat în mai multe directive, precum Directiva 90/496/CEE privind etichetarea nutrițională și Directiva 2000/13/CE referitoare la etichetarea generală.[1, 3, 8] Prin această unificare, regulamentul urmărește să asigure securitatea juridică pentru operatorii economici, să reducă birocrația și, cel mai important, să impună o etichetare obligatorie care să fie clară, pe înțelesul cetățeanului și lizibilă, servind astfel atât interesele pieței interne, cât și pe cele ale consumatorilor.[1]</p>
+            <p>Regulamentul stabilește o listă de <strong>mențiuni obligatorii</strong> care trebuie să apară pe ambalajul tuturor produselor alimentare preambalate, conform Articolului 9. Acestea includ [3, 9, 10]:</p>
+                <ul>
+                    <li>Denumirea produsului alimentar</li>
+                    <li>Lista ingredientelor</li>
+                    <li>Substanțele care provoacă alergii sau intoleranțe</li>
+                    <li>Cantitatea anumitor ingrediente sau categorii de ingrediente</li>
+                    <li>Cantitatea netă de produs alimentar</li>
+                    <li>Data durabilității minimale sau data limită de consum („a se consuma de preferință înainte de/până la”)</li>
+                    <li>Condițiile speciale de păstrare și/sau condițiile de utilizare</li>
+                    <li>Numele sau denumirea comercială și adresa operatorului din sectorul alimentar</li>
+                    <li>Țara de origine sau locul de proveniență, în cazurile în care omiterea acestora ar putea induce în eroare consumatorul</li>
+                    <li>Instrucțiuni de utilizare, în cazul în care omiterea lor ar îngreuna utilizarea corectă a produsului</li>
+                    <li>Pentru băuturile care conțin mai mult de 1,2% de alcool în volum, tăria alcoolică dobândită</li>
+                    <li>O declarație nutrițională</li>
+                </ul>
+            <p>Regulamentul prevede și o serie de excepții pentru a asigura aplicabilitatea sa practică. De exemplu, ambalajele sau recipientele a căror suprafață maximă este mai mică de 10 $cm^2$ sunt exceptate de la obligația de a prezenta declarația nutrițională și lista de ingrediente, dar trebuie să indice denumirea, alergenii, cantitatea netă și data durabilității.[9] Alte excepții includ produsele care conțin un singur ingredient (unde lista de ingrediente nu este necesară), produsele vândute în vrac (care au cerințe simplificate) sau anumite produse precum fructele și legumele proaspete, care nu necesită o listă de ingrediente.[3, 9]</p>
+            <p>Deși Regulamentul 1169/2011 a fost conceput pentru a simplifica și unifica legislația, realitatea este că el funcționează ca un cadru general, completat de o rețea complexă de regulamente specifice pentru diverse categorii de produse. Există norme separate pentru mențiunile de sănătate [11], pentru indicarea originii la carnea proaspătă [12], precum și pentru produse precum mierea, peștele sau uleiul de măsline.[3] Această interconectare legislativă, deși necesară pentru a acoperi specificul fiecărui sector, creează un peisaj normativ complex. Pentru un producător, în special pentru unul de mici dimensiuni, navigarea prin acest labirint de regulamente pentru a asigura conformitatea deplină poate fi o provocare. Acest paradox al simplificării subliniază necesitatea unor ghiduri consolidate, care să traducă și să integreze aceste informații fragmentate într-un format coerent și aplicabil.</p>
+            <h3>Regulamentul (CE) nr. 1924/2006: decodarea mențiunilor nutriționale și de sănătate</h3>
+            <p>În paralel cu regulamentul general, <strong>Regulamentul (CE) nr. 1924/2006</strong> guvernează utilizarea mențiunilor nutriționale și de sănătate înscrise pe produsele alimentare. Acest act normativ este esențial pentru a asigura că afirmațiile de marketing privind beneficiile unui produs sunt veridice, bazate pe dovezi științifice și nu induc în eroare consumatorul.[13, 14]</p>
+            <p>Regulamentul face o distincție clară între două tipuri de mențiuni [13]:</p>
+            <ol>
+                <li><strong>Mențiune nutrițională:</strong> O afirmație care sugerează că un produs alimentar are proprietăți nutriționale benefice speciale. Exemple includ „sursă de proteine”, „conținut redus de grăsimi”, „fără zaharuri” sau „bogat în fibre”. Aceste mențiuni sunt permise doar dacă produsul îndeplinește anumite condiții cantitative stricte, definite în anexa regulamentului.</li>
+                <li><strong>Mențiune de sănătate:</strong> O afirmație care sugerează existența unei relații între o categorie de produse alimentare, un produs alimentar sau unul dintre constituenții săi și sănătate. De exemplu: „Vitamina D contribuie la menținerea sănătății sistemului osos”. Aceste mențiuni pot fi utilizate numai dacă au fost autorizate la nivelul UE în urma unei evaluări științifice riguroase efectuate de Autoritatea Europeană pentru Siguranța Alimentară (EFSA).</li>
+            </ol>
+            <p>Un principiu fundamental al acestui regulament este că utilizarea oricărei mențiuni nutriționale pe ambalaj face ca declararea tabelului nutrițional complet să devină obligatorie, chiar dacă produsul ar fi fost altfel exceptat.[15] De asemenea, regulamentul interzice în mod explicit anumite tipuri de mențiuni, precum cele care sunt false, ambigue, care pun la îndoială siguranța altor alimente, care încurajează consumul excesiv sau care fac referire la recomandări ale unui singur medic.[13]</p>
+            <h3>Cerințe de lizibilitate și prezentare a informațiilor</h3>
+            <p>Pentru ca informațiile de pe etichetă să fie cu adevărat utile, ele trebuie să fie, înainte de toate, lizibile. Regulamentul 1169/2011 stabilește criterii clare în acest sens, pentru a combate practica etichetelor cu text minuscul, aproape imposibil de citit la raft. Cerința principală este legată de dimensiunea fontului: înălțimea literei mici „x” (o măsură standard în tipografie) trebuie să fie mai mare sau egală cu 1,2 mm.[16, 17] Această regulă are o excepție pentru ambalajele de dimensiuni reduse. În cazul în care cea mai mare față a ambalajului are o suprafață mai mică de 80 $cm^2$, dimensiunea minimă a fontului este redusă la 0,9 mm.[9, 16] Pe lângă dimensiunea fontului, lizibilitatea este definită ca un concept mai larg, care include și alți factori precum contrastul dintre text și fundal, distanța dintre litere și rânduri, și tipul de caracter folosit.[1] Regulamentul definește, de asemenea, „câmpul vizual principal” ca fiind suprafața ambalajului cel mai probabil să fie văzută de consumator la prima vedere, subliniind importanța plasării informațiilor esențiale într-un loc vizibil.[1]</p>
+        </div>
+
+        <div id="anatomie" class="tab-content">
+            <h2>Anatomia etichetei nutriționale</h2>
+            <h3>Declarația nutrițională obligatorie</h3>
+            <p>Elementul central al informării nutriționale este declarația, adesea prezentată sub formă de tabel, care detaliază profilul energetic și de macronutrienți al produsului. Conform Regulamentului 1169/2011, aceasta trebuie să includă în mod obligatoriu șapte elemente esențiale, cunoscute și sub denumirea de "Big 7".[16, 17, 18] Aceste informații trebuie exprimate obligatoriu per 100 g sau per 100 ml de produs, pentru a asigura un standard de comparație unitar între produse similare. Producătorii pot adăuga, în mod voluntar, și valorile corespunzătoare unei porții.[9, 18]</p>
+            <p>Cele șapte elemente obligatorii sunt:</p>
+            <ol>
+                <li><strong>Valoarea energetică:</strong> Exprimată atât în kilojouli ($kJ$) cât și în kilocalorii ($kcal$). Aceasta reprezintă cantitatea totală de energie pe care o furnizează alimentul.</li>
+                <li><strong>Grăsimi:</strong> Cantitatea totală de lipide.</li>
+                <li><strong>Acizi grași saturați:</strong> O subcategorie a grăsimilor totale, a cărei monitorizare este importantă pentru sănătatea cardiovasculară.</li>
+                <li><strong>Glucide:</strong> Cantitatea totală de carbohidrați, care include amidonul, zaharurile și fibrele.</li>
+                <li><strong>Zaharuri:</strong> O subcategorie a glucidelor, care se referă la totalitatea monozaharidelor și dizaharidelor prezente în produs (ex: glucoză, fructoză, zaharoză, lactoză).</li>
+                <li><strong>Proteine:</strong> Cantitatea totală de proteine.</li>
+                <li><strong>Sare:</strong> Cantitatea de sare, calculată pe baza conținutului total de sodiu ($sare = sodiu \times 2.5$). O modificare importantă adusă de noul regulament a fost înlocuirea declarării sodiului cu cea a sării, o valoare considerată mai intuitivă pentru consumatori.[9]</li>
+            </ol>
+            <p>O schimbare notabilă față de legislația anterioară este că declararea fibrelor alimentare nu mai este obligatorie în tabelul standard, deși acestea pot fi adăugate voluntar.[9]</p>
+            <h3>Informații nutriționale voluntare</h3>
+            <p>Pentru a oferi o imagine mai detaliată și mai nuanțată a profilului nutrițional, producătorii pot completa declarația obligatorie cu o serie de informații voluntare. Acestea sunt adesea adăugate pentru a evidenția anumite calități ale produsului. Informațiile suplimentare permise includ [16, 17, 18, 19]:</p>
+            <ul>
+                <li><strong>Acizi grași mononesaturați și polinesaturați:</strong> Acestea sunt considerate "grăsimi bune", iar declararea lor separată poate ajuta consumatorii să aleagă produse cu un profil lipidic mai sănătos.</li>
+                <li><strong>Polioli:</strong> Cunoscuți și ca alcooli din zahăr (ex: xilitol, sorbitol), aceștia sunt îndulcitori cu valoare calorică redusă, adesea utilizați în produse "fără zahăr".</li>
+                <li><strong>Amidon:</strong> O componentă majoră a glucidelor complexe.</li>
+                <li><strong>Fibre:</strong> Deși nu mai este obligatorie, declararea fibrelor este frecventă la produsele din cereale integrale, fructe și legume, datorită rolului lor benefic recunoscut pentru sănătatea digestivă și controlul glicemiei.</li>
+                <li><strong>Vitamine și minerale:</strong> Orice vitamină sau mineral din lista oficială a UE poate fi declarată, cu condiția să fie prezentă într-o "cantitate semnificativă" (de regulă, cel puțin 15% din Valoarea Nutrițională de Referință per 100 g/ml sau per porție).</li>
+            </ul>
+            <table>
+                <thead><tr><th>Elemente obligatorii</th><th>Elemente voluntare (suplimentare)</th></tr></thead>
+                <tbody>
+                    <tr><td>Valoarea energetică (kJ și kcal)</td><td>Acizi grași mononesaturați</td></tr>
+                    <tr><td>Grăsimi (totale)</td><td>Acizi grași polinesaturați</td></tr>
+                    <tr><td>Acizi grași saturați</td><td>Polioli</td></tr>
+                    <tr><td>Glucide (totale)</td><td>Amidon</td></tr>
+                    <tr><td>Zaharuri</td><td>Fibre</td></tr>
+                    <tr><td>Proteine</td><td>Vitamine (prezente în cantități semnificative)</td></tr>
+                    <tr><td>Sare</td><td>Minerale (prezente în cantități semnificative)</td></tr>
+                </tbody>
+            </table>
+            <h3>Lista de ingrediente</h3>
+            <p>Lista de ingrediente este, probabil, cea mai transparentă secțiune a etichetei, oferind o "rețetă" a produsului. Principiul fundamental care guvernează această listă este <strong>regula ordinii descrescătoare a greutății</strong>.[10, 20] Ingredientul prezent în cea mai mare cantitate este listat primul, urmat de celelalte în ordine descrescătoare, în funcție de greutatea pe care au avut-o în momentul adăugării lor în procesul de fabricație.</p>
+            <p>Această regulă simplă este un instrument extrem de puternic pentru consumatorul avizat. De exemplu, dacă zahărul, siropul de glucoză sau alte forme de îndulcitori apar în primele două sau trei poziții pe listă, este un indicator clar că produsul este unul cu un conținut foarte ridicat de zahăr, indiferent de alte mențiuni de marketing de pe ambalaj.[21, 22] O listă de ingrediente scurtă, cu termeni simpli și recognoscibili, este adesea un indicator al unui produs mai puțin procesat și, potențial, mai sănătos.[22] Ingredientele care constituie mai puțin de 2% din produsul finit pot fi listate într-o ordine diferită după celelalte ingrediente.[20]</p>
+            <h3>Declararea alergenilor</h3>
+            <p>Pentru persoanele cu alergii sau intoleranțe alimentare, informarea corectă poate face diferența dintre siguranță și o reacție adversă severă. Regulamentul 1169/2011 a introdus cerințe stricte și clare pentru declararea celor <strong>14 categorii de alergeni majori</strong>. Aceștia trebuie să fie <strong>evidențiați</strong> în lista de ingrediente printr-o metodă care îi distinge clar de restul textului, cum ar fi utilizarea de caractere <strong>îngroșate</strong>, <em>italice</em>, <u>subliniate</u> sau un fond de altă culoare.[10, 23] Această cerință asigură identificarea rapidă și fără echivoc a prezenței unui potențial alergen. În cazul în care un produs nu are o listă de ingrediente (de exemplu, o sticlă de vin), prezența alergenilor trebuie indicată printr-o mențiune separată, de tipul "Conține: sulfiți".[10]</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Categoria de alergen</th>
+                        <th>Exemple specifice</th>
+                        <th>Cuvinte-cheie de căutat pe etichetă</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>1. Cereale cu gluten</strong></td><td>Grâu, secară, orz, ovăz, grâu spelt</td><td>Amidon, malț, griș, pesmet, gluten, bulgur, cuscus, E1404</td></tr>
+                    <tr><td><strong>2. Crustacee</strong></td><td>Creveți, crabi, homari, raci</td><td>Pastă de creveți, chitosan, surimi</td></tr>
+                    <tr><td><strong>3. Ouă</strong></td><td>Ou de găină, de rață, etc.</td><td>Albumină, lecitină (E322), lizozim, ovoglobulină, maioneză, bezea</td></tr>
+                    <tr><td><strong>4. Pește</strong></td><td>Toate speciile de pește</td><td>Ulei de pește, gelatină de pește, sos Worcestershire, surimi</td></tr>
+                    <tr><td><strong>5. Arahide</strong></td><td>Alune de pământ</td><td>Ulei de arahide, unt de arahide, masă de marțipan (dacă conține)</td></tr>
+                    <tr><td><strong>6. Soia</strong></td><td>Boabe de soia</td><td>Lecitină de soia (E322), tofu, miso, edamame, proteină vegetală texturată (TVP)</td></tr>
+                    <tr><td><strong>7. Lapte</strong></td><td>Lapte de vacă, capră, oaie</td><td>Cazeină, cazeinat, lactoză, zer, smântână, unt, brânză, iaurt</td></tr>
+                    <tr><td><strong>8. Fructe cu coajă lemnoasă</strong></td><td>Migdale, alune de pădure, nuci, caju, fistic</td><td>Pastă de nuci, marțipan, praline, unt de caju, Nutella®</td></tr>
+                    <tr><td><strong>9. Țelină</strong></td><td>Rădăcină, tulpină, frunze, semințe</td><td>Sare de țelină, pudră de țelină</td></tr>
+                    <tr><td><strong>10. Muștar</strong></td><td>Semințe, pastă, pudră</td><td>Făină de muștar, ulei de muștar</td></tr>
+                    <tr><td><strong>11. Semințe de susan</strong></td><td>Semințe, pastă (tahini), ulei</td><td>Tahini, gomasio, halva</td></tr>
+                    <tr><td><strong>12. Dioxid de sulf și sulfiți</strong></td><td>Concentrații > 10 mg/kg sau 10 mg/L</td><td>E220-E228, metabisulfit, conservant (în vin, fructe uscate)</td></tr>
+                    <tr><td><strong>13. Lupin</strong></td><td>Semințe, făină</td><td>Făină de lupin (adesea în produse de panificație fără gluten)</td></tr>
+                    <tr><td><strong>14. Moluște</strong></td><td>Scoici, midii, calamari, caracatiță</td><td>Sos de stridii, extract de moluște</td></tr>
+                </tbody>
+            </table>
+            <h3>Alte mențiuni obligatorii</h3>
+            <p>Pe lângă elementele de bază, legislația impune o serie de mențiuni suplimentare pentru anumite categorii de produse, pentru a oferi informații contextuale esențiale [3, 9, 12]:</p>
+            <ul>
+                <li><strong>"Decongelat":</strong> Pentru produsele care au fost congelate înainte de vânzare și sunt vândute în stare decongelată.</li>
+                <li><strong>Data primei congelări:</strong> Obligatorie pentru carnea, preparatele din carne și produsele pescărești neprocesate congelate.</li>
+                <li><strong>Avertismente specifice:</strong>
+                    <ul>
+                        <li><strong>Cofeină:</strong> Băuturile cu un conținut de cofeină mai mare de 150 mg/l trebuie să poarte mențiunea „Conținut ridicat de cofeină. Nu se recomandă pentru copii sau femeile însărcinate sau care alăptează”, urmată de conținutul de cofeină exprimat în mg/100 ml.</li>
+                        <li><strong>Aspartam:</strong> Produsele care conțin acest îndulcitor trebuie să aibă mențiunea „conține o sursă de fenilalanină”.</li>
+                        <li><strong>Lemn dulce:</strong> Produsele de cofetărie sau băuturile cu acid glicirizic trebuie să aibă avertismente specifice pentru consumatorii cu hipertensiune.</li>
+                    </ul>
+                </li>
+                <li><strong>Originea uleiurilor și grăsimilor vegetale:</strong> Nu mai este suficientă mențiunea generică "ulei vegetal". Trebuie specificată originea (ex: ulei de palmier, ulei de floarea-soarelui). Dacă grăsimile sunt hidrogenate, trebuie precizat dacă sunt "parțial" sau "total hidrogenate".</li>
+                <li><strong>Produse imitație:</strong> Produsele care imită alte alimente, înlocuind un ingredient tipic cu altul (de ex., grăsimea lactată cu grăsime vegetală), trebuie să indice clar acest lucru lângă denumirea produsului (ex: "preparat din grăsimi vegetale" pentru o imitație de brânză).</li>
+            </ul>
+        </div>
+
+        <div id="interpretare" class="tab-content">
+            <h2>Interpretarea avansată a datelor</h2>
+            <h3>Consumul de referință (CR) și valoarea nutrițională de referință (VNR)</h3>
+            <p>Pentru ca datele absolute din tabelul nutrițional (grame, miligrame) să capete o semnificație practică, legislația europeană a introdus conceptul de <strong>Consum de Referință (CR)</strong>, adesea exprimat procentual (%CR) pe ambalaj. Aceste procente oferă un context rapid, arătând cât de mult contribuie o porție dintr-un produs la necesarul zilnic dintr-un anumit nutrient.[24, 25]</p>
+            <ul>
+                <li><strong>Consumul de Referință (CR):</strong> se aplică energiei și macronutrienților (grăsimi, grăsimi saturate, glucide, zaharuri, proteine, sare). Aceste valori sunt calculate pentru un adult mediu, sănătos, cu o dietă zilnică de 2000 kcal (8400 kJ). Este crucial de înțeles că acesta este un ghid general, iar nevoile individuale pot varia semnificativ în funcție de vârstă, sex, greutate și nivel de activitate fizică.[6]</li>
+                <li><strong>Valoarea Nutrițională de Referință (VNR) e</strong> este un concept similar, dar se aplică exclusiv vitaminelor și mineralelor. Procentul din VNR indică aportul acestor micronutrienți esențiali.[24]</li>
+            </ul>
+            <p>Un ghid practic și simplu pentru interpretarea procentajului din CR este regula 5%/20% [6]:</p>
+            <ul>
+                <li><strong>5% CR sau mai puțin</strong> per porție este considerat un conținut <strong>scăzut</strong> dintr-un nutrient.</li>
+                <li><strong>20% CR sau mai mult</strong> per porție este considerat un conținut <strong>ridicat</strong> dintr-un nutrient.</li>
+            </ul>
+            <table>
+                <thead><tr><th>Nutrient</th><th>Valoare de referință (CR) pentru un adult mediu</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Valoare energetică</strong></td><td>8400 kJ / 2000 kcal</td></tr>
+                    <tr><td><strong>Grăsimi totale</strong></td><td>70 g</td></tr>
+                    <tr><td><strong>Acizi grași saturați</strong></td><td>20 g</td></tr>
+                    <tr><td><strong>Glucide</strong></td><td>260 g</td></tr>
+                    <tr><td><strong>Zaharuri</strong></td><td>90 g</td></tr>
+                    <tr><td><strong>Proteine</strong></td><td>50 g</td></tr>
+                    <tr><td><strong>Sare</strong></td><td>6 g</td></tr>
+                </tbody>
+            </table>
+            <h3>Rolul porției de servire</h3>
+            <p>Unul dintre cele mai subtile, dar și mai importante aspecte în interpretarea etichetei este <strong>dimensiunea porției de servire</strong>. Toate valorile nutriționale, fie ele absolute (grame) sau relative (%CR), sunt calculate în funcție de cantitatea specificată ca fiind o porție.[6] Adesea, consumatorii ignoră acest detaliu și presupun că valorile se referă la întregul pachet.</p>
+            <p>Producătorii pot manipula percepția asupra calității nutriționale a unui produs prin stabilirea unor porții de servire nerealist de mici. De exemplu, o pungă de chipsuri poate avea valorile nutriționale declarate pentru o porție de 30 g, deși majoritatea oamenilor consumă întreaga pungă de 100 g sau mai mult. În acest caz, consumatorul trebuie să multiplice mental toate valorile de pe etichetă (calorii, grăsimi, sare) cu numărul de porții pe care le consumă efectiv pentru a obține o imagine reală a aportului nutrițional.6 O evoluție pozitivă în acest sens, observată în alte sisteme de etichetare precum cel din SUA, a fost trecerea de la declararea valorilor pentru o porție recomandată la o porție care reflectă cantitatea pe care oamenii o consumă în realitate, oferind astfel o imagine mult mai onestă.[2]</p>
+            <h3>Analiza comparativă a produselor: tehnici de evaluare rapidă la raft</h3>
+            <p>Înarmat cu cunoștințele de mai sus, consumatorul poate dezvolta o metodologie eficientă pentru a compara rapid două sau mai multe produse similare direct la raft. O abordare structurată poate arăta astfel:</p>
+            <ol>
+                <li><strong>Standardizarea unității de măsură:</strong> Primul și cel mai important pas este ignorarea valorilor per porție și concentrarea exclusivă pe coloana <strong>"per 100 g"</strong> sau <strong>"per 100 ml"</strong>. Doar așa se poate face o comparație obiectivă, "măr la măr".</li>
+                <li><strong>Verificarea valorii energetice:</strong> O primă triere rapidă se poate face pe baza numărului de calorii.</li>
+                <li><strong>Analiza nutrienților de limitat:</strong> Se compară, în ordine, cantitățile de <strong>zaharuri</strong>, <strong>acizi grași saturați</strong> și <strong>sare</strong>. Produsul cu valorile cele mai mici la acești trei indicatori este, de regulă, alegerea mai sănătoasă.</li>
+                <li><strong>Evaluarea nutrienților de încurajat:</strong> Dacă produsele sunt similare la primii trei indicatori, se poate face o departajare pe baza conținutului de <strong>proteine</strong> și <strong>fibre</strong> (dacă sunt declarate). Se va alege produsul cu valorile cele mai mari.</li>
+                <li><strong>Inspecția finală – lista de ingrediente:</strong> Înainte de decizia finală, o privire rapidă asupra listei de ingrediente poate oferi informații calitative cruciale. Se va prefera produsul cu o listă mai scurtă, cu ingrediente integrale (ex: "făină integrală de grâu" vs. "făină albă de grâu") și fără aditivi sau zaharuri ascunse (siropuri, dextroză etc.) pe primele poziții.</li>
+            </ol>
+            <p>Această abordare, deși utilă, poate conduce la ceea ce se numește <strong>"nutriționism reducționist"</strong>. Eticheta, prin însăși structura sa, încurajează descompunerea alimentului într-o sumă de nutrienți izolați, evaluând produsul pe baza cantității de componente "bune" și "rele". Această perspectivă poate fi înșelătoare, deoarece ignoră aspecte esențiale precum <strong>matricea alimentară</strong> (modul în care nutrienții interacționează în cadrul alimentului integral), <strong>gradul de procesare</strong> și prezența altor compuși bioactivi (polifenoli, antioxidanți) care nu sunt cuantificați pe etichetă. Un produs ultra-procesat, dar fortificat artificial cu fibre și vitamine, ar putea părea, conform tabelului nutrițional, superior unui aliment natural și simplu, precum un iaurt integral. Prin urmare, eticheta trebuie folosită ca un instrument de ghidare, nu ca un verdict absolut, iar o listă scurtă de ingrediente recognoscibile rămâne adesea cel mai bun indicator al calității unui produs.[22]</p>
+        </div>
+
+        <div id="ghiduri" class="tab-content">
+            <h2>Ghiduri practice pentru grupuri specifice</h2>
+            <h3>Managementul greutății</h3>
+            <p>Pentru persoanele care urmăresc controlul greutății, fie pentru a slăbi, fie pentru a se menține, eticheta nutrițională este un aliat indispensabil. Atenția trebuie concentrată pe câțiva indicatori cheie:</p>
+            <ul>
+                <li><strong>Valoarea energetică (kcal/kJ):</strong> Acesta este cel mai important indicator. Compararea valorii energetice per 100 g ajută la identificarea alimentelor cu densitate calorică mare (multe calorii într-un volum mic), care ar trebui consumate cu moderație. Este esențial să se coreleze aportul caloric dintr-o porție cu necesarul caloric zilnic individual.[5, 6]</li>
+                <li><strong>Fibrele alimentare:</strong> Deși declararea lor este voluntară, atunci când sunt prezente pe etichetă, fibrele sunt un indicator excelent. Alimentele bogate în fibre (cereale integrale, leguminoase, legume) contribuie la instalarea mai rapidă a sațietății, ajutând la controlul porțiilor și la reducerea aportului caloric total.[5]</li>
+                <li><strong>Zaharurile și grăsimile:</strong> Acești macronutrienți sunt cei mai denși din punct de vedere energetic. O cantitate mare de zaharuri sau grăsimi pe etichetă se traduce, de obicei, într-o valoare energetică ridicată. Băuturile îndulcite, de exemplu, pot adăuga un număr semnificativ de calorii fără a oferi sațietate, contribuind la creșterea în greutate.[26]</li>
+            </ul>
+            <h3>Diabet zaharat</h3>
+            <p>Pentru persoanele cu diabet zaharat, în special pentru cele care utilizează insulină, stăpânirea citirii etichetei este o competență vitală pentru un management glicemic eficient. Abilitatea centrală este <strong>numărarea carbohidraților</strong>.[27, 28]</p>
+            <ul>
+                <li><strong>Focalizarea pe "Glucide" (Carbohidrați):</strong> Linia esențială de pe etichetă este cea care indică "Glucide" sau "Carbohidrați" în total. Această valoare, exprimată în grame per 100 g sau per porție, este cea care influențează cel mai direct nivelul glicemiei postprandiale. [29]</li>
+                <li><strong>Diferența dintre "Glucide" și "din care zaharuri":</strong> Este o sursă frecventă de confuzie. "Glucide" reprezintă totalul carbohidraților (amidon, zaharuri, fibre). "Din care zaharuri" este doar o parte din acest total. Pentru calculul necesarului de insulină sau pentru planificarea meselor, se utilizează valoarea totală a glucidelor, nu doar cea a zaharurilor.[28]</li>
+                <li><strong>Calculul practic:</strong>Pacientul trebuie să identifice cantitatea de produs pe care intenționează să o consume, să verifice cantitatea de glucide per 100 g pe etichetă și să calculeze totalul de glucide din porția sa. De exemplu, dacă o persoană consumă 50 g de biscuiți, iar eticheta indică 60 g de glucide per 100 g, aportul total va fi de 30 g de glucide. Acest calcul este fundamental pentru ajustarea dozei de insulină rapidă.[28]</p>
+                <li><strong>Identificarea zaharurilor ascunse: </strong>Pe lângă tabelul nutrițional, lista de ingrediente trebuie verificată cu atenție pentru a identifica diverse forme de zaharuri adăugate, precum sirop de porumb bogat în fructoză, dextroză, melasă, sirop de malț etc.[31]</p>
+            </ul>
+            <h3>Nutriția sportivilor</h3>
+            <p>Nevoile nutriționale ale sportivilor variază considerabil în funcție de tipul, durata și intensitatea efortului. Eticheta nutrițională îi ajută să aleagă alimente care să le susțină performanța și recuperarea.</p>
+            <ul>
+                <li><strong>Sportivii de anduranță:</strong>Prioritatea este aportul energetic adecvat. Aceștia se vor concentra pe:</li>
+                    <ul>
+                        <li><strong>Glucide: </strong>Sursa principală de combustibil pentru efort prelungit. Se recomandă un aport de 6-12 g de glucide per kg de masă corporală pe zi, în funcție de intensitate. Eticheta ajută la alegerea produselor bogate în carbohidrați complecși (paste integrale, orez, fulgi de ovăz).[32]</li>
+                        <li><strong>Sare (Sodiu): </strong>În timpul eforturilor de lungă durată, se pierd electroliți importanți prin transpirație. Eticheta ajută la selectarea băuturilor izotonice sau a gustărilor (biscuiți sărați) care contribuie la refacerea nivelului de sodiu.[33]</li>
+                    </ul>
+                <li><strong>Sportivii de forță (culturism, haltere):</strong> Accentul cade pe recuperarea și construcția masei musculare</li>
+                    <ul>
+                        <li><strong>Proteine:</strong> Necesarul este mai mare, de aproximativ 1,2-1,7 g de proteine per kg de masă corporală pe zi. Eticheta este folosită pentru a compara conținutul de proteine din diverse surse (iaurturi, brânzeturi, batoane proteice) și pentru a asigura atingerea țintei zilnice.[32]</li> 
+                    </ul>
+                <li><strong>În general</strong>, sportivii vor utiliza eticheta pentru a evalua raportul dintre macronutrienți în alimente precum batoanele energizante sau de recuperare, alegând produse cu un profil adecvat pentru momentul consumului (mai bogate în carbohidrați înainte/în timpul efortului, mai bogate în proteine după efort).[35]</li>
+            </ul>
+            <h3>Alimentația copiilor</h3>
+            <p>Selectarea alimentelor pentru copii necesită o vigilență sporită, deoarece aceștia sunt mai vulnerabili la efectele negative ale unui exces de zahăr, sare și aditivi alimentari.</p>
+            <ul>
+                <li><strong>Se vor alege produse cu liste de ingrediente cât mai scurte, cu alimente integrale și naturale pe primele locuri (carne, legume, cereale integrale).[22]</li>
+                <li><strong>Limitarea strictă a zahărului și sării:</strong>  Trebuie evitate produsele în care zahărul sau siropurile apar ca prim ingredient.</li>
+                <li><strong>Evitarea grăsimilor și aditivilor nocivi:</strong> Grăsimile trans sau hidrogenate trebuie evitate complet. De asemenea, se recomandă limitarea aditivilor precum nitriții (E250), glutamatul monosodic (E621) și anumiți coloranți sintetici.[22]</li>
+                <li><strong>Atenție la băuturi:</strong> Sucurile de fructe, chiar și cele 100% naturale, sunt concentrate în zaharuri și ar trebui limitate la maximum 150 ml pe zi, ocazional. Apa trebuie să rămână principala sursă de hidratare. Băuturile energizante care conțin cofeină sunt strict nerecomandate copiilor.[9]</li>
+                <li><strong>Legislație specifică: <strong> Pentru sugari și copii de vârstă mică, există o legislație europeană dedicată (Directiva 2006/125/CE) care impune reguli mult mai stricte privind compoziția alimentelor pe bază de cereale și a altor alimente pentru copii, inclusiv limite foarte joase pentru reziduurile de pesticide.[37]</li>
+            </ul>
+        </div>
+        
+        <div id="capcane" class="tab-content">
+            <h2>Capcane de marketing și mențiuni ambigue</h2>
+            <h3>Navigarea printre mesajele comerciale</h3>
+            <p>Ambalajul unui produs este, în primul rând, un instrument de marketing. Partea frontală este concepută pentru a atrage atenția și a vinde, folosind adesea termeni și mențiuni care, deși par să indice o calitate superioară sau beneficii pentru sănătate, pot fi ambigue sau chiar înșelătoare. O înțelegere critică a acestor termeni este esențială pentru a nu cădea în capcanele de marketing.[38]</p>
+            <h3>Analiza termenilor „natural”, „tradițional”, „artizanal”</h3>
+            <ul>
+                <li><strong>"Natural":</strong> Acesta este, probabil, cel mai utilizat și cel mai abuzat termen de pe etichetele alimentare. Problema fundamentală este lipsa unei definiții legale clare și armonizate la nivelul Uniunii Europene. În absența unor criterii stricte, producătorii îl pot folosi în mod subiectiv. Pentru majoritatea consumatorilor, "natural" implică absența substanțelor chimice, a aditivilor sintetici și a procesării intensive.39 Realitatea, însă, poate fi foarte diferită. Un produs etichetat "natural" poate conține ingrediente procesate sau aditivi considerați "de origine naturală". Recomandarea practică este de a ignora în mare măsură acest termen și de a se baza exclusiv pe analiza listei de ingrediente [39]</li>
+                <li><strong>"Tradițional":</strong> Spre deosebire de "natural", termenul "tradițional" este reglementat mai specific în legislația națională. Conform normelor din România, pentru a fi atestat ca "produs tradițional", un aliment trebuie să îndeplinească simultan mai multe condiții stricte: să fie fabricat pe teritoriul național, să folosească materii prime locale, să nu conțină aditivi alimentari, să aibă la bază o rețetă tradițională și un proces tehnologic care include operațiuni manuale.40 Produsele care îndeplinesc aceste criterii sunt înscrise în Registrul Național al Produselor Tradiționale, care poate fi consultat public.[40, 41, 42]</li>
+                <li><strong>"Artizanal":</strong> cest termen se referă la modul de producție. Un produs este considerat "artizanal" dacă este realizat fie integral manual, fie cu ajutorul unor unelte, unde contribuția manuală a operatorului uman este o componentă esențială a produsului finit.43 Termenul sugerează o producție la scară mică și o atenție deosebită la detalii, în contrast cu producția industrială, standardizată și în masă.[43]</li>
+            </ul>
+            <h3>Decodarea mențiunilor „fără zahăr adăugat”, „light”, „degresat”</h3>
+            <ul>
+                <li><strong>"Fără zahăr adăugat":</strong> Această mențiune înseamnă că produsul nu conține monozaharide sau dizaharide adăugate (ex: zahăr de masă, glucoză, fructoză) și niciun alt ingredient folosit pentru proprietățile sale de îndulcire (ex: miere, sirop de arțar, concentrate de fructe).[44] De asemenea, produsul nu poate conține îndulcitori artificiali. Totuși, aceasta este o capcană frecventă: un produs "fără zahăr adăugat", cum ar fi un suc de fructe, poate conține cantități foarte mari de zaharuri <strong>prezente în mod natural</strong> în fructe, având un impact similar asupra glicemiei și aportului caloric. Legea impune ca, în acest caz, pe etichetă să apară și mențiunea: „Conține zaharuri prezente în mod natural”.[44, 45]</li>
+                <li><strong>"Light / Cu conținut redus de...":</strong> O mențiune precum "light", "lite" sau "redus în..." indică faptul că produsul are un conținut dintr-un anumit nutrient (de obicei grăsimi sau zaharuri) redus cu <strong>cel puțin 30%</strong> comparativ cu un produs similar standard de pe piață. Este important de reținut că "light" nu înseamnă neapărat "sărac în calorii".</li>
+                <li><strong>"Degresat" / "Fără grăsimi":</strong>Această mențiune poate fi utilizată doar pentru produsele care conțin <strong>nu mai mult de 0,5 g de grăsimi la 100 g sau 100 ml</strong>.</li>
+                <li><strong>Capcana compensării:</strong> O problemă majoră a produselor "light" sau "degresate" este că, adesea, pentru a compensa pierderea de gust și textură cauzată de eliminarea grăsimii, producătorii adaugă cantități mai mari de zahăr, sare sau diverși aditivi (agenți de îngroșare, arome). Astfel, un produs "degresat" poate ajunge să fie mai bogat în zahăr și mai puțin sănătos per ansamblu decât varianta sa originală.[46]</li>
+            </ul>
+            <h3>Identificarea produselor ultra-procesate</h3>
+            <p>Chiar și un ambalaj cu un design "curat", care evocă natura și sănătatea, poate ascunde un produs ultra-procesat. Indicatorii cheie pentru identificarea acestor produse se găsesc în lista de ingrediente:</p>
+            <ul>
+                <li><strong>Listă lungă de ingrediente: </strong>Produsele cu liste de ingrediente foarte lungi sunt, de obicei, intens procesate.</li>
+                <li><strong>Ingrediente nerecunoscute: </strong>Prezența unor substanțe pe care un consumator nu le-ar folosi într-o bucătărie casnică (ex: izolat proteic de soia, uleiuri hidrogenate, sirop de porumb bogat în fructoză, maltodextrină).</li>
+                <li><strong>Prezența aditivilor: </strong>O listă lungă de aditivi alimentari (coloranți, conservanți, emulgatori, potențiatori de aromă) este un semn clar al unui grad înalt de procesare.</li>
+            </ul>
+        </div>
+
+        <div id="viitor" class="tab-content">
+            <h2>Viitorul etichetării nutriționale</h2>
+            <h3>Sisteme de etichetare frontală (Front-of-Pack)</h3>
+            <p>Recunoscând că mulți consumatori nu au timpul sau cunoștințele necesare pentru a analiza în detaliu tabelul nutrițional de pe spatele ambalajului, au fost dezvoltate sisteme de etichetare simplificate, plasate pe partea frontală a pachetului (Front-of-Pack Labelling - FOPL). Acestea au rolul de a oferi o evaluare rapidă, dintr-o singură privire, a calității nutriționale a unui produs.</p>
+            <p>Sistemele de etichetare frontală (FOPL), precum <strong>Nutri-Score</strong>, oferă o evaluare rapidă a calității nutriționale. Nutri-Score clasifică alimentele pe o scară de la A (verde) la E (roșu), pe baza unui algoritm care evaluează atât nutrienții negativi, cât și pe cei pozitivi.[47, 48, 49]</p>
+            <p>Cel mai cunoscut și mai dezbătut sistem FOPL din Europa este Nutri-Score. Acesta clasifică alimentele pe o scară de la A (verde închis, cea mai bună calitate nutrițională) la E (roșu/portocaliu închis, cea mai slabă calitate nutrițională).47 Scorul este calculat pe baza unui algoritm științific care ia în considerare, per 100 g de produs, atât elementele considerate "negative" (densitatea energetică, zaharurile, acizii grași saturați, sarea), cât și cele "pozitive" (procentul de fructe, legume și nuci, fibrele și proteinele).[48]</p>
+            <table>
+                <tr>
+                    <th><strong>Argumente Pro (Susținători) [7]</strong></th>
+                    <th><strong>Argumente Contra (Critici) [48]</strong></th>
+                </tr>
+                <tr>
+                    <td><strong>Simplitate și eficiență:</strong> Permite consumatorilor să compare rapid și intuitiv produsele din aceeași categorie, facilitând alegerile mai sănătoase.</td>
+                    <td><strong>Simplificare excesivă: </strong>Algoritmul poate penaliza nedrept alimente sănătoase, monoingredient, bogate în grăsimi benefice (ex: ulei de măsline, somon).</td>
+                </tr>
+                <tr>
+                    <td><strong>Validare științifică: </strong>Numeroase studii epidemiologice și de piață au demonstrat eficacitatea sa în a orienta consumatorii către diete de o calitate superioară și în a reduce riscul de boli cronice.</td>
+                    <td><strong>Ignoră gradul de procesare: </strong>Un produs ultra-procesat, dar reformulat pentru a obține un scor bun, poate fi clasificat mai bine decât un aliment natural, neprocesat</td>
+                </tr>
+                <tr>
+                    <td><strong>Stimulează reformularea: </strong>Încurajează producătorii să își îmbunătățească rețetele (ex: reducerea sării, a zahărului) pentru a obține un scor mai bun și a câștiga un avantaj competitiv.</td>
+                    <td><strong>Baza de calcul (100 g): </strong>Calculul per 100 g, și nu per porție, poate fi înșelător pentru produse consumate în cantități mici (ex: ulei) sau mari (ex: pizza).</td>
+                </tr>
+                <tr>
+                    <td><strong>Crește conștientizarea:</strong> Implementarea sa pe scară largă a dus la o creștere a conștientizării publice privind calitatea nutrițională a alimentelor.</td>
+                    <td><strong>Potențial de manipulare: </strong>Criticii susțin că algoritmul poate fi "păcălit" prin adăugarea de fibre sau proteine izolate pentru a compensa un conținut ridicat de zahăr.</td>
+                </tr>
+            </table>
+            <p>Deși adoptat voluntar în mai multe țări europene (Franța, Belgia, Germania, Spania etc.), Nutri-Score rămâne un subiect de controversă. În România, utilizarea sa a fost interzisă începând cu 1 mai 2023, în așteptarea unei decizii privind un sistem FOPL armonizat la nivelul întregii Uniuni Europene.[48] Comisia Europeană continuă să analizeze opțiunile pentru un sistem FOPL obligatoriu, dar progresele sunt lente, reflectând complexitatea problemei și interesele divergente ale statelor membre și ale industriei.[51]</p>
+            <h3>Etichetele digitale (coduri QR)</h3>
+            <p>O inovație tehnologică majoră care remodelează etichetarea este utilizarea codurilor QR pentru a oferi informații extinse printr-o etichetă digitală (e-label). Această soluție răspunde problemei lipsei de spațiu fizic pe ambalaj, permițând producătorilor să ofere un nivel de transparență fără precedent.[52]</p>
+            <p>Un exemplu concret este noua legislație europeană pentru vinuri, care, începând cu 8 decembrie 2023, a devenit obligatorie. Producătorii de vinuri vândute în UE trebuie acum să furnizeze lista completă de ingrediente și declarația nutrițională.20 Regulamentul le oferă însă o opțiune flexibilă:</p>
+            <ul>
+                <li>Pe eticheta fizică de pe sticlă, este obligatoriu să fie afișate doar valoarea energetică (cu simbolul "E") și alergenii (ex: "conține sulfiți").20</li>
+                <li>Declarația nutrițională completă și lista de ingrediente pot fi mutate pe o etichetă digitală, accesibilă prin scanarea unui cod QR imprimat pe eticheta fizică.55</li>
+            </ul>
+            <p>Există reguli stricte pentru aceste etichete digitale: pagina web către care duce codul QR <strong>nu trebuie să conțină nicio informație în scop de marketing sau vânzare și nu trebuie să colecteze sau să urmărească datele utilizatorilor </strong>, pentru a proteja confidențialitatea acestora.[57]</p>
+            <p>Această digitalizare a etichetei reprezintă o oportunitate imensă pentru transparență, permițând furnizarea de informații detaliate, multilingve și actualizabile. Totuși, ea ridică și o provocare importantă: riscul creării unei diviziuni informaționale. Accesul la informații complete devine dependent de deținerea unui smartphone, de o conexiune la internet și de competențe digitale. Acest lucru poate exclude sau dezavantaja anumite segmente ale populației, precum persoanele vârstnice sau cele cu venituri reduse. Prin urmare, deși tehnologia oferă o soluție elegantă la problema spațiului, politicile viitoare trebuie să se asigure că informațiile esențiale rămân accesibile tuturor, fără a crea noi bariere digitale.</p>
+            <h3>Perspective și direcții viitoare</h3>
+            <p>Viitorul etichetării nutriționale în UE se conturează în jurul a două axe principale: <strong>armonizarea și digitalizarea</strong>. Eforturile Comisiei Europene de a stabili un sistem FOPL unic și obligatoriu vor continua, deși procesul este complex și politic sensibil.51 În paralel, succesul și acceptarea etichetelor digitale în sectorul vinicol ar putea deschide calea pentru extinderea acestei tehnologii și la alte categorii de produse alimentare, oferind un nou standard de transparență pentru consumatori.</p>
+        </div>
+    
+        <div id="rezumat" class="tab-content">
+            <h2>Rezumat infografic</h2>
+            <div style="background-color: var(--bg-light); padding: 1.5rem; border-radius: 12px; font-family: 'Inter', sans-serif;">
+                <header style="background: linear-gradient(135deg, #073B4C, #118AB2); color: white; text-align: center; padding: 2rem 1rem; border-radius: 12px;">
+                    <h1 style="font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; color: white !important; border: none !important;">Ghid de decodare a etichetei nutriționale</h1>
+                    <p style="font-size: 1.125rem; color: #e2e8f0; max-width: 42rem; margin: 0 auto;">Învață să faci alegeri alimentare informate și sănătoase pentru tine și familia ta.</p>
+                </header>
+                <main style="padding: 2rem 0 0 0;">
+                    <section style="margin-bottom: 3rem;">
+                        <h2 style="font-size: 1.875rem; color: #118AB2; margin-bottom: 1rem; text-align: center; border: none;">De ce este important să citești eticheta?</h2>
+                        <p style="max-width: 42rem; margin: 0 auto 2rem auto; text-align: center;">Eticheta nutrițională este un instrument esențial pentru sănătatea publică, ajutându-te să previi boli cronice și să stimulezi producătorii să ofere alimente mai sănătoase.</p>
+                        <div style="display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                            <div style="background-color: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center;">
+                                <div style="font-size: 3rem; margin-bottom: 0.5rem; color: #FF6B6B;">💡</div>
+                                <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; border: none; text-align: center;">Educație</h3>
+                                <p>Îți oferă cunoștințele necesare pentru a alege produse aliniate nevoilor tale nutriționale.</p>
+                            </div>
+                            <div style="background-color: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center;">
+                                <div style="font-size: 3rem; margin-bottom: 0.5rem; color: #06D6A0;">🛡️</div>
+                                <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; border: none; text-align: center;">Prevenție</h3>
+                                <p>Te ajută să limitezi consumul de zahăr, sare și grăsimi saturate, factori de risc pentru boli cronice.</p>
+                            </div>
+                            <div style="background-color: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center;">
+                                <div style="font-size: 3rem; margin-bottom: 0.5rem; color: #FFD166;">🔍</div>
+                                <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem; border: none; text-align: center;">Transparență</h3>
+                                <p>Responsabilizează producătorii, încurajând reformularea produselor pentru a fi mai sănătoase.</p>
+                            </div>
+                        </div>
+                    </section>
+                    <section style="margin-bottom: 3rem;">
+                        <h2 style="font-size: 1.875rem; color: #118AB2; margin-bottom: 1rem; text-align: center; border: none;">Anatomia etichetei nutriționale</h2>
+                        <p style="max-width: 42rem; margin: 0 auto 2rem auto; text-align: center;">O etichetă conține mai multe secțiuni cheie. Iată cum să le interpretezi pe cele mai importante.</p>
+                        <div style="display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start;">
+                            <div style="background-color: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; border: none; text-align: center;">Declarația nutrițională obligatorie ("Big 7")</h3>
+                                <p style="text-align: center;">Aceste 7 elemente trebuie declarate obligatoriu per 100g/ml, permițând o comparație directă între produse.</p>
+                                <ul style="list-style: none; padding: 0; text-align: left; font-size: 0.9em; margin-top: 1rem;">
+                                    <li style="display:flex; align-items: center; background: #f1f5f9; padding: 0.5rem; border-radius: 4px; margin-bottom: 4px;"><strong style="flex-basis: 50%;">Valoare energetică</strong> <span style="flex-basis: 50%; text-align: right;">kJ / kcal</span></li>
+                                    <li style="display:flex; align-items: center; background: #f1f5f9; padding: 0.5rem; border-radius: 4px; margin-bottom: 4px;"><strong style="flex-basis: 50%;">Grăsimi</strong> <span style="flex-basis: 50%; text-align: right;">din care:</span></li>
+                                    <li style="padding-left: 1rem; margin-bottom: 4px; background: #fafafa; padding: 0.5rem; border-radius: 4px;">- Acizi grași saturați <span style="color: var(--color-red); font-weight: 600;">(de limitat)</span></li>
+                                    <li style="display:flex; align-items: center; background: #f1f5f9; padding: 0.5rem; border-radius: 4px; margin-bottom: 4px;"><strong style="flex-basis: 50%;">Glucide</strong> <span style="flex-basis: 50%; text-align: right;">din care:</span></li>
+                                    <li style="padding-left: 1rem; margin-bottom: 4px; background: #fafafa; padding: 0.5rem; border-radius: 4px;">- Zaharuri <span style="color: var(--color-red); font-weight: 600;">(de limitat)</span></li>
+                                    <li style="display:flex; align-items: center; background: #f1f5f9; padding: 0.5rem; border-radius: 4px; margin-bottom: 4px;"><strong style="flex-basis: 50%;">Proteine</strong> <span style="color: var(--color-green); font-weight: 600; flex-basis: 50%; text-align: right;">(de încurajat)</span></li>
+                                    <li style="display:flex; align-items: center; background: #f1f5f9; padding: 0.5rem; border-radius: 4px;"><strong style="flex-basis: 50%;">Sare</strong> <span style="color: var(--color-red); font-weight: 600; flex-basis: 50%; text-align: right;">(de limitat)</span></li>
+                                </ul>
+                            </div>
+                            <div style="background-color: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center;">
+                                 <h3 style="font-size: 1.25rem; margin-bottom: 1rem; border: none; text-align: center;">Lista de ingrediente: regula de aur</h3>
+                                 <p>Ingredientele sunt listate în ordinea descrescătoare a cantității. Primul ingredient este cel mai abundent!</p>
+                                 <p style="margin-top: 1rem;"><strong>Sfat:</strong> O listă scurtă cu ingrediente simple este adesea un semn al unui produs mai puțin procesat.</p>
+                            </div>
+                        </div>
+                    </section>
+                    <section style="margin-bottom: 3rem; background-color: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                         <h2 style="font-size: 1.875rem; color: #118AB2; margin-bottom: 1rem; text-align: center; border: none;">Atenție la alergeni!</h2>
+                         <p style="max-width: 42rem; margin: 0 auto 2rem auto; text-align: center;">Cei 14 alergeni majori trebuie evidențiați în lista de ingrediente (ex: prin text <strong>îngroșat</strong>) pentru identificare rapidă.</p>
+                         <div style="display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); text-align: center; font-size: 0.9em;">
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">🌾 Cereale cu gluten</div>
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">🦐 Crustacee</div>
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">🥚 Ouă</div>
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">🐟 Pește</div>
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">🥜 Arahide</div>
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">🌱 Soia</div>
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">🥛 Lapte</div>
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">🌰 Fructe cu coajă</div>
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">🌿 Țelină</div>
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">🌭 Muștar</div>
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">✨ Susan</div>
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">🍇 Sulfiți</div>
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">🌼 Lupin</div>
+                            <div style="background-color: #f1f5f9; padding: 0.5rem; border-radius: 8px;">🦑 Moluște</div>
+                         </div>
+                    </section>
+                    <section style="margin-bottom: 3rem;">
+                        <h2 style="font-size: 1.875rem; color: #118AB2; margin-bottom: 1rem; text-align: center; border: none;">Cheia interpretării: procentul din consumul de referință (%CR)</h2>
+                        <p style="max-width: 42rem; margin: 0 auto 2rem auto; text-align: center;">%CR îți arată cât contribuie o porție la necesarul zilnic de nutrienți, calculat pentru un adult mediu cu o dietă de 2000 kcal.</p>
+                        <div style="display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: center;">
+                            <div style="background-color: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center;">
+                                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; border: none; text-align: center;">Regula 5% / 20%</h3>
+                                <p style="font-weight: 600; color: var(--color-red); font-size: 1.1em;">5% CR sau mai puțin = conținut SCĂZUT.</p>
+                                <p>(Ideal pentru grăsimi saturate, zaharuri, sare)</p>
+                                <p style="font-weight: 600; color: var(--color-green); font-size: 1.1em; margin-top: 1rem;">20% CR sau mai mult = conținut RIDICAT.</p>
+                                <p>(Ideal pentru fibre, vitamine, minerale)</p>
+                            </div>
+                            <div style="background-color: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); text-align: center;">
+                                 <h3 style="font-size: 1.25rem; margin-bottom: 1rem; border: none; text-align: center;">Compoziția dietei de referință (2000 kcal)</h3>
+                                <div class="chart-container"><canvas id="crChart"></canvas></div>
+                            </div>
+                        </div>
+                    </section>
+                    <section style="margin-bottom: 3rem;">
+                        <h2 style="font-size: 1.875rem; color: #118AB2; margin-bottom: 1rem; text-align: center; border: none;">Capcane de marketing de evitat</h2>
+                         <p style="max-width: 42rem; margin: 0 auto 2rem auto; text-align: center;">Nu te lăsa păcălit de ambalaj. Termenii atractivi pot ascunde o realitate nutrițională mai puțin ideală.</p>
+                        <div style="display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start;">
+                            <div style="background-color: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; border: none; text-align: center;">Capcana produselor "light"</h3>
+                                <p style="text-align: center;">Adesea, grăsimea redusă este compensată cu zahăr adăugat pentru a menține gustul.</p>
+                                <div class="chart-container"><canvas id="lightTrapChart"></canvas></div>
+                            </div>
+                            <div style="background-color: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                                 <h3 style="font-size: 1.25rem; margin-bottom: 1rem; border: none; text-align: center;">Termeni ambigui</h3>
+                                 <ul style="list-style: none; padding: 0; text-align: left;">
+                                    <li style="margin-bottom: 1rem;"><strong style="color: var(--color-red);">"Natural":</strong> Termen fără o definiție legală clară în UE. Ignoră-l și citește lista de ingrediente.</li>
+                                    <li style="margin-bottom: 1rem;"><strong style="color: var(--color-yellow);">"Fără zahăr adăugat":</strong> Nu înseamnă "fără zahăr". Produsul poate conține cantități mari de zaharuri prezente natural.</li>
+                                    <li><strong style="color: var(--color-green);">"Tradițional":</strong> În România, acest termen este reglementat și implică o rețetă specifică, fără aditivi alimentari.</li>
+                                 </ul>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        </div>
+
+        <div id="concluzii" class="tab-content">
+            <h2>Concluzii și recomandări strategice</h2>
+            <h3>Sinteza celor mai importante principii de utilizare a etichetei nutriționale</h3>
+            <ol>
+                <li><strong>Priviți dincolo de fața ambalajului:</strong> Informațiile de marketing de pe partea frontală sunt concepute pentru a vinde. Adevărul despre produs se află pe spatele ambalajului, în tabelul nutrițional și, mai ales, în lista de ingrediente.</li>
+                <li><strong>Lista de ingrediente este cheia:</strong> Ordinea descrescătoare a ingredientelor este cel mai onest indicator al compoziției reale a unui produs. O listă scurtă, cu ingrediente simple și recognoscibile, este aproape întotdeauna de preferat uneia lungi și pline de termeni tehnici.</li>
+                <li><strong>Folosiți standardul de 100 g/ml pentru comparații:</strong> Pentru a evalua obiectiv două produse similare, ignorați valorile per porție și comparați întotdeauna datele raportate la 100 g sau 100 ml.</li>
+                <li><strong>Contextualizați procentele (%CR):</strong> Folosiți regula 5%/20% pentru a evalua rapid dacă un produs are un conținut scăzut sau ridicat dintr-un nutrient. Nu uitați că aceste procente sunt raportate la un adult mediu și trebuie adaptate nevoilor individuale.</li>
+                <li><strong>Fiți vigilenți la mențiunile ambigue:</strong> Termeni precum "natural" sunt adesea lipsiți de o bază legală strictă. Mențiuni precum "fără zahăr adăugat" sau "degresat" pot ascunde compromisuri nutriționale, cum ar fi un conținut mai mare de zaharuri naturale sau de aditivi.</li>
+            </ol>
+            <h3>Recomandări pentru profesioniștii din domeniul nutriției în educarea clienților/pacienților</h3>
+            <p>Pentru nutriționiști, dieteticieni și medici, eticheta nutrițională este un instrument didactic de primă mână. Integrarea educației privind citirea etichetelor în consultații poate crește semnificativ autonomia și aderența pacienților la planurile alimentare. Recomandările strategice includ:</p>
+            <ol>
+                <li><strong>Sesiuni practice:</strong> Organizati sesiuni practice, eventual folosind ambalaje reale de produse, pentru a învăța pacienții cum să identifice informațiile cheie, în special pentru condiții specifice precum diabetul (numărarea carbohidraților) sau hipertensiunea (identificarea conținutului de sare).</li>
+                <li><strong>Stabilirea de praguri personalizate:</strong> Traduceți recomandările generale în ținte concrete pentru pacient. De exemplu, stabiliți limite clare pentru gramele de zahăr, sare sau grăsimi saturate pe care ar trebui să le caute pe etichete.</li>
+                <li><strong>Promovarea analizei comparative:</strong> Încurajați pacienții să devină "detectivi alimentari", învățându-i metodologia de a compara produse similare la raft pentru a face cea mai bună alegere posibilă în cadrul bugetului lor.</li>
+                <li><strong>Utilizarea tehnologiei: </strong>Recomandați aplicații mobile care pot scana coduri de bare și pot oferi o interpretare simplificată a etichetei nutriționale, acționând ca un instrument de suport în timpul cumpărăturilor.</li>
+            </ol>
+            <h3>Apel la vigilență critică și la o abordare holistică a alimentației</h3>
+            <p>În concluzie, eticheta nutrițională este un instrument excepțional de informare și educație, un pilon al politicilor de sănătate publică din Uniunea Europeană. Ea ne oferă datele necesare pentru a naviga prin complexitatea ofertei alimentare moderne și pentru a face alegeri conștiente.</p>
+            <p>Cu toate acestea, este esențial să nu cădem în capcana de a reduce alimentația la o simplă ecuație matematică de nutrienți. Valoarea unui aliment nu este dată doar de cifrele din tabelul său nutrițional. O abordare holistică a alimentației va prioritiza întotdeauna consumul de alimente integrale, proaspete și cât mai puțin procesate – alimente care, în majoritatea lor, nici măcar nu au nevoie de o etichetă. </p>
+            <p>Eticheta nutrițională este cel mai bun ghid pe care îl avem pentru a alege în mod înțelept în lumea produselor ambalate, dar nu trebuie să înlocuiască niciodată principiile fundamentale ale unei diete variate și echilibrate, bazată pe alimente reale. Vigilența critică, combinată cu o înțelegere profundă a acestui instrument, reprezintă cheia pentru o viață mai sănătoasă.</p>
+        </div>
+
+        <div id="bibliografie" class="tab-content">
+            <h2>Referințe bibliografice</h2>
+            <ol class="bibliography-list">
+                <li>Parlamentul European și Consiliul Uniunii Europene. (2011). Regulamentul (UE) nr. 1169/2011 privind informarea consumatorilor cu privire la produsele alimentare. Jurnalul Oficial al Uniunii Europene, L 304/18.</li>
+                <li>U.S. Food and Drug Administration (FDA). (2020). Changes to the Nutrition Facts Label.</li>
+                <li>Autoritatea Națională pentru Protecția Consumatorilor (ANPC). Ghid privind etichetarea produselor alimentare.</li>
+                <li>Grunert, K. G., & Wills, J. M. (2007). A review of consumer research on food labels. International Journal of Consumer Studies, 31(6), 581-591.</li>
+                <li>World Health Organization (WHO). (2018). Healthy diet. Fact sheet N°394.</li>
+                <li>European Food Information Council (EUFIC). (2020). Reading food labels.</li>
+                <li>Egnell, M., et al. (2019). Objective understanding of the Nutri-Score front-of-package nutrition label according to individual characteristics of subjects: A quantitative study in 10 European countries. PLOS ONE, 14(10), e0223027.</li>
+                <li>Comisia Europeană. (2008). Propunere de Regulament al Parlamentului European și al Consiliului privind informarea consumatorilor cu privire la produsele alimentare. COM(2008) 40 final.</li>
+                <li>Food Safety Authority of Ireland (FSAI). (2016). Guidance Note No. 28 - Food Information for Consumers (FIC).</li>
+                <li>InfoCons. (2022). Ghid Etichetarea Produselor Alimentare.</li>
+                <li>Parlamentul European și Consiliul Uniunii Europene. (2006). Regulamentul (CE) nr. 1924/2006 privind mențiunile nutriționale și de sănătate înscrise pe produsele alimentare. Jurnalul Oficial al Uniunii Europene, L 404/9.</li>
+                <li>Parlamentul European și Consiliul Uniunii Europene. (2013). Regulamentul de punere în aplicare (UE) nr. 1337/2013.</li>
+                <li>European Commission. Health claims. Food Safety.</li>
+                <li>EFSA Panel on Dietetic Products, Nutrition and Allergies (NDA). (2012). Guidance on the scientific requirements for health claims related to functions of the nervous system. EFSA Journal, 10(7), 2760.</li>
+                <li>UK Food Standards Agency. (2013). Guidance on nutrition and health claims.</li>
+                <li>Guvernul României. (2014). Hotărârea nr. 106/2002 privind etichetarea alimentelor.</li>
+                <li>Pascu, R. (2023). Curs de Nutriție și Siguranță Alimentară.</li>
+                <li>Ministerul Sănătății. Ghid pentru o alimentație sănătoasă.</li>
+                <li>Institute of Medicine (US). (2012). Front-of-Package Nutrition Rating Systems and Symbols.</li>
+                <li>Comisia Europeană. (2021). Regulamentul Delegat (UE) 2021/2117.</li>
+                <li>American Heart Association (AHA). (2021). Added Sugars.</li>
+                <li>Monteiro, C. A., et al. (2019). The UN Decade of Nutrition, the NOVA food classification and the trouble with ultra-processing. Public Health Nutrition, 21(1), 5-17.</li>
+                <li>EFSA Panel on Dietetic Products, Nutrition and Allergies (NDA). (2014). Scientific Opinion on the evaluation of allergenic foods. EFSA Journal, 12(11), 3894.</li>
+                <li>Food and Drink Europe. (2013). Guidance on the Provision of Food Information to Consumers.</li>
+                <li>British Nutrition Foundation. (2018). Reference Intakes on food labels.</li>
+                <li>Malik, V. S., Schulze, M. B., & Hu, F. B. (2006). Intake of sugar-sweetened beverages and weight gain: a systematic review. The American journal of clinical nutrition, 84(2), 274-288.</li>
+                <li>American Diabetes Association (ADA). (2022). Standards of Medical Care in Diabetes—2022. Diabetes Care, 45(Supplement 1).</li>
+                <li>Diabetes UK. (2021). Carbohydrate counting and diabetes.</li>
+                <li>Evert, A. B., et al. (2019). Nutrition therapy for adults with diabetes or prediabetes: a consensus report. Diabetes Care, 42(5), 731-754.</li>
+                <li>Federația Română de Diabet, Nutriție și Boli Metabolice. Ghid de nutriție pentru persoana cu diabet zaharat.</li>
+                <li>Stanhope, K. L. (2016). Sugar consumption, metabolic disease and obesity. Critical reviews in clinical laboratory sciences, 53(1), 52-67.</li>
+                <li>Kerksick, C. M., et al. (2018). ISSN exercise & sports nutrition review update. Journal of the International Society of Sports Nutrition, 15(1), 38.</li>
+                <li>Thomas, D. T., et al. (2016). Position of the Academy of Nutrition and Dietetics, Dietitians of Canada, and the American College of Sports Medicine: Nutrition and Athletic Performance. Journal of the Academy of Nutrition and Dietetics, 116(3), 501-528.</li>
+                <li>Jäger, R., et al. (2017). International Society of Sports Nutrition Position Stand: protein and exercise. Journal of the International Society of Sports Nutrition, 14(1), 20.</li>
+                <li>Zernicke, R. F., & Ciolac, E. G. (2019). Nutrition for Athletes. In IOC Manual of Sports Cardiology.</li>
+                <li>World Health Organization (WHO). (2019). A healthy diet for children.</li>
+                <li>Comisia Europeană. (2006). Directiva 2006/125/CE.</li>
+                <li>Nestle, M. (2013). Food politics: How the food industry influences nutrition and health. University of California Press.</li>
+                <li>European Court of Auditors. (2018). Special Report No 02/2018: The ‘organic’ logo.</li>
+                <li>Ministerul Agriculturii și Dezvoltării Rurale. Ordinul nr. 724/2013 pentru atestarea produselor tradiționale.</li>
+                <li>Registrul Național al Produselor Tradiționale (RNPT) - MADR.</li>
+                <li>Pascu, R. (2021). Siguranța și calitatea produselor alimentare tradiționale. Editura Academiei Române.</li>
+                <li>Guvernul României. (2009). Legea nr. 1/2005 privind organizarea și funcționarea cooperației.</li>
+                <li>Food Safety Authority of Ireland (FSAI). (2015). Guidance Note No. 29 - The Use of Nutrition and Health Claims.</li>
+                <li>Anexa la Regulamentul (CE) nr. 1924/2006.</li>
+                <li>Drewnowski, A. (2005). The economics of food choice. Public Health Nutrition, 8(S1), 37-43.</li>
+                <li>Hercberg, S., et al. (2017). The Nutri-Score: a simple and validated front-of-pack nutrition label. The Lancet Public Health, 2(9), e375.</li>
+                <li>Pascu, R. (2023, April 20). De ce a fost interzis Nutri-Score în România. Blog de Nutriție.</li>
+                <li>Santé publique France. (2021). The Nutri-Score: A guide to understanding and using it.</li>
+                <li>Fialon, M., et al. (2019). A new indicator of the nutritional quality of the diet based on the French nutrition label Nutri-Score. British Journal of Nutrition, 121(11), 1296-1306.</li>
+                <li>European Commission. (2022). Proposal for a Regulation on front-of-pack nutrition labelling.</li>
+                <li>GS1 in Europe. (2022). Digital Label: Enhancing consumer information.</li>
+                <li>FoodDrinkEurope. (2021). Digitalisation of food information.</li>
+                <li>European Parliament. (2021). Common Agricultural Policy reform: deal on new EU farm rules.</li>
+                <li>OIV (International Organisation of Vine and Wine). (2022). Digital labelling of wines.</li>
+                <li>Wine Institute. (2023). New EU Wine Labeling Regulations.</li>
+                <li>Comité Européen des Entreprises Vins (CEEV). (2022). Guidelines on the implementation of the new EU wine labelling rules.</li>
+                <li>Pascu, R. (2023, December 10). Revoluția etichetelor digitale la vinuri. Blog de Nutriție.</li>
+                <li>European Data Protection Board (EDPB). Guidelines on the protection of personal data in the context of QR codes for food information.</li>
+            </ol>
+        </div>
+
+        <footer class="ztabs-footer">
+            <p>Copyright &copy; 2025 - dr.ing. Radu Pascu</p>
+        </footer>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            const targetTab = document.getElementById(tabName);
+            if (targetTab) {
+                targetTab.style.display = "block";
+            }
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.className += " active";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            // Deschide primul tab în mod implicit la încărcarea paginii
+            const firstTabButton = document.querySelector('.tab-link');
+            if(firstTabButton) {
+                firstTabButton.click();
+            }
+            
+            // Initializare grafice pentru infografic
+            const wrapLabel = (label, maxLength = 16) => {
+                if (typeof label !== 'string' || label.length <= maxLength) {
+                    return label;
+                }
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = '';
+                for (const word of words) {
+                    if ((currentLine + word).length > maxLength) {
+                        lines.push(currentLine.trim());
+                        currentLine = '';
+                    }
+                    currentLine += word + ' ';
+                }
+                lines.push(currentLine.trim());
+                return lines.filter(line => line.length > 0);
+            };
+
+            const multiLineTooltipTitle = {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                    return label.join(' ');
+                                } else {
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            
+            const chartColors = {
+                red: '#FF6B6B',
+                yellow: '#FFD166',
+                green: '#06D6A0',
+                blue: '#118AB2',
+                darkBlue: '#073B4C'
+            };
+
+            const crChartElement = document.getElementById('crChart');
+            if (crChartElement) {
+                if(window.crChartInstance) window.crChartInstance.destroy();
+                const crChartCtx = crChartElement.getContext('2d');
+                window.crChartInstance = new Chart(crChartCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Grăsimi (70g)', 'Glucide (260g)', 'Proteine (50g)', 'Sare (6g)'],
+                        datasets: [{
+                            label: 'Grame per zi',
+                            data: [70, 260, 50, 6],
+                            backgroundColor: [chartColors.yellow, chartColors.blue, chartColors.green, chartColors.red],
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { ...multiLineTooltipTitle.plugins, legend: { position: 'bottom' } }
+                    }
+                });
+            }
+
+            const lightTrapChartElement = document.getElementById('lightTrapChart');
+            if (lightTrapChartElement) {
+                if(window.lightTrapChartInstance) window.lightTrapChartInstance.destroy();
+                const lightTrapChartCtx = lightTrapChartElement.getContext('2d');
+                const originalLabels = ['Grăsimi saturate', 'Zaharuri'];
+                const wrappedLabels = originalLabels.map(label => wrapLabel(label));
+                window.lightTrapChartInstance = new Chart(lightTrapChartCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: wrappedLabels,
+                        datasets: [
+                            {
+                                label: 'Produs original (g)',
+                                data: [15, 10],
+                                backgroundColor: chartColors.blue,
+                            },
+                            {
+                                label: 'Produs "light" (g)',
+                                data: [5, 22],
+                                backgroundColor: chartColors.red,
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        ...multiLineTooltipTitle,
+                        scales: { y: { beginAtZero: true, title: { display: true, text: 'Grame per 100g' } } },
+                        plugins: { ...multiLineTooltipTitle.plugins, legend: { position: 'bottom' } }
+                    }
+                });
+            }
+        });
+
+        // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey && e.key === 'c') || (e.ctrlKey && e.key === 'u') || e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.shiftKey && e.key === 'J')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+
+</body>
+</html>
