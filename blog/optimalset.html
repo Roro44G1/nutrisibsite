@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analiza sistemică a unui protocol de rezonanță celulară: Fitline Optimal-Set</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background-color: #f0f4f8; /* Fundal albastru eliminat */
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+            font-style: italic;
+        }
+        .content {
+            padding: 60px 40px;
+        }
+        .section {
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.4s; }
+        .section:nth-child(4) { animation-delay: 0.6s; }
+        .section:nth-child(5) { animation-delay: 0.8s; }
+        .section:nth-child(6) { animation-delay: 1.0s; }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .section h2 {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3498db;
+            position: relative;
+        }
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #e74c3c;
+        }
+        .section p {
+            margin-bottom: 20px;
+            text-align: justify;
+            font-size: 1.1em;
+        }
+        .product-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .product-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+        .product-card:hover::before {
+            left: 100%;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .product-card img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+        .product-card h3 {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .product-card .description {
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.6;
+        }
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #3498db;
+            position: relative;
+        }
+        .highlight::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2em;
+        }
+        .optimal-set-image {
+            text-align: center;
+            margin: 40px 0;
+        }
+        .optimal-set-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .optimal-set-image img:hover {
+            transform: scale(1.02);
+        }
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .footer h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        .footer p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        @media (max-width: 768px) {
+            body { padding: 0; }
+            .container { border-radius: 0; margin: 0; }
+            .header { padding: 40px 20px; }
+            .header h1 { font-size: 2em; }
+            .content { padding: 40px 20px; }
+            .section h2 { font-size: 1.5em; }
+            .product-showcase { grid-template-columns: 1fr; }
+            .product-card { padding: 20px; }
+        }
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(52, 152, 219, 0.3);
+            z-index: 1000;
+        }
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #e74c3c);
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+    <div class="container">
+        <header class="header">
+            <h1>Fitline Optimal-Set</h1>
+            <h2>O perspectivă inginerească și holistică asupra sinergiei</h2> 
+            <h2>PowerCocktail, Restorate și Activize Oxyplus</h2>
+            <p class="subtitle">Analiza sistemică a unui protocol de rezonanță celulară</p>
+        </header>
+        <main class="content">
+            <section class="section">
+                <h2>Prolog: de la instrument la protocol integrat</h2>
+                <p>În demersul nostru de a recalibra sistemul biologic uman, am stabilit că succesul nu stă în intervenții izolate, ci într-o strategie coerentă, care adresează întregul ansamblu. Un plan nutrițional este arhitectura, dar materialele de construcție trebuie să fie de cea mai înaltă calitate și, mai important, trebuie să ajungă exact acolo unde este nevoie de ele. Aici intervine conceptul de suplimentare inteligentă.</p>
+                <p>Ca inginer, sunt sceptic din fire. Nu accept un produs doar pentru că promite. Îl analizez. Îi descompun componentele, îi studiez mecanismul de acțiune și, cel mai important, îi evaluez integrarea într-un sistem mai larg. Produsele Fitline, în special conceptul lor de bază – Optimal-Set (PowerCocktail, Restorate, Activize) – au atras atenția inginerului din mine tocmai prin această abordare sistemică.</p>
+                <div class="optimal-set-image">
+                    <img src="/img/fitline_optimal_set_fl.jpg" alt="Fitline Optimal-Set - PowerCocktail, Restorate și Activize">
+                </div>
+                <p>Nu vorbim despre "pastile minune", ci despre un protocol coerent, proiectat să susțină ciclul de 24 de ore al organismului: faza de producție energetică (ziua) și faza de regenerare și detoxifiere (noaptea). Pentru clientul meu, "Exploratorul Conștient", care caută logică și eficiență, această analiză nu este o recomandare oarbă, ci o decodare a unui set de instrumente de înaltă precizie. Rolul meu, ca terapeut, este să vă ofer "manualul de operare" și să vă ghidez în calibrarea acestor instrumente pentru arhitectura dumneavoastră unică.</p>
+            </section>
+            <section class="section">
+                <h2>Protocolul Optimal-Set: Cei trei piloni</h2>
+                <div class="product-showcase">
+                    <div class="product-card">
+                        <img src="powercoktail.jpg" alt="PowerCocktail">
+                        <h3>PowerCocktail</h3>
+                        <p class="description">Pachetul de date pentru operarea diurnă - un "mic dejun celular" care combină vitamine B, vitamina C, E, provitamina A, fibre, probiotice și antioxidanți pentru energie și protecție celulară optimă.</p>
+                    </div>
+                    <div class="product-card">
+                        <img src="restorate.jpg" alt="Restorate">
+                        <h3>Restorate</h3>
+                        <p class="description">Protocolul de mentenanță nocturnă - o matrice de minerale alcaline (calciu, magneziu, fier, zinc, seleniu) și vitamina D pentru regenerare, echilibru acido-bazic și recuperare în timpul somnului.</p>
+                    </div>
+                    <div class="product-card">
+                        <img src="activize.jpg" alt="Activize Oxyplus">
+                        <h3>Activize Oxyplus</h3>
+                        <p class="description">Catalizatorul pentru transferul de energie și oxigen - cu vitamine B, vitamina C, extract de guarana și alge marine pentru maximizarea producției de energie și transport de oxigen.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <h2>PowerCocktail – pachetul de date pentru operarea diurnă</h2>
+                <p>PowerCocktail este conceput ca un "mic dejun celular". Este un amestec sinergic care combină beneficiile a două produse: Basics (pentru sănătatea digestivă) și Activize Oxyplus (pentru energie). Conține un spectru larg de vitamine, inclusiv întregul complex de vitamine B (B1, B2, B3, B5, B6, B7, B9, B12), vitamina C, vitamina E și provitamina A. Pe lângă acestea, include un amestec de fibre solubile și insolubile, culturi de bacterii lactice vii (probiotice), enzime digestive și o selecție de extracte din plante cu o capacitate antioxidantă ridicată (polifenoli din fructe, legume și condimente precum curcuma). Obiectivul său este clar: să susțină producția de energie, să optimizeze digestia și absorbția nutrienților și să protejeze celulele de stresul oxidativ pe parcursul zilei.</p>
+                <div class="highlight">
+                    <p><strong>Perspectiva inginerească:</strong> Pentru a înțelege pe deplin impactul său, trebuie să privim dincolo de lista de ingrediente. PowerCocktail poate fi definit ca un pachet informațional complex pentru inițializarea și operarea sistemului în faza activă (diurnă). Prin furnizarea completă a complexului de vitamine B în forme biodisponibile, acesta asigură toți co-factorii necesari pentru ca algoritmul central de producere a energiei (ciclul Krebs) să ruleze la eficiență maximă. Este "uleiul și bujiile" pentru motorul mitocondrial.</p>
+                </div>
+            </section>
+            <section class="section">
+                <h2>Restorate – protocolul de mentenanță și recalibrare nocturnă</h2>
+                <p>Dacă PowerCocktail este despre producție, Restorate este despre regenerare. Consumat seara, acest produs este o matrice de minerale alcaline și oligoelemente esențiale: calciu, magneziu, fier, zinc, seleniu, cupru, mangan, crom și vitamina D. Scopul său este de a reface rezervele de minerale consumate în timpul zilei, de a susține echilibrul acido-bazic al organismului, de a contribui la sănătatea oaselor și a dinților și de a facilita o recuperare mai bună în timpul somnului. Magneziul și zincul, în special, sunt cruciale pentru funcția musculară și hormonală.</p>
+                <div class="highlight">
+                    <p><strong>Mecanismul sistemic:</strong> Dincolo de această funcție de refacere, Restorate acționează ca un protocol de mentenanță, defragmentare și recalibrare a sistemului, rulat în faza de repaus (nocturnă). Procesele metabolice diurne generează produși acizi, iar acumularea acestora crește entropia (dezordinea) în mediul intern. Matricea de minerale alcaline acționează ca un "buffer system", neutralizând această aciditate, proces echivalent cu o "curățare a fișierelor temporare" care încetinesc sistemul.</p>
+                </div>
+            </section>
+            <section class="section">
+                <h2>Activize Oxyplus – catalizatorul pentru transferul de energie și oxigen</h2>
+                <p>Activize este un produs specializat, axat pe maximizarea producției de energie și a transportului de oxigen. Conține, din nou, un spectru complet de vitamine B (în special B1, B2, B3-niacina, B5, B6, B12), vitamina C, extract de guarana (o sursă naturală de cofeină) și un extract special din alge marine. Este renumit pentru efectul său rapid, adesea însoțit de un "flash" (o înroșire temporară a pielii), datorat niacinei (vitamina B3), care provoacă o vasodilatație capilară, îmbunătățind microcirculația.</p>
+                <div class="highlight">
+                    <p><strong>Acceleratorul metabolic:</strong> Pentru a înțelege mecanismul său rapid, trebuie să-l privim nu doar ca pe un simplu energizant, ci ca pe un accelerator metabolic și un optimizator al lățimii de bandă circulatorie. Prin furnizarea unui flux rapid de vitamine B, în special B3 (precursorul NAD), Activize acționează ca un catalizator direct pentru ciclul Krebs; este ca și cum ai crește frecvența procesorului central al celulei. Efectul de "flash" al niacinei nu este un simplu efect secundar; din punct de vedere sistemic, este o dilatare a celor mai fine canale de transport ale rețelei – capilarele.</p>
+                </div>
+            </section>
+            <section class="section">
+                <h2>Concluzie: protocolul în paradigma NUTRISIB</h2>
+                <p>Pentru <a href="../povestea.html#avatar" >"Exploratorul Conștient"</a>, setul PowerCocktail, Restorate și Activize nu este o soluție, ci un set de instrumente. Un set excepțional de bine proiectat, care funcționează sinergic pentru a adresa ciclul complet de 24 de ore al sistemului uman. Toate aceste produse se bazează pe un concept patentat, NTC® (Conceptul de Transport al Nutrienților), care, din perspectiva mea inginerească, este un <strong>protocol de livrare a datelor</strong>, proiectat pentru a reduce <strong >pierderea de pachete</strong> și pentru a asigura că semnalul informațional (molecula de nutrient) ajunge la destinație cu o integritate și o viteză maxime.</p>
+                <p>La NUTRISIB, nu vă vom preda pur și simplu o cutie. Rolul meu este să integrez aceste instrumente în arhitectura dumneavoastră unică. Vom măsura. Vom calibra. Vom ajusta dozajul în funcție de datele obținute prin biorezonanță, de nivelul de stres, de obiectivele personale și de răspunsul sistemului.</p>
+                <p>Aceste produse pot accelera dramatic procesul de reechilibrare, dar ele nu înlocuiesc fundația: un plan nutrițional corect, managementul stresului și un stil de viață aliniat cu biologia dumneavoastră. Ele sunt catalizatorii, nu combustibilul. Iar eu sunt aici pentru a vă ghida în utilizarea lor corectă, transformându-le din simple suplimente în pârghii precise pentru a vă rescrie povestea și a atinge o stare de rezonanță și vitalitate durabilă.</p>
+            </section>
+        </main>
+        <footer class="footer">
+            <h3>NUTRISIB</h3>
+            <p>Transformând suplimentele în pârghii precise pentru rezonanță și vitalitate durabilă</p>
+            <p style="font-size: 0.9em; opacity: 0.7; margin-top: 10px;">Copyright &copy; dr.ing. Radu Pascu - 2025</p>
+        </footer>
+    </div>
+    <script>
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / scrollHeight) * 100;
+            const scrollProgress = document.getElementById('scrollProgress');
+            if(scrollProgress) {
+                scrollProgress.style.width = scrollPercent + '%';
+            }
+        });
+
+        // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey && e.key === 'c') || (e.ctrlKey && e.key === 'u') || e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.shiftKey && e.key === 'J')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
