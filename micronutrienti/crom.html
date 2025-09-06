@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crom</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --primary-color: #95a5a6; /* O nuanță de gri-metalic */
+            --primary-color-dark: #7f8c8d;
+            --secondary-color: #2c3e50;
+            --background-color: #f4f6f7;
+            --text-color: #34495e;
+            --card-background: #ffffff;
+            --light-gray-background: #f8f9fa;
+            --border-color: #e0e0e0;
+            --accent-blue: #3498db;
+            --accent-green: #27ae60;
+            --accent-red: #e74c3c;
+            --base-font-family: 'Roboto', sans-serif;
+            --border-radius-large: 15px;
+            --border-radius-small: 10px;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: var(--base-font-family);
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .infographic-container {
+            max-width: 950px;
+            width: 100%;
+            background: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-medium);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .infographic-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 10px;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .section {
+            padding: 25px 45px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.9em;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-color-dark);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .subsection {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--light-gray-background);
+            border-radius: var(--border-radius-small);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid transparent;
+        }
+
+        .subsection:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-left-color: var(--primary-color);
+        }
+
+        .subsection-title {
+            font-size: 1.4em;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .subsection p,.subsection ul,.subsection ol {
+            font-size: 0.98em;
+            margin-bottom: 12px;
+        }
+
+        .subsection ul,.subsection ol {
+            padding-left: 20px;
+        }
+
+        .subsection li {
+            margin-bottom: 10px;
+        }
+
+        .subsection b,.subsection strong {
+            color: var(--secondary-color);
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 25px;
+            padding: 15px 20px;
+            background-color: #f4f6f7;
+            border-left: 4px solid var(--primary-color);
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+        
+        .warning-note {
+            background-color: #f9ebea;
+            border-left-color: var(--accent-red);
+        }
+        
+        .holistic-note {
+            background-color: #e8f8f5;
+            border-left-color: var(--accent-green);
+       }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 12px;
+            color: var(--primary-color-dark);
+            vertical-align: middle;
+        }
+        
+        .subsection-icon {
+             font-size: 1.5em;
+             margin-right: 10px;
+             color: var(--primary-color);
+        }
+        
+        .icon-small {
+            font-size: 1.5em;
+            margin-right: 8px;
+            color: var(--primary-color);
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .footer-container {
+            padding: 30px 45px;
+            background-color: var(--secondary-color);
+            color: #bdc3c7;
+        }
+        
+        .references h4 {
+            color: white;
+            border-bottom: 1px solid #7f8c8d;
+            padding-bottom: 5px;
+        }
+        
+        .references ul {
+            list-style-type: none;
+            padding-left: 0;
+            font-size: 0.8em;
+        }
+        
+        .references li {
+            margin-bottom: 5px;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: var(--light-gray-background);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-gray-background);
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 25px 20px; }
+            .section-content {
+                flex-direction: column;
+            }
+            .subsection {
+                min-width: unset;
+            }
+            .infographic-header {
+                font-size: 2em;
+            }
+            .section-title {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="infographic-container">
+        <header class="infographic-header">
+            Crom
+        </header>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
+            <div class="section-content">
+                <div class="subsection" style="flex: 2;">
+                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul principal în organism</h3>
+                     <p><b>Cromul (Cr)</b> este un oligoelement esențial, recunoscut în principal pentru rolul său în metabolismul macronutrienților. Forma biologic activă este <strong>cromul trivalent (Cr3+)</strong>.</p>
+                     <ul>
+                         <li><b>Potențarea acțiunii insulinei:</b> Acesta este rolul său cel mai important. Cromul se leagă de o moleculă numită cromodulină, care la rândul ei amplifică semnalizarea de la receptorii de insulină. Acest mecanism îmbunătățește sensibilitatea celulară la insulină, facilitând transportul glucozei din sânge în celule.</li>
+                         <li><b>Metabolismul macronutrienților:</b> Prin influența sa asupra insulinei, cromul este implicat în metabolismul carbohidraților, lipidelor și proteinelor.</li>
+                         <li><b>Sănătatea cardiovasculară:</b> Studiile sugerează că un aport adecvat poate contribui la menținerea unui profil lipidic sănătos, influențând nivelurile de colesterol și trigliceride.</li>
+                     </ul>
+                </div>
+                 <div class="subsection" style="flex: 1.5;">
+                    <h3 class="subsection-title"><span class="subsection-icon">🥦</span>Surse alimentare</h3>
+                    <p>Cromul este prezent în diverse alimente, dar conținutul poate varia în funcție de sol și procesare. Alimentele rafinate tind să aibă un conținut mai scăzut.</p>
+                     <ul>
+                        <li><b>Drojdie de bere:</b> O sursă excelentă.</li>
+                        <li><b>Carne:</b> Carne de vită, ficat, carne de pasăre.</li>
+                        <li><b>Cereale integrale.</b></li>
+                        <li><b>Legume:</b> Broccoli, fasole verde.</li>
+                        <li><b>Fructe:</b> Struguri (suc), mere, banane.</li>
+                        <li><b>Condimente:</b> Piper negru.</li>
+                     </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit și Siguranță</h2>
+             <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Simptome cauzate de deficit</h3>
+                    <p>Deficiența severă de crom este rară, dar aportul sub-optim este comun, în special la persoanele cu diete bogate în alimente procesate.</p>
+                    <ul>
+                        <li><b>Intoleranță la glucoză:</b> Niveluri crescute de zahăr în sânge și rezistență la insulină, similare cu diabetul de tip 2.</li>
+                        <li><b>Niveluri crescute de colesterol și trigliceride.</b></li>
+                        <li><b>Poftă crescută de dulciuri și carbohidrați.</b></li>
+                        <li><b>Oboseală și energie scăzută.</b></li>
+                        <li><b>Neuropatie:</b> Afectarea nervilor, ducând la amorțeală și furnicături (observată în cazuri severe).</li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Exces și siguranță</h3>
+                    <p>Toxicitatea cromului depinde fundamental de forma sa chimică.</p>
+                    <ul>
+                        <li><b>Cromul trivalent (Cr3+):</b> Forma găsită în alimente și suplimente, are o toxicitate foarte scăzută și este slab absorbită. Nu există dovezi de toxicitate din aportul alimentar.</li>
+                        <li><b>Cromul hexavalent (Cr6+):</b> O formă industrială toxică, un poluant de mediu și un carcinogen cunoscut la inhalare. <strong>Nu se găsește în alimente sau suplimente.</strong></li>
+                    </ul>
+                </div>
+             </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">🤝</span>Sinergii și antagonisme</h3>
+                    <p><b>Sinergii (lucrează împreună cu):</b></p>
+                    <ul>
+                        <li><b>Vitaminele B (în special B3):</b> Susțin metabolismul energetic.</li>
+                        <li><b>Aminoacizii:</b> Pot îmbunătăți absorbția cromului.</li>
+                    </ul>
+                     <p><b>Antagonisme (competiție sau blocaj):</b></p>
+                     <ul>
+                        <li><b>Zaharurile simple:</b> Consumul ridicat de zahăr crește excreția urinară de crom, epuizând rezervele organismului.</li>
+                        <li><b>Fierul:</b> Dozele mari de fier pot concura cu cromul pentru absorbție.</li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
+                    <p><b>În MTC</b>, cromul este legat de funcția <b>Splinei</b>, organul responsabil pentru transformarea alimentelor în Qi și Sânge și pentru gestionarea "dulcelui". O deficiență de crom reflectă o slăbiciune a Qi-ului Splinei, ducând la pofte de dulce și la acumularea de "umezeală" (corespondentul energetic al grăsimii corporale).</p>
+                    <p><b>În Ayurveda</b>, cromul ajută la echilibrarea <b>Kapha dosha</b>, care, în exces, poate duce la creștere în greutate, letargie și probleme cu glicemia. Susține <b>Agni</b> (focul metabolic).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
+            <p>Din perspectivă holistică, cromul este asociat cu <b>echilibrul, armonia metabolică și capacitatea de a "procesa" și a integra "dulceața" vieții</b>. Rezonează cu "balanța" noastră interioară și cu abilitatea de a menține o stare de vitalitate stabilă.</p>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">💔</span>Deficit</h3>
+                    <p>Un deficit de crom poate fi legat de:</p>
+                    <ol>
+                        <li><b>Dezechilibre emoționale și instabilitate:</b> Fluctuații de dispoziție, iritabilitate, dificultăți în a menține calmul, similar cu fluctuațiile glicemiei.</li>
+                        <li><b>Lipsa de "dulceață" în viață:</b> Un sentiment de lipsă de bucurie, apatie, senzația că viața este "amară".</li>
+                        <li><b>Epuizare energetică:</b> Un sentiment de oboseală profundă, ca și cum "motorul" interior ar funcționa ineficient.</li>
+                    </ol>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
+                    <p>Obiectivele pe care le susține cromul pot fi atinse prin:</p>
+                    <ul>
+                        <li><b>Practici de echilibrare și armonizare:</b> Meditație centrată pe echilibrul interior.</li>
+                        <li><b>Restabilirea "dulceții" vieții:</b> Implicarea în activități care aduc bucurie, plăcere și entuziasm.</li>
+                        <li><b>Gestionarea stresului:</b> Tehnici de mindfulness și respirație profundă pentru a reduce agitația mentală.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
+            <div class="section-content">
+                <div class="subsection">
+                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Aport adecvat (AI)</h3>
+                     <p>Deoarece necesarul exact este greu de determinat, s-a stabilit un Aport Adecvat (AI).</p>
+                     <table>
+                         <thead>
+                             <tr>
+                                 <th>Grup de populație</th>
+                                 <th>AI (mcg/zi)</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>Bărbați (19-50 ani)</td>
+                                 <td>35</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei (19-50 ani)</td>
+                                 <td>25</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei însărcinate</td>
+                                 <td>30</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei care alăptează</td>
+                                 <td>45</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
+                    <p>Cromul trivalent (Cr3+) din alimente și suplimente este considerat foarte sigur.</p>
+                    <div class="note holistic-note">
+                        <p><b>Recomandare:</b> Nu a fost stabilită o limită superioară tolerabilă (UL) pentru cromul trivalent din cauza siguranței sale ridicate. Totuși, suplimentarea trebuie discutată cu un medic, în special de către persoanele cu afecțiuni renale sau hepatice. Cea mai bună abordare este o dietă bogată în alimente integrale și reducerea consumului de zaharuri rafinate.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="footer-copyright">
+            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
+            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        </div>
+    </main>
+</body>
+</html>

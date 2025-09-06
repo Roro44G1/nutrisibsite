@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colina</title>
+    <style>
+        :root {
+            --primary-color: #3498db; /* O nuanță de albastru-ceruleum */
+            --primary-color-dark: #2980b9;
+            --secondary-color: #2c3e50;
+            --background-color: #f4f6f7;
+            --text-color: #34495e;
+            --card-background: #ffffff;
+            --light-gray-background: #f8f9fa;
+            --border-color: #e0e0e0;
+            --accent-green: #27ae60;
+            --accent-red: #e74c3c;
+            --base-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --border-radius-large: 15px;
+            --border-radius-small: 10px;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: var(--base-font-family);
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .infographic-container {
+            max-width: 950px;
+            width: 100%;
+            background: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-medium);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .infographic-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 2.4em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .section {
+            padding: 25px 45px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.9em;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-color-dark);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .subsection {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--light-gray-background);
+            border-radius: var(--border-radius-small);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid transparent;
+        }
+
+        .subsection:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-left-color: var(--primary-color);
+        }
+
+        .subsection-title {
+            font-size: 1.4em;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .subsection p,.subsection ul,.subsection ol {
+            font-size: 0.98em;
+            margin-bottom: 12px;
+        }
+
+        .subsection ul,.subsection ol {
+            padding-left: 20px;
+        }
+
+        .subsection li {
+            margin-bottom: 10px;
+        }
+
+        .subsection b,.subsection strong {
+            color: var(--secondary-color);
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 25px;
+            padding: 15px 20px;
+            background-color: #ebf5fb;
+            border-left: 4px solid var(--primary-color);
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+        
+        .warning-note {
+            background-color: #f9ebea;
+            border-left-color: var(--accent-red);
+        }
+        
+        .holistic-note {
+            background-color: #e8f8f5;
+            border-left-color: var(--accent-green);
+       }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 12px;
+            color: var(--primary-color-dark);
+            vertical-align: middle;
+        }
+        
+        .subsection-icon {
+             font-size: 1.5em;
+             margin-right: 10px;
+             color: var(--primary-color);
+        }
+        
+        .icon-small {
+            font-size: 1.5em;
+            margin-right: 8px;
+            color: var(--primary-color);
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .footer-container {
+            padding: 30px 45px;
+            background-color: var(--secondary-color);
+            color: #bdc3c7;
+        }
+        
+        .references h4 {
+            color: white;
+            border-bottom: 1px solid #7f8c8d;
+            padding-bottom: 5px;
+        }
+        
+        .references ul {
+            list-style-type: none;
+            padding-left: 0;
+            font-size: 0.8em;
+        }
+        
+        .references li {
+            margin-bottom: 5px;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: var(--light-gray-background);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-gray-background);
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 25px 20px; }
+            .section-content {
+                flex-direction: column;
+            }
+            .subsection {
+                min-width: unset;
+            }
+            .infographic-header {
+                font-size: 2em;
+            }
+            .section-title {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="infographic-container">
+        <header class="infographic-header">
+            Colina
+        </header>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
+            <div class="section-content">
+                <div class="subsection" style="flex: 2;">
+                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul principal în organism</h3>
+                     <p><b>Colina</b> este un nutrient esențial, asemănător vitaminelor B, vital pentru numeroase funcții biologice. Deși corpul produce cantități mici în ficat, acestea sunt insuficiente, iar aportul din dietă este necesar pentru a preveni deficiența.</p>
+                     <ul>
+                         <li><b>Funcția cerebrală și memoria:</b> Este precursorul direct al <strong>acetilcolinei</strong>, un neurotransmițător crucial pentru memorie, învățare, concentrare și control muscular.</li>
+                         <li><b>Integritatea membranelor celulare:</b> Este o componentă structurală esențială a fosfolipidelor (fosfatidilcolină, sfingomielină), care formează membranele tuturor celulelor.</li>
+                         <li><b>Funcția hepatică și transportul grăsimilor:</b> Este indispensabilă pentru producerea de particule VLDL (lipoproteine cu densitate foarte joasă), care transportă grăsimile (trigliceridele) din ficat către alte țesuturi. Acest rol previne acumularea de grăsime în ficat (steatoză hepatică).</li>
+                         <li><b>Metilare și sănătate cardiovasculară:</b> Poate fi convertită în betaină, o moleculă care participă la ciclul de metilare și ajută la conversia homocisteinei în metionină, reducând astfel un factor de risc cardiovascular.</li>
+                         <li><b>Dezvoltarea fetală:</b> Este crucială în sarcină pentru dezvoltarea normală a creierului și a măduvei spinării la făt.</li>
+                     </ul>
+                </div>
+                 <div class="subsection" style="flex: 1.5;">
+                    <h3 class="subsection-title"><span class="subsection-icon">🍳</span>Surse alimentare</h3>
+                    <p>Colina se găsește într-o varietate de alimente, în special în cele de origine animală.</p>
+                     <ul>
+                        <li><b>Gălbenuș de ou:</b> Una dintre cele mai bogate și biodisponibile surse.</li>
+                        <li><b>Ficat:</b> De vită și de pui.</li>
+                        <li><b>Carne:</b> De vită, pui, porc.</li>
+                        <li><b>Pește:</b> Somon, cod.</li>
+                        <li><b>Soia și derivate:</b> Lecitină de soia, tofu.</li>
+                        <li><b>Legume crucifere:</b> Broccoli, conopidă, varză de Bruxelles.</li>
+                        <li><b>Nuci, semințe și leguminoase</b> (în special arahide).</li>
+                     </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit și Exces</h2>
+             <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Simptome cauzate de deficit</h3>
+                    <p>Deficiența de colină poate avea consecințe serioase, în special asupra ficatului și mușchilor. Grupurile de risc includ femeile însărcinate, sportivii de anduranță și persoanele cu anumite variații genetice.</p>
+                    <ul>
+                        <li><b>Afectare hepatică:</b> Acumularea de grăsime în ficat (steatoză hepatică non-alcoolică - NAFLD), putând progresa spre leziuni hepatice.</li>
+                        <li><b>Afectare musculară:</b> Leziuni musculare, indicate de creșterea enzimei creatin kinază (CK) în sânge.</li>
+                        <li><b>Probleme cognitive:</b> Dificultăți de memorie, "ceață mentală", probleme de concentrare.</li>
+                        <li><b>La gravide:</b> Risc crescut de defecte de tub neural la făt (independent de folat).</li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Exces și siguranță</h3>
+                    <p>Excesul din alimente este improbabil. Dozele foarte mari din suplimente pot cauza efecte adverse.</p>
+                     <ul>
+                        <li><b>Miros corporal de pește:</b> Cel mai caracteristic simptom, cauzat de metabolitul trimetilamină (TMA).</li>
+                        <li><b>Hipotensiune arterială</b> (scăderea tensiunii) și amețeli.</li>
+                        <li><b>Transpirație excesivă și salivație.</b></li>
+                        <li><b>Tulburări gastrointestinale.</b></li>
+                        <li><b>Toxicitate hepatică</b> (în cazuri extreme).</li>
+                    </ul>
+                </div>
+             </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">🤝</span>Sinergii și antagonisme</h3>
+                    <p><b>Sinergii (lucrează împreună cu):</b></p>
+                    <ul>
+                        <li><b>Vitaminele din complexul B (în special B12 și folat):</b> Sunt esențiale pentru ciclul metilării, în care colina joacă un rol cheie. O deficiență de folat poate crește necesarul de colină.</li>
+                        <li><b>Acizii grași esențiali ("Vitamina F"):</b> Sunt necesari împreună cu colina pentru a construi membrane celulare sănătoase.</li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
+                    <p><b>În MTC</b>, colina este legată de funcțiile <b>Ficatului</b> (metabolismul grăsimilor, fluxul liber al Qi-ului) și ale <b>Inimii</b> (lăcașul <b>Shen-ului</b> - mintea, conștiința, memoria). O deficiență poate duce la stagnarea Qi-ului în Ficat și la un Shen agitat.</p>
+                    <p><b>În Ayurveda</b>, colina este un nutrient care hrănește <b>Majja Dhatu</b> (țesutul nervos) și <b>Meda Dhatu</b> (țesutul adipos). Susține funcțiile mentale și cognitive, contribuind la o minte clară și calmă, o calitate <b>Sattvică</b>.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
+            <p>Din perspectivă holistică, Colina este asociată cu <b>memoria, claritatea mentală, comunicarea interioară și integritatea personală</b>. Rezonează cu capacitatea noastră de a ne aminti cine suntem și de a avea o comunicare fluidă între minte și corp.</p>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">💔</span>Deficit</h3>
+                    <p>Un deficit de colină poate fi legat de:</p>
+                    <ol>
+                        <li><b>"Ceață mentală" și uitare:</b> dificultatea de a accesa amintiri, de a te concentra.<br><i>Manifestare fizică: probleme cognitive.</i></li>
+                        <li><b>Granițe slabe:</b> o tendință de a absorbi emoțiile altora.<br><i>Manifestare fizică: membrane celulare slăbite.</i></li>
+                        <li><b>Stagnare emoțională:</b> dificultatea de a procesa și "metaboliza" emoțiile.<br><i>Manifestare fizică: ficat gras.</i></li>
+                    </ol>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
+                    <p>Obiectivele pe care le susține colina pot fi atinse prin:</p>
+                    <ul>
+                        <li>Practici pentru claritate mentală: meditație, mindfulness.</li>
+                        <li>Lucrul cu memoria: jurnal, exerciții de rememorare.</li>
+                        <li>Terapii pentru procesarea emoțiilor stagnante.</li>
+                        <li>Exerciții de stabilire a granițelor personale sănătoase.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
+            <div class="section-content">
+                <div class="subsection">
+                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Aport adecvat (AI)</h3>
+                     <p>Deoarece necesarul variază, s-a stabilit un Aport Adecvat (AI) în loc de o Doză Zilnică Recomandată.</p>
+                     <table>
+                         <thead>
+                             <tr>
+                                 <th>Grup de populație</th>
+                                 <th>AI (mg/zi)</th>
+                                 <th>Limită superioară (mg/zi)</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>Bărbați (19+ ani)</td>
+                                 <td>550</td>
+                                 <td>3.500</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei (19+ ani)</td>
+                                 <td>425</td>
+                                 <td>3.500</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei însărcinate</td>
+                                 <td>450</td>
+                                 <td>3.500</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei care alăptează</td>
+                                 <td>550</td>
+                                 <td>3.500</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
+                    <p>Deși esențială, suplimentarea cu doze mari trebuie făcută informat.</p>
+                    <div class="note warning-note">
+                        <p><b>Recomandare:</b> Majoritatea oamenilor pot obține suficientă colină dintr-o dietă variată. Suplimentarea poate fi necesară pentru grupurile de risc. Totuși, dozele care depășesc limita superioară tolerabilă de 3.500 mg/zi trebuie evitate din cauza riscului de hipotensiune și a altor efecte adverse. Discutați cu medicul înainte de a lua doze mari de colină.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="footer-copyright">
+            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
+            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        </div>
+    </main>
+</body>
+</html>

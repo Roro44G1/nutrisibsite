@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanadiu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --primary-color: #008080; /* O nuanță de albastru-petrol */
+            --primary-color-dark: #006666;
+            --secondary-color: #2c3e50;
+            --background-color: #f4f6f7;
+            --text-color: #34495e;
+            --card-background: #ffffff;
+            --light-gray-background: #f8f9fa;
+            --border-color: #e0e0e0;
+            --accent-blue: #3498db;
+            --accent-green: #27ae60;
+            --accent-red: #e74c3c;
+            --base-font-family: 'Roboto', sans-serif;
+            --border-radius-large: 15px;
+            --border-radius-small: 10px;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: var(--base-font-family);
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .infographic-container {
+            max-width: 950px;
+            width: 100%;
+            background: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-medium);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .infographic-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 10px;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .section {
+            padding: 25px 45px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.9em;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-color-dark);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .subsection {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--light-gray-background);
+            border-radius: var(--border-radius-small);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid transparent;
+        }
+
+        .subsection:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-left-color: var(--primary-color);
+        }
+
+        .subsection-title {
+            font-size: 1.4em;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .subsection p,.subsection ul,.subsection ol {
+            font-size: 0.98em;
+            margin-bottom: 12px;
+        }
+
+        .subsection ul,.subsection ol {
+            padding-left: 20px;
+        }
+
+        .subsection li {
+            margin-bottom: 10px;
+        }
+
+        .subsection b,.subsection strong {
+            color: var(--secondary-color);
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 25px;
+            padding: 15px 20px;
+            background-color: #e0f2f1;
+            border-left: 4px solid var(--primary-color);
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+        
+        .warning-note {
+            background-color: #f9ebea;
+            border-left-color: var(--accent-red);
+        }
+        
+        .holistic-note {
+            background-color: #e8f8f5;
+            border-left-color: var(--accent-green);
+       }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 12px;
+            color: var(--primary-color-dark);
+            vertical-align: middle;
+        }
+        
+        .subsection-icon {
+             font-size: 1.5em;
+             margin-right: 10px;
+             color: var(--primary-color);
+        }
+        
+        .icon-small {
+            font-size: 1.5em;
+            margin-right: 8px;
+            color: var(--primary-color);
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: var(--light-gray-background);
+        }
+        
+        @media (max-width: 768px) {
+            .section { padding: 25px 20px; }
+            .section-content {
+                flex-direction: column;
+            }
+            .subsection {
+                min-width: unset;
+            }
+            .infographic-header {
+                font-size: 2em;
+            }
+            .section-title {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="infographic-container">
+        <header class="infographic-header">
+            Vanadiu
+        </header>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
+            <div class="section-content">
+                <div class="subsection" style="flex: 2;">
+                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul în organism</h3>
+                     <p><b>Vanadiul (V)</b> este un oligoelement a cărui esențialitate pentru om este încă subiect de cercetare. Deși este prezent în organism în cantități extrem de mici, studiile au evidențiat câteva roluri biologice potențiale.</p>
+                     <ul>
+                         <li><b>Efect insulinomimetic (imită insulina):</b> Acesta este cel mai studiat rol al său. Anumiți compuși ai vanadiului (precum sulfatul de vanadil) au demonstrat în studii (în principal pe animale și unele studii umane) că pot imita acțiunea insulinei, ajutând la transportul glucozei în celule și îmbunătățind sensibilitatea la insulină.</li>
+                         <li><b>Metabolismul lipidelor:</b> Poate juca un rol în inhibarea sintezei de colesterol.</li>
+                         <li><b>Sănătatea oaselor și a dinților:</b> Unele cercetări sugerează că ar putea contribui la mineralizarea osoasă.</li>
+                         <li><b>Activitatea enzimatică:</b> Poate influența activitatea unor enzime, inclusiv a pompei de sodiu-potasiu.</li>
+                     </ul>
+                </div>
+                 <div class="subsection" style="flex: 1.5;">
+                    <h3 class="subsection-title"><span class="subsection-icon">🍄</span>Surse alimentare</h3>
+                    <p>Vanadiul se găsește în cantități infime într-o varietate de alimente.</p>
+                     <ul>
+                        <li><b>Condimente:</b> Piper negru, mărar, pătrunjel.</li>
+                        <li><b>Fructe de mare:</b> Scoici, creveți.</li>
+                        <li><b>Ciuperci.</b></li>
+                        <li><b>Cereale integrale:</b> Ovăz, hrișcă.</li>
+                        <li><b>Băuturi:</b> Bere, vin.</li>
+                     </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit și Siguranță</h2>
+             <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Deficit</h3>
+                    <p>Deoarece vanadiul nu este considerat un nutrient esențial pentru om, <strong>nu există o boală de deficiență cunoscută</strong>. Aportul din dietă este considerat suficient pentru orice rol teoretic pe care l-ar putea avea.</p>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Exces și toxicitate</h3>
+                    <p>Vanadiul are o <strong>fereastră terapeutică îngustă</strong>, ceea ce înseamnă că doza benefică este apropiată de cea toxică. Toxicitatea apare la doze mari din suplimente.</p>
+                     <ul>
+                        <li><b>Probleme gastrointestinale:</b> Greață, crampe abdominale, diaree.</li>
+                        <li><b>Toxicitate renală și hepatică:</b> Dozele mari pot afecta rinichii și ficatul.</li>
+                        <li><b>Limba verde:</b> Un simptom specific al toxicității la vanadiu.</li>
+                        <li><b>Efecte neurologice:</b> La doze foarte mari, poate fi neurotoxic.</li>
+                    </ul>
+                </div>
+             </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">🏋️</span>Utilizare în sport și diabet</h3>
+                    <p>Datorită efectului său insulinomimetic, suplimentele cu vanadiu (în special sulfatul de vanadil) au fost populare în rândul culturiștilor pentru a promova stocarea glicogenului în mușchi. De asemenea, a fost studiat ca un potențial agent adjuvant în managementul diabetului de tip 2. Totuși, din cauza potențialului de toxicitate, utilizarea sa în aceste scopuri este controversată și trebuie făcută cu maximă prudență.</p>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
+                    <p><b>În MTC</b>, vanadiul, prin rolul său în metabolismul glucozei, este legat de funcția <b>Splinei</b>, care gestionează "dulcele" și transformarea alimentelor. Un dezechilibru ar reflecta o slăbiciune a Qi-ului Splinei.</p>
+                    <p><b>În Ayurveda</b>, vanadiul poate influența <b>Kapha dosha</b>, care, în exces, este asociată cu probleme de glicemie și creștere în greutate. Poate susține <b>Agni</b> (focul metabolic).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
+            <p>Din perspectivă holistică, vanadiul este asociat cu <b>disciplina energetică, voința și capacitatea de a transforma și de a atinge echilibrul</b>. Rezonează cu modul în care ne gestionăm energia internă și disciplina emoțională.</p>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">💔</span>Dezechilibru (simbolic)</h3>
+                    <p>Un dezechilibru legat de vanadiu poate fi asociat cu:</p>
+                    <ol>
+                        <li><b>Lipsa de disciplină și de voință:</b> Dificultăți în a-ți menține angajamentele sau în a-ți gestiona impulsurile.<br><i>Manifestare fizică: Posibile probleme în reglarea glicemiei.</i></li>
+                        <li><b>Dificultăți în a-ți transforma obiceiurile:</b> Incapacitatea de a depăși vechi comportamente sau gânduri.</li>
+                        <li><b>Rigiditate excesivă și control compulsiv</b> (în caz de exces simbolic).</li>
+                    </ol>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
+                    <p>Obiectivele pe care le susține vanadiul pot fi atinse prin:</p>
+                    <ul>
+                        <li><b>Practici de cultivare a disciplinei conștiente</b> (ex: stabilirea unor obiective mici și atingerea lor).</li>
+                        <li><b>Tehnici de reglare a energiei:</b> Exerciții fizice moderate, yoga, respirație conștientă.</li>
+                        <li><b>Terapii</b> care ajută la identificarea și transformarea obiceiurilor limitative.</li>
+                        <li><b>Jurnalism terapeutic</b> pentru a clarifica obiectivele și a înțelege blocajele.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
+            <div class="section-content">
+                <div class="subsection">
+                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Doze recomandate</h3>
+                     <p>Deoarece nu este considerat un nutrient esențial, <strong>nu există o Doză Zilnică Recomandată (DZR)</strong>. Aportul din dietă este de obicei sub 30 mcg/zi.</p>
+                     <p>Limita superioară tolerabilă (UL) pentru adulți este stabilită la <strong>1.800 mcg (1.8 mg) pe zi</strong>.</p>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
+                    <p>Suplimentarea cu vanadiu trebuie făcută cu maximă prudență.</p>
+                    <div class="note warning-note">
+                        <p><b>Avertisment critic:</b> Din cauza ferestrei terapeutice înguste și a potențialului de toxicitate la doze mari, <strong>nu luați suplimente cu vanadiu fără recomandarea și monitorizarea strictă a unui medic</strong>. Suplimentarea pe cont propriu, în special pentru controlul glicemiei sau pentru performanță sportivă, poate fi periculoasă. O dietă variată este cea mai sigură abordare.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="footer-copyright">
+            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
+            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        </div>
+    </main>
+</body>
+</html>

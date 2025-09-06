@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Molibden</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --primary-color: #95a5a6; /* O nuanță de gri-argintiu */
+            --primary-color-dark: #7f8c8d;
+            --secondary-color: #2c3e50;
+            --background-color: #f4f6f7;
+            --text-color: #34495e;
+            --card-background: #ffffff;
+            --light-gray-background: #f8f9fa;
+            --border-color: #e0e0e0;
+            --accent-blue: #3498db;
+            --accent-green: #27ae60;
+            --accent-red: #e74c3c;
+            --base-font-family: 'Roboto', sans-serif;
+            --border-radius-large: 15px;
+            --border-radius-small: 10px;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: var(--base-font-family);
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .infographic-container {
+            max-width: 950px;
+            width: 100%;
+            background: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-medium);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .infographic-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 10px;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .section {
+            padding: 25px 45px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.9em;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-color-dark);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .subsection {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--light-gray-background);
+            border-radius: var(--border-radius-small);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid transparent;
+        }
+
+        .subsection:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-left-color: var(--primary-color);
+        }
+
+        .subsection-title {
+            font-size: 1.4em;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .subsection p,.subsection ul,.subsection ol {
+            font-size: 0.98em;
+            margin-bottom: 12px;
+        }
+
+        .subsection ul,.subsection ol {
+            padding-left: 20px;
+        }
+
+        .subsection li {
+            margin-bottom: 10px;
+        }
+
+        .subsection b,.subsection strong {
+            color: var(--secondary-color);
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 25px;
+            padding: 15px 20px;
+            background-color: #f4f6f7;
+            border-left: 4px solid var(--primary-color);
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+        
+        .warning-note {
+            background-color: #f9ebea;
+            border-left-color: var(--accent-red);
+        }
+        
+        .holistic-note {
+            background-color: #e8f8f5;
+            border-left-color: var(--accent-green);
+       }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 12px;
+            color: var(--primary-color-dark);
+            vertical-align: middle;
+        }
+        
+        .subsection-icon {
+             font-size: 1.5em;
+             margin-right: 10px;
+             color: var(--primary-color);
+        }
+        
+        .icon-small {
+            font-size: 1.5em;
+            margin-right: 8px;
+            color: var(--primary-color);
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: var(--light-gray-background);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-gray-background);
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 25px 20px; }
+            .section-content {
+                flex-direction: column;
+            }
+            .subsection {
+                min-width: unset;
+            }
+            .infographic-header {
+                font-size: 2em;
+            }
+            .section-title {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="infographic-container">
+        <header class="infographic-header">
+            Molibden
+        </header>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
+            <div class="section-content">
+                <div class="subsection" style="flex: 2;">
+                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul principal în organism</h3>
+                     <p><b>Molibdenul (Mo)</b> este un oligoelement esențial care acționează ca un cofactor pentru patru enzime cheie în organism, fiind indispensabil pentru anumite căi de detoxifiere și metabolism.</p>
+                     <ul>
+                         <li><b>Metabolismul sulfului (Sulfit Oxidaza):</b> Acesta este rolul său cel mai critic. Enzima sulfit oxidaza, dependentă de molibden, transformă sulfitul toxic în sulfat inofensiv. Sulfiții se găsesc în mod natural în alimente și sunt adăugați ca conservanți (ex: în vin, fructe uscate).</li>
+                         <li><b>Metabolismul purinelor (Xantin Oxidaza):</b> Această enzimă descompune purinele (din carne, fructe de mare) în acid uric, care este apoi eliminat.</li>
+                         <li><b>Detoxifierea aldehidelor (Aldehid Oxidaza):</b> Ajută la descompunerea aldehidelor, compuși toxici rezultați din metabolismul alcoolului și din poluare.</li>
+                         <li><b>Metabolismul fierului:</b> Poate juca un rol în mobilizarea fierului din depozitele hepatice.</li>
+                     </ul>
+                </div>
+                 <div class="subsection" style="flex: 1.5;">
+                    <h3 class="subsection-title"><span class="subsection-icon">🥜</span>Surse alimentare</h3>
+                    <p>Conținutul de molibden din plante depinde foarte mult de solul în care au fost cultivate.</p>
+                     <ul>
+                        <li><b>Leguminoase:</b> Fasole, linte, mazăre, năut (cele mai bogate surse).</li>
+                        <li><b>Cereale integrale:</b> Ovăz, grâu integral, orez brun.</li>
+                        <li><b>Nuci și semințe:</b> Migdale, semințe de floarea-soarelui.</li>
+                        <li><b>Legume cu frunze verzi:</b> Spanac, varză.</li>
+                        <li><b>Produse lactate:</b> Lapte, brânză, iaurt.</li>
+                        <li><b>Organe:</b> În special ficat de vită.</li>
+                     </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit și Siguranță</h2>
+             <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Simptome cauzate de deficit</h3>
+                    <p>Deficiența de molibden din dietă este extrem de rară la om. A fost documentată doar în cazuri de afecțiuni genetice foarte rare care împiedică formarea cofactorului de molibden sau la pacienți cu nutriție parenterală totală pe termen lung, cu soluții care nu conțineau molibden.</p>
+                    <p>Simptomele unei deficiențe severe (intoleranță la sulfiți) includ:</p>
+                    <ul>
+                        <li>Tahicardie (ritm cardiac accelerat).</li>
+                        <li>Dureri de cap, greață, vărsături.</li>
+                        <li>Confuzie, dezorientare, putând progresa spre comă.</li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Exces și toxicitate</h3>
+                    <p>Toxicitatea din surse alimentare este foarte rară. Riscul apare la expunerea industrială sau la suplimentarea necontrolată cu doze foarte mari.</p>
+                     <ul>
+                        <li><b>Antagonism cu cuprul:</b> Principalul efect al excesului de molibden este că poate induce o <strong>deficiență de cupru</strong> prin creșterea excreției acestuia.</li>
+                        <li><b>Creșterea acidului uric:</b> Dozele mari pot crește nivelul de acid uric, putând agrava simptomele de gută la persoanele predispuse.</li>
+                    </ul>
+                </div>
+             </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">🍷</span>Sensibilitatea la sulfiți</h3>
+                    <p>Pentru persoanele care reacționează negativ la sulfiții din vin, fructe uscate sau alte alimente procesate (cu dureri de cap, urticarie, probleme respiratorii), o funcționare sub-optimală a enzimei sulfit oxidaza poate fi o cauză. Asigurarea unui aport adecvat de molibden este o strategie fundamentală în managementul acestei sensibilități.</p>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
+                    <p><b>În MTC</b>, molibdenul este legat de funcția de detoxifiere a <b>Ficatului</b>. Un ficat care funcționează optim asigură un flux lin de Qi și Sânge. Prin rolul său în metabolismul purinelor, este legat și de funcția <b>Rinichilor</b>.</p>
+                    <p><b>În Ayurveda</b>, molibdenul susține procesele de purificare ale organismului, ajutând la eliminarea <b>Ama</b> (toxine metabolice). Ajută la echilibrarea <b>Pitta dosha</b>, care, în exces, poate duce la acumularea de "căldură" și toxicitate în sânge.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
+            <p>Din perspectivă holistică, molibdenul este asociat cu <b>procesarea, detoxifierea (la nivel fizic și emoțional) și capacitatea de a elibera ceea ce nu mai servește</b>. Rezonează cu procesele noastre interne de "curățare" și transformare a energiilor și emoțiilor.</p>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">💔</span>Deficit</h3>
+                    <p>Un deficit de molibden poate fi legat de:</p>
+                    <ol>
+                        <li><b>Dificultăți în procesarea emoțiilor toxice:</b> Incapacitatea de a "digera" și a elibera resentimente, furie sau vină.<br><i>Manifestare fizică: Sensibilitate la sulfați.</i></li>
+                        <li><b>Sentiment de copleșire:</b> O senzație de a fi copleșit de situații, responsabilități sau emoții.</li>
+                        <li><b>Rigiditate și rezistență la schimbare.</b></li>
+                    </ol>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
+                    <p>Obiectivele pe care le susține molibdenul pot fi atinse prin:</p>
+                    <ul>
+                        <li><b>Practici de eliberare emoțională:</b> Jurnalism terapeutic, art-terapie.</li>
+                        <li><b>Tehnici de relaxare și reducere a stresului:</b> Meditație, mindfulness.</li>
+                        <li><b>Practici de "curățare" energetică:</b> Vizualizări, timp petrecut în natură.</li>
+                        <li><b>Cultivarea acceptării și a iertării</b> pentru a elibera povara emoțională.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
+            <div class="section-content">
+                <div class="subsection">
+                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Doze recomandate</h3>
+                     <p>Necesarul de molibden este foarte mic, dar esențial.</p>
+                     <table>
+                         <thead>
+                             <tr>
+                                 <th>Grup de populație</th>
+                                 <th>DZR (mcg/zi)</th>
+                                 <th>Limită superioară (UL)</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>Adulți (19+ ani)</td>
+                                 <td>45</td>
+                                 <td>2.000</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei însărcinate</td>
+                                 <td>50</td>
+                                 <td>2.000</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei care alăptează</td>
+                                 <td>50</td>
+                                 <td>2.000</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
+                    <p>Suplimentarea cu molibden este rareori necesară și trebuie făcută cu prudență.</p>
+                    <div class="note warning-note">
+                        <p><b>Recomandare:</b> O dietă variată, bogată în leguminoase și cereale integrale, asigură cu ușurință necesarul de molibden. Suplimentarea trebuie luată în considerare doar în cazuri specifice (ex: sensibilitate la sulfiți), sub îndrumarea unui specialist. <strong>Dozele mari pot interfera cu absorbția cuprului</strong>, deci este important să se mențină un echilibru mineral general.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="footer-copyright">
+            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
+            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        </div>
+    </main>
+</body>
+</html>

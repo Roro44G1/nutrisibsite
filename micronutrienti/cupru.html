@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cupru</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --primary-color: #3498db; /* O nuanță de albastru */
+            --primary-color-dark: #2980b9;
+            --secondary-color: #2c3e50;
+            --background-color: #f4f6f7;
+            --text-color: #34495e;
+            --card-background: #ffffff;
+            --light-gray-background: #f8f9fa;
+            --border-color: #e0e0e0;
+            --accent-green: #27ae60;
+            --accent-red: #e74c3c;
+            --base-font-family: 'Roboto', sans-serif;
+            --border-radius-large: 15px;
+            --border-radius-small: 10px;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: var(--base-font-family);
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .infographic-container {
+            max-width: 950px;
+            width: 100%;
+            background: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-medium);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .infographic-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 10px;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .section {
+            padding: 25px 45px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.9em;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-color-dark);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .subsection {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--light-gray-background);
+            border-radius: var(--border-radius-small);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid transparent;
+        }
+
+        .subsection:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-left-color: var(--primary-color);
+        }
+
+        .subsection-title {
+            font-size: 1.4em;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .subsection p,.subsection ul,.subsection ol {
+            font-size: 0.98em;
+            margin-bottom: 12px;
+        }
+
+        .subsection ul,.subsection ol {
+            padding-left: 20px;
+        }
+
+        .subsection li {
+            margin-bottom: 10px;
+        }
+
+        .subsection b,.subsection strong {
+            color: var(--secondary-color);
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 25px;
+            padding: 15px 20px;
+            background-color: #ebf5fb;
+            border-left: 4px solid var(--primary-color);
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+        
+        .warning-note {
+            background-color: #f9ebea;
+            border-left-color: var(--accent-red);
+        }
+        
+        .holistic-note {
+            background-color: #e8f8f5;
+            border-left-color: var(--accent-green);
+       }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 12px;
+            color: var(--primary-color-dark);
+            vertical-align: middle;
+        }
+        
+        .subsection-icon {
+             font-size: 1.5em;
+             margin-right: 10px;
+             color: var(--primary-color);
+        }
+        
+        .icon-small {
+            font-size: 1.5em;
+            margin-right: 8px;
+            color: var(--primary-color);
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: var(--light-gray-background);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-gray-background);
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 25px 20px; }
+            .section-content {
+                flex-direction: column;
+            }
+            .subsection {
+                min-width: unset;
+            }
+            .infographic-header {
+                font-size: 2em;
+            }
+            .section-title {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="infographic-container">
+        <header class="infographic-header">
+            Cupru
+        </header>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
+            <div class="section-content">
+                <div class="subsection" style="flex: 2;">
+                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul principal în organism</h3>
+                     <p><b>Cuprul (Cu)</b> este un oligoelement esențial care acționează ca un cofactor crucial pentru numeroase enzime (cuproenzime), fiind indispensabil pentru sănătate.</p>
+                     <ul>
+                         <li><b>Metabolismul fierului și formarea sângelui:</b> Este vital pentru absorbția și utilizarea fierului. Enzimele cu cupru, precum ceruloplasmina, sunt necesare pentru a mobiliza fierul din depozite și a-l încorpora în hemoglobină.</li>
+                         <li><b>Sănătatea țesuturilor conjunctive:</b> Este esențial pentru enzima lizil oxidaza, care este necesară pentru "întrețeserea" fibrelor de <strong>colagen și elastină</strong>, conferind rezistență și elasticitate oaselor, pielii și vaselor de sânge.</li>
+                         <li><b>Funcția nervoasă și cerebrală:</b> Contribuie la sinteza neurotransmițătorilor (ex: norepinefrina) și la menținerea tecii de mielină care protejează nervii.</li>
+                         <li><b>Producția de energie:</b> Este o componentă a enzimei citocrom c oxidaza, un pas final și esențial în lanțul de transport de electroni pentru producerea de ATP în mitocondrii.</li>
+                         <li><b>Funcția antioxidantă:</b> Face parte din enzima superoxid dismutaza (SOD), care protejează celulele de stresul oxidativ.</li>
+                         <li><b>Pigmentarea pielii și a părului:</b> Este necesar pentru producția de melanină.</li>
+                     </ul>
+                </div>
+                 <div class="subsection" style="flex: 1.5;">
+                    <h3 class="subsection-title"><span class="subsection-icon">🍫</span>Surse alimentare</h3>
+                    <p>Cuprul se găsește într-o varietate de alimente, în special în organe și fructe de mare.</p>
+                     <ul>
+                        <li><b>Organe:</b> Ficat de vită (cea mai bogată sursă).</li>
+                        <li><b>Fructe de mare:</b> Stridii, crab, homar.</li>
+                        <li><b>Nuci și semințe:</b> Caju, semințe de floarea-soarelui, susan.</li>
+                        <li><b>Leguminoase:</b> Linte, năut.</li>
+                        <li><b>Ciocolată neagră.</b></li>
+                        <li><b>Ciuperci</b> (în special Shiitake).</li>
+                        <li><b>Cereale integrale.</b></li>
+                     </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit și Exces</h2>
+             <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Simptome cauzate de deficit</h3>
+                    <p>Deficiența de cupru este rară, dar poate fi indusă de un consum excesiv de zinc din suplimente, de anumite afecțiuni genetice (boala Menkes) sau de intervenții chirurgicale bariatrice.</p>
+                    <ul>
+                        <li><b>Anemie:</b> Similară cu anemia feriprivă, deoarece fierul nu poate fi utilizat corect.</li>
+                        <li><b>Probleme osoase:</b> Osteoporoză și risc crescut de fracturi.</li>
+                        <li><b>Probleme neurologice:</b> Mielopatie (afectarea măduvei spinării), neuropatie periferică, slăbiciune musculară și probleme de coordonare.</li>
+                        <li><b>Depigmentarea părului și a pielii.</b></li>
+                        <li><b>Imunitate slăbită (neutropenie).</b></li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Exces și toxicitate</h3>
+                    <p>Excesul de cupru din dietă este rar. Toxicitatea apare de obicei în contextul unor boli genetice (boala Wilson), contaminării apei sau suplimentării neadecvate.</p>
+                     <ul>
+                        <li><b>Probleme gastrointestinale:</b> Greață, vărsături, dureri abdominale, diaree.</li>
+                        <li><b>Afectare hepatică:</b> Acumularea de cupru în ficat poate duce la leziuni hepatice severe și ciroză.</li>
+                        <li><b>Simptome neurologice și psihiatrice:</b> Iritabilitate, depresie, tremor, dificultăți de vorbire.</li>
+                        <li><b>Inelul Kayser-Fleischer:</b> Un inel maroniu-verzui în jurul corneei, specific bolii Wilson.</li>
+                    </ul>
+                </div>
+             </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">⚖️</span>Echilibrul Cupru-Zinc</h3>
+                    <p>Cuprul și zincul concurează pentru absorbție în intestin. Un aport ridicat de zinc pe termen lung (din suplimente) poate duce la o deficiență de cupru, și invers. Menținerea unui <strong>raport echilibrat</strong> între aceste două minerale este crucială pentru sănătate. Dezechilibrul (în special excesul de cupru nelegat de ceruloplasmină) este asociat în medicina funcțională cu anxietate, iritabilitate și probleme de concentrare.</p>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
+                    <p><b>În MTC</b>, cuprul este legat de <b>Sângele (Xue) Ficatului</b> și de <b>Esența (Jing) a Rinichilor</b>. Rolul său în formarea sângelui și în sănătatea țesuturilor conjunctive (tendoane, ligamente) susține funcția Ficatului. Prin implicarea sa în funcția nervoasă, susține Jing-ul Rinichilor, care guvernează creierul și măduva.</p>
+                    <p><b>În Ayurveda</b>, cuprul are o natură <b>Pitta</b> (fierbinte, ascuțită). Susține <b>Rakta Dhatu</b> (sângele) și <b>Majja Dhatu</b> (țesutul nervos). Un exces poate agrava Pitta, ducând la inflamație și iritabilitate.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
+            <p>Din perspectivă holistică, cuprul este asociat cu <b>fluiditatea, adaptabilitatea, expresia creativă și echilibrul emoțional</b>. Prin rolul său în sinteza colagenului și elastinei, rezonează cu elasticitatea noastră, atât fizică, cât și mentală.</p>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">💔</span>Deficit</h3>
+                    <p>Un deficit de cupru poate fi legat de:</p>
+                    <ol>
+                        <li><b>Lipsa de fluiditate și rigiditate emoțională:</b> Dificultatea de a te adapta la schimbări, o tendință de a fi rigid în gândire.<br><i>Manifestare fizică: Probleme ale țesuturilor conjunctive.</i></li>
+                        <li><b>Dificultăți în exprimarea creativă:</b> O blocare a expresiei artistice, un sentiment că "nu ai voie să strălucești".<br><i>Manifestare fizică: Depigmentarea părului.</i></li>
+                        <li><b>Anxietate și iritabilitate.</b></li>
+                    </ol>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
+                    <p>Obiectivele pe care le susține cuprul pot fi atinse prin:</p>
+                    <ul>
+                        <li><b>Practici care încurajează fluiditatea și mișcarea</b> (dans, tai chi, yoga fluidă).</li>
+                        <li><b>Exerciții de exprimare creativă</b> (pictură, muzică, scris liber).</li>
+                        <li><b>Meditații</b> pentru a cultiva acceptarea schimbării și a elibera rigiditatea mentală.</li>
+                        <li><b>Timp petrecut în natură</b> pentru a te reconecta cu ritmurile naturale.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
+            <div class="section-content">
+                <div class="subsection">
+                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Doze recomandate</h3>
+                     <p>Necesarul de cupru este relativ mic, dar esențial.</p>
+                     <table>
+                         <thead>
+                             <tr>
+                                 <th>Grup de populație</th>
+                                 <th>DZR (mcg/zi)</th>
+                                 <th>Limită superioară (UL)</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>Adulți (19+ ani)</td>
+                                 <td>900</td>
+                                 <td>10.000 (10 mg)</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei însărcinate</td>
+                                 <td>1.000</td>
+                                 <td>10.000 (10 mg)</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei care alăptează</td>
+                                 <td>1.300</td>
+                                 <td>10.000 (10 mg)</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
+                    <p>Echilibrul dintre cupru și zinc este fundamental.</p>
+                    <div class="note warning-note">
+                        <p><b>Avertisment critic:</b> Suplimentarea pe termen lung cu doze mari de <strong>zinc (peste 40-50 mg/zi) poate induce o deficiență de cupru</strong>. Invers, un exces de cupru poate afecta nivelul de zinc. Nu luați suplimente cu doze mari de cupru sau zinc în mod izolat fără a monitoriza și celălalt mineral și fără recomandarea unui specialist. Persoanele cu boala Wilson trebuie să evite complet suplimentele cu cupru.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="footer-copyright">
+            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
+            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        </div>
+    </main>
+</body>
+</html>

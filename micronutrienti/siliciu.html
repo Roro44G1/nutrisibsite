@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siliciu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --primary-color: #A19B8F; /* O nuanță de gri-bej, pământiu */
+            --primary-color-dark: #8A8174;
+            --secondary-color: #2c3e50;
+            --background-color: #f4f6f7;
+            --text-color: #34495e;
+            --card-background: #ffffff;
+            --light-gray-background: #f8f9fa;
+            --border-color: #e0e0e0;
+            --accent-blue: #3498db;
+            --accent-green: #27ae60;
+            --accent-red: #e74c3c;
+            --base-font-family: 'Roboto', sans-serif;
+            --border-radius-large: 15px;
+            --border-radius-small: 10px;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: var(--base-font-family);
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .infographic-container {
+            max-width: 950px;
+            width: 100%;
+            background: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-medium);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .infographic-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 10px;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .section {
+            padding: 25px 45px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.9em;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-color-dark);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .subsection {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--light-gray-background);
+            border-radius: var(--border-radius-small);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid transparent;
+        }
+
+        .subsection:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-left-color: var(--primary-color);
+        }
+
+        .subsection-title {
+            font-size: 1.4em;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .subsection p,.subsection ul,.subsection ol {
+            font-size: 0.98em;
+            margin-bottom: 12px;
+        }
+
+        .subsection ul,.subsection ol {
+            padding-left: 20px;
+        }
+
+        .subsection li {
+            margin-bottom: 10px;
+        }
+
+        .subsection b,.subsection strong {
+            color: var(--secondary-color);
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 25px;
+            padding: 15px 20px;
+            background-color: #f5f5f5;
+            border-left: 4px solid var(--primary-color);
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+        
+        .warning-note {
+            background-color: #f9ebea;
+            border-left-color: var(--accent-red);
+        }
+        
+        .holistic-note {
+            background-color: #e8f8f5;
+            border-left-color: var(--accent-green);
+       }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 12px;
+            color: var(--primary-color-dark);
+            vertical-align: middle;
+        }
+        
+        .subsection-icon {
+             font-size: 1.5em;
+             margin-right: 10px;
+             color: var(--primary-color);
+        }
+        
+        .icon-small {
+            font-size: 1.5em;
+            margin-right: 8px;
+            color: var(--primary-color);
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: var(--light-gray-background);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-gray-background);
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 25px 20px; }
+            .section-content {
+                flex-direction: column;
+            }
+            .subsection {
+                min-width: unset;
+            }
+            .infographic-header {
+                font-size: 2em;
+            }
+            .section-title {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="infographic-container">
+        <header class="infographic-header">
+            Siliciu
+        </header>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
+            <div class="section-content">
+                <div class="subsection" style="flex: 2;">
+                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul principal în organism</h3>
+                     <p><b>Siliciul (Si)</b> este al doilea cel mai abundent element din scoarța terestră. Deși nu este clasificat ca un mineral esențial, dovezile științifice arată că joacă un rol important în sănătatea structurală a organismului.</p>
+                     <ul>
+                         <li><b>Sinteza colagenului și elastinei:</b> Acesta este rolul său cel mai important. Siliciul este esențial pentru activarea enzimelor (prolil hidroxilaza) care inițiază formarea și stabilizarea rețelelor de colagen, proteina fundamentală care oferă structură și rezistență pielii, oaselor, părului și unghiilor.</li>
+                         <li><b>Sănătatea oaselor:</b> Contribuie la mineralizarea osoasă, ajutând la depunerea calciului în matricea osoasă. Un aport adecvat de siliciu este asociat cu o densitate minerală osoasă mai mare.</li>
+                         <li><b>Sănătatea pielii, părului și unghiilor:</b> Prin susținerea producției de colagen, contribuie la menținerea elasticității și fermității pielii, la întărirea părului și la reducerea fragilității unghiilor.</li>
+                         <li><b>Sănătatea cardiovasculară:</b> Ajută la menținerea elasticității vaselor de sânge, în special a aortei, care este bogată în elastină.</li>
+                         <li><b>Detoxifierea aluminiului:</b> Studiile sugerează că siliciul (sub formă de acid ortosilicic) se poate lega de aluminiu în tractul digestiv, reducându-i absorbția și potențiala neurotoxicitate.</li>
+                     </ul>
+                </div>
+                 <div class="subsection" style="flex: 1.5;">
+                    <h3 class="subsection-title"><span class="subsection-icon">🌾</span>Surse alimentare</h3>
+                    <p>Siliciul se găsește în principal în alimente de origine vegetală, în special în cele bogate în fibre.</p>
+                     <ul>
+                        <li><b>Cereale integrale:</b> Ovăz (cea mai bogată sursă), orez brun, orz, secară.</li>
+                        <li><b>Legume:</b> Fasole verde, castraveți (în special coaja), ardei gras.</li>
+                        <li><b>Fructe:</b> Banane, stafide.</li>
+                        <li><b>Plante:</b> Coada-calului și bambusul sunt extrem de bogate și adesea folosite pentru extracte.</li>
+                        <li><b>Băuturi:</b> Berea (din orz și hamei) și apa minerală bogată în siliciu sunt surse semnificative.</li>
+                     </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit și Siguranță</h2>
+             <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Simptome asociate cu un aport insuficient</h3>
+                    <p>Deoarece nu este considerat esențial, nu există o boală de carență clasică. Totuși, un aport scăzut pe termen lung poate contribui la:</p>
+                    <ul>
+                        <li><b>Îmbătrânirea prematură a pielii:</b> Linii fine, riduri, pierderea elasticității.</li>
+                        <li><b>Păr subțire și casant.</b></li>
+                        <li><b>Unghii fragile, care se rup ușor.</b></li>
+                        <li><b>Oase slăbite</b> și risc crescut de osteoporoză.</li>
+                        <li><b>Vindecare lentă a fracturilor.</b></li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Exces și siguranță</h3>
+                    <p>Siliciul din surse alimentare și din apă este considerat foarte sigur. Excesul este eliminat de rinichi.</p>
+                     <ul>
+                        <li><b>Silicoza:</b> Este o boală pulmonară gravă cauzată de <strong>inhalarea</strong> cronică a prafului de dioxid de siliciu cristalin în medii industriale (minerit, construcții) și <strong>nu are legătură cu aportul alimentar</strong>.</li>
+                        <li><b>Suplimente:</b> Suplimentele pe bază de siliciu sunt în general sigure, dar persoanele cu afecțiuni renale ar trebui să consulte medicul.</li>
+                    </ul>
+                </div>
+             </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">🤝</span>Sinergii</h3>
+                    <p>Siliciul lucrează în strânsă legătură cu alți nutrienți pentru a construi și menține structura corpului:</p>
+                    <ul>
+                        <li><b>Calciu, Magneziu, Vitamina D, Vitamina K:</b> Toate sunt esențiale pentru sănătatea oaselor.</li>
+                        <li><b>Vitamina C, Cupru, Zinc:</b> Sunt, de asemenea, necesare pentru sinteza colagenului.</li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
+                    <p><b>În MTC</b>, siliciul, prin rolul său structural, este legat de <b>Rinichi</b> (care guvernează oasele) și de <b>Splină</b> (care hrănește țesuturile). O structură puternică reflectă un Jing (esență) și un Qi (energie) robuste.</p>
+                    <p><b>În Ayurveda</b>, siliciul este fundamental pentru integritatea tuturor celor șapte <b>Dhatus</b> (țesuturi), în special <b>Asthi Dhatu</b> (țesutul osos) și <b>Rasa Dhatu</b> (plasma, care include pielea). Ajută la echilibrarea <b>Vata</b> (prin combaterea uscăciunii și fragilității) și <b>Kapha</b> (prin menținerea structurii).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
+            <p>Din perspectivă holistică, siliciul este conectat cu <b>structura, integritatea, flexibilitatea și capacitatea de a rezista presiunilor externe</b>. Rezonează cu "scheletul" nostru emoțional și cu rezistența la adversitate.</p>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">💔</span>Insuficiență</h3>
+                    <p>O insuficiență de siliciu poate fi legată de:</p>
+                    <ol>
+                        <li><b>Lipsa de structură interioară:</b> Un sentiment de vulnerabilitate, de a nu avea un "schelet" emoțional solid.<br><i>Manifestare fizică: Unghii fragile, păr casant.</i></li>
+                        <li><b>Dificultăți în a-ți susține integritatea:</b> Incapacitatea de a-ți menține poziția sau de a-ți compromite valorile.</li>
+                        <li><b>Lipsa de rezistență la presiuni externe.</b></li>
+                    </ol>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
+                    <p>Obiectivele pe care le susține siliciul pot fi atinse prin:</p>
+                    <ul>
+                        <li><b>Practici de întărire a stimei de sine</b> și a valorii personale.</li>
+                        <li><b>Terapii</b> care ajută la construirea unei structuri emoționale solide.</li>
+                        <li><b>Exerciții de adaptabilitate și flexibilitate mentală</b> (mindfulness, yoga fluidă).</li>
+                        <li><b>Conectarea cu natura</b> pentru a te simți mai rezistent.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
+            <div class="section-content">
+                <div class="subsection">
+                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Doze recomandate</h3>
+                     <p>Deoarece nu este considerat esențial, <strong>nu există o Doză Zilnică Recomandată (DZR)</strong>. Aportul mediu dintr-o dietă occidentală este de 20-50 mg/zi.</p>
+                     <p>Dozele din suplimente variază, dar formele biodisponibile, precum <strong>acidul ortosilicic stabilizat pe colină (ch-OSA)</strong>, sunt eficiente în doze mici (5-10 mg/zi).</p>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
+                    <p>Siliciul din surse alimentare și suplimente este considerat foarte sigur.</p>
+                    <div class="note holistic-note">
+                        <p><b>Recomandare:</b> Nu a fost stabilită o limită superioară tolerabilă (UL) pentru siliciul alimentar. Cea mai bună abordare este o dietă bogată în alimente integrale, bogate în fibre. Suplimentarea trebuie discutată cu un medic, în special de către persoanele cu afecțiuni renale.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="footer-copyright">
+            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
+            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        </div>
+    </main>
+</body>
+</html>
