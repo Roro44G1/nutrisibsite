@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meridian Stomac – Infografic Extins</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f1f5f9;
+      padding: 2rem;
+      color: #1e293b;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    select {
+      display: block;
+      margin: 0 auto 2rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .bar-container {
+      position: relative;
+      width: 100%;
+      max-width: 700px;
+      height: 30px;
+      display: flex;
+      margin: 0 auto 3rem;
+      border: 3px solid #000;
+      box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    }
+    .segment { flex: 1; }
+    .red    { background: #ef4444; }
+    .yellow { background: #facc15; }
+    .blue   { background: #3b82f6; }
+    .green  { background: #22c55e; }
+
+    .arrow {
+      position: absolute;
+      bottom: -30px;
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-top: 30px solid #334155;
+      transition: left 0.4s ease;
+    }
+
+    .content-box {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .content-box h3 {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #0f172a;
+    }
+    .content-box p {
+      margin: 0.3rem 0 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>⚖️ Stare Energetică – Meridianul Stomacului</h2>
+
+  <select id="stareSelect" onchange="mutaSageata(this.value)">
+    <option value="0">0 – Hipofuncție severă</option>
+    <option value="1">1 – Hipofuncție moderată</option>
+    <option value="2">2 – Dezechilibru ușor (spre hipo)</option>
+    <option value="3" selected>3 – Echilibru</option>
+    <option value="4">4 – Dezechilibru ușor (spre hiper)</option>
+    <option value="5">5 – Hiperfuncție moderată</option>
+    <option value="6">6 – Hiperfuncție severă</option>
+  </select>
+
+  <div class="bar-container">
+    <div class="segment red"></div>
+    <div class="segment yellow"></div>
+    <div class="segment blue"></div>
+    <div class="segment green"></div>
+    <div class="segment blue"></div>
+    <div class="segment yellow"></div>
+    <div class="segment red"></div>
+    <div class="arrow" id="indicator" style="left: 50%;"></div>
+  </div>
+
+  <div class="content-box" id="infoBox"></div>
+
+  <script>
+    const info = [
+      {
+        titlu: "Hipofuncție severă",
+        fiziologie: "Digestie lentă, balonare, greață, oboseală, lipsă de poftă.",
+        nutritie: "Supe calde, ghimbir, orez, dovleac, morcov, carne albă fiartă.",
+        suplimente: "Enzime digestive, zinc, ghimbir, vitamina B6.",
+        parinti: "Deficit în relația cu mama, lipsă de hrănire emoțională.",
+        terapie: "Masaj abdominal, ST36, Qi Gong stomac, evitarea alimentelor reci.",
+        emotional: "Apatie, teamă de respingere, sentiment că 'nu merit să primesc'."
+      },
+      {
+        titlu: "Hipofuncție moderată",
+        fiziologie: "Digestie slabă, meteorism, tranzit lent, oboseală după masă.",
+        nutritie: "Terci de mei, linte, ceai cald de fenicul, chimen.",
+        suplimente: "Complex B, enzime blânde, angelică.",
+        parinti: "Dorință nespusă de apropiere de mamă, copil interior nevindecat.",
+        terapie: "Journaling, băi cu magneziu, yoga digestivă, aromaterapie caldă.",
+        emotional: "Sentiment de lipsă, auto-subestimare, dificultăți în exprimarea nevoilor."
+      },
+      {
+        titlu: "Dezechilibru ușor (spre hipo)",
+        fiziologie: "Poftă instabilă, digestie oscilantă, ușor dezechilibrată.",
+        nutritie: "Hummus, ovăz, sfeclă, biscuiți integrali.",
+        suplimente: "Drojdii inactivate, magneziu, plante blânde.",
+        parinti: "Neîncredere subtilă, lipsă de susținere afectivă.",
+        terapie: "Împământare, scris terapeutic, băi cu plante dulci.",
+        emotional: "Stări ușoare de anxietate, nevoie de validare interioară."
+      },
+      {
+        titlu: "Echilibru",
+        fiziologie: "Digestie bună, tranzit normal, poftă echilibrată.",
+        nutritie: "Dietă variată, mese gătite, combinații corecte.",
+        suplimente: "Probiotice, spirulină, turmeric.",
+        parinti: "Acceptare, recunoștință față de ambii părinți.",
+        terapie: "Stretching, meditație zilnică, recunoștință activă.",
+        emotional: "Stabilitate emoțională, deschidere către relații și încredere în sine."
+      },
+      {
+        titlu: "Dezechilibru ușor (spre hiper)",
+        fiziologie: "Aciditate ușoară, agitație digestivă, poftă de dulce.",
+        nutritie: "Verdețuri gătite, salate ușoare, avocado.",
+        suplimente: "Glutamină, aloe, curcuma cu piper.",
+        parinti: "Presiune din partea tatălui, nevoia de validare.",
+        terapie: "Respirație 4-7-8, yoga yin, băi calmante.",
+        emotional: "Neliniște, gândire accelerată, nevoia de a dovedi."
+      },
+      {
+        titlu: "Hiperfuncție moderată",
+        fiziologie: "Reflux, poftă exagerată, digestie fierbinte, control alimentar.",
+        nutritie: "Castravete, țelină, supe răcoritoare, conopidă.",
+        suplimente: "Nalbă, pătlagină, L. reuteri, triphala.",
+        parinti: "Control excesiv din partea tatălui, frică de eșec.",
+        terapie: "Terapie craniosacrală, planificare blândă, respirație ghidată.",
+        emotional: "Perfecționism, furie reprimată, dificultăți în relaxare."
+      },
+      {
+        titlu: "Hiperfuncție severă",
+        fiziologie: "Arsuri gastrice, reflux sever, gândire obsesivă.",
+        nutritie: "Migdale, quinoa, sucuri verzi, dovlecel.",
+        suplimente: "Roiniță, valeriană, adaptogeni blânzi.",
+        parinti: "Conflict nerezolvat cu autoritatea / tatăl.",
+        terapie: "Iertare ghidată, meditație plex solar, detox emoțional.",
+        emotional: "Iritabilitate, impulsivitate, supraidentificare cu performanța."
+      }
+    ];
+
+    function mutaSageata(index) {
+      const procent = (index / 6) * 100;
+      document.getElementById('indicator').style.left = `${procent}%`;
+      const item = info[index];
+      document.getElementById('infoBox').innerHTML = `
+        <h3>${item.titlu}</h3>
+        <p><strong>🧬 Fiziologie:</strong> ${item.fiziologie}</p>
+        <p><strong>🥗 Nutriție:</strong> ${item.nutritie}</p>
+        <p><strong>💊 Suplimente:</strong> ${item.suplimente}</p>
+        <p><strong>👪 Relație cu părinții:</strong> ${item.parinti}</p>
+        <p><strong>💆 Terapie:</strong> ${item.terapie}</p>
+        <p><strong>🧠 Emoțional:</strong> ${item.emotional}</p>
+      `;
+    }
+
+    window.onload = () => mutaSageata(3);
+  </script>
+
+</body>
+</html>

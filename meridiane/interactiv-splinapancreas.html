@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafic Interactiv Meridian Splină-Pancreas</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Resetare și Stiluri Generale */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Containerul principal al paginii */
+        .infographic-container {
+            flex-grow: 1;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centrează orizontal conținutul */
+        }
+        
+        /* Containerul specific al graficului */
+        .meridian-section {
+            width: 100%;
+            max-width: 700px; /* Lățime maximă aplicată aici pentru uniformitate */
+        }
+
+        h2 {
+            font-size: 2em;
+            font-weight: 700;
+            color: #0A2463;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        select {
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #3E92CC;
+            background-color: #e0f2f7;
+            color: #0A2463;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+        }
+
+        select:hover {
+            border-color: #0A2463;
+            background-color: #d1eff6;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(62, 146, 204, 0.4);
+        }
+
+        /* Bara de evaluare */
+        .bar-container {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            border: 3px solid #0A2463;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        .segment {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+        }
+
+        .segment.extreme-red    { background-color: #EF4444; }
+        .segment.moderate-yellow { background-color: #FACC15; }
+        .segment.tendency-blue   { background-color: #3B82F6; }
+        .segment.balanced-green  { background-color: #22C55E; }
+
+        .arrow {
+            position: absolute;
+            bottom: 5px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #212529;
+            transform: translateX(-50%);
+            transition: left 0.4s ease-in-out;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            z-index: 10;
+        }
+
+        /* Caseta de informații */
+        .info-box {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        .info-box h3 {
+            font-size: 1.4em;
+            color: #0A2463;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            border-bottom: 2px dashed #3E92CC;
+            padding-bottom: 0.5rem;
+        }
+
+        .info-box p {
+            font-size: 1.05em;
+            margin-bottom: 0.75rem;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .info-box ul {
+            list-style-type: '🔹';
+            padding-left: 1.5rem;
+            font-size: 1em;
+            color: #475569;
+        }
+
+        .info-box li {
+            margin-bottom: 0.5rem;
+            padding-left: 0.5rem;
+        }
+        
+        /* Footer */
+        .footer-copyright {
+            text-align: center;
+            padding: 1rem;
+            background-color: #e9ecef;
+            color: #495057;
+            font-size: 0.9em;
+            margin-top: 2rem;
+        }
+
+        /* Stiluri responsive pentru ecrane mici */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 1.6em;
+            }
+            .bar-container {
+                height: 35px;
+            }
+            .segment {
+                font-size: 0.7em;
+            }
+            .info-box {
+                padding: 1.2rem;
+            }
+            .info-box h3 {
+                font-size: 1.2em;
+            }
+            .info-box p, .info-box ul {
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="infographic-container">
+        <div class="meridian-section">
+            <h2>Evaluare interactivă: starea meridianului splină-pancreas</h2>
+
+            <select id="select-splina-pancreas">
+                <option value="0">Hipofuncție severă</option>
+                <option value="1">Hipofuncție moderată</option>
+                <option value="2">Dezechilibru ușor (Hipofuncție)</option>
+                <option value="3" selected>Echilibru</option>
+                <option value="4">Dezechilibru ușor (Hiperfuncție)</option>
+                <option value="5">Hiperfuncție moderată</option>
+                <option value="6">Hiperfuncție severă</option>
+            </select>
+
+            <div class="bar-container">
+                <div class="segment extreme-red">---</div>
+                <div class="segment moderate-yellow">--</div>
+                <div class="segment tendency-blue">-</div>
+                <div class="segment balanced-green">=</div>
+                <div class="segment tendency-blue">+</div>
+                <div class="segment moderate-yellow">++</div>
+                <div class="segment extreme-red">+++</div>
+                
+                <div class="arrow" id="indicator-splina-pancreas"></div>
+            </div>
+
+            <div id="infoDisplay-splina-pancreas" class="info-box">
+                </div>
+        </div>
+    </div>
+
+    <footer class="footer-copyright">
+        <p>Copyright: dr.ing. Radu Pascu - 2025</p>
+    </footer>
+
+    <script>
+        const meridianSpleenPancreasData = [
+            {
+                stare: "Hipofuncție severă",
+                fiziologic: "Rigiditate extremă a limbii, vărsături severe, dureri abdominale cronice, balonare severă. Diabet necontrolat, durere toracică intensă, constipație severă, diaree cronică, retenție masivă de apă în organism. Tulburări severe de somn, edeme paralizante ale picioarelor, membre foarte reci, lipsă totală de vitalitate. Scurgeri nazale apoase persistente, anemie severă, hematoame extinse, rigiditate pronunțată a vaselor sanguine, predispoziție majoră la hemoragie. Gastralgie intensă, inapetență totală, icter sever, astenie generală extremă. Congestii limfatice severe, amețeli constante, apetit absent. Probleme severe în zona pelviană și dezechilibre feminine cronice. Dureri de genunchi și coapse paralizante, oboseala extremă a mâinilor și picioarelor.",
+                nutritie: "Nevoie stringentă de intervenție medicală și nutrițională specializată. Dietă strictă, ușor digerabilă, cu accent pe alimente calde, pure, care susțin funcția splenică și pancreatică. Evitarea totală a alimentelor reci, crude, procesate, zaharurilor, lactatelor în exces. Lichide calde, supe creme de legume, piureuri.",
+                suplimente: "Enzime pancreatice puternice (sub supraveghere medicală), crom (pentru diabet), complex de Vitamine B, zinc, magneziu, probiotice pentru sănătatea intestinală, suport pentru sistemul limfatic.",
+                emotional: "Confuzie mentală severă, gândire extrem de lentă și împrăștiată, probleme grave de memorare, idei fixiste obsesive, dogmatism rigid, exces de zel compulsiv, autocompătimire paralizantă, sentiment de nesiguranță profundă, tristețe nemotivată cronică, imposibilitate totală de adaptare. Lipsa încrederii, obsesie, remușcări, regret, îndoială de sine. Incapacitatea de a-și exprima emoțiile, tendința de a reține grijile și obsesiile.",
+                relatiiParinti: "Conflict profund și nerezolvat cu influența maternă (Yin), blocând capacitatea de a se 'hrăni' emoțional și de a 'asimila' suport din relații. Tendința de a reține grijile și obsesiile, de a se simți copleșit de emoțiile materne sau de lipsa de suport din partea figurii materne. Dificultăți severe în a elibera trecutul și a ierta.",
+                terapie: "Intervenție medicală și psihologică urgentă. Terapie nutrițională strictă. Suport psihologic intens pentru eliberarea grijilor, obsesiilor și a autocompătimirii. Meditație de împământare și de cultivare a încrederii. Terapii energetice (acupunctură, *Qi Gong*) pentru a stimula fluxul energetic și a restabili echilibrul elementului pământ."
+            },
+            {
+                stare: "Hipofuncție moderată",
+                fiziologic: "Rigiditatea limbii, stări de vomă, dureri abdominale, balonare. Diabet, durere toracică, constipație, diaree, retenția apei în organism. Tulburări de somn, edeme ale picioarelor, membre reci, lipsa vitalității. Scurgeri nazale apoase, anemie, hematoame, rigiditatea vaselor sanguine, predispoziție la hemoragie. Gastralgie, inapetență, icter, astenie generală. Congestii limfatice, amețeli, apetit scăzut. Probleme în zona pelviană sau caracteristice femeiești. Dureri de genunchi și coapse, oboseala mâinilor sau a picioarelor. Digestie îngreunată, disconfort abdominal după mâncare, saliva puțină, simț gustativ diminuat, hiperaciditate cronică, ten maroniu, predispoziție către răcire, piele de culoare galben-murdar, dureri în coloană și picioare, senzație de greutate în membre, ombilic rigid, limbă îngroșată, neliniște, respirație accelerată, extremități reci, nemulțumire, somn neliniștit, tulburări cardiace.",
+                nutritie: "Dietă antiinflamatorie, cu accent pe alimente calde, ușor digerabile, care susțin funcția splenică și pancreatică. Reducerea alimentelor reci, lactate în exces. Ceaiuri din plante, supe. Hidratare adecvată.",
+                suplimente: "Enzime pancreatice, crom, complex de Vitamine B, zinc, magneziu, probiotice.",
+                emotional: "Confuzie, gândire lentă, împrăștiată, probleme de memorare, idei fixiste, dogmatism, exces de zel, autocompătimire, sentiment de nesiguranță, tristețe nemotivată, imposibilitate de adaptare. Lipsa încrederii, obsesie, remușcări, regret, îndoială de sine. Dificultăți în a-și exprima emoțiile, tendința de a reține grijile și obsesiile.",
+                relatiiParinti: "Dificultăți în a se 'hrăni' emoțional și a 'asimila' suport din relații, o tendință de a reține grijile și obsesiile, de a se simți copleșit de emoțiile materne sau de lipsa de suport din partea figurii materne. Dificultăți în a elibera trecutul și a ierta.",
+                terapie: "Dietă de suport digestiv și limfatic. Jurnalism terapeutic pentru explorarea sentimentelor de îngrijorare și autocompătimire. Meditații de acceptare și de cultivare a încrederii. Exerciții de *Qi Gong* sau *Tai Chi* pentru a stimula fluxul energetic."
+            },
+            {
+                stare: "Dezechilibru ușor (Hipofuncție)",
+                fiziologic: "Digestie ocazional îngreunată, disconfort abdominal minor după mâncare, saliva puțină, simț gustativ ușor diminuat, ușoară hiperaciditate cronică. Ten maroniu, ușoară predispoziție către răcire. Dureri ușoare în coloană și picioare, senzație de greutate în membre. Ușoare edeme, ombilic ușor rigid, limbă ușor îngroșată. Ușoară neliniște, respirație ușor accelerată, extremități ușor reci, nemulțumire ocazională, somn ușor neliniștit, ocazional tulburări cardiace.",
+                nutritie: "Dietă echilibrată, cu accent pe alimente proaspete, bogate în vitamine și minerale. Consum regulat de alimente care susțin digestia și imunitatea. Evitarea excesului de lactate și alimente reci.",
+                suplimente: "Multivitamine/minerale, suplimente cu enzime digestive în caz de nevoie.",
+                emotional: "Ușoară confuzie, gândire ușor lentă și împrăștiată, probleme minore de memorare. Ușoară tendință spre dogmatism sau exces de zel. Ușoară autocompătimire, sentiment de nesiguranță, tristețe ocazională, ușoară dificultate de adaptare.",
+                relatiiParinti: "Unele tensiuni persistente sau neînțelegeri subtile legate de influența maternă, care pot duce la o presiune internă și la dificultăți în acceptarea lor așa cum sunt.",
+                terapie: "Conștientizarea obiceiurilor alimentare. Practici de mindfulness pentru a reduce neliniștea. Exerciții de respirație pentru calmare. Explorarea surselor de 'hrană emoțională'."
+            },
+            {
+                stare: "Echilibru",
+                fiziologic: "Funcționare optimă a splinei și pancreasului, extracție și asimilare eficientă a nutrienților. Imunitate robustă, echilibru fluidic și sanguin. Tonus muscular bun, buze roșii și umede. Digestie armonioasă, fără disconfort.",
+                nutritie: "Dietă variată și echilibrată, bogată în alimente integrale, proaspete, cu un bun aport de vitamine și minerale. Accent pe alimente de sezon, care susțin energia pământului.",
+                suplimente: "Suplimente de întreținere dacă este necesar, conform nevoilor individuale.",
+                emotional: "Încredere, onestitate, deschidere, acceptare, calm, echilibru și imparțialitate. Gândire analitică clară, memorie bună, procese cognitive eficiente. Lipsa grijilor excesive și a îndoielii de sine.",
+                relatiiParinti: "Echilibru între influența maternă (hrănire, acceptare) și autoritatea paternă (structură, direcție), permițând o bună integrare a ambelor aspecte în propria personalitate. Capacitate de a te simți iubit și acceptat.",
+                terapie: "Menținerea obiceiurilor sănătoase. Continuarea practicilor de mindfulness și meditație. Cultivarea recunoștinței și a relațiilor pozitive. Explorarea continuă a sinelui pentru creștere personală."
+            },
+            {
+                stare: "Dezechilibru ușor (Hiperfuncție)",
+                fiziologic: "Salivă ușor crescută în gură, ușor acid gastric, ușoare 'nervi' în stomac. Picioare ușor grele, ușoară poftă de dulciuri. Ocazional stări febrile, ușoară hepatită. Mișcări ușor nesigure. Sete ușoară continuă, ușoară hipoglicemie. Posibile mici formațiuni de mușchi contractați în zona dintre ombilic și osul pubian.",
+                nutritie: "Dietă echilibrată, cu atenție la alimentele care pot genera 'căldură' sau stimula excesiv. Hidratare adecvată. Consum de alimente care susțin detoxifierea.",
+                suplimente: "Antioxidanți de bază, suport pentru detoxifiere.",
+                emotional: "Ușoară iritabilitate, tendință de a fi perfecționist, uneori dificultăți în a elibera tensiunea. Poate ofta frecvent. Ușor distantă emoțional.",
+                relatiiParinti: "Unele tensiuni persistente sau neînțelegeri subtile legate de influența paternă, care pot duce la o presiune internă și la dificultăți în acceptarea lor așa cum sunt.",
+                terapie: "Reevaluarea obiectivelor și a așteptărilor. Practici de relaxare pentru a reduce iritabilitatea. Exerciții de conștientizare a emoțiilor. Dialog deschis cu părinții pentru a rezolva tensiunile."
+            },
+            {
+                stare: "Hiperfuncție moderată",
+                fiziologic: "Salivă multă în gură, mult acid gastric, 'nervi' în stomac, picioare grele, poftă de dulciuri continuă. Pot apărea stări febrile, hepatită, mișcări nesigure, sete continuă, hipoglicemie. Formațiuni de mușchi contractați în zona dintre ombilic și osul pubian.",
+                nutritie: "Nevoie de alimente care 'răcoresc' și 'drenează' excesul de căldură. Evitarea alimentelor picante, prăjite, sau care generează mucus. Hidratare adecvată. Dietă antiinflamatorie.",
+                suplimente: "Antioxidanți, plante cu efect calmant și antiinflamator, suport pentru detoxifiere hepatică.",
+                emotional: "Persoana este supraponderală, pofticioasă, cu voință slabă, mult prea grijulie, ține totul pentru sine. Are senzația de dezrădăcinare, nivelul de energie fluctuează, se adâncește în amănunte inutile, se autocompătimește și e sigură că toate strădaniile sale sunt în zadar.",
+                relatiiParinti: "Conflicte deschise sau o rebeliune activă împotriva autorității paterne, ceea ce poate duce la o stare de tensiune internă și la incapacitatea de a integra lecțiile de viață.",
+                terapie: "Tehnici de gestionare a furiei și nerăbdării. Meditații de acceptare și renunțare la control. Terapie pentru a explora relația cu autoritatea paternă. Activități care canalizează energia în mod constructiv."
+            },
+            {
+                stare: "Hiperfuncție severă",
+                fiziologic: "Salivă excesivă în gură, acid gastric foarte mult, 'nervi' severi în stomac, picioare foarte grele, poftă de dulciuri constantă și incontrolabilă. Stări febrile severe, hepatită cronică, mișcări foarte nesigure, sete insațiabilă, hipoglicemie severă. Formațiuni mari și dureroase de mușchi contractați în zona dintre ombilic și osul pubian.",
+                nutritie: "Nevoie stringentă de intervenție medicală și nutrițională specializată. Dietă strictă, care să elimine orice aliment inflamator sau care generează 'căldură' excesivă. Lichide răcoroase, ceaiuri medicinale, alimente ușoare și pure.",
+                suplimente: "Suplimente complexe pentru suport hepatic și pancreatic, antioxidanți, detoxifiere, sub strictă supraveghere medicală. Poate fi necesară terapia intensivă.",
+                emotional: "Compasiune și simpatie duse la extrem, bârfe compulsive. Gândire extrem de îngreunată, lentă și împrăștiată, tulburări severe de memorie, halucinații, coșmaruri. Se simte constrânsă să facă anumite acțiuni, caracterizată de milă față de propria persoană, anxietate severă, supărare profundă. Supraponderală, pofticioasă compulsiv, cu voință extrem de slabă, mult prea grijulie, ține totul pentru sine. Senzația de dezrădăcinare profundă, nivelul de energie fluctuează extrem, se adâncește în amănunte inutile, se autocompătimește și e sigură că toate strădaniile sale sunt în zadar. Incapacitatea de a-și exprima emoțiile, tendința de a reține grijile și obsesiile.",
+                relatiiParinti: "Refuz total de a se conforma sau de a accepta figura paternă, ducând la un conflict interior devastator, care erodează sentimentul de siguranță și liniște. Poate fi o rebeliune extremă împotriva structurii și autorității, cu consecințe grave asupra sănătății.",
+                terapie: "Intervenție medicală și psihologică urgentă. Terapie intensivă pentru gestionarea grijilor, obsesiilor și a autocompătimirii. Meditații de iertare și acceptare. Lucrul profund cu traumele legate de autoritate și control. Reconstruirea relației cu sinele și cu lumea."
+            }
+        ];
+
+        function afiseazaInformatii(meridianId, index) {
+            let data;
+            if (meridianId === 'splina-pancreas') {
+                data = meridianSpleenPancreasData[index];
+            }
+            if (!data) return;
+            
+            const infoDisplay = document.getElementById(`infoDisplay-${meridianId}`);
+            infoDisplay.innerHTML = `
+                <h3>Stare: ${data.stare}</h3>
+                <p><strong>🧬 Fiziologie:</strong> ${data.fiziologic}</p>
+                <p><strong>🥗 Nutriție:</strong> ${data.nutritie}</p>
+                <p><strong>💊 Suplimente:</strong> ${data.suplimente}</p>
+                <p><strong>🧠 Emoțional:</strong> ${data.emotional}</p>
+                <p><strong>👪 Relații cu părinții:</strong> ${data.relatiiParinti}</p>
+                <p><strong>💆 Terapie:</strong> ${data.terapie}</p>
+            `;
+        }
+
+        function mutaSageata(meridianId, indexStr) {
+            const index = parseInt(indexStr, 10);
+            const totalSegments = 7;
+            
+            // Calculează poziția pentru centrul fiecărui segment
+            const segmentWidth = 100 / totalSegments;
+            const procent = (index * segmentWidth) + (segmentWidth / 2);
+            
+            document.getElementById(`indicator-${meridianId}`).style.left = `${procent}%`;
+            afiseazaInformatii(meridianId, index);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectSpleenPancreas = document.getElementById('select-splina-pancreas');
+            
+            if (selectSpleenPancreas) {
+                // Setează starea inițială la încărcarea paginii
+                mutaSageata('splina-pancreas', selectSpleenPancreas.value);
+
+                // Adaugă event listener pentru schimbări ulterioare
+                selectSpleenPancreas.addEventListener('change', (event) => {
+                    mutaSageata('splina-pancreas', event.target.value);
+                });
+            }
+        });
+
+        // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
+        document.addEventListener('keydown', function(e) {
+            // Blochează Ctrl+C (Copiere)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+            }
+            // Blochează F12 (Developer Tools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+J (Developer Tools Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+            }
+        });
+
+        
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafic Interactiv Meridian Triplu Încălzitor</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Resetare și Stiluri Generale */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Containerul principal al paginii */
+        .infographic-container {
+            flex-grow: 1;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centrează orizontal conținutul */
+        }
+        
+        /* Containerul specific al graficului */
+        .meridian-section {
+            width: 100%;
+            max-width: 700px; /* Lățime maximă aplicată aici pentru uniformitate */
+        }
+
+        h2 {
+            font-size: 2em;
+            font-weight: 700;
+            color: #0A2463;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        select {
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #3E92CC;
+            background-color: #e0f2f7;
+            color: #0A2463;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+        }
+
+        select:hover {
+            border-color: #0A2463;
+            background-color: #d1eff6;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(62, 146, 204, 0.4);
+        }
+
+        /* Bara de evaluare */
+        .bar-container {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            border: 3px solid #0A2463;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        .segment {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+        }
+
+        .segment.extreme-red    { background-color: #EF4444; }
+        .segment.moderate-yellow { background-color: #FACC15; }
+        .segment.tendency-blue   { background-color: #3B82F6; }
+        .segment.balanced-green  { background-color: #22C55E; }
+
+        .arrow {
+            position: absolute;
+            bottom: 5px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #212529;
+            transform: translateX(-50%);
+            transition: left 0.4s ease-in-out;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            z-index: 10;
+        }
+
+        /* Caseta de informații */
+        .info-box {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        .info-box h3 {
+            font-size: 1.4em;
+            color: #0A2463;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            border-bottom: 2px dashed #3E92CC;
+            padding-bottom: 0.5rem;
+        }
+
+        .info-box p {
+            font-size: 1.05em;
+            margin-bottom: 0.75rem;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .info-box ul {
+            list-style-type: '🔹';
+            padding-left: 1.5rem;
+            font-size: 1em;
+            color: #475569;
+        }
+
+        .info-box li {
+            margin-bottom: 0.5rem;
+            padding-left: 0.5rem;
+        }
+        
+        /* Footer */
+        .footer-copyright {
+            text-align: center;
+            padding: 1rem;
+            background-color: #e9ecef;
+            color: #495057;
+            font-size: 0.9em;
+            margin-top: 2rem;
+        }
+
+        /* Stiluri responsive pentru ecrane mici */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 1.6em;
+            }
+            .bar-container {
+                height: 35px;
+            }
+            .segment {
+                font-size: 0.7em;
+            }
+            .info-box {
+                padding: 1.2rem;
+            }
+            .info-box h3 {
+                font-size: 1.2em;
+            }
+            .info-box p, .info-box ul {
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="infographic-container">
+        <div class="meridian-section">
+            <h2>Evaluare interactivă: starea meridianului triplu încălzitor</h2>
+
+            <select id="select-triplu-incalzitor">
+                <option value="0">Hipofuncție severă</option>
+                <option value="1">Hipofuncție moderată</option>
+                <option value="2">Dezechilibru ușor (Hipofuncție)</option>
+                <option value="3" selected>Echilibru</option>
+                <option value="4">Dezechilibru ușor (Hiperfuncție)</option>
+                <option value="5">Hiperfuncție moderată</option>
+                <option value="6">Hiperfuncție severă</option>
+            </select>
+
+            <div class="bar-container">
+                <div class="segment extreme-red">---</div>
+                <div class="segment moderate-yellow">--</div>
+                <div class="segment tendency-blue">-</div>
+                <div class="segment balanced-green">=</div>
+                <div class="segment tendency-blue">+</div>
+                <div class="segment moderate-yellow">++</div>
+                <div class="segment extreme-red">+++</div>
+                
+                <div class="arrow" id="indicator-triplu-incalzitor"></div>
+            </div>
+
+            <div id="infoDisplay-triplu-incalzitor" class="info-box">
+                </div>
+        </div>
+    </div>
+
+    <footer class="footer-copyright">
+        <p>Copyright: dr.ing. Radu Pascu - 2025</p>
+    </footer>
+
+    <script>
+        const meridianTripleHeaterData = [
+            {
+                stare: "Hipofuncție severă",
+                fiziologic: "Senzație extremă de frig, mâini și picioare foarte reci. Infecții severe și cronice ale urechii, inflamații glandulare persistente. Dureri severe în gât, amigdalită cronică. Probleme oculare grave, cataractă avansată. Transpirație excesivă și incontrolabilă. Sindromul oboselii cronice sever, lipsă totală de energie. Ciclu menstrual tulburat sever. Păr și piele extrem de subțiate. Tensiune arterială foarte mică, ochi predispuși la oboseală, durere severă în spatele capului și în tâmple. Probleme grave ale brațelor și organelor genitale.",
+                nutritie: "Nevoie stringentă de intervenție medicală și nutrițională specializată. Dietă strictă, ușor digerabilă, cu accent pe alimente calde, pure, care susțin metabolismul și echilibrul fluidelor. Evitarea totală a alimentelor reci, crude, procesate, zaharurilor, lactatelor în exces. Lichide calde, supe creme de legume, ceaiuri din plante.",
+                suplimente: "Suplimente complexe pentru suport metabolic și energetic (CoQ10, Magneziu, Vitamine B, L-carnitină), adaptogeni pentru suport adrenal (sub strictă supraveghere medicală). Suplimente pentru suport hormonal și imunitar.",
+                emotional: "Grijă cronică excesivă, hipersensibilitate extremă, oboseală psihică profundă. Personalitate închisă/introvertită, cu tendințe de izolare. Stare de alertă mentală constantă, 'pitici pe creier' obsesivi. Iritabilitate severă, nemulțumire cronică. Incapacitatea de autoapărare, sensibilitate acută la schimbările vremii, atât fizic cât și emoțional. Lipsa totală a capacității de a se relaxa.",
+                relatiiParinti: "Conflict profund și nerezolvat cu influența maternă (Yin), manifestat prin incapacitatea de a 'primi' și 'asimila' suport emoțional și energetic. Tendința de a reține grijile și obsesiile, de a se simți copleșit de emoțiile materne sau de lipsa de suport din partea figurii materne. Dificultăți severe în a elibera trecutul și a ierta.",
+                terapie: "Intervenție medicală și psihologică urgentă. Terapie nutrițională strictă. Suport psihologic intens pentru eliberarea grijilor, obsesiilor și a hipersensibilității. Meditație de împământare și de cultivare a încrederii în propria capacitate de adaptare. Terapii energetice (acupunctură, *Qi Gong*) pentru a stimula fluxul energetic și a restabili echilibrul elementului foc."
+            },
+            {
+                stare: "Hipofuncție moderată",
+                fiziologic: "Senzație de frig, mâini și picioare reci. Infecții ale urechii, inflamații glandulare. Dureri în gât, amigdalită. Probleme oculare. Transpirație excesivă. Sindromul oboselii cronice, lipsă de energie. Ciclu menstrual tulburat. Păr sau piele subțiate. Tensiune arterială mică, ochi obosiți, durere în spatele capului și în tâmple. Probleme ale brațelor și organelor genitale.",
+                nutritie: "Dietă caldă, echilibrată, bogată în nutrienți care susțin metabolismul și echilibrul fluidelor. Reducerea alimentelor reci, lactate în exces. Ceaiuri din plante, supe. Hidratare adecvată.",
+                suplimente: "CoQ10, Magneziu, Vitamine B, L-carnitină, adaptogeni.",
+                emotional: "Grijă excesivă, hipersensibilitate, oboseală psihică. Personalitate închisă/introvertită. Stare de alertă mentală, 'pitici pe creier'. Iritabilitate, nemulțumire. Lipsa capacității de autoapărare, sensibilitate la schimbările vremii, atât fizic cât și emoțional. Dificultăți în a se relaxa.",
+                relatiiParinti: "Dificultăți în a 'primi' și 'asimila' suport emoțional și energetic, o tendință de a reține grijile și obsesiile, de a se simți copleșit de emoțiile materne sau de lipsa de suport din partea figurii materne. Dificultăți în a elibera trecutul și a ierta.",
+                terapie: "Dietă de suport metabolic. Jurnalism terapeutic pentru explorarea sentimentelor de îngrijorare și hipersensibilitate. Meditații de acceptare și de cultivare a încrederii. Exerciții de *Qi Gong* sau *Tai Chi* pentru a stimula fluxul energetic."
+            },
+            {
+                stare: "Dezechilibru ușor (Hipofuncție)",
+                fiziologic: "Senzație ușoară de frig, mâini și picioare ușor reci. Ocazional infecții minore ale urechii sau gâtului. Ușoară transpirație excesivă. Energie ușor scăzută. Păr sau piele ușor subțiate. Tensiune arterială ușor mică, ochi ușor obosiți.",
+                nutritie: "Dietă echilibrată, cu accent pe alimente proaspete, bogate în vitamine și minerale. Consum regulat de alimente care susțin metabolismul. Evitarea excesului de lactate și alimente reci.",
+                suplimente: "Multivitamine/minerale, suport de bază pentru energie.",
+                emotional: "Ușoară grijă, tendință spre hipersensibilitate. Ușor introvertită, cu tendințe de a se închide. Poate avea 'pitici pe creier' ocazionali. Ușor iritabilă sau nemulțumită.",
+                relatiiParinti: "Unele tensiuni persistente sau neînțelegeri subtile legate de influența maternă, care pot duce la o presiune internă și la dificultăți în acceptarea lor așa cum sunt.",
+                terapie: "Conștientizarea obiceiurilor. Practici de mindfulness pentru a reduce neliniștea. Exerciții de respirație pentru calmare. Explorarea surselor de 'hrană emoțională'."
+            },
+            {
+                stare: "Echilibru",
+                fiziologic: "Echilibru termic optim, mâini și picioare cu temperatură normală. Sistem imunitar robust, fără infecții recurente. Piele și păr sănătoase. Energie constantă și vitalitate. Metabolism eficient, echilibru fluidic.",
+                nutritie: "Dietă variată și echilibrată, bogată în alimente integrale, proaspete, cu un bun aport de vitamine și minerale. Accent pe alimente de sezon, care susțin energia focului.",
+                suplimente: "Suplimente de întreținere dacă este necesar, conform nevoilor individuale.",
+                emotional: "Armonie, pace internă, vitalitate, activitate, capacitatea de a se preda fluxului natural al vieții, adaptabilitate. Lipsa grijilor excesive și a îndoielii de sine.",
+                relatiiParinti: "Echilibru între influența maternă (hrănire, acceptare) și autoritatea paternă (structură, direcție), permițând o bună integrare a ambelor aspecte în propria personalitate. Capacitate de a te simți iubit și acceptat.",
+                terapie: "Menținerea obiceiurilor sănătoase. Continuarea practicilor de mindfulness și meditație. Cultivarea recunoștinței și a relațiilor pozitive. Explorarea continuă a sinelui pentru creștere personală."
+            },
+            {
+                stare: "Dezechilibru ușor (Hiperfuncție)",
+                fiziologic: "Ușoară disfuncție a somnului. Ușoară predispoziție la îmbolnăvirea inflamatorie a sistemului limfatic, secreție ușoară a cavităților nazale. Posibilă ușoară parodontoză. Ușoare iritații și mâncărimi ale pielii. Senzație ușoară de apăsare în piept. Ușoară senzație de picioare grele.",
+                nutritie: "Dietă echilibrată, cu atenție la alimentele care pot genera 'căldură' sau stimula excesiv. Hidratare adecvată. Consum de alimente care susțin detoxifierea.",
+                suplimente: "Antioxidanți de bază, suport pentru detoxifiere.",
+                emotional: "Ușoară stare de alertă, tendință de a fi perfecționist, uneori dificultăți în a elibera tensiunea. Poate ofta frecvent. Ușor distantă emoțional.",
+                relatiiParinti: "Unele tensiuni persistente sau neînțelegeri subtile legate de influența paternă, care pot duce la o presiune internă și la dificultăți în acceptarea lor așa cum sunt.",
+                terapie: "Reevaluarea obiectivelor și a așteptărilor. Practici de relaxare pentru a reduce iritabilitatea. Exerciții de conștientizare a emoțiilor. Dialog deschis cu părinții pentru a rezolva tensiunile."
+            },
+            {
+                stare: "Hiperfuncție moderată",
+                fiziologic: "Disfuncție a somnului. Predispoziție la îmbolnăvirea inflamatorie a sistemului limfatic, secreție excesivă a cavităților nazale. Posibilă și parodontoză, hemoragie, iritații și mâncărimi ale pielii, senzație de apăsare în piept, metrită, senzația de picioare grele.",
+                nutritie: "Nevoie de alimente care 'răcoresc' și 'drenează' excesul de căldură. Evitarea alimentelor picante, prăjite, sau care generează mucus. Hidratare adecvată. Dietă antiinflamatorie.",
+                suplimente: "Antioxidanți, plante cu efect calmant și antiinflamator, suport pentru detoxifiere hepatică.",
+                emotional: "Persoana este în stare de alertă, are 'pitici pe creier', este prea grijulie cu propria sa persoană și cu familia sa. Poate fi maniacă în privința curățeniei, cu tendințe obsesiv-compulsive. Stări isterice, dezechilibru emoțional.",
+                relatiiParinti: "Conflicte deschise sau o rebeliune activă împotriva autorității paterne, ceea ce poate duce la o stare de tensiune internă și la incapacitatea de a integra lecțiile de viață.",
+                terapie: "Tehnici de gestionare a agitației și suprasolicitării. Meditații de acceptare și renunțare la control. Terapie pentru a explora relația cu autoritatea paternă. Activități care canalizează energia în mod constructiv."
+            },
+            {
+                stare: "Hiperfuncție severă",
+                fiziologic: "Disfuncție severă a somnului. Predispoziție severă la îmbolnăvirea inflamatorie a sistemului limfatic, secreție excesivă și cronică a cavităților nazale. Parodontoză severă, hemoragii, iritații și mâncărimi ale pielii intense, senzație de apăsare severă în piept, metrită cronică, senzația de picioare extrem de grele. Stare de stres și incapacitate de relaxare cronică.",
+                nutritie: "Nevoie stringentă de intervenție medicală și nutrițională specializată. Dietă strictă, care să elimine orice aliment inflamator sau care generează 'căldură' excesivă. Lichide răcoroase, ceaiuri medicinale, alimente ușoare și pure.",
+                suplimente: "Suplimente complexe pentru suport metabolic și energetic, antioxidanți, detoxifiere, sub strictă supraveghere medicală. Poate fi necesară terapia intensivă.",
+                emotional: "Stare de alertă extremă, 'pitici pe creier' obsesivi și incontrolabili. Grijă obsesivă față de propria persoană și familie. Maniacă în privința curățeniei, cu tendințe obsesiv-compulsive severe. Stări isterice severe, dezechilibru emoțional major. Stare de stres și incapacitate de relaxare cronică. Lipsa totală a capacității de a se relaxa.",
+                relatiiParinti: "Refuz total de a se conforma sau de a accepta figura paternă, ducând la un conflict interior devastator, care erodează sentimentul de siguranță și liniște. Poate fi o rebeliune extremă împotriva structurii și autorității, cu consecințe grave asupra sănătății.",
+                terapie: "Intervenție medicală și psihologică urgentă. Terapie intensivă pentru gestionarea agitației și suprasolicitării. Meditații de iertare și acceptare. Lucrul profund cu traumele legate de autoritate și control. Reconstruirea relației cu sinele și cu lumea."
+            }
+        ];
+
+        function afiseazaInformatii(meridianId, index) {
+            let data;
+            if (meridianId === 'triplu-incalzitor') {
+                data = meridianTripleHeaterData[index];
+            }
+            if (!data) return;
+            
+            const infoDisplay = document.getElementById(`infoDisplay-${meridianId}`);
+            infoDisplay.innerHTML = `
+                <h3>Stare: ${data.stare}</h3>
+                <p><strong>🧬 Fiziologie:</strong> ${data.fiziologic}</p>
+                <p><strong>🥗 Nutriție:</strong> ${data.nutritie}</p>
+                <p><strong>💊 Suplimente:</strong> ${data.suplimente}</p>
+                <p><strong>🧠 Emoțional:</strong> ${data.emotional}</p>
+                <p><strong>👪 Relații cu părinții:</strong> ${data.relatiiParinti}</p>
+                <p><strong>💆 Terapie:</strong> ${data.terapie}</p>
+            `;
+        }
+
+        function mutaSageata(meridianId, indexStr) {
+            const index = parseInt(indexStr, 10);
+            const totalSegments = 7;
+            
+            // Calculează poziția pentru centrul fiecărui segment
+            const segmentWidth = 100 / totalSegments;
+            const procent = (index * segmentWidth) + (segmentWidth / 2);
+            
+            document.getElementById(`indicator-${meridianId}`).style.left = `${procent}%`;
+            afiseazaInformatii(meridianId, index);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectTripluIncalzitor = document.getElementById('select-triplu-incalzitor');
+            
+            if (selectTripluIncalzitor) {
+                // Setează starea inițială la încărcarea paginii
+                mutaSageata('triplu-incalzitor', selectTripluIncalzitor.value);
+
+                // Adaugă event listener pentru schimbări ulterioare
+                selectTripluIncalzitor.addEventListener('change', (event) => {
+                    mutaSageata('triplu-incalzitor', event.target.value);
+                });
+            }
+        });
+
+            // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
+        document.addEventListener('keydown', function(e) {
+            // Blochează Ctrl+C (Copiere)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+            }
+            // Blochează F12 (Developer Tools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+J (Developer Tools Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+            }
+        });   
+    
+    </script>
+
+</body>
+</html>

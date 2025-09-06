@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafic Interactiv Meridian Vas de Concepție</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Resetare și Stiluri Generale */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Containerul principal al paginii */
+        .infographic-container {
+            flex-grow: 1;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centrează orizontal conținutul */
+        }
+        
+        /* Containerul specific al graficului */
+        .meridian-section {
+            width: 100%;
+            max-width: 700px; /* Lățime maximă aplicată aici pentru uniformitate */
+        }
+
+        h2 {
+            font-size: 2em;
+            font-weight: 700;
+            color: #0A2463;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        select {
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #3E92CC;
+            background-color: #e0f2f7;
+            color: #0A2463;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+        }
+
+        select:hover {
+            border-color: #0A2463;
+            background-color: #d1eff6;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(62, 146, 204, 0.4);
+        }
+
+        /* Bara de evaluare */
+        .bar-container {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            border: 3px solid #0A2463;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        .segment {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+        }
+
+        .segment.extreme-red    { background-color: #EF4444; }
+        .segment.moderate-yellow { background-color: #FACC15; }
+        .segment.tendency-blue   { background-color: #3B82F6; }
+        .segment.balanced-green  { background-color: #22C55E; }
+
+        .arrow {
+            position: absolute;
+            bottom: 5px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #212529;
+            transform: translateX(-50%);
+            transition: left 0.4s ease-in-out;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            z-index: 10;
+        }
+
+        /* Caseta de informații */
+        .info-box {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        .info-box h3 {
+            font-size: 1.4em;
+            color: #0A2463;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            border-bottom: 2px dashed #3E92CC;
+            padding-bottom: 0.5rem;
+        }
+
+        .info-box p {
+            font-size: 1.05em;
+            margin-bottom: 0.75rem;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .info-box ul {
+            list-style-type: '🔹';
+            padding-left: 1.5rem;
+            font-size: 1em;
+            color: #475569;
+        }
+
+        .info-box li {
+            margin-bottom: 0.5rem;
+            padding-left: 0.5rem;
+        }
+        
+        /* Footer */
+        .footer-copyright {
+            text-align: center;
+            padding: 1rem;
+            background-color: #e9ecef;
+            color: #495057;
+            font-size: 0.9em;
+            margin-top: 2rem;
+        }
+
+        /* Stiluri responsive pentru ecrane mici */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 1.6em;
+            }
+            .bar-container {
+                height: 35px;
+            }
+            .segment {
+                font-size: 0.7em;
+            }
+            .info-box {
+                padding: 1.2rem;
+            }
+            .info-box h3 {
+                font-size: 1.2em;
+            }
+            .info-box p, .info-box ul {
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="infographic-container">
+        <div class="meridian-section">
+            <h2>Evaluare interactivă: starea meridianului vas de concepție</h2>
+
+            <select id="select-vas-de-conceptie">
+                <option value="0">Hipofuncție severă</option>
+                <option value="1">Hipofuncție moderată</option>
+                <option value="2">Dezechilibru ușor (Hipofuncție)</option>
+                <option value="3" selected>Echilibru</option>
+                <option value="4">Dezechilibru ușor (Hiperfuncție)</option>
+                <option value="5">Hiperfuncție moderată</option>
+                <option value="6">Hiperfuncție severă</option>
+            </select>
+
+            <div class="bar-container">
+                <div class="segment extreme-red">---</div>
+                <div class="segment moderate-yellow">--</div>
+                <div class="segment tendency-blue">-</div>
+                <div class="segment balanced-green">=</div>
+                <div class="segment tendency-blue">+</div>
+                <div class="segment moderate-yellow">++</div>
+                <div class="segment extreme-red">+++</div>
+                
+                <div class="arrow" id="indicator-vas-de-conceptie"></div>
+            </div>
+
+            <div id="infoDisplay-vas-de-conceptie" class="info-box">
+                </div>
+        </div>
+    </div>
+
+    <footer class="footer-copyright">
+        <p>Copyright: dr.ing. Radu Pascu - 2025</p>
+    </footer>
+
+    <script>
+        const meridianConceptionVesselData = [
+            {
+                stare: "Hipofuncție severă",
+                fiziologic: "Epuizare cronică, lipsă totală de vitalitate, probleme severe de regenerare celulară, ciclu menstrual absent/sever neregulat, frigiditate severă, probleme grave de fertilitate. Senzație de gol interior, deshidratare cronică la nivel celular, piele uscată, lipsă de tonus. Probleme cardiace și pulmonare severe, senzație de strângere în piept. Tulburări urinare severe.",
+                nutritie: "Nevoie stringentă de alimente calde, hrănitoare, ușor digerabile, bogate în nutrienți esențiali pentru regenerare (proteine de calitate, grăsimi sănătoase, vitamine B, minerale). Evitarea alimentelor reci, crude, procesate. Supe nutritive, bulion de oase.",
+                suplimente: "Suplimente complexe pentru regenerare celulară, CoQ10, Magneziu, Vitamine B (în special B12, folat), Omega-3, suport hormonal (sub supraveghere medicală). Probiotice pentru sănătatea intestinală.",
+                emotional: "Apatie profundă, lipsă totală de calm interior, sentiment de izolare, incapacitate de a se conecta emoțional. Trac paralizant, nervozitate extremă, tulburări severe de vorbire (bâlbâială, mutism), voință extrem de slabă. Senzație de copleșire, depresie severă, lipsă de vitalitate.",
+                relatiiParinti: "Conflict profund și nerezolvat cu influența maternă (Yin), blocând capacitatea de a 'primi' hrănire emoțională și suport. Sentiment de a fi golit, neacceptat, lipsit de iubire maternă. Poate fi o traumă de abandon sau neglijare emoțională din partea figurii materne.",
+                terapie: "Intervenție medicală și psihologică urgentă. Terapie nutrițională strictă. Suport psihologic intens pentru vindecarea rănilor emoționale legate de lipsa de hrănire și acceptare. Meditație de cultivare a iubirii de sine și a conexiunii interioare. Terapii energetice (Reiki, Qi Gong) pentru a stimula regenerarea și a debloca fluxul Yin."
+            },
+            {
+                stare: "Hipofuncție moderată",
+                fiziologic: "Oboseală cronică, vitalitate scăzută, probleme de regenerare celulară, ciclu menstrual neregulat, frigiditate, probleme de fertilitate. Senzație de gol interior, piele uscată. Probleme cardiace și pulmonare, senzație de strângere în piept. Tulburări urinare.",
+                nutritie: "Dietă caldă, hrănitoare, ușor digerabilă. Accent pe alimente care susțin regenerarea și fluidele.",
+                suplimente: "Complex B, Magneziu, Omega-3, probiotice. Suport pentru sistemul reproducător.",
+                emotional: "Labilitate psihică, trac, nervozitate, tulburări de vorbire, bâlbâială, voință slabă. Senzație de copleșire, depresie, lipsă de vitalitate.",
+                relatiiParinti: "Dificultăți în a 'primi' hrănire emoțională și suport din partea figurii materne. Sentiment de a fi neglijat sau neînțeles în nevoile emoționale.",
+                terapie: "Dietă de suport Yin. Jurnalism terapeutic pentru explorarea sentimentelor de lipsă și neacceptare. Meditații de auto-hrănire și acceptare. Exerciții blânde (Qi Gong, Tai Chi) pentru a stimula fluxul Yin."
+            },
+            {
+                stare: "Dezechilibru ușor (Hipofuncție)",
+                fiziologic: "Oboseală ușoară, vitalitate ușor scăzută. Cicluri menstruale ușor neregulate. Senzație de ușoară greutate în zona inghinală, dureri abdominale minore. Ușoare probleme cardiace sau pulmonare.",
+                nutritie: "Dietă echilibrată, cu accent pe alimente nutritive. Atenție la hidratare.",
+                suplimente: "Multivitamine/minerale de bază.",
+                emotional: "Ușoară labilitate psihică, trac ocazional, ușoară nervozitate. Uneori dificultăți de vorbire. Ușoară senzație de copleșire.",
+                relatiiParinti: "Unele tensiuni persistente sau neînțelegeri subtile legate de influența maternă, care pot duce la o presiune internă și la dificultăți în acceptarea lor așa cum sunt.",
+                terapie: "Conștientizarea obiceiurilor. Practici de mindfulness pentru a reduce neliniștea. Exerciții de respirație pentru calmare. Explorarea surselor de 'hrană emoțională'."
+            },
+            {
+                stare: "Echilibru",
+                fiziologic: "Energie stabilă, vitalitate optimă, regenerare celulară eficientă. Cicluri menstruale regulate, fertilitate bună. Calm interior, relaxare generală. Funcție cardiacă și pulmonară armonioasă.",
+                nutritie: "Dietă variată și echilibrată, bogată în alimente integrale, proaspete, cu un bun aport de nutrienți. Accent pe alimente de sezon.",
+                suplimente: "Suplimente de întreținere dacă este necesar, conform nevoilor individuale.",
+                emotional: "Calm interior, relaxare, deschidere, încredere în sine, armonie, unitate, vitalitate, capacitatea de a crea (idei, proiecte), sentimentul de a fi în control, pace, liniște, prezență ('aici și acum').",
+                relatiiParinti: "Echilibru între influența maternă (hrănire, acceptare) și autoritatea paternă (structură, direcție), permițând o bună integrare a ambelor aspecte în propria personalitate. Capacitate de a te simți iubit și acceptat.",
+                terapie: "Menținerea obiceiurilor sănătoase. Continuarea practicilor de mindfulness și meditație. Cultivarea recunoștinței și a relațiilor pozitive. Explorarea continuă a sinelui pentru creștere personală."
+            },
+            {
+                stare: "Dezechilibru ușor (Hiperfuncție)",
+                fiziologic: "Ușoare tulburări menstruale, ușoare scurgeri vaginale. Ușoare disfuncționalități ale vezicii și organelor genitale. Ușoare dureri de cap și ceafă. Senzație ușoară de prea plin în stomac, balonare ușoară. Ușoare abcese în cavitatea bucală.",
+                nutritie: "Dietă echilibrată, cu atenție la alimentele care pot genera 'răceală' sau stagnare. Hidratare adecvată. Consum de alimente care susțin 'mișcarea' energiei.",
+                suplimente: "Suplimente de bază, adaptate nevoilor.",
+                emotional: "Ușoară labilitate psihică, tendință spre frigiditate emoțională, ușor trac, ușoară nervozitate. Ușoare tulburări de vorbire, ușoară bâlbâială. Voință ușor slabă.",
+                relatiiParinti: "Unele tensiuni persistente sau neînțelegeri subtile legate de influența maternă (Yin), care pot duce la o presiune internă și la dificultăți în a elibera controlul sau a permite fluiditatea.",
+                terapie: "Reevaluarea obiectivelor și a așteptărilor. Practici de relaxare pentru a reduce tensiunea. Exerciții de conștientizare a emoțiilor. Dialog deschis cu părinții pentru a rezolva tensiunile."
+            },
+            {
+                stare: "Hiperfuncție moderată",
+                fiziologic: "Tulburări menstruale, scurgeri vaginale, disfuncționalități ale vezicii și organelor genitale la bărbați. Dureri de cap și ceafă. Senzație de prea plin în stomac, balonare, abcese în cavitatea bucală.",
+                nutritie: "Nevoie de alimente care 'încălzesc' și 'drenează' excesul de Yin. Evitarea alimentelor reci, crude, care pot crea stagnare. Hidratare adecvată. Dietă care susțin 'mișcarea' și 'transformarea'.",
+                suplimente: "Plante cu efect de 'încălzire' și 'mișcare' a energiei, suport pentru detoxifiere.",
+                emotional: "Labilitate psihică, frigiditate, trac, nervozitate, tulburări de vorbire, bâlbâială, voință slabă. Senzația că te îneci în evenimentele vieții și nu ai energie pentru a te susține, sentimentul de copleșire, depresie, senzația de cufundare în întuneric.",
+                relatiiParinti: "Conflicte deschise sau o rebeliune activă împotriva influenței materne (Yin) sau a principiului feminin, ceea ce poate duce la o stare de tensiune internă și la incapacitatea de a integra aspectele hrănitoare și creative.",
+                terapie: "Tehnici de gestionare a emoțiilor stagnante. Meditații de acceptare și renunțare la control. Terapie pentru a explora relația cu figura maternă. Activități care canalizează energia în mod constructiv."
+            },
+            {
+                stare: "Hiperfuncție severă",
+                fiziologic: "Tulburări menstruale severe, scurgeri vaginale abundente și cronice, disfuncționalități grave ale vezicii și organelor genitale la bărbați. Dureri de cap și ceafă severe. Senzație extremă de prea plin în stomac, balonare severă, abcese recurente și severe în cavitatea bucală.",
+                nutritie: "Nevoie stringentă de intervenție medicală și nutrițională specializată. Dietă strictă, care să elimine orice aliment care generează 'răceală' sau 'stagnare'. Lichide calde, ceaiuri medicinale, alimente ușoare și pure.",
+                suplimente: "Suplimente complexe pentru suport hormonal și reproducător, antioxidanți, detoxifiere, sub strictă supraveghere medicală. Poate fi necesară terapia intensivă.",
+                emotional: "Labilitate psihică extremă, frigiditate emoțională totală, trac paralizant, nervozitate incontrolabilă, tulburări severe de vorbire, bâlbâială cronică, voință absentă. Senzația că te îneci complet în evenimentele vieții și nu ai energie pentru a te susține, sentiment de copleșire totală, depresie severă, senzația de cufundare în întuneric. Incapacitatea de a duce proiectele la final, epuizare fizică, senzația de dezrădăcinare. Incapacitatea de a găsi pacea, de a se centra în ființă, dificultate în a trăi viața în afara 'turmei'.",
+                relatiiParinti: "Refuz total de a se conforma sau de a accepta figura maternă, ducând la un conflict interior devastator, care erodează sentimentul de siguranță și liniște. Poate fi o rebeliune extremă împotriva principiului feminin, cu consecințe grave asupra sănătății.",
+                terapie: "Intervenție medicală și psihologică urgentă. Terapie intensivă pentru gestionarea emoțiilor stagnante și a conflictelor interioare. Meditații de iertare și acceptare. Lucrul profund cu traumele legate de figura maternă și de principiul feminin. Reconstruirea relației cu sinele și cu lumea."
+            }
+        ];
+
+        function afiseazaInformatii(meridianId, index) {
+            let data;
+            if (meridianId === 'vas-de-conceptie') {
+                data = meridianConceptionVesselData[index];
+            }
+            if (!data) return;
+            
+            const infoDisplay = document.getElementById(`infoDisplay-${meridianId}`);
+            infoDisplay.innerHTML = `
+                <h3>Stare: ${data.stare}</h3>
+                <p><strong>🧬 Fiziologie:</strong> ${data.fiziologic}</p>
+                <p><strong>🥗 Nutriție:</strong> ${data.nutritie}</p>
+                <p><strong>💊 Suplimente:</strong> ${data.suplimente}</p>
+                <p><strong>🧠 Emoțional:</strong> ${data.emotional}</p>
+                <p><strong>👪 Relații cu părinții:</strong> ${data.relatiiParinti}</p>
+                <p><strong>💆 Terapie:</strong> ${data.terapie}</p>
+            `;
+        }
+
+        function mutaSageata(meridianId, indexStr) {
+            const index = parseInt(indexStr, 10);
+            const totalSegments = 7;
+            
+            // Calculează poziția pentru centrul fiecărui segment
+            const segmentWidth = 100 / totalSegments;
+            const procent = (index * segmentWidth) + (segmentWidth / 2);
+            
+            document.getElementById(`indicator-${meridianId}`).style.left = `${procent}%`;
+            afiseazaInformatii(meridianId, index);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectVasDeConceptie = document.getElementById('select-vas-de-conceptie');
+            
+            if (selectVasDeConceptie) {
+                // Setează starea inițială la încărcarea paginii
+                mutaSageata('vas-de-conceptie', selectVasDeConceptie.value);
+
+                // Adaugă event listener pentru schimbări ulterioare
+                selectVasDeConceptie.addEventListener('change', (event) => {
+                    mutaSageata('vas-de-conceptie', event.target.value);
+                });
+            }
+        });
+    </script>
+        
+        // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
+        document.addEventListener('keydown', function(e) {
+            // Blochează Ctrl+C (Copiere)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+            }
+            // Blochează F12 (Developer Tools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+J (Developer Tools Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+            }
+        });
+
+    
+</body>
+</html>

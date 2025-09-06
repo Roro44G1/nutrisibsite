@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafic Interactiv Meridian Intestin Gros</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Resetare și Stiluri Generale */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Containerul principal al paginii */
+        .infographic-container {
+            flex-grow: 1;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centrează orizontal conținutul */
+        }
+        
+        /* Containerul specific al graficului */
+        .meridian-section {
+            width: 100%;
+            max-width: 700px; /* Lățime maximă aplicată aici pentru uniformitate */
+        }
+
+        h2 {
+            font-size: 2em;
+            font-weight: 700;
+            color: #0A2463;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        select {
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #3E92CC;
+            background-color: #e0f2f7;
+            color: #0A2463;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+        }
+
+        select:hover {
+            border-color: #0A2463;
+            background-color: #d1eff6;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(62, 146, 204, 0.4);
+        }
+
+        /* Bara de evaluare */
+        .bar-container {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            border: 3px solid #0A2463;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        .segment {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+        }
+
+        .segment.extreme-red    { background-color: #EF4444; }
+        .segment.moderate-yellow { background-color: #FACC15; }
+        .segment.tendency-blue   { background-color: #3B82F6; }
+        .segment.balanced-green  { background-color: #22C55E; }
+
+        .arrow {
+            position: absolute;
+            bottom: 5px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #212529;
+            transform: translateX(-50%);
+            transition: left 0.4s ease-in-out;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            z-index: 10;
+        }
+
+        /* Caseta de informații */
+        .info-box {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        .info-box h3 {
+            font-size: 1.4em;
+            color: #0A2463;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            border-bottom: 2px dashed #3E92CC;
+            padding-bottom: 0.5rem;
+        }
+
+        .info-box p {
+            font-size: 1.05em;
+            margin-bottom: 0.75rem;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .info-box ul {
+            list-style-type: '🔹';
+            padding-left: 1.5rem;
+            font-size: 1em;
+            color: #475569;
+        }
+
+        .info-box li {
+            margin-bottom: 0.5rem;
+            padding-left: 0.5rem;
+        }
+        
+        /* Footer */
+        .footer-copyright {
+            text-align: center;
+            padding: 1rem;
+            background-color: #e9ecef;
+            color: #495057;
+            font-size: 0.9em;
+            margin-top: 2rem;
+        }
+
+        /* Stiluri responsive pentru ecrane mici */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 1.6em;
+            }
+            .bar-container {
+                height: 35px;
+            }
+            .segment {
+                font-size: 0.7em;
+            }
+            .info-box {
+                padding: 1.2rem;
+            }
+            .info-box h3 {
+                font-size: 1.2em;
+            }
+            .info-box p, .info-box ul {
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="infographic-container">
+        <div class="meridian-section">
+            <h2>Evaluare interactivă: starea meridianului intestin gros</h2>
+
+            <select id="select-intestin-gros">
+                <option value="0">Hipofuncție severă</option>
+                <option value="1">Hipofuncție moderată</option>
+                <option value="2">Dezechilibru ușor (Hipofuncție)</option>
+                <option value="3" selected>Echilibru</option>
+                <option value="4">Dezechilibru ușor (Hiperfuncție)</option>
+                <option value="5">Hiperfuncție moderată</option>
+                <option value="6">Hiperfuncție severă</option>
+            </select>
+
+            <div class="bar-container">
+                <div class="segment extreme-red">---</div>
+                <div class="segment moderate-yellow">--</div>
+                <div class="segment tendency-blue">-</div>
+                <div class="segment balanced-green">=</div>
+                <div class="segment tendency-blue">+</div>
+                <div class="segment moderate-yellow">++</div>
+                <div class="segment extreme-red">+++</div>
+                
+                <div class="arrow" id="indicator-intestin-gros"></div>
+            </div>
+
+            <div id="infoDisplay-intestin-gros" class="info-box">
+                </div>
+        </div>
+    </div>
+
+    <footer class="footer-copyright">
+        <p>Copyright: dr.ing. Radu Pascu - 2025</p>
+    </footer>
+
+    <script>
+        const meridianLargeIntestineData = [
+            {
+                stare: "Hipofuncție severă",
+                fiziologic: "Febră de fân severă, alergii cronice, bronșită cronică, inflamații frecvente. Senzație intensă de rece în jurul abdomenului, zgomote abdominale persistente. Diaree foarte frecventă la consumul de alimente crude cu fibre. Dureri cronice severe în teritoriile străbătute de meridian, furnicături și paralizie. Mâncărime intensă. Probleme severe la amigdale și sinusuri, ten acneic sever, dureri dentare și gingivale cronice, secreții oculare abundente. Constipație severă care se transformă în diaree. Piele înroșită intens și durere tăioasă severă în zona de acces a meridianului.",
+                nutritie: "Nevoie stringentă de intervenție medicală și nutrițională specializată. Dietă strictă, ușor digerabilă, cu alimente calde și pure. Evitarea totală a alimentelor reci, crude, lactate în exces. Lichide calde, supe, ceaiuri din plante. Suport pentru detoxifiere și eliminare.",
+                suplimente: "Probiotice specifice pentru intestinul gros, prebiotice (cu prudență), enzime digestive, suport pentru mucoasa intestinală (glutamină, zinc carnosină), Vitamine C, D, Zinc, Seleniu, Quercetină, extracte de plante pentru imunitate și antiinflamatoare.",
+                emotional: "Framântare extremă, frustrare paralizantă, viață lipsită total de bucurii, dependențe severe, probleme sufletești profunde, gândire pesimistă cronică, stări de amărăciune și dezamăgire intense, lipsă totală de vitalitate. Sentiment de a fi la cheremul celorlalți, deznădejde profundă. Lipsa totală a curajului și a capacității de decizie. Incapacitatea de autoapreciere și de apreciere a celor din jur. Dificultăți severe de relaxare, izolare socială.",
+                relatiiParinti: "Conflict profund și nerezolvat cu influența maternă (Yin), manifestat prin incapacitatea de a 'elibera' și 'renunța' la vechile tipare emoționale. Tendința de a reține tristețea și durerea, de a se simți copleșit de emoțiile materne sau de lipsa de suport din partea figurii materne. Dificultăți severe în a elibera trecutul și a ierta.",
+                terapie: "Intervenție medicală și psihologică urgentă. Terapie nutrițională strictă. Suport psihologic intens pentru eliberarea traumelor emoționale legate de 'eliberare' și 'renunțare'. Meditație de purificare și eliberare. Terapii energetice (acupunctură, *Qi Gong*) pentru a stimula fluxul energetic și a restabili echilibrul elementului metal."
+            },
+            {
+                stare: "Hipofuncție moderată",
+                fiziologic: "Febră de fân, alergii, bronșită, inflamații frecvente. Senzație de rece în jurul abdomenului, zgomote abdominale. Diaree frecventă la consumul de alimente crude cu fibre. Dureri cronice în teritoriile străbătute de meridian, furnicături, paralizie, mâncărime. Probleme la amigdale și sinusuri, ten acneic, dureri dentare și gingivale, secreții oculare. Constipație care se transformă în diaree. Piele înroșită și durere tăioasă în zona de acces a meridianului.",
+                nutritie: "Dietă ușor digerabilă, cu accent pe alimente pure, calde. Suport pentru absorbția nutrienților și eliminare. Reducerea alimentelor reci, lactate în exces. Ceaiuri din plante, supe. Hidratare adecvată.",
+                suplimente: "Probiotice specifice pentru intestinul gros, prebiotice (cu prudență), enzime digestive, suport pentru mucoasa intestinală.",
+                emotional: "Framântare, frustrare, viață lipsită de bucurie, diferite dependențe, probleme sufletești, gândire pesimistă, stări de amărăciune, dezamăgire, lipsă de vitalitate. Persoana se simte la cheremul celorlalți, deznădăjduită. Lipsa curajului și a capacității de decizie.",
+                relatiiParinti: "Dificultăți în a 'elibera' și 'renunța' la vechile tipare emoționale, o tendință de a reține tristețea și durerea, de a se simți copleșit de emoțiile materne sau de lipsa de suport din partea figurii materne. Dificultăți în a elibera trecutul și a ierta.",
+                terapie: "Dietă antiinflamatorie. Jurnalism terapeutic pentru explorarea sentimentelor de frustrare și supărare. Meditații de acceptare și auto-compasiune. Exerciții de respirație pentru a stimula fluxul energetic."
+            },
+            {
+                stare: "Dezechilibru ușor (Hipofuncție)",
+                fiziologic: "Tuse ocazională cu secreții, nas ușor înfundat. Piele ușor iritată sau uscată. Tendință spre constipație. Respirație uneori neuniformă.",
+                nutritie: "Dietă echilibrată, cu accent pe alimente proaspete, bogate în vitamine și minerale. Consum regulat de alimente care susțin imunitatea. Evitarea excesului de lactate și alimente reci.",
+                suplimente: "Multivitamine/minerale, suplimente de bază pentru imunitate.",
+                emotional: "Ușoară framântare, preocupare ușoară, frustrare ocazională. Uneori dificultăți în a elibera tensiunea. Poate ofta frecvent. Ușor distantă emoțional.",
+                relatiiParinti: "Unele tensiuni persistente sau neînțelegeri subtile legate de influența maternă, care pot duce la o presiune internă și la dificultăți în acceptarea lor așa cum sunt.",
+                terapie: "Conștientizarea obiceiurilor alimentare. Practici de mindfulness pentru a reduce framântarea. Exerciții de respirație pentru calmare. Explorarea surselor de 'hrană emoțională'."
+            },
+            {
+                stare: "Echilibru",
+                fiziologic: "Funcționare optimă a intestinului gros, eliminare eficientă a deșeurilor. Sistem imunitar robust, rezistență bună la infecții. Piele sănătoasă, ten luminos. Fără probleme respiratorii cronice. Energie constantă și vitalitate.",
+                nutritie: "Dietă variată și echilibrată, bogată în alimente integrale, proaspete, cu un bun aport de vitamine și minerale. Accent pe alimente de sezon, care susțin energia metalului.",
+                suplimente: "Suplimente de întreținere dacă este necesar, conform nevoilor individuale.",
+                emotional: "Capacitate de a acționa hotărât, de a trece cu ușurință peste greutăți, de a stăpâni situațiile. Echilibru emoțional, capacitate de a gestiona stresul, prospețime psihică. Exprimă iubirea și emoțiile liber. Maniacă în privința curățeniei (în sens pozitiv, de ordine interioară și exterioară).",
+                relatiiParinti: "Echilibru între influența maternă (hrănire, acceptare) și autoritatea paternă (structură, direcție), permițând o bună integrare a ambelor aspecte în propria personalitate. Capacitate de a te simți iubit și acceptat.",
+                terapie: "Menținerea obiceiurilor sănătoase. Continuarea practicilor de mindfulness și meditație. Cultivarea recunoștinței și a relațiilor pozitive. Explorarea continuă a sinelui pentru creștere personală."
+            },
+            {
+                stare: "Dezechilibru ușor (Hiperfuncție)",
+                fiziologic: "Dureri de cap ocazionale, nas care curge ușor, inflamații minore în jurul orificiilor nazale. Probleme ușoare la amigdale și sinusuri, ten ușor acneic, dureri dentare și gingivale ușoare. Secreții oculare ușoare. Constipație ușoară care alternează cu diaree. Piele ușor înroșită și durere tăioasă ușoară în zona de acces a meridianului.",
+                nutritie: "Dietă echilibrată, cu atenție la alimentele care pot genera 'căldură' sau stimula excesiv. Hidratare adecvată. Consum de alimente care susțin detoxifierea.",
+                suplimente: "Antioxidanți de bază, suport pentru detoxifiere.",
+                emotional: "Ușoară neliniște, nemulțumire, incapacitate de autoapreciere. Dificultăți în a se relaxa. Ușor distantă emoțional. Se ocupă cu lucruri inutile, își pierde timpul cu întâmplări mărunte și supărări minore din trecut.",
+                relatiiParinti: "Unele tensiuni persistente sau neînțelegeri subtile legate de influența paternă, care pot duce la o presiune internă și la dificultăți în acceptarea lor așa cum sunt.",
+                terapie: "Reevaluarea obiectivelor și a așteptărilor. Practici de relaxare pentru a reduce iritabilitatea. Exerciții de conștientizare a emoțiilor. Dialog deschis cu părinții pentru a rezolva tensiunile."
+            },
+            {
+                stare: "Hiperfuncție moderată",
+                fiziologic: "Dureri de cap, nas care curge, inflamații în jurul orificiilor nazale, probleme la amigdale și sinusuri, ten acneic, dureri dentare și gingivale, secreții oculare, dureri în umeri și torace, constipație care se transformă în diaree. Piele înroșită și durere tăioasă în zona de acces a meridianului.",
+                nutritie: "Nevoie de alimente care 'răcoresc' și 'drenează' excesul de căldură. Evitarea alimentelor picante, prăjite, sau care generează mucus. Hidratare adecvată. Dietă antiinflamatorie.",
+                suplimente: "Antioxidanți, plante cu efect expectorant și antiinflamator, suport pentru detoxifiere hepatică.",
+                emotional: "Neliniste, nemulțumire, incapacitate de autoapreciere și de apreciere a serviciului, familiei, părinților. Persoana se poate relaxa cu dificultate, nu are prieteni, nu apreciază trăsăturile de caracter pozitive ale celorlalți. Se ocupă cu lucruri inutile, nesemnificative, își pierde timpul cu întâmplări mărunte și supărări minore din trecut.",
+                relatiiParinti: "Conflicte deschise sau o rebeliune activă împotriva autorității paterne, ceea ce poate duce la o stare de tensiune internă și la incapacitatea de a integra lecțiile de viață.",
+                terapie: "Tehnici de gestionare a furiei și nerăbdării. Meditații de acceptare și renunțare la control. Terapie pentru a explora relația cu autoritatea paternă. Activități care canalizează energia în mod constructiv."
+            },
+            {
+                stare: "Hiperfuncție severă",
+                fiziologic: "Dureri de cap severe, nas cronic înfundat, inflamații severe în jurul orificiilor nazale, probleme grave la amigdale și sinusuri, ten acneic sever, dureri dentare și gingivale cronice, secreții oculare abundente. Dureri intense în umeri și torace, constipație severă care alternează cu diaree. Piele înroșită intens și durere tăioasă severă în zona de acces a meridianului.",
+                nutritie: "Nevoie stringentă de intervenție medicală și nutrițională specializată. Dietă strictă, care să elimine orice aliment inflamator sau care generează 'căldură' excesivă. Lichide răcoroase, ceaiuri medicinale, alimente ușoare și pure.",
+                suplimente: "Suplimente complexe pentru suport respirator, detoxifiere, imunitate, sub strictă supraveghere medicală. Poate fi necesară terapia cu oxigen.",
+                emotional: "Framântare extremă, frustrare paralizantă, viață lipsită total de bucurii, dependențe severe, probleme sufletești profunde, gândire pesimistă cronică, stări de amărăciune și dezamăgire intense, lipsă totală de vitalitate. Sentiment de a fi la cheremul celorlalți, deznădejde profundă. Lipsa totală a curajului și a capacității de decizie. Incapacitatea de autoapreciere și de apreciere a celor din jur. Dificultăți severe de relaxare, izolare socială.",
+                relatiiParinti: "Refuz total de a se conforma sau de a accepta figura paternă, ducând la un conflict interior devastator, care erodează sentimentul de siguranță și liniște. Poate fi o rebeliune extremă împotriva structurii și autorității, cu consecințe grave asupra sănătății.",
+                terapie: "Intervenție medicală și psihologică urgentă. Terapie intensivă pentru gestionarea furiei și frustrării. Meditații de iertare și acceptare. Lucrul profund cu traumele legate de autoritate și control. Reconstruirea relației cu sinele și cu lumea."
+            }
+        ];
+
+        function afiseazaInformatii(meridianId, index) {
+            let data;
+            if (meridianId === 'intestin-gros') {
+                data = meridianLargeIntestineData[index];
+            }
+            if (!data) return;
+            
+            const infoDisplay = document.getElementById(`infoDisplay-${meridianId}`);
+            infoDisplay.innerHTML = `
+                <h3>Stare: ${data.stare}</h3>
+                <p><strong>🧬 Fiziologie:</strong> ${data.fiziologic}</p>
+                <p><strong>🥗 Nutriție:</strong> ${data.nutritie}</p>
+                <p><strong>💊 Suplimente:</strong> ${data.suplimente}</p>
+                <p><strong>🧠 Emoțional:</strong> ${data.emotional}</p>
+                <p><strong>👪 Relații cu părinții:</strong> ${data.relatiiParinti}</p>
+                <p><strong>💆 Terapie:</strong> ${data.terapie}</p>
+            `;
+        }
+
+        function mutaSageata(meridianId, indexStr) {
+            const index = parseInt(indexStr, 10);
+            const totalSegments = 7;
+            
+            // Calculează poziția pentru centrul fiecărui segment
+            const segmentWidth = 100 / totalSegments;
+            const procent = (index * segmentWidth) + (segmentWidth / 2);
+            
+            document.getElementById(`indicator-${meridianId}`).style.left = `${procent}%`;
+            afiseazaInformatii(meridianId, index);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectLargeIntestine = document.getElementById('select-intestin-gros');
+            
+            if (selectLargeIntestine) {
+                // Setează starea inițială la încărcarea paginii
+                mutaSageata('intestin-gros', selectLargeIntestine.value);
+
+                // Adaugă event listener pentru schimbări ulterioare
+                selectLargeIntestine.addEventListener('change', (event) => {
+                    mutaSageata('intestin-gros', event.target.value);
+                });
+            }
+        });
+
+            // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
+        document.addEventListener('keydown', function(e) {
+            // Blochează Ctrl+C (Copiere)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+            }
+            // Blochează F12 (Developer Tools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+J (Developer Tools Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+            }
+        });
+    
+    </script>
+
+</body>
+</html>

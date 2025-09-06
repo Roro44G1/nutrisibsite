@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafic Interactiv Meridian Vas Guvernator</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Resetare și Stiluri Generale */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Containerul principal al paginii */
+        .infographic-container {
+            flex-grow: 1;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centrează orizontal conținutul */
+        }
+        
+        /* Containerul specific al graficului */
+        .meridian-section {
+            width: 100%;
+            max-width: 700px; /* Lățime maximă aplicată aici pentru uniformitate */
+        }
+
+        h2 {
+            font-size: 2em;
+            font-weight: 700;
+            color: #0A2463;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        select {
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #3E92CC;
+            background-color: #e0f2f7;
+            color: #0A2463;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+        }
+
+        select:hover {
+            border-color: #0A2463;
+            background-color: #d1eff6;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(62, 146, 204, 0.4);
+        }
+
+        /* Bara de evaluare */
+        .bar-container {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            border: 3px solid #0A2463;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        .segment {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+        }
+
+        .segment.extreme-red    { background-color: #EF4444; }
+        .segment.moderate-yellow { background-color: #FACC15; }
+        .segment.tendency-blue   { background-color: #3B82F6; }
+        .segment.balanced-green  { background-color: #22C55E; }
+
+        .arrow {
+            position: absolute;
+            bottom: 5px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #212529;
+            transform: translateX(-50%);
+            transition: left 0.4s ease-in-out;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            z-index: 10;
+        }
+
+        /* Caseta de informații */
+        .info-box {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        .info-box h3 {
+            font-size: 1.4em;
+            color: #0A2463;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            border-bottom: 2px dashed #3E92CC;
+            padding-bottom: 0.5rem;
+        }
+
+        .info-box p {
+            font-size: 1.05em;
+            margin-bottom: 0.75rem;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .info-box ul {
+            list-style-type: '🔹';
+            padding-left: 1.5rem;
+            font-size: 1em;
+            color: #475569;
+        }
+
+        .info-box li {
+            margin-bottom: 0.5rem;
+            padding-left: 0.5rem;
+        }
+        
+        /* Footer */
+        .footer-copyright {
+            text-align: center;
+            padding: 1rem;
+            background-color: #e9ecef;
+            color: #495057;
+            font-size: 0.9em;
+            margin-top: 2rem;
+        }
+
+        /* Stiluri responsive pentru ecrane mici */
+        @media (max-width: 768px) {
+            h2 {
+                font-size: 1.6em;
+            }
+            .bar-container {
+                height: 35px;
+            }
+            .segment {
+                font-size: 0.7em;
+            }
+            .info-box {
+                padding: 1.2rem;
+            }
+            .info-box h3 {
+                font-size: 1.2em;
+            }
+            .info-box p, .info-box ul {
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="infographic-container">
+        <div class="meridian-section">
+            <h2>Evaluare interactivă: starea meridianului vas guvernator</h2>
+
+            <select id="select-vas-guvernator">
+                <option value="0">Hipofuncție severă</option>
+                <option value="1">Hipofuncție moderată</option>
+                <option value="2">Dezechilibru ușor (Hipofuncție)</option>
+                <option value="3" selected>Echilibru</option>
+                <option value="4">Dezechilibru ușor (Hiperfuncție)</option>
+                <option value="5">Hiperfuncție moderată</option>
+                <option value="6">Hiperfuncție severă</option>
+            </select>
+
+            <div class="bar-container">
+                <div class="segment extreme-red">---</div>
+                <div class="segment moderate-yellow">--</div>
+                <div class="segment tendency-blue">-</div>
+                <div class="segment balanced-green">=</div>
+                <div class="segment tendency-blue">+</div>
+                <div class="segment moderate-yellow">++</div>
+                <div class="segment extreme-red">+++</div>
+                
+                <div class="arrow" id="indicator-vas-guvernator"></div>
+            </div>
+
+            <div id="infoDisplay-vas-guvernator" class="info-box">
+                </div>
+        </div>
+    </div>
+
+    <footer class="footer-copyright">
+        <p>Copyright: dr.ing. Radu Pascu - 2025</p>
+    </footer>
+
+    <script>
+        const meridianGoverningVesselData = [
+            {
+                stare: "Hipofuncție severă",
+                fiziologic: "Senzație de cap extrem de îngreunat, capul are tendința să alunece sever în față, postură corporală foarte încovoiată în timpul mersului, umerii alunecă sever în față. Lipsă totală de energie fizică și psihică. Hemoroizi severi, sterilitate, impotență cronică, infecții recurente, răceli persistente, dureri de spate paralizante, sângerări nazale frecvente. Coloană rigidă sever, dureri de cap intense, halucinații, disfuncții severe în *Shen*, dureri oculare intense, sensibilitate extremă. Crize de epilepsie frecvente și severe.",
+                nutritie: "Nevoie stringentă de intervenție medicală și nutrițională specializată. Dietă strictă, ușor digerabilă, cu alimente calde, pure, care susțin energia Yang (cereale integrale, legume rădăcinoase, proteine slabe). Evitarea alimentelor reci, crude, procesate, care pot bloca fluxul energetic.",
+                suplimente: "Suplimente complexe pentru suport energetic (CoQ10, Vitamine B, L-carnitină), adaptogeni pentru suport adrenal (sub strictă supraveghere medicală). Suplimente pentru suport neurologic și hormonal.",
+                emotional: "Depresie profundă, lipsă totală de curaj, lipsa energiei motivației, lipsa capacității de creație, gânduri extrem de tulburi, pierderea în detalii obsesive. Sentiment de responsabilitate excesivă și copleșitoare. Lipsa totală a independenței. Incapacitatea de a pune în practică planurile, de a se manifesta. Sentiment de izolare și lipsă de conexiune.",
+                relatiiParinti: "Conflict profund și nerezolvat cu autoritatea paternă (Yang), blocând capacitatea de a 'acționa', de a 'crea' și de a 'se afirma'. Poate reflecta o lipsă de structură, disciplină sau suport din partea figurii paterne, sau o rebeliune extremă împotriva acesteia.",
+                terapie: "Intervenție medicală și psihologică urgentă. Terapie nutrițională strictă. Suport psihologic intens pentru eliberarea traumelor legate de autoritate și control. Meditație de cultivare a curajului și a voinței. Terapii energetice (acupunctură, *Qi Gong*) pentru a stimula fluxul Yang și a restabili echilibrul."
+            },
+            {
+                stare: "Hipofuncție moderată",
+                fiziologic: "Senzație de cap îngreunat, capul are tendința să alunece în față, postură corporală încovoiată în timpul mersului, umerii alunecă în față. Lipsă de energie fizică și psihică. Hemoroizi, sterilitate, impotență, infecții, răceli, dureri de spate, sângerări nazale. Coloană rigidă, dureri de cap, halucinații, disfuncții în *Shen*, dureri oculare, sensibilitate. Crize de epilepsie.",
+                nutritie: "Dietă caldă, echilibrată, bogată în nutrienți care susțin energia Yang. Alimente care 'încălzesc' corpul și stimulează circulația. Reducerea alimentelor reci, crude, procesate.",
+                suplimente: "Complex B, Magneziu, Zinc, Omega-3. Suport pentru glande suprarenale.",
+                emotional: "Depresie, lipsă de curaj, lipsa energiei motivației, lipsa capacității de creație, gânduri tulburi, pierderea în detalii. Sentiment de responsabilitate excesivă. Lipsa independenței. Incapacitatea de a pune în practică planurile, de a se manifesta.",
+                relatiiParinti: "Dificultăți în a 'acționa', de a 'crea' și de a 'se afirma', o tendință de a se simți copleșit de așteptările paterne sau de lipsa de suport din partea figurii paterne. Dificultăți în a integra structura și disciplina.",
+                terapie: "Dietă de suport energetic. Jurnalism terapeutic pentru explorarea sentimentelor de lipsă de curaj și motivație. Meditații de cultivare a voinței și a clarității scopului. Exerciții fizice moderate (Qi Gong, Tai Chi) pentru a stimula fluxul Yang."
+            },
+            {
+                stare: "Dezechilibru ușor (Hipofuncție)",
+                fiziologic: "Senzație ușoară de cap îngreunat, postură ușor încovoiată. Lipsă ușoară de energie fizică. Ocazional dureri de spate, sângerări nazale minore. Rigiditate ușoară a coloanei, dureri de cap ușoare. Gânduri ușor tulburi.",
+                nutritie: "Dietă echilibrată, cu accent pe alimente nutritive. Atenție la hidratare.",
+                suplimente: "Multivitamine/minerale de bază.",
+                emotional: "Ușoară depresie, lipsă ușoară de curaj, lipsă ușoară de energie motivațională. Gânduri ușor tulburi, tendință de a se pierde în detalii. Sentiment ușor de responsabilitate excesivă.",
+                relatiiParinti: "Unele tensiuni persistente sau neînțelegeri subtile legate de influența paternă, care pot duce la o presiune internă și la dificultăți în acceptarea lor așa cum sunt.",
+                terapie: "Conștientizarea obiceiurilor. Practici de mindfulness pentru a reduce neliniștea. Exerciții de respirație pentru calmare. Explorarea surselor de 'hrană emoțională'."
+            },
+            {
+                stare: "Echilibru",
+                fiziologic: "Energie Yang echilibrată, vitalitate optimă. Postură dreaptă, coloană vertebrală flexibilă. Claritate mentală, concentrare bună. Performanță fizică și mentală optimă. Absența durerilor de spate și cap.",
+                nutritie: "Dietă variată și echilibrată, bogată în alimente integrale, proaspete, cu un bun aport de nutrienți. Accent pe alimente de sezon.",
+                suplimente: "Suplimente de întreținere dacă este necesar, conform nevoilor individuale.",
+                emotional: "Bucurie, inițiativă, echilibru, relaxare. Capacitate de creație, putere de a pune în practică planurile, independență. Gândire clară, fără a se pierde în detalii. Sentiment de responsabilitate echilibrat.",
+                relatiiParinti: "Echilibru între influența maternă (hrănire, acceptare) și autoritatea paternă (structură, direcție), permițând o bună integrare a ambelor aspecte în propria personalitate. Capacitate de a te simți iubit și acceptat.",
+                terapie: "Menținerea obiceiurilor sănătoase. Continuarea practicilor de mindfulness și meditație. Cultivarea recunoștinței și a relațiilor pozitive. Explorarea continuă a sinelui pentru creștere personală."
+            },
+            {
+                stare: "Dezechilibru ușor (Hiperfuncție)",
+                fiziologic: "Rigiditate ușoară a coloanei, dureri de spate ușoare, dureri de cap ușoare. Halucinații ușoare sau disfuncții ușoare în *Shen*. Dureri oculare ușoare, sensibilitate ușoară. Crize de epilepsie ușoare. Tensiune arterială ușor crescută.",
+                nutritie: "Dietă echilibrată, cu atenție la alimentele care pot genera 'căldură' sau stimula excesiv. Hidratare adecvată. Consum de alimente care 'răcoresc' corpul.",
+                suplimente: "Antioxidanți de bază, suport pentru detoxifiere.",
+                emotional: "Ușoară lipsă a capacității de creație, tendință de a se pierde în detalii. Ușor responsabilă în exces. Gânduri ușor tulburi. Uneori iritabilă sau nemulțumită.",
+                relatiiParinti: "Unele tensiuni persistente sau neînțelegeri subtile legate de influența paternă, care pot duce la o presiune internă și la dificultăți în acceptarea lor așa cum sunt.",
+                terapie: "Reevaluarea obiectivelor și a așteptărilor. Practici de relaxare pentru a reduce iritabilitatea. Exerciții de conștientizare a emoțiilor. Dialog deschis cu părinții pentru a rezolva tensiunile."
+            },
+            {
+                stare: "Hiperfuncție moderată",
+                fiziologic: "Rigiditate a coloanei, dureri de spate, dureri de cap. Halucinații, disfuncții în *Shen*, dureri oculare, sensibilitate. Crize de epilepsie. Tensiune arterială crescută.",
+                nutritie: "Nevoie de alimente care 'răcoresc' și 'drenează' excesul de Yang. Evitarea alimentelor picante, prăjite, alcoolului, cofeinei. Hidratare adecvată. Dietă antiinflamatorie.",
+                suplimente: "Antioxidanți, plante cu efect calmant și antiinflamator, suport pentru detoxifiere.",
+                emotional: "Lipsa capacității de creație, puterea de a pune în practică planurile, lipsa independenței, sentimentul de responsabilitate excesivă. Gânduri tulburi, pierderea în detalii. Iritabilă, nemulțumită, nu simte că și-ar fi atins scopul.",
+                relatiiParinti: "Conflicte deschise sau o rebeliune activă împotriva autorității paterne, ceea ce poate duce la o stare de tensiune internă și la incapacitatea de a integra lecțiile de viață.",
+                terapie: "Tehnici de gestionare a furiei și nerăbdării. Meditații de acceptare și renunțare la control. Terapie pentru a explora relația cu autoritatea paternă. Activități care canalizează energia în mod constructiv."
+            },
+            {
+                stare: "Hiperfuncție severă",
+                fiziologic: "Rigiditate severă a coloanei, dureri de spate paralizante, dureri de cap intense. Halucinații severe, disfuncții grave în *Shen*, dureri oculare severe, sensibilitate extremă. Crize de epilepsie frecvente și severe. Tensiune arterială cronică și severă.",
+                nutritie: "Nevoie stringentă de intervenție medicală și nutrițională specializată. Dietă strictă, care să elimine orice aliment inflamator sau care generează 'căldură' excesivă. Lichide răcoroase, ceaiuri medicinale, alimente ușoare și pure.",
+                suplimente: "Suplimente complexe pentru suport neurologic și energetic, antioxidanți, detoxifiere, sub strictă supraveghere medicală. Poate fi necesară terapia intensivă.",
+                emotional: "Lipsa totală a capacității de creație, puterea de a pune în practică planurile este absentă. Lipsa totală a independenței, sentimentul de responsabilitate excesivă și copleșitoare. Gânduri extrem de tulburi, pierderea obsesivă în detalii. Iritabilă cronic, nemulțumită constant, incapabilă să-și atingă scopul sau să accepte iubirea și mediul înconjurător. Sentiment de izolare și lipsă de conexiune.",
+                relatiiParinti: "Refuz total de a se conforma sau de a accepta figura paternă, ducând la un conflict interior devastator, care erodează sentimentul de siguranță și liniște. Poate fi o rebeliune extremă împotriva structurii și autorității, cu consecințe grave asupra sănătății.",
+                terapie: "Intervenție medicală și psihologică urgentă. Terapie intensivă pentru gestionarea furiei și frustrării. Meditații de iertare și acceptare. Lucrul profund cu traumele legate de autoritate și control. Reconstruirea relației cu sinele și cu lumea."
+            }
+        ];
+
+        function afiseazaInformatii(meridianId, index) {
+            let data;
+            if (meridianId === 'vas-guvernator') {
+                data = meridianGoverningVesselData[index];
+            }
+            if (!data) return;
+            
+            const infoDisplay = document.getElementById(`infoDisplay-${meridianId}`);
+            infoDisplay.innerHTML = `
+                <h3>Stare: ${data.stare}</h3>
+                <p><strong>🧬 Fiziologie:</strong> ${data.fiziologic}</p>
+                <p><strong>🥗 Nutriție:</strong> ${data.nutritie}</p>
+                <p><strong>💊 Suplimente:</strong> ${data.suplimente}</p>
+                <p><strong>🧠 Emoțional:</strong> ${data.emotional}</p>
+                <p><strong>👪 Relații cu părinții:</strong> ${data.relatiiParinti}</p>
+                <p><strong>💆 Terapie:</strong> ${data.terapie}</p>
+            `;
+        }
+
+        function mutaSageata(meridianId, indexStr) {
+            const index = parseInt(indexStr, 10);
+            const totalSegments = 7;
+            
+            // Calculează poziția pentru centrul fiecărui segment
+            const segmentWidth = 100 / totalSegments;
+            const procent = (index * segmentWidth) + (segmentWidth / 2);
+            
+            document.getElementById(`indicator-${meridianId}`).style.left = `${procent}%`;
+            afiseazaInformatii(meridianId, index);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectVasGuvernator = document.getElementById('select-vas-guvernator');
+            
+            if (selectVasGuvernator) {
+                // Setează starea inițială la încărcarea paginii
+                mutaSageata('vas-guvernator', selectVasGuvernator.value);
+
+                // Adaugă event listener pentru schimbări ulterioare
+                selectVasGuvernator.addEventListener('change', (event) => {
+                    mutaSageata('vas-guvernator', event.target.value);
+                });
+            }
+        });
+
+        // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
+        document.addEventListener('keydown', function(e) {
+            // Blochează Ctrl+C (Copiere)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+            }
+            // Blochează F12 (Developer Tools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+J (Developer Tools Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+            }
+        });
+    
+    </script>
+
+</body>
+</html>
