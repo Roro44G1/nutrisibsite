@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enzimele: Catalizatorii Vieții - Ghid Extins</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; 
+            color: #212529;
+        }
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        /* Stiluri pentru diagrama de flux personalizată */
+        .flow-step {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .flow-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+        .flow-arrow span {
+            font-size: 3rem;
+            color: #adb5bd; /* gray-400 */
+        }
+        @media (min-width: 768px) {
+            .flow-arrow.horizontal {
+                transform: rotate(0deg);
+            }
+            .flow-arrow.vertical {
+                transform: rotate(90deg);
+                margin: 0 auto;
+            }
+        }
+        .bg-custom-blue {
+            background-color: #3E92CC;
+        }
+        .info-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid #a3d9ff;
+            padding-bottom: 5px;
+            align-self: stretch;
+        }
+        .text-section {
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .text-section h3 {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #0A2463;
+            margin-bottom: 1rem;
+        }
+        .text-section ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+        .text-section li {
+            margin-bottom: 0.5rem;
+        }
+        .note {
+            font-size: 0.85em;
+            color: #777;
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+        }
+        .footer-copyright {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.85em;
+            color: #6c757d;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="bg-white">
+        <main class="container mx-auto p-4 md:p-8 max-w-7xl">
+            <header class="text-center mb-16">
+                <h1 class="text-4xl md:text-5xl font-bold text-[#0A2463] mb-4">Enzimele: catalizatorii vieții și cheia unei digestii optime - un ghid complet și științific</h1>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">Muncitori minusculi, dar esențiali: descoperă rolul crucial al enzimelor în digestie, producția de energie, detoxifiere și sănătatea generală a organismului. Fără ele, viața așa cum o cunoaștem nu ar fi posibilă.</p>
+            </header>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Ce sunt enzimele? structură, funcție și importanță biologică</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Enzimele sunt <b>proteine specializate</b> care acționează ca **catalizatori biologici**, accelerând exponențial reacțiile chimice din corp fără a fi consumate în proces. Ele sunt esențiale pentru fiecare proces metabolic, de la descompunerea alimentelor la sinteza ADN-ului și producția de energie. Fără enzime, reacțiile biochimice ar fi mult prea lente pentru a susține viața.</p>
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center text-center">
+                    <span class="text-5xl text-[#3E92CC] mb-3">⏱️</span>
+                    <h3 class="text-xl font-bold text-[#0A2463]">Viteza vieții: o reacție enzimatică în cifre</h3>
+                    <p class="text-slate-600 mt-2">O reacție biochimică care ar dura ani fără enzime se produce în fracțiuni de secundă cu ajutorul lor. De exemplu, enzima orotidilat decarboxilaza accelerează o reacție de 10^17 ori, transformând o reacție de milioane de ani într-una de milisecunde. (Referință: Alberts, B., et al. (2014). Molecular Biology of the Cell. Garland Science.)</p>
+                    <p class="text-slate-600 mt-4">Fiecare enzimă este specifică pentru un anumit substrat (molecula pe care acționează) și o anumită reacție, funcționând ca o "cheie într-o broască". Această specificitate asigură precizia și eficiența proceselor biologice.</p>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Rolurile cheie și diversitatea funcțională a enzimelor în corp</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">De la descompunerea alimentelor la apărarea organismului și reglarea hormonală, enzimele sunt implicate în aproape toate procesele vitale. Ele sunt esențiale pentru menținerea homeostaziei și a sănătății generale.</p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 text-center bg-white rounded-2xl shadow-lg p-6">
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🍽️</span>
+                        <p class="font-semibold mt-2"><b>Digestia alimentelor:</b> Enzimele digestive (amilaze, lipaze, proteaze) descompun carbohidrații, grăsimile și proteinele în molecule mai mici, care pot fi absorbite și utilizate de corp. (Referință: Mudambi, S. R., & Rajagopal, M. V. (2007). Fundamentals of Foods, Nutrition and Diet Therapy. New Age International Publishers.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">⚡</span>
+                        <p class="font-semibold mt-2"><b>Producția de energie:</b> Enzimele sunt esențiale în căile metabolice care transformă nutrienții în adenozin trifosfat (ATP), principala monedă energetică a celulelor. (Referință: Marcus, J. B. (2013). Culinary Nutrition. Academic Press.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🧬</span>
+                        <p class="font-semibold mt-2"><b>Sinteza de molecule noi:</b> Enzimele construiesc proteine, acizi nucleici (ADN, ARN), hormoni și alte componente celulare esențiale pentru creștere, reparare și funcționare. (Referință: Vander, A. J., et al. (2018). Vander's Human Physiology. McGraw-Hill Education.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🚯</span>
+                        <p class="font-semibold mt-2"><b>Detoxifiere:</b> Enzimele hepatice (ex: citocrom P450) neutralizează și elimină toxinele, medicamentele și alte substanțe nocive din corp. (Referință: Vasey, C. (2008). Ghid de Detoxifiere. Niculescu.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🛡️</span>
+                        <p class="font-semibold mt-2"><b>Funcție imunitară:</b> Enzimele sunt implicate în recunoașterea patogenilor, în răspunsul inflamator și în distrugerea celulelor infectate sau anormale. (Referință: Fox, S. I. (2011). Human Physiology. McGraw-Hill.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🩸</span>
+                        <p class="font-semibold mt-2"><b>Coagularea sângelui:</b> O serie de enzime (factori de coagulare) sunt esențiale pentru formarea cheagurilor de sânge, prevenind sângerările excesive. (Referință: Essentials of Anatomy and Physiology. F. A. Davis.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">⚖️</span>
+                        <p class="font-semibold mt-2"><b>Reglarea pH-ului:</b> Anumite enzime contribuie la menținerea echilibrului acido-bazic al corpului. (Referință: Graur, M. (2014). Dezechilibre Hidro-Electrolitice și Acido-Bazice. Editura "Gr. T. Popa".)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Unde și când acționează enzimele digestive? o călătorie prin tractul digestiv</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Digestia este un proces bine orchestrat, cu enzime specifice eliberate în diferite etape și locuri ale tractului gastrointestinal, fiecare adaptată la mediul chimic specific (pH) al acelei zone.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-y-4 md:gap-y-0 md:gap-x-4">
+                    <!-- Gură -->
+                    <div class="flow-step col-span-1 border-b-2 md:border-r-2 md:border-b-0 border-[#3E92CC]">
+                        <h3 class="text-xl font-bold text-[#0A2463] mb-2">Gura (glande salivare)</h3>
+                        <p class="text-slate-700 font-semibold mb-1"><b>Când/unde:</b> La începutul mesei, prin secreția salivară.</p>
+                        <p class="text-slate-700 mb-2"><b>Enzime cheie:</b> Amilaza salivară (ptialina), lipaza linguală.</p>
+                        <p class="text-sm text-slate-600"><b>Ce fac:</b> Amilaza salivară începe descompunerea amidonului în zaharuri mai simple. Lipaza linguală începe digestia grăsimilor, activându-se mai ales în mediul acid al stomacului. Importanța mestecării adecvate pentru a permite amilazei să acționeze eficient. (Referință: Moța, M. (2007). Alimentația Omului Sănătos. Editura Medicală Universitară "Iuliu Hațieganu".)</p>
+                    </div>
+                    <div class="flow-arrow hidden md:flex"><span>➡️</span></div>
+                    <div class="flow-arrow block md:hidden"><span>⬇️</span></div>
+
+                    <!-- Stomac -->
+                    <div class="flow-step col-span-1 border-b-2 md:border-b-0 border-[#3E92CC]">
+                        <h3 class="text-xl font-bold text-[#0A2463] mb-2">Stomac (glande gastrice)</h3>
+                        <p class="text-slate-700 font-semibold mb-1"><b>Când/unde:</b> La contactul cu alimentele, în mediu puternic acid (pH 1.5-3.5).</p>
+                        <p class="text-slate-700 mb-2"><b>Enzime cheie:</b> Pepsină, lipaza gastrică.</p>
+                        <p class="text-sm text-slate-600"><b>Ce fac:</b> Pepsina (activată de acidul clorhidric) începe descompunerea proteinelor în peptide mai mici. Lipaza gastrică continuă digestia grăsimilor, în special a trigliceridelor cu lanț scurt și mediu. Acidul clorhidric denaturează proteinele, facilitând acțiunea pepsinei, și omoară bacteriile. (Referință: Fox, S. I. (2011). Human Physiology. McGraw-Hill.)</p>
+                    </div>
+                    <div class="flow-arrow hidden md:flex col-start-2 row-start-2"><span>➡️</span></div>
+                    <div class="flow-arrow block md:hidden"><span>⬇️</span></div>
+                    
+                    <!-- Pancreas -->
+                    <div class="flow-step col-span-1 border-b-2 md:border-r-2 md:border-b-0 border-[#3E92CC] md:col-start-3 md:row-start-1">
+                        <h3 class="text-xl font-bold text-[#0A2463] mb-2">Pancreas (exocrin)</h3>
+                        <p class="text-slate-700 font-semibold mb-1"><b>Când/unde:</b> Când chimul acid ajunge în intestinul subțire (duoden).</p>
+                        <p class="text-slate-700 mb-2"><b>Enzime cheie:</b> Amilaza pancreatică, lipaze pancreatice, proteaze pancreatice (Tripsină, Chimotripsină, Carboxipeptidaze).</p>
+                        <p class="text-sm text-slate-600"><b>Ce fac:</b> Pancreasul eliberează un cocktail puternic de enzime în duoden, unde mediul este neutralizat de bicarbonat. Aceste enzime realizează digestia majorității carbohidraților, grăsimilor și proteinelor, pregătindu-le pentru absorbție. (Referință: Vander, A. J., et al. (2018). Vander's Human Physiology. McGraw-Hill Education.)</p>
+                    </div>
+                    <div class="flow-arrow hidden md:flex col-start-3 row-start-2"><span>➡️</span></div>
+                    <div class="flow-arrow block md:hidden"><span>⬇️</span></div>
+                    
+                    <!-- Intestin Subțire -->
+                    <div class="flow-step col-span-1 md:col-span-3 border-b-2 md:border-b-0 border-[#3E92CC]">
+                        <h3 class="text-xl font-bold text-[#0A2463] mb-2">Intestinul subțire (pereți intestinali - marginea în perie)</h3>
+                        <p class="text-slate-700 font-semibold mb-1"><b>Când/unde:</b> Pe suprafața celulelor intestinale (enterocite), la nivelul microvilozităților ("marginea în perie").</p>
+                        <p class="text-slate-700 mb-2"><b>Enzime cheie:</b> Dizaharidaze (Lactază, Sucrază, Maltază), Peptidaze (Aminopeptidaze, Dipeptidaze).</p>
+                        <p class="text-sm text-slate-600"><b>Ce fac:</b> Aceste enzime finalizează digestia carbohidraților complecși (dizaharide) în monozaharide (glucoză, fructoză, galactoză) și a peptidelor în aminoacizi individuali, transformând nutrienții în forme suficient de mici pentru a fi absorbiți în sânge. (Referință: Abrahamson, E., & Langston, J. (2017). Making Sense of Human Anatomy and Physiology. Lotus Publishing.)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Tipuri principale de enzime digestive: specificitate și roluri</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Fiecare categorie de enzime vizează un tip specific de macronutrient, asigurând o digestie eficientă. Această specificitate este crucială pentru a descompune eficient alimentele în componentele lor absorbabile.</p>
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <div class="chart-container">
+                        <canvas id="enzymeFunctionChart"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-slate-500 mt-4">Graficul ilustrează importanța relativă a principalelor categorii de enzime digestive în descompunerea macronutrienților. O dietă echilibrată necesită o activitate enzimatică robustă pentru toate tipurile de alimente.</p>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Alimente pentru reechilibrare enzimatică: susținerea digestiei naturale</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Susține-ți sistemul digestiv prin alegerea alimentelor care conțin enzime naturale (în special în stare crudă) sau care ajută corpul să-și producă propriile enzime în mod eficient. O dietă bogată în alimente integrale și neprocesate este fundamentală.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="info-card border-l-4 border-[#06D6A0]">
+                        <h3 class="text-2xl font-bold text-[#06D6A0] mb-3">Alimente bogate în enzime naturale (vii/crude)</h3>
+                        <p class="text-slate-700 mb-4">Aceste enzime exogene (din exteriorul corpului) pot ajuta la "pre-digerarea" alimentelor în stomac și intestinul subțire, reducând sarcina asupra propriilor enzime digestive și îmbunătățind absorbția nutrienților. Este important ca aceste alimente să fie consumate crude, deoarece enzimele sunt sensibile la căldură.</p>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li><b>Fructe crude:</b>
+                                <ul>
+                                    <li><b>Ananas:</b> Conține bromelaină, o enzimă proteolitică (descompune proteinele), utilă și ca antiinflamator. (Referință: Ross, I. A. (2001). Medicinal Plants of the World, Volume 2. Springer.)</li>
+                                    <li><b>Papaya:</b> Conține papaină, o altă enzimă proteolitică, adesea folosită în tenderizarea cărnii.</li>
+                                    <li><b>Kiwi:</b> Conține actinidină, o enzimă proteolitică.</li>
+                                </ul>
+                            </li>
+                            <li><b>Legume crude:</b> Germeni (de exemplu: lucernă, broccoli), spanac, ardei, țelină. Consumul sub formă de supe reci (gazpacho) sau sucuri proaspete de legume păstrează enzimele intacte.</li>
+                            <li><b>Alimente fermentate:</b> Varză murată, kimchi, chefir, iaurt cu culturi vii, kombucha. Acestea conțin enzime și probiotice care susțin digestia și sănătatea microbiomului. (Referință: Kahleova, H., et al. (2019). Guide to the Gut Microbiota. Physicians Committee for Responsible Medicine.)</li>
+                            <li><b>Miere crudă (nepasteurizată):</b> Conține mici cantități de amilază și alte enzime.</li>
+                            <li><b>Avocado:</b> Conține lipază, o enzimă care ajută la descompunerea grăsimilor.</li>
+                        </ul>
+                    </div>
+                    <div class="info-card border-l-4 border-[#3E92CC]">
+                        <h3 class="text-2xl font-bold text-[#3E92CC] mb-3">Alimente care susțin producția de enzime a corpului (cofactori și substraturi)</h3>
+                        <p class="text-slate-700 mb-4">Pentru ca organismul să-și producă eficient propriile enzime, are nevoie de "materiile prime" și "cofactorii" esențiali. O dietă densă nutrițional este cheia.</p>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li><b>Proteine de calitate:</b> Enzimele sunt proteine, deci un aport adecvat de aminoacizi esențiali (din carne, pește, ouă, leguminoase, cereale integrale) este fundamental pentru sinteza lor. (Referință: Marcus, J. B. (2013). Culinary Nutrition. Academic Press.)</li>
+                            <li><b>Grăsimi sănătoase:</b> Esențiale pentru integritatea membranelor celulare și pentru absorbția vitaminelor liposolubile, care pot acționa ca și co-factori. (Referință: Shanahan, C., & Shanahan, L. (2016). Deep Nutrition. Flatiron Books.)</li>
+                            <li><b>Micronutrienți (vitamine și minerale):</b> Multe vitamine (în special din complexul B) și minerale (zinc, magneziu, seleniu, cupru, mangan) sunt co-factori esențiali pentru activitatea enzimatică. Deficiențele acestora pot afecta direct funcția enzimatică. (Referință: Combs, G. F., & McClung, J. P. (2017). The Vitamins. Academic Press; Razzaque, M. S., & Wimalawansa, S. J. (2025). Minerals and Human Health: From Deficiency to Toxicity. Nutrients.)</li>
+                            <li><b>Fibre:</b> Susțin sănătatea microbiotei intestinale, care, la rândul său, influențează mediul intestinal și activitatea enzimatică. (Referință: Kahleova, H., et al. (2019). Guide to the Gut Microbiota. Physicians Committee for Responsible Medicine.)</li>
+                            <li><b>Apă:</b> Hidratarea optimă este esențială pentru toate reacțiile enzimatice și pentru transportul enzimelor. (Referință: Graur, M. (2014). Dezechilibre Hidro-Electrolitice și Acido-Bazice. Editura "Gr. T. Popa".)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="info-card border-l-4 border-[#F4C150] mt-8">
+                    <h3 class="text-2xl font-bold text-[#F4C150] mb-3">Suplimente enzimatice: când sunt necesare?</h3>
+                    <p class="text-slate-700 mb-4">În anumite condiții (ex: insuficiență pancreatică, vârstă înaintată, afecțiuni digestive cronice), producția endogenă de enzime poate fi insuficientă. Suplimentele enzimatice (care conțin amilaze, lipaze, proteaze, lactază etc.) pot fi utile sub îndrumare medicală pentru a sprijini digestia și absorbția nutrienților. Acestea pot fi derivate din surse animale (pancreatină), vegetale (bromelaină, papaină) sau microbiene.</p>
+                    <p class="text-slate-700 mt-4"><b>Când să le iei în considerare:</b> Balonare persistentă, gaze excesive, scaune grase, senzație de plenitudine după mese mici, deficiențe nutriționale inexplicabile, intoleranțe alimentare. (Referință: Longe, J. L. (Ed.). (2005). The Gale Encyclopedia of Alternative Medicine.)</p>
+                </div>
+            </section>
+            
+            <section>
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Concluzie: investește în digestia ta! cheia vitalității și a longevității</h2>
+                <div class="bg-[#0A2463] text-white rounded-2xl shadow-lg p-8 text-center max-w-4xl mx-auto">
+                    <p class="text-xl">Enzimele sunt pilonul invizibil al sănătății tale, orchestrând fiecare proces vital din corp. O digestie optimă, susținută de o dietă bogată în alimente integrale, crude (acolo unde este cazul) și, la nevoie, de suplimente enzimatice inteligente, este cheia unei absorbții eficiente a nutrienților și a unei stări generale de vitalitate. Prin cultivarea unui mediu intern propice activității enzimatice, vei sprijini nu doar digestia, ci și metabolismul, imunitatea și capacitatea corpului de a se regenera. Ai grijă de enzimele tale și ele vor avea grijă de tine, contribuind la o viață lungă și sănătoasă în programul ReDefine!</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="footer-copyright">
+        <p>Copyright: dr.ing. Radu Pascu - 2025</p>
+    </footer>
+
+    <script>
+        const colorPalette = {
+            darkBlue: '#0A2463',
+            mediumBlue: '#3E92CC',
+            crimson: '#D8315B',
+            yellow: '#F4C150',
+            green: '#06D6A0'
+        };
+
+        const tooltipConfig = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            family: 'Inter',
+                            size: 14
+                        },
+                        color: '#212529'
+                    }
+                }
+            }
+        };
+        
+        function wrapLabel(label, maxLength = 16) {
+            if (label.length <= maxLength) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).length > maxLength && currentLine.length > 0) {
+                    lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine += (currentLine === '' ? '' : ' ') + word;
+                }
+            });
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        function initEnzymeFunctionChart() {
+            const ctx = document.getElementById('enzymeFunctionChart').getContext('2d');
+            const data = {
+                labels: ['Amilaze', 'Lipaze', 'Proteaze', wrapLabel('Dizaharidaze & Peptidaze')],
+                datasets: [{
+                    label: 'Macronutrient principal digerat',
+                    data: [40, 30, 25, 15], /* Valori ilustrative */
+                    backgroundColor: [
+                        colorPalette.mediumBlue, 
+                        colorPalette.crimson, 
+                        colorPalette.green, 
+                        colorPalette.yellow
+                    ],
+                    borderColor: 'rgba(255, 255, 255, 0.5)',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                }]
+            };
+            new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: { ...tooltipConfig,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Importanță relativă (%)', font: { family: 'Inter', size: 14, weight: 'bold' }, color: '#475569' }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    family: 'Inter',
+                                }
+                            }
+                        }
+                    },
+                    plugins: { ...tooltipConfig.plugins, legend: { display: false } }
+                }
+            });
+        }
+        
+        window.addEventListener('load', () => {
+            initEnzymeFunctionChart();
+        });
+
+        // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
+
+        document.addEventListener('keydown', function(e) {
+            // Blochează Ctrl+C (Copiere)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+            }
+            // Blochează F12 (Developer Tools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+            }
+             // Blochează Ctrl+Shift+J (Developer Tools Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+            }
+        });
+
+        // Activați primul tab la încărcarea paginii
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector('.tab-button').click();
+        });
+        
+    </script>
+</body>
+</html>
