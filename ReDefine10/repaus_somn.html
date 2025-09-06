@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografic: Repausul și Somnul</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; 
+            color: #212529;
+        }
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        .info-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+        .icon-text-pair {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        .icon-text-pair span {
+            font-size: 2rem;
+            margin-right: 0.75rem;
+            color: #0A2463;
+        }
+        .good-practice-card {
+            background-color: #e0f2f7; /* light blue */
+            border-left: 4px solid #3E92CC;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+        .bad-practice-card {
+            background-color: #ffebe6; /* very light red */
+            border-left: 4px solid #D8315B;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="bg-white">
+        <main class="container mx-auto p-4 md:p-8 max-w-7xl">
+            <header class="text-center mb-16">
+                <h1 class="text-4xl md:text-5xl font-bold text-[#0A2463] mb-4">Repausul și somnul: pilonul esențial al sănătății</h1>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">Somnul de 7-8 ore continuu nu este un lux, ci o necesitate biologică vitală pentru fiecare aspect al bunăstării tale.</p>
+                <nav class="mt-8">
+                    <a href="index.html" class="inline-block bg-[#3E92CC] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#0A2463] transition duration-300 shadow-md">← Înapoi la meniu</a>
+                </nav>
+            </header>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">De ce este somnul crucial? O investiție în bunăstarea ta</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Somnul nu este o stare pasivă, ci un proces activ în care corpul și creierul lucrează intens pentru a se repara, reîncărca și optimiza.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center bg-white rounded-2xl shadow-lg p-6">
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">💪</span>
+                        <p class="font-semibold mt-2">Recuperare & reparare fizică</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">⚖️</span>
+                        <p class="font-semibold mt-2">Echilibru hormonal</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🧠</span>
+                        <p class="font-semibold mt-2">Funcție cerebrală & cognitivă</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🛡️</span>
+                        <p class="font-semibold mt-2">Fortificarea sistemului imunitar</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">😊</span>
+                        <p class="font-semibold mt-2">Reglare emoțională & stare de spirit</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🧼</span>
+                        <p class="font-semibold mt-2">"Spălarea creierului"</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                 <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Cât somn ai nevoie?</h2>
+                 <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Durata optimă de somn pentru majoritatea adulților este de 7-8 ore. Un somn insuficient are consecințe serioase.</p>
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <div class="chart-container md:max-w-xl">
+                        <canvas id="sleepDurationChart"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-slate-500 mt-4">Proporția populației care respectă sau nu recomandările de somn (valori ilustrative).</p>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                 <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Consecințele privării de somn: un avertisment serios</h2>
+                 <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Ignorarea nevoilor de somn ale corpului are consecințe grave pe termen scurt și lung.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-white rounded-2xl shadow-lg p-6">
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <span class="text-3xl text-[#D8315B]">🧠</span>
+                        <p class="font-semibold mt-2">Performanță cognitivă afectată</p>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <span class="text-3xl text-[#D8315B]">📈</span>
+                        <p class="font-semibold mt-2">Risc crescut de boli cronice</p>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <span class="text-3xl text-[#D8315B]">🤒</span>
+                        <p class="font-semibold mt-2">Sistem imunitar slăbit</p>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <span class="text-3xl text-[#D8315B]">⚖️</span>
+                        <p class="font-semibold mt-2">Dezechilibre hormonale</p>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <span class="text-3xl text-[#D8315B]">😟</span>
+                        <p class="font-semibold mt-2">Probleme de sănătate mentală</p>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <span class="text-3xl text-[#D8315B]">📉</span>
+                        <p class="font-semibold mt-2">Scăderea performanței fizice</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                 <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Igiena somnului: reguli pentru un somn de calitate</h2>
+                 <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Adoptarea unor obiceiuri sănătoase legate de somn este fundamentală pentru odihnă profundă.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#3E92CC]">
+                        <h3 class="text-2xl font-bold text-[#3E92CC] mb-3">✅ Ce să faci pentru un somn bun</h3>
+                        <ul class="list-disc list-inside text-slate-700 space-y-2">
+                            <li>**Program regulat:** culcare/trezire la aceleași ore, chiar și în weekend.</li>
+                            <li>**Mediu de somn optim:** întuneric complet, liniște, temperatură răcoroasă (18-20°C), confort.</li>
+                            <li>**Rutină de "liniștire":** activități relaxante (lectură, baie caldă, meditație) cu 1-2 ore înainte de culcare.</li>
+                            <li>**Gestionarea stresului:** tehnici de relaxare (respirație profundă, yoga, jurnal).</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#D8315B]">
+                        <h3 class="text-2xl font-bold text-[#D8315B] mb-3">❌ Ce să eviți înainte de somn</h3>
+                        <ul class="list-disc list-inside text-slate-700 space-y-2">
+                            <li>**Ecranele (telefoane, TV, laptop) cu 1-2 ore înainte:** lumina albastră suprimă melatonina.</li>
+                            <li>**Mese copioase cu < 2 ore înainte:** digestia greoaie perturbă somnul.</li>
+                            <li>**Carnea la cină:** necesită digestie lungă (3-8 ore), supraîncarcă organele seara.</li>
+                            <li>**Stimulente:** cafea (după amiază), alcool, țigări, băuturi energizante.</li>
+                            <li>**Lichide în exces:** pentru a minimiza trezirile nocturne.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <section>
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Concluzie: somnul, investiția ta strategică în wellness!</h2>
+                <div class="bg-[#0A2463] text-white rounded-2xl shadow-lg p-8 text-center max-w-4xl mx-auto">
+                    <p class="text-xl">Calitatea somnului tău este un indicator direct al sănătății generale și o componentă vitală a "bateriei wellness" pe care trebuie să o menții încărcată. Prin prioritizarea odihnei și adoptarea unei igiene riguroase a somnului, vei debloca un potențial enorm de energie, claritate mentală și bunăstare emoțională. Fă din somn o prioritate și vei redefini modul în care trăiești!</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const colorPalette = {
+            darkBlue: '#0A2463',
+            mediumBlue: '#3E92CC',
+            crimson: '#D8315B',
+            yellow: '#F4C150',
+            green: '#06D6A0'
+        };
+
+        const tooltipConfig = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    labels: {
+                        font: {
+                           family: 'Inter',
+                           size: 14
+                        },
+                        color: '#212529'
+                    }
+                }
+            }
+        };
+        
+        function wrapLabel(label, maxLength = 16) {
+            if (label.length <= maxLength) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).length > maxLength && currentLine.length > 0) {
+                    lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine += (currentLine === '' ? '' : ' ') + word;
+                }
+            });
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        function initSleepDurationChart() {
+            const ctx = document.getElementById('sleepDurationChart').getContext('2d');
+            const data = {
+                labels: ['7-8 ore (optim)', 'Mai puțin de 7 ore', 'Mai mult de 9 ore'],
+                datasets: [{
+                    data: [50, 40, 10], // Valori ilustrative
+                    backgroundColor: [colorPalette.green, colorPalette.crimson, colorPalette.yellow],
+                    hoverOffset: 4
+                }]
+            };
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: { ...tooltipConfig,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        window.addEventListener('load', () => {
+            initSleepDurationChart();
+        });
+    </script>
+</body>
+</html>

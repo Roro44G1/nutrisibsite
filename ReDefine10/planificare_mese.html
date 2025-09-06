@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografic: Planificarea meselor</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* Light background */
+            color: #212529; /* Dark text */
+        }
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        /* Custom styles for meal prep steps/cards */
+        .step-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: #0A2463; /* darkBlue */
+            color: white;
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+        }
+        .flow-connector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+        .flow-connector span {
+            font-size: 3rem;
+            color: #adb5bd; /* gray-400 */
+        }
+        @media (min-width: 768px) {
+            .flow-connector.horizontal {
+                transform: rotate(0deg);
+            }
+            .flow-connector.vertical {
+                transform: rotate(90deg);
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="bg-white">
+        <main class="container mx-auto p-4 md:p-8 max-w-7xl">
+            <header class="text-center mb-16">
+                <h1 class="text-4xl md:text-5xl font-bold text-[#0A2463] mb-4">Planificarea meselor: strategia succesului nutrițional</h1>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">Un plan bine structurat este cheia pentru energie constantă, controlul greutății și o sănătate optimă. Descoperă cum să-ți organizezi mesele eficient.</p>
+                <nav class="mt-8">
+                    <a href="index.html" class="inline-block bg-[#3E92CC] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#0A2463] transition duration-300 shadow-md">← Înapoi la meniu</a>
+                </nav>
+            </header>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Importanța respectării orelor de masă</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Un program regulat de mese stabilizează glicemia și optimizează funcțiile corpului.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center bg-white rounded-2xl shadow-lg p-6">
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">📉</span>
+                        <p class="font-semibold mt-2">Reglarea glicemiei</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">⚖️</span>
+                        <p class="font-semibold mt-2">Controlul apetitului & greutății</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">⚙️</span>
+                        <p class="font-semibold mt-2">Optimizarea metabolismului</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">⚡</span>
+                        <p class="font-semibold mt-2">Performanță fizică & mentală</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                 <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Proporția ideală de macronutrienți: regula 40-30-30</h2>
+                 <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Fundamentul fiecărei farfurii echilibrate pentru energie, sațietate și bunăstare.</p>
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <div class="chart-container md:max-w-xl">
+                        <canvas id="macronutrientRatioDonut"></canvas>
+                    </div>
+                    <p class="text-center text-sm text-slate-500 mt-4">Această proporție generală este un ghid, nevoile individuale pot varia.</p>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Farfuria echilibrată: un ghid vizual</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Vizualizează cum arată o masă echilibrată, respectând proporțiile de macronutrienți și abundența de micronutrienți și fitonutrienți ("curcubeul din farfurie").</p>
+                <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center">
+                    <img src="farfuriaechilibrata1.jpg" alt="[Imagine: Farfurie echilibrată cu diverse alimente]" class="w-full max-w-md rounded-full border-4 border-gray-200 shadow-lg mb-6">
+                    <div class="text-center text-slate-600">
+                        <p class="mb-2">**Cum se traduce vizual regula 40-30-30:**</p>
+                        <ul class="list-disc list-inside text-left mx-auto max-w-xs">
+                            <li>**Carbohidrați complecși (40%):** O secțiune mare, preponderent legume și cereale integrale (ex: orez brun, quinoa). Vizibilă în imagine prin porțiunea mare de legume și cereale.</li>
+                            <li>**Proteine slabe (30%):** O secțiune dedicată surselor de proteine (ex: pește, leguminoase, carne slabă). Reprezentată de diverse surse proteice animale și vegetale.</li>
+                            <li>**Grăsimi sănătoase (30%):** Prezentă în surse precum avocado, nuci, semințe, ulei de măsline. Integrate în salate sau ca elemente separate.</li>
+                            <li>**🌈 Micronutrienți & Fitonutrienți:** Împrăștiați vizual în toate secțiunile, prin diversitatea de culori din legume și fructe (ex: broccoli, morcovi, fructe de pădure, roșii).</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                 <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Importanța gustărilor pentru aportul proteic</h2>
+                 <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Corpul are o capacitate limitată de a utiliza proteinele la o singură masă. Gustările ajută la distribuția optimă și la menținerea sațietății.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-white rounded-2xl shadow-lg p-6">
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <span class="text-3xl">💪</span>
+                        <p class="font-semibold mt-2">Optimizarea sintezei musculare</p>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <span class="text-3xl">🚫🍔</span>
+                        <p class="font-semibold mt-2">Menținerea sațietății & control pofte</p>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <span class="text-3xl">🎯</span>
+                        <p class="font-semibold mt-2">Atingerea necesarului zilnic</p>
+                    </div>
+                    <div class="lg:col-span-3 text-center mt-4">
+                        <p class="text-slate-700 font-semibold">Exemple de gustări proteice:</p>
+                        <p class="text-slate-600 text-sm">iaurt grecesc/stors, brânză cottage/urdă, nuci/semințe, ouă fierte, leguminoase, shake proteic.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                 <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Cina: alegerea ușoară pentru digestie și somn</h2>
+                 <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Evită carnea la cină! Corpul încetinește metabolic seara. O digestie grea perturbă somnul și supraîncarcă organele.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                    <div class="bg-red-50 rounded-2xl shadow-lg p-6 border-l-4 border-[#D8315B]">
+                        <h3 class="text-2xl font-bold text-[#D8315B] mb-3">De ce nu carne seara?</h3>
+                        <ul class="list-disc list-inside text-slate-700 space-y-1">
+                            <li>Ritmul circadian încetinește digestia.</li>
+                            <li>Timp de digestie al cărnii: **3-8 ore!**</li>
+                            <li>Stres digestiv nocturn, balonare.</li>
+                            <li>Somn perturbat (insomnie, calitate slabă).</li>
+                            <li>Suprasolicitare ficat & rinichi.</li>
+                            <li>Risc de acumulare grăsime.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 rounded-2xl shadow-lg p-6 border-l-4 border-[#06D6A0]">
+                        <h3 class="text-2xl font-bold text-[#06D6A0] mb-3">Opțiuni ideale pentru cină</h3>
+                        <p class="text-slate-700 mb-4">Alege surse de proteine ușor digerabile combinate cu legume:</p>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li>Pește slab (cod, șalău)</li>
+                            <li>Leguminoase (linte, năut)</li>
+                            <li>Tofu, ciuperci, ouă</li>
+                            <li>Lactate slabe (urdă, brânză cottage)</li>
+                            <li>Însoțite de legume proaspete sau gătite ușor.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="mb-16">
+                 <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Meal prep: super-strategia pentru cei ocupați</h2>
+                 <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Pregătirea meselor în avans transformă intențiile bune în acțiuni concrete, asigurând o nutriție sănătoasă constant.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="step-card">
+                        <span class="step-number">1</span>
+                        <h3 class="text-xl font-bold text-[#0A2463] mb-2">Economie de timp</h3>
+                        <p class="text-slate-600">Gătești o singură dată pentru mai multe zile.</p>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">2</span>
+                        <h3 class="text-xl font-bold text-[#0A2463] mb-2">Alegeri sănătoase la îndemână</h3>
+                        <p class="text-slate-600">Elimini tentația fast-food-ului când ești presat de timp.</p>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">3</span>
+                        <h3 class="text-xl font-bold text-[#0A2463] mb-2">Control porții & macronutrienți</h3>
+                        <p class="text-slate-600">Măsori precis proporția 40-30-30 pentru fiecare masă.</p>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">4</span>
+                        <h3 class="text-xl font-bold text-[#0A2463] mb-2">Reducerea cheltuielilor</h3>
+                        <p class="text-slate-600">Mâncarea acasă este mai ieftină decât restaurantul.</p>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">5</span>
+                        <h3 class="text-xl font-bold text-[#0A2463] mb-2">Minimizarea risipei alimentare</h3>
+                        <p class="text-slate-600">Planificarea reduce deteriorarea alimentelor.</p>
+                    </div>
+                    <div class="step-card">
+                        <span class="step-number">6</span>
+                        <h3 class="text-xl font-bold text-[#0A2463] mb-2">Diversitate nutrițională asigurată</h3>
+                        <p class="text-slate-600">Poți planifica un "curcubeu" de culori variate.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                 <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Regulile de trofologie: combinații alimentare corecte</h2>
+                 <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Principii simple pentru o digestie mai ușoară și o absorbție optimă a nutrienților.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#3E92CC]">
+                        <h3 class="text-2xl font-bold text-[#3E92CC] mb-3">Proteine cu legume non-amidonoase</h3>
+                        <p class="text-slate-700 mb-4">Evită combinarea proteinelor dense (carne) cu carbohidrați amidonoși (cartofi, orez) pentru a nu încetini digestia. Combină cu salate sau legume verzi.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#D8315B]">
+                        <h3 class="text-2xl font-bold text-[#D8315B] mb-3">Carbohidrați amidonoși cu legume non-amidonoase</h3>
+                        <p class="text-slate-700 mb-4">Combinații precum orezul integral cu broccoli sau cartofii copți cu spanac sunt ușor de digerat și nutritive.</p>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#06D6A0] md:col-span-2">
+                        <h3 class="text-2xl font-bold text-[#06D6A0] mb-3">Fructele: consumate separat</h3>
+                        <p class="text-slate-700 mb-4">Fructele se digeră rapid. Consumă-le cu 30 de minute înainte de masă sau la 2-3 ore după o masă principală pentru a evita fermentația și balonarea. Excepție fac fructele cu grăsimi (avocado) sau fibre bogate (fructe de pădure, mere) care pot fi combinate cu iaurt/nuci.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Concluzie: planifică, mănâncă echilibrat, trăiește sănătos!</h2>
+                <div class="bg-[#0A2463] text-white rounded-2xl shadow-lg p-8 text-center max-w-4xl mx-auto">
+                    <p class="text-xl">Planificarea meselor nu este o restricție, ci o libertate. Îți oferă control asupra nutriției tale, asigură un aport optim de macronutrienți, micronutrienți și fitonutrienți, și te ajută să construiești un stil de viață sănătos și sustenabil. Începe azi să-ți planifici drumul spre bunăstare!</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        const colorPalette = {
+            darkBlue: '#0A2463',
+            mediumBlue: '#3E92CC',
+            crimson: '#D8315B',
+            yellow: '#F4C150',
+            green: '#06D6A0'
+        };
+
+        const tooltipConfig = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                           family: 'Inter',
+                           size: 14
+                        },
+                        color: '#212529'
+                    }
+                }
+            }
+        };
+        
+        function wrapLabel(label, maxLength = 16) {
+            if (label.length <= maxLength) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).length > maxLength && currentLine.length > 0) {
+                    lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine += (currentLine === '' ? '' : ' ') + word;
+                }
+            });
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        function initMacronutrientRatioDonut() {
+            const ctx = document.getElementById('macronutrientRatioDonut').getContext('2d');
+            const data = {
+                labels: ['Carbohidrați (40%)', 'Proteine (30%)', 'Grăsimi Sănătoase (30%)'],
+                datasets: [{
+                    data: [40, 30, 30], 
+                    backgroundColor: [colorPalette.mediumBlue, colorPalette.crimson, colorPalette.darkBlue],
+                    hoverOffset: 4
+                }]
+            };
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: { ...tooltipConfig,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        window.addEventListener('load', () => {
+            initMacronutrientRatioDonut();
+        });
+    </script>
+</body>
+</html>
