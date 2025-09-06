@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analiza exhaustivă a subponderabilității</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #F8F7F4;
+            --text-color: #333333;
+            --primary-accent: #007A7A; /* Un turcoaz mai sobru */
+            --secondary-accent: #D4A056; /* Un auriu/ocru */
+            --card-bg: #FFFFFF;
+            --border-color: #EAE8E1;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            color: #222222;
+        }
+        .section-heading {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        .section-subheading {
+            font-size: 1.125rem;
+            font-weight: 400;
+            margin-bottom: 4rem;
+            color: #777777;
+        }
+        .masthead {
+            position: relative;
+            padding-top: 10rem;
+            padding-bottom: 10rem;
+            background: linear-gradient(rgba(248, 247, 244, 0.8), rgba(248, 247, 244, 0.8)), url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        .masthead h1 {
+            font-size: 3.5rem;
+            color: var(--text-color);
+        }
+        .masthead p {
+            font-size: 1.25rem;
+            color: black;
+        }
+        #mainNav {
+            transition: background-color 0.3s, padding-top 0.3s, padding-bottom 0.3s, box-shadow 0.3s;
+            background-color: transparent;
+        }
+        #mainNav .nav-link {
+            color: #555555;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        #mainNav .nav-link:hover,
+        #mainNav .nav-link.active {
+            color: var(--primary-accent);
+        }
+        #mainNav.navbar-shrink {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        #mainNav.navbar-shrink .nav-link {
+            color: var(--text-color);
+        }
+        #mainNav.navbar-shrink .nav-link:hover,
+        #mainNav.navbar-shrink .nav-link.active {
+            color: var(--primary-accent);
+        }
+        .divider-custom {
+            margin: 2.5rem 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .divider-custom .divider-custom-line {
+            width: 100%;
+            max-width: 7rem;
+            height: 0.2rem;
+            background-color: var(--primary-accent);
+            border-radius: 1rem;
+        }
+        .divider-custom .divider-custom-icon {
+            color: var(--primary-accent);
+            font-size: 1.5rem;
+            padding: 0 1.5rem;
+        }
+        .info-card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+        .info-card h4 {
+            color: var(--primary-accent);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .info-card ul li {
+            padding-left: 1.5em;
+            text-indent: -1.5em;
+            margin-bottom: 0.5rem;
+        }
+        .info-card ul li::before {
+            font-family: "Font Awesome 6 Free";
+            content: "\f058";
+            font-weight: 900;
+            color: var(--primary-accent);
+            margin-right: 0.7em;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.95rem;
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f0eb;
+            font-weight: 600;
+        }
+        .footer {
+            background-color: #EAE8E1;
+            color: #555555;
+            padding: 4rem 0;
+        }
+        .copyright {
+            background-color: #DFDCD5;
+            padding: 1.5rem 0;
+            color: #777777;
+        }
+    </style>
+</head>
+<body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50" id="mainNav">
+        <div class="container mx-auto flex items-center justify-center p-4">
+            <div class="hidden md:block">
+                <ul class="flex flex-row space-x-2" id="nav-menu">
+                    <li class="nav-item"><a class="nav-link p-2" href="#introducere">Introducere</a></li>
+                    <li class="nav-item"><a class="nav-link p-2" href="#etiologie">Etiologie</a></li>
+                    <li class="nav-item"><a class="nav-link p-2" href="#consecinte">Consecințe</a></li>
+                    <li class="nav-item"><a class="nav-link p-2" href="#diagnostic">Diagnostic</a></li>
+                    <li class="nav-item"><a class="nav-link p-2" href="#terapii">Terapii</a></li>
+                    <li class="nav-item"><a class="nav-link p-2" href="#holistic">Perspective holistice</a></li>
+                    <li class="nav-item"><a class="nav-link p-2" href="#bibliografie">Bibliografie</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Masthead -->
+    <header class="masthead">
+        <div class="container mx-auto text-center">
+            <h1>Analiza exhaustivă a subponderabilității</h1>
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-balance-scale"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <p>Un ghid complet despre etiologie, diagnostic și abordări terapeutice integrate</p>
+        </div>
+    </header>
+
+    <!-- Section 1: Introducere -->
+    <section class="py-24" id="introducere">
+        <div class="container mx-auto px-4">
+            <h2 class="section-heading text-center">Capitolul 1: Introducere în problematica subponderabilității</h2>
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-info-circle"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <div class="info-card max-w-4xl mx-auto">
+                <h4>1.1. Definirea clinică a subponderabilității și limitările sale</h4>
+                <p>Subponderabilitatea este definită, în termeni clinici, printr-un Indice de Masă Corporală (IMC) sub valoarea de 18.5 kg/m². Acest prag a fost stabilit de Organizația Mondială a Sănătății (OMS) ca un indicator statistic pentru identificarea populațiilor cu risc crescut de morbiditate și mortalitate asociate cu o greutate corporală insuficientă. Calculul IMC se realizează prin raportarea greutății, exprimată în kilograme, la pătratul înălțimii, exprimată în metri, conform formulei:</p>
+                <p class="text-center italic my-4 text-lg">IMC = greutate(kg) / înălțime(m)²</p>
+                <p>Deși standardul actual acceptat internațional este un IMC < 18.5, unele surse mai vechi pot menționa praguri diferite pentru femei (sub 19.1) și bărbați (sub 20.7), însă aceste valori sunt în mare parte depășite.</p>
+                <p>Este fundamental de înțeles că IMC este un instrument de screening populațional, nu o unealtă de diagnostic individual cu precizie absolută. Principala sa limitare constă în incapacitatea de a diferenția între masa adipoasă (grăsime) și masa non-adipoasă (mușchi, oase, apă). Astfel, un atlet de performanță cu o masă musculară foarte dezvoltată poate avea un IMC în categoria "supraponderal" fără a avea un exces de grăsime corporală. Invers, o persoană sedentară cu masă musculară redusă (sarcopenie) poate avea un IMC în limite normale, dar un procent de grăsime corporală ridicat, ceea ce implică riscuri metabolice. Prin urmare, interpretarea IMC trebuie întotdeauna contextualizată clinic.</p>
+                
+                <h4 class="mt-8">1.2. Subponderabilitate constituțională vs. patologică</h4>
+                <p>O distincție esențială în evaluarea unui pacient subponderal este cea dintre subponderabilitatea constituțională și cea patologică.</p>
+                <p><strong>Subponderabilitatea constituțională</strong>, adesea descrisă ca "natural slab", se referă la indivizi care au o greutate corporală scăzută, dar sunt perfect sănătoși. Aceștia au, de regulă, un istoric familial de siluetă similară, nu prezintă semne clinice sau de laborator de malnutriție și nu suferă de nicio afecțiune medicală sau psihologică care să le influențeze greutatea. Această condiție nu necesită intervenție medicală, iar încercările de a câștiga în greutate sunt adesea sortite eșecului și pot fi chiar contraproductive.</p>
+                <p><strong>Subponderabilitatea patologică</strong>, pe de altă parte, este un simptom sau o consecință a unei afecțiuni subiacente. Aceasta poate fi de natură organică (o boală digestivă, endocrină, neoplazică) sau psihologică (o tulburare de alimentație). În aceste cazuri, greutatea scăzută este un semnal de alarmă care indică un dezechilibru în organism și necesită investigații amănunțite pentru a identifica și trata cauza primară.</p>
+                
+                <h4 class="mt-8">1.3. Impactul general asupra sănătății și calității vieții</h4>
+                <p>Percepția publică și, uneori, chiar cea medicală, tinde să se concentreze disproporționat asupra riscurilor asociate cu obezitatea, neglijând adesea pericolele la fel de grave ale subponderabilității. Această focalizare inegală poate duce la o subdiagnosticare și o minimalizare a problemelor cu care se confruntă pacienții subponderali, ale căror simptome (oboseală cronică, infecții recurente) pot fi ignorate sau atribuite eronat altor cauze.</p>
+                <p>Studiile epidemiologice demonstrează o relație în formă de "J" între IMC și riscul de mortalitate, ceea ce înseamnă că atât subponderabilitatea, cât și obezitatea sunt asociate cu o speranță de viață redusă, riscul cel mai mic fiind înregistrat în intervalul de greutate normală. Consecințele subponderabilității sunt sistemice și severe, incluzând:</p>
+                <ul>
+                    <li>Scăderea imunității: un răspuns imun deficitar crește susceptibilitatea la infecții. Pacienții subponderali cu sepsis, de exemplu, au o rată de mortalitate semnificativ mai mare.</li>
+                    <li>Probleme de termoreglare: dificultăți în menținerea temperaturii corporale normale.</li>
+                    <li>Afectare musculo-scheletică: pierderea masei musculare și osoase, ducând la slăbiciune, oboseală și un risc crescut de osteoporoză și fracturi.</li>
+                    <li>Tulburări de fertilitate: la femei, subponderabilitatea poate cauza tulburări ale ciclului menstrual, inclusiv amenoree (absența menstruației), și poate duce la infertilitate.</li>
+                </ul>
+                <p>Netratată, subponderabilitatea patologică poate agrava boala de bază, poate duce la complicații severe și, în cazuri extreme, la deces.</p>
+                <h4 class="mt-8">Tabelul 1.1: Clasificarea indicelui de masă corporală (IMC) conform OMS</h4>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead><tr><th>Categorie</th><th>Interval IMC (kg/m²)</th></tr></thead>
+                        <tbody>
+                            <tr><td>Subponderal</td><td>&lt; 18.5</td></tr>
+                            <tr><td>Greutate normală</td><td>18.5 - 24.9</td></tr>
+                            <tr><td>Supraponderal</td><td>25.0 - 29.9</td></tr>
+                            <tr><td>Obezitate clasa I</td><td>30.0 - 34.9</td></tr>
+                            <tr><td>Obezitate clasa II</td><td>35.0 - 39.9</td></tr>
+                            <tr><td>Obezitate clasa III (morbidă)</td><td>≥ 40.0</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Etiologie -->
+    <section class="py-24 bg-light" id="etiologie">
+        <div class="container mx-auto px-4">
+            <h2 class="section-heading text-center">Capitolul 2: Etiologia multi-factorială a subponderabilității</h2>
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-sitemap"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <div class="info-card max-w-4xl mx-auto">
+                <p>Subponderabilitatea este rareori rezultatul unui singur factor. Cel mai adesea, este o condiție complexă, la intersecția dintre biologie, genetică, psihologie și mediu.</p>
+                <h4>2.1. Cauze fiziologice și organice</h4>
+                <p>Acestea reprezintă un grup heterogen de afecțiuni care interferează cu balanța energetică a organismului, fie prin reducerea aportului, fie prin creșterea consumului sau a pierderilor.</p>
+                <ul>
+                    <li><strong>Aport dietetic redus:</strong> Este cea mai evidentă cauză. Poate fi secundară unor boli acute sau cronice care suprimă apetitul (anorexie medicală) prin mecanisme inflamatorii și hormonale complexe, implicând citokine (ex: TNF-alfa), glucocorticoizi și insulină. De asemenea, cauzele socio-economice, precum sărăcia și insecuritatea alimentară, joacă un rol major la nivel global.</li>
+                    <li><strong>Malabsorbția:</strong> În aceste condiții, organismul nu poate absorbi eficient nutrienții din alimentele ingerate, chiar dacă aportul caloric este adecvat. Printre cauzele principale se numără:
+                        <ul>
+                            <li><strong>Boala celiacă:</strong> O reacție autoimună la gluten care distruge vilozitățile intestinale. Este o cauză frecventă și subdiagnosticată de malabsorbție și pierdere în greutate.</li>
+                            <li><strong>Boli inflamatorii intestinale:</strong> Boala Crohn și colita ulcerativă pot cauza inflamație cronică, diaree și malabsorbție.</li>
+                            <li><strong>Insuficiența pancreatică exocrină:</strong> Pancreasul nu produce suficiente enzime pentru a digera grăsimile, proteinele și carbohidrații.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Stări hipermetabolice și pierderi crescute:</strong> Anumite afecțiuni accelerează metabolismul bazal, "arzând" mai multe calorii decât în mod normal, sau cauzează pierderi directe de nutrienți:
+                         <ul>>
+                            <li><strong>Hipertiroidismul:</strong> Excesul de hormoni tiroidieni crește rata metabolică, ducând la pierdere în greutate în ciuda unui apetit adesea crescut.</li>
+                            <li><strong>Neoplaziile (cancerul):</strong> Multe tipuri de cancer, în special cele digestive, pulmonare sau hematologice, induc o stare de cașexie, caracterizată prin anorexie, inflamație sistemică și catabolism muscular și adipos accelerat.</li>
+                            <li><strong>Infecții cronice:</strong> Afecțiuni precum HIV/SIDA sau tuberculoza sunt asociate clasic cu pierdere ponderală semnificativă.</li>
+                            <li><strong>Arsuri majore sau traume severe:</strong> Aceste stări critice induc un hipermetabolism și un hipercatabolism extrem, cu necesar energetic foarte mare.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Reglarea neuro-hormonală:</strong> Apetitul și greutatea corporală sunt fin reglate de un sistem complex de hormoni și semnale neuronale. Dezechilibrele la acest nivel pot duce la subponderabilitate:
+                        <ul>
+                            <li><strong>Hormoni gastrointestinali și pancreatici:</strong> Leptina (hormonul sațietății), insulina, polipeptidul pancreatic și amilina acționează la nivelul hipotalamusului pentru a suprima apetitul. Niveluri patologic scăzute sau rezistența la acțiunea acestor hormoni pot influența balanța energetică.</li>
+                            <li><strong>Afectare neurologică:</strong> Leziuni sau atrofii la nivelul lobului frontal drept au fost asociate cu anorexia (pierderea apetitului), în timp ce leziunile lobului stâng pot duce la hiperfagie.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h4 class="mt-8">2.2. Predispoziția genetică</h4>
+                <p>Dovezile științifice indică tot mai clar că genetica joacă un rol substanțial în determinarea greutății corporale. Studiile pe gemeni au demonstrat că variația greutății este în mare măsură influențată de factori ereditari. Pentru unii indivizi, a fi slab este, literalmente, "înscris în gene".</p>
+                 <ul>
+                    <li><strong>Sindroame genetice specifice:</strong>
+                        <ul>
+                            <li><strong>Duplicația locusului 16p11.2:</strong> Cercetări de referință au arătat că persoanele cu o copie suplimentară (duplicație) a unei anumite regiuni de pe cromozomul 16 (locusul 16p11.2) au un risc de 23 de ori mai mare (la bărbați) de a fi subponderale. În mod fascinant, fenomenul este în oglindă: persoanele cărora le lipsește această regiune (deleție) au un risc extrem de mare de obezitate morbidă. Acest locus conține 28 de gene implicate probabil în reglarea apetitului și dezvoltarea cerebrală.</li>
+                            <li><strong>Alte sindroame:</strong> Afecțiuni precum sindromul Marfan sau sindromul Silver-Russell sunt boli genetice cunoscute care se manifestă frecvent prin statură înaltă și subțire sau, respectiv, prin retard de creștere intrauterină și postnatală, ambele ducând la subponderabilitate.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Gene ale "siluetei" (Skinny Genes):</strong> Dincolo de sindroamele rare, cercetările la scară largă au identificat numeroase variante genetice comune care predispun la o greutate corporală scăzută. Un studiu important realizat la Universitatea Cambridge a arătat că persoanele slabe și sănătoase au, în general, o "povară genetică" mai mică – adică mai puține variante genetice cunoscute pentru creșterea riscului de obezitate. Alte studii au identificat gene specifice, precum PARGC1A, care codifică un coactivator esențial în metabolismul energetic celular și arderea grăsimilor. Persoanele cu anumite variante ale acestei gene pot avea un sistem mai eficient de utilizare a grăsimilor ca sursă de energie în timpul exercițiilor fizice, ceea ce le ajută să mențină o greutate mai mică.</li>
+                </ul>
+                <p>Este important de subliniat că predispoziția genetică nu acționează în izolare. Ea creează o vulnerabilitate biologică – de exemplu, un metabolism mai eficient sau o sensibilitate redusă la recompensa alimentară. Atunci când această vulnerabilitate se suprapune cu anumiți factori psihologici (precum perfecționismul) și de mediu (precum presiunea socială pentru a fi slab), riscul de a dezvolta o tulburare de alimentație poate crește exponențial. Acest model explică de ce, în fața acelorași presiuni, unii indivizi dezvoltă o patologie, în timp ce alții nu. Tratamentul eficient trebuie, așadar, să adreseze nu doar comportamentul, ci și să educe pacientul cu privire la componenta sa biologică, reducând astfel sentimentele de vinovăție și auto-învinovățire.</p>
+                <h4 class="mt-8">2.3. Cauze psihologice și psihiatrice</h4>
+                <p>Mintea joacă un rol central în multe cazuri de subponderabilitate, în special prin intermediul tulburărilor de alimentație, care sunt afecțiuni psihiatrice grave, cu consecințe medicale severe.</p>
+                <ul>
+                    <li><strong>Factori de vulnerabilitate și declanșatori:</strong>
+                        <ul>
+                            <li><strong>Trăsături de personalitate:</strong> Anumite trăsături cresc riscul dezvoltării unei tulburări de alimentație. Acestea includ perfecționismul exacerbat, nevoia de control, gândirea rigidă, trăsăturile obsesiv-compulsive (anankaste) și o stimă de sine scăzută.</li>
+                            <li><strong>Factori de mediu și traumatici:</strong> Presiunea culturală și socială de a atinge un ideal corporal nerealist, perpetuată de media tradițională și de rețelele sociale, este un factor omniprezent în societățile occidentale. Experiențele de bullying sau tachinare legate de greutate în copilărie sau adolescență sunt un declanșator extrem de puternic. De asemenea, evenimentele de viață traumatice sau stresante, precum abuzul fizic sau sexual, pierderea unei persoane dragi sau tranzițiile majore (schimbarea școlii, divorțul părinților), pot precipita debutul bolii.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Tulburările de alimentație (conform DSM-5):</strong>
+                        <ul>
+                            <li><strong>Anorexia nervoasă (AN):</strong> Este definită de trei caracteristici esențiale: 1) restricția aportului energetic care duce la o greutate corporală semnificativ scăzută; 2) o frică intensă de a câștiga în greutate sau de a deveni gras; și 3) o perturbare a modului în care este percepută propria greutate sau formă corporală (imagine corporală distorsionată) sau o negare a gravității stării de subponderabilitate. Există două subtipuri: tipul restrictiv, în care pierderea în greutate este obținută predominant prin dietă, post și/sau exerciții fizice excesive, și tipul binge-eating/purging, în care persoana se angajează în episoade recurente de supraalimentare urmate de comportamente compensatorii (vărsături auto-induse, abuz de laxative, diuretice etc.).</li>
+                            <li><strong>Bulimia nervoasă (BN):</strong> Se caracterizează prin episoade recurente de binge-eating (consumul unei cantități de mâncare mult mai mari decât normal într-o perioadă scurtă de timp, cu sentimentul pierderii controlului), urmate de comportamente compensatorii inadecvate pentru a preveni creșterea în greutate. Persoanele cu BN pot fi subponderale, normoponderale sau supraponderale, dar diagnosticul este relevant în acest context atunci când comportamentele duc la o greutate sub limita normală.</li>
+                            <li><strong>Tulburarea de aport alimentar evitant/restrictiv (ARFID):</strong> Spre deosebire de AN, în ARFID nu există frica de îngrășare sau o imagine corporală distorsionată. Evitarea alimentelor se bazează pe alte motive: 1) lipsa de interes pentru mâncare; 2) caracteristicile senzoriale ale alimentelor (textură, miros, gust); sau 3) frica de consecințe aversive ale mâncatului (ex: înec, vărsături, durere abdominală). Această tulburare duce la deficiențe nutriționale semnificative, dependență de suplimente orale și/sau subponderabilitate marcată.</li>
+                            <li><strong>Ortorexia nervoasă:</strong> Deși încă nu este un diagnostic formal în DSM-5, ortorexia este o condiție clinică din ce în ce mai recunoscută. Ea reprezintă o obsesie pentru alimentația "sănătoasă", "pură" sau "curată". Ceea ce începe ca o intenție pozitivă alunecă treptat spre o rigiditate extremă, cu eliminarea unor grupuri întregi de alimente, anxietate severă legată de calitatea ingredientelor și izolare socială pentru a evita alimentele considerate "nesănătoase". Această obsesie poate duce la malnutriție severă și poate coexista cu sau poate evolua spre anorexie nervoasă. Această alunecare de la o preocupare normală pentru sănătate la o obsesie patologică subliniază necesitatea ca profesioniștii din domeniul sănătății să fie capabili să identifice semnele de avertizare, cum ar fi inflexibilitatea dietei, anxietatea socială legată de mâncare și ritualurile compulsive.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h4 class="mt-8">Tabelul 2.1: Criterii de diagnostic comprimate (DSM-5) pentru tulburări de alimentație relevante</h4>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead><tr><th>Caracteristică</th><th>Anorexia nervoasă (AN)</th><th>Tulburarea de aport alimentar evitant/restrictiv (ARFID)</th><th>Ortorexia nervoasă (caracteristici clinice)</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Greutate corporală</strong></td><td>Semnificativ scăzută</td><td>Scăzută sau eșec în atingerea greutății expectate</td><td>Poate deveni semnificativ scăzută</td></tr>
+                            <tr><td><strong>Motivul principal al restricției/evitării</strong></td><td>Frică intensă de îngrășare, imagine corporală distorsionată</td><td>Lipsă de interes, caracteristici senzoriale, frica de consecințe aversive (ex: înec)</td><td>Obsesie pentru calitatea "pură" și "sănătoasă" a alimentelor</td></tr>
+                            <tr><td><strong>Preocupare pentru greutate/formă</strong></td><td>Centrală, definitorie</td><td>Absentă</td><td>Poate fi prezentă, dar secundară obsesiei pentru "sănătate"</td></tr>
+                            <tr><td><strong>Impact funcțional</strong></td><td>Sever, medical și psihosocial</td><td>Deficiențe nutriționale, dependență de suplimente, afectare psihosocială</td><td>Malnutriție, izolare socială, anxietate severă</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Consecinte -->
+    <section class="py-24" id="consecinte">
+        <div class="container mx-auto px-4">
+            <h2 class="section-heading text-center">Capitolul 3: Consecințele subponderabilității asupra sănătății</h2>
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-heart-pulse"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <div class="info-card max-w-4xl mx-auto">
+                <p>Consecințele unei greutăți corporale insuficiente sunt profunde și afectează practic fiecare sistem de organe, precum și bunăstarea psihologică și socială a individului. Aceste efecte nu sunt izolate, ci interacționează, creând adesea un cerc vicios care se auto-întreține și agravează starea pacientului.</p>
+                <h4>3.1. Impactul sistemic</h4>
+                <p>Malnutriția cronică, fie ea cauzată de aport insuficient, malabsorbție sau hipermetabolism, privează organismul de "cărămizile" și energia necesare pentru a funcționa corect.</p>
+                <ul>
+                    <li><strong>Funcția musculară și osoasă:</strong> Organismul, în lipsa unui aport energetic adecvat, începe să-și consume propriile țesuturi. Masa musculară este catabolizată (descompusă) pentru a furniza aminoacizi și energie, ducând la slăbiciune (astenie) și scăderea masei musculare (sarcopenie). Un aspect important este că funcția musculară scade chiar înainte ca pierderea de masă să fie evidentă, sugerând un impact direct al deficitului de nutrienți asupra proceselor energetice celulare. Simultan, densitatea osoasă scade, crescând dramatic riscul de osteoporoză și fracturi de fragilitate. Acest risc este exacerbat la femei de amenoreea indusă de malnutriție, care privează oasele de efectul protector al estrogenului.</li>
+                    <li><strong>Sistemul cardiovascular și respirator:</strong> Inima, fiind un mușchi, este și ea afectată. Masa musculară cardiacă se reduce, ceea ce duce la scăderea debitului cardiac. Aceasta, la rândul său, compromite perfuzia sanguină a altor organe, în special a rinichilor. Pot apărea bradicardie (puls scăzut) și hipotensiune. Mușchii respiratori, inclusiv diafragma, slăbesc, ceea ce reduce eficiența tusei și capacitatea de a elimina secrețiile bronșice, crescând vulnerabilitatea la infecții respiratorii precum pneumonia.</li>
+                    <li><strong>Sistemul imunitar:</strong> Malnutriția este un cunoscut imunosupresor. Producția și funcționarea celulelor imune sunt compromise, lăsând organismul vulnerabil în fața infecțiilor bacteriene și virale. O meta-analiză recentă a demonstrat convingător acest risc, arătând că pacienții subponderali care dezvoltă sepsis au o mortalitate intraspitalicească, la 28 de zile și la 1 an semnificativ mai mare decât pacienții normoponderali.</li>
+                    <li><strong>Sistemul gastrointestinal:</strong> Paradoxal, starea de malnutriție afectează chiar sistemul responsabil cu absorbția nutrienților. Se produce atrofia vilozităților intestinale, se reduce fluxul sanguin către intestin și scade producția de enzime pancreatice. Aceste modificări pot duce la diaree, care agravează și mai mult deshidratarea și pierderea de nutrienți, închizând un cerc vicios.</li>
+                    <li><strong>Sistemul reproducător și endocrin:</strong> La femei, unul dintre cele mai cunoscute semne este amenoreea (absența menstruației), cauzată de supresia axei hipotalamo-hipofizo-ovariene. Nivelurile scăzute de leptină și stresul metabolic semnalizează creierului că organismul nu are resursele necesare pentru a susține o sarcină, ducând la oprirea ovulației și a menstruației. Aceasta poate cauza infertilitate pe termen lung și poate întârzia dezvoltarea pubertară la adolescente.</li>
+                    <li><strong>Sănătatea mintală:</strong> Legătura dintre subponderabilitate și sănătatea mintală este bidirecțională. Pe de o parte, afecțiuni precum depresia și anxietatea pot cauza pierdere în greutate. Pe de altă parte, malnutriția însăși afectează chimia și funcționarea creierului, exacerbând simptomele de depresie, anxietate, iritabilitate și dificultăți de concentrare. Riscul de suicid este o preocupare majoră, în special în anorexia nervoasă, unde este a doua cea mai frecventă cauză de deces, după complicațiile medicale.</li>
+                </ul>
+                <h4 class="mt-8">3.2. Consecințe sociale și interpersonale</h4>
+                <p>Impactul subponderabilității depășește cu mult sfera fizică, afectând profund relațiile interpersonale și integrarea socială a individului.</p>
+                <ul>
+                    <li><strong>Bullying și stigmatizare ("skinny shaming"):</strong> Deși discursul public se concentrează pe stigmatizarea obezității, bullying-ul îndreptat împotriva persoanelor slabe este un fenomen real, dureros și cu consecințe grave. Comentariile pot varia de la remarci aparent inofensive sau "sfaturi bine intenționate" ("Mănâncă și tu ceva!", "Ești numai piele și os!") la insulte directe și rău intenționate, atât în viața reală, cât și în mediul online. Aceste experiențe sunt deosebit de dăunătoare în perioade vulnerabile precum adolescența.</li>
+                    <li><strong>Mecanismul impactului psihologic:</strong> Indiferent de direcția sa, bullying-ul bazat pe greutate este un factor de risc major pentru dezvoltarea unei întregi game de probleme psihologice. Aproximativ 65% dintre persoanele cu tulburări de alimentație raportează că experiențele de bullying au contribuit direct la debutul bolii lor. Aceste atacuri erodează stima de sine, induc o imagine corporală negativă și pot declanșa sau agrava depresia și anxietatea.</li>
+                    <li><strong>Internalizarea stigmei și izolarea socială:</strong> Poate cel mai insidios efect este internalizarea stigmei (internalized weight bias). Victima ajunge să creadă mesajele negative și să-și aplice singură atitudinile ostile și stereotipurile, dezvoltând un sentiment profund de rușine și inadecvare. Această auto-stigmatizare acționează ca un mediator puternic între experiența de bullying și dezvoltarea simptomelor patologice. Consecința firească este retragerea socială. Persoana afectată începe să evite situațiile care implică mâncare (mese în familie, ieșiri cu prietenii), activitățile care expun corpul (mersul la piscină) sau orice context social unde s-ar putea simți judecată. Această izolare agravează sentimentele de singurătate și depresie, lipsind individul de suportul social esențial pentru recuperare.</li>
+                </ul>
+                <p>Se conturează astfel un model circular devastator: o cauză inițială duce la pierdere în greutate, care atrage consecințe fizice (oboseală, afectare cognitivă) și sociale (bullying). Acestea, la rândul lor, agravează starea psihologică (depresie, anxietate, stimă de sine scăzută), ceea ce întărește comportamentele disfuncționale (restricție, izolare) ca o formă de control sau evitare. Comportamentele restrictive agravează malnutriția, iar ciclul se reia cu o intensitate sporită. O intervenție eficientă trebuie să vizeze ruperea acestui cerc în mai multe puncte simultan: suport nutrițional pentru a repara corpul și creierul, psihoterapie pentru a aborda mecanismele psihologice și terapie de grup sau de familie pentru a reconstrui rețeaua de suport social.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Diagnostic -->
+    <section class="py-24 bg-light" id="diagnostic">
+        <div class="container mx-auto px-4">
+            <h2 class="section-heading text-center">Capitolul 4: Evaluarea clinică și diagnosticul diferențial</h2>
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-stethoscope"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <div class="info-card max-w-4xl mx-auto">
+                <p>Abordarea unui pacient cu subponderabilitate necesită o evaluare sistematică și riguroasă, menită să diferențieze între o condiție constituțională benignă și o patologie subiacentă. Procesul de diagnostic este adesea similar cu investigarea unei "febre de origine necunoscută" prin amploarea cauzelor posibile.</p>
+                <h4>4.1. Anamneza și examenul fizic</h4>
+                <p>Acestea reprezintă piatra de temelie a oricărui demers diagnostic și, în peste jumătate din cazuri, pot orienta direct către cauza probabilă.</p>
+                <ul>
+                    <li><strong>Anamneza (istoricul medical):</strong> Conversația detaliată cu pacientul este crucială. Medicul trebuie să investigheze:
+                        <ul>
+                            <li><strong>Caracteristicile pierderii în greutate:</strong> Cantitatea exactă (ex: pierdere de >5% din greutatea corporală în 6-12 luni este considerată semnificativă clinic), cronologia (bruscă sau treptată) și caracterul intenționat sau neintenționat. Este utilă coroborarea cu date medicale anterioare sau cu informații de la familie.</li>
+                            <li><strong>Obiceiuri alimentare și apetit:</strong> Evaluarea detaliată a aportului alimentar, ideal printr-un jurnal alimentar pe câteva zile, deoarece memoria declarativă este adesea imprecisă. Se notează prezența apetitului, sațietatea precoce, frica de alimente, ritualurile alimentare.</li>
+                            <li><strong>Simptome asociate (review of systems):</strong> O trecere în revistă completă a simptomelor pe aparate și sisteme pentru a identifica indicii: febră, transpirații nocturne (infecție, neoplazie), tuse, hemoptizie (TBC, cancer pulmonar), dureri abdominale, diaree, constipație (boală digestivă), poliurie, polidipsie (diabet), palpitații, intoleranță la căldură (hipertiroidism).</li>
+                            <li><strong>Istoric personal și familial:</strong> Boli cronice cunoscute, intervenții chirurgicale, istoric de cancer, boli endocrine, digestive sau psihiatrice în familie.</li>
+                            <li><strong>Medicație și substanțe:</strong> Utilizarea de medicamente (prescrise, OTC), suplimente, droguri recreaționale sau alcool.</li>
+                            <li><strong>Context psihosocial:</strong> Evenimente de viață recente, nivel de stres, statut socio-economic, modificări ale situației de locuit, doliu, rețea de suport social.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Examenul fizic complet:</strong> Trebuie să fie amănunțit, căutând semne care pot sugera o etiologie specifică:
+                        <ul>
+                            <li><strong>Semne vitale și antropometrie:</strong> Măsurarea greutății, înălțimii, calcularea IMC. Febra, tahicardia, tahipneea sau hipotensiunea sunt semnale de alarmă.</li>
+                            <li><strong>Examenul tegumentelor și fanerelor:</strong> Căutarea palorii (anemie), icterului (boală hepatică), hiperpigmentării (boala Addison), uscăciunii pielii, căderii părului, prezenței părului fin tip lanugo (malnutriție severă) sau a semnului Russell (leziuni pe dosul mâinilor de la vărsăturile auto-induse în bulimie).</li>
+                            <li><strong>Cap și gât:</strong> Examinarea cavității bucale (carii dentare, eroziuni ale smalțului de la acidul gastric), palparea tiroidei pentru gușă sau noduli, palparea ganglionilor limfatici.</li>
+                            <li><strong>Examen cardiovascular și pulmonar:</strong> Căutarea suflurilor cardiace, a semnelor de insuficiență cardiacă, a raluri pulmonare.</li>
+                            <li><strong>Examen abdominal:</strong> Palparea pentru mase tumorale, hepatomegalie (ficat mărit), splenomegalie (splină mărătă).</li>
+                            <li><strong>Examen neurologic și psihiatric:</strong> Evaluarea forței musculare, a reflexelor, a stării de dispoziție, a afectului și a conținutului gândirii, cu atenție specială la ideile prevalente despre greutate și imagine corporală.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h4 class="mt-8">4.2. Protocol de investigații de laborator și imagistice</h4>
+                <p>Dacă anamneza și examenul fizic nu relevă o cauză clară, se impune o abordare etapizată a investigațiilor paraclinice. Un aspect demn de menționat este că o proporție semnificativă de pacienți, estimată la până la 25%, pot rămâne fără un diagnostic etiologic clar chiar și după o evaluare exhaustivă. Această realitate clinică subliniază importanța unei strategii de monitorizare atentă în timp ("watchful waiting"). Absența unui diagnostic inițial nu echivalează cu absența unei probleme. Poate fi vorba de o boală în stadiu foarte incipient, sub pragul de detecție al testelor actuale, sau de o cauză psihosocială subtilă (stres cronic, depresie mascată). În aceste cazuri, strategia corectă nu este abandonarea investigațiilor, ci programarea unor reevaluări periodice (ex: la 1-3 luni), care includ măsurarea greutății și consiliere nutrițională. Timpul devine astfel un instrument de diagnostic, permițând observarea evoluției și, posibil, apariția unor noi semne sau simptome care să ghideze investigațiile viitoare.</p>
+                <h4 class="mt-8">Tabelul 4.1: Protocol de investigații pentru evaluarea subponderabilității la adult</h4>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr>
+                                <th class="w-1/3">Testul</th>
+                                <th>Raționament clinic și corelații (ce căutăm?)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="2" class="font-bold bg-gray-200 text-center">Secțiunea 1: Teste de Primă Linie (Screening Inițial)</td></tr>
+                            <tr><td>Hemoleucogramă completă (CBC)</td><td>Anemie (deficiență de fier/B12, boală cronică), leucopenie, trombocitopenie (malnutriție severă, supresie medulară în neoplazii).</td></tr>
+                            <tr><td>Electroliți (Na, K, Cl), Uree, Creatinină</td><td>Dezechilibre electrolitice (hipokaliemie în purjare), evaluarea funcției renale (boală cronică de rinichi) și a statusului de hidratare.</td></tr>
+                            <tr><td>Teste funcționale hepatice (ALT, AST, GGT, Bilirubină, Albumină)</td><td>Afectare hepatică (hepatită, ciroză, metastaze). Albumina serică este un marker al statusului nutrițional pe termen lung.</td></tr>
+                            <tr><td>Glicemie a jeun</td><td>Excluderea unui diabet zaharat nou-instalat sau slab controlat, care poate cauza pierdere ponderală prin glicozurie.</td></tr>
+                            <tr><td>TSH (Hormon de stimulare tiroidiană)</td><td>Cel mai sensibil test de screening pentru disfuncții tiroidiene. Un TSH supresat sugerează hipertiroidism.</td></tr>
+                            <tr><td>Markeri inflamatori (VSH, CRP)</td><td>Niveluri crescute sugerează o boală inflamatorie cronică (ex: boală Crohn, artrită reumatoidă), infecție cronică sau neoplazie.</td></tr>
+                            <tr><td>Ac. anti-transglutaminază tisulară (tTG) IgA & IgA seric total</td><td>Test de screening de înaltă specificitate și sensibilitate pentru boala celiacă, o cauză majoră de malabsorbție.</td></tr>
+                            <tr><td>Sumar de urină</td><td>Căutarea proteinuriei (sindrom nefrotic), glicozuriei (diabet), hematuriei (neoplazie urogenitală).</td></tr>
+                            <tr><td>Radiografie toracică</td><td>Screening pentru tuberculoză, sarcoidoză, cancer pulmonar primar sau metastaze pulmonare.</td></tr>
+                            <tr><td colspan="2" class="font-bold bg-gray-200 text-center">Secțiunea 2: Teste de a Doua Linie (Investigații Specifice)</td></tr>
+                            <tr><td>Dozări hormonale specifice (fT4, Cortizol matinal, ACTH)</td><td>Confirmarea hipertiroidismului (fT4 crescut) sau investigarea insuficienței adrenale/bolii Addison (cortizol scăzut).</td></tr>
+                            <tr><td>Vitamine și Minerale (Vit. D, B12, Fier, Feritină, Fosfat, Magneziu)</td><td>Evaluarea deficiențelor specifice cauzate de aport redus, malabsorbție sau pierderi crescute.</td></tr>
+                            <tr><td>Teste serologice pentru infecții (HIV, AgHBs, VHC)</td><td>Indicat la pacienții cu factori de risc pentru infecții cronice care pot cauza pierdere în greutate.</td></tr>
+                            <tr><td>Endoscopie digestivă superioară / Colonoscopie</td><td>Vizualizarea directă a mucoasei esofagiene, gastrice, duodenale și colonice; prelevare de biopsii pentru diagnostic (ex: boală celiacă, boală inflamatorie intestinală, neoplazii).</td></tr>
+                            <tr><td>Imagistică avansată (CT/RMN toraco-abdomino-pelvin)</td><td>Indicată dacă testele de primă linie sunt anormale sau dacă persistă o suspiciune clinică înaltă de malignitate ocultă, în ciuda testelor inițiale normale.</td></tr>
+                            <tr><td>Teste genetice (analiză microarray cromozomială)</td><td>Recomandate în contextul unui retard de dezvoltare, autism, microcefalie sau trăsături dismorfice care sugerează un sindrom genetic (ex: Silver-Russell, duplicație 16p11.2).</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Terapii -->
+    <section class="py-24" id="terapii">
+        <div class="container mx-auto px-4">
+            <h2 class="section-heading text-center">Capitolul 5: Strategii terapeutice: o abordare integrată</h2>
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-hand-holding-medical"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="info-card">
+                    <h4>5.1. Mecanisme de creștere sănătoasă în greutate</h4>
+                    <p>Creșterea în greutate trebuie să se concentreze pe refacerea țesuturilor funcționale (în special masa musculară), nu doar pe acumularea de grăsime.</p>
+                    <ul>
+                        <li><strong>Surplus caloric controlat și progresiv:</strong> Pentru a câștiga în greutate, este esențial să se consume mai multe calorii decât se ard. Totuși, acest surplus trebuie introdus treptat, de obicei cu 300-500 kcal suplimentare pe zi față de necesarul de menținere. O creștere bruscă poate copleși sistemul digestiv și poate duce la acumularea predominantă de țesut adipos.</li>
+                        <li><strong>Creșterea frecvenței meselor:</strong> În loc de trei mese mari, se recomandă 5-6 mese mai mici și gustări pe parcursul zilei. Această strategie ajută la gestionarea sațietății precoce și asigură un flux constant de energie și nutrienți.</li>
+                        <li><strong>Focalizare pe densitatea energetică și nutritivă:</strong> Alegerea alimentelor trebuie să fie strategică, preferând cele bogate atât în calorii, cât și în micronutrienți.
+                            <ul>
+                                <li><strong>Proteine de înaltă calitate:</strong> Sunt vitale pentru sinteza masei musculare. Sursele recomandate includ carnea slabă (pui, curcan), peștele, ouăle, lactatele integrale (iaurt grecesc), leguminoasele și nucile.</li>
+                                <li><strong>Carbohidrați complecși:</strong> Asigură energie durabilă și refac rezervele de glicogen. Se recomandă orezul, pastele integrale, cartofii, ovăzul și pâinea integrală.</li>
+                                <li><strong>Grăsimi sănătoase:</strong> Reprezintă cea mai concentrată sursă de calorii și sunt esențiale pentru funcția hormonală și absorbția vitaminelor liposolubile. Surse excelente sunt avocado, uleiul de măsline extra-virgin, nucile, semințele și peștele gras (somon, macrou).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Strategii practice de îmbogățire a mesei:</strong> Se pot adăuga "calorii ascunse" în preparate: brânză rasă sau smântână în supe și ciorbe, unt de arahide sau de migdale pe pâine prăjită, lapte praf în piureuri sau smoothie-uri, ulei de măsline adăugat peste legumele gătite. Shake-urile nutritive, preparate cu lapte integral, pudră proteică, fructe și unt de nuci, sunt o metodă excelentă de a consuma calorii și nutrienți într-o formă lichidă, mai puțin sățioasă.</li>
+                        <li><strong>Rolul crucial al exercițiilor fizice:</strong> Contrar intuiției, exercițiile fizice sunt esențiale în procesul de îngrășare sănătoasă. Antrenamentul de forță (cu greutăți, benzi elastice sau greutatea corporală) este cel mai important. Acesta trimite un semnal anabolic mușchilor, stimulând sinteza proteică și asigurând că surplusul caloric este utilizat pentru a construi masă musculară, nu doar țesut adipos. Fără acest stimul, o mare parte din greutatea câștigată va fi sub formă de grăsime. În plus, exercițiile fizice moderate pot stimula apetitul și pot îmbunătăți starea de spirit.</li>
+                        <li><strong>Managementul stilului de viață:</strong>
+                            <ul>
+                                <li><strong>Odihna și somnul:</strong> Procesele anabolice (de construcție) au loc predominant în timpul somnului. Asigurarea unui somn de calitate, de 7-9 ore pe noapte, este vitală pentru recuperare și creștere.</li>
+                                <li><strong>Hidratarea:</strong> Este importantă, dar se recomandă consumul de lichide (apă, ceaiuri) între mese, nu în timpul acestora, pentru a nu umple stomacul și a reduce prematur apetitul.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <h4>5.2. Abordări psihoterapeutice</h4>
+                    <p>În cazurile în care subponderabilitatea este cauzată sau întreținută de factori psihologici, în special de tulburări de alimentație, psihoterapia este componenta centrală și indispensabilă a tratamentului. Totuși, este esențial de înțeles că eficacitatea terapiei este condiționată de starea nutrițională a pacientului. Malnutriția severă induce deficite cognitive (probleme de concentrare, rigiditate a gândirii, afectare a memoriei) care fac dificilă, dacă nu imposibilă, angajarea într-un proces terapeutic ce necesită introspecție și flexibilitate mentală. Prin urmare, abordarea trebuie să fie secvențială și integrată: prima etapă este stabilizarea medicală și renutriția (realimentarea), care "repară" creierul și îl face receptiv la terapie. Odată ce pacientul este stabil din punct de vedere medical și cognitiv, psihoterapia poate aborda în profunzime cauzele psihologice subiacente.</p>
+                    <ul>
+                        <li><strong>Terapia cognitiv-comportamentală (CBT):</strong> Este considerată tratamentul "gold standard" pentru bulimia nervoasă și tulburarea de binge-eating. O formă adaptată, CBT-E (Enhanced Cognitive Behavioural Therapy), a fost dezvoltată pentru a se adresa tuturor tipurilor de tulburări de alimentație, inclusiv anorexiei. CBT-E se concentrează pe identificarea și modificarea mecanismelor care mențin tulburarea: preocuparea excesivă pentru formă și greutate, restricția dietetică, perfecționismul, stima de sine scăzută și intoleranța la emoții.</li>
+                        <li><strong>Terapia bazată pe familie (FBT / Metoda Maudsley):</strong> Este tratamentul de primă linie, cu cea mai solidă bază de dovezi, pentru copiii și adolescenții cu anorexie nervoasă. FBT este o abordare pragmatică care nu caută vinovați, ci împuternicește familia să devină agentul principal al schimbării. În prima fază, controlul asupra meselor este transferat temporar părinților, cu scopul unic de a restabili greutatea adolescentului. Pe măsură ce greutatea se normalizează, controlul este redat treptat adolescentului, iar în faza finală se abordează problemele de dezvoltare specifice vârstei.</li>
+                        <li><strong>Terapia dialectic-comportamentală (DBT):</strong> Deși inițial creată pentru tulburarea de personalitate borderline, DBT s-a dovedit eficientă pentru pacienții cu tulburări de alimentație care prezintă o disreglare emoțională severă, impulsivitate și comportamente de auto-vătămare. Terapia se axează pe dezvoltarea a patru seturi de abilități: mindfulness (conștientizare prezentă), toleranța la suferință, reglarea emoțională și eficiența interpersonală.</li>
+                        <li><strong>Terapia psihodinamică:</strong> Această abordare explorează rădăcinile mai profunde, adesea inconștiente, ale tulburării, legându-le de experiențe timpurii, conflicte interne și pattern-uri relaționale. Simptomele alimentare sunt văzute ca o expresie simbolică a unor suferințe sau nevoi neîmplinite. Deși studiile sunt mai puțin numeroase decât pentru CBT, dovezile existente sugerează că terapia psihodinamică, în special în formate pe termen mai lung, poate fi eficientă, mai ales în tratamentul anorexiei nervoase la adulți, cu rezultate care se mențin sau chiar se îmbunătățesc după încheierea tratamentului.</li>
+                        <li><strong>Terapii emergente:</strong>
+                            <ul>
+                                <li><strong>Terapia prin acceptare și angajament (ACT):</strong> O terapie din "valul al treilea" al CBT, ACT nu se concentrează pe schimbarea gândurilor, ci pe schimbarea relației cu acestea. Pacienții sunt învățați să observe și să accepte gândurile și emoțiile dureroase (ex: "sunt gras", anxietate) fără a le lăsa să le dicteze comportamentul, și să se angajeze în acțiuni care sunt în concordanță cu valorile lor personale profunde.</li>
+                                <li><strong>Terapia de expunere și prevenire a răspunsului (ERP):</strong> O tehnică specifică, extrem de utilă în ARFID și în tulburarea dismorfică corporală. Pacientul, ghidat de terapeut, se expune gradual și sistematic la alimentele, senzațiile sau situațiile temute (ex: a mânca un aliment cu o textură "greșită", a se privi în oglindă fără a se camufla), învățând să tolereze anxietatea fără a recurge la comportamente de evitare sau ritualuri.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <h4 class="mt-8 text-center">Tabelul 5.1: Comparație a abordărilor psihoterapeutice în tulburările de alimentație</h4>
+            <div class="overflow-x-auto info-card max-w-5xl mx-auto">
+                <table class="min-w-full">
+                    <thead><tr><th>Terapie</th><th>Principiu central</th><th>Populația țintă principală</th><th>Tehnici cheie</th><th>Puncte forte</th></tr></thead>
+                    <tbody>
+                        <tr><td>CBT-E</td><td>Modificarea cognițiilor și comportamentelor care mențin tulburarea.</td><td>Adulți cu AN, BN, BED.</td><td>Auto-monitorizare, restructurare cognitivă, experimente comportamentale, planificare mese.</td><td>Structurată, bazată pe dovezi solide, eficientă pe termen scurt-mediu.</td></tr>
+                        <tr><td>FBT</td><td>Împuternicirea familiei pentru a gestiona realimentarea.</td><td>Copii și adolescenți cu AN.</td><td>Sesiuni de familie, cântărire în ședință, transferul controlului asupra meselor.</td><td>Cea mai eficientă terapie pentru AN la adolescenți, previne spitalizarea.</td></tr>
+                        <tr><td>DBT</td><td>Dezvoltarea abilităților de reglare emoțională și toleranță la suferință.</td><td>Pacienți cu disreglare emoțională severă, impulsivitate (BN, BED).</td><td>Mindfulness, toleranța la suferință, reglare emoțională, eficiență interpersonală.</td><td>Abordează comorbiditățile și problemele de personalitate subiacente.</td></tr>
+                        <tr><td>Psihodinamică</td><td>Explorarea conflictelor inconștiente și a pattern-urilor relaționale.</td><td>Adulți cu AN, tulburări complexe și de lungă durată.</td><td>Interpretare, analiza transferului, explorarea trecutului și a emoțiilor.</td><td>Poate produce schimbări profunde și de durată, îmbunătățire post-tratament.</td></tr>
+                        <tr><td>ACT</td><td>Acceptarea gândurilor/emoțiilor dificile și angajamentul față de valori.</td><td>Pacienți cu rigiditate psihologică, evitare experiențială.</td><td>Defuziune cognitivă, exerciții de acceptare, clarificarea valorilor, mindfulness.</td><td>Crește flexibilitatea psihologică, utilă în cazuri rezistente la CBT clasic.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Holistic -->
+    <section class="py-24 bg-light" id="holistic">
+        <div class="container mx-auto px-4">
+            <h2 class="section-heading text-center">Capitolul 6: Perspective holistice și terapii complementare</h2>
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-yin-yang"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <div class="info-card max-w-4xl mx-auto">
+                <p>O abordare cu adevărat integrată a subponderabilității recunoaște că sănătatea este mai mult decât absența bolii și că starea de bine implică un echilibru între corp, minte și spirit. Terapiile complementare și perspectivele holistice pot oferi instrumente valoroase pentru a susține procesul de vindecare, în special prin managementul stresului, îmbunătățirea conștientizării corporale și susținerea funcției digestive. Acestea nu înlocuiesc tratamentul medical convențional, ci îl completează.</p>
+                <p>Un aspect fascinant este convergența limbajelor terapeutice. Deși sistemele holistice folosesc termeni diferiți – "Deficit de Qi al Splinei" în loc de "sindrom de malabsorbție", sau "blocaj al chakrei rădăcină" în loc de "anxietate de supraviețuire" – ele adesea identifică aceleași dezechilibre fundamentale și propun soluții care sunt remarcabil de complementare cu abordările convenționale. Un practician integrativ poate folosi aceste sisteme ca "lentile" diferite pentru a privi aceeași problemă, crescând aderența la tratament și oferind pacientului instrumente suplimentare de auto-îngrijire.</p>
+                <h4>6.1. Medicina tradițională chineză (MTC)</h4>
+                <p>În MTC, digestia și metabolismul sunt guvernate de un sistem funcțional denumit "Splina". Este important de menționat că aceasta nu se referă la organul anatomic splina, ci la un concept energetic. "Splina" este responsabilă pentru transformarea alimentelor și a lichidelor în Qi (energie vitală) și Sânge, și pentru transportul acestora în întregul corp pentru a hrăni țesuturile și organele.</p>
+                <ul>
+                    <li><strong>Conceptul de "Deficit de Qi al Splinei":</strong> Aceasta este una dintre cele mai frecvente diagnoze în MTC și descrie o slăbire a funcției digestive și metabolice. Când Qi-ul Splinei este deficitar, transformarea și transportul nutrienților sunt afectate.
+                        <ul>
+                            <li><strong>Simptome:</strong> Tabloul clinic al deficitului de Qi al Splinei se suprapune în mod izbitor cu simptomele malabsorbției sau ale tulburării de aport alimentar evitant/restrictiv (ARFID). Acestea includ: oboseală cronică (în special după mese), balonare abdominală, apetit scăzut sau capricios, sațietate precoce, scaune moi sau diaree, ten palid sau gălbui, slăbiciune musculară, membre grele, ceață mentală ("brain fog") și o pierdere treptată în greutate, chiar și la un aport alimentar aparent adecvat.</li>
+                            <li><strong>Cauze:</strong> MTC consideră că acest deficit este cauzat de o dietă necorespunzătoare (exces de alimente reci, crude, grase sau procesate), mese neregulate sau luate în grabă, suprasolicitare intelectuală ("gânditul excesiv" consumă Qi-ul Splinei), stres cronic și boli de lungă durată.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Terapii MTC pentru tonifierea Splinei:</strong>
+                        <ul>
+                            <li><strong>Dietoterapia:</strong> Este pilonul principal. Se pune accent pe consumul de alimente calde, gătite, ușor de digerat, care "încălzesc" și susțin funcția digestivă. Se recomandă supele, tocănițele, terciurile (congee), legumele rădăcinoase gătite (cartof dulce, morcov, dovleac), cerealele integrale (orez, ovăz, mei) și utilizarea condimentelor "încălzitoare" precum ghimbir, scorțișoară, cardamom și fenicul.</li>
+                            <li><strong>Fitoterapia:</strong> Se folosesc formule de plante medicinale clasice, prescrise de un practician autorizat, precum Si Jun Zi Tang (Decoctul celor Patru Nobili) sau Bu Zhong Yi Qi Tang (Decoctul pentru Tonifierea Centrului și Creșterea Qi-ului), care au ca scop tonifierea energiei Splinei.</li>
+                            <li><strong>Acupunctura și moxibustia:</strong> Stimularea anumitor puncte de pe meridiane (ex: Stomac 36 - Zusanli) are rolul de a regla și întări funcția digestivă.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h4 class="mt-8">Tabelul 6.1: Perspectiva MTC - Deficitul de Qi al Splinei: simptome și recomandări</h4>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead><tr><th>Simptome comune</th><th>Recomandări dietoterapeutice și de stil de viață</th></tr></thead>
+                        <tbody>
+                            <tr><td>Oboseală cronică, în special post-prandială</td><td>Alimente de favorizat: Cartof dulce, dovleac, morcovi, orez, ovăz, ghimbir, scorțișoară.</td></tr>
+                            <tr><td>Balonare abdominală, disconfort digestiv</td><td>Alimente de evitat: Alimente crude (salate), reci (înghețată, băuturi de la frigider), lactate, alimente grase, zahăr rafinat.</td></tr>
+                            <tr><td>Apetit scăzut, sațietate precoce</td><td>Obiceiuri de favorizat: Mese regulate, la ore fixe. A mânca încet, într-un mediu calm. A mesteca bine mâncarea.</td></tr>
+                            <tr><td>Scaune moi, tendință spre diaree</td><td>Metode de gătit: Gătit la abur, la cuptor, fierbere lentă (supe, tocănițe). A se evita prăjirea.</td></tr>
+                            <tr><td>Ceață mentală, dificultăți de concentrare</td><td>Stil de viață: Odihnă adecvată, managementul stresului, evitarea suprasolicitării intelectuale.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h4 class="mt-8">6.2. Sistemul energetic al chakrelor</h4>
+                <p>În tradițiile yoghine, chakrele sunt considerate centre energetice subtile situate de-a lungul coloanei vertebrale, fiecare guvernând aspecte fizice, emoționale și spirituale specifice.</p>
+                <ul>
+                    <li><strong>Chakra Rădăcină (Muladhara):</strong> Este prima chakră, localizată la baza coloanei vertebrale. Asociată cu elementul Pământ, culoarea roșie și mantra "LAM", Muladhara guvernează fundația existenței noastre: sentimentele de siguranță, stabilitate, securitate, supraviețuire și conexiunea cu corpul fizic și lumea materială.
+                        <ul>
+                            <li><strong>Simptomele unui blocaj:</strong> Un dezechilibru sau un blocaj în chakra rădăcină se poate manifesta printr-o gamă largă de simptome care rezonează puternic cu tabloul clinic al subponderabilității patologice și al tulburărilor de alimentație. Emoțional, apar frica, anxietatea cronică, insecuritatea profundă, un sentiment de a nu fi "împământat" sau "acasă" în propriul corp și o mentalitate de "supraviețuire". Fizic, dezechilibrele pot fi asociate cu probleme în partea inferioară a corpului (dureri lombare, probleme la nivelul picioarelor și tălpilor), oboseală cronică, sistem imunitar slăbit, probleme digestive (constipație) și fluctuații de greutate, inclusiv pierdere în greutate.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Metode de echilibrare a chakrei rădăcină:</strong>
+                        <ul>
+                            <li><strong>Yoga și mișcare:</strong> Posturile de yoga care întăresc conexiunea cu pământul sunt deosebit de benefice: Tadasana (Postura Muntelui), Virabhadrasana (Posturile Războinicului), Vrksasana (Postura Copacului) și, în special, Malasana (Ghirlanda sau Genuflexiunea Yoghină).</li>
+                            <li><strong>Meditație și vizualizare:</strong> Meditațiile de "împământare" (grounding), în care se vizualizează rădăcini puternice crescând din tălpi adânc în pământ, sunt foarte eficiente. De asemenea, se practică vizualizarea culorii roșii la baza coloanei și intonarea repetată a mantrei "LAM".</li>
+                            <li><strong>Contactul cu natura:</strong> Activități precum mersul desculț pe iarbă sau pământ, grădinăritul sau simpla petrecere a timpului în natură ajută la restabilirea conexiunii cu energia Pământului.</li>
+                            <li><strong>Afirmații:</strong> Repetarea conștientă a unor afirmații pozitive poate ajuta la reprogramarea pattern-urilor de gândire negative. Exemple includ: "Sunt în siguranță și protejat(ă)", "Am încredere în procesul vieții", "Pământul mă susține", "Aparțin acestui loc".</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h4 class="mt-8">6.3. Alte terapii complementare</h4>
+                <ul>
+                    <li><strong>Yoga, Qigong, Tai Chi:</strong> Aceste practici minte-corp ancestrale sunt extrem de valoroase pentru pacienții subponderali, în special pentru cei cu un nivel ridicat de anxietate și stres. Ele combină mișcarea lentă și conștientă cu respirația profundă și focusarea mentală. Beneficiile includ:
+                        <ul>
+                            <li><strong>Reducerea stresului:</strong> Calmează sistemul nervos simpatic ("luptă sau fugi") și activează sistemul parasimpatic ("odihnă și digestie"), scăzând nivelul hormonilor de stres precum cortizolul.</li>
+                            <li><strong>Îmbunătățirea digestiei:</strong> Mișcările de torsiune și respirația diafragmatică realizează un masaj intern blând al organelor abdominale, putând stimula peristaltismul.</li>
+                            <li><strong>Creșterea conștientizării corporale (interocepție):</strong> Ajută la reconstruirea unei relații pozitive și non-critice cu propriul corp.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Reiki:</strong> Este o tehnică de vindecare energetică japoneză în care practicianul acționează ca un "canal" pentru "energia vitală universală" (Reiki), pe care o transmite pacientului prin impunerea palmelor deasupra sau pe corp. Deși mecanismul de acțiune nu este validat de știința convențională și conceptul de "energie vitală" nu poate fi măsurat, Reiki este folosit în numeroase centre medicale de prestigiu ca terapie complementară. Studiile, deși adesea de calitate metodologică modestă, și numeroasele raportări anecdotice sugerează că Reiki poate induce o stare de relaxare profundă, reducând anxietatea, durerea, greața și îmbunătățind starea de bine generală și calitatea somnului. Pentru un pacient subponderal, anxios și stresat, aceste efecte pot fi extrem de benefice, contribuind indirect la îmbunătățirea apetitului și a funcției digestive.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Section 7: Bibliografie -->
+    <section class="py-24 bg-light" id="bibliografie">
+        <div class="container mx-auto px-4">
+            <h2 class="section-heading text-center">Capitolul 7: Bibliografie</h2>
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-book"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <div class="info-card max-w-4xl mx-auto text-sm">
+                <ol class="list-decimal list-inside space-y-2">
+                    <li>World Health Organization. (2004). *Global database on Body Mass Index.*</li>
+                    <li>Riveros-McKay, F., et al. (2019). The genetic architecture of thinness is distinct from that of obesity. *PLoS Genetics*, 15(5), e1008116.</li>
+                    <li>Estour, B., et al. (2017). Constitutional thinness: a model for the understanding of anorexia nervosa. *Presse Médicale*, 46(1), 22-29.</li>
+                    <li>D'Avanzo, B., et al. (1994). Constitutional leanness and anorexia nervosa. *The Lancet*, 343(8912), 1563.</li>
+                    <li>Allison, D. B., & Casey, D. E. (2001). The clinical management of the underweight adult. *American Journal of Clinical Nutrition*, 74(3), 273-274.</li>
+                    <li>Al-Daghri, N. M., et al. (2011). An approach to the underweight patient. *Journal of Clinical Endocrinology & Metabolism*, 96(2), 288-298.</li>
+                    <li>Bouras, E. P., & Lange, S. M. (2001). Evaluation of the patient with involuntary weight loss. *Gastroenterology Clinics of North America*, 30(3), 549-562.</li>
+                    <li>Mehler, P. S., & Brown, C. (2015). Anorexia nervosa–medical complications. *Journal of eating disorders*, 3(1), 1-8.</li>
+                    <li>Pepper, D. J., et al. (2019). The association between body mass index and outcomes in hospitalized patients with sepsis: a systematic review and meta-analysis. *Critical Care*, 23(1), 1-11.</li>
+                    <li>Mehler, P. S., & Andersen, A. E. (Eds.). (2017). *Eating disorders: A guide to medical care and complications.* Johns Hopkins University Press.</li>
+                    <li>American Psychiatric Association. (2013). *Diagnostic and statistical manual of mental disorders (5th ed.).*</li>
+                    <li>Food and Agriculture Organization of the United Nations. (2020). *The State of Food Security and Nutrition in the World 2020.*</li>
+                    <li>UpToDate. (2023). *Approach to the patient with unintentional weight loss.*</li>
+                    <li>Huffman, G. B. (2002). Evaluating and treating unintentional weight loss in the elderly. *American family physician*, 65(4), 640-651.</li>
+                    <li>Fearon, K., et al. (2011). Definition and classification of cancer cachexia: an international consensus. *The Lancet Oncology*, 12(5), 489-495.</li>
+                    <li>Jacquemont, S., et al. (2011). Mirror extreme BMI phenotypes associated with gene dosage at the 16p11. 2 locus. *Nature*, 478(7367), 97-102.</li>
+                    <li>Prior, S. J., et al. (2016). The PGC-1α gene Gly482Ser polymorphism is associated with weight loss and changes in body composition in postmenopausal women. *Metabolism*, 65(6), 921-927.</li>
+                    <li>Treasure, J., et al. (2020). Eating disorders. *The Lancet*, 395(10227), 899-911.</li>
+                    <li>Cassin, S. E., & von Ranson, K. M. (2005). Personality and eating disorders: a decade in review. *Clinical psychology review*, 25(7), 895-916.</li>
+                    <li>Hay, P., & Sachdev, P. (2011). Brain, behaviour, and eating: a scoping review of the current knowledge of the neurobiology of eating disorders. *Journal of eating disorders*, 1(1), 1-10.</li>
+                    <li>Puhl, R. M., & Luedicke, J. (2012). Weight-based victimization among adolescents in the school setting: emotional reactions and coping behaviors. *Journal of youth and adolescence*, 41(1), 27-40.</li>
+                    <li>Meadows, A., & Higgs, S. (2022). "It's just a bit of banter": The role of weight-related teasing and internalized weight bias in the relationship between weight stigma and eating disorder symptoms. *Frontiers in nutrition*, 9, 843135.</li>
+                    <li>Call, C., et al. (2020). Anorexia nervosa, avoidant-restrictive food intake disorder, and picky eating: A comparison of clinical and psychosocial characteristics. *Journal of eating disorders*, 8(1), 1-9.</li>
+                    <li>Dunn, T. M., & Bratman, S. (2016). On orthorexia nervosa: A review of the literature and proposed diagnostic criteria. *Eating behaviors*, 21, 11-17.</li>
+                    <li>Cena, H., et al. (2019). Definition and diagnostic criteria for orthorexia nervosa: a narrative review of the literature. *Eating and Weight Disorders-Studies on Anorexia, Bulimia and Obesity*, 24(2), 209-246.</li>
+                    <li>Misra, M., & Klibanski, A. (2014). Anorexia nervosa and bone. *Journal of Endocrinology*, 221(3), R163-R176.</li>
+                    <li>National Eating Disorders Association (NEDA). (n.d.). *Bullying & Eating Disorders.*</li>
+                    <li>Hilbert, A., et al. (2014). Social isolation in eating disorders. *The International journal of eating disorders*, 47(5), 522-529.</li>
+                    <li>Reife, C. M. (1995). Involuntary weight loss. *Medical Clinics of North America*, 79(2), 299-313.</li>
+                    <li>Mehler, P. S., & Krantz, M. J. (2003). Anorexia nervosa. *New England Journal of Medicine*, 348(26), 2666-2673.</li>
+                    <li>Wong, C. J. (2000). Involuntary weight loss. *Medical Clinics of North America*, 84(6), 1543-1563.</li>
+                    <li>Marton, K. I., et al. (1981). Involuntary weight loss: diagnostic and prognostic significance. *Annals of internal medicine*, 95(5), 568-574.</li>
+                    <li>Stewart, P. M. (2003). The adrenal cortex. In *Williams Textbook of Endocrinology* (10th ed.). Saunders.</li>
+                    <li>Tipton, K. D., & Wolfe, R. R. (2004). Protein and amino acids for athletes. *Journal of sports sciences*, 22(1), 65-79.</li>
+                    <li>Rozenek, R., et al. (2002). Effects of high-calorie supplements on body composition and muscular strength following a 12-week resistance training program. *Journal of strength and conditioning research*, 16(4), 529-536.</li>
+                    <li>Applegate, E. A. (1999). Nutritional considerations for the vegetarian athlete. *Canadian Journal of Applied Physiology*, 24(2), 177-187.</li>
+                    <li>American Dietetic Association. (2009). Position of the American Dietetic Association, Dietitians of Canada, and the American College of Sports Medicine: Nutrition and athletic performance. *Journal of the American Dietetic Association*, 109(3), 509-527.</li>
+                    <li>Tanchoco, C. C., et al. (2003). Nutritional assessment of patients in the intensive care unit. *Nutrition in Clinical Practice*, 18(2), 120-129.</li>
+                    <li>Fairburn, C. G. (2008). *Cognitive behavior therapy and eating disorders.* Guilford Press.</li>
+                    <li>Agras, W. S., & Robinson, A. H. (2019). Forty years of progress in the treatment of the eating disorders. *Nordic Journal of Psychiatry*, 73(1), 1-6.</li>
+                    <li>Kaye, W. H., et al. (2013). Neurobiology of anorexia and bulimia nervosa. *Physiology & behavior*, 121, 121-135.</li>
+                    <li>Lock, J., & Le Grange, D. (2015). *Treatment manual for anorexia nervosa: A family-based approach.* Guilford Publications.</li>
+                    <li>National Institute for Health and Care Excellence (NICE). (2017). *Eating disorders: recognition and treatment.* NICE guideline [NG69].</li>
+                    <li>Zipfel, S., et al. (2015). Focal psychodynamic therapy, cognitive behaviour therapy, and treatment-as-usual in outpatients with anorexia nervosa (ANTOP study): a randomised controlled trial. *The Lancet*, 385(9976), 1417-1427.</li>
+                    <li>Godart, N., et al. (2012). A randomized controlled trial of adjunctive family therapy and treatment as usual in an inpatient unit for adolescents with anorexia nervosa. *Journal of the American Academy of Child & Adolescent Psychiatry*, 51(8), 777-787.</li>
+                    <li>de la Rie, S. M., et al. (2007). The efficacy of a specialized outpatient treatment for adolescent eating disorders. *International Journal of Eating Disorders*, 40(S1), S65-S71.</li>
+                    <li>Hayes, S. C., et al. (2006). Acceptance and commitment therapy: Model, processes and outcomes. *Behaviour research and therapy*, 44(1), 1-25.</li>
+                    <li>Thomas, J. J., et al. (2017). *Cognitive-behavioral therapy for avoidant/restrictive food intake disorder: Children, adolescents, and adults.* Cambridge University Press.</li>
+                    <li>Maciocia, G. (2015). *The foundations of Chinese medicine: A comprehensive text.* Elsevier Health Sciences.</li>
+                    <li>Kaptchuk, T. J. (2000). *The web that has no weaver: Understanding Chinese medicine.* Contemporary books.</li>
+                    <li>Pitchford, P. (2002). *Healing with whole foods: Asian traditions and modern nutrition.* North Atlantic Books.</li>
+                    <li>Flaws, B. (1997). *The Tao of healthy eating: Dietary wisdom according to traditional Chinese medicine.* Blue Poppy Press.</li>
+                    <li>Judith, A. (2004). *Eastern body, Western mind: Psychology and the chakra system as a path to the self.* Celestial Arts.</li>
+                    <li>Dale, C. (2009). *The complete book of chakra healing: Activating the 12-chakra energy system.* Llewellyn Publications.</li>
+                    <li>Myss, C. (1997). *Anatomy of the spirit: The seven stages of power and healing.* Harmony.</li>
+                    <li>Govinda, K. (2018). *A handbook of chakra healing: Spiritual and scientific practices for awakening the chakras.* Llewellyn Publications.</li>
+                    <li>McCall, T. (2007). *Yoga as medicine: The yogic prescription for health and healing.* Bantam.</li>
+                    <li>Thrane, S., & Cohen, S. M. (2014). Effect of Reiki therapy on pain and anxiety in adults: an in-depth literature review of randomized trials with effect size calculations. *Pain management nursing*, 15(4), 897-908.</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+   
+
+    <!-- Copyright Section -->
+    <div class="copyright py-4 text-center">
+        <div class="container mx-auto"><small>Copyright &copy; dr.ing. Radu Pascu - 2025</small></div>
+    </div>
+
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        window.addEventListener('DOMContentLoaded', event => {
+            const mainNav = document.body.querySelector('#mainNav');
+            if (mainNav) {
+                // Navbar shrink function
+                var navbarShrink = function () {
+                    if (window.scrollY < 100) {
+                        mainNav.classList.remove('navbar-shrink');
+                    } else {
+                        mainNav.classList.add('navbar-shrink');
+                    }
+                };
+                navbarShrink(); // Call on load
+                document.addEventListener('scroll', navbarShrink); // Call on scroll
+            }
+
+            // Custom ScrollSpy logic
+            const navLinks = document.querySelectorAll('#nav-menu .nav-link');
+            const sections = document.querySelectorAll('section');
+
+            const activateNavLink = () => {
+                let index = sections.length;
+
+                while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+                
+                navLinks.forEach((link) => link.classList.remove('active'));
+                
+                // Ensure the link exists before trying to add a class
+                if (navLinks[index]) {
+                    navLinks[index].classList.add('active');
+                }
+            };
+            
+            activateNavLink(); // Call on load
+            window.addEventListener('scroll', activateNavLink); // Call on scroll
+        });
+    </script>
+</body>
+</html>

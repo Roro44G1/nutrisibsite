@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analiza Ulcerului Gastric: O Perspectivă Integrată</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Blue -->
+    <!-- Application Structure Plan: The application is designed as a guided journey for understanding gastric ulcers, from the physical to the metaphysical. It starts with a simple definition (What), moves to causes (Why), symptoms (How), and then delves into deeper emotional/energetic roots. The core of the app is the "Healing Path" section, which uses an interactive tabbed interface to present Allopathic, Naturopathic, and Holistic therapies side-by-side. A new "Synthesis & Prevention" section was added to provide a concluding overview and actionable recommendations. This structure allows users to easily navigate complex information, compare treatment philosophies, and build a comprehensive understanding, guiding the user from problem identification to solution exploration and long-term management. -->
+    <!-- Visualization & Content Choices: 1. Causes Chart: Report Info -> Main causes of ulcer (H. pylori, AINS). Goal -> Compare the impact of the primary causes. Viz/Presentation -> Doughnut Chart (Chart.js). Interaction -> Hovering over segments shows percentages. Justification -> A doughnut chart is excellent for showing part-to-whole relationships, making the dominant causes immediately clear. Library -> Chart.js. 2. Symptoms Diagram: Report Info -> List of common and severe symptoms. Goal -> Inform and alert the user. Viz/Presentation -> Interactive cards using HTML/CSS/Tailwind. Interaction -> Hovering over cards provides visual feedback. Justification -> Cards are a visually appealing way to segment information. Method -> HTML/Tailwind. 3. Therapies Tabs: Report Info -> Allopathic, Naturopathic, Holistic therapies. Goal -> Organize and compare different treatment approaches. Viz/Presentation -> Tabbed interface. Interaction -> Clicking a tab reveals the content for that therapy type. Justification -> Tabs are a standard, user-friendly UI pattern for organizing large amounts of related content in a compact space. Method -> HTML/JS. 4. HTML Tables: Report Info -> Detailed comparisons (symptoms, medications, herbs). Goal -> Present structured data clearly. Viz/Presentation -> Styled HTML tables. Interaction -> None. Justification -> Tables are the best format for presenting structured, comparative data. Method -> HTML/Tailwind. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        .nav-button.active {
+            background-color: #3B82F6;
+            color: #FFFFFF;
+        }
+        .tab-button.active {
+            border-color: #3B82F6;
+            background-color: #EFF6FF;
+            color: #1E40AF;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-height: 400px;
+            }
+        }
+        .table-auto th {
+            background-color: #EBF5FF;
+        }
+        .table-auto tr:nth-child(even) {
+            background-color: #F9FAFB;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-blue-800 mb-4">Ghid Complet despre Ulcerul Gastric</h1>
+            <p class="text-lg text-gray-600">O perspectivă integrată: de la cauze fizice la vindecare holistică</p>
+        </header>
+
+        <nav class="flex flex-wrap justify-center gap-2 md:gap-4 mb-12 sticky top-0 bg-white/80 backdrop-blur-sm py-4 z-10">
+            <button onclick="scrollToSection('intro')" class="nav-button py-2 px-4 rounded-full bg-white shadow-sm hover:bg-gray-100 transition duration-300">Introducere</button>
+            <button onclick="scrollToSection('causes')" class="nav-button py-2 px-4 rounded-full bg-white shadow-sm hover:bg-gray-100 transition duration-300">Cauze</button>
+            <button onclick="scrollToSection('symptoms')" class="nav-button py-2 px-4 rounded-full bg-white shadow-sm hover:bg-gray-100 transition duration-300">Simptome</button>
+            <button onclick="scrollToSection('holistic-view')" class="nav-button py-2 px-4 rounded-full bg-white shadow-sm hover:bg-gray-100 transition duration-300">Perspectiva Holistică</button>
+            <button onclick="scrollToSection('therapies')" class="nav-button py-2 px-4 rounded-full bg-white shadow-sm hover:bg-gray-100 transition duration-300">Terapii</button>
+            <button onclick="scrollToSection('synthesis')" class="nav-button py-2 px-4 rounded-full bg-white shadow-sm hover:bg-gray-100 transition duration-300">Sinteză & Prevenție</button>
+        </nav>
+
+        <main>
+            <section id="intro" class="mb-16 scroll-mt-24">
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                    <h2 class="text-3xl font-bold text-blue-700 mb-4">Partea I: Perspectiva Biomedicală</h2>
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">Capitolul 1: Definirea și Contextualizarea Ulcerului Gastric</h3>
+                    <p class="text-lg leading-relaxed text-gray-700 mb-4">Ulcerul gastric, cunoscut în termeni populari ca "rană pe stomac", reprezintă o leziune deschisă, bine delimitată, care se dezvoltă la nivelul mucoasei ce căptușește interiorul stomacului. Din punct de vedere histologic, pentru a fi considerată un ulcer propriu-zis, această leziune trebuie să pătrundă în profunzime, depășind stratul muscular al mucoasei (*muscularis mucosae*) și ajungând în submucoasă, unde se găsesc vase de sânge și terminații nervoase. Această profunzime explică atât durerea caracteristică, cât și riscul de complicații severe, precum sângerarea.</p>
+                    <p class="text-lg leading-relaxed text-gray-700">Descoperirea bacteriei *Helicobacter pylori* de către Barry Marshall și Robin Warren a revoluționat înțelegerea bolii, demonstrând că o cauză infecțioasă stă la baza majorității cazurilor. Această tranziție de la "boala de stres" la "boala infecțioasă" este fundamentală, însă o perspectivă integrativă, așa cum va demonstra acest ghid, este necesară pentru a reconcilia toate fațetele acestei afecțiuni complexe.</p>
+                </div>
+            </section>
+
+            <section id="causes" class="mb-16 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-center text-blue-700 mb-8">Capitolul 2 & 3: Cauze, Fiziopatologie și Factori de Risc</h2>
+                <div class="grid md:grid-cols-2 gap-8 items-start">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Dezechilibrul dintre Agresiune și Apărare</h3>
+                        <p class="leading-relaxed text-gray-700 mb-4">Apariția ulcerului este rezultatul ruperii unui echilibru delicat între factorii agresivi (acid clorhidric, pepsină) și mecanismele de apărare ale mucoasei (strat de mucus, secreție de bicarbonat, flux sanguin adecvat). În esență, ulcerul este mai mult o boală a "vulnerabilității mucoasei" decât a "excesului de acid".</p>
+                        <p class="leading-relaxed text-gray-700 mb-4">Principalii factori care subminează această barieră sunt infecția cu *Helicobacter pylori* și consumul de medicamente antiinflamatoare nesteroidiene (AINS), care acționează prin slăbirea directă a mecanismelor de protecție.</p>
+                         <ul class="mt-4 space-y-2 text-gray-600">
+                           <li class="flex items-start"><span class="font-bold text-blue-600 mr-2">●</span><strong>Alți factori:</strong> Fumatul, consumul excesiv de alcool și stresul cronic, deși nu sunt cauze directe, pot agrava simptomele, slăbi mecanismele de apărare și încetini procesul de vindecare.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                        <h3 class="text-xl font-semibold text-center mb-4">Principalii Vinovați în Apariția Ulcerului</h3>
+                        <div class="chart-container">
+                            <canvas id="causesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="symptoms" class="mb-16 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-center text-blue-700 mb-8">Capitolul 4: Tabloul Clinic și Complicațiile</h2>
+                <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">Manifestările clinice pot varia de la un disconfort minor la dureri intense și complicații care pun viața în pericol. Simptomul cardinal este durerea epigastrică (arsură, roadere), a cărei ritmicitate în funcție de alimentație poate oferi indicii diagnostice valoroase.</p>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 mb-8 overflow-x-auto">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Diagnostic Diferențial Clinic al Durerii Ulceroase</h3>
+                    <table class="w-full text-left table-auto">
+                        <thead>
+                            <tr>
+                                <th class="p-3">Caracteristică</th>
+                                <th class="p-3">Ulcer Gastric</th>
+                                <th class="p-3">Ulcer Duodenal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-3 border-t">Momentul apariției durerii</td>
+                                <td class="p-3 border-t">Precoce postprandial (30-60 min după masă)</td>
+                                <td class="p-3 border-t">Tardiv postprandial (2-3 ore după masă) sau nocturn</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border-t">Relația cu alimentația</td>
+                                <td class="p-3 border-t">Durerea este declanșată sau accentuată de mâncare</td>
+                                <td class="p-3 border-t">Durerea este ameliorată de mâncare ("foame dureroasă")</td>
+                            </tr>
+                             <tr>
+                                <td class="p-3 border-t">Simptome nocturne</td>
+                                <td class="p-3 border-t">Mai puțin frecvente</td>
+                                <td class="p-3 border-t">Frecvente, trezesc pacientul din somn</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 border-t">Apetit și greutate</td>
+                                <td class="p-3 border-t">Apetit scăzut, posibilă scădere în greutate</td>
+                                <td class="p-3 border-t">Apetit normal sau crescut, greutate stabilă</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                 <div class="mt-8 bg-red-50 border-l-4 border-red-500 text-red-800 p-6 rounded-lg shadow-md">
+                    <h3 class="font-bold text-xl mb-2">Atenție! Complicații Grave (Urgență Medicală)</h3>
+                    <p>Apariția următoarelor simptome indică o complicație (hemoragie, perforație, stenoză) și necesită consult medical imediat:</p>
+                    <ul class="list-disc list-inside mt-2 space-y-1">
+                        <li><strong>Hemoragie:</strong> Vărsături cu sânge (roșu sau "zaț de cafea"), scaune negre (melenă).</li>
+                        <li><strong>Perforație:</strong> Durere abdominală bruscă, violentă, "ca o lovitură de pumnal", abdomen rigid.</li>
+                        <li><strong>Stenoză:</strong> Vărsături cu alimente nedigerate, sațietate precoce, scădere masivă în greutate.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="holistic-view" class="mb-16 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-center text-blue-700 mb-8">Partea a II-a: Perspectiva Holistică</h2>
+                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                     <h3 class="text-2xl font-semibold text-gray-700 mb-4">Capitolul 6: Dimensiunea Psihosomatică și Emoțională</h3>
+                     <p class="text-lg leading-relaxed text-gray-700 mb-6">Știința modernă validează ceea ce medicina tradițională a susținut de secole: starea emoțională și stresul nu sunt "mituri", ci modulatori puternici ai fiziologiei gastrice. Axa intestin-creier, o rețea de comunicare bidirecțională, este autostrada prin care stările psihologice se traduc în vulnerabilitate fizică la nivelul stomacului. Stresul cronic, prin inhibarea tonusului nervului vag, crește secreția acidă, reduce fluxul sanguin protector și încetinește vindecarea.</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-xl font-semibold text-gray-800 mb-4">Conflicte Emoționale Specifice</h4>
+                            <ul class="space-y-3 text-gray-600">
+                                <li class="flex items-start"><span class="text-2xl mr-3">😟</span> <strong>Îngrijorarea cronică:</strong> Anxietatea și gândirea excesivă pot perturba energia stomacului, generând "foc interior".</li>
+                                <li class="flex items-start"><span class="text-2xl mr-3">😠</span> <strong>Furia reprimată:</strong> Resentimentele și frustrările neexprimate "rod" pe dinăuntru, slăbind bariera protectoare a stomacului.</li>
+                                <li class="flex items-start"><span class="text-2xl mr-3">😥</span> <strong>Incapacitatea de a "digera" o situație:</strong> Un eveniment traumatic sau un conflict persistent poate fi somatizat la nivel digestiv.</li>
+                                 <li class="flex items-start"><span class="text-2xl mr-3">🛡️</span> <strong>Nevoia de control:</strong> Perfecționismul și teama de a greși creează o tensiune internă constantă.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-lg">
+                             <h4 class="text-xl font-semibold text-gray-800 mb-4">Dezechilibre Energetice (MTC)</h4>
+                             <p class="text-gray-700 mb-4">Medicina Tradițională Chineză (MTC) asociază cel mai frecvent ulcerul cu un tipar de "Stagnare a Qi-ului Ficatului care invadează Stomacul", declanșat de stres și emoții reprimate.</p>
+                             <ul class="space-y-3 text-gray-600">
+                                <li class="flex items-start"><span class="font-bold text-blue-600 mr-2">●</span> <strong>Stagnarea Qi-ului:</strong> Stresul blochează fluxul de energie, cauzând durere și balonare.</li>
+                                <li class="flex items-start"><span class="font-bold text-blue-600 mr-2">●</span> <strong>"Foc la Stomac":</strong> Căldura internă excesivă, generată de emoții sau dietă, lezează mucoasa.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="therapies" class="mb-16 scroll-mt-24">
+                <h2 class="text-3xl font-bold text-center text-blue-700 mb-8">Calea Vindecării: Abordări Terapeutice</h2>
+                 <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">Tratamentul ulcerului gastric beneficiază de o abordare integrată, care combină eficiența medicinei moderne cu înțelepciunea terapiilor naturale și holistice. Alegerea căii potrivite depinde de cauza specifică și de deschiderea fiecărei persoane către o vindecare completă, la toate nivelurile.</p>
+                
+                <div>
+                    <div class="mb-4 flex flex-wrap justify-center border-b border-gray-200">
+                        <button class="tab-button active text-lg py-2 px-6 border-b-2 border-transparent" onclick="openTab(event, 'Allopathic')">Terapie Alopată</button>
+                        <button class="tab-button text-lg py-2 px-6 border-b-2 border-transparent" onclick="openTab(event, 'Naturopathic')">Terapie Naturopată</button>
+                        <button class="tab-button text-lg py-2 px-6 border-b-2 border-transparent" onclick="openTab(event, 'Holistic')">Terapie Holistică</button>
+                    </div>
+
+                    <div id="Allopathic" class="tab-content bg-white p-8 rounded-2xl shadow-lg border border-gray-100 overflow-x-auto">
+                        <h3 class="text-2xl font-semibold text-blue-800 mb-4">Capitolul 5: Medicina Convențională</h3>
+                        <p class="text-gray-700 mb-6">Managementul modern se bazează pe diagnostic precis (endoscopie cu biopsie, testare H. pylori) și un tratament țintit care să elimine cauza, să permită vindecarea și să prevină recurențele.</p>
+                        <table class="w-full text-left table-auto">
+                            <thead>
+                                <tr>
+                                    <th class="p-3">Clasa de Medicamente</th>
+                                    <th class="p-3">Exemple</th>
+                                    <th class="p-3">Rol în Tratament</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Antibiotice</strong></td>
+                                    <td class="p-3 border-t">Claritromicină, Amoxicilină, Metronidazol</td>
+                                    <td class="p-3 border-t">Eradicarea cauzei infecțioase (*H. pylori*), prevenirea recurențelor.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Inhibitori de Pompă de Protoni (IPP)</strong></td>
+                                    <td class="p-3 border-t">Omeprazol, Pantoprazol</td>
+                                    <td class="p-3 border-t">Reducerea rapidă a durerii, vindecarea ulcerului, componentă esențială în eradicare.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Blocanți ai Receptorilor H2</strong></td>
+                                    <td class="p-3 border-t">Famotidină</td>
+                                    <td class="p-3 border-t">Reducerea acidității și vindecarea ulcerului; mai puțin potenți decât IPP.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Antiacide</strong></td>
+                                    <td class="p-3 border-t">Carbonat de calciu, Hidroxid de Al/Mg</td>
+                                    <td class="p-3 border-t">Ameliorarea rapidă, dar de scurtă durată, a simptomelor. Nu vindecă ulcerul.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Protectoare ale Mucoasei</strong></td>
+                                    <td class="p-3 border-t">Sucralfat, Subcitrat de bismut</td>
+                                    <td class="p-3 border-t">Formează o barieră protectoare peste ulcer, accelerând vindecarea.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="mt-6 text-sm text-gray-600 italic">Intervenția chirurgicală este rezervată astăzi aproape exclusiv pentru managementul complicațiilor acute (perforație, hemoragie necontrolabilă, stenoză).</p>
+                    </div>
+
+                    <div id="Naturopathic" class="tab-content hidden bg-white p-8 rounded-2xl shadow-lg border border-gray-100 overflow-x-auto">
+                        <h3 class="text-2xl font-semibold text-blue-800 mb-4">Capitolul 7: Abordarea Naturopată</h3>
+                        <p class="text-gray-700 mb-6">Se concentrează pe eliminarea factorilor iritanți și pe furnizarea organismului a "cărămizilor" necesare pentru a-și activa propriile mecanisme de vindecare.</p>
+                        <table class="w-full text-left table-auto">
+                            <thead>
+                                <tr>
+                                    <th class="p-3">Remediu</th>
+                                    <th class="p-3">Mecanism de Acțiune Principal</th>
+                                    <th class="p-3">Observații</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Dietă Terapeutică</strong></td>
+                                    <td class="p-3 border-t">Reduce iritația și protejează mucoasa.</td>
+                                    <td class="p-3 border-t">Mese mici și dese, evitarea prăjelilor, alcoolului, cafelei.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Lemn Dulce (DGL)</strong></td>
+                                    <td class="p-3 border-t">Citoprotector: crește secreția de mucus.</td>
+                                    <td class="p-3 border-t">Eficacitate comparabilă cu unele medicamente în studii.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Mastic Gum</strong></td>
+                                    <td class="p-3 border-t">Antimicrobian puternic, eradică *H. pylori*.</td>
+                                    <td class="p-3 border-t">Alternativă naturală studiată pentru infecția cu *H. pylori*.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Probiotice</strong></td>
+                                    <td class="p-3 border-t">Refac flora, cresc rata de eradicare a *H. pylori*.</td>
+                                    <td class="p-3 border-t">Cruciale ca adjuvant la terapia cu antibiotice (*S. boulardii*, *L. reuteri*).</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Zinc-Carnozină</strong></td>
+                                    <td class="p-3 border-t">Aderă la ulcer, repară țesutul și reduce inflamația.</td>
+                                    <td class="p-3 border-t">Medicament aprobat în Japonia pentru tratamentul ulcerului.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Suc de Varză</strong></td>
+                                    <td class="p-3 border-t">Conține "Vitamina U" și glutamină, repară mucoasa.</td>
+                                    <td class="p-3 border-t">Remediu tradițional cu rezultate rapide în studii vechi.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="Holistic" class="tab-content hidden bg-white p-8 rounded-2xl shadow-lg border border-gray-100 overflow-x-auto">
+                        <h3 class="text-2xl font-semibold text-blue-800 mb-4">Capitolul 8: Terapii Energetice și Mind-Body</h3>
+                        <p class="text-gray-700 mb-6">Acționează direct asupra componentei psihologice a axei intestin-creier, având ca scop întreruperea ciclului vicios în care stresul agravează simptomele, iar simptomele generează și mai mult stres.</p>
+                        <table class="w-full text-left table-auto">
+                            <thead>
+                                <tr>
+                                    <th class="p-3">Terapie</th>
+                                    <th class="p-3">Mecanism de Acțiune Principal</th>
+                                    <th class="p-3">Beneficii Documentate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Acupunctura</strong></td>
+                                    <td class="p-3 border-t">Modularea axei intestin-creier, creșterea tonusului vagal, reglarea acidității.</td>
+                                    <td class="p-3 border-t">Eficiență demonstrată pentru dispepsia funcțională (simptome similare ulcerului).</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Meditația Mindfulness</strong></td>
+                                    <td class="p-3 border-t">Reduce reactivitatea la stres, scade nivelul de cortizol, activează sistemul parasimpatic.</td>
+                                    <td class="p-3 border-t">Ameliorează vindecarea ulcerului, reduce anxietatea și depresia.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Respirația Diafragmatică</strong></td>
+                                    <td class="p-3 border-t">Stimulează direct nervul vag, activează răspunsul de relaxare.</td>
+                                    <td class="p-3 border-t">Metodă simplă și directă de a contracara efectele fiziologice ale stresului.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border-t"><strong>Yoga / Tai Chi</strong></td>
+                                    <td class="p-3 border-t">Integrează mișcarea, respirația și meditația pentru a calma sistemul nervos.</td>
+                                    <td class="p-3 border-t">Beneficii documentate pentru creșterea tonusului vagal și ameliorarea anxietății.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="synthesis" class="mb-16 scroll-mt-24">
+                 <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                    <h2 class="text-3xl font-bold text-blue-700 mb-4">Partea a III-a: Sinteză Integrativă și Recomandări</h2>
+                     <h3 class="text-2xl font-semibold text-gray-700 mb-4">Capitolul 9 & 10: Crearea unui Protocol Integrativ</h3>
+                    <p class="text-lg leading-relaxed text-gray-700 mb-4">O vindecare completă, autentică și durabilă nu se poate limita la a "pansa" rana. Ea necesită o abordare pe multiple niveluri, care acționează sinergic pentru a elimina agresorii, a reconstrui bariera de apărare, a reechilibra sistemul nervos și a rezolva conflictele emoționale de fond.</p>
+                    <div class="bg-blue-50 p-6 rounded-lg">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-4">Strategii de Prevenire a Recurențelor</h4>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+                            <li><strong>Alimentație conștientă:</strong> Menținerea unei diete bogate în fructe, legume și fibre.</li>
+                            <li><strong>Managementul stresului ca practică zilnică:</strong> Integrarea tehnicilor de mindfulness sau respirație în rutina zilnică.</li>
+                            <li><strong>Utilizarea judicioasă a medicamentelor:</strong> Evitarea AINS pentru dureri minore; dacă sunt necesare, se utilizează cu protecție gastrică.</li>
+                            <li><strong>Renunțarea la fumat și moderarea consumului de alcool.</strong></li>
+                            <li><strong>Verificarea eradicării *H. pylori*</strong> după tratament.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="text-center pt-8 border-t border-gray-200">
+            <p class="text-gray-500">Aceste informații au caracter educativ și nu înlocuiesc un consult medical de specialitate. Adresați-vă medicului pentru diagnostic și tratament.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const causesData = {
+                labels: [
+                    'Infecția cu H. Pylori',
+                    'Medicamente AINS',
+                    'Alți Factori (Stres, Dietă, etc.)'
+                ],
+                datasets: [{
+                    label: 'Cauzele Ulcerului Gastric',
+                    data: [75, 20, 5],
+                    backgroundColor: [
+                        '#2563EB',
+                        '#60A5FA',
+                        '#BFDBFE'
+                    ],
+                    hoverOffset: 4,
+                    borderColor: '#f8f9fa',
+                    borderWidth: 2
+                }]
+            };
+
+            const config = {
+                type: 'doughnut',
+                data: causesData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: "'Inter', sans-serif"
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            const causesChart = new Chart(
+                document.getElementById('causesChart'),
+                config
+            );
+        });
+
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('main section');
+            const navButtons = document.querySelectorAll('.nav-button');
+            
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 120) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            navButtons.forEach(button => {
+                button.classList.remove('active');
+                if (button.getAttribute('onclick').includes(currentSection)) {
+                    button.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

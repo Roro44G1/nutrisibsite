@@ -1,0 +1,852 @@
+<!DOCTYPE html> 
+ <html lang="ro"> 
+ <head> 
+ 	 <meta charset="UTF-8"> 
+ 	 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+ 	 <title>Raport Nutrițional - Andi David</title> 
+ 	 <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)"> 
+ 	 <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin> 
+ 	 <link href="[https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap](https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap)" rel="stylesheet"> 
+ 	 <script src="[https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js](https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js)" xintegrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+ 	 <style> 
+ 		 :root { 
+ 			 --background-color: #f4f7f6; 
+ 			 --container-bg-color: #ffffff; 
+ 			 --primary-text-color: #333333; 
+ 			 --secondary-text-color: #555555; 
+ 			 --header-bg: #2c3e50; /* Albastru închis pentru antet */ 
+ 			 --primary-accent-color: #2980b9; /* Albastru puternic */ 
+ 			 --secondary-accent-color: #3498db; /* Albastru deschis */ 
+ 			 --border-color: #dee2e6; 
+ 			 --tab-inactive-bg: #e9ecef; 
+ 			 --tab-active-bg: var(--container-bg-color); 
+ 			 --summary-box-bg: #eaf2f8; 
+ 			 --summary-box-border: #aed6f1; 
+ 			 --error-color: #c0392b; 
+ 		 } 
+
+ 		 body { 
+ 			 font-family: 'Roboto', sans-serif; 
+ 			 background-color: var(--background-color); 
+ 			 color: var(--primary-text-color); 
+ 			 margin: 0; 
+ 			 padding: 20px; 
+ 			 line-height: 1.7; 
+ 			 font-weight: 400; 
+ 			 -webkit-user-select: none; /* Safari */ 
+ 			 -ms-user-select: none; /* Internet Explorer/Edge */ 
+ 			 user-select: none; /* Standard syntax */ 
+ 		 } 
+
+ 		.main-container { 
+ 			 max-width: 900px; 
+ 			 margin: 20px auto; 
+ 			 background-color: var(--container-bg-color); 
+ 			 border-radius: 8px; 
+ 			 box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+ 			 overflow: hidden; 
+ 			 border: 1px solid var(--border-color); 
+ 		 } 
+ 		 
+ 		.page-header { 
+ 			 background-color: var(--header-bg); 
+ 			 color: white; 
+ 			 padding: 25px 30px; 
+ 		 } 
+ 		 
+ 		.page-header h1 { 
+ 			 color: white; 
+ 			 margin: 0; 
+ 			 font-size: 2.2em; 
+ 			 font-weight: 700; 
+ 		 } 
+ 		 
+ 		.page-header p { 
+ 			 color: #bdc3c7; 
+ 			 margin: 5px 0 0; 
+ 			 font-size: 1.1em; 
+ 			 font-weight: 300; 
+ 		 } 
+
+ 		.tab-container { 
+ 			 display: flex; 
+ 			 flex-wrap: wrap; 
+ 			 background-color: var(--tab-inactive-bg); 
+ 			 border-bottom: 1px solid var(--border-color); 
+ 		 } 
+
+ 		.tab-button { 
+ 			 flex-grow: 1; 
+ 			 padding: 15px 10px; 
+ 			 cursor: pointer; 
+ 			 border: none; 
+ 			 background-color: var(--tab-inactive-bg); 
+ 			 font-family: 'Roboto', sans-serif; 
+ 			 font-size: 15px; 
+ 			 font-weight: 700; 
+ 			 color: var(--secondary-text-color); 
+ 			 transition: background-color 0.3s, color 0.3s, opacity 0.3s; 
+ 			 border-bottom: 4px solid transparent; 
+ 			 text-align: center; 
+ 		 } 
+
+ 		.tab-button:hover { 
+ 			 background-color: #d8e0e6; 
+ 			 color: var(--primary-accent-color); 
+ 		 } 
+
+ 		.tab-button.active { 
+ 			 background-color: var(--tab-active-bg); 
+ 			 color: var(--primary-accent-color); 
+ 			 border-bottom: 4px solid var(--primary-accent-color); 
+ 		 } 
+
+ 		.tab-content { 
+ 			 display: none; 
+ 			 padding: 25px 30px; 
+ 			 min-height: 70vh; 
+ 			 max-height: 70vh; 
+ 			 overflow-y: auto; 
+ 		} 
+
+ 		.tab-content.active { 
+ 			 display: block; 
+ 		 } 
+ 		 
+ 		 h2, h3, h4, h5 { 
+ 			 font-family: 'Roboto', sans-serif; 
+ 			 font-weight: 700; 
+ 		 } 
+
+ 		 h2 { 
+ 			 font-size: 1.8em; 
+ 			 color: var(--header-bg); 
+ 			 border-bottom: 2px solid var(--primary-accent-color); 
+ 			 padding-bottom: 10px; 
+ 			 margin-top: 1.2em; 
+ 			 margin-bottom: 1em; 
+ 		 } 
+
+ 		 h3 { 
+ 			 font-size: 1.5em; 
+ 			 color: var(--primary-accent-color); 
+ 			 margin-top: 1.5em; 
+ 		 } 
+ 		 
+ 		 h4 { 
+ 			 font-size: 1.2em; 
+ 			 color: var(--header-bg); 
+ 			 font-style: italic; 
+ 		 } 
+ 		 
+ 		 h5 { 
+ 			 font-size: 1.1em; 
+ 			 color: var(--secondary-accent-color); 
+ 			 margin-top: 1.5em; 
+ 			 margin-bottom: 0.5em; 
+ 		 } 
+
+ 		 p, li { 
+ 			 font-size: 1em; 
+ 			 color: var(--secondary-text-color); 
+ 			 text-align: justify; 
+ 			 font-weight: 400; 
+ 		 } 
+
+ 		 a { 
+ 			 color: var(--primary-accent-color); 
+ 			 text-decoration: none; 
+ 			 font-weight: 700; 
+ 		 } 
+
+ 		 a:hover { 
+ 			 text-decoration: underline; 
+ 		 } 
+
+ 		 table { 
+ 			 width: 100%; 
+ 			 border-collapse: collapse; 
+ 			 margin: 25px 0; 
+ 			 font-size: 0.95em; 
+ 		 } 
+
+ 		 th, td { 
+ 			 border: 1px solid var(--border-color); 
+ 			 padding: 12px 15px; 
+ 			 text-align: left; 
+ 		 } 
+
+ 		 th { 
+ 			 background-color: #e9ecef; 
+ 			 font-weight: 700; 
+ 			 color: var(--header-bg); 
+ 		 } 
+
+ 		 tr:nth-child(even) { 
+ 			 background-color: #f8f9fa; 
+ 		 } 
+ 		 
+ 		 ul, ol { 
+ 			 padding-left: 25px; 
+ 		 } 
+ 		 
+ 		 blockquote { 
+ 			 border-left: 4px solid var(--secondary-accent-color); 
+ 			 padding-left: 20px; 
+ 			 margin: 20px 0; 
+ 			 font-style: italic; 
+ 			 color: #6c757d; 
+ 			 background-color: #f8f9fa; 
+ 			 border-radius: 0 5px 5px 0; 
+ 		 } 
+ 		 
+ 		.summary-box { 
+ 			 background-color: var(--summary-box-bg); 
+ 			 border: 1px solid var(--summary-box-border); 
+ 			 border-left: 5px solid var(--primary-accent-color); 
+ 			 padding: 20px; 
+ 			 margin: 20px 0; 
+ 			 border-radius: 8px; 
+ 		 } 
+ 		.summary-box h4 { 
+ 			 margin-top: 0; 
+ 			 color: var(--header-bg); 
+ 			 font-style: normal; 
+ 		 } 
+ 		.summary-box ol,.summary-box ul { 
+ 			 padding-left: 20px; 
+ 		 } 
+
+ 		.bibliography-list { 
+ 			 list-style-type: none; 
+ 			 padding-left: 0; 
+ 			 counter-reset: item; 
+ 			 column-count: 2; 
+ 			 column-gap: 40px; 
+ 		 } 
+ 		.bibliography-list li { 
+ 			 margin-bottom: 12px; 
+ 			 padding-left: 35px; 
+ 			 position: relative; 
+ 			 text-align: left; 
+ 			 font-size: 0.9em; 
+ 			 break-inside: avoid-column; 
+ 		} 
+ 		.bibliography-list li::before { 
+ 			 content: "[" counter(item) "]"; 
+ 			 counter-increment: item; 
+ 			 position: absolute; 
+ 			 left: 0; 
+ 			 font-weight: bold; 
+ 			 color: var(--primary-accent-color); 
+ 		 } 
+ 		 
+ 		 /* Password Protection Styles */ 
+ 		.tab-button.locked { 
+ 			 opacity: 0.6; 
+ 			 cursor: pointer; 
+ 		 } 
+ 		.tab-button.locked:hover { 
+ 			 background-color: #d8e0e6; 
+ 			 color: var(--secondary-text-color); 
+ 		 } 
+
+ 		.modal-overlay { 
+ 			 display: none; 
+ 			 position: fixed; 
+ 			 z-index: 1000; 
+ 			 left: 0; 
+ 			 top: 0; 
+ 			 width: 100%; 
+ 			 height: 100%; 
+ 			 overflow: auto; 
+ 			 background-color: rgba(0,0,0,0.5); 
+ 			 justify-content: center; 
+ 			 align-items: center; 
+ 		 } 
+
+ 		.modal-content { 
+ 			 background-color: #fefefe; 
+ 			 padding: 30px 40px; 
+ 			 border: 1px solid #888; 
+ 			 width: 90%; 
+ 			 max-width: 400px; 
+ 			 border-radius: 8px; 
+ 			 box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+ 			 text-align: center; 
+ 		 } 
+ 		 
+ 		.modal-content h3 { 
+ 			 margin-top: 0; 
+ 			 color: var(--header-bg); 
+ 		 } 
+ 		 
+ 		.modal-content input[type="password"] { 
+ 			 width: 100%; 
+ 			 padding: 12px; 
+ 			 margin: 10px 0 20px 0; 
+ 			 display: inline-block; 
+ 			 border: 1px solid #ccc; 
+ 			 border-radius: 4px; 
+ 			 box-sizing: border-box; 
+ 		 } 
+
+ 		.modal-content button { 
+ 			 background-color: var(--primary-accent-color); 
+ 			 color: white; 
+ 			 padding: 14px 20px; 
+ 			 margin: 8px 0; 
+ 			 border: none; 
+ 			 border-radius: 4px; 
+ 			 cursor: pointer; 
+ 			 width: 100%; 
+ 			 font-size: 16px; 
+ 			 font-weight: 700; 
+ 		 } 
+ 		 
+ 		.modal-content button:hover { 
+ 			 background-color: var(--header-bg); 
+ 		 } 
+ 		 
+ 		 #password-error { 
+ 			 color: var(--error-color); 
+ 			 font-weight: bold; 
+ 			 height: 20px; 
+ 		 } 
+
+ 		.page-footer { 
+ 			 text-align: center; 
+ 			 padding: 20px; 
+ 			 background-color: var(--header-bg); 
+ 			 color: #bdc3c7; 
+ 			 font-size: 0.9em; 
+ 		 } 
+ 		.page-footer p { 
+ 			 margin: 0; 
+ 			 color: #bdc3c7; 
+ 		 } 
+
+ 		 /* Stil pentru butonul de generare PDF */ 
+ 		 #generatePdfBtn { 
+ 			 background-color: #27ae60; 
+ 			 color: white; 
+ 			 padding: 12px 20px; 
+ 			 border: none; 
+ 			 border-radius: 5px; 
+ 			 cursor: pointer; 
+ 			 font-size: 16px; 
+ 			 font-weight: bold; 
+ 			 margin-top: 20px; 
+ 			 transition: background-color 0.3s; 
+ 		 } 
+
+ 		 #generatePdfBtn:hover { 
+ 			 background-color: #229954; 
+ 		 } 
+
+ 	 </style> 
+ </head> 
+ <body oncontextmenu="return false;" onkeydown="if(event.ctrlKey && (event.keyCode === 83 |
+
+| event.keyCode === 85)) { return false; }"> 
+
+ 	 <div class="main-container"> 
+ 		 <header class="page-header"> 
+ 			 <h1>Raport nutrițional și de sănătate integrativă</h1> 
+ 			 <p>Un plan de acțiune personalizat pentru Andi David</p> 
+ 		 </header> 
+
+ 		 <div class="tab-container"> 
+ 			 <button class="tab-button" data-tab="introducere">Introducere</button> 
+ 			 <button class="tab-button protected" data-tab="riscuri">Riscuri și presiuni</button> 
+ 			 <button class="tab-button protected" data-tab="perspectiva-emotionala">Perspectiva emoțională</button> 
+ 			 <button class="tab-button protected" data-tab="terapii-holistice">Terapii holistice</button> 
+ 			 <button class="tab-button protected" data-tab="energie-hidratare">Energie & Hidratare</button> 
+ 			 <button class="tab-button protected" data-tab="sistem-digestiv">Sistem digestiv</button> 
+ 			 <button class="tab-button protected" data-tab="sistem-osos">Sistem osos</button> 
+ 			 <button class="tab-button protected" data-tab="micronutrienti">Micronutrienți</button> 
+ 			 <button class="tab-button protected" data-tab="plan-alimentar">Plan alimentar</button> 
+ 			 <button class="tab-button protected" data-tab="protocol">Protocol echilibrare</button> 
+ 			 <button class="tab-button protected" data-tab="bibliografie">Bibliografie</button> 
+ 		 </div> 
+
+ 		 <div id="introducere" class="tab-content"> 
+ 			 <h2>Rezumat și premisele raportului</h2> 
+ 			 
+ 			 <h4>Notă preliminară și declinarea responsabilității medicale</h4> 
+ 			 <p>Acest raport a fost elaborat ca răspuns la rezultatele unei evaluări de status general și nutrițional pentru Andi David, un sportiv de performanță în vârstă de 11 ani. Documentul reprezintă o analiză de nivel expert și un set de directive nutriționale și holistice fundamentate pe informațiile furnizate. Este esențial de subliniat că acest protocol are un caracter informativ și nu substituie un consult medical direct, un diagnostic clinic sau un tratament personalizat. Recomandările din acest raport trebuie implementate exclusiv sub supravegherea unei echipe multidisciplinare, care să includă medicul pediatru al copilului, un medic specializat în medicină sportivă [1], un dietetician autorizat sau un nutriționist cu specializare în nutriția sportivă [2], și, având în vedere noile perspective adăugate, un psiholog sau psihoterapeut specializat în lucrul cu copiii și sportivii. Scopul acestui document este de a oferi un cadru solid, bazat pe dovezi științifice, pentru a ghida discuțiile cu acești specialiști și pentru a construi un plan de acțiune coerent și eficient.</p> 
+ 			 
+ 			 <div class="summary-box"> 
+ 				 <h4>Datele evaluării pentru Andi David</h4> 
+ 				 <ul> 
+ 					 <li><strong>Beneficiar:</strong> ANDI DAVID</li> 
+ 					 <li><strong>Vârsta:</strong> 11 ani</li> 
+ 					 <li><strong>Greutate:</strong> 45 kg</li> 
+ 					 <li><strong>Înălțime:</strong> 160 cm</li> 
+ 				 </ul> 
+ 				 <h4>Aspecte relevante identificate în evaluare:</h4> 
+ 				 <ol> 
+ 					 <li>Deficiențe ușoare în metabolismul proteic</li> 
+ 					 <li>Coeficient de absorbție colonică scăzut</li> 
+ 					 <li>Coeficient scăzut de bacterii intestinale</li> 
+ 					 <li>Urobilinogen crescut</li> 
+ 					 <li>Densitate non-minerală osoasă scăzută</li> 
+ 					 <li>Coeficient crescut de osteoporoză</li> 
+ 					 <li>Deficit de <a href="[https://nutrisibmicron.netlify.app/zinc.html](https://nutrisibmicron.netlify.app/zinc.html)" target="_blank">zinc</a>, <a href="[https://nutrisibmicron.netlify.app/seleniu.html](https://nutrisibmicron.netlify.app/seleniu.html)" target="_blank">seleniu</a>, <a href="[https://nutrisibmicron.netlify.app/potasiu.html](https://nutrisibmicron.netlify.app/potasiu.html)" target="_blank">potasiu</a>, <a href="[https://nutrisibmicron.netlify.app/magneziu.html](https://nutrisibmicron.netlify.app/magneziu.html)" target="_blank">magneziu</a>, <a href="[https://nutrisibmicron.netlify.app/cupru.html](https://nutrisibmicron.netlify.app/cupru.html)" target="_blank">cupru</a></li> 
+ 					 <li>Deficit de <a href="[https://nutrisibmicron.netlify.app/vitamina_b1.html](https://nutrisibmicron.netlify.app/vitamina_b1.html)" target="_blank">vitamina B1</a>, <a href="[https://nutrisibmicron.netlify.app/vitamina_b2.html](https://nutrisibmicron.netlify.app/vitamina_b2.html)" target="_blank">B2</a>, <a href="[https://nutrisibmicron.netlify.app/vitamina_c.html](https://nutrisibmicron.netlify.app/vitamina_c.html)" target="_blank">C</a>, <a href="[https://nutrisibmicron.netlify.app/vitamina_e.html](https://nutrisibmicron.netlify.app/vitamina_e.html)" target="_blank">E</a></li> 
+ 					 <li>Dezechilibre de <a href="[https://nutrisibholistic.netlify.app/aminoacizi](https://nutrisibholistic.netlify.app/aminoacizi)" target= "_blank">aminoacizi</a> (exces ușor de lizină, triptofan, treonină, histidină, arginină)</li> 
+ 					 <li>Semne de deshidratare și deficit de electroliți</li> 
+ 				 </ol> 
+ 			 </div> 
+
+ 			 <h3>O abordare integrată pentru un sportiv în creștere</h3> 
+ 			 <p>Acest raport analizează în profunzime rezultatele evaluării. Perspectiva adoptată este una holistică, recunoscând că cele zece puncte identificate nu sunt probleme izolate, ci simptome interconectate ale unor dezechilibre mai profunde. Cauzele fundamentale par a fi o combinație între cerințele energetice excepționale ale sportului de performanță, o sănătate intestinală care necesită suport și un posibil impact al stresului psiho-emoțional asupra fiziologiei. Protocolul de față nu se concentrează doar pe corectarea punctuală a deficitelor, ci propune o strategie de reconstrucție a sănătății de la temelie, având ca piloni:</p> 
+ 			 <ul> 
+ 				 <li>Asigurarea unui aport energetic și hidric adecvat efortului.</li> 
+ 				 <li>Restaurarea sănătății digestive pentru a maximiza absorbția nutrienților.</li> 
+ 				 <li>Abordarea cauzelor emoționale și a impactului stresului.</li> 
+ 				 <li>Fortificarea sistemului osos aflat într-o perioadă critică de dezvoltare.</li> 
+ 				 <li>Repleția țintită a stocurilor de vitamine și minerale.</li> 
+ 			 </ul> 
+ 			 <p>Scopul final este de a-i oferi lui Andi David un fundament solid pentru o carieră sportivă lungă, performantă și, mai presus de orice, sănătoasă.</p> 
+ 		 </div> 
+
+ 		 <div id="riscuri" class="tab-content"> 
+ 			 <h2>Pericolele ascunse: nutriția neglijată și presiunea emoțională</h2> 
+ 			 <p>Pentru un tânăr sportiv, drumul către performanță este fragil. Neglijarea pilonilor fundamentali – nutriția și echilibrul emoțional – nu doar că oprește progresul, ci poate crea probleme de sănătate pe termen lung, transformând visul performanței într-un risc. Această secțiune analizează aceste pericole interconectate.</p> 
+
+ 			 <h3>Costul fizic și emoțional al unei nutriții deficitare</h3> 
+ 			 <p>Neglijarea nutriției la un sportiv de 11 ani nu este o simplă omisiune, ci o rețetă pentru eșec și probleme grave de sănătate. Corpul său este într-o dublă misiune: susține o creștere accelerată și se adaptează la un efort fizic intens. Când "combustibilul" este insuficient sau de proastă calitate, organismul intră într-o stare de <strong>"datorie energetică"</strong>, cu consecințe severe.</p> 
+ 			 
+ 			 <h4>Cascada pericolelor fizice:</h4> 
+ 			 <ul> 
+ 				 <li><strong>Canibalizarea osoasă și musculară:</strong> Așa cum s-a văzut în analize, organismul începe să descompună propriile țesuturi (oase, mușchi) pentru a obține energia necesară supraviețuirii. Acest lucru nu doar că oprește progresul sportiv, dar compromite fundația sănătății scheletice pentru tot restul vieții, crescând exponențial riscul de fracturi de stres și osteoporoză la vârsta adultă.</li> 
+ 				 <li><strong>Blocaj hormonal:</strong> Creșterea și dezvoltarea pubertară sunt dirijate de un echilibru hormonal delicat. Nutriția deficitară, în special lipsa grăsimilor sănătoase și a caloriilor, poate întârzia sau perturba acest proces natural, cu consecințe pe termen lung asupra dezvoltării fizice.</li> 
+ 				 <li><strong>Prăbușirea sistemului imunitar:</strong> Deficitele de <a href="[https://nutrisibmicron.netlify.app/zinc.html](https://nutrisibmicron.netlify.app/zinc.html)" target="_blank">zinc</a>, <a href="[https://nutrisibmicron.netlify.app/seleniu.html](https://nutrisibmicron.netlify.app/seleniu.html)" target="_blank">seleniu</a> și <a href="[https://nutrisibmicron.netlify.app/vitamina_c.html](https://nutrisibmicron.netlify.app/vitamina_c.html)" target="_blank">vitamina C</a> lasă "porțile deschise" infecțiilor. Un sportiv care se îmbolnăvește frecvent nu se poate antrena constant, nu poate progresa și intră într-un cerc vicios de oboseală și performanță scăzută.</li> 
+ 				 <li><strong>Epuizare cronică:</strong> Fără suficiente vitamine B și minerale precum <a href="[https://nutrisibmicron.netlify.app/fier.html](https://nutrisibmicron.netlify.app/fier.html)" target="_blank">fierul</a> sau <a href="[https://nutrisibmicron.netlify.app/magneziu.html](https://nutrisibmicron.netlify.app/magneziu.html)" target="_blank">magneziul</a>, producția de energie la nivel celular este ineficientă. Copilul se va simți constant obosit, indiferent de cât doarme, o stare adesea confundată cu lenea, când în realitate este un semnal de alarmă biochimic.</li> 
+ 			 </ul> 
+
+ 			 <h4>Impactul emoțional și cognitiv:</h4> 
+ 			 <p>Creierul este un mare consumator de energie și nutrienți. O nutriție precară duce inevitabil la dificultăți de concentrare, iritabilitate, anxietate și chiar stări depresive. Performanța școlară scade, iar bucuria de a practica sportul dispare, fiind înlocuită de frustrare și de sentimentul că "oricât aș încerca, nu reușesc".</p> 
+
+ 			 <h3>Somatizarea: când corpul strigă ceea ce mintea nu poate spune</h3> 
+ 			 <p>Somatizarea este procesul prin care o suferință emoțională (stres, anxietate, frustrare) se manifestă prin simptome fizice reale, pentru care nu se găsește o cauză medicală directă. La un copil, care nu are încă vocabularul sau maturitatea de a-și exprima complexitatea emoțiilor, corpul devine adesea principalul canal de comunicare a suferinței.</p> 
+
+ 			 <h4>Presiunea părinților și eșecul sportiv:</h4> 
+ 			 <p>Presiunea de a performa, fie că este exprimată direct ("Trebuie să câștigi!") sau indirect (limbajul non-verbal, dezamăgirea subtilă a părinților după un eșec, comparațiile cu alți copii), este o sursă imensă de stres toxic pentru un copil. Acesta poate dezvolta o teamă paralizantă de a nu-și dezamăgi părinții, o teamă care îi subminează încrederea și plăcerea de a juca. Fiecare eșec sau performanță sub așteptări, dacă nu este gestionat cu empatie și sprijin necondiționat, se acumulează ca o frustrare tăcută, care trebuie să iasă la suprafață cumva.</p> 
+
+ 			 <h4>Cum "vorbește" corpul:</h4> 
+ 			 <ul> 
+ 				 <li><strong>Axa intestin-creier în acțiune:</strong> Așa cum am discutat, stresul are un impact direct și devastator asupra intestinului. Problemele digestive ale lui Andi (absorbție scăzută, microbiotă săracă) pot fi o manifestare fizică directă a anxietății și presiunii pe care le resimte. "Fluturii în stomac" dinaintea unui meci pot deveni o stare cronică de disconfort digestiv, balonare și malabsorbție.</li> 
+ 				 <li><strong>Dureri inexplicabile:</strong> Durerile de cap frecvente, durerile musculare care nu par justificate de efort sau durerile de stomac recurente pot fi semnale ale unei încărcături emoționale prea mari. Corpul preia și exprimă ceea ce copilul nu poate verbaliza.</li> 
+ 				 <li><strong>Oboseala cronică:</strong> Stresul constant menține corpul într-o stare de alertă, consumând resursele energetice și ducând la o epuizare care nu se remediază doar prin somn sau alimentație, ci necesită și o "liniștire" a sistemului nervos.</li> 
+ 			 </ul> 
+ 			 <p>Performanța sportivă a copilului este un maraton, nu un sprint. Sănătatea sa fizică și emoțională sunt profund interconectate și reprezintă fundația pe care se poate construi orice succes viitor. A investi în nutriție corectă și într-un mediu emoțional suportiv, în care valoarea copilului nu este condiționată de rezultate, este cea mai importantă strategie pentru o carieră sportivă lungă și, mai ales, fericită.</p> 
+ 		 </div> 
+ 		 
+ 		 <div id="perspectiva-emotionala" class="tab-content"> 
+ 			 <h2>Perspectiva holistică și cauzele emoționale – conexiunea minte-corp</h2> 
+ 			 <p>Pentru a înțelege pe deplin complexitatea acestui tablou clinic, este esențial să adoptăm o perspectivă holistică, care recunoaște că sănătatea fizică, emoțională, socială și cognitivă a unui copil sunt profund interconectate. Simptomele fizice nu sunt întotdeauna doar rezultatul unor procese biochimice izolate; ele pot fi și manifestarea fizică a unor stări emoționale și a stresului cronic. Această secțiune explorează cum presiunea emoțională și stresul, în special în contextul sportului de performanță, pot contribui direct la deficiențele fiziologice observate.</p> 
+
+ 			 <h3>Stresul și presiunea în sportul de performanță juvenil</h3> 
+ 			 <p>Sportul de performanță, deși benefic, poate expune tinerii atleți la niveluri semnificative de presiune. Aceasta poate proveni din multiple surse: așteptări autoimpuse de a fi perfect, teama de a greși, presiunea de a performa pentru echipă, antrenori sau pentru a satisface așteptările părinților. Când această presiune devine cronică, riscul de <strong>epuizare (burnout)</strong> crește exponențial.[3, 4]</p> 
+ 			 <p>Simptomele de burnout la tinerii sportivi includ oboseală cronică, scăderea performanței, modificări de dispoziție (iritabilitate, tristețe), lipsă de entuziasm, tulburări de somn și îmbolnăviri frecvente. Este frapantă suprapunerea dintre aceste semne de epuizare emoțională și tabloul clinic al copilului, sugerând că stresul ar putea fi un factor contributor major.</p> 
+
+ 			 <h3>Cascada fiziologică a stresului: cum emoțiile devorează corpul</h3> 
+ 			 <p>Atunci când creierul percepe o amenințare – fie ea un pericol real sau presiunea unei competiții – activează răspunsul de "luptă, fugă sau îngheț" (fight, flight, or freeze). Acest mecanism de supraviețuire inundă corpul cu hormoni de stres, precum cortizolul și adrenalina.[5] În timp ce acest răspuns este util pe termen scurt, stresul cronic menține corpul într-o stare de alertă constantă, cu efecte devastatoare asupra mai multor sisteme.</p> 
+ 			 <ul> 
+ 				 <li><strong>Impactul asupra sistemului digestiv (axa intestin-creier):</strong> Creierul și intestinul sunt într-o comunicare constantă printr-o rețea complexă de nervi și hormoni, cunoscută ca axa intestin-creier. Stresul cronic perturbă grav această comunicare.[6] În starea de "luptă sau fugă", corpul deviază sângele de la organele digestive către mușchi, considerând digestia o funcție non-esențială pentru supraviețuirea imediată. Acest proces: 
+ 					 <ul> 
+ 						 <li><strong>Încetinește digestia și alterează secrețiile gastrice</strong>, ceea ce duce la o descompunere ineficientă a alimentelor și la o absorbție redusă a nutrienților. Aceasta este o explicație directă pentru "coeficientul de absorbție colonică scăzut".</li> 
+ 						 <li><strong>Afectează negativ microbiomul intestinal</strong>, ducând la un dezechilibru între bacteriile bune și cele rele. Acest fenomen poate explica "coeficientul scăzut de bacterii intestinale".</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong>Epuizarea nutrienților esențiali:</strong> Pentru a produce hormoni de stres și a menține corpul în alertă, organismul consumă cantități mari de vitamine și minerale. Stresul cronic este un "hoț" de nutrienți, epuizând în mod specific rezervele de: 
+ 					 <ul> 
+ 						 <li><a href="[https://nutrisibmicron.netlify.app/magneziu.html](https://nutrisibmicron.netlify.app/magneziu.html)" target="_blank">Magneziu</a>: Esențial pentru relaxarea musculară și funcția nervoasă. Stresul crește excreția de magneziu.</li> 
+ 						 <li><a href="[https://nutrisibmicron.netlify.app/zinc.html](https://nutrisibmicron.netlify.app/zinc.html)" target="_blank">Zinc</a>: Crucial pentru imunitate și reglarea cortizolului. Nivelurile de zinc și cortizol au o relație inversă.</li> 
+ 						 <li>Vitaminele din complexul B (inclusiv <a href="[https://nutrisibmicron.netlify.app/vitamina_b1.html](https://nutrisibmicron.netlify.app/vitamina_b1.html)" target="_blank">Vitamina B1</a> și <a href="[https://nutrisibmicron.netlify.app/vitamina_b2.html](https://nutrisibmicron.netlify.app/vitamina_b2.html)" target="_blank">Vitamina B2</a>): Vitale pentru producția de energie și funcția neurologică, sunt consumate rapid în perioade de stres.</li> 
+ 						 <li><a href="[https://nutrisibmicron.netlify.app/vitamina_c.html](https://nutrisibmicron.netlify.app/vitamina_c.html)" target="_blank">Vitamina C</a>: Concentrată în glandele suprarenale, este utilizată masiv pentru producția de cortizol.</li> 
+ 					 </ul> 
+ 					 Acest proces de epuizare se aliniază perfect cu deficitele de <strong><a href="[https://nutrisibmicron.netlify.app/zinc.html](https://nutrisibmicron.netlify.app/zinc.html)" target="_blank">zinc</a>, <a href="[https://nutrisibmicron.netlify.app/magneziu.html](https://nutrisibmicron.netlify.app/magneziu.html)" target="_blank">magneziu</a>, <a href="[https://nutrisibmicron.netlify.app/vitamina_b1.html](https://nutrisibmicron.netlify.app/vitamina_b1.html)" target="_blank">vitamina B1</a>, <a href="[https://nutrisibmicron.netlify.app/vitamina_b2.html](https://nutrisibmicron.netlify.app/vitamina_b2.html)" target="_blank">B2</a> și <a href="[https://nutrisibmicron.netlify.app/vitamina_c.html](https://nutrisibmicron.netlify.app/vitamina_c.html)" target="_blank">C</a></strong> identificate în analizele copilului. 
+ 				 </li> 
+ 				 <li><strong>Impactul asupra sistemului scheletic:</strong> Hormonul principal al stresului cronic, <strong>cortizolul</strong>, are un efect direct distructiv asupra oaselor. Nivelurile ridicate de cortizol: 
+ 					 <ul> 
+ 						 <li><strong>Blochează absorbția calciului</strong> în intestin.[7, 8]</li> 
+ 						 <li><strong>Stimulează resorbția osoasă</strong>, adică descompunerea țesutului osos pentru a elibera aminoacizi, pe care corpul îi folosește ca sursă de energie de urgență.</li> 
+ 						 <li><strong>Reduce factorii de creștere osoasă</strong> și crește moartea celulelor formatoare de os (osteoblaste).</li> 
+ 					 </ul> 
+ 					 Această legătură directă între stresul cronic și metabolismul osos oferă o explicație plauzibilă pentru "densitatea non-minerală scăzută" și "coeficientul crescut de osteoporoză", fenomene extrem de neobișnuite la un copil de 11 ani.[9, 10] 
+ 				 </li> 
+ 			 </ul> 
+ 			 
+ 			 <h3>Când corpul spune nu: costul stresului ascuns</h3> 
+ 			 <p>Medicul și autorul Gabor Maté, în lucrarea sa "Când corpul spune nu", argumentează că bolile cronice pot fi adesea modul în care corpul exprimă fizic o suferință emoțională pe care mintea nu o poate sau nu vrea să o recunoască. Din această perspectivă, simptomele copilului nu sunt doar o listă de probleme tehnice, ci pot fi considerate un mesaj. Corpul său ar putea "spune nu" la un nivel de presiune, la un program de antrenament sau la un stres emoțional care a devenit nesustenabil.</p> 
+
+ 			 <h3>Strategii de acțiune pentru reziliență emoțională</h3> 
+ 			 <p>Abordarea cauzelor emoționale este la fel de importantă ca și protocolul nutrițional. Aceste recomandări nu înlocuiesc consultul unui specialist în sănătate mintală, ci oferă un cadru de sprijin pentru părinți și antrenori.</p> 
+ 			 <ol> 
+ 				 <li><strong>Comunicare și sprijin necondiționat:</strong> Creați un spațiu sigur în care copilul să poată vorbi despre gândurile și sentimentele sale fără teama de a fi judecat. Mutați focusul de la rezultate și câștig la efort, progres și bucuria de a practica sportul.</li> 
+ 				 <li><strong>Tehnici de relaxare și conectare minte-corp:</strong> Integrați în rutina zilnică practici simple de management al stresului. 
+ 					 <ul> 
+ 						 <li><strong>Respirație conștientă:</strong> Exerciții simple de respirație profundă pot calma instantaneu sistemul nervos.[11]</li> 
+ 						 <li><strong>Stretching și yoga:</strong> Aceste activități ajută la eliberarea tensiunii musculare acumulate și la creșterea conștientizării corporale.[12]</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong>Prioritizarea somnului și a recuperării:</strong> Somnul este esențial pentru recuperarea fizică și emoțională. Asigurați o rutină de somn constantă și un mediu propice odihnei.</li> 
+ 				 <li><strong>Joc nestructurat și deconectare:</strong> Este vital ca viața copilului să nu se rezume doar la sport. Timpul pentru joc liber, creativ și nestructurat este fundamental pentru dezvoltarea sa și pentru eliberarea stresului.[13]</li> 
+ 				 <li><strong>Căutarea ajutorului specializat:</strong> Colaborarea cu un psiholog sportiv sau un terapeut poate oferi copilului instrumente valoroase pentru a gestiona presiunea, a-și construi reziliența și a naviga provocările sportului de performanță. A recunoaște nevoia de ajutor este un semn de putere, nu de slăbiciune.</li> 
+ 			 </ol> 
+ 		 </div> 
+ 		 
+ 		 <div id="terapii-holistice" class="tab-content"> 
+ 			 <h2>Abordări holistice complementare pentru recuperare și echilibru</h2> 
+ 			 <p><i>Notă importantă: Terapiile prezentate în această secțiune sunt considerate complementare și nu trebuie să înlocuiască niciodată protocolul medical și nutrițional de bază. Integrarea lor se va face doar cu acordul medicului curant și sub îndrumarea unor practicieni certificați.</i></p> 
+
+ 			 <h3>Abordarea ayurvedică: echilibrarea focului digestiv și a vitalității</h3> 
+ 			 <p>Din perspectiva medicinei ayurvedice, tabloul clinic al lui Andi sugerează un dezechilibru al dosha-urilor (energiile fundamentale) și o slăbire a focului digestiv, numit <strong>Agni</strong>. Efortul fizic intens este asociat cu energia <strong>Pitta</strong> (foc și apă), iar stresul și epuizarea cu <strong>Vata</strong> (aer și eter). Un exces de Pitta neechilibrat poate "arde" resursele, în timp ce un Vata agravat duce la uscăciune, slăbiciune osoasă și probleme digestive.</p> 
+ 			 <ul> 
+ 				 <li><strong>Pacificarea Pitta și Vata:</strong> Dieta trebuie să fie calmantă, hrănitoare și ușor de digerat. Se recomandă alimente gătite, calde, cu gusturi dulce, amar și astringent. Evitarea alimentelor picante, acide, prăjite și a celor reci este esențială.</li> 
+ 				 <li><strong>Întărirea Agni (focul digestiv):</strong> Consumul de ceai de ghimbir înainte de mese, utilizarea condimentelor digestive precum chimenul, coriandrul și feniculul, și respectarea unui program regulat de mese pot ajuta la refacerea capacității digestive.</li> 
+ 				 <li><strong>Reconstruirea Ojas (vitalitatea):</strong> Ojas este esența vitală a tuturor țesuturilor. Pentru a o reface, se recomandă alimente precum ghee (unt clarifiat), lapte cald cu mirodenii (cardamom, scorțișoară), migdale înmuiate și curmale. Plante adaptogene precum <strong>Ashwagandha</strong> pot fi de ajutor, dar doar la recomandarea unui specialist ayurvedic.[14]</li> 
+ 			 </ul> 
+
+ 			 <h3>Medicina tradițională chineză (MTC): tonifierea splinei și a rinichilor</h3> 
+ 			 <p>În MTC, sănătatea depinde de fluxul armonios al energiei vitale (<strong>Qi</strong>) prin canalele energetice numite meridiane. Simptomele lui Andi indică un deficit major la nivelul a două sisteme de organe:</p> 
+ 			 <ul> 
+ 				 <li><strong>Deficit de Qi al <a href="[https://nutrisibmeridiane.netlify.app/meridianul-splinapancreas](https://nutrisibmeridiane.netlify.app/meridianul-splinapancreas)" target="_blank">Splinei:</a></strong> Splina, în MTC, este responsabilă cu transformarea alimentelor în Qi și Sânge și cu menținerea masei musculare. O splină slăbită duce la digestie proastă, absorbție deficitară, oboseală și slăbiciune musculară.</li> 
+ 				 <li><strong>Deficit de Esență a <a href="[https://nutrisibmeridiane.netlify.app/meridianul-rinichi](https://nutrisibmeridiane.netlify.app/meridianul-rinichi)" target="_blank">Rinichilor:</a></strong> Rinichii stochează Esența (Jing), care este baza creșterii, dezvoltării și sănătății oaselor. Epuizarea prin efort excesiv și stres consumă această esență, ducând la probleme osoase și o vitalitate scăzută.</li> 
+ 				 <li><strong>Stagnarea Qi-ului <a href="[https://nutrisibmeridiane.netlify.app/meridianul-ficat](https://nutrisibmeridiane.netlify.app/meridianul-ficat)" target="_blank">Ficatului:</a></strong> Presiunea emoțională și frustrarea pot bloca fluxul liber al Qi-ului în meridianul Ficatului, ceea ce agravează problemele digestive și poate duce la iritabilitate.</li> 
+ 			 </ul> 
+ 			 <p><strong>Terapii MTC recomandate:</strong></p> 
+ 			 <ul> 
+ 				 <li><strong>Acupunctura/Presopunctura:</strong> Stimularea unor puncte specifice poate tonifia energia organelor deficitare și poate debloca stagnările. Puncte cheie ar fi: <strong>Stomac 36 (Zusanli)</strong> pentru digestie și vitalitate generală, <strong>Splină 6 (Sanyinjiao)</strong> pentru a hrăni Sângele și a calma mintea, și <strong>Rinichi 3 (Taixi)</strong> pentru a tonifia Esența Rinichilor.[3]</li> 
+ 				 <li><strong>Dietoterapie chineză:</strong> Consumul de alimente care tonifică Splina (cartofi dulci, dovleac, orez, ovăz) și Rinichii (fasole neagră, nuci, semințe de susan negru).</li> 
+ 			 </ul> 
+
+ 			 <h3>Tehnici de meditație și echilibrare energetică (Chakre)</h3> 
+ 			 <p>Stresul și presiunea performanței creează un dezechilibru în sistemul energetic al corpului. Meditația și conștientizarea centrilor energetici (chakre) pot ajuta la restabilirea armoniei interioare.</p> 
+ 			 <ul> 
+ 				 <li><strong>Chakrele afectate:</strong> 
+ 					 <ul> 
+ 						 <li><strong><a href="[https://nutrisibchakra.netlify.app/muladhara](https://nutrisibchakra.netlify.app/muladhara)" target="_blank">Muladhara (Chakra Rădăcinii):</a></strong> Localizată la baza coloanei, este asociată cu sentimentul de siguranță, stabilitate și sănătatea fizică (oase, picioare). Dezechilibrul se manifestă prin insecuritate și probleme scheletice.</li> 
+ 						 <li><strong><a href="[https://nutrisibchakra.netlify.app/manipura](https://nutrisibchakra.netlify.app/manipura)" target="_blank">Manipura (Chakra Plexului Solar):</a></strong> Localizată în zona stomacului, guvernează puterea personală, stima de sine și sistemul digestiv. Presiunea de a performa și eșecurile pot bloca această chakră, ducând la probleme digestive și lipsă de încredere.</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong>Tehnici recomandate:</strong> 
+ 					 <ul> 
+ 						 <li><strong>Meditația de <a href="[https://nutrisibholistic.netlify.app/impamantarea](https://nutrisibholistic.netlify.app/impamantarea)" target="blank">împământare (Grounding):</a></strong> Exerciții simple de vizualizare în care copilul își imaginează rădăcini care cresc din tălpile picioarelor adânc în pământ, oferindu-i stabilitate și siguranță. Aceasta ajută la echilibrarea chakrei rădăcinii.[15]</li> 
+ 						 <li><strong>Respirația abdominală:</strong> Plasarea mâinilor pe abdomen și observarea mișcării de ridicare și coborâre în timpul respirației aduce energia și conștientizarea în zona plexului solar, calmând sistemul nervos și ajutând digestia.[5]</li> 
+ 						 <li><strong>Vizualizarea culorilor:</strong> Asocierea culorii roșii cu chakra rădăcinii și a culorii galbene cu plexul solar în timpul unor meditații scurte poate ajuta la revitalizarea acestor centri energetici.</li> 
+ 					 </ul> 
+ 				 </li> 
+ 			 </ul> 
+ 		 </div> 
+ 		 
+ 		 <div id="energie-hidratare" class="tab-content"> 
+ 			 <h2>Alimentarea tânărului atlet: fundamentele energetice și de hidratare</h2> 
+ 			 <p>Pentru un tânăr sportiv, hrana nu este doar o sursă de plăcere, ci combustibilul esențial care susține performanța, creșterea și recuperarea. Orice strategie nutrițională trebuie să înceapă cu asigurarea unui aport energetic și hidric adecvat, care să corespundă cerințelor excepționale impuse de antrenamentele zilnice.</p> 
+ 			 
+ 			 <h3>Calcularea necesarului caloric pentru antrenamente intense</h3> 
+ 			 <p>Datele antropometrice (11 ani, 160 cm, 45 kg) și nivelul de activitate fizică (2-3 ore de antrenament pe zi) plasează copilul într-o categorie cu cerințe energetice foarte ridicate. Tabelele standard indică un necesar de aproximativ 2700 kcal/zi pentru un băiat activ de această vârstă. Totuși, acest nivel este adesea insuficient pentru sportivii de performanță.</p> 
+ 			 <p>Pentru o estimare mai precisă, se poate utiliza ecuația Mifflin-St Jeor pentru a calcula Rata Metabolică Bazală (BMR) – energia consumată în repaus.</p> 
+ 			 <ul> 
+ 				 <li><strong>Calcul BMR:</strong><br> 
+ 					 BMR = (10 x 45) + (6.25 x 160) - (5 x 11) + 5 = 450 + 1000 - 55 + 5 = 1400 kcal 
+ 				 </li> 
+ 			 </ul> 
+ 			 <p>Această valoare reprezintă doar necesarul pentru funcțiile vitale. Necesarul caloric total zilnic (TDEE) se obține prin multiplicarea BMR cu un factor de activitate. Pentru 2-3 ore de antrenament intens, acest factor este de cel puțin 1.7-1.9.</p> 
+ 			 <ul> 
+ 				 <li><strong>Calcul TDEE (necesar caloric total):</strong><br> 
+ 					 TDEE = BMR x Factor_{activitate} = 1400 x (1.7 \text{ la } 1.9) = 2380 - 2660 kcal/zi 
+ 				 </li> 
+ 			 </ul> 
+ 			 <p>Această valoare de 2400-2700 kcal/zi reprezintă minimul necesar doar pentru a menține greutatea actuală. Prezența multiplilor deficite nutriționale, a problemelor de metabolism proteic și, mai ales, a semnelor de demineralizare osoasă, indică în mod clar că organismul nu primește suficientă energie pentru a acoperi simultan costurile antrenamentului și procesele fundamentale de creștere și reparație. Această stare este cunoscută ca <strong>Disponibilitate Energetică Scăzută (Low Energy Availability - LEA)</strong>. În starea de LEA, organismul intră într-un mod de conservare, sacrificând funcții pe termen lung, precum construirea oaselor și sinteza musculară, pentru a supraviețui pe termen scurt.</p> 
+ 			 <p>Prin urmare, obiectivul caloric trebuie să depășească simpla menținere.<br> 
+ 			 <strong>Recomandare:</strong> Aportul caloric zilnic țintă ar trebui să fie de <strong>3000-3500 kcal</strong>, monitorizat și ajustat în funcție de evoluția greutății și a stării generale, sub îndrumarea unui specialist.</p> 
+ 			 
+ 			 <h3>Protocolul de hidratare și electroliți: piatra de temelie a recuperării</h3> 
+ 			 <p>Deshidratarea și deficitul de electroliți, identificate în evaluare, sunt probleme critice pentru un sportiv. Hidratarea este adesea subestimată, însă este cel mai important nutrient pentru performanță, recuperare și funcționarea corectă a organelor interne.  Electroliții sunt minerale esențiale (precum sodiu, <a href="[https://nutrisibmicron.netlify.app/potasiu.html](https://nutrisibmicron.netlify.app/potasiu.html)" target="_blank">potasiu</a>, <a href="[https://nutrisibmicron.netlify.app/magneziu.html](https://nutrisibmicron.netlify.app/magneziu.html)" target="_blank">magneziu</a>, <a href="[https://nutrisibmicron.netlify.app/calciu.html](https://nutrisibmicron.netlify.app/calciu.html)" target="_blank">calciu</a>) care se pierd prin transpirație și sunt vitale pentru funcția musculară, transmiterea nervoasă și menținerea echilibrului hidric în organism. Un deficit de electroliți poate duce la crampe musculare, oboseală și scăderea performanței.</p> 
+ 			 <p>Unul dintre rezultatele anormale – <strong>urobilinogenul crescut</strong> – poate fi, de asemenea, direct legat de starea de hidratare. Deși poate semnala o patologie hepatică , în contextul unui sportiv, este frecvent un indicator al <strong>hemolizei induse de efort</strong> (distrugerea globulelor roșii din cauza impactului mecanic al antrenamentului), combinată cu <strong>deshidratarea</strong>.  Deshidratarea concentrează urina, ceea ce face ca orice cantitate de urobilinogen să pară crescută, și, în același timp, pune un stres suplimentar pe ficat. </p> 
+ 			 <p>Prin urmare, un protocol de hidratare riguros nu este doar o recomandare generală, ci o intervenție terapeutică directă.</p> 
+ 			 <h4>Protocol de hidratare recomandat:</h4> 
+ 			 <ul> 
+ 				 <li><strong>Hidratare de bază:</strong> Consumul a cel puțin <strong>2.5 - 3 litri de lichide pe zi</strong>, predominant apă plată, în afara antrenamentelor.</li> 
+ 				 <li><strong>Înainte de antrenament:</strong> 500-600 ml de apă cu 2-3 ore înainte și încă 200-300 ml cu 20 de minute înainte.</li> 
+ 				 <li><strong>În timpul antrenamentului:</strong> 150-250 ml de lichide la fiecare 15-20 de minute. Pentru antrenamentele care depășesc 60-90 de minute, este esențială o băutură sportivă care să conțină electroliți pentru a înlocui pierderile de <strong><a href="[https://nutrisibmicron.netlify.app/potasiu.html](https://nutrisibmicron.netlify.app/potasiu.html)" target="_blank">potasiu</a> și <a href="[https://nutrisibmicron.netlify.app/magneziu.html](https://nutrisibmicron.netlify.app/magneziu.html)" target="_blank">magneziu</a></strong> (ambele deficitare), precum și sodiu. </li> 
+ 				 <li><strong>După antrenament (rehidratare):</strong> Refacerea pierderilor de lichide este critică. Se recomandă consumul a 1.5 litri de lichid pentru fiecare kilogram de greutate corporală pierdut în timpul antrenamentului. Utilizarea sărurilor de rehidratare orală (SRO) sau a unor băuturi de recuperare cu electroliți poate fi extrem de benefică. </li> 
+ 				 <li><strong>Monitorizare:</strong> Culoarea urinei este un indicator simplu și eficient. O urină de culoarea paiului deschis indică o hidratare bună, în timp ce o culoare închisă, de chihlimbar, semnalează deshidratare. [15]</li> 
+ 			 </ul> 
+ 		 </div> 
+
+ 		 <div id="sistem-digestiv" class="tab-content"> 
+ 			 <h2>Reconstrucția din interior: strategie pentru restaurarea digestivă și metabolică</h2> 
+ 			 <p>Deficiențele multiple și problemele metabolice semnalate sugerează că organismul nu doar că nu primește suficienți nutrienți, dar nici nu îi poate procesa și absorbi corect. Această secțiune se concentrează pe refacerea funcțiilor digestive și metabolice.</p> 
+ 			 
+ 			 <h3>Corectarea metabolismului proteic și a dezechilibrului de aminoacizi</h3> 
+ 			 <p>Rezultatele indică "ușoare deficiențe în metabolismul proteic" și un "exces ușor de lizină, triptofan, treonină, histidină, arginină". Aceste două constatări par contradictorii, dar, în realitate, ele dezvăluie o problemă metabolică mai profundă.</p> 
+ 			 <p>Excesul aparent al anumitor aminoacizi în sânge nu indică neapărat un consum prea mare, ci mai degrabă o <strong>incapacitate a organismului de a-i utiliza eficient</strong>. Acest blocaj metabolic, sau "ambuteiaj", poate fi cauzat de deficiența unor cofactori esențiali. Vitaminele din complexul B, în special <strong><a href="[https://nutrisibmicron.netlify.app/vitamina_b1.html](https://nutrisibmicron.netlify.app/vitamina_b1.html)" target="_blank">vitamina B1</a> (tiamina) și <a href="[https://nutrisibmicron.netlify.app/vitamina_b2.html](https://nutrisibmicron.netlify.app/vitamina_b2.html)" target="_blank">vitamina B2</a> (riboflavina)</strong> – ambele deficitare în acest caz – sunt coenzime critice în metabolismul energetic și în cel al aminoacizilor.  Fără ele, procesul de sinteză a noilor proteine este încetinit, iar aminoacizii rămân în circulație, creând un fals aspect de "exces".</p> 
+ 			 <h4>Strategie de intervenție:</h4> 
+ 			 <ol> 
+ 				 <li><strong>Asigurarea aportului proteic:</strong> Respectarea țintei de 72-81 g de <a href="[https://nutrisibholistic.netlify.app/proteins](https://nutrisibholistic.netlify.app/proteins)" target="_blank"> proteine </a>pe zi, cu un accent pe diversitate și calitate.</li> 
+ 				 <li><strong>Surse proteice de calitate:</strong> 
+ 					 <ul> 
+ 						 <li><strong>Carne slabă:</strong> Piept de pui sau curcan, mușchi de vită.</li> 
+ 						 <li><strong>Pește:</strong> Somon, ton, sardine, cod – oferă și acizi grași omega-3 benefici.</li> 
+ 						 <li><strong>Ouă:</strong> Considerate un aliment complet, o sursă excelentă de proteine.</li> 
+ 						 <li><strong>Lactate:</strong> Iaurt grecesc, brânză de vaci (cottage), kefir – oferă și calciu și probiotice.</li> 
+ 						 <li><strong>Surse vegetale (complementare):</strong> Linte, năut, quinoa, tofu, fasole. </li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong>Corectarea deficitelor de vitamine B:</strong> Urmarea recomandărilor din tabelele de repleție pentru a reface stocurile de B1 și B2.</li> 
+ 			 </ol> 
+ 			 
+ 			 <h3>Planul de revitalizare a sănătății intestinale: probiotice și prebiotice</h3> 
+ 			 <p>Rezultatele care arată un "coeficient de absorbție colonică scăzut" și un "coeficient scăzut de bacterii intestinale" sunt, probabil, piesa centrală a acestui puzzle. Un intestin cu o floră bacteriană (microbiotă) sărăcită este incapabil să extragă nutrienții vitali din alimente.  Stresul fizic intens este un factor cunoscut care poate afecta negativ microbiota. [16]</p> 
+ 			 <p>Prin urmare, refacerea sănătății intestinale este prioritatea absolută. Strategia este una duală:</p> 
+ 			 <ul> 
+ 				 <li><strong>Probiotice (repopularea microbiotei):</strong> Sunt microorganisme vii care aduc beneficii sănătății. Scopul este de a reintroduce în intestin tulpini benefice, precum <i>Lactobacillus</i> și <i>Bifidobacterium</i>. [17] 
+ 					 <ul> 
+ 						 <li><strong>Surse alimentare:</strong> Iaurt și chefir (naturale, neîndulcite), varză murată (nepasteurizată), castraveți murați în saramură (nu în oțet), miso, kombucha. </li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong>Prebiotice (hrănirea bacteriilor bune):</strong> Sunt tipuri de fibre care servesc drept hrană pentru bacteriile intestinale benefice. 
+ 					 <ul> 
+ 						 <li><strong>Surse alimentare:</strong> Usturoi, ceapă, praz, sparanghel, banane (mai puțin coapte), mere, cereale integrale (ovăz, orz), leguminoase (fasole, linte). </li> 
+ 					 </ul> 
+ 				 </li> 
+ 			 </ul> 
+ 			 <p>Prin combinarea zilnică a alimentelor probiotice și prebiotice, se creează un mediu intestinal propice pentru refacerea florei și creșterea capacității de absorbție a nutrienților. </p> 
+ 		 </div> 
+ 		 
+ 		 <div id="sistem-osos" class="tab-content"> 
+ 			 <h2>Fortificarea viitorului: un protocol proactiv pentru sănătatea scheletică</h2> 
+ 			 <p>Constatările privind "densitatea non-minerală scăzută" și un "coeficient crescut de osteoporoză" sunt extrem de importante și necesită o intervenție imediată. Apariția acestor markeri la un copil de 11 ani este un semnal de alarmă, indicând un dezechilibru sever între formarea și resorbția osoasă.</p> 
+ 			 
+ 			 <h3>Fereastra critică pentru masa osoasă maximă</h3> 
+ 			 <p>Copilăria și adolescența reprezintă o fereastră de oportunitate unică și limitată în timp pentru acumularea masei osoase. Capitalul osos maxim (Peak Bone Mass), atins în jurul vârstei de 20-25 de ani, determină riscul de osteoporoză la vârsta adultă.  O densitate osoasă scăzută la 11 ani sugerează că acest proces fundamental este deja compromis.</p> 
+ 			 <p>Cauzele sunt direct legate de problemele identificate anterior: disponibilitatea energetică scăzută (organismul "canibalizează" osul pentru energie), malabsorbția nutrienților și deficiențele de cofactori (<a href="[https://nutrisibmicron.netlify.app/magneziu.html](https://nutrisibmicron.netlify.app/magneziu.html)" target="_blank">magneziu</a>, <a href="[https://nutrisibmicron.netlify.app/zinc.html](https://nutrisibmicron.netlify.app/zinc.html)" target="_blank">zinc</a>, <a href="[https://nutrisibmicron.netlify.app/potasiu.html](https://nutrisibmicron.netlify.app/potasiu.html)" target="_blank">potasiu</a>, <a href="[https://nutrisibmicron.netlify.app/vitamina_c.html](https://nutrisibmicron.netlify.app/vitamina_c.html)" target="_blank">vitamina C</a>, D). Tratarea sănătății osoase în izolare, prin simpla administrare de <a href="[https://nutrisibmicron.netlify.app/calciu.html](https://nutrisibmicron.netlify.app/calciu.html)" target="_blank">calciu</a>, este sortită eșecului. Abordarea trebuie să fie integrată.</p> 
+ 			 
+ 			 <h3>Matricea nutrienților pentru construcția osoasă: o abordare sinergică</h3> 
+ 			 <p>Construirea unui os puternic necesită atât "cărămizi" (<a href="[https://nutrisibmicron.netlify.app/calciu.html](https://nutrisibmicron.netlify.app/calciu.html)" target="_blank">calciu</a>), cât și o echipă de "muncitori" (ceilalți nutrienți) pentru a le asambla corect.</p> 
+ 			 <ul> 
+ 				 <li><strong><a href="[https://nutrisibmicron.netlify.app/calciu.html](https://nutrisibmicron.netlify.app/calciu.html)" target="_blank">Calciu</a> și <a href="[https://nutrisibmicron.netlify.app/vitamina_d.html](https://nutrisibmicron.netlify.app/vitamina_d.html)" target="_blank">Vitamina D</a>:</strong> Duo-ul fundamental. Calciul este "cărămida", iar vitamina D este "șeful de șantier" care asigură transportul calciului. [18] 
+ 					 <ul> 
+ 						 <li><strong>Surse de <a href="[https://nutrisibmicron.netlify.app/calciu.html](https://nutrisibmicron.netlify.app/calciu.html)" target="_blank">Calciu</a>:</strong> Produse lactate, legume cu frunze verzi (broccoli, kale), tofu îmbogățit, sardine (cu oase), migdale. </li> 
+ 						 <li><strong>Surse de <a href="[https://nutrisibmicron.netlify.app/vitamina_d.html](https://nutrisibmicron.netlify.app/vitamina_d.html)" target="_blank">Vitamina D</a>:</strong> Expunerea la soare, pește gras (somon, macrou), gălbenuș de ou, alimente fortificate. [19]</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong><a href="[https://nutrisibmicron.netlify.app/magneziu.html](https://nutrisibmicron.netlify.app/magneziu.html)" target="_blank">Magneziu</a> (Deficitar):</strong> Activează <a href="[https://nutrisibmicron.netlify.app/vitamina_d.html](https://nutrisibmicron.netlify.app/vitamina_d.html)" target="_blank">vitamina D</a> și reglează transportul de <a href="[https://nutrisibmicron.netlify.app/calciu.html](https://nutrisibmicron.netlify.app/calciu.html)" target="_blank">calciu</a>.  
+ 					 <ul> 
+ 						 <li><strong>Surse:</strong> Semințe de dovleac, migdale, leguminoase, avocado, spanac. </li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong><a href="[https://nutrisibmicron.netlify.app/zinc.html](https://nutrisibmicron.netlify.app/zinc.html)" target="_blank">Zinc</a> (Deficitar):</strong> Stimulează celulele formatoare de os (osteoblaste).  
+ 					 <ul> 
+ 						 <li><strong>Surse:</strong> Carne roșie, stridii, năut, semințe de dovleac. </li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong><a href="[https://nutrisibmicron.netlify.app/vitamina_k.html](https://nutrisibmicron.netlify.app/vitamina_k.html)" target="_blank">Vitamina K</a>:</strong> "Leagă" <a href="[https://nutrisibmicron.netlify.app/calciu.html](https://nutrisibmicron.netlify.app/calciu.html)" target="_blank">calciul</a> în structura osoasă.  
+ 					 <ul> 
+ 						 <li><strong>Surse:</strong> Legume cu frunze verzi (spanac, kale, broccoli).</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong><a href="[https://nutrisibmicron.netlify.app/vitamina_c.html](https://nutrisibmicron.netlify.app/vitamina_c.html)" target="_blank">Vitamina C</a> (Deficitară):</strong> Indispensabilă pentru sinteza colagenului, "schela" osului.  
+ 					 <ul> 
+ 						 <li><strong>Surse:</strong> Ardei gras roșu, kiwi, coacăze, broccoli, portocale. [20]</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong><a href="[https://nutrisibmicron.netlify.app/potasiu.html](https://nutrisibmicron.netlify.app/potasiu.html)" target="_blank">Potasiu</a> (Deficitar):</strong> Neutralizează acizii din organism, prevenind "scurgerea" <a href="[https://nutrisibmicron.netlify.app/calciu.html](https://nutrisibmicron.netlify.app/calciu.html)" target="_blank">calciului</a> din oase.  
+ 					 <ul> 
+ 						 <li><strong>Surse:</strong> Cartofi dulci, spanac, avocado, banane, somon. </li> 
+ 					 </ul> 
+ 				 </li> 
+ 			 </ul> 
+ 		 </div> 
+ 		 
+ 		 <div id="micronutrienti" class="tab-content"> 
+ 			 <h2>Repleția țintită a micronutrienților esențiali</h2> 
+ 			 <p>Deficitele multiple de vitamine și minerale sunt o consecință directă a dezechilibrului dintre cerințele crescute ale lui Andi David și capacitatea redusă de absorbție. Această secțiune oferă un ghid pentru corectarea fiecărui deficit, prioritizând alimentele integrale.</p> 
+ 			 
+ 			 <h3>Refacerea echilibrului mineral: un ghid bazat pe alimentație</h3> 
+ 			 <h4>Tabelul 2: Ghid de repleție pentru mineralele deficitare</h4> 
+ 			 <table> 
+ 				 <thead> 
+ 					 <tr> 
+ 						 <th>Mineral deficitar</th> 
+ 						 <th>Rol esențial pentru tânărul sportiv</th> 
+ 						 <th>Surse alimentare de top</th> 
+ 					 </tr> 
+ 				 </thead> 
+ 				 <tbody> 
+ 					 <tr> 
+ 						 <td><strong><a href="[https://nutrisibmicron.netlify.app/zinc.html](https://nutrisibmicron.netlify.app/zinc.html)" target="_blank">Zinc</a></strong></td> 
+ 						 <td>Imunitate, sinteza proteinelor, vindecare, sănătate osoasă. </td> 
+ 						 <td>Carne de vită, semințe de dovleac, năut, nuci caju, iaurt/kefir.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="[https://nutrisibmicron.netlify.app/seleniu.html](https://nutrisibmicron.netlify.app/seleniu.html)" target="_blank">Seleniu</a></strong></td> 
+ 						 <td>Protecție antioxidantă, funcție tiroidiană, imunitate. </td> 
+ 						 <td>Nuci braziliene (1-2/zi), ton, sardine, ouă, orez brun.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="[https://nutrisibmicron.netlify.app/potasiu.html](https://nutrisibmicron.netlify.app/potasiu.html)" target="_blank">Potasiu</a></strong></td> 
+ 						 <td>Echilibru electrolitic, funcție musculară și nervoasă, sănătate osoasă. </td> 
+ 						 <td>Cartof dulce, spanac, avocado, fasole albă, somon, banană.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="[https://nutrisibmicron.netlify.app/magneziu.html](https://nutrisibmicron.netlify.app/magneziu.html)" target="_blank">Magneziu</a></strong></td> 
+ 						 <td>Producția de energie (ATP), funcție musculară, activează Vit. D. </td> 
+ 						 <td>Semințe de dovleac, migdale, spanac, fasole neagră, avocado.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="[https://nutrisibmicron.netlify.app/cupru.html](https://nutrisibmicron.netlify.app/cupru.html)" target="_blank">Cupru</a></strong></td> 
+ 						 <td>Formarea globulelor roșii și a colagenului, absorbția fierului. </td> 
+ 						 <td>Ficat de vită, nuci caju, semințe de floarea-soarelui, cartofi, ciuperci.</td> 
+ 					 </tr> 
+ 				 </tbody> 
+ 			 </table> 
+ 			 
+ 			 <h3>Refacerea stocurilor de vitamine cheie pentru energie și protecție</h3> 
+ 			 <h4>Tabelul 3: Ghid de repleție pentru vitaminele deficitare</h4> 
+ 			 <table> 
+ 				 <thead> 
+ 					 <tr> 
+ 						 <th>Vitamina deficitară</th> 
+ 						 <th>Rol esențial pentru tânărul sportiv</th> 
+ 						 <th>Surse alimentare de top</th> 
+ 					 </tr> 
+ 				 </thead> 
+ 				 <tbody> 
+ 					 <tr> 
+ 						 <td><strong><a href="[https://nutrisibmicron.netlify.app/vitamina_b1.html](https://nutrisibmicron.netlify.app/vitamina_b1.html)" target="_blank">Vitamina B1 (Tiamina)</a></strong></td> 
+ 						 <td>Metabolismul carbohidraților (energie), funcție nervoasă. </td> 
+ 						 <td>Carne de porc, semințe de floarea-soarelui, fasole neagră, linte.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="[https://nutrisibmicron.netlify.app/vitamina_b2.html](https://nutrisibmicron.netlify.app/vitamina_b2.html)" target="_blank">Vitamina B2 (Riboflavina)</a></strong></td> 
+ 						 <td>Producția de energie, metabolismul proteinelor. </td> 
+ 						 <td>Ficat de vită, iaurt, migdale, ouă, spanac.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="[https://nutrisibmicron.netlify.app/vitamina_c.html](https://nutrisibmicron.netlify.app/vitamina_c.html)" target="_blank">Vitamina C</a></strong></td> 
+ 						 <td>Antioxidant, sinteza colagenului (oase, tendoane), imunitate. </td> 
+ 						 <td>Ardei gras roșu, kiwi, coacăze negre, broccoli, portocale.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="[https://nutrisibmicron.netlify.app/vitamina_e.html](https://nutrisibmicron.netlify.app/vitamina_e.html)" target="_blank">Vitamina E</a></strong></td> 
+ 						 <td>Antioxidant, protejează membranele celulare de stresul oxidativ. </td> 
+ 						 <td>Semințe de floarea-soarelui, migdale, ulei de germeni de grâu, avocado.</td> 
+ 					 </tr> 
+ 				 </tbody> 
+ 			 </table> 
+ 		 </div> 
+ 		 
+ 		 <div id="plan-alimentar" class="tab-content"> 
+ 			 <h2>Planul de acțiune integrat: de la teorie la practică</h2> 
+ 			 <p>Această secțiune transpune toate recomandările anterioare într-un plan practic și aplicabil. Scopul este de a oferi un model flexibil pe care părintele, în colaborare cu specialiștii, îl poate adapta pentru a asigura o nutriție optimă.</p> 
+ 			 
+ 			 <h3>Exemplu de plan alimentar integrat pe 7 zile</h3> 
+ 			 <h4>Tabelul 4: Exemplu de plan alimentar săptămânal pentru recuperare și performanță</h4> 
+ 			 <table> 
+ 				 <thead> 
+ 					 <tr> 
+ 						 <th>Micul dejun (7:00)</th> 
+ 						 <th>Gustare 1 (10:00)</th> 
+ 						 <th>Prânz (13:00)</th> 
+ 						 <th>Gustare 2 (16:00 - pre-antrenament)</th> 
+ 						 <th>Cină (19:30 - post-antrenament)</th> 
+ 						 <th>Gustare 3 (21:00)</th> 
+ 					 </tr> 
+ 				 </thead> 
+ 				 <tbody> 
+ 					 <tr> 
+ 						 <td>Omletă din 3 ouă cu spanac și brânză, 2 felii pâine integrală. <i>(Proteine, Vit. B2/D/K, Mg, Fe)</i></td> 
+ 						 <td>Iaurt grecesc (200g) cu 1 banană feliată. <i>(Proteine, Probiotice, K, Prebiotice)</i></td> 
+ 						 <td>Piept de pui la grătar (150g) cu quinoa (1 cană) și salată de ardei roșu. <i>(Proteine, Carbohidrați complecși, Vit. C)</i></td> 
+ 						 <td>Măr cu 2 linguri de unt de arahide. <i>(Carbohidrați, Grăsimi sănătoase, Proteine)</i></td> 
+ 						 <td>Somon la cuptor (150g) cu cartofi dulci copți și broccoli la abur. <i>(Proteine, Omega-3, Vit. D, K, Potasiu, Mg, Vit. C)</i></td> 
+ 						 <td>Un pahar de chefir. <i>(Probiotice, Calciu)</i></td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td>Terci de ovăz (1 cană) preparat cu lapte, 1 lingură semințe de chia, nuci și fructe de pădure. <i>(Carbohidrați complecși, Fibre, Omega-3, Mg, Vit. C)</i></td> 
+ 						 <td>Un pumn de migdale (30g) și o portocală. <i>(Grăsimi sănătoase, Mg, Vit. E, Vit. C)</i></td> 
+ 						 <td>Tocăniță de vită (150g) cu linte (1 cană) și morcovi. <i>(Proteine, Fe, Zn, Fibre, Vit. B1)</i></td> 
+ 						 <td>Pâine integrală cu avocado și felii de curcan. <i>(Carbohidrați, Grăsimi sănătoase, Proteine)</i></td> 
+ 						 <td>Ficat de vită (100g) gătit cu ceapă, servit cu piure de cartofi. <i>(Fe, Zn, Cu, Vit. A, B2, B12)</i></td> 
+ 						 <td>Brânză de vaci (cottage) cu bucăți de ananas. <i>(Proteine cu absorbție lentă, Enzime)</i></td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td>Smoothie: 1 cană lapte, 1 cupă proteină zer, 1/2 avocado, 1 banană, 1 lingură semințe de in. <i>(Proteine, Grăsimi sănătoase, K, Mg, Fibre)</i></td> 
+ 						 <td>2 ouă fierte tari. <i>(Proteine, Vit. D)</i></td> 
+ 						 <td>Sardine la conservă (1 cutie) pe pâine integrală, cu salată verde. <i>(Calciu, Vit. D, Proteine, Omega-3)</i></td> 
+ 						 <td>Iaurt grecesc (200g) cu 1 linguriță miere. <i>(Proteine, Carbohidrați rapizi, Probiotice)</i></td> 
+ 						 <td>Paste integrale cu sos de roșii, năut și spanac. <i>(Carbohidrați complecși, Fibre, Proteine vegetale, Mg)</i></td> 
+ 						 <td>1-2 nuci braziliene. <i>(Seleniu)</i></td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td>Iaurt grecesc (250g) cu semințe de dovleac, semințe de floarea-soarelui și kiwi. <i>(Proteine, Probiotice, Zn, Mg, Vit. E/C)</i></td> 
+ 						 <td>Un baton proteic de calitate (aprox. 20g proteine). <i>(Proteine, Carbohidrați)</i></td> 
+ 						 <td>Supă cremă de fasole neagră cu o lingură de smântână și crutoane integrale. <i>(Proteine, Fibre, Mg, Vit. B1)</i></td> 
+ 						 <td>Banană și un pahar de lapte. <i>(K, Carbohidrați, Calciu)</i></td> 
+ 						 <td>Piept de curcan la grătar (150g) cu orez brun și sparanghel. <i>(Proteine, Carbohidrați complecși, Vit. B1/K)</i></td> 
+ 						 <td>Un pahar de lapte cald. <i>(Calciu, Triptofan)</i></td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td>Clătite proteice (făcute cu făină integrală și pudră proteică) cu fructe de pădure. <i>(Proteine, Carbohidrați, Vit. C)</i></td> 
+ 						 <td>Brânză de vaci (150g) cu felii de castravete și roșii. <i>(Proteine, Hidratare)</i></td> 
+ 						 <td>Salată mare cu ton (1 conservă), fasole albă, ceapă roșie, porumb și dressing de iaurt. <i>(Proteine, Fibre, K, Se)</i></td> 
+ 						 <td>Un pumn de nuci caju și caise uscate. <i>(Grăsimi sănătoase, Mg, Cu, K)</i></td> 
+ 						 <td>Tofu la grătar (200g) cu legume stir-fry (broccoli, ardei, ciuperci) și sos de soia. <i>(Proteine vegetale, Calciu, Vitamine)</i></td> 
+ 						 <td>Iaurt simplu. <i>(Probiotice)</i></td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td>Ouă ochiuri (3) cu șuncă de calitate, servite cu felii de avocado și roșii. <i>(Proteine, Grăsimi sănătoase, K, Licopen)</i></td> 
+ 						 <td>Smoothie: kefir, spanac, măr și o lingură de unt de migdale. <i>(Probiotice, Prebiotice, Mg, Vit. K)</i></td> 
+ 						 <td>Ciorbă de perișoare (carne de vită) cu mult pătrunjel proaspăt. <i>(Proteine, Zn, Fe, Vit. C)</i></td> 
+ 						 <td>Orez cu lapte și scorțișoară. <i>(Carbohidrați, Calciu)</i></td> 
+ 						 <td>Pizza de casă pe blat integral cu sos de roșii, mozzarella, ciuperci și pui. <i>(Masă echilibrată, de refacere)</i></td> 
+ 						 <td>Un măr. <i>(Fibre, Prebiotice)</i></td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td>Mic dejun variat, la alegere.</td> 
+ 						 <td>Gustare la alegere.</td> 
+ 						 <td>Masă de prânz în familie (ex: friptură de vită la cuptor cu garnitură de legume rădăcinoase). <i>(Proteine, Zn, Fe)</i></td> 
+ 						 <td>Fructe proaspete.</td> 
+ 						 <td>Resturile de la prânz sau o masă ușoară: salată cu ou fiert și brânză. <i>(Proteine, Calciu)</i></td> 
+ 						 <td>Un pahar de chefir. <i>(Probiotice)</i></td> 
+ 					 </tr> 
+ 				 </tbody> 
+ 			 </table> 
+ 			 <button id="generatePdfBtn" onclick="generatePlanPDF()">Generează PDF cu Planul Alimentar</button> 
+ 		 </div> 
+ 		 <div id="protocol" class="tab-content"> 
+ 			 <h3>Protocol de echilibrare electrolitică și cu micronutrienți</h3> 
+ 			 <p>Filosofia principală trebuie să fie <strong>"alimentul pe primul loc"</strong> ("food-first"). Totuși, în contextul unor deficiențe multiple și a unor cerințe fiziologice excepționale, suplimentarea țintită și temporară poate acționa ca o punte, accelerând procesul de recuperare. Orice supliment trebuie administrat doar la recomandarea și sub monitorizarea medicului sau a dieteticianului.</p> 
+ 			 
+ 			 <h4>Recomandări specifice</h4> 
+ 			 <p><i>Notă importantă: Acestea sunt recomandări cu scop informativ, bazate pe produsele disponibile. Alegerea finală și dozajul trebuie stabilite de un specialist.</i></p> 
+ 			 
+ 			 <h5>1. Hidratare celulară și mineralizare</h5> 
+ 			 <ul> 
+ 				 <li><strong><a hef="[https://ro.coral.club/shop/coral-mine.html?offer=2220](https://ro.coral.club/shop/coral-mine.html?offer=2220)" target="_blank"> Coral-Mine:</a></strong> Compoziție minerală din coral fosil de adâncime, care, adăugată în apa de băut, o îmbogățește cu minerale ionice (în special <a href="[https://nutrisibmicron.netlify.app/calciu.html](https://nutrisibmicron.netlify.app/calciu.html)" target="_blank">calciu</a> și <a href="[https://nutrisibmicron.netlify.app/magneziu.html](https://nutrisibmicron.netlify.app/magneziu.html)" target="_blank">magneziu</a>). Beneficiul principal este îmbunătățirea proprietăților apei, facilitând o hidratare mai eficientă la nivel celular și contribuind la echilibrul acido-bazic al organismului.</li> 
+ 				 <li><strong><a hef="[https://ro.coral.club/shop/h-500.html?offer=91883&app_redirect=y](https://ro.coral.club/shop/h-500.html?offer=91883&app_redirect=y)" target="_blank">H-500:</a></strong> Un antioxidant puternic care ajută la neutralizarea radicalilor liberi generați în timpul efortului fizic intens. Contribuie la creșterea rezistenței și la reducerea timpului de recuperare prin scăderea nivelului de acid lactic.</li> 
+ 				 <li><strong><a hef="[https://ro.coral.club/shop/oceanmin.html?offer=225130](https://ro.coral.club/shop/oceanmin.html?offer=225130)" target="_blank"> Oceanmin:</a></strong> Conține un concentrat de peste 70 de minerale din apele oceanice de mare adâncime. Este o sursă excelentă de <a href="[https://nutrisibmicron.netlify.app/magneziu.html](https://nutrisibmicron.netlify.app/magneziu.html)" target="_blank">magneziu</a>, un mineral esențial pentru funcția musculară, producția de energie și combaterea oboselii, fiind deosebit de util pentru un sportiv cu deficit confirmat.</li> 
+ 			 </ul> 
+ 			 <p>O hidratare adecvată este piatra de temelie a sănătății, însă conceptul modern de "hidratare inteligentă" depășește simplul consum de apă. Adevărata eficiență a hidratării se măsoară la nivel celular, unde apa nu este doar un lichid, ci un transportator esențial și un mediu pentru nenumărate reacții biochimice. Pentru ca apa să pătrundă eficient în interiorul celulelor (spațiul intracelular), este necesară o balanță fină de electroliți – minerale precum potasiu, sodiu, magneziu și calciu. Acești "gardieni" ai hidratării reglează presiunea osmotică și mențin potențialul electric al membranelor celulare, un proces vital pentru transmiterea impulsurilor nervoase, contracția musculară și producția de energie.</p> 
+ 			 <p>La nivelul membranei fiecărei celule se află canale ionice specializate – pori proteici care permit trecerea selectivă a ionilor de sodiu (Na+), potasiu (K+) și calciu (Ca2+). Funcționarea optimă a acestor canale este esențială. O "curățare" sau menținere a eficienței acestor canale nu implică o acțiune mecanică, ci asigurarea unui mediu biochimic optim. Acest lucru este realizat în principal de pompa de sodiu-potasiu (Na+/K+), un motor celular care consumă energie (ATP) pentru a pompa activ sodiul în afara celulei și potasiul în interiorul ei. Acest proces menține gradientul electrochimic necesar vieții, asigurând că celulele rămân hidratate, energizate și capabile să comunice. Un aport insuficient de potasiu sau un exces de sodiu perturbă acest echilibru, ducând la deshidratare celulară, oboseală și o funcționare sub-optimă a întregului organism.</p> 
+ 			 <p>În paralel cu hidratarea, protecția celulară împotriva stresului oxidativ este fundamentală. Procesele metabolice normale generează în mod inevitabil specii reactive de oxigen (SRO), cunoscute ca radicali liberi. În exces, aceștia pot deteriora structuri vitale precum ADN-ul, proteinele și lipidele membranare. Deși mulți antioxidanți sunt benefici, o strategie cu adevărat avansată implică utilizarea unui agent antioxidant <em>selectiv</em>. Un astfel de antioxidant are capacitatea unică de a neutraliza specific cei mai dăunători radicali liberi (precum radicalul hidroxil, ·OH), lăsând neatinse speciile reactive de oxigen care au roluri utile în semnalizarea celulară și funcția imunitară. Datorită dimensiunii sale moleculare extrem de mici, un astfel de agent poate pătrunde cu ușurință în interiorul celulei, ajungând până la mitocondrii – "centralele energetice" – pentru a le proteja direct de daunele oxidative. Mai mult, un antioxidant de elită contribuie la crearea unui Potențial de Oxido-Reducere (POR) negativ în mediul celular, susținând starea reductivă naturală a organismului, care este esențială pentru sănătate și longevitate. Acesta are și proprietăți antiinflamatorii, ajutând la calmarea inflamației cronice de grad redus, adesea asociată cu stresul oxidativ.</p> 
+
+ 			 <h5>2. Suport cu micronutrienți și sănătate intestinală</h5> 
+ 			 <ul> 
+ 				 <li><strong><a href="[https://ro.coral.club/shop/super-flora.html](https://ro.coral.club/shop/super-flora.html)" target="_blank"> Super-Flora:</a> </strong> Produs care combină probiotice (bifido- și lactobacterii) cu prebioticul inulină. Este o alegere excelentă pentru a reface microbiota intestinală, a îmbunătăți digestia și a crește absorbția nutrienților.</li> 
+ 				 <li><strong><a href="[https://ro.coral.club/shop/coral-magnesium.html?app_redirect=y](https://ro.coral.club/shop/coral-magnesium.html?app_redirect=y)"  target="_blank"> Coral-Magnesium:</a></strong> Conținând forme cu absorbție superioară (taurat și glicinat), este ideal pentru repleția rapidă a deficitului de <a href="[https://nutrisibmicron.netlify.app/magneziu.html](https://nutrisibmicron.netlify.app/magneziu.html)" target="_blank">magneziu</a>, esențial pentru funcția musculară și osoasă.</li> 
+ 				 <li><strong><a href="[https://ro.coral.club/shop/tasty-b.html](https://ro.coral.club/shop/tasty-b.html)" target="_blank"> Tasty B:</a></strong> Un complex de vitamine B într-o formă masticabilă, potrivită pentru copii, care poate ajuta la deblocarea căilor metabolice energetice și proteice.</li> 
+ 				 <li><strong><a href="[https://ro.coral.club/shop/zinc-methionine-15-mg.html?app_redirect=y](https://ro.coral.club/shop/zinc-methionine-15-mg.html?app_redirect=y)"target="_blank"> Zinc 25 mg</a> și <a href="[https://ro.coral.club/shop/selenium.html?app_redirect=y](https://ro.coral.club/shop/selenium.html?app_redirect=y)"target="_blank"> Selenium 100 mcg:</a></strong> Suplimente dedicate pentru corectarea țintită a deficitelor de <a href="[https://nutrisibmicron.netlify.app/zinc.html](https://nutrisibmicron.netlify.app/zinc.html)" target="_blank">zinc</a> și <a href="[https://nutrisibmicron.netlify.app/seleniu.html](https://nutrisibmicron.netlify.app/seleniu.html)" target="_blank">seleniu</a>, respectând dozajul indicat de specialist.</li> 
+ 				 <li><strong><a href="[https://www.fitline.com/ro/ro-ro/products/0705068](https://www.fitline.com/ro/ro-ro/products/0705068)" target="_blank">PowerCocktail Junior:</a></strong> Este un complex special conceput pentru copii, care combină vitamine și minerale esențiale. Conține vitaminele din complexul B (inclusiv <a href="[https://nutrisibmicron.netlify.app/vitamina_b1.html](https://nutrisibmicron.netlify.app/vitamina_b1.html)" target="_blank">B1</a> și <a href="[https://nutrisibmicron.netlify.app/vitamina_b2.html](https://nutrisibmicron.netlify.app/vitamina_b2.html)" target="_blank">B2</a>), <a href="[https://nutrisibmicron.netlify.app/vitamina_c.html](https://nutrisibmicron.netlify.app/vitamina_c.html)" target="_blank">vitamina C</a>, <a href="[https://nutrisibmicron.netlify.app/vitamina_e.html](https://nutrisibmicron.netlify.app/vitamina_e.html)" target="_blank">vitamina E</a>, precum și minerale cheie. Conceptul NTC® (Nutrient Transport Concept) specific mărcii urmărește o biodisponibilitate crescută, fiind o opțiune bună pentru a adresa multiplele deficite identificate.</li> 
+ 			 </ul> 
+ 			 
+ 			 <h5>3. Suport cu acizi grași Omega-3</h5> 
+ 			 <ul> 
+ 				 <li><strong><a href="[https://www.pmebusiness.com/us/shop/fitline/fitline-products/special-products/fitline-microsolve-omega-3/?TP=6289743&lang=en](https://www.pmebusiness.com/us/shop/fitline/fitline-products/special-products/fitline-microsolve-omega-3/?TP=6289743&lang=en)" target="_blank">FitLine microSolve Omega 3</a>:</strong> Acest supliment utilizează tehnologia microSolve pentru a crește biodisponibilitatea acizilor grași Omega-3 (EPA și DHA). Aceștia sunt esențiali pentru reducerea inflamației sistemice induse de efort, pentru sănătatea membranelor celulare și pentru funcția cognitivă, aspecte cruciale pentru un sportiv în creștere.</li> 
+ 				 <li><strong><a href="[https://ro.coral.club/shop/o-mega-3-tg.html?offer=2191](https://ro.coral.club/shop/o-mega-3-tg.html?offer=2191)" target="_blank">O-Mega-3 TG (Coral Club)</a>:</strong> Oferă acizi grași Omega-3 în forma lor naturală de trigliceride (TG), care este recunoscută pentru o absorbție superioară. Acest produs susține sănătatea cardiovasculară,
