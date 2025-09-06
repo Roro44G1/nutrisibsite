@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorii vs. Porții - Ghid Detaliat</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* Light background */
+            color: #212529; /* Dark text */
+        }
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        .info-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid #a3d9ff;
+            padding-bottom: 5px;
+            align-self: stretch;
+        }
+        .text-section {
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .text-section h3 {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #0A2463;
+            margin-bottom: 1rem;
+        }
+        .text-section ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+        .text-section li {
+            margin-bottom: 0.5rem;
+        }
+        .comparison-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .comparison-image {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .step-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: #0A2463; /* darkBlue */
+            color: white;
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+        }
+        .flow-connector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+        .flow-connector span {
+            font-size: 3rem;
+            color: #adb5bd; /* gray-400 */
+        }
+        @media (min-width: 768px) {
+            .flow-connector.horizontal {
+                transform: rotate(0deg);
+            }
+            .flow-connector.vertical {
+                transform: rotate(90deg);
+                margin: 0 auto;
+            }
+        }
+        .note {
+            font-size: 0.85em;
+            color: #777;
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="bg-white">
+        <main class="container mx-auto p-4 md:p-8 max-w-7xl">
+            <header class="text-center mb-16">
+                <h1 class="text-4xl md:text-5xl font-bold text-[#0A2463] mb-4">Redefine 2.0: caloriile sau porțiile - ce schimbăm pentru o sănătate durabilă?</h1>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">Secretul controlului greutății nu este înfometarea, ci alegerea alimentelor inteligente. În programul Redefine, învățăm să mâncăm sătul, să ne simțim energici și să ne atingem obiectivele de sănătate printr-o abordare științifică a nutriției.</p>
+            </header>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Nu reducem porțiile, reducem caloriile: o paradigmă nutrițională esențială</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Strategia simplistă "mănâncă mai puțin" este, pe termen lung, ineficientă și dăunătoare. Aceasta duce la senzație constantă de foame, deficiențe nutriționale și, inevitabil, la eșecul obiectivelor de sănătate. Soluția științifică, adoptată în programul Redefine, este să înlocuim alimentele cu densitate calorică ridicată și sărace în nutrienți cu cele care oferă un volum mare și sațietate profundă, dar cu un aport caloric semnificativ mai mic.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-red-50 border-l-4 border-[#D8315B] p-6 rounded-r-lg shadow-lg">
+                        <h3 class="text-2xl font-bold text-[#D8315B] mb-3">Capcana reducerii porțiilor: implicații fiziologice și psihologice</h3>
+                        <ul class="list-disc list-inside text-slate-700 space-y-1">
+                            <li><b>Senzație constantă de foame și privațiune:</b> Restricția calorică severă declanșează răspunsuri hormonale adaptative. Nivelurile de grelină (hormonul foamei) cresc, în timp ce cele de leptină (hormonul sațietății) scad, amplificând senzația de foame și dificultatea de a adera la dietă. Aceasta poate duce la o stare de stres fiziologic cronic.</li>
+                            <li><b>Pofte intense și supraalimentare ulterioară:</b> Privațiunea alimentară activează centrele de recompensă din creier, în special cele legate de dopamină, ducând la pofte incontrolabile pentru alimente hiper-palatabile (bogate în zahăr și grăsimi). Aceasta se soldează adesea cu episoade de supraalimentare compensatorie, cunoscute sub denumirea de "binge eating", anihilând progresele și contribuind la un ciclu vicios de frustrare și eșec.</li>
+                            <li><b>Deficiențe nutriționale și scăderea energiei:</b> Reducerea arbitrară a porțiilor, fără o selecție inteligentă a alimentelor, conduce la un aport insuficient de vitamine, minerale, fibre și proteine esențiale. Aceasta se manifestă prin oboseală cronică, slăbirea sistemului imunitar (prin afectarea funcției celulelor imunitare și a barierelor fizice), disfuncții metabolice (ex: rezistența la insulină) și o performanță cognitivă redusă.</li>
+                            <li><b>Risc de încetinire a metabolismului (adaptare metabolică):</b> Corpul, percepe restricția calorică severă și prelungită ca pe o amenințare la supraviețuire și își adaptează rata metabolică bazală (RMB), arzând mai puține calorii pentru a conserva energia. Această adaptare, cunoscută sub numele de "adaptare metabolică" sau "termogeneză adaptativă", face pierderea în greutate din ce în ce mai dificilă și favorizează recâștigarea rapidă a kilogramelor pierdute odată cu revenirea la un aport caloric normal, fenomen adesea observat în "yo-yo dieting".</li>
+                            <li><b>Sustenabilitate redusă pe termen lung:</b> Dietele restrictive sunt dificil de menținut pe termen lung din cauza presiunii psihologice și a răspunsurilor fiziologice negative. Aceasta duce la frustrare, eșec și un ciclu vicios de fluctuații de greutate, cu efecte negative asupra sănătății fizice și psihice, inclusiv asupra stimei de sine și a relației cu mâncarea.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-green-50 border-l-4 border-[#06D6A0] p-6 rounded-r-lg shadow-lg">
+                        <h3 class="text-2xl font-bold text-[#06D6A0] mb-3">Soluția: alege inteligent prin densitate nutrițională</h3>
+                        <ul class="list-disc list-inside text-slate-700 space-y-1">
+                            <li><b>Mănâncă sătul, dar cu mai puține calorii totale:</b> Concentrează-te pe alimente cu volum mare și conținut scăzut de calorii, cum ar fi legumele, fructele bogate în fibre și proteinele slabe. Aceasta permite consumul unor cantități satisfăcătoare de alimente, activând receptorii de întindere gastrică și semnalizând sațietatea către creier, fără a depăși necesarul caloric.</li>
+                            <li><b>Prioritizează alimente bogate în nutrienți esențiali:</b> Asigură un aport optim de vitamine, minerale, fibre, proteine de calitate și fitonutrienți. Acești compuși sunt cruciali pentru funcționarea metabolică optimă, producția de energie la nivel celular (ATP), sinteza neurotransmițătorilor și prevenirea deficiențelor care pot afecta funcția imunitară, cognitivă și hormonală.</li>
+                            <li><b>Asigură sațietate prin volum, apă și fibre:</b> Alimentele bogate în apă (ex: castraveți, roșii, pepene) și fibre (ex: cereale integrale, leguminoase, legume cu frunze verzi) umplu stomacul, contribuind la senzația de plenitudine. Fibrele, în special cele solubile, încetinesc golirea gastrică și absorbția nutrienților, prelungind sațietatea și stabilizând glicemia.</li>
+                            <li><b>Sprijină un metabolism sănătos și activ:</b> O dietă densă nutrițional furnizează co-factorii enzimatici necesari pentru procesele metabolice eficiente. Aceasta previne adaptările negative ale ratei metabolice și menține un metabolism optim, esențial pentru arderea caloriilor și gestionarea greutății pe termen lung. Proteinele, de exemplu, au un efect termic mai mare decât carbohidrații și grăsimile, contribuind la un consum energetic sporit post-prandial.</li>
+                            <li><b>Construiește obiceiuri alimentare durabile și plăcute:</b> Această abordare promovează o relație sănătoasă cu mâncarea, bazată pe plăcere, satisfacție și ascultarea semnalelor interne de foame și sațietate, nu pe privațiune sau restricție. Astfel, se creează obiceiuri alimentare sustenabile pe termen lung, care contribuie la bunăstarea fizică și psihică.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Densitatea nutrițională: definiție și beneficii aprofundate</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto"><b>Densitatea nutrițională</b> se referă la cantitatea de nutrienți esențiali (vitamine, minerale, fibre, fitonutrienți, proteine de calitate) pe care un aliment o oferă în raport cu numărul său de calorii. Este conceptul de "mai mulți nutrienți pentru mai puține calorii", o piatră de temelie a unei alimentații sănătoase și eficiente pentru controlul greutății și prevenția bolilor cronice.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center bg-white rounded-2xl shadow-lg p-6">
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🍽️</span>
+                        <p class="font-semibold mt-2"><b>Sațietate durabilă:</b> Alimentele cu densitate nutrițională mare sunt adesea bogate în fibre și apă, care contribuie la senzația de plenitudine. Fibrele solubile formează un gel în stomac, încetinind golirea gastrică și prelungind sațietatea, în timp ce fibrele insolubile adaugă volum. Aceasta reduce tendința de a mânca în exces și de a ceda poftelor, contribuind la un control caloric natural. (Referință: Willett, W. C. (2013). Nutritional Epidemiology. Oxford University Press.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🍎</span>
+                        <p class="font-semibold mt-2"><b>Nutrienți esențiali abundenți:</b> Aceste alimente furnizează o gamă largă de vitamine (ex: vitaminele B pentru energie, vitamina C pentru imunitate), minerale (ex: magneziu pentru funcția musculară, fier pentru transportul oxigenului), antioxidanți și fitonutrienți, esențiali pentru funcționarea optimă a fiecărei celule și sistem din corp. Acești micronutrienți sunt co-factori în mii de reacții biochimice, de la sinteza ADN-ului la producția de energie. (Referință: Shils, M. E., et al. (1999). Modern Nutrition in Health and Disease. Lippincott Williams & Wilkins.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">⚙️</span>
+                        <p class="font-semibold mt-2"><b>Metabolism eficient:</b> Un aport adecvat de micronutrienți este crucial pentru funcția enzimatică. Enzimele sunt catalizatori biologici care accelerează reacțiile chimice din corp, inclusiv cele implicate în metabolismul carbohidraților, grăsimilor și proteinelor. Fără acești co-factori (ex: cromul pentru sensibilitatea la insulină, zincul pentru funcția enzimatică), metabolismul încetinește, afectând producția de energie și gestionarea greutății. (Referință: Combs, G. F., & McClung, J. P. (2017). The Vitamins. Academic Press.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🛡️</span>
+                        <p class="font-semibold mt-2"><b>Prevenția bolilor cronice:</b> Alimentele dense nutrițional, bogate în antioxidanți și compuși antiinflamatori (ex: polifenoli din fructe de pădure, alicina din usturoi), reduc stresul oxidativ și inflamația cronică, factori cheie în dezvoltarea bolilor cardiovasculare, diabetului de tip 2, anumitor tipuri de cancer și afecțiunilor neurodegenerative. O dietă bogată în fibre contribuie, de asemenea, la sănătatea microbiotei intestinale, un pilon al imunității și sănătății generale. (Referință: Perlmutter, D. (2015). Brain Maker. Little, Brown and Company.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">⚡</span>
+                        <p class="font-semibold mt-2"><b>Energie constantă și vitalitate:</b> Prin stabilizarea glicemiei și furnizarea constantă de nutrienți pentru producția de ATP (adenozin trifosfat), alimentele dense nutrițional previn fluctuațiile energetice, oboseala cronică și "căderile" de energie. Aceasta susține vitalitatea fizică și mentală pe parcursul întregii zile, optimizând performanța cognitivă și fizică. (Referință: Marcus, J. B. (2013). Culinary Nutrition. Academic Press.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🌿</span>
+                        <p class="font-semibold mt-2"><b>Digestie sănătoasă și microbiom echilibrat:</b> Fibrele alimentare promovează un tranzit intestinal regulat și servesc drept prebiotice, hrănind bacteriile benefice din colon. Un microbiom echilibrat este esențial pentru sinteza anumitor vitamine (ex: vitamina K, unele vitamine B), modularea răspunsului imunitar și producția de acizi grași cu lanț scurt, care susțin integritatea barierei intestinale și reduc inflamația. (Referință: Kahleova, H., et al. (2019). Guide to the Gut Microbiota. Physicians Committee for Responsible Medicine.)</p>
+                    </div>
+                </div>
+                <p class="text-slate-600 mt-8 max-w-4xl mx-auto"><b>Exemple de alimente cu densitate nutrițională ridicată:</b> Legume cu frunze verzi (spanac, kale, rucola), broccoli, varză de Bruxelles, fructe de pădure (afine, zmeură), leguminoase (linte, fasole, năut), cereale integrale (quinoa, ovăz, hrișcă), nuci și semințe (chia, in, dovleac, migdale), pește gras (somon, macrou, sardine), ouă, carne slabă (piept de pui/curcan), ciuperci. Acestea oferă un raport optim nutrienți/calorii.</p>
+                <p class="text-slate-600 mt-4 max-w-4xl mx-auto"><b>Exemple de alimente cu densitate nutrițională scăzută:</b> Băuturi răcoritoare îndulcite, dulciuri, produse de patiserie, chipsuri, fast-food, pâine albă, cereale rafinate, majoritatea produselor ultra-procesate. Acestea oferă multe calorii (în special din zaharuri adăugate și grăsimi nesănătoase), dar puțini nutrienți esențiali, contribuind la "foamea celulară" și la acumularea de grăsime.</p>
+            </section>
+            
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Strategii de implementare: cum aplici conceptul de densitate nutrițională în dieta zilnică?</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Adoptarea densității nutriționale necesită o schimbare de mentalitate și de obiceiuri, dar este mai ușor decât crezi. Transformă-ți alimentația pas cu pas, integrând aceste principii în rutina ta zilnică pentru a optimiza sănătatea metabolică și cardiovasculară:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#3E92CC]">
+                        <h3 class="text-2xl font-bold text-[#3E92CC] mb-3">1. Umple jumătate din farfurie cu legume la fiecare masă principală</h3>
+                        <p class="text-slate-700 mb-4">Legumele sunt campioane la densitatea nutrițională, oferind vitamine, minerale, antioxidanți și fibre cu un conținut caloric minim. Ele adaugă volum farfuriei, contribuind la sațietate fără un aport caloric excesiv.</p>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li><b>Exemple:</b> Salate variate și colorate (cu rucola, spanac, roșii, castraveți, ardei), broccoli la aburi, conopidă la cuptor, sparanghel, ciuperci la grătar.</li>
+                            <li><b>Beneficii fiziologice:</b> Aport crescut de fibre care susțin digestia și stabilizează glicemia (prin încetinirea absorbției carbohidraților), vitamine și minerale esențiale (ex: vitamina K, potasiu, magneziu), antioxidanți cu rol antiinflamator care protejează celulele.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#F4C150]">
+                        <h3 class="text-2xl font-bold text-[#F4C150] mb-3">2. Include proteine slabe și de calitate la fiecare masă</h3>
+                        <p class="text-slate-700 mb-4">Proteinele sunt macronutrienții cu cel mai mare efect termic al alimentelor (TEF), ceea ce înseamnă că organismul consumă mai multe calorii pentru a le digera și metaboliza. Ele sunt esențiale pentru sațietate, menținerea masei musculare și funcția metabolică generală.</p>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li><b>Exemple:</b> Piept de pui sau curcan fără piele, pește slab (cod, merluciu, șalău), albuș de ou, brânză cottage, urdă, leguminoase (linte, năut, fasole), tofu, tempeh.</li>
+                            <li><b>Beneficii fiziologice:</b> Contribuie la controlul apetitului prin stimularea hormonilor de sațietate (ex: GLP-1, PYY, colecistokinină), previn pierderea masei musculare în timpul dietelor hipocalorice și susțin un metabolism activ. Un aport proteic adecvat este, de asemenea, crucial pentru sinteza enzimelor și a anticorpilor.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#06D6A0]">
+                        <h3 class="text-2xl font-bold text-[#06D6A0] mb-3">3. Alege carbohidrați complecși în porții controlate</h3>
+                        <p class="text-slate-700 mb-4">Carbohidrații complecși, bogați în fibre, oferă energie susținută și previn fluctuațiile glicemice bruște, spre deosebire de carbohidrații rafinați care duc la vârfuri de insulină și căderi de energie.</p>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li><b>Exemple:</b> Quinoa, ovăz integral, hrișcă, orez brun, cartofi dulci, leguminoase (fasole, linte, năut).</li>
+                            <li><b>Beneficii fiziologice:</b> Furnizează energie treptat, menținând un nivel stabil al glicemiei și al insulinei. Fibrele din acești carbohidrați contribuie la sănătatea digestivă, la sațietate și la hrănirea microbiotei intestinale benefice.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#D8315B]">
+                        <h3 class="text-2xl font-bold text-[#D8315B] mb-3">4. Consumă fructe întregi, nu sucuri îndulcite</h3>
+                        <p class="text-slate-700 mb-4">Fructele întregi sunt o sursă excelentă de vitamine, minerale, antioxidanți și fibre. Sucurile, chiar și cele naturale, pot concentra zaharurile și elimina fibrele esențiale, transformându-le într-o sursă de zaharuri libere.</p>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li><b>Beneficii fiziologice:</b> Fibrele din fructele întregi încetinesc absorbția zahărului, prevenind vârfurile glicemice și oferind o sațietate mai durabilă. Sucurile, în special cele îndulcite, pot contribui la un aport caloric și de zahăr excesiv, fără beneficiile fibrelor, putând afecta sensibilitatea la insulină și contribuind la acumularea de grăsime hepatică.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#0A2463]">
+                        <h3 class="text-2xl font-bold text-[#0A2463] mb-3">5. Hidratează-te corespunzător pe parcursul întregii zile</h3>
+                        <p class="text-slate-700 mb-4">Apa este esențială pentru toate funcțiile metabolice, transportul nutrienților și eliminarea toxinelor. Contribuie, de asemenea, la senzația de plinătate și este zero calorii.</p>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li><b>Recomandare:</b> Bea constant pe parcursul zilei, chiar și înainte de a simți senzația de sete. Aportul optim este de aproximativ 2-3 litri de apă pură zilnic, în funcție de nivelul de activitate și climă.</li>
+                            <li><b>Beneficii:</b> Susține metabolismul, ajută la digestie și la absorbția nutrienților, contribuie la sațietate și la controlul greutății.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#3E92CC]">
+                        <h3 class="text-2xl font-bold text-[#3E92CC] mb-3">6. "Meal prep" este aliatul tău pentru alegeri sănătoase</h3>
+                        <p class="text-slate-700 mb-4">Planificarea și pregătirea meselor în avans (meal prep) este o strategie eficientă pentru a asigura un aport constant de alimente sănătoase și dense nutrițional, evitând capcanele alegerilor de moment nesănătoase.</p>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li><b>Beneficii:</b> Reduce riscul de a apela la fast-food sau la produse ultra-procesate din lipsă de timp, asigură controlul porțiilor și al ingredientelor, și sprijină aderența la planul alimentar.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-slate-400 lg:col-span-3">
+                        <h3 class="text-2xl font-bold text-slate-700 mb-3">7. Fii un cititor educat de etichete nutriționale</h3>
+                        <p class="text-slate-700 mb-4">Abilitatea de a citi și interpreta corect etichetele nutriționale este o competență fundamentală în programul Redefine. Aceasta îți permite să identifici alimentele procesate cu densitate nutrițională scăzută, bogate în zahăr adăugat, grăsimi trans și sodiu, care ar trebui limitate sau evitate în dietă.</p>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li><b>Beneficii:</b> Autonomie alimentară, prevenția bolilor cronice, controlul greutății și optimizarea sănătății metabolice.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <section>
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Concluzie: planifică, mănâncă echilibrat, trăiește sănătos! fundamentul programului Redefine</h2>
+                <div class="bg-[#0A2463] text-white rounded-2xl shadow-lg p-8 text-center max-w-4xl mx-auto">
+                    <p class="text-xl">Planificarea meselor nu este o restricție, ci o libertate și o strategie inteligentă pentru a-ți optimiza sănătatea. Îți oferă control asupra nutriției tale, asigură un aport optim de macronutrienți, micronutrienți și fitonutrienți, și te ajută să construiești un stil de viață sănătos și sustenabil. Prin respectarea ritmurilor circadiene, a proporțiilor ideale de macronutrienți și a regulilor de trofologie, vei sprijini digestia, metabolismul și bunăstarea generală. Începe azi să-ți planifici drumul spre o sănătate optimă și o redefinire corporală durabilă în cadrul programului Redefine!</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="footer-copyright">
+        <p>Copyright: dr.ing. Radu Pascu - 2025</p>
+    </footer>
+
+    <script>
+        const colorPalette = {
+            darkBlue: '#0A2463',
+            mediumBlue: '#3E92CC',
+            crimson: '#D8315B',
+            yellow: '#F4C150',
+            green: '#06D6A0'
+        };
+
+        const tooltipConfig = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            family: 'Inter',
+                            size: 14
+                        },
+                        color: '#212529'
+                    }
+                }
+            }
+        };
+        
+        function initMacronutrientRatioDonut() {
+            const ctx = document.getElementById('macronutrientRatioDonut').getContext('2d');
+            const data = {
+                labels: ['Carbohidrați (40%)', 'Proteine (30%)', 'Grăsimi Sănătoase (30%)'],
+                datasets: [{
+                    data: [40, 30, 30], 
+                    backgroundColor: [colorPalette.mediumBlue, colorPalette.crimson, colorPalette.darkBlue],
+                    hoverOffset: 4
+                }]
+            };
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: { ...tooltipConfig,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 20
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        window.addEventListener('load', () => {
+            initMacronutrientRatioDonut();
+        });
+
+        // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
+
+        document.addEventListener('keydown', function(e) {
+            // Blochează Ctrl+C (Copiere)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+            }
+            // Blochează F12 (Developer Tools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+            }
+             // Blochează Ctrl+Shift+J (Developer Tools Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+            }
+        });
+
+        // Activați primul tab la încărcarea paginii
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelector('.tab-button').click();
+        });
+    
+
+        
+    </script>
+</body>
+</html>

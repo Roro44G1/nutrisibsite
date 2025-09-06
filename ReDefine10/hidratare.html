@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hidratarea - Ghidul Extins</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa; /* Light background for contrast */
+            color: #212529; /* Dark text for readability */
+        }
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+        .info-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+        .section-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid #a3d9ff;
+            padding-bottom: 5px;
+            align-self: stretch;
+        }
+        .text-section {
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .text-section h3 {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #0A2463;
+            margin-bottom: 1rem;
+        }
+        .text-section ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+        .text-section li {
+            margin-bottom: 0.5rem;
+        }
+        .note {
+            font-size: 0.85em;
+            color: #777;
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+        }
+        .footer-copyright {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.85em;
+            color: #6c757d;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="bg-white">
+        <main class="container mx-auto p-4 md:p-8 max-w-7xl">
+            <header class="text-center mb-16">
+                <h1 class="text-4xl md:text-5xl font-bold text-[#0A2463] mb-4">Hidratarea: piatra de temelie a sănătății - un ghid complet și științific</h1>
+                <p class="text-lg text-slate-600 max-w-3xl mx-auto">Apa este combustibilul esențial pentru fiecare celulă și sistem din corpul tău. Descoperă de ce hidratarea corectă este vitală pentru funcțiile fiziologice, echilibrul metabolic și bunăstarea generală, și cum să o menții optimă în fiecare zi.</p>
+            </header>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Rolurile vitale și complexitatea apei în organism</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Apa constituie aproximativ 50-70% din greutatea corporală a unui adult și este solventul universal al vieții. Este implicată în fiecare proces fiziologic, de la nivel celular la nivel de sistem, fiind indispensabilă pentru menținerea homeostaziei și a funcțiilor vitale.</p>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 text-center bg-white rounded-2xl shadow-lg p-6">
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🚚</span>
+                        <p class="font-semibold mt-2"><b>Transport nutrienți și oxigen:</b> Apa este mediul prin care nutrienții (vitamine, minerale, glucoză, aminoacizi) și oxigenul sunt transportați către celule, iar produsele reziduale sunt eliminate. Este componenta principală a sângelui și limfei. (Referință: Graur, M. (2014). Dezechilibre Hidro-Electrolitice și Acido-Bazice. Editura "Gr. T. Popa".)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🗑️</span>
+                        <p class="font-semibold mt-2"><b>Eliminare toxine și deșeuri:</b> Apa este esențială pentru funcția renală, ajutând la filtrarea sângelui și la eliminarea toxinelor metabolice și a deșeurilor prin urină. De asemenea, contribuie la eliminarea toxinelor prin transpirație și scaun. (Referință: Morse, R. (2005). Să Trăim Sănătos Fără Toxine. Paralela 45.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🌡️</span>
+                        <p class="font-semibold mt-2"><b>Reglarea temperaturii corporale:</b> Apa are o capacitate termică ridicată. Prin transpirație și evaporare, corpul își reglează temperatura, prevenind supraîncălzirea. (Referință: Vander, A. J., et al. (2018). Vander's Human Physiology. McGraw-Hill Education.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🤸</span>
+                        <p class="font-semibold mt-2"><b>Lubrifierea articulațiilor și protecția țesuturilor:</b> Apa este o componentă majoră a lichidului sinovial din articulații, acționând ca lubrifiant și amortizor. De asemenea, protejează organele și țesuturile (creierul, măduva spinării) prin rolul său de amortizor. (Referință: Abrahamson, E., & Langston, J. (2017). Making Sense of Human Anatomy and Physiology. Lotus Publishing.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🍽️</span>
+                        <p class="font-semibold mt-2"><b>Digestie și absorbție:</b> Apa este necesară pentru producția de salivă, enzime digestive și sucuri gastrice. Facilitează descompunerea alimentelor și absorbția nutrienților în intestin. Fibrele alimentare necesită apă pentru a-și îndeplini rolul în tranzitul intestinal. (Referință: Meyerowitz, S. (2010). Combinarea Alimentelor și Digestia. Benefica.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">✨</span>
+                        <p class="font-semibold mt-2"><b>Sănătatea pielii:</b> Hidratarea adecvată menține elasticitatea, suplețea și aspectul sănătos al pielii, contribuind la funcția sa de barieră protectoare. (Referință: Shanahan, C., & Shanahan, L. (2016). Deep Nutrition. Flatiron Books.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🧠</span>
+                        <p class="font-semibold mt-2"><b>Funcție cerebrală optimă:</b> Creierul este compus în mare parte din apă. Deshidratarea, chiar și ușoară, poate afecta concentrarea, memoria, starea de spirit și performanța cognitivă. (Referință: Perlmutter, D. (2015). Brain Maker. Little, Brown and Company.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🛡️</span>
+                        <p class="font-semibold mt-2"><b>Protecția organelor și a țesuturilor:</b> Apa ajută la menținerea structurii și funcției optime a tuturor organelor și țesuturilor, prevenind deteriorarea acestora. (Referință: Essentials of Anatomy and Physiology. F. A. Davis.)</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Câtă apă avem nevoie? necesarul zilnic și factorii de influență</h2>
+                <p class="text-center text-slate-600 mb-6 max-w-4xl mx-auto">Necesarul de apă variază individual, dar există ghiduri generale. Hidratarea constantă, indiferent de anotimp, este secretul. Nu aștepta setea, deoarece aceasta este deja un semn de deshidratare ușoară!</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-white rounded-2xl shadow-lg p-6">
+                    <div class="text-center p-4">
+                        <p class="text-slate-600 mb-2">Calculul necesarului zilnic (ghid general):</p>
+                        <p class="text-5xl font-bold text-[#D8315B]">0.033 l./kg. corp</p>
+                        <p class="text-sm text-slate-500 mt-2">(Exemplu: o persoană de 70 kg * 0.033 l/kg.corp = aproximativ 2.3 Litri/zi)</p>
+                        <p class="text-slate-600 mt-4"><b>Factori care cresc necesarul de apă:</b></p>
+                        <ul class="list-disc list-inside text-slate-600 text-sm">
+                            <li>Activitate fizică intensă (transpirație crescută).</li>
+                            <li>Climat cald și umed.</li>
+                            <li>Febră, vărsături, diaree.</li>
+                            <li>Sarcină și alăptare.</li>
+                            <li>Consumul de cafea, alcool, alimente bogate în sodiu.</li>
+                            <li>Anumite afecțiuni medicale.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 border-l-4 border-[#3E92CC] p-4 rounded-r-lg">
+                        <h3 class="font-bold text-[#0A2463] mb-2">Diureza rece: de ce bem apă și iarna?</h3>
+                        <p class="text-slate-700">Chiar și în sezonul rece, corpul pierde lichide prin respirație (aerul rece și uscat din plămâni) și transpirație (chiar și imperceptibilă). Mai mult, frigul poate crește producția de urină (diureză rece), iar aerul uscat din încălzirea centralizată contribuie la deshidratare. Hidratarea constantă este la fel de crucială ca vara, pentru a menține funcțiile metabolice și a preveni deshidratarea cronică.</p>
+                        <p class="text-slate-700 mt-4"><b>Mit:</b> "Nu simt sete, deci nu am nevoie de apă." Setea este un indicator tardiv al deshidratării. Hidratarea preventivă este cheia.</p>
+                    </div>
+                </div>
+                <div class="chart-container mt-8">
+                    <canvas id="waterIntakeChart"></canvas>
+                </div>
+                <p class="text-center text-sm text-slate-500 mt-4">Graficul ilustrează discrepanța dintre aportul recomandat și media consumului, evidențiind necesitatea unei atenții sporite la hidratare.</p>
+            </section>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Semnele deshidratării: nu le ignora! impactul asupra corpului și minții</h2>
+                <p class="text-center text-slate-600 mb-6 max-w-4xl mx-auto">Corpul tău îți trimite semnale clare atunci când nu primește suficientă apă. Recunoaște-le rapid pentru a acționa la timp și a preveni consecințele negative asupra sănătății fizice și mentale.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-white rounded-2xl shadow-lg p-6">
+                    <div class="p-4 bg-yellow-50 rounded-lg">
+                        <span class="text-3xl">💦</span>
+                        <p class="font-semibold mt-2"><b>Sete intensă și gură uscată:</b> Acestea sunt primele și cele mai evidente semne. Mucoasele uscate indică o lipsă de fluide. (Referință: Graur, M. (2014). Dezechilibre Hidro-Electrolitice și Acido-Bazice. Editura "Gr. T. Popa".)</p>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-lg">
+                        <span class="text-3xl">⬇️</span>
+                        <p class="font-semibold mt-2"><b>Urină închisă la culoare și volum redus:</b> Urina ar trebui să fie de un galben pal. O culoare închisă (galben intens, portocaliu) indică o urină concentrată și deshidratare. (Referință: Duyff, R. L. (2012). American Dietetic Association Complete Food and Nutrition Guide. Wiley.)</p>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-lg">
+                        <span class="text-3xl">😴</span>
+                        <p class="font-semibold mt-2"><b>Oboseală, letargie și scăderea energiei:</b> Deshidratarea afectează producția de energie la nivel celular și transportul oxigenului, ducând la o stare generală de slăbiciune și lipsă de vitalitate. (Referință: Marcus, J. B. (2013). Culinary Nutrition. Academic Press.)</p>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-lg">
+                        <span class="text-3xl">🤯</span>
+                        <p class="font-semibold mt-2"><b>Dureri de cap și amețeli:</b> Deshidratarea poate reduce volumul sanguin, afectând fluxul sanguin cerebral și provocând dureri de cap sau senzație de amețeală. (Referință: Perlmutter, D. (2015). Brain Maker. Little, Brown and Company.)</p>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-lg">
+                        <span class="text-3xl">🥶</span>
+                        <p class="font-semibold mt-2"><b>Piele rece și uscată, elasticitate redusă:</b> Deshidratarea afectează hidratarea pielii și capacitatea corpului de a regla temperatura. Pielea își pierde elasticitatea. (Referință: Shanahan, C., & Shanahan, L. (2016). Deep Nutrition. Flatiron Books.)</p>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-lg">
+                        <span class="text-3xl">🦵</span>
+                        <p class="font-semibold mt-2"><b>Crampe musculare:</b> Dezechilibrele electrolitice cauzate de deshidratare pot duce la spasme și crampe musculare, în special în timpul efortului fizic. (Referință: Graur, M. (2014). Dezechilibre Hidro-Electrolitice și Acido-Bazice. Editura "Gr. T. Popa".)</p>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-lg">
+                        <span class="text-3xl">🚽</span>
+                        <p class="font-semibold mt-2"><b>Constipație:</b> Lipsa apei face scaunele dure și dificil de eliminat, încetinind tranzitul intestinal și contribuind la constipație cronică. (Referință: Meyerowitz, S. (2010). Combinarea Alimentelor și Digestia. Benefica.)</p>
+                    </div>
+                    <div class="lg:col-span-3 p-4 bg-red-50 rounded-lg">
+                        <span class="text-3xl">⚠️</span>
+                        <p class="font-semibold mt-2"><b>Confuzie, iritabilitate, probleme cognitive:</b> Deshidratarea severă afectează funcția cerebrală, ducând la dificultăți de concentrare, iritabilitate și, în cazuri extreme, la confuzie sau delir. (Referință: Perlmutter, D. (2015). Brain Maker. Little, Brown and Company.)</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Sfaturi practice pentru o hidratare optimă: strategii eficiente</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Integrarea unor obiceiuri simple în rutina zilnică poate face o diferență semnificativă în nivelul tău de hidratare și, implicit, în sănătatea generală.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-white rounded-2xl shadow-lg p-6">
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">💧</span>
+                        <p class="font-semibold mt-2"><b>Poartă o sticlă de apă reutilizabilă:</b> Având apă la îndemână, ești mai predispus să bei regulat. Alege o sticlă din sticlă sau oțel inoxidabil.</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🗓️</span>
+                        <p class="font-semibold mt-2"><b>Stabilește un obiectiv zilnic și monitorizează:</b> Calculează-ți necesarul (0.033 l/kg corp) și folosește aplicații sau markere pe sticlă pentru a urmări progresul. (Exemplu: 2.3 l/zi pentru 70 kg).</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">⏰</span>
+                        <p class="font-semibold mt-2"><b>Bea regulat, nu aștepta setea:</b> Consumă un pahar de apă la fiecare oră sau la intervale regulate pe parcursul zilei. Setea este deja un semn de deshidratare ușoară.</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">☀️</span>
+                        <p class="font-semibold mt-2"><b>Începe dimineața cu apă:</b> Bea un pahar mare de apă imediat după trezire pentru a rehidrata corpul după somn și a activa metabolismul. Poți adăuga lămâie pentru un plus de detoxifiere.</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🍋</span>
+                        <p class="font-semibold mt-2"><b>Infuzii de fructe și legume:</b> Adaugă felii de lămâie, castravete, mentă, ghimbir sau fructe de pădure în apă pentru a-i îmbunătăți gustul și a adăuga nutrienți. Aceasta te poate ajuta să bei mai multă apă. (Referință: Popa, V. (2012). Dăruim Lumină și Iubire. Editura Dharana.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">🍉</span>
+                        <p class="font-semibold mt-2"><b>Consumă alimente bogate în apă:</b> Fructe și legume precum pepenele roșu, castraveții, salata verde, roșiile, portocalele contribuie semnificativ la aportul zilnic de lichide. (Referință: Duyff, R. L. (2012). American Dietetic Association Complete Food and Nutrition Guide. Wiley.)</p>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <span class="text-3xl">📊</span>
+                        <p class="font-semibold mt-2"><b>Monitorizează culoarea urinei:</b> O urină de culoare galben pal indică o hidratare bună. O culoare mai închisă semnalează necesitatea de a bea mai multă apă.</p>
+                    </div>
+                    <div class="lg:col-span-3 p-4 bg-yellow-50 rounded-lg">
+                        <span class="text-3xl">➕</span>
+                        <p class="font-semibold mt-2">Pentru un plus de gust și beneficii, ia în considerare <b>adăugarea de suplimente</b> special concepute pentru a îmbunătăți calitatea apei și a sprijini hidratarea celulară, sub îndrumarea unui specialist.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Rolul suplimentelor în hidratare: optimizarea la nivel celular</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Anumite suplimente pot transforma apa simplă într-o băutură cu beneficii suplimentare pentru hidratare, echilibru electrolitic și suport celular, contribuind la o hidratare mai eficientă la nivel microscopic.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#3E92CC]">
+                        <h3 class="text-2xl font-bold text-[#3E92CC] mb-3">Gelul de aloe: hidratare profundă și suport digestiv</h3>
+                        <p class="text-slate-700 mb-4">Adăugarea gelului de aloe de calitate superioară în apă poate îmbunătăți gustul și aduce beneficii semnificative pentru hidratarea celulară și sănătatea digestivă.</p>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li><b>Hidratare celulară profundă:</b> Aloe vera conține mucopolizaharide care pot ajuta la reținerea apei în celule, contribuind la o hidratare mai eficientă.</li>
+                            <li><b>Calmarea tractului digestiv:</b> Are proprietăți antiinflamatorii și calmante, benefice pentru mucoasa gastrointestinală iritată. Poate ajuta la ameliorarea simptomelor de reflux și constipație.</li>
+                            <li><b>Susținerea detoxifierii ușoare:</b> Prin proprietățile sale diuretice și laxative blânde, aloe vera poate sprijini eliminarea toxinelor.</li>
+                            <li><b>Aport de vitamine și minerale:</b> Conține vitamine (A, C, E, B-uri) și minerale (calciu, magneziu, zinc), contribuind la aportul de micronutrienți.</li>
+                            <li><b>Efect prebiotic:</b> Poate susține creșterea bacteriilor benefice în intestin.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-[#0A2463]">
+                        <h3 class="text-2xl font-bold text-[#0A2463] mb-3">Coral-Mine: mineralizare și alcalinizare pentru echilibrul intern</h3>
+                        <p class="text-slate-700 mb-4">Supliment pe bază de coral Sango din Okinawa, Japonia. Adăugat în apă, eliberează minerale ionice și îi modifică proprietățile, transformând apa într-o soluție mai bio-disponibilă.</p>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                            <li><b>Mineralizarea apei:</b> Eliberează calciu și magneziu (în raport de 2:1, optim pentru absorbție), precum și peste 70 de oligoelemente esențiale, îmbunătățind profilul mineral al apei.</li>
+                            <li><b>Alcalinizarea apei:</b> Contribuie la creșterea pH-ului apei, ceea ce poate sprijini echilibrul acido-bazic al corpului, un aspect important în menținerea sănătății celulare și reducerea inflamației. (Referință: Vasey, C. (2008). Ghid de Detoxifiere. Niculescu.)</li>
+                            <li><b>Potențial antioxidant:</b> Poate reduce potențialul de oxido-reducere (ORP) al apei, indicând proprietăți antioxidante care pot neutraliza radicalii liberi.</li>
+                            <li><b>Hidratare celulară îmbunătățită:</b> Structura ionică a apei mineralizate poate facilita o absorbție mai eficientă la nivel celular, optimizând funcțiile metabolice.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Hidratarea și canalele ionice: conexiunea celulară vitală</h2>
+                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Funcționarea optimă a fiecărei celule din corpul nostru depinde de un echilibru delicat al ionilor (electroliți precum sodiu, potasiu, calciu, clor), controlat de canale ionice specializate. Apa este esențială pentru menținerea acestui echilibru și pentru funcționarea corectă a canalelor ionice, care stau la baza semnalizării celulare și a funcțiilor vitale.</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center items-center">
+                    <div class="bg-blue-50 rounded-lg p-4 shadow-md">
+                        <p class="font-bold text-[#0A2463] mb-2">Apă suficientă</p>
+                        <p class="text-lg">💧</p>
+                    </div>
+                    <div class="flex items-center justify-center">
+                        <span class="text-5xl text-gray-400">➡️</span>
+                    </div>
+                    <div class="bg-blue-50 rounded-lg p-4 shadow-md">
+                        <p class="font-bold text-[#0A2463] mb-2">Echilibru electrolitic</p>
+                        <p class="text-lg">Na+, K+, Ca2+, Cl-</p>
+                    </div>
+                    <div class="flex items-center justify-center col-span-1 md:col-span-3 lg:col-span-1 md:col-start-2 lg:col-start-2">
+                        <span class="text-5xl text-gray-400 rotate-90 md:rotate-0">➡️</span>
+                    </div>
+                    <div class="bg-blue-50 rounded-lg p-4 shadow-md md:col-span-3 lg:col-span-1">
+                        <p class="font-bold text-[#0A2463] mb-2">Funcție optimă canale ionice</p>
+                        <p class="text-lg">⚡🧠💪</p>
+                    </div>
+                </div>
+                <p class="text-center text-sm text-slate-500 mt-4">Deshidratarea perturbă acest echilibru ionic, afectând semnalizarea celulară, funcțiile nervoase și musculare, și procesele metabolice vitale ale corpului. O hidratare optimă asigură o comunicare celulară eficientă și o funcționare armonioasă a întregului organism. (Referință: Vander, A. J., et al. (2018). Vander's Human Physiology. McGraw-Hill Education.)</p>
+            </section>
+            
+            <section>
+                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Concluzie: fă din hidratare o prioritate! fundamentul sănătății tale în redefine</h2>
+                <div class="bg-[#0A2463] text-white rounded-2xl shadow-lg p-8 text-center max-w-4xl mx-auto">
+                    <p class="text-xl">Hidratarea nu este un aspect opțional, ci fundamentul pe care se construiește sănătatea ta fizică, mentală și energetică. Bea apă constant, în cantități adecvate nevoilor tale individuale, și consideră suplimentele de calitate ca un aliat pentru a-ți optimiza hidratarea la nivel celular. Prin prioritizarea hidratării în programul ReDefine, îți vei susține corpul în toate funcțiile sale vitale, vei îmbunătăți metabolismul, vei crește nivelul de energie și vei contribui la o bunăstare generală durabilă. Corpul tău îți va mulțumi!</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="footer-copyright">
+        <p>Copyright: dr.ing. Radu Pascu - 2025</p>
+    </footer>
+
+    <script>
+        const colorPalette = {
+            darkBlue: '#0A2463',
+            mediumBlue: '#3E92CC',
+            crimson: '#D8315B',
+            yellow: '#F4C150',
+            lightGrey: '#f8f9fa'
+        };
+
+        const tooltipConfig = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            family: 'Inter',
+                            size: 14
+                        },
+                        color: '#212529'
+                    }
+                }
+            }
+        };
+        
+        function wrapLabel(label, maxLength = 16) {
+            if (label.length <= maxLength) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).length > maxLength && currentLine !== '') {
+                    lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine += (currentLine === '' ? '' : ' ') + word;
+                }
+            });
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        function initWaterIntakeChart() {
+            const ctx = document.getElementById('waterIntakeChart').getContext('2d');
+            const data = {
+                labels: ['Recomandat (l/zi)', 'Medie consum (l/zi)'],
+                datasets: [{
+                    label: 'Litri de apă',
+                    data: [2.5, 1.5], // Valori ilustrative
+                    backgroundColor: [colorPalette.mediumBlue, colorPalette.crimson],
+                    borderColor: 'rgba(255, 255, 255, 0.5)',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                }]
+            };
+            new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: { ...tooltipConfig,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Litri de apă', font: { family: 'Inter', size: 14, weight: 'bold' }, color: '#475569' }
+                        },
+                        x: {
+                            ticks: {
+                                font: {
+                                    family: 'Inter',
+                                }
+                            }
+                        }
+                    },
+                    plugins: { ...tooltipConfig.plugins, legend: { display: false } }
+                }
+            });
+        }
+        
+        window.addEventListener('load', () => {
+            initWaterIntakeChart();
+        });
+    </script>
+</body>
+</html>

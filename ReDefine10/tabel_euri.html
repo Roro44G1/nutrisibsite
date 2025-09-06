@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aditivi alimentari (E-uri)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: #e9ecef;
+            color: #343a40;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+        .infographic-container {
+            max-width: 1200px; /* Lățime mărită pentru tabel */
+            width: 100%;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        .infographic-header {
+            background-color: #79a3b1;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 2.2em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        .infographic-header:before, .infographic-header:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+        .infographic-header:before {
+            border-width: 0 0 20px 20px;
+            border-color: transparent transparent #5f8694 transparent;
+            bottom: 0;
+            left: 0;
+        }
+        .infographic-header:after {
+            border-width: 20px 20px 0 0;
+            border-color: #5f8694 transparent transparent transparent;
+            top: 0;
+            right: 0;
+        }
+
+        .section {
+            padding: 30px 40px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+            border-bottom: 2px solid #a3d9ff;
+            padding-bottom: 5px;
+            align-self: stretch;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            overflow: hidden; /* Ensures rounded corners apply to inner elements */
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f0f8ff;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1em;
+            text-transform: uppercase;
+        }
+        td {
+            background-color: #ffffff;
+            font-size: 0.95em;
+        }
+        tr:nth-child(even) td {
+            background-color: #f8f9fa;
+        }
+        ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin: 0;
+        }
+        li {
+            margin-bottom: 4px;
+        }
+        li:last-child {
+            margin-bottom: 0;
+        }
+        .note {
+            font-size: 0.85em;
+            color: #777;
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+        }
+        .footer-copyright {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.85em;
+            color: #6c757d;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 20px;
+        }
+
+        /* Culori pentru gradul de periculozitate */
+        .danger-high { background-color: #ffcccc; color: #cc0000; font-weight: bold; }
+        .danger-medium { background-color: #ffebcc; color: #e65c00; font-weight: bold; }
+        .danger-low { background-color: #e0ffe0; color: #008000; font-weight: bold; }
+        .danger-safe { background-color: #f0f8ff; color: #000080; }
+
+
+        @media (max-width: 768px) {
+            .infographic-header {
+                font-size: 1.8em;
+            }
+            .section-title {
+                font-size: 1.5em;
+            }
+            table, th, td {
+                display: block;
+            }
+            th {
+                text-align: right;
+                padding-right: 20px;
+                position: relative;
+            }
+            td {
+                text-align: left;
+                padding-left: 20px;
+            }
+            tr {
+                margin-bottom: 15px;
+                border: 1px solid #e0e0e0;
+                border-radius: 10px;
+                padding: 10px;
+                background-color: #ffffff;
+            }
+            tr:nth-child(even) {
+                background-color: #f8f9fa;
+            }
+            tr td:before {
+                content: attr(data-label);
+                font-weight: bold;
+                text-transform: uppercase;
+                margin-right: 10px;
+                color: #5f8694;
+                display: inline-block;
+                width: 120px; /* Adjust as needed */
+            }
+            th:before {
+                content: ""; /* Hide content for mobile th */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="infographic-container">
+        <div class="infographic-header">
+            Aditivi Alimentari (E-uri)
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Tabel de aditivi alimentari</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cod E</th>
+                        <th>Denumire</th>
+                        <th>Periculozitate</th>
+                        <th>Efecte</th>
+                        <th>Utilizare</th>
+                        <th>Alternative</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Foarte Periculos (Evitați) -->
+                    <tr>
+                        <td data-label="Cod E">E123</td>
+                        <td data-label="Denumire">Amarant</td>
+                        <td data-label="Periculozitate" class="danger-high">Evitați</td>
+                        <td data-label="Efecte">Suspectat de a fi cancerigen, interzis în multe țări (SUA, Norvegia). Poate provoca reacții alergice, astm.</td>
+                        <td data-label="Alimente (Exemple)">Băuturi răcoritoare, dulciuri, jeleuri, produse de patiserie, cereale pentru mic dejun.</td>
+                        <td data-label="Alternative">Sfeclă roșie (pulbere/suc), rodie (extract), aronia (extract), coacăze negre (extract).</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E249-E252</td>
+                        <td data-label="Denumire">Nitriți și Nitrați (de sodiu/potasiu)</td>
+                        <td data-label="Periculozitate" class="danger-high">Evitați</td>
+                        <td data-label="Efecte">Pot forma nitrozamine cancerigene (mai ales la gătire), risc de metahemoglobinemie la sugari, hiperactivitate.</td>
+                        <td data-label="Alimente (Exemple)">Mezeluri (șuncă, salam, bacon), carne procesată, brânzeturi maturate, pește afumat.</td>
+                        <td data-label="Alternative">Sare de mare, condimente (rozmarin, cimbru), afumare la rece naturală, uscare, fermentare controlată, Vitamina C (acid ascorbic).</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E407</td>
+                        <td data-label="Denumire">Caragenan</td>
+                        <td data-label="Periculozitate" class="danger-high">Evitați</td>
+                        <td data-label="Efecte">Poate provoca inflamație intestinală, ulcere, sindrom de colon iritabil. Forma degradată este cancerigenă.</td>
+                        <td data-label="Alimente (Exemple)">Produse lactate (înghețată, lapte vegetal, iaurt), mezeluri, sosuri, deserturi gata preparate.</td>
+                        <td data-label="Alternative">Agar-agar, gumă guar, gumă xantan, semințe de chia, pectine.</td>
+                    </tr>
+
+                    <!-- Periculos (Cu prudență) -->
+                    <tr>
+                        <td data-label="Cod E">E102</td>
+                        <td data-label="Denumire">Tartrazină (Galben 5)</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Reacții alergice (urticarie, astm), hiperactivitate la copii (în special în combinație cu benzoați).</td>
+                        <td data-label="Alimente (Exemple)">Băuturi răcoritoare, dulciuri, produse de patiserie, cereale, supe instant, muștar.</td>
+                        <td data-label="Alternative">Turmeric, șofran, morcov (extract/pulbere), gălbenele (extract), ardei gras galben.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E104</td>
+                        <td data-label="Denumire">Galben de chinolină</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Hiperactivitate la copii, reacții alergice, dermatite.</td>
+                        <td data-label="Alimente (Exemple)">Băuturi, dulciuri, produse de cofetărie, gume de mestecat, gemuri, cereale.</td>
+                        <td data-label="Alternative">Turmeric, spirulină (pentru nuanțe verzi), spanac (extract), clorofilă.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E110</td>
+                        <td data-label="Denumire">Galben portocaliu S (Sunset Yellow FCF)</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Hiperactivitate la copii, reacții alergice, urticarie, rinită.</td>
+                        <td data-label="Alimente (Exemple)">Băuturi răcoritoare, dulciuri, produse de panificație, cereale, conserve de fructe.</td>
+                        <td data-label="Alternative">Morcov (extract), paprika, turmeric, sfeclă roșie (pentru nuanțe roșii-portocalii).</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E122</td>
+                        <td data-label="Denumire">Azorubină (Carmoisină)</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Hiperactivitate la copii, reacții alergice, astm, urticarie.</td>
+                        <td data-label="Alimente (Exemple)">Dulciuri, jeleuri, băuturi răcoritoare, produse de patiserie, conserve de fructe.</td>
+                        <td data-label="Alternative">Sfeclă roșie (pulbere/suc), rodie (extract), aronia (extract), coacăze negre (extract).</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E124</td>
+                        <td data-label="Denumire">Ponceau 4R (Roșu Coșenilă A)</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Hiperactivitate la copii, reacții alergice, astm, urticarie.</td>
+                        <td data-label="Alimente (Exemple)">Dulciuri, băuturi răcoritoare, produse de patiserie, conserve de fructe, mezeluri.</td>
+                        <td data-label="Alternative">Sfeclă roșie (pulbere/suc), aronia (extract), extract de coaja de struguri roșii, antociani din fructe de pădure.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E127</td>
+                        <td data-label="Denumire">Eritrozină</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Poate afecta funcția tiroidiană, hiperactivitate la copii, fotosensibilitate.</td>
+                        <td data-label="Alimente (Exemple)">Cireșe confiate, dulciuri, produse de patiserie, băuturi, conserve de fructe.</td>
+                        <td data-label="Alternative">Sfeclă roșie (pulbere/suc), extract de coaja de struguri roșii, antociani.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E129</td>
+                        <td data-label="Denumire">Roșu Allura AC</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Hiperactivitate la copii, reacții alergice, urticarie.</td>
+                        <td data-label="Alimente (Exemple)">Băuturi răcoritoare, dulciuri, produse de patiserie, cereale, jeleuri.</td>
+                        <td data-label="Alternative">Sfeclă roșie (pulbere/suc), rodie (extract), aronia (extract), extract de coaja de struguri roșii.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E131</td>
+                        <td data-label="Denumire">Albastru Patent V</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Reacții alergice severe (șoc anafilactic), astm, urticarie.</td>
+                        <td data-label="Alimente (Exemple)">Dulciuri, produse de patiserie, băuturi, decorațiuni alimentare.</td>
+                        <td data-label="Alternative">Spirulină (pentru nuanțe albastru-verzui), extract de varză roșie, flori de Clitoria ternatea.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E133</td>
+                        <td data-label="Denumire">Albastru Briliant FCF</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Reacții alergice, hiperactivitate la copii.</td>
+                        <td data-label="Alimente (Exemple)">Băuturi răcoritoare, dulciuri, produse de patiserie, cereale, înghețată.</td>
+                        <td data-label="Alternative">Spirulină, extract de varză roșie, flori de Clitoria ternatea.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E142</td>
+                        <td data-label="Denumire">Verde S</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Hiperactivitate la copii, reacții alergice, astm.</td>
+                        <td data-label="Alimente (Exemple)">Dulciuri, produse de patiserie, băuturi, conserve de mazăre, sosuri.</td>
+                        <td data-label="Alternative">Clorofilă, spirulină, spanac (extract), matcha.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E150c, E150d</td>
+                        <td data-label="Denumire">Caramel amoniacal, Caramel sulfit de amoniu</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Pot conține 4-MEI (4-metilimidazol), un potențial carcinogen. Probleme digestive la doze mari.</td>
+                        <td data-label="Alimente (Exemple)">Băuturi răcoritoare tip cola, bere, sosuri (soia, BBQ), dulciuri, produse de patiserie.</td>
+                        <td data-label="Alternative">Caramel natural (din zahăr ars), extract de malț, cafea, cacao.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E151</td>
+                        <td data-label="Denumire">Negru Briliant BN</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Hiperactivitate la copii, reacții alergice, astm.</td>
+                        <td data-label="Alimente (Exemple)">Dulciuri negre, produse de patiserie, sosuri, icre negre artificiale.</td>
+                        <td data-label="Alternative">Cărbune vegetal activ, extract de morcov negru, extract de coaja de struguri.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E155</td>
+                        <td data-label="Denumire">Brun HT</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Hiperactivitate la copii, reacții alergice, astm.</td>
+                        <td data-label="Alimente (Exemple)">Dulciuri, ciocolată, produse de patiserie, cereale, sosuri.</td>
+                        <td data-label="Alternative">Caramel natural, cacao, cafea, extract de malț.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E210-E213</td>
+                        <td data-label="Denumire">Acid benzoic și Benzoați</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Reacții alergice (astm, urticarie), hiperactivitate la copii (în special în combinație cu anumiți coloranți).</td>
+                        <td data-label="Alimente (Exemple)">Băuturi răcoritoare, sucuri de fructe, gemuri, murături, produse de patiserie, sosuri.</td>
+                        <td data-label="Alternative">Oțet de mere, acid citric (din citrice), extract de rozmarin, uleiuri esențiale (cimbru, oregano), conservare prin fermentare.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E220-E228</td>
+                        <td data-label="Denumire">Sulfiți</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Reacții alergice severe (astm, șoc anafilactic) la persoanele sensibile (în special astmatici), probleme digestive.</td>
+                        <td data-label="Alimente (Exemple)">Vin, bere, fructe uscate, cartofi congelați, produse din carne, produse de panificație.</td>
+                        <td data-label="Alternative">Acid ascorbic (Vitamina C), acid citric, extract de rozmarin, tocopheroli (Vitamina E).</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E319</td>
+                        <td data-label="Denumire">Butilhidroxinonă terțiară (TBHQ)</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Poate provoca greață, vărsături, tinitus, delirium la doze mari. Suspectat de a afecta sistemul imunitar.</td>
+                        <td data-label="Alimente (Exemple)">Uleiuri vegetale (unele), chipsuri, snacks-uri, carne procesată, produse de patiserie, cereale.</td>
+                        <td data-label="Alternative">Tocopheroli (Vitamina E), extract de rozmarin, acid ascorbic (Vitamina C).</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E320</td>
+                        <td data-label="Denumire">Butilhidroxianisol (BHA)</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Suspectat de a fi cancerigen, perturbator endocrin, reacții alergice.</td>
+                        <td data-label="Alimente (Exemple)">Cereale pentru mic dejun, snacks-uri, gumă de mestecat, uleiuri vegetale, carne procesată, cartofi prăjiți congelați.</td>
+                        <td data-label="Alternative">Tocopheroli (Vitamina E), extract de rozmarin, acid ascorbic (Vitamina C).</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E321</td>
+                        <td data-label="Denumire">Butilhidroxitoluen (BHT)</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Similar cu BHA, suspectat de a fi cancerigen și perturbator endocrin.</td>
+                        <td data-label="Alimente (Exemple)">Cereale pentru mic dejun, snacks-uri, gumă de mestecat, uleiuri vegetale, carne procesată.</td>
+                        <td data-label="Alternative">Tocopheroli (Vitamina E), extract de rozmarin, acid ascorbic (Vitamina C).</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E621</td>
+                        <td data-label="Denumire">Glutamat Monosodic (MSG)</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">"Sindromul restaurantului chinezesc" (dureri de cap, palpitații, greață, amorțeală). Poate agrava astmul.</td>
+                        <td data-label="Alimente (Exemple)">Supe instant, snacks-uri, mezeluri, condimente, mâncăruri chinezești, alimente semipreparate.</td>
+                        <td data-label="Alternative">Drojdie inactivă (fulgi de drojdie inactivă), ciuperci umami (shiitake), alge marine (kelp, kombu), roșii uscate, parmezan.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E950</td>
+                        <td data-label="Denumire">Acesulfam K</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Suspectat de a fi cancerigen (studii contradictorii), poate afecta tiroida și rinichii.</td>
+                        <td data-label="Alimente (Exemple)">Băuturi răcoritoare "dietetice", dulciuri fără zahăr, produse de patiserie, gumă de mestecat, iaurturi dietetice.</td>
+                        <td data-label="Alternative">Stevia, eritritol, xilitol (cu moderație), sirop de arțar, miere.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E951</td>
+                        <td data-label="Denumire">Aspartam</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Dureri de cap, amețeli, tulburări de dispoziție, probleme neurologice (fenilalanina). Contraindicat în fenilcetonurie.</td>
+                        <td data-label="Alimente (Exemple)">Băuturi răcoritoare "dietetice", dulciuri fără zahăr, produse lactate dietetice, gumă de mestecat, cereale.</td>
+                        <td data-label="Alternative">Stevia, eritritol, xilitol (cu moderație), sirop de arțar, miere.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E954</td>
+                        <td data-label="Denumire">Zaharină</td>
+                        <td data-label="Periculozitate" class="danger-medium">Cu prudență</td>
+                        <td data-label="Efecte">Suspectată de a fi cancerigenă în trecut (studii pe animale), reacții alergice.</td>
+                        <td data-label="Alimente (Exemple)">Băuturi răcoritoare dietetice, dulciuri fără zahăr, produse de patiserie, gumă de mestecat.</td>
+                        <td data-label="Alternative">Stevia, eritritol, xilitol (cu moderație), sirop de arțar, miere.</td>
+                    </tr>
+
+                    <!-- General Sigur (Acceptabil) -->
+                    <tr>
+                        <td data-label="Cod E">E160b</td>
+                        <td data-label="Denumire">Annatto</td>
+                        <td data-label="Periculozitate" class="danger-low">General sigur</td>
+                        <td data-label="Efecte">Rareori reacții alergice (urticarie, prurit).</td>
+                        <td data-label="Alimente (Exemple)">Brânzeturi, unt, margarină, snacks-uri, produse de patiserie, cereale.</td>
+                        <td data-label="Alternative">Turmeric, morcov (extract), paprika.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E420</td>
+                        <td data-label="Denumire">Sorbitol</td>
+                        <td data-label="Periculozitate" class="danger-low">General sigur</td>
+                        <td data-label="Efecte">Efect laxativ și gaze la doze mari, disconfort abdominal.</td>
+                        <td data-label="Alimente (Exemple)">Dulciuri fără zahăr, gumă de mestecat, produse de patiserie dietetice, medicamente (siropuri de tuse).</td>
+                        <td data-label="Alternative">Eritritol, xilitol, sirop de agave (cu moderație), nectar de cocos.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E421</td>
+                        <td data-label="Denumire">Manitol</td>
+                        <td data-label="Periculozitate" class="danger-low">General sigur</td>
+                        <td data-label="Efecte">Efect laxativ la doze mari, disconfort gastrointestinal.</td>
+                        <td data-label="Alimente (Exemple)">Dulciuri fără zahăr, gumă de mestecat, produse dietetice.</td>
+                        <td data-label="Alternative">Eritritol, xilitol, sirop de agave (cu moderație).</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Cod E">E955</td>
+                        <td data-label="Denumire">Sucraloză</td>
+                        <td data-label="Periculozitate" class="danger-low">General sigur</td>
+                        <td data-label="Efecte">Considerată sigură, dar studii recente sugerează posibile modificări ale microbiotei intestinale la doze mari.</td>
+                        <td data-label="Alimente (Exemple)">Băuturi răcoritoare "zero", dulciuri fără zahăr, produse lactate dietetice, cereale, produse de patiserie.</td>
+                        <td data-label="Alternative">Stevia, eritritol, xilitol (cu moderație), sirop de arțar, miere.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="note">Notă: Acest tabel oferă o clasificare generală a aditivilor alimentari pe baza informațiilor disponibile și a consensului științific. Reacțiile individuale pot varia. Este recomandat să citiți etichetele produselor și să consultați un specialist pentru sfaturi personalizate, mai ales în cazul unor sensibilități sau afecțiuni medicale preexistente. Clasificarea "Periculozitate" este o simplificare pentru scopuri educaționale și nu înlocuiește evaluările detaliate ale autorităților de reglementare.</p>
+        </div>
+
+        <div class="footer-copyright">
+            <p>Copyright: dr.ing. Radu Pascu - 2025</p>
+        </div>
+    </div>
+</body>
+</html>
