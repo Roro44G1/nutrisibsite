@@ -33,7 +33,7 @@
     <div class="site-container">
         <main class="bg-white p-4 sm:p-6 md:p-8">
 
-            <header class="text-center mb-12 p-8 rounded-xl text-white" style="background: linear-gradient(135deg, #003F5C, #58508D);">
+            <header class="text-center mb-12 p-8 rounded-xl text-white" style="background: linear-gradient(135deg, #0A2463, #3E92CC);">
                 <h1 class="text-4xl md:text-5xl font-extrabold">Arhitectura biologică a adaptării</h1>
                 <p class="text-lg md:text-xl mt-4 max-w-3xl mx-auto opacity-90">Un ghid vizual pentru părinții care caută înțelegerea științifică a patologiilor din colectivitatea școlară.</p>
             </header>
@@ -167,7 +167,7 @@
                     </div>
                 </div>
     
-                <div class="md:col-span-2 lg:col-span-3 text-center mt-8 p-8 rounded-xl text-white" style="background: linear-gradient(135deg, #003F5C, #58508D);">
+                <div class="md:col-span-2 lg:col-span-3 text-center mt-8 p-8 rounded-xl text-white" style="background: linear-gradient(135deg, #0A2463, #3E92CC);">
                     <h2 class="text-3xl font-bold mb-4">De la reactivitate la arhitectură preventivă.</h2>
                     <p class="max-w-3xl mx-auto mb-6 opacity-90">La NUTRISIB, nu tratăm simptome – co-creăm arhitecturi biologice optimizate pentru performanță susținută. Parteneriatul nostru strategic se bazează pe competență științifică, transparență și rezultate măsurabile, pentru a transforma capitalul cel mai de preț: sănătatea copilului dumneavoastră.</p>
                     <a href="https://nutrisib.club" target="_blank" rel="noopener noreferrer" class="inline-block bg-white text-lg font-bold py-3 px-8 rounded-lg shadow-md transition-transform transform hover:scale-105" style="color: #003F5C;">Descoperiți abordarea NUTRISIB</a>
@@ -188,7 +188,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom', labels: { boxWidth: 20, padding: 20 } },
+                        legend: { position: 'bottom', labels: { boxWidth: 20, padding: 20, pointStyle: 'rectRounded', usePointStyle: true } },
                         tooltip: { backgroundColor: '#003F5C', titleFont: { weight: 'bold' }, bodyFont: { size: 14 }, padding: 10, cornerRadius: 5 }
                     }
                 };
@@ -202,18 +202,21 @@
                             labels: { 
                                 boxWidth: 20, 
                                 padding: 15,
+                                usePointStyle: true,
+                                pointStyle: 'rectRounded',
                                 generateLabels: function(chart) {
                                     const data = chart.data;
                                     if (data.labels.length && data.datasets.length) {
-                                        return data.labels.map(function(label, i) {
+                                        const { labels, datasets } = data;
+                                        return labels.map((label, i) => {
                                             const meta = chart.getDatasetMeta(0);
-                                            const ds = data.datasets[0];
-                                            const getValue = ds.data[i];
-                                            const text = `${label}: ${getValue}%`;
+                                            const ds = datasets[0];
+                                            const value = ds.data[i];
                                             return {
-                                                text: text,
+                                                text: `${label}: ${value}%`,
                                                 fillStyle: ds.backgroundColor[i],
-                                                hidden: isNaN(ds.data[i]) || meta.data[i].hidden,
+                                                strokeStyle: 'rgba(0,0,0,0)',
+                                                hidden: isNaN(value) || meta.data[i].hidden,
                                                 index: i
                                             };
                                         });
