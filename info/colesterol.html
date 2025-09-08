@@ -1,39 +1,42 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="ro" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infografic Interactiv: O Analiză Completă a Hipercolesterolemiei</title>
+    <title>Hipercolesterolemiei - Analiză grafică</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #F0F4F8;
+            background-color: #e5e7eb; /* bg-gray-200 */
+        }
+        .site-container {
+            max-width: 1280px; /* max-w-screen-xl */
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #f9fafb; /* bg-gray-50 */
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25); /* shadow-2xl */
         }
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 320px;
-            max-height: 400px;
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 400px;
-            }
+            height: 280px; 
         }
         .kpi-value {
-            font-size: 4rem;
+            font-size: 3.5rem;
             line-height: 1;
             font-weight: 700;
         }
-        .flowchart-step {
+        @media (min-width: 768px) {
+            .kpi-value {
+                font-size: 4rem;
+            }
+        }
+       .flowchart-step {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -41,6 +44,7 @@
             border-radius: 0.5rem;
             padding: 1rem;
             min-height: 100px;
+            height: 100%;
         }
         .flowchart-arrow {
             font-size: 2.5rem;
@@ -50,75 +54,73 @@
         }
     </style>
 </head>
-<body class="text-gray-800">
+<body class="bg-gray-200 text-gray-800">
 
-    <div class="container mx-auto p-4 md:p-8">
+    <div class="site-container">
+        <main class="bg-white p-4 sm:p-6 md:p-8">
 
-        <header class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold text-[#003F5C] mb-4">Hipercolesterolemia: O perspectivă integrativă</h1>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto">O explorare vizuală a cauzelor, consecințelor și abordărilor terapeutice ale "ucigașului tăcut", dincolo de o simplă valoare de laborator.</p>
-        </header>
+            <header class="text-center mb-12 p-8 rounded-xl text-white" style="background: linear-gradient(135deg, #003F5C, #3E92CC);">
+                <h1 class="text-4xl md:text-5xl font-extrabold">Hipercolesterolemia: O perspectivă integrativă</h1>
+                <p class="text-lg md:text-xl mt-4 max-w-3xl mx-auto opacity-90">O explorare vizuală a cauzelor, consecințelor și abordărilor terapeutice ale "ucigașului tăcut", dincolo de o simplă valoare de laborator.</p>
+            </header>
 
-        <main>
-            <section id="kpi" class="mb-16">
-                <div class="bg-white rounded-lg shadow-lg p-8 text-center">
-                    <h2 class="text-2xl font-bold text-[#003F5C] mb-4">O problemă de sănătate publică majoră</h2>
-                    <p class="text-gray-600 mb-6">Hipercolesterolemia este adesea subdiagnosticată, însă prevalența sa este alarmantă, fiind un factor de risc principal pentru bolile cardiovasculare, principala cauză de mortalitate la nivel global.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                        <div class="text-center">
-                            <p class="kpi-value text-[#BC5090]">~50%</p>
-                            <p class="text-xl font-semibold text-gray-700 mt-2">dintre adulții din țările dezvoltate au niveluri crescute ale colesterolului total.</p>
-                        </div>
-                        <div class="chart-container h-64 md:h-80">
+            <section id="imaginea-de-ansamblu" class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-[#003F5C] mb-8">Imaginea de ansamblu: Colesterolul în cifre</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Card Stânga: LDL vs HDL -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col">
+                        <h3 class="text-2xl font-bold text-center text-[#003F5C] mb-4">LDL vs. HDL: Balanța critică</h3>
+                        <p class="text-center kpi-value text-[#BC5090]">~50%</p>
+                        <p class="text-center font-semibold text-gray-700 mt-2 mb-4">dintre adulți au colesterolul total crescut.</p>
+                        <div class="chart-container flex-grow">
                             <canvas id="ldlHdlChart"></canvas>
                         </div>
+                        <p class="text-sm text-gray-500 mt-4 text-center">LDL-C ("rău") se depune în artere, în timp ce HDL-C ("bun") ajută la eliminarea acestuia. Echilibrul este crucial.</p>
                     </div>
-                    <p class="text-sm text-gray-500 mt-8">Graficul ilustrează simplificat dihotomia "bun" vs. "rău". LDL-C în exces se depune în artere, în timp ce HDL-C ajută la eliminarea acestuia. Echilibrul dintre cele două este crucial pentru sănătatea vasculară.</p>
-                </div>
-            </section>
 
-            <section id="causes" class="mb-16">
-                <div class="bg-white rounded-lg shadow-lg p-8">
-                    <h2 class="text-2xl font-bold text-center text-[#003F5C] mb-4">Etiologia complexă: De la gene la stil de viață</h2>
-                    <p class="text-gray-600 text-center max-w-2xl mx-auto mb-8">Hipercolesterolemia este rareori rezultatul unei singure cauze. Cel mai adesea, este o interacțiune complexă între predispoziția genetică și factori de mediu modificabili, care se potențează reciproc.</p>
-                    <div class="chart-container">
-                        <canvas id="riskFactorsChart"></canvas>
+                    <!-- Card Dreapta: Factori de risc -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col">
+                        <h3 class="text-2xl font-bold text-center text-[#003F5C] mb-4">Etiologia complexă: Factorii de risc</h3>
+                        <p class="text-gray-600 text-center mb-4">Hipercolesterolemia este o interacțiune complexă între genetică și stilul de viață, factori care se potențează reciproc.</p>
+                        <div class="chart-container flex-grow">
+                            <canvas id="riskFactorsChart"></canvas>
+                        </div>
+                         <p class="text-sm text-gray-500 text-center mt-4">Deși genetica joacă un rol, stilul de viață (dieta, sedentarismul) are un impact major și, cel mai important, este modificabil.</p>
                     </div>
-                     <p class="text-sm text-gray-500 text-center mt-4">Graficul arată contribuția relativă a principalilor factori de risc. Deși genetica joacă un rol, stilul de viață (dieta, sedentarismul) are un impact major și, cel mai important, este modificabil.</p>
                 </div>
             </section>
 
             <section id="atherosclerosis" class="mb-16">
-                 <div class="bg-white rounded-lg shadow-lg p-8">
+                 <div class="bg-white rounded-xl shadow-lg p-8">
                     <h2 class="text-2xl font-bold text-center text-[#003F5C] mb-4">Progresia tăcută: Mecanismul aterosclerozei</h2>
                     <p class="text-gray-600 text-center max-w-2xl mx-auto mb-8">Consecințele hipercolesterolemiei sunt mediate de ateroscleroză, un proces cronic și inflamator care se desfășoară silențios pe parcursul a zeci de ani, ducând la îngustarea și rigidizarea arterelor.</p>
                     <div class="grid grid-cols-1 md:grid-cols-9 gap-4 items-stretch">
                         <div class="flowchart-step bg-[#F0F4F8] text-[#003F5C] md:col-span-2">
                             <p class="font-semibold">1. Disfuncție Endotelială<br><span class="font-normal text-sm">Peretele arterial devine permeabil din cauza factorilor de risc (fumat, HTA).</span></p>
                         </div>
-                        <div class="flowchart-arrow hidden md:block">→</div>
+                        <div class="flowchart-arrow hidden md:flex items-center justify-center">→</div>
                         <div class="flowchart-step bg-[#E3EAF2] text-[#374C80] md:col-span-2">
                             <p class="font-semibold">2. Infiltrarea LDL<br><span class="font-normal text-sm">Particulele de LDL-C pătrund în peretele arterial și se oxidează.</span></p>
                         </div>
-                        <div class="flowchart-arrow hidden md:block">→</div>
+                        <div class="flowchart-arrow hidden md:flex items-center justify-center">→</div>
                         <div class="flowchart-step bg-[#D1D3E5] text-[#7A5195] md:col-span-2">
                             <p class="font-semibold">3. Răspuns Inflamator<br><span class="font-normal text-sm">Sistemul imunitar reacționează, formând "celule spumoase".</span></p>
                         </div>
                         <div class="flowchart-arrow md:hidden text-center my-2">↓</div>
                         <div class="md:col-span-9 h-4"></div>
                         <div class="md:col-start-4 md:col-span-2 flowchart-step bg-[#EACCE0] text-[#BC5090]">
-                            <p class="font-semibold">4. Formarea Plăcii<br><span class="font-normal text-sm">Acumularea de lipide și celule formează placa de aterom.</span></p>
+                            <p class="font-semibold">4. Formarea plăcii<br><span class="font-normal text-sm">Acumularea de lipide și celule formează placa de aterom.</span></p>
                         </div>
-                        <div class="flowchart-arrow hidden md:block">→</div>
+                        <div class="flowchart-arrow hidden md:flex items-center justify-center">→</div>
                         <div class="md:col-span-2 flowchart-step bg-[#F9D0D8] text-[#EF5675]">
-                            <p class="font-semibold">5. Eveniment Acut<br><span class="font-normal text-sm">Ruptura plăcii duce la tromboză (infarct, AVC).</span></p>
+                            <p class="font-semibold">5. Eveniment acut<br><span class="font-normal text-sm">Ruptura plăcii duce la tromboză (infarct, AVC).</span></p>
                         </div>
                     </div>
                 </div>
             </section>
             
             <section id="risk" class="mb-16">
-                <div class="bg-white rounded-lg shadow-lg p-8">
+                <div class="bg-white rounded-xl shadow-lg p-8">
                     <h2 class="text-2xl font-bold text-center text-[#003F5C] mb-4">Stratificarea riscului și țintele terapeutice</h2>
                     <p class="text-gray-600 text-center max-w-2xl mx-auto mb-8">Tratamentul nu este universal. Ghidurile moderne personalizează țintele de LDL-colesterol în funcție de riscul cardiovascular total al pacientului. Cu cât riscul este mai mare, cu atât ținta de LDL-C este mai scăzută.</p>
                     <div class="chart-container">
@@ -129,18 +131,18 @@
             </section>
 
             <section id="approach" class="mb-16">
-                <div class="bg-white rounded-lg shadow-lg p-8">
+                <div class="bg-white rounded-xl shadow-lg p-8">
                     <h2 class="text-2xl font-bold text-center text-[#003F5C] mb-4">O abordare terapeutică integrativă</h2>
                     <p class="text-gray-600 text-center max-w-2xl mx-auto mb-8">Managementul optim combină punctele forte ale diferitelor paradigme. Medicina alopată oferă soluții puternice pentru scăderea LDL, în timp ce abordările complementare se concentrează pe cauzele fundamentale legate de stres și metabolism.</p>
                     <div class="chart-container">
                         <canvas id="holisticApproachChart"></canvas>
                     </div>
-                    <p class="text-sm text-gray-500 text-center mt-4">Graficul radar compară focusul principal al diferitelor abordări. O strategie completă le integrează: utilizează medicația alopată pentru controlul rapid al lipidelor, în timp ce implementează strategii naturopate și holistice pentru managementul pe termen lung al stilului de viață și al stresului.</p>
+                    <p class="text-sm text-gray-500 text-center mt-4">Comparăm focusul principal al diferitelor abordări. O strategie completă le integrează: utilizează medicația alopată pentru controlul rapid al lipidelor, în timp ce implementează strategii naturopate și holistice pentru managementul pe termen lung al stilului de viață și al stresului.</p>
                 </div>
             </section>
             
             <section id="prevention">
-                 <div class="bg-white rounded-lg shadow-lg p-8">
+                 <div class="bg-white rounded-xl shadow-lg p-8">
                     <h2 class="text-2xl font-bold text-center text-[#003F5C] mb-4">Prevenția: Strategia fundamentală</h2>
                     <p class="text-gray-600 text-center max-w-2xl mx-auto mb-8">Cea mai eficientă metodă de a combate hipercolesterolemia și consecințele sale este prevenția, bazată pe un stil de viață sănătos adoptat de la o vârstă cât mai fragedă.</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
@@ -167,266 +169,241 @@
                     </div>
                 </div>
             </section>
+
         </main>
 
-        <footer class="text-center mt-12 text-sm text-gray-500">
-            <p>Acest infografic are un scop pur educațional și nu înlocuiește consultul medical de specialitate. Datele prezentate sunt agregate din surse medicale și ghiduri clinice general acceptate.</p>
-            <p class="mt-4">Copyright &copy; dr.ing. Radu Pascu - 2025</p>
+        <div class="md:col-span-2 lg:col-span-3 text-center mt-8 p-8 rounded-xl text-white" style="background: linear-gradient(135deg, #0A2463, #3E92CC);">
+            <h2 class="text-3xl font-bold mb-4">Hipercolesterolemia: O perspectivă integrativă</h2>
+            <p class="max-w-3xl mx-auto mb-4 opacity-90 text-lg">La NUTRISIB, abordăm holisitic nu simptomatic. Managementul optim al hipercolesterolomiei în secolul XXI necesită o abordare integrativă, care să utilizeze cu discernământ cele mai puternice instrumente ale medicinei alopate – diagnosticul de precizie, stratificarea riguroasă a riscului și terapiile farmacologice bazate pe dovezi – și să le completeze cu strategii holistice fundamentale, care adresează cauzele profunde ale dezechilibrului: nutriția, mișcarea, managementul stresului și al emoțiilor</p>
+            <a href="https://nutrisib.club" target="_blank" rel="noopener noreferrer" class="inline-block bg-white text-lg font-bold py-3 px-8 rounded-lg shadow-md transition-transform transform hover:scale-105" style="color: #003F5C;">Descoperiți abordarea NUTRISIB</a>
+        </div>
+        
+        <footer class="text-center mt-12 py-6 border-t border-gray-200">
+            <p class="text-sm text-gray-500">Copyright © dr.ing. Radu Pascu - 2025</p>
         </footer>
-
     </div>
 
     <script>
-        const tooltipTitleCallback = (tooltipItems) => {
-            const item = tooltipItems[0];
-            let label = item.chart.data.labels[item.dataIndex];
-            if (Array.isArray(label)) {
-                return label.join(' ');
-            }
-            return label;
-        };
-        
-        const wrapLabel = (label) => {
-            const maxLength = 16;
-            if (label.length <= maxLength) return label;
-            
-            const words = label.split(' ');
-            const lines = [];
-            let currentLine = '';
-            
-            words.forEach(word => {
-                if ((currentLine + word).length > maxLength) {
-                    lines.push(currentLine.trim());
-                    currentLine = '';
-                }
-                currentLine += word + ' ';
-            });
-            lines.push(currentLine.trim());
-            return lines;
-        };
-        
-        const brilliantBluesPalette = {
-            darkBlue: '#003F5C',
-            purpleBlue: '#374C80',
-            purple: '#7A5195',
-            magenta: '#BC5090',
-            pink: '#EF5675',
-            orange: '#FF764A',
-            yellow: '#FFA600'
-        };
+        document.addEventListener('DOMContentLoaded', function () {
 
-        const ctxLdlHdl = document.getElementById('ldlHdlChart').getContext('2d');
-        new Chart(ctxLdlHdl, {
-            type: 'doughnut',
-            data: {
-                labels: ['LDL-Colesterol ("Rău")', 'HDL-Colesterol ("Bun")'],
-                datasets: [{
-                    label: 'Tipuri de Colesterol',
-                    data: [70, 30],
-                    backgroundColor: [brilliantBluesPalette.pink, brilliantBluesPalette.purpleBlue],
-                    borderColor: '#FFFFFF',
-                    borderWidth: 4,
-                    hoverOffset: 8
-                }]
-            },
-            options: {
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
+                }
+                return label;
+            };
+            
+            const wrapLabel = (label, maxLength = 16) => {
+                if (typeof label !== 'string' || label.length <= maxLength) return label;
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = '';
+                words.forEach(word => {
+                    if ((currentLine + ' ' + word).trim().length > maxLength) {
+                        lines.push(currentLine.trim());
+                        currentLine = '';
+                    }
+                    currentLine += word + ' ';
+                });
+                lines.push(currentLine.trim());
+                return lines;
+            };
+
+            const brilliantBluesPalette = {
+                darkBlue: '#003F5C',
+                purpleBlue: '#374C80',
+                purple: '#7A5195',
+                magenta: '#BC5090',
+                pink: '#EF5675',
+                orange: '#FF764A',
+                yellow: '#FFA600'
+            };
+
+            const defaultOptions = {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '60%',
                 plugins: {
                     legend: {
                         position: 'bottom',
+                        labels: { padding: 20 }
                     },
                     tooltip: {
-                        callbacks: {
-                            title: tooltipTitleCallback
-                        }
+                        backgroundColor: brilliantBluesPalette.darkBlue,
+                        callbacks: { title: tooltipTitleCallback }
                     }
                 }
-            }
-        });
-
-        const ctxRiskFactors = document.getElementById('riskFactorsChart').getContext('2d');
-        new Chart(ctxRiskFactors, {
-            type: 'doughnut',
-            data: {
-                labels: [
-                    'Dietă necorespunzătoare',
-                    'Genetică',
-                    'Sedentarism',
-                    'Alți factori (fumat, comorbidități)'
-                ],
-                datasets: [{
-                    label: 'Contribuția Factorilor de Risc (%)',
-                    data: [40, 25, 20, 15],
-                    backgroundColor: [
-                        brilliantBluesPalette.purple,
-                        brilliantBluesPalette.darkBlue,
-                        brilliantBluesPalette.pink,
-                        brilliantBluesPalette.yellow
-                    ],
-                    borderColor: '#FFFFFF',
-                    borderWidth: 4,
-                    hoverOffset: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
+            };
+            
+            const doughnutOptions = {
+                ...defaultOptions,
                 cutout: '60%',
                 plugins: {
+                    ...defaultOptions.plugins,
                     legend: {
-                        position: 'bottom',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            title: tooltipTitleCallback,
-                            label: function(context) {
-                                let label = context.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed !== null) {
-                                    label += context.parsed + '%';
-                                }
-                                return label;
-                            }
+                        position: 'right',
+                        labels: {
+                            boxWidth: 20,
+                            padding: 15,
                         }
                     }
                 }
+            };
+            
+            const ctxLdlHdl = document.getElementById('ldlHdlChart');
+            if(ctxLdlHdl) {
+                new Chart(ctxLdlHdl, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['LDL-Colesterol ("Rău")', 'HDL-Colesterol ("Bun")'],
+                        datasets: [{
+                            label: 'Tipuri de Colesterol',
+                            data: [70, 30],
+                            backgroundColor: [brilliantBluesPalette.pink, brilliantBluesPalette.purpleBlue],
+                            borderColor: '#FFFFFF',
+                            borderWidth: 4,
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: doughnutOptions
+                });
             }
-        });
 
-        const ctxLdlTargets = document.getElementById('ldlTargetsChart').getContext('2d');
-        const ldlTargetLabels = ['Risc Scăzut', 'Risc Moderat', 'Risc Înalt', wrapLabel('Risc Foarte Înalt (ex: post-infarct)')];
-        new Chart(ctxLdlTargets, {
-            type: 'bar',
-            data: {
-                labels: ldlTargetLabels,
-                datasets: [{
-                    label: 'Țintă LDL-Colesterol (mg/dL)',
-                    data: [116, 100, 70, 55],
-                    backgroundColor: [
-                        brilliantBluesPalette.purpleBlue,
-                        brilliantBluesPalette.purple,
-                        brilliantBluesPalette.magenta,
-                        brilliantBluesPalette.pink
-                    ],
-                    borderColor: [
-                        brilliantBluesPalette.purpleBlue,
-                        brilliantBluesPalette.purple,
-                        brilliantBluesPalette.magenta,
-                        brilliantBluesPalette.pink
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
+            const ctxRiskFactors = document.getElementById('riskFactorsChart');
+            if(ctxRiskFactors) {
+                new Chart(ctxRiskFactors, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [
+                            wrapLabel('Dietă necorespunzătoare'),
+                            'Genetică',
+                            'Sedentarism',
+                            wrapLabel('Alți factori (fumat, comorbidități)')
+                        ],
+                        datasets: [{
+                            label: 'Contribuția Factorilor de Risc (%)',
+                            data: [40, 25, 20, 15],
+                            backgroundColor: [
+                                brilliantBluesPalette.purple,
+                                brilliantBluesPalette.darkBlue,
+                                brilliantBluesPalette.pink,
+                                brilliantBluesPalette.yellow
+                            ],
+                            borderColor: '#FFFFFF',
+                            borderWidth: 4,
+                            hoverOffset: 8
+                        }]
                     },
-                    tooltip: {
-                        callbacks: {
-                            title: tooltipTitleCallback
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'LDL-C (mg/dL)'
-                        }
-                    }
-                }
-            }
-        });
-        
-        const ctxHolistic = document.getElementById('holisticApproachChart').getContext('2d');
-        const holisticLabels = ['Reducere LDL Directă', 'Management Stres', 'Suport Metabolic', 'Echilibru Emoțional', 'Detoxifiere'];
-        new Chart(ctxHolistic, {
-            type: 'radar',
-            data: {
-                labels: holisticLabels,
-                datasets: [
-                    {
-                        label: 'Abordare Alopată',
-                        data: [5, 2, 3, 1, 1],
-                        fill: true,
-                        backgroundColor: 'rgba(0, 63, 92, 0.2)',
-                        borderColor: brilliantBluesPalette.darkBlue,
-                        pointBackgroundColor: brilliantBluesPalette.darkBlue,
-                    },
-                    {
-                        label: 'Abordare Naturistă',
-                        data: [3, 3, 5, 2, 4],
-                        fill: true,
-                        backgroundColor: 'rgba(122, 81, 149, 0.2)',
-                        borderColor: brilliantBluesPalette.purple,
-                        pointBackgroundColor: brilliantBluesPalette.purple,
-                    },
-                    {
-                        label: 'Abordare Holistică',
-                        data: [1, 5, 3, 5, 2],
-                        fill: true,
-                        backgroundColor: 'rgba(239, 86, 117, 0.2)',
-                        borderColor: brilliantBluesPalette.pink,
-                        pointBackgroundColor: brilliantBluesPalette.pink,
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            title: tooltipTitleCallback
-                        }
-                    },
-                    legend: {
-                        position: 'bottom'
-                    }
-                },
-                scales: {
-                    r: {
-                        angleLines: {
-                            display: true
-                        },
-                        suggestedMin: 0,
-                        suggestedMax: 5,
-                        pointLabels: {
-                            font: {
-                                size: 10
+                    options: {
+                        ...doughnutOptions,
+                         plugins: {
+                            ...doughnutOptions.plugins,
+                            tooltip: {
+                                ...doughnutOptions.plugins.tooltip,
+                                callbacks: {
+                                    ...doughnutOptions.plugins.tooltip.callbacks,
+                                    label: function(context) {
+                                        let label = Array.isArray(context.label) ? context.label.join(' ') : context.label || '';
+                                        if (label) { label += ': '; }
+                                        if (context.parsed !== null) { label += context.parsed + '%'; }
+                                        return label;
+                                    }
+                                }
                             }
                         }
                     }
-                }
+                });
             }
+
+            const ctxLdlTargets = document.getElementById('ldlTargetsChart');
+            if(ctxLdlTargets) {
+                 new Chart(ctxLdlTargets, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Risc Scăzut', 'Risc Moderat', 'Risc Înalt', wrapLabel('Risc Foarte Înalt (ex: post-infarct)')],
+                        datasets: [{
+                            label: 'Țintă LDL-Colesterol (mg/dL)',
+                            data: [116, 100, 70, 55],
+                            backgroundColor: [
+                                brilliantBluesPalette.purpleBlue,
+                                brilliantBluesPalette.purple,
+                                brilliantBluesPalette.magenta,
+                                brilliantBluesPalette.pink
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        ...defaultOptions,
+                        plugins: { ...defaultOptions.plugins, legend: { display: false } },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: { display: true, text: 'LDL-C (mg/dL)' }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            const ctxHolistic = document.getElementById('holisticApproachChart');
+            if(ctxHolistic) {
+                new Chart(ctxHolistic, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Reducere LDL Directă', 'Management Stres', 'Suport Metabolic', 'Echilibru Emoțional', 'Detoxifiere'],
+                        datasets: [
+                            {
+                                label: 'Abordare Alopată',
+                                data: [5, 2, 3, 1, 1],
+                                fill: true,
+                                backgroundColor: 'rgba(0, 63, 92, 0.2)',
+                                borderColor: brilliantBluesPalette.darkBlue,
+                                pointBackgroundColor: brilliantBluesPalette.darkBlue,
+                            },
+                            {
+                                label: 'Abordare Naturistă',
+                                data: [3, 3, 5, 2, 4],
+                                fill: true,
+                                backgroundColor: 'rgba(122, 81, 149, 0.2)',
+                                borderColor: brilliantBluesPalette.purple,
+                                pointBackgroundColor: brilliantBluesPalette.purple,
+                            },
+                            {
+                                label: 'Abordare Holistică',
+                                data: [1, 5, 3, 5, 2],
+                                fill: true,
+                                backgroundColor: 'rgba(239, 86, 117, 0.2)',
+                                borderColor: brilliantBluesPalette.pink,
+                                pointBackgroundColor: brilliantBluesPalette.pink,
+                            }
+                        ]
+                    },
+                    options: {
+                        ...defaultOptions,
+                        scales: {
+                            r: {
+                                angleLines: { display: true },
+                                suggestedMin: 0,
+                                suggestedMax: 5,
+                                pointLabels: { font: { size: 10 } }
+                            }
+                        }
+                    }
+                });
+            }
+        
+            document.addEventListener('contextmenu', event => event.preventDefault());
+            document.onkeydown = function(e) {
+                if (e.keyCode == 123) { return false; }
+                if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; }
+                if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; }
+                if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; }
+                if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) { return false; }
+            };
         });
-  
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.onkeydown = function(e) {
-            if (e.keyCode == 123) { 
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-                return false;
-            }
-            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-                return false;
-            }
-            if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) {
-                return false;
-            }
-        };
     </script>
 </body>
 </html>
+
