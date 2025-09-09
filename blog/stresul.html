@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stresul - un ghid complet</title>
+    <style>
+        /* Se asigură că fontul Inter este încărcat */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        /* Definirea variabilelor de culoare pentru a fi ușor de modificat */
+        :root {
+            --dark-blue: #0A2463;
+            --medium-blue: #3E92CC;
+            --text-dark: #212529;
+            --text-light: #475569;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-color: #e0e0e0;
+
+            /* Paletă de culori pastelate, foarte pale */
+            --card-pale-blue: #f0f7ff;
+            --card-pale-green: #effaf5;
+            --card-pale-yellow: #fffcf2;
+            --card-pale-red: #fff5f5;
+            --card-pale-grey: #f8f9fa;
+            --card-pale-purple: #f9f5ff;
+            --card-pale-cyan: #edfcfc;
+        }
+
+        /* Stilul general al paginii */
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Containerul principal al articolului */
+        .ztabs-container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            background: var(--bg-white);
+            border-radius: 15px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .ztabs-header {
+            background-color: var(--dark-blue);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .ztabs-header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            margin: 0;
+            padding: 0;
+            color: white !important;
+            border: none !important;
+        }
+
+        /* Stiluri pentru sistemul de tab-uri */
+        .tab-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #f1f1f1;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-link {
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 0.85em; /* Ajustat pentru a încăpea pe un rând */
+            font-weight: 600;
+            color: var(--dark-blue);
+            border-bottom: 3px solid transparent;
+            flex-grow: 1;
+            text-align: center;
+            white-space: nowrap; /* Previne trecerea pe rândul următor */
+        }
+
+        .tab-link:hover {
+            background-color: #ddd;
+        }
+
+        .tab-link.active {
+            background-color: var(--bg-white);
+            color: var(--dark-blue);
+            border-bottom: 3px solid var(--medium-blue);
+        }
+
+        .tab-content {
+            display: none; /* Ascunde tab-urile by default */
+            padding: 30px 40px;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Stiluri pentru card-urile de conținut */
+        .zwp-section-title {
+            font-size: 1.8em;
+            color: var(--dark-blue);
+            margin-bottom: 25px;
+            font-weight: 700;
+            border-bottom: 3px solid var(--medium-blue);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .zwp-card-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .zwp-topic-card {
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem 2rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+        .zwp-topic-card.bg-pale-blue { background-color: var(--card-pale-blue); }
+        .zwp-topic-card.bg-pale-green { background-color: var(--card-pale-green); }
+        .zwp-topic-card.bg-pale-yellow { background-color: var(--card-pale-yellow); }
+        .zwp-topic-card.bg-pale-red { background-color: var(--card-pale-red); }
+        .zwp-topic-card.bg-pale-grey { background-color: var(--card-pale-grey); }
+        .zwp-topic-card.bg-pale-purple { background-color: var(--card-pale-purple); }
+        .zwp-topic-card.bg-pale-cyan { background-color: var(--card-pale-cyan); }
+
+        .zwp-topic-card h3 {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--dark-blue) !important;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--medium-blue);
+            padding-bottom: 0.5rem;
+        }
+
+        .zwp-topic-card h4 {
+            font-size: 1.1em;
+            color: var(--medium-blue) !important;
+            font-weight: 600;
+            margin-top: 1.2rem;
+            margin-bottom: 0.5rem;
+            border: none !important;
+            padding: 0 !important;
+        }
+
+        .zwp-topic-card p, .zwp-topic-card ul, .zwp-topic-card ol {
+            font-size: 0.95em;
+            color: var(--text-light);
+            text-align: justify;
+            margin-bottom: 10px;
+        }
+
+        .zwp-topic-card ul, .zwp-topic-card ol {
+            padding-left: 20px;
+        }
+        
+        .zwp-topic-card li {
+            margin-bottom: 5px;
+        }
+
+        .zwp-topic-card strong {
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+        
+        .note {
+            background-color: #fffde7;
+            border-left: 6px solid #fbc02d;
+            padding: 18px;
+            margin: 25px 0;
+            border-radius: 5px;
+        }
+
+        .zwp-topic-card table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9em;
+        }
+
+        .zwp-topic-card th, .zwp-topic-card td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #d1d9e6;
+        }
+
+        .zwp-topic-card th {
+            background-color: #e2e8f0;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+
+        .zwp-topic-card tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .zwp-topic-card td:first-child {
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        
+        .zwp-references-list {
+            list-style-type: decimal;
+            padding-left: 20px;
+            font-size: 0.85em; /* Dimensiune font redusă */
+            column-count: 2; /* Formatare pe două coloane */
+            column-gap: 40px; /* Spațiu între coloane */
+        }
+
+        .zwp-references-list li {
+            margin-bottom: 1em;
+            word-break: break-word;
+            padding-left: 5px;
+        }
+
+        .ztabs-footer {
+            text-align: center;
+            padding: 25px 20px;
+            font-size: 0.9em;
+            color: #6c757d;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-light);
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .tab-content {
+                padding: 20px;
+            }
+            .zwp-references-list {
+                column-count: 1;
+            }
+            .tab-link {
+                font-size: 0.8em;
+                padding: 12px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ztabs-container">
+        <header class="ztabs-header">
+            <h1>Stresul și Insomnia: Ghid Complet</h1>
+        </header>
+
+        <div class="tab-buttons">
+            <button class="tab-link active" onclick="openTab(event, 'Introducere')">Introducere</button>
+            <button class="tab-link" onclick="openTab(event, 'Fiziologie')">Fiziologia Stresului</button>
+            <button class="tab-link" onclick="openTab(event, 'Consecinte')">Consecințe</button>
+            <button class="tab-link" onclick="openTab(event, 'Strategii')">Strategii Practice</button>
+            <button class="tab-link" onclick="openTab(event, 'Nutritie')">Nutriție</button>
+            <button class="tab-link" onclick="openTab(event, 'Fitoterapie')">Fitoterapie</button>
+            <button class="tab-link" onclick="openTab(event, 'Protocoale')">Protocoale</button>
+            <button class="tab-link" onclick="openTab(event, 'Concluzii')">Concluzii</button>
+            <button class="tab-link" onclick="openTab(event, 'Bibliografie')">Bibliografie</button>
+        </div>
+
+        <!-- Tab Content: Introducere -->
+        <div id="Introducere" class="tab-content" style="display: block;">
+            <h2 class="zwp-section-title">De ce ne simțim mereu „pe muchie de cuțit”?</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-blue">
+                    <h3>Adevăratele sabotoare ale somnului</h3>
+                    <p>Știi care sunt adevăratele sabotoare ale somnului tău? Știi cum stresul cronic, chiar și cel generat de micile responsabilități aparent banale, poate transforma nopțile tale în momente de neliniște și oboseală profundă? Când creierul simte că e sub asediu continuu, îl reglează instinctiv să rămână în „modul supraviețuire” - o stare hiperalertă permanentă, în care fiecare gând, orice mică grijă, devine o potențială „urgență” ce declanșează un val de cortizol și tensiune. Creierul este pregătit să reacționeze nu doar la pericole reale, ci chiar și la temerile pe care ni le creăm singuri - cum ar fi gândul că ai uitat caietul de matematică sau lista de cumpărături.</p>
+                    <p>Stresul prelungit modifică profund ciclul natural al hormonilor, menținând nivelurile de cortizol ridicate exact când ar trebui să scadă pentru a permite relaxarea și somnul odihnitor. De asemenea, stresul conturează o minte agitată, plină de gânduri obsesive și planificări compulsive, care îți încetinesc capacitatea de a te lăsa dusă de noapte. Pe de altă parte, tensiunea musculară cauzată de această stare de alertă continuă blochează relaxarea corporală, transformând fiecare moment de întindere în pat într-o luptă cu propria-ți tensiune.</p>
+                     <p>Ai observat cum uneori te culci și te scoli mai obosit(ă) decât ai fost înainte? Aceasta este povestea tulburătoare a somnului afectat de stres.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Ce se întâmplă „sub capotă”</h3>
+                    <p><strong>Ritmul circadian și cortizolul:</strong> Într-un ritm circadian sănătos, cortizolul are un vârf fiziologic dimineața (cortisol awakening response, CAR) și o scădere continuă spre seară, ceea ce pregătește creierul pentru somn profund; când stresul cronic aplatizează panta diurnă și menține cortizolul ridicat seara, crește hiper‑arousalul și se instalează insomnie de inițiere și fragmentare a somnului.</p>
+                    <p><strong>De ce se simte ziua „mai grea” după o noapte proastă:</strong> Somnul fragmentat perturbă în dimineața următoare pulsatilele de cortizol și reactivitatea autonomă, ceea ce amplifică răspunsul emoțional, reduce toleranța la stres și perpetuează ciclul stres‑insomnie‑stres care definește bucla HPA dereglată (Hypothalamic–pituitary–adrenal = hipotalamo-hipofizo-suprarenale).</p>
+                    <p><strong>Factorii de mediu:</strong> Lumina artificială albastră și zgomotul pre‑somn pot acționa sinergic ca stresori, suprimând melatonina și crescând cortizolul/noadrenalina, cu efect cumulativ asupra arhitecturii somnului și a bunei funcționări circadiene.</p>
+                </div>
+                 <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>O problemă profundă</h3>
+                    <p>Această stare nu este o simplă neplăcere, ci o problemă profundă care îți afectează sănătatea mentală și fizică. Somnul nu mai reprezintă un refugiu de odihnă, ci devine un obiectiv greu de atins pentru multe persoane, iar tu, care muncești din greu pentru cei dragi, meriți cu adevărat să redescoperi liniștea pe care o aduce un somn sănătos. Fără această bază, răbdarea, prezența și bucuria momentelor frumoase dispar, lăsând în urmă doar extenuare și stres.</p>
+                    <p>Așadar, care sunt pașii pe care îi poți face astăzi pentru a rupe acest cerc vicios și a-ți recăpăta somnul și calmul de care ai nevoie?</p>
+                     <p>Acest material oferă o analiză integrativă a mecanismelor prin care stresul ne afectează corpul și mintea, de la răspunsurile hormonale fundamentale la consecințele pe termen lung asupra sănătății cardiovasculare, neurologice și a somnului. Mai important, prezintă un set complet de strategii bazate pe dovezi științifice și practici tradiționale pentru a combate eficient stresul, de la tehnici de relaxare și ajustări ale stilului de viață, la intervenții nutriționale și suport fitoterapeutic.</p>
+                    <p>Acest ghid explică de ce stresul cronic și insomnia se întrețin reciproc și cum pot fi “deconectate” prin intervenții pe mai multe niveluri: comportamentale (CBT‑I), somatice (RMP, respirație), circadiene (lumină), nutriționale și fitoterapice, toate integrate într-un protocol eficient pentru profesioniști ocupați. Recomandarea internațională de primă linie pentru insomnia cronică este terapia cognitiv-comportamentală pentru insomnie (CBT‑I), cu componente scurte, aplicabile în programe aglomerate: controlul stimulilor, restricția somnului, relaxarea și intervenții circadiene, la care se pot adăuga tehnici de respirație, RMP și, selectiv, hipnoză ghidată.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Fiziologia Stresului -->
+        <div id="Fiziologie" class="tab-content">
+            <h2 class="zwp-section-title">Arhitectura neuroendocrină a răspunsului la stres</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-blue">
+                    <h3>Ce este stresul?</h3>
+                    <p>În limbajul comun, termenul "stres" este adesea utilizat pentru a descrie o stare de presiune, tensiune sau disconfort emoțional. Din punct de vedere științific, însă, stresul este un concept mult mai complex și fundamental pentru supraviețuire. Definit riguros, stresul reprezintă răspunsul nespecific al organismului la orice solicitare (stresor) care perturbă starea sa de echilibru intern, cunoscută sub numele de homeostazie. Stresorul nu este neapărat un factor negativ; el poate fi orice eveniment fizic, chimic, psihologic sau social care impune o adaptare. Printre exemple se numără expunerea la temperaturi extreme, un efort fizic intens, o infecție, dar și un examen important, un conflict interpersonal sau chiar un eveniment fericit, precum o nuntă.</p>
+                    <h4>Sindromul General de Adaptare (SGA)</h4>
+                    <p>Pionierul cercetării în domeniul stresului, Hans Selye, a descris acest răspuns ca fiind un "sindrom general de adaptare" (SGA), care se desfășoară în trei etape distincte:</p>
+                    <ul>
+                        <li><strong>Reacția de alarmă:</strong> Aceasta este faza inițială, "luptă sau fugi" (fight-or-flight), declanșată de perceperea unui pericol. Sistemul nervos simpatic este activat, ducând la eliberarea rapidă de adrenalină și noradrenalină. Ritmul cardiac și tensiunea arterială cresc, respirația se accelerează, iar rezervele de energie (glucoză) sunt mobilizate pentru a pregăti corpul pentru o acțiune imediată.</li>
+                        <li><strong>Etapa de rezistență (sau adaptare):</strong> Dacă stresorul persistă, organismul intră într-o fază de rezistență. Principala caracteristică a acestei etape este activarea axei hipotalamo-hipofizo-suprarenaliene (HHS) și secreția crescută de cortizol. Cortizolul ajută organismul să mențină un nivel ridicat de alertă și să gestioneze consumul de energie pe termen lung. În această fază, organismul pare că funcționează normal, dar la un cost metabolic și energetic mult mai mare.</li>
+                        <li><strong>Etapa de epuizare:</strong> Expunerea prelungită la stresor, fără posibilitatea de recuperare, duce la depășirea capacității de adaptare a organismului. Rezervele de energie se epuizează, sistemul imunitar devine suprimat, iar funcționarea normală a organelor este compromisă. Această etapă este asociată cu apariția bolilor cronice și a problemelor de sănătate mintală.</li>
+                    </ul>
+                </div>
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Tipuri de stres: de la eustres la distres</h3>
+                     <p>Contrar percepției populare, nu tot stresul este dăunător. Hans Selye a fost cel care a introdus distincția crucială între "eustres" (stresul pozitiv) și "distres" (stresul negativ).</p>
+                    <h4>Eustres (stresul pozitiv)</h4>
+                    <p>Eustresul este stresul benefic, care acționează ca un catalizator pentru creștere, performanță și dezvoltare personală. Este un stres de scurtă durată, perceput ca fiind gestionabil și motivant. Acesta ne ajută să ne concentrăm, să fim mai productivi și să ne atingem obiectivele. Exemplele includ emoțiile dinaintea unei competiții sportive, entuziasmul unui nou proiect la locul de muncă sau provocarea de a învăța o nouă abilitate. Eustresul este asociat cu sentimente de vitalitate și împlinire și este esențial pentru o viață sănătoasă și productivă.</p>
+                    <h4>Distres (stresul negativ)</h4>
+                    <p>Distresul apare atunci când solicitările depășesc capacitatea percepută a unei persoane de a le face față. Acesta poate fi de două tipuri:</p>
+                    <ul>
+                        <li><strong>Stresul acut:</strong> Este un răspuns intens, de scurtă durată, la o amenințare imediată sau o provocare neașteptată. Exemplele includ un accident de mașină, un conflict verbal intens sau apropierea unui termen limită. Deși poate fi copleșitor pe moment, organismul revine la normal odată ce situația se încheie. Problemele apar atunci când episoadele de stres acut sunt prea frecvente.</li>
+                        <li><strong>Stresul cronic:</strong> Acesta este cel mai dăunător tip de stres. Este un stres persistent, de lungă durată, care se întinde pe săptămâni, luni sau chiar ani. Stresorii cronici pot include probleme financiare continue, un loc de muncă nesatisfăcător, relații toxice sau îngrijirea pe termen lung a unei rude bolnave. Stresul cronic menține organismul într-o stare constantă de alertă, cu niveluri ridicate de cortizol, ceea ce duce la uzura treptată a sistemelor fiziologice și la un risc crescut de boli grave.</li>
+                    </ul>
+                </div>
+                <div class="zwp-topic-card bg-pale-cyan">
+                     <h3>Axa "creier-intestin": al doilea creier și rolul său în stres</h3>
+                     <p>Comunicarea dintre creier și intestin este bidirecțională și extrem de complexă, formând ceea ce este cunoscut sub numele de "axa creier-intestin". Intestinul, adesea numit "al doilea creier", găzduiește sistemul nervos enteric, o rețea vastă de neuroni care funcționează autonom, dar este în permanent dialog cu sistemul nervos central prin intermediul nervului vag. Această conexiune joacă un rol fundamental în modul în care stresul este perceput și procesat.</p>
+                     <p>Stresul psihologic acționează ca un semnal de alarmă pentru creier, care, la rândul său, influențează direct funcția gastrointestinală. Poate modifica motilitatea intestinală (provocând diaree sau constipație), poate crește permeabilitatea intestinală ("leaky gut"), permițând trecerea toxinelor în sânge, și poate altera secreția de acid gastric. În sens invers, starea intestinului are un impact profund asupra sănătății mintale. Microbiota intestinală, formată din trilioane de bacterii, produce o gamă largă de neurotransmițători, inclusiv aproximativ 95% din serotonina totală a organismului, un mesager chimic esențial pentru reglarea dispoziției. Un dezechilibru al microbiotei (disbioză), adesea cauzat de stres cronic, dietă necorespunzătoare sau antibiotice, a fost asociat cu un risc crescut de anxietate, depresie și alte tulburări de dispoziție. Astfel, menținerea sănătății intestinale este o componentă critică în managementul stresului.</p>
+                </div>
+                 <div class="zwp-topic-card bg-pale-purple">
+                    <h3>Rolul sistemului limbic și al amigdalei în perceperea amenințărilor</h3>
+                    <p>Răspunsul la stres nu este declanșat de evenimentul în sine, ci de interpretarea pe care creierul o dă acelui eveniment. Structura cheie responsabilă pentru această evaluare rapidă este sistemul limbic, considerat centrul emoțional al creierului. În cadrul acestui sistem, amigdala joacă rolul de "detector de amenințări".</p>
+                    <p>Amigdala scanează în permanență informațiile primite de la simțuri (văz, auz, etc.) și le compară cu experiențele trecute pentru a identifica potențiale pericole. Atunci când o amenințare este detectată – reală sau imaginară – amigdala trimite un semnal de primejdie către hipotalamus, acționând ca un comutator care inițiază cascada de stres "luptă sau fugi". Această reacție este extrem de rapidă și precede procesarea conștientă, rațională, a informației de către cortexul prefrontal. Deși acest mecanism este vital pentru supraviețuire în situații de pericol real, în societatea modernă el poate fi activat în mod cronic de stresori psihologici (griji, termene limită), ducând la o stare de anxietate persistentă. Hipocampul, o altă structură a sistemului limbic, este responsabil pentru formarea amintirilor și contextualizarea emoțiilor. Stresul cronic, prin nivelurile ridicate de cortizol, poate afecta negativ funcționarea hipocampului, afectând memoria și capacitatea de a regla răspunsul la stres.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-red">
+                    <h3>Răspunsul rapid: Axa simpato-medulo-suprarenaliană (SAM)</h3>
+                    <p>În fața unui factor de stres acut, perceput ca o amenințare imediată – fie că este vorba de un pericol fizic sau de o provocare psihologică intensă, precum susținerea unui discurs public – organismul declanșează un răspuns rapid, orchestrat de sistemul nervos simpatic. Această primă linie de apărare este axa simpato-medulo-suprarenaliană (SAM) - „linia rapidă” a răspunsului la stres care activează nervul simpatic și medulosuprarenala, eliberând adrenalină/noradrenalină în câteva secunde. Activarea pornește de la nivelul centrilor superiori ai creierului, precum amigdala și hipotalamusul, care transmit semnale de-a lungul fibrelor nervoase simpatice direct către glandele suprarenale, mai precis către porțiunea lor medulară (medulosuprarenala). Această stimulare directă, neurală, determină eliberarea masivă în circulația sanguină a catecolaminelor: adrenalina (epinefrina) și, într-o măsură mai mică, norepinefrina (noradrenalina).</p>
+                    <h4>Efecte fiziologice "luptă sau fugă":</h4>
+                    <ul>
+                        <li><strong>Accelerarea ritmului cardiac și creșterea contractilității miocardice</strong></li>
+                        <li><strong>Mobilizarea rapidă a rezervelor energetice</strong></li>
+                        <li><strong>Redistribuția fluxului sanguin</strong></li>
+                        <li><strong>Creșterea frecvenței respiratorii și bronhodilatație</strong></li>
+                        <li><strong>Creșterea vigilenței și a acuității senzoriale</strong></li>
+                    </ul>
+                    <p>Pe termen scurt, acest răspuns este extrem de benefic, permițând organismului să depășească cu succes situații periculoase. Totuși, activarea frecventă și intensă a axei SAM poate duce la dezvoltarea unui comportament de căutare a senzațiilor tari, cunoscut sub denumirea de "dependență de adrenalină".</p>
+                    <div class="note">
+                        <p><strong>De ce apar palpitațiile seara:</strong> Deși SAM este un răspuns de „primă linie” destinat acutului, expuneri repetate pot lăsa reziduuri de hiperreactivitate autonomă, astfel încât stimuli minori (notificări, lumină albastră, gânduri intruzive) declanșează micro‑descărcări catecolaminergice care blochează scăderea fiziologică a arousalului presomn.</p>
+                        <p><strong>Integrarea cu somnul:</strong> Un SAM ușor “ridicat” la culcare poate destabiliza tranzițiile NREM‑REM, crescând microtrezirile și reducând eficiența somnului, fenomen frecvent raportat când ritmul cortizolului este deviat de la profilul diurn sănătos.</p>
+                    </div>
+                </div>
+                <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>Răspunsul susținut: Fiziologia axei HPA</h3>
+                    <p>Dacă răspunsul SAM este rapid și de scurtă durată, axa hipotalamo-hipofizo-suprarenaliană (HPA) reprezintă componenta mai lentă, dar mai persistentă, a răspunsului la stres. Aceasta nu este menită să gestioneze urgențele imediate, ci să susțină organismul pe parcursul unor perioade prelungite de efort, adaptare și recuperare.</p>
+                    <h4>Cascada hormonală: De la CRH la ACTH și cortizol</h4>
+                    <p>Procesul este inițiat în hipotalamus, care eliberează hormonul de eliberare a corticotropinei (CRH). CRH ajunge la glanda pituitară, care secretă hormonul adrenocorticotrop (ACTH). ACTH călătorește prin sânge până la cortexul glandelor suprarenale, stimulându-le să elibereze cortizol.</p>
+                    <h4>Rolul central al cortizolului</h4>
+                    <p>Cortizolul este un regulator metabolic și imunitar crucial, cu funcții multiple:</p>
+                    <ul>
+                        <li><strong>Reglarea metabolismului energetic</strong></li>
+                        <li><strong>Modularea răspunsului imunitar și inflamator</strong></li>
+                        <li><strong>Menținerea ritmului circadian</strong></li>
+                    </ul>
+                    <h4>DHEA: Antagonistul glucocorticoid</h4>
+                    <p>Dehidroepiandrosteronul (DHEA) este co-eliberat cu cortizolul și contrabalansează efectele catabolice și imunosupresoare ale acestuia. Raportul cortizol/DHEA este un marker important al rezilienței la stres.</p>
+                    <h4>Dereglarea mecanismelor de feedback negativ în stresul cronic</h4>
+                    <p>În stresul cronic, receptorii pentru glucocorticoizi devin desensibilizați ("rezistență la glucocorticoizi"), în special în hipocamp. Acest lucru duce la o pierdere a controlului inhibitor și la o hiperactivitate susținută a axei HPA, perpetuând starea de stres.</p>
+                    <div class="note">
+                        <p><strong>Consecințe clinice:</strong> Acest decuplaj explică paradoxul „cortizol mult, dar antiinflamator slab”, cu persistența inflamației și efecte negative asupra memoriei, vigilenței și anxietății.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Consecințe -->
+        <div id="Consecinte" class="tab-content">
+            <h2 class="zwp-section-title">Fiziopatologia sistemică a stresului cronic</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-red">
+                    <h3>Morbiditatea cardiovasculară: De la hipertensiune la ateroscleroză</h3>
+                    <p>Legătura dintre stresul cronic și bolile cardiovasculare este una dintre cele mai bine documentate. Activarea constantă a răspunsului "luptă sau fugi" duce la creșterea cronică a tensiunii arteriale și a ritmului cardiac, supunând sistemul cardiovascular la o uzură constantă.</p>
+                    <h4>Mecanisme directe:</h4>
+                    <ul>
+                        <li><strong>Hipertensiune arterială persistentă:</strong> Uzura pereților arteriali.</li>
+                        <li><strong>Creșterea ritmului cardiac:</strong> Risc de hipertrofie ventriculară și aritmii.</li>
+                        <li><strong>Vasoconstricție:</strong> Risc de ischemie și infarct.</li>
+                        <li><strong>Disfuncție endotelială:</strong> Primul pas către ateroscleroză.</li>
+                    </ul>
+                    <h4>Mecanisme indirecte:</h4>
+                    <ul>
+                        <li><strong>Inflamație sistemică:</strong> Prin rezistența la cortizol, celulele imunitare produc citokine pro-inflamatorii necontrolat, accelerând ateroscleroza.</li>
+                        <li><strong>Comportamente nocive:</strong> Alimentație emoțională, fumat, consum de alcool, sedentarism.</li>
+                    </ul>
+                     <div class="note">
+                        <p><strong>Stresul și lipsa somnului:</strong> Această combinație este deosebit de periculoasă, menținând o activitate ridicată a sistemului nervos simpatic și prevenind scăderea normală a tensiunii arteriale în timpul nopții, crescând exponențial riscul cardiovascular.</p>
+                    </div>
+                </div>
+                <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>Consecințele neurologice și cognitive</h3>
+                    <p>Creierul este una dintre principalele victime ale stresului cronic. Expunerea prelungită la cortizol are efecte neurotoxice, ducând la modificări structurale și funcționale.</p>
+                    <h4>Remodelarea structurală a creierului</h4>
+                    <ul>
+                        <li><strong>Atrofia hipocampală:</strong> Supraexpunerea la cortizol este toxică pentru neuronii din hipocamp (centrul memoriei), ducând la scăderea în volum a acestuia. Acest lucru afectează memoria și slăbește mecanismul de feedback negativ al axei HPA.</li>
+                        <li><strong>Hipertrofia amigdaliană:</strong> Amigdala (centrul fricii) devine hiperactivă și crește în volum, ducând la o stare de hipervigilență și anxietate.</li>
+                    </ul>
+                    <h4>Deficite cognitive</h4>
+                    <ul>
+                        <li><strong>Dificultăți de memorare și învățare.</strong></li>
+                        <li><strong>Scăderea capacității de concentrare și atenție.</strong></li>
+                        <li><strong>"Ceață cerebrală" (brain fog):</strong> O senzație generală de confuzie mentală și lentoare cognitivă.</li>
+                    </ul>
+                </div>
+                 <div class="zwp-topic-card bg-pale-cyan">
+                    <h3>Dereglarea somnului și a ritmului circadian</h3>
+                    <p>Somnul și stresul sunt profund interconectate, formând adesea un cerc vicios care se auto-întreține.</p>
+                    <h4>Cum perturbă stresul cronic somnul</h4>
+                     <ul>
+                        <li><strong>Crește nivelul de cortizol seara:</strong> Menține corpul într-o stare de hiperactivitate.</li>
+                        <li><strong>Activează gândurile obsesive și planificarea compulsivă:</strong> Mintea nu se poate "opri".</li>
+                        <li><strong>Tensionează musculatura:</strong> Împiedică relaxarea fizică.</li>
+                    </ul>
+                    <h4>Impactul hipercortizolemiei asupra arhitecturii somnului</h4>
+                    <ul>
+                        <li><strong>Insomnie de inițiere:</strong> Dificultatea de a adormi.</li>
+                        <li><strong>Fragmentarea somnului:</strong> Treziri frecvente și somn superficial.</li>
+                        <li><strong>Reducerea somnului profund (N3) și REM:</strong> Somnul devine mai puțin odihnitor.</li>
+                    </ul>
+                     <h4>Cercul vicios: Insomnia ca factor de stres</h4>
+                     <p>Relația este bidirecțională. Lipsa unui somn de calitate este, în sine, un factor de stres major, care activează axele SAM și HPA în ziua următoare, perpetuând ciclul.</p>
+                      <h4>Un mesaj special: Somnul nu este un lux</h4>
+                      <p>În special pentru mame și pentru toți cei care fac atât de mult pentru ceilalți, somnul nu este un răsfăț. Este combustibilul care te ajută să fii prezent, răbdător și să te bucuri de viață. A-ți proteja orele de somn nu este egoism, ci o necesitate.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab Content: Strategii Practice -->
+        <div id="Strategii" class="tab-content">
+            <h2 class="zwp-section-title">Strategii practice de management al stresului</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Tehnici de relaxare psihofiziologică</h3>
+                     <div class="note">
+                        <h4>Terapia Cognitiv-Comportamentală pentru Insomnie (CBT-I)</h4>
+                        <p>CBT-I este tratamentul de primă linie. Acesta învață creierul că patul este pentru somn, reduce "efortul de a dormi" și remodelează obiceiurile care întrețin insomnia.</p>
+                        <ul>
+                            <li><strong>Controlul stimulilor:</strong> Se intră în pat doar la apariția somnolenței; dacă somnul nu apare în 15-20 min, se părăsește patul.</li>
+                            <li><strong>Restricția somnului:</strong> Timpul petrecut în pat se potrivește cu somnul real, crescând eficiența acestuia.</li>
+                        </ul>
+                    </div>
+                    <h4>Respirația conștientă</h4>
+                    <p>Exercițiile de respirație activează sistemul nervos parasimpatic (relaxarea).</p>
+                    <ul>
+                        <li><strong>Respirația 4-7-8:</strong> Inspiră 4s, ține 7s, expiră 8s.</li>
+                        <li><strong>Respirația profundă abdominală:</strong> Concentrează-te pe ridicarea abdomenului la inspir.</li>
+                        <li><strong>Respirația alternativă pe nări (Nadi Shodhana).</strong></li>
+                        <li><strong>Respirația focalizată pe expir:</strong> Fă expirul mai lung decât inspirul.</li>
+                    </ul>
+                    <h4>Meditația și mindfulness</h4>
+                    <p>Aceste tehnici antrenează atenția pe momentul prezent și întăresc controlul cortexului prefrontal asupra amigdalei. Reduc cortizolul, tensiunea arterială și ritmul cardiac.</p>
+                    <h4>Relaxarea musculară progresivă (RMP)</h4>
+                    <p>Constă în încordarea și apoi relaxarea conștientă a diferitelor grupe musculare pentru a elibera tensiunea fizică acumulată. Este ideală pentru a fi practicată seara, înainte de culcare.</p>
+                    <h4>Hipnoza</h4>
+                    <p>Hipnoza ghidează persoana într-o stare de relaxare profundă, unde mintea devine mai receptivă la sugestii pozitive. Poate modifica răspunsul emoțional la stres, reduce gândurile obsesive și îmbunătățește somnul.</p>
+                    <h4>Alte tehnici</h4>
+                    <ul>
+                        <li><strong>Yoga și exerciții fizice moderate:</strong> Eliberează tensiunea și stimulează endorfinele.</li>
+                        <li><strong>Masaj terapeutic și presopunctură.</strong></li>
+                        <li><strong>Aromaterapie:</strong> Uleiuri esențiale de lavandă, mușețel.</li>
+                        <li><strong>Terapie prin sunet și vizualizare ghidată.</strong></li>
+                    </ul>
+                </div>
+                 <div class="zwp-topic-card bg-pale-blue">
+                    <h3>Rolul stilului de viață</h3>
+                     <ul>
+                        <li><strong>Activitatea fizică regulată:</strong> Acționează ca un "antidot" fiziologic la stres. Ajută la metabolizarea excesului de hormoni de stres. Evită mișcarea intensă cu cel puțin 2 ore înainte de culcare.</li>
+                        <li><strong>Igiena somnului:</strong> Stabilește o rutină fixă de culcare. Limitează expunerea la lumină albastră (telefon, TV) cu cel puțin 1 oră înainte de somn.</li>
+                        <li><strong>Suportul social:</strong> Petrece timp cu persoane apropiate și discută deschis despre preocupări. Relațiile sociale pozitive sunt un tampon puternic împotriva stresului.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Nutriție -->
+        <div id="Nutritie" class="tab-content">
+            <h2 class="zwp-section-title">Abordarea nutrițională în managementul stresului</h2>
+             <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Alimentația pentru echilibru hormonal: Ce să consumăm</h3>
+                    <p>Anumite alimente susțin sănătatea creierului, echilibrul hormonal și calmarea sistemului nervos, ajutând la reducerea naturală a cortizolului:</p>
+                    <ul>
+                        <li><strong>Ciocolată neagră (minim 70% cacao):</strong> Bogată în polifenoli, reduce reactivitatea glandelor suprarenale.</li>
+                        <li><strong>Semințe și nuci:</strong> Surse importante de magneziu și polifenoli cu efect antistres.</li>
+                        <li><strong>Leguminoase și cereale integrale:</strong> Conțin proteine vegetale și magneziu.</li>
+                        <li><strong>Pește gras (somon, ton):</strong> Bogat în Omega-3, previne producerea excesivă de cortizol.</li>
+                        <li><strong>Fructe și legume bogate în magneziu și vitamina C:</strong> Spanac, avocado, citrice.</li>
+                        <li><strong>Condimente precum scorțișoara:</strong> Stabilizează glicemia.</li>
+                        <li><strong>Alimente fermentate (iaurt, kefir):</strong> Susțin un microbiom intestinal sănătos.</li>
+                        <li><strong>Hidratare corespunzătoare:</strong> Deshidratarea poate crește nivelul de cortizol.</li>
+                    </ul>
+                </div>
+                <div class="zwp-topic-card bg-pale-red">
+                    <h3>Alimentația pro-stres: Ce să evităm</h3>
+                    <p>Pentru a menține nivelul de cortizol în limite normale, este important să eviți anumite alimente:</p>
+                     <ul>
+                        <li><strong>Zahărul și carbohidrații rafinați:</strong> Perturbă glicemia și echilibrul hormonal.</li>
+                        <li><strong>Produsele ultraprocesate și fast-food:</strong> Conțin aditivi, grăsimi trans și sare în exces care inflamează organismul.</li>
+                        <li><strong>Alcoolul:</strong> Afectează negativ somnul și crește cortizolul.</li>
+                        <li><strong>Cafeaua și băuturile cu cofeină (mai ales după-amiaza):</strong> Stimulează eliberarea cortizolului.</li>
+                        <li><strong>Carnea roșie procesată și grăsimile saturate în exces:</strong> Favorizează inflamația cronică.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab Content: Fitoterapie -->
+        <div id="Fitoterapie" class="tab-content">
+             <h2 class="zwp-section-title">Suport fitoterapeutic și nutraceutic</h2>
+            <div class="zwp-card-grid">
+                 <div class="zwp-topic-card bg-pale-purple">
+                    <h3>Plante adaptogene: Modulatori naturali ai răspunsului la stres</h3>
+                    <p>Adaptogenele sunt plante care ajută organismul să se adapteze la stres și să regleze răspunsul hormonal. Ele acționează prin modularea axei HPA.</p>
+                     <ul>
+                        <li><strong>Ashwagandha (Withania somnifera):</strong> "Ginsengul indian", are un profil predominant calmant. Reduce semnificativ nivelul cortizolului și este eficientă pentru anxietate și insomnie.</li>
+                        <li><strong>Rhodiola rosea:</strong> "Rădăcina de aur", are un profil predominant energizant. Combate oboseala indusă de stres și "ceața cerebrală".</li>
+                        <li><strong>Eleuthero (ginseng siberian):</strong> Crește rezistența fizică și mentală.</li>
+                        <li><strong>Ginseng coreean (Panax ginseng):</strong> Stimulează sistemul imunitar și funcția cognitivă.</li>
+                        <li><strong>Schisandra chinensis:</strong> Are efecte antioxidante și susține funcția hepatică.</li>
+                    </ul>
+                     <table>
+                        <caption>Tabel 1: Analiză comparativă Ashwagandha vs. Rhodiola rosea</caption>
+                        <thead>
+                            <tr>
+                                <th>Caracteristică</th>
+                                <th>Ashwagandha (Withania somnifera)</th>
+                                <th>Rhodiola rosea</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><strong>Profil Energetic</strong></td><td>Predominant calmant, relaxant, anxiolitic</td><td>Predominant energizant, stimulant, nootropic</td></tr>
+                            <tr><td><strong>Indicații Primare</strong></td><td>Anxietate, insomnie, stres cronic, agitație</td><td>Oboseală, epuizare, performanță cognitivă și fizică</td></tr>
+                            <tr><td><strong>Interacțiuni Notabile</strong></td><td>Sedative, imunosupresoare, medicamente tiroidiene</td><td>Antidepresive (ISRS), stimulante</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Fitoterapie pentru anxioliză și somn: Ceaiuri și extracte</h3>
+                    <ul>
+                        <li><strong>Valeriana (Valeriana officinalis):</strong> Modulând sistemul GABA, este renumită pentru efectele sale calmante.</li>
+                        <li><strong>Mușețelul (Matricaria recutita):</strong> Are proprietăți sedative ușoare, datorită flavonoidului apigenină.</li>
+                        <li><strong>Ceai de lavandă:</strong> Calmează sistemul nervos și reduce tensiunea musculară.</li>
+                        <li><strong>Ceai de tei:</strong> Reduce simptomele fizice ale stresului.</li>
+                        <li><strong>Ceai de roiniță (melisa):</strong> Reduce anxietatea și dificultățile de somn.</li>
+                        <li><strong>Ceai de busuioc sfânt (Tulsi):</strong> Un adaptogen puternic care reglează nivelurile de cortizol.</li>
+                    </ul>
+                     <table>
+                         <caption>Tabelul 2: Profil de siguranță pentru valeriană și mușețel</caption>
+                        <thead>
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Valeriana (Valeriana officinalis)</th>
+                                <th>Mușețel (Matricaria recutita)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                             <tr><td><strong>Contraindicații</strong></td><td>Sarcină, alăptare, afecțiuni hepatice severe.</td><td>Alergie la plante din familia Asteraceae (ambrozie).</td></tr>
+                             <tr><td><strong>Interacțiuni Critice</strong></td><td>Potențează periculos efectul sedativelor și al alcoolului.</td><td>Poate crește riscul de sângerare în combinație cu anticoagulante (ex. warfarina).</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                 <div class="zwp-topic-card bg-pale-blue">
+                    <h3>Suplimente și micronutrienți cheie</h3>
+                     <p>Stresul cronic crește necesarul organismului pentru anumiți micronutrienți.</p>
+                     <ul>
+                        <li><strong>Magneziul:</strong> "Mineralul anti-stres", stabilizează sistemul nervos. Deficitul crește vulnerabilitatea la stres.</li>
+                        <li><strong>Acizii grași Omega-3 (EPA și DHA):</strong> Au un puternic efect antiinflamator și pot reduce producția de cortizol.</li>
+                        <li><strong>Vitamina C (acid ascorbic):</strong> Esențială pentru sinteza hormonilor de stres în glandele suprarenale.</li>
+                        <li><strong>Alte suplimente:</strong> Melatonina (pentru reglarea somnului), complexul de vitamine B (pentru sistemul nervos), uleiul de CBD.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Protocoale -->
+        <div id="Protocoale" class="tab-content">
+             <h2 class="zwp-section-title">Protocol de management al stresului bazat pe suplimente</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-yellow">
+                    <h3>Obiectiv și principii</h3>
+                    <p>Obiectivul protocolului este reducerea reactivității la stres pe timpul zilei și susținerea somnului noaptea, cu stabilizarea glicemiei, aport corect de micronutrienți și reechilibrare neuro‑hormonală.</p>
+                    <p>Hidratarea se realizează prin aloe de băut (Herbalife Herbal Aloe Concentrate sau LR Aloe Vera Drinking Gel), iar nutriția prin înlocuirea strategică a uneia sau a două mese cu shake‑uri complete.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-cyan">
+                     <h3>Protocol zilnic complet (schemă de bază)</h3>
+                     <ul>
+                        <li><strong>Dimineața, după trezire:</strong> 250–500 ml apă + aloe și un shake nutritiv complet pentru a stabiliza energia.</li>
+                        <li><strong>La prânz:</strong> masă echilibrată sau înlocuitor de masă.</li>
+                        <li><strong>După-amiaza:</strong> hidratare cu aloe sau apă mineralizată.</li>
+                        <li><strong>Seara, cu 30–60 min înainte de culcare:</strong> ancoră pentru somn (ex. Herbalife Night Mode, LR Night Master) și/sau mineralizare (ex. FitLine Restorate).</li>
+                    </ul>
+                </div>
+                <div class="zwp-topic-card bg-pale-blue">
+                    <h3>Trei protocoale complete (exemple)</h3>
+                    <h4>1. Linie Herbalife + Aloe Hidratare</h4>
+                    <ul>
+                        <li><strong>Hidratare:</strong> Herbal Aloe Concentrate pe parcursul zilei.</li>
+                        <li><strong>Mic dejun:</strong> Shake Formula 1 + PDM.</li>
+                        <li><strong>Seara:</strong> Night Mode înainte de culcare.</li>
+                    </ul>
+                    <h4>2. Linie FitLine + Ancoră de somn</h4>
+                    <ul>
+                        <li><strong>Dimineața:</strong> PowerCocktail pe stomacul gol.</li>
+                        <li><strong>Prânz:</strong> ProShape All-in-1.</li>
+                        <li><strong>Seara:</strong> Restorate la culcare.</li>
+                    </ul>
+                     <h4>3. Linie LR + Aloe + Figu Active</h4>
+                     <ul>
+                        <li><strong>Hidratare:</strong> LR Aloe Vera Drinking Gel înainte de mese.</li>
+                        <li><strong>Mese:</strong> Dimineața shake Figu Active, seara supă Figu Active.</li>
+                        <li><strong>Somn:</strong> Night Master înainte de culcare.</li>
+                    </ul>
+                </div>
+                <div class="zwp-topic-card bg-pale-red">
+                    <h3>Ajustări și reguli de siguranță</h3>
+                    <h4>Ajustări pe obiective:</h4>
+                    <ul>
+                        <li><strong>Adormire dificilă cu ruminare mentală:</strong> Se poate adăuga Griffonia (5-HTP, Coral Club) la masa de seară.</li>
+                        <li><strong>Tensiune musculară/oboseală fizică seara:</strong> Se poate adăuga LR ProBalance la mese.</li>
+                    </ul>
+                    <h4>Reguli de siguranță:</h4>
+                    <ul>
+                        <li>Nu suprapune în aceeași seară două produse pentru somn/relaxare.</li>
+                        <li>Evită produsele cu cofeină după-amiaza.</li>
+                        <li>5-HTP (Griffonia) nu se combină cu tratamente serotoninergice (antidepresive) fără aviz medical.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Concluzii -->
+        <div id="Concluzii" class="tab-content">
+             <h2 class="zwp-section-title">Strategii integrate și perspective de viitor</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-blue">
+                    <h3>Dezvoltarea unui protocol personalizat</h3>
+                    <p>Stresul este o componentă inevitabilă a vieții. Obiectivul nu este eliminarea completă a stresului, ci dezvoltarea rezilienței – capacitatea de a ne adapta și de a ne recupera în fața adversității. Reziliența nu este o trăsătură înnăscută, ci o abilitate care poate fi cultivată prin practică conștientă.</p>
+                    <p>Trecerea de la un mod de "supraviețuire" cronică la unul de "prosperitate" implică un angajament activ față de auto-îngrijire. Un protocol eficient trebuie să fie integrat și personalizat, începând cu o evaluare a "fenotipului de stres" al individului (anxietate vs. epuizare).</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-red">
+                    <h3>Când și cum să ceri ajutor specializat</h3>
+                    <p>Apelarea la un specialist nu este un semn de slăbiciune, ci un act de responsabilitate. Semnele care indică necesitatea unui ajutor profesionist includ:</p>
+                    <ul>
+                        <li>Simptome de anxietate sau depresie care persistă mai mult de câteva săptămâni.</li>
+                        <li>Stresul interferează semnificativ cu funcționarea zilnică.</li>
+                        <li>Utilizarea unor mecanisme de adaptare nesănătoase (alcool, mâncat compulsiv).</li>
+                        <li>Apariția gândurilor de auto-vătămare.</li>
+                    </ul>
+                    <p>Un psihoterapeut poate oferi tehnici personalizate, cum ar fi terapia cognitiv-comportamentală (TCC), care este deosebit de eficientă în modificarea tiparelor de gândire negative.</p>
+                </div>
+                <div class="zwp-topic-card bg-pale-green">
+                    <h3>Concluzii finale</h3>
+                    <p>Stresul cronic este un proces biologic complex cu consecințe patologice sistemice profunde. Cu toate acestea, răspunsul biologic la provocările vieții este modulabil. Există un arsenal tot mai mare de intervenții, de la cele comportamentale la cele nutraceutice și fitoterapeutice, care pot reechilibra substratul biochimic al răspunsului la stres.</p>
+                    <p>Ia-ți timp să faci tranziția spre relaxare seara, chiar dacă pare greu sau „neproductiv”. Un creier odihnit va răspunde mai bine atât urgențelor reale, cât și celor imaginare – și îți va oferi resursele necesare să savurezi cu adevărat bucuria vieții. Investiția în liniștea mentală și în echilibrul fiziologic nu este un lux, ci o necesitate fundamentală pentru menținerea sănătății și a bunăstării pe termen lung.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Bibliografie -->
+        <div id="Bibliografie" class="tab-content">
+            <h2 class="zwp-section-title">Bibliografie</h2>
+            <div class="zwp-card-grid">
+                <div class="zwp-topic-card bg-pale-grey">
+                    <ol class="zwp-references-list">
+                        <li>Science ro - Sorcova Health.</li>
+                        <li>Impactul stresului cronic asupra creierului și sănătății psihice... - Elytis Hospital.</li>
+                        <li>Adrenalina si hormonii de stres - Medicover.</li>
+                        <li>Stresul cronic poate declanșa boli cardiovasculare? - Clinica Olariu Med Timișoara.</li>
+                        <li>Glandele suprarenale si nivelul de cortizol din organism - Medicover.</li>
+                        <li>Stresul și somnul - Healthy-Heart.org.</li>
+                        <li>Cortizolul: Ce este, Rol, Actiune, Testarea cortizolului - Farmacia Tei.</li>
+                        <li>Cortizol - ce este și care este rolul hormonului stresului? - Institutul BrainMap.</li>
+                        <li>Magneziul si rolul lui in managementul stresului acut si cronic - Secom.</li>
+                        <li>#AHA23. Stresul cronic, depresia și anxietatea cresc riscul de boli cardiovasculare - Raportul de Gardă.</li>
+                        <li>Cortizolul și mineralele esențiale: cum stresul afectează magneziul, zincul și seleniul din corp - Poliana.</li>
+                        <li>Implicațiile stresului oxidativ, inflamației și factorilor neurotrofici cerebrali în tulburările afective - UMFCD.</li>
+                        <li>Cum influențează stresul bolile cardiovasculare - Centrul Medical Anastasios.</li>
+                        <li>Cum afectează stresul sănătatea inimii? - Monza Ares.</li>
+                        <li>Ritmul circadian si impactul acestuia asupra tulburarilor de somn - Medicover.</li>
+                        <li>Meditation interventions efficiently reduce cortisol levels of at-risk... - PubMed.</li>
+                        <li>Mindfulness mediates the physiological markers of stress: Systematic review and meta-analysis - PubMed.</li>
+                        <li>UNIVERSITATEA „ALEXANDRU IOAN CUZA” IAȘI FACULTATEA.</li>
+                        <li>Melatonină: efecte, dozare și contraindicații - Natu.Care.</li>
+                        <li>Adaptogeni pentru echilibrul tău fizic, mental și emoțional - Boost4Life.</li>
+                        <li>Ce Sunt Adaptogenii și De Ce Sunt Esențiali Pentru Echilibrul Organismului? - Alevia.</li>
+                        <li>Adaptogeni - ce sunt, tipuri, efecte, efecte secundare - Natu.Care.</li>
+                        <li>Ashwagandha and Rhodiola rosea effective in combatting stress, study finds - Nutraceutical Business Review.</li>
+                        <li>Rhodiola: Planta Adaptogenă Care Combate Stresul și ... - Alevia.</li>
+                        <li>Can You Take Rhodiola and Ashwagandha Together? - Healthline.</li>
+                        <li>What Happens When You Take Ashwagandha and Rhodiola... - Verywell Health.</li>
+                        <li>Plante medicinale de ajutor in lupta cu insomnia - Catena.</li>
+                        <li>Valeriana: beneficii, proprietăți, contraindicații - MedLife.</li>
+                        <li>Valeriana: beneficii pentru sanatate, proprietati si mod de utilizare - Secom.</li>
+                        <li>Ceaiul de musetel - beneficii, proprietati, contraindicatii - Dr. Max Farmacie.</li>
+                        <li>Valeriana: beneficii somn, anxietate, stres - Spring Farma.</li>
+                        <li>Valeriana, plantă pentru relaxare și somn liniștit. - Stirile ProTV.</li>
+                        <li>Ceai de valeriana: beneficii, proprietati, contraindicatii - Dr. Max Farmacie.</li>
+                        <li>Valeriana - beneficii, proprietati, contraindicatii - Dr. Max Farmacie.</li>
+                        <li>Musetel - Beneficii si proprietati pentru sanatate - Medicover.</li>
+                        <li>Ceaiul de mușețel beneficii - Răzvan Idicel.</li>
+                        <li>Valeriana - beneficii, proprietăți și utilizări - Fares.</li>
+                        <li>care sunt proprietățile sale și ce beneficii are ceaiul de mușețel pentru sănătate? - Aronia Charlottenburg.</li>
+                        <li>Valeriana: Beneficii, moduri de utilizare si contraindicatii - Medicover.</li>
+                        <li>Magneziul și stresul - BIOGENA Romania.</li>
+                        <li>Acizii grași Omega 3: beneficii, surse alimentare și doză necesară - Bioclinica.</li>
+                        <li>Human adrenal glands secrete vitamin C... - PubMed.</li>
+                        <li>Review: relation of vitamin C to adrenocortical function... - PubMed.</li>
+                        <li>Selye, H. (1936). A Syndrome produced by Diverse Nocuous Agents. Nature.</li>
+                        <li>Selye, H. (1950). Stress and the General Adaptation Syndrome. British Medical Journal.</li>
+                        <li>Cannon, W. B. (1929). Bodily changes in pain, hunger, fear and rage.</li>
+                        <li>Herman, J. P., & Cullinan, W. E. (1997). Neurocircuitry of stress. Trends in Neurosciences.</li>
+                        <li>McEwen, B. S. (2007). Physiology and neurobiology of stress and adaptation. Physiological Reviews.</li>
+                        <li>Selye, H. (1976). The Stress of Life.</li>
+                        <li>Cohen, S., Janicki-Deverts, D., & Miller, G. E. (2007). Psychological stress and disease. JAMA.</li>
+                        <li>Cryan, J. F., & O'Mahony, S. M. (2011). The microbiome-gut-brain axis. Neurogastroenterology & Motility.</li>
+                        <li>Breit, S., Kupferberg, A., Rogler, G., & Hasler, G. (2018). Vagus Nerve as Modulator of the Brain-Gut Axis... Frontiers in Psychiatry.</li>
+                        <li>Konturek, P. C., Brzozowski, T., & Konturek, S. J. (2011). Stress and the gut... Journal of Physiology and Pharmacology.</li>
+                        <li>Yano, J. M., et al. (2015). Indigenous bacteria from the gut microbiota regulate host serotonin biosynthesis. Cell.</li>
+                        <li>Foster, J. A., & Neufeld, K. A. (2013). Gut-brain axis: how the microbiome influences anxiety and depression. Trends in Neurosciences.</li>
+                        <li>Hofmann, S. G., Asnaani, A., Vonk, I. J., Sawyer, A. T., & Fang, A. (2012). The Efficacy of Cognitive Behavioral Therapy: A Review of Meta-analyses. Cognitive Therapy and Research.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="ztabs-footer">
+            <p>Copyright &copy; 2025 dr.ing. Radu Pascu. Toate drepturile rezervate.</p>
+            <p>Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist.</p>
+        </footer>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        
+        // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
+
+        document.addEventListener('keydown', function(e) {
+            // Blochează Ctrl+C (Copiere)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+            }
+            // Blochează F12 (Developer Tools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+            }
+             // Blochează Ctrl+Shift+J (Developer Tools Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+            }
+        });
+    </script>
+
+</body>
+</html>
