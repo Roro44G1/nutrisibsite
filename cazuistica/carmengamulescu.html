@@ -256,7 +256,7 @@
             background-color: var(--bg-light);
         }
         
-        #paymentModalOverlay {
+        #paymentModalOverlay, #passwordModalOverlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -277,6 +277,17 @@
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        #passwordModal {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
         }
         .copy-btn {
             background-color: #e0e7ff;
@@ -1292,9 +1303,9 @@
                  <h4 class="text-xl md:text-2xl font-semibold text-[#0A2463] mt-10 mb-4">Notă finală: de la protocol la arhitectură personală</h4>
                  <p class="text-gray-700 text-justify mb-4 leading-relaxed">Ați parcurs acum harta strategică a programului ReDefine!. Ceea ce aveți în față nu este o simplă dietă sau o listă de suplimente; este un algoritm biologic, un sistem de operare conceput pentru a reseta, reconstrui și optimiza ființa dumneavoastră de la cel mai fundamental nivel.</p>
                  <ol class="list-decimal pl-5 space-y-3 text-gray-700 text-justify mb-4">
-                     <li>Am început prin a reduce "zgomotul" informațional. Asemenea unui programator care curăță un cod sursă de erori, am eliminat input-urile haotice pentru a permite sistemului să-și audă propriile semnale.</li>
-                     <li>Am continuat prin a oferi "materia primă" de cea mai înaltă calitate. Am folosit nutriția fazată și suplimentarea de precizie nu ca pe niște "remedii", ci ca pe niște "resurse" pentru a reconstrui structuri celulare integre.</li>
-                     <li>Am finalizat prin a optimiza "comunicațiile" interne. Am consolidat microbiomul, am modulat răspunsul inflamator și am susținut producția de energie, asigurând o funcționare coerentă și eficientă.</li>
+                      <li>Am început prin a reduce "zgomotul" informațional. Asemenea unui programator care curăță un cod sursă de erori, am eliminat input-urile haotice pentru a permite sistemului să-și audă propriile semnale.</li>
+                      <li>Am continuat prin a oferi "materia primă" de cea mai înaltă calitate. Am folosit nutriția fazată și suplimentarea de precizie nu ca pe niște "remedii", ci ca pe niște "resurse" pentru a reconstrui structuri celulare integre.</li>
+                      <li>Am finalizat prin a optimiza "comunicațiile" interne. Am consolidat microbiomul, am modulat răspunsul inflamator și am susținut producția de energie, asigurând o funcționare coerentă și eficientă.</li>
                  </ol>
                  <p class="text-gray-700 text-justify leading-relaxed">Programul ReDefine! nu se încheie după 12 săptămâni. El marchează începutul. Vă oferă nu doar rezultate, ci și înțelegerea mecanismelor care le-au produs. Vă înzestrează cu o nouă arhitectură interioară și cu manualul de operare al acesteia, permițându-vă să navigați viitorul cu încredere, vitalitate și o profundă rezonanță între minte, corp și scop.</p>
             </section>
@@ -1371,9 +1382,36 @@
         </div>
     </div>
 
+    <!-- NEW PASSWORD MODAL -->
+    <div id="passwordModalOverlay" style="display: none;">
+        <div id="passwordModal">
+            <h2 class="text-2xl font-bold text-[#0A2463] mb-4">Introduceți parola</h2>
+            <p class="text-gray-700 mb-4">Acest conținut este protejat. Vă rugăm introduceți parola primită pentru a continua.</p>
+            <input type="password" id="passwordInput" class="w-full p-2 border border-gray-300 rounded-lg mb-4" placeholder="Parola...">
+            <p id="passwordError" class="text-red-500 text-sm mb-4" style="display: none;"></p>
+            <button id="submitPasswordBtn" class="w-full bg-[#0A2463] text-white py-2 px-4 rounded-lg hover:bg-[#1a3a8a] transition-colors">Deblocare</button>
+        </div>
+    </div>
+
 
     <script>
+        let isUnlocked = false;
+        let targetTabName = '';
+        let currentActiveButton = document.querySelector('.tab-link.active');
+
+
         function openTab(evt, tabName) {
+            // Verifică protecția cu parolă
+            if (tabName !== 'Avertisment' && !isUnlocked) {
+                targetTabName = tabName; // Stochează tab-ul dorit
+                document.getElementById('passwordModalOverlay').style.display = 'flex';
+                document.getElementById('passwordInput').focus();
+                if (evt) {
+                   evt.preventDefault();
+                }
+                return; // Oprește funcția aici
+            }
+
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
             for (i = 0; i < tabcontent.length; i++) {
@@ -1389,30 +1427,70 @@
                 tabToOpen.style.display = "block";
             }
             
-            evt.currentTarget.className += " active";
+            if (evt && evt.currentTarget) {
+                 evt.currentTarget.className += " active";
+                 currentActiveButton = evt.currentTarget;
+            }
+        }
+
+        function checkPassword() {
+            const passwordInput = document.getElementById('passwordInput');
+            const passwordError = document.getElementById('passwordError');
+            const correctPassword = 'C@rm3n';
+
+            if (passwordInput.value === correctPassword) {
+                isUnlocked = true;
+                document.getElementById('passwordModalOverlay').style.display = 'none';
+                passwordInput.value = '';
+                passwordError.style.display = 'none';
+                
+                // Găsește butonul corespunzător și simulează un click pentru a deschide tab-ul corect
+                const buttons = document.querySelectorAll('.tab-link');
+                buttons.forEach(button => {
+                    if (button.getAttribute('onclick').includes(`'${targetTabName}'`)) {
+                        button.click(); // This will trigger openTab with the correct event target
+                    }
+                });
+
+            } else {
+                passwordError.innerText = 'Informație blocată până la confirmarea plății.';
+                passwordError.style.display = 'block';
+                passwordInput.value = '';
+            }
         }
 
         // --- Modal Logic ---
         window.addEventListener('load', function() {
-            const modalOverlay = document.getElementById('paymentModalOverlay');
+            const paymentModalOverlay = document.getElementById('paymentModalOverlay');
             const mainContent = document.getElementById('mainContent');
             const closeModalBtn = document.getElementById('closeModalBtn');
+            const submitPasswordBtn = document.getElementById('submitPasswordBtn');
+            const passwordInput = document.getElementById('passwordInput');
 
-            // Show modal on page load
-            modalOverlay.style.display = 'flex';
+            // Afișează fereastra de plată la încărcarea paginii
+            paymentModalOverlay.style.display = 'flex';
             mainContent.style.display = 'none';
 
-            // Hide modal and show content when close button is clicked
+            // Ascunde fereastra de plată și afișează conținutul la click pe buton
             closeModalBtn.addEventListener('click', function() {
-                modalOverlay.style.display = 'none';
+                paymentModalOverlay.style.display = 'none';
                 mainContent.style.display = 'block';
+            });
+
+            // Gestionează trimiterea parolei
+            submitPasswordBtn.addEventListener('click', checkPassword);
+            passwordInput.addEventListener('keyup', function(event) {
+                // Permite trimiterea parolei și cu tasta Enter
+                if (event.key === 'Enter') {
+                    checkPassword();
+                }
             });
         });
 
         function copyToClipboard(elementId, button) {
             const textToCopy = document.getElementById(elementId).innerText;
             
-            // Use the modern Clipboard API
+            // Folosește API-ul modern Clipboard
             navigator.clipboard.writeText(textToCopy).then(function() {
                 const originalText = button.innerText;
                 button.innerText = 'Copiat!';
@@ -1423,7 +1501,7 @@
                 }, 2000);
             }).catch(function(err) {
                 console.error('Nu s-a putut copia textul: ', err);
-                // Fallback for older browsers
+                // Metodă de rezervă pentru browsere mai vechi
                 try {
                     const textArea = document.createElement("textarea");
                     textArea.value = textToCopy;
@@ -1441,19 +1519,11 @@
                          button.style.backgroundColor = '#e0e7ff';
                     }, 2000);
                 } catch (e) {
-                    alert('Nu s-a putut copia. Vă rugăm selectați manual.');
+                    // Nu folosim alert()
+                    console.error('Copierea a eșuat și metoda de rezervă nu a funcționat.');
                 }
             });
         }
-
-       // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
-        document.addEventListener('contextmenu', event => event.preventDefault());
-
-        document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey && e.key === 'c') || (e.ctrlKey && e.key === 'u') || e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I') || (e.ctrlKey && e.shiftKey && e.key === 'J')) {
-                e.preventDefault();
-            }
-        });
     </script>
 </body>
 </html>
