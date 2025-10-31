@@ -4,44 +4,380 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Raport de Sănătate & Protocol ReDefine! - Viola Fiordean</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Custom styles for Inter font and tab system */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* bg-gray-100 */
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        /* Definim culorile brandului pentru a fi ușor de folosit */
+        /* --- Variabile Globale --- */
         :root {
             --brand-primary: #0A2463;
             --brand-accent: #3E92CC;
-            --text-dark: #212529; /* Adăugat pentru noul subsol */
+            --text-dark: #212529;
+            --text-dark-secondary: #1f2937;
+            --text-gray-medium: #374151;
+            --text-gray-light: #4b5563;
+            --bg-body: #f3f4f6;
+            --bg-white: #ffffff;
+            --bg-light-gray: #f9fafb;
+            --bg-light-blue: #eff6ff;
+            --border-color: #e5e7eb;
+            --border-blue: #bfdbfe;
+            --accent-red: #dc2626;
+            --accent-orange: #ea580c;
         }
-        /* Stil pentru tab-ul activ, preluat din victorpopescu.html */
+
+        /* --- Resetare și Stiluri de Bază --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            display: flex;
+            justify-content: center;
+            padding: 0.5rem;
+            color: var(--text-dark-secondary);
+            line-height: 1.6;
+        }
+
+        @media (min-width: 640px) {
+            body { padding: 1rem; }
+        }
+        @media (min-width: 768px) {
+            body { padding: 1.5rem; }
+        }
+
+        /* --- Container Principal --- */
+        .main-container {
+            background-color: var(--bg-white);
+            max-width: 56rem;
+            width: 100%;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        /* --- Antet (Header) --- */
+        .report-header {
+            color: var(--bg-white);
+            text-align: center;
+            padding: 1.5rem;
+            background-image: linear-gradient(to bottom right, var(--brand-primary), var(--brand-accent));
+        }
+
+        .report-header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            margin-bottom: 0.5rem;
+        }
+
+        .report-header h2 {
+            font-size: 1.125rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+
+        .report-header .subtitle {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+
+        .report-header .note {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 0.5rem;
+            max-width: 42rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (min-width: 640px) {
+            .report-header { padding: 2rem; }
+            .report-header h1 { font-size: 2.25rem; }
+            .report-header h2 { font-size: 1.25rem; }
+        }
+
+        /* --- Navigare Tab-uri --- */
+        .tab-navigation {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab-navigation ul {
+            display: flex;
+            margin-bottom: -1px;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            list-style-type: none;
+        }
+
+        .tab-button {
+            display: inline-block;
+            padding: 1rem;
+            border-bottom: 2px solid transparent;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            background-color: transparent;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            color: var(--text-gray-light);
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .tab-button:hover {
+            color: var(--text-gray-light);
+            border-color: #d1d5db;
+        }
+
         .tab-button.active-tab {
             border-color: var(--brand-accent);
             color: var(--brand-accent);
         }
 
-        /* --- STILURI NOI PENTRU SUBSOL (preluate din oboseala.html) --- */
+        @media (min-width: 768px) {
+            .tab-navigation ul {
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+        }
+
+        /* --- Conținut Principal (Main) --- */
+        main {
+            padding: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            main { padding: 2rem; }
+        }
+
+        /* --- Conținut Tab-uri --- */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content > section {
+            margin-bottom: 2rem; /* Simulează space-y-8 */
+        }
+        .tab-content > section:last-child {
+            margin-bottom: 0;
+        }
+
+        /* --- Stiluri de Text Generice --- */
+        section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--brand-primary);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 4px solid var(--brand-accent);
+        }
+
+        section h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-gray-medium);
+            margin-bottom: 0.5rem;
+            margin-top: 1rem; /* Spațiere între grupurile de liste */
+        }
+        
+        section p, section ul, section ol {
+            color: var(--text-dark-secondary);
+            line-height: 1.625;
+            margin-bottom: 1rem;
+        }
+
+        section ul, section ol {
+            padding-left: 1.5rem; /* pl-6 */
+        }
+
+        section ul { list-style-type: disc; }
+        section ol { list-style-type: decimal; }
+
+        section ul.space-y-2 > li + li,
+        section ol.space-y-2 > li + li { 
+            margin-top: 0.5rem; 
+        }
+        section ul.space-y-1 > li + li,
+        section ol.space-y-1 > li + li { 
+            margin-top: 0.25rem; 
+        }
+
+        .font-semibold { font-weight: 600; }
+        .text-orange-600 { color: var(--accent-orange); }
+        .text-red-600 { color: var(--accent-red); }
+        .text-gray-900 { color: #111827; }
+        .font-medium { font-weight: 500; }
+
+        /* --- Secțiune CTA (Analize) --- */
+        .cta-section {
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .cta-box {
+            padding: 1.25rem;
+            background-color: var(--bg-light-blue);
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-blue);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .cta-box p {
+            color: var(--text-dark-secondary);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background-image: linear-gradient(to right, var(--brand-primary), var(--brand-accent));
+            color: var(--bg-white);
+            font-weight: 700;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+
+        .cta-button:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        /* --- Tab 2: Grid și Carduri Protocol --- */
+        .grid-container {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .phase-card {
+            background-color: var(--bg-white);
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 1.25rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .phase-card-highlight {
+            border-width: 2px;
+            border-color: var(--brand-accent);
+        }
+
+        .phase-card h4 {
+            font-weight: 700;
+            font-size: 1.125rem;
+            color: var(--brand-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .phase-card .subtitle {
+            font-size: 0.875rem;
+            color: var(--text-gray-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-card ul {
+            font-size: 0.875rem;
+            list-style-type: disc;
+            padding-left: 1.25rem;
+            color: var(--text-gray-medium);
+        }
+
+        .phase-card ul > li + li {
+            margin-top: 0.25rem;
+        }
+        
+        .phase-card li .font-semibold {
+            color: var(--text-dark-secondary);
+        }
+
+        /* --- Tab 2: Tabele --- */
+        .table-container {
+            overflow-x: auto;
+            background-color: var(--bg-white);
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            margin-top: 1rem;
+        }
+
+        .styled-table {
+            width: 100%;
+            font-size: 0.875rem;
+            border-collapse: collapse;
+        }
+        
+        .styled-table[data-min-width="600"] { min-width: 600px; }
+        .styled-table[data-min-width="700"] { min-width: 700px; }
+
+        .styled-table thead {
+            background-color: #f3f4f6;
+        }
+
+        .styled-table th {
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-gray-medium);
+        }
+
+        .styled-table td {
+            padding: 0.75rem;
+            vertical-align: top;
+            color: var(--text-dark-secondary);
+        }
+
+        .styled-table tbody tr {
+            border-top: 1px solid var(--border-color);
+        }
+
+        .styled-table tbody tr.bg-light-gray {
+            background-color: var(--bg-light-gray);
+        }
+        
+        .styled-table .text-gray-600 {
+            color: var(--text-gray-light);
+        }
+
+        .note-potasiu {
+            font-size: 0.75rem;
+            color: var(--accent-red);
+            margin-top: 0.75rem;
+            font-weight: 600;
+        }
+        
+        /* --- Subsol (Footer) --- */
         footer.main-footer {
-            background-color: var(--text-dark); /* #212529 */
+            background-color: var(--text-dark);
             color: #bdc3c7;
             text-align: center;
             padding: 1.5rem 2rem;
             font-size: 0.85rem;
-            /* Se elimină border-top și bg-gray-50 din stilul vechi, deoarece acesta le înlocuiește */
         }
         
         .footer-social-links {
@@ -67,7 +403,7 @@
         
         footer.main-footer p {
             margin: 0.5rem 0;
-            color: white; /* Text alb specific pentru noul subsol */
+            color: var(--bg-white);
         }
 
         footer.main-footer a {
@@ -78,43 +414,43 @@
         footer.main-footer a:hover {
             text-decoration: underline;
         }
-        /* --- SFÂRȘIT STILURI NOI SUBSOL --- */
+
     </style>
 </head>
-<body class="flex justify-center p-2 sm:p-4 md:p-6">
+<body>
 
-    <!-- Main Article Container -->
-    <div class="bg-white max-w-4xl w-full rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+    <!-- Containerul principal -->
+    <div class="main-container">
 
-        <!-- Header Section (Stil preluat din victorpopescu.html) -->
-        <header class="text-white text-center p-6 sm:p-8 bg-gradient-to-br from-[var(--brand-primary)] to-[var(--brand-accent)]">
-            <h1 class="text-3xl sm:text-4xl font-bold text-shadow mb-2">Raport de Sănătate & Protocolul ReDefine!</h1>
-            <h2 class="text-lg sm:text-xl font-light opacity-90">client: Viola Fiordean</h2>
-            <p class="mt-4 text-sm opacity-80">Evaluare orientativă: 29 octombrie 2025 • 62 ani • 160 cm • 65 kg</p>
-            <p class="text-xs text-white/70 mt-2 max-w-2xl mx-auto">Notă: raport informativ, nu constituie diagnostic medical. Recomandările se corelează cu istoricul, simptomele și analizele de laborator.</p>
+        <!-- Antet -->
+        <header class="report-header">
+            <h1>Raport de Sănătate & Protocolul ReDefine!</h1>
+            <h2>client: Viola Fiordean</h2>
+            <p class="subtitle">Evaluare orientativă: 29 octombrie 2025 • 62 ani • 160 cm • 65 kg</p>
+            <p class="note">Notă: raport informativ, nu constituie diagnostic medical. Recomandările se corelează cu istoricul, simptomele și analizele de laborator.</p>
         </header>
 
-        <!-- Tab Navigation (Stil preluat din victorpopescu.html) -->
-        <div class="border-b border-gray-200">
-            <ul class="flex -mb-px px-6 md:px-8">
+        <!-- Navigare Tab-uri -->
+        <div class="tab-navigation">
+            <ul>
                 <li>
-                    <button class="tab-button inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 font-semibold" onclick="changeTab(event, 'report')">Raport de Sănătate</button>
+                    <button class="tab-button" onclick="changeTab(event, 'report')">Raport de Sănătate</button>
                 </li>
                 <li>
-                    <button class="tab-button inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 font-semibold" onclick="changeTab(event, 'protocol')">Protocolul ReDefine!</button>
+                    <button class="tab-button" onclick="changeTab(event, 'protocol')">Protocolul ReDefine!</button>
                 </li>
             </ul>
         </div>
 
-        <!-- Main Content with Tabs -->
-        <main class="p-6 md:p-8">
+        <!-- Conținut Principal -->
+        <main>
 
-            <!-- Tab 1: Raport de Sănătate (Conținut NOU) -->
-            <div id="report" class="tab-content space-y-8">
+            <!-- Tab 1: Raport de Sănătate -->
+            <div id="report" class="tab-content">
                 
                 <section>
-                    <h2 class="text-2xl md:text-3xl font-bold text-[var(--brand-primary)] mb-4 pb-2 border-b-4 border-[var(--brand-accent)]">1. De urmărit:</h2>
-                    <ul class="list-disc pl-6 space-y-2 leading-relaxed text-gray-800">
+                    <h2>1. De urmărit:</h2>
+                    <ul class="space-y-2">
                         <li><span class="font-semibold">Deficite/insuficiențe probabile:</span> <strong class="text-orange-600">vitamina B1</strong> scăzută și <strong class="text-orange-600">vitamina D3</strong> ușor scăzută.</li>
                         <li><span class="font-semibold">Microelemente:</span> <strong class="text-red-600">fier scăzut</strong> și <strong class="text-red-600">potasiu scăzut</strong>.</li>
                         <li><span class="font-semibold">Lipide/metabolism:</span> marker de <strong class="text-red-600">trigliceride crescut</strong> și „grăsime neutră” crescută; HDL este mare (benefic, izolat).</li>
@@ -126,8 +462,8 @@
                 </section>
 
                 <section>
-                    <h2 class="text-2xl md:text-3xl font-bold text-[var(--brand-primary)] mb-4 pb-2 border-b-4 border-[var(--brand-accent)]">2. Ce ar putea însemna ?</h2>
-                    <ul class="list-disc pl-6 space-y-2 leading-relaxed text-gray-800">
+                    <h2>2. Ce ar putea însemna ?</h2>
+                    <ul class="space-y-2">
                         <li><span class="font-semibold">B1 scăzut →</span> oboseală, neuropatii subtile, toleranță mai slabă la carbohidrați; util în contexte de carbohidrați rafinați/alcool.</li>
                         <li><span class="font-semibold">Vitamina D3 ușor scăzută →</span> suport osos/imun suboptimal la 62 ani.</li>
                         <li><span class="font-semibold">Fier scăzut →</span> risc pentru feritină joasă/anemie; la >60 ani trebuie exclusă pierderea cronică (GI).</li>
@@ -141,47 +477,60 @@
                 </section>
 
                 <section>
-                    <h2 class="text-2xl md:text-3xl font-bold text-[var(--brand-primary)] mb-4 pb-2 border-b-4 border-[var(--brand-accent)]">3. Ce facem concret ?</h2>
-                    <div class="space-y-6">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-700 mb-2">1) Confirmă clinic (analize standard în 7–14 zile)</h3>
-                            <ul class="list-decimal pl-6 space-y-1 text-gray-800">
-                                <li>Hemoleucogramă, feritină, fier seric, TIBC/TSAT (pentru fier).</li>
-                                <li>25-OH vitamina D, B12, folat, B1.</li>
-                                <li>Profil lipidic à jeun (CT, LDL-C, HDL-C, TG) + glicemie/HbA1c.</li>
-                                <li>Creatinină/eGFR, uree, potasiu seric, sumar de urină + UACR (confirmă proteinuria).</li>
-                                <li>Dacă nu există un screening GI recent și fierul iese jos, ia în calcul FIT/colonoscopie.</li>
-                            </ul>
-                        </div>
-                        
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-700 mb-2">2) Intervenții nutriție & stil de viață (poți începe azi)</h3>
-                            <ul class="list-decimal pl-6 space-y-1 text-gray-800">
-                                <li><span class="font-semibold">Trigliceride:</span> 6–8 săpt. de dietă mediteraneană low-GI (alimente cu indice glicemic scăzut: carbo <40–45% din energie), fără zahăr/alcool. Pește gras 2–3×/săpt. + EPA/DHA 2 g/zi (vezi protocol).</li>
-                                <li><span class="font-semibold">B1 scăzut:</span> Food-first (cereale integrale, leguminoase). Țintit: benfotiamină 150–300 mg/zi (sau complex B de calitate).</li>
-                                <li><span class="font-semibold">Vitamina D3:</span> Începe 2000-4000 UI/zi (ideal cu K2), ajustezi după analize.</li>
-                                <li><span class="font-semibold">Fier scăzut:</span> Nu suplimenta orb. Întâi confirmă feritina. Până atunci, fier heme (ficat, carne roșie) + vitamina C la masă.</li>
-                                <li><span class="font-semibold">Potasiu scăzut:</span> Crește aportul alimentar (frunze verzi, avocado, leguminoase). FĂRĂ suplimente până confirmi K seric și funcția renală.</li>
-                                <li><span class="font-semibold">Motilitate GI:</span> 25–30 g fibră/zi (psyllium, fibre măr/ovăz), hidratare 30–35 ml/kg, plimbare 10–15’ după mese, amar-digestive (aloe vera, anghinare). Magneziu bisglicinat 200–300 mg seara.</li>
-                                <li><span class="font-semibold">Os & colagen:</span> Antrenament de forță 2–3×/săpt., proteine 1,2–1,5 g/kg/zi, calciu alimentar, K2-MK7. Consideră DEXA de bază.</li>
-                                <li><span class="font-semibold">Alergie vopsea păr:</span> Evită PPD; folosește alternative „PPD-free” cu test patch.</li>
-                            </ul>
-                        </div>
+                    <h2>3. Ce facem concret ?</h2>
+                    <div>
+                        <h3>1) Confirmă clinic (analize standard în 7–14 zile)</h3>
+                        <ol class="space-y-1">
+                            <li>Hemoleucogramă, feritină, fier seric, TIBC/TSAT (pentru fier).</li>
+                            <li>25-OH vitamina D, B12, folat, B1.</li>
+                            <li>Profil lipidic à jeun (CT, LDL-C, HDL-C, TG) + glicemie/HbA1c.</li>
+                            <li>Creatinină/eGFR, uree, potasiu seric, sumar de urină + UACR (confirmă proteinuria).</li>
+                            <li>Dacă nu există un screening GI recent și fierul iese jos, ia în calcul FIT/colonoscopie.</li>
+                        </ol>
+                    </div>
+                    
+                    <div>
+                        <h3>2) Intervenții nutriție & stil de viață (poți începe azi)</h3>
+                        <ol class="space-y-1">
+                            <li><span class="font-semibold">Trigliceride:</span> 6–8 săpt. de dietă mediteraneană low-GI (alimente cu indice glicemic scăzut: carbo &lt;40–45% din energie), fără zahăr/alcool. Pește gras 2–3×/săpt. + EPA/DHA 2 g/zi (vezi protocol).</li>
+                            <li><span class="font-semibold">B1 scăzut:</span> Food-first (cereale integrale, leguminoase). Țintit: benfotiamină 150–300 mg/zi (sau complex B de calitate).</li>
+                            <li><span class="font-semibold">Vitamina D3:</span> Începe 2000-4000 UI/zi (ideal cu K2), ajustezi după analize.</li>
+                            <li><span class="font-semibold">Fier scăzut:</span> Nu suplimenta orb. Întâi confirmă feritina. Până atunci, fier heme (ficat, carne roșie) + vitamina C la masă.</li>
+                            <li><span class="font-semibold">Potasiu scăzut:</span> Crește aportul alimentar (frunze verzi, avocado, leguminoase). FĂRĂ suplimente până confirmi K seric și funcția renală.</li>
+                            <li><span class="font-semibold">Motilitate GI:</span> 25–30 g fibră/zi (psyllium, fibre măr/ovăz), hidratare 30–35 ml/kg, plimbare 10–15’ după mese, amar-digestive (aloe vera, anghinare). Magneziu bisglicinat 200–300 mg seara.</li>
+                            <li><span class="font-semibold">Os & colagen:</span> Antrenament de forță 2–3×/săpt., proteine 1,2–1,5 g/kg/zi, calciu alimentar, K2-MK7. Consideră DEXA de bază.</li>
+                            <li><span class="font-semibold">Alergie vopsea păr:</span> Evită PPD; folosește alternative „PPD-free” cu test patch.</li>
+                        </ol>
+                    </div>
 
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-700 mb-2">3) Monitorizare & semnale de urmărit</h3>
-                            <ul class="list-decimal pl-6 space-y-1 text-gray-800">
-                                <li>Repetă sumar urină + UACR la 2–4 săpt. Persistența necesită evaluare nefro.</li>
-                                <li>Dacă fierul rămâne jos sau apare anemie → investigație GI.</li>
-                                <li>Dacă TG rămân sus la 8–12 săpt. → escaladezi intervenția (fine-tuning carbo, doză EPA/DHA).</li>
-                            </ul>
-                        </div>
+                    <div>
+                        <h3>3) Monitorizare & semnale de urmărit</h3>
+                        <ol class="space-y-1">
+                            <li>Repetă sumar urină + UACR la 2–4 săpt. Persistența necesită evaluare nefro.</li>
+                            <li>Dacă fierul rămâne jos sau apare anemie → investigație GI.</li>
+                            <li>Dacă TG rămân sus la 8–12 săpt. → escaladezi intervenția (fine-tuning carbo, doză EPA/DHA).</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- Secțiunea CTA -->
+                <section class="cta-section">
+                    <div class="cta-box">
+                        <p>
+                            Pentru a înțelege mai bine ce reprezintă fiecare analiză medicală recomandată și de ce este importantă, vă invităm să consultați ghidul nostru detaliat.
+                        </p>
+                        <a href="https://nutrisib.club/blog/analizemedicale.html" 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           class="cta-button">
+                            Ghid analize medicale
+                        </a>
                     </div>
                 </section>
 
                 <section>
-                    <h2 class="text-2xl md:text-3xl font-bold text-[var(--brand-primary)] mb-4 pb-2 border-b-4 border-[var(--brand-accent)]">4. Observații punctuale:</h2>
-                    <ul class="list-disc pl-6 space-y-2 leading-relaxed text-gray-800">
+                    <h2>4. Observații punctuale:</h2>
+                    <ul class="space-y-2">
                         <li>Vit. A, B2, C, E, K în plaje bune; B3 ușor sub limită, B12 la limită.</li>
                         <li>HDL ridicat (protector), LDL chiar sub interval (posibil artefact al aparatului).</li>
                         <li>Marcatori ginecologici (vaginită/BIP/anexită) ies crescuți; la 62 ani e frecvent sindromul genitourinar de menopauză → vizită la ginecolog dacă apare simptomatologie.</li>
@@ -191,30 +540,30 @@
 
             </div>
 
-            <!-- Tab 2: Protocol ReDefine! (Conținut NOU și ACTUALIZAT) -->
-            <div id="protocol" class="tab-content space-y-8">
+            <!-- Tab 2: Protocol ReDefine! -->
+            <div id="protocol" class="tab-content">
                 
                 <section>
-                    <h3 class="text-2xl md:text-3xl font-bold text-[var(--brand-primary)] mb-4 pb-2 border-b-4 border-[var(--brand-accent)]">Viziune sistemică & principii</h3>
-                    <p class="text-gray-700 leading-relaxed mb-4">Protocolul <span class="font-semibold">ReDefine!</span> pentru Viola este centrat pe 5 piloni de intervenție, pe baza deficitelor identificate:</p>
-                    <ol class="list-decimal pl-6 space-y-2 text-gray-800">
+                    <h3>Viziune sistemică & principii</h3>
+                    <p class="leading-relaxed">Protocolul <span class="font-semibold">ReDefine!</span> pentru Viola este centrat pe 5 piloni de intervenție, pe baza deficitelor identificate:</p>
+                    <ol class="space-y-2">
                         <li><strong class="text-gray-900">Reglare gastro-intestinală:</strong> Combaterea constipației și malabsorbției prin refacerea peristaltismului și a mucoasei (aloe, fibre, probiotice).</li>
                         <li><strong class="text-gray-900">Metabolism lipo-glucidic:</strong> Scăderea trigliceridelor (Omega-3) și controlul aportului de carbohidrați rafinați.</li>
                         <li><strong class="text-gray-900">Refacere micronutrienți:</strong> Corectarea deficitelor specifice de <span class="font-semibold">fier</span>, <span class="font-semibold">vitamina D3</span> și complexul <span class="font-semibold">B (B1, B3, B12)</span>.</li>
                         <li><strong class="text-gray-900">Detox & suport osos:</strong> Sprijin pentru eliminarea metalelor grele (antioxidanți, chlorella) și refacerea matricii de colagen (colagen, vit C, magneziu).</li>
                         <li><strong class="text-gray-900">Management stres & cardio:</strong> Optimizarea hemodinamică prin suport mineral (magneziu) și adaptogeni.</li>
                     </ol>
-                    <p class="text-gray-700 leading-relaxed mt-4">Protocolul integrează sinergic produse de la Herbalife, LR Health & Beauty, FitLine și Coral Club pentru a oferi soluții țintite.</p>
+                    <p class="leading-relaxed" style="margin-top: 1rem;">Protocolul integrează sinergic produse de la Herbalife, LR Health & Beauty, FitLine și Coral Club pentru a oferi soluții țintite.</p>
                 </section>
 
                 <section>
-                    <h3 class="text-xl md:text-2xl font-bold text-[var(--brand-primary)] mb-4">Plan pe faze (12–16 săptămâni):</h3>
-                    <div class="grid md:grid-cols-3 gap-6">
+                    <h3>Plan pe faze (12–16 săptămâni):</h3>
+                    <div class="grid-container">
                         <!-- Faza 0 -->
-                        <div class="bg-white rounded-2xl shadow-lg p-5 border border-gray-200">
-                            <h4 class="font-bold text-lg text-[var(--brand-primary)]">Faza 0 (săpt. 1-2)</h4>
-                            <p class="text-sm text-gray-600 mb-2">Reset Gastro-Intestinal & hidratare</p>
-                            <ul class="text-sm list-disc pl-5 space-y-1 text-gray-700">
+                        <div class="phase-card">
+                            <h4>Faza 0 (săpt. 1-2)</h4>
+                            <p class="subtitle">Reset Gastro-Intestinal & hidratare</p>
+                            <ul>
                                 <li><span class="font-semibold">Detox Metale:</span> <span class="font-medium">Coral Club Chlorella</span> / <span class="font-medium">FitLine D-Drink</span> (conform protocol).</li>
                                 <li><span class="font-semibold">Hidratare:</span> 2-2.5 L apă/zi (recomandat cu <span class="font-medium">Coral-Mine</span> pentru alcalinizare). <strong>14 săptămâni+</strong></li>
                                 <li><span class="font-semibold">Gastro-Intestinal - Aloe:</span> <span class="font-medium">LR Aloe Vera Gel</span> / <span class="font-medium">Herbalife AloeMax</span> (3x30ml înainte de mese). <strong>14 săptămâni+</strong></li>
@@ -223,10 +572,10 @@
                             </ul>
                         </div>
                         <!-- Faza 1 -->
-                        <div class="bg-white rounded-2xl shadow-lg p-5 border-2 border-[var(--brand-accent)]">
-                            <h4 class="font-bold text-lg text-[var(--brand-primary)]">Faza 1 (săpt. 3-8)</h4>
-                            <p class="text-sm text-gray-600 mb-2">Micronutrienți ↓, lipide ↑, detox</p>
-                            <ul class="text-sm list-disc pl-5 space-y-1 text-gray-700">
+                        <div class="phase-card phase-card-highlight">
+                            <h4>Faza 1 (săpt. 3-8)</h4>
+                            <p class="subtitle">Micronutrienți ↓, lipide ↑, detox</p>
+                            <ul>
                                 <li><span class="font-semibold">Bază B-uri/D3/Fier:</span> <span class="font-medium">FitLine PowerCocktail</span> (dimineața).</li>
                                 <li><span class="font-semibold">Minerale (Mg/K):</span> <span class="font-medium">FitLine Restorate</span> / <span class="font-medium">LR Pro Balance</span> (seara).</li>
                                 <li><span class="font-semibold">Trigliceride (Omega-3):</span> <span class="font-medium">Herbalifeline MAX</span> / <span class="font-medium">FitLine Omega 3+E</span> (1.5-2g EPA/DHA la masă).</li>
@@ -235,10 +584,10 @@
                             </ul>
                         </div>
                         <!-- Faza 2 -->
-                        <div class="bg-white rounded-2xl shadow-lg p-5 border border-gray-200">
-                            <h4 class="font-bold text-lg text-[var(--brand-primary)]">Faza 2 (săpt. 9-12+)</h4>
-                            <p class="text-sm text-gray-600 mb-2">Consolidare & colagen</p>
-                            <ul class="text-sm list-disc pl-5 space-y-1 text-gray-700">
+                        <div class="phase-card">
+                            <h4>Faza 2 (săpt. 9-12+)</h4>
+                            <p class="subtitle">Consolidare & colagen</p>
+                            <ul>
                                 <li>Continuă <span class="font-medium">Baza (PowerCocktail/Restorate)</span> și <span class="font-medium">Omega-3</span>.</li>
                                 <li><span class="font-semibold">Colagen:</span> <span class="font-medium">Coral Club Promarine</span> / <span class="font-medium">LR 5in1 Beauty Elixir</span> / <span class="font-medium">FitLine Beauty</span> (zilnic).</li>
                                 <li><span class="font-semibold">Stres/Cardio:</span> <span class="font-medium">LR Reishi Plus</span> / <span class="font-medium">Coral Club Coenzyme Q10</span> (seara).</li>
@@ -249,41 +598,41 @@
                 </section>
 
                 <section>
-                    <h3 class="text-xl md:text-2xl font-bold text-[var(--brand-primary)] mb-4">Orar zilnic schematic (exemplu Faza 1)</h3>
-                    <div class="overflow-x-auto bg-white rounded-2xl shadow-lg border border-gray-200">
-                        <table class="w-full text-sm min-w-[600px]">
-                            <thead class="bg-gray-100">
+                    <h3>Orar zilnic schematic (exemplu Faza 1)</h3>
+                    <div class="table-container">
+                        <table class="styled-table" data-min-width="600">
+                            <thead>
                                 <tr>
-                                    <th class="p-3 text-left font-semibold text-gray-700">Moment</th>
-                                    <th class="p-3 text-left font-semibold text-gray-700">Produs (exemplu)</th>
-                                    <th class="p-3 text-left font-semibold text-gray-700">Rol principal</th>
+                                    <th>Moment</th>
+                                    <th>Produs (exemplu)</th>
+                                    <th>Rol principal</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-t">
-                                    <td class="p-3 font-semibold align-top">La trezire</td>
-                                    <td class="p-3"><span class="font-medium">FitLine PowerCocktail</span><br>+ <span class="text-gray-600">(opțional) FitLine D-Drink / Coral Club Chlorella</span></td>
-                                    <td class="p-3">Energie, complex B, fier, D3, probiotice, antioxidanți, detox metale.</td>
+                                <tr>
+                                    <td class="font-semibold">La trezire</td>
+                                    <td><span class="font-medium">FitLine PowerCocktail</span><br><span class="text-gray-600">(opțional) FitLine D-Drink / Coral Club Chlorella</span></td>
+                                    <td>Energie, complex B, fier, D3, probiotice, antioxidanți, detox metale.</td>
                                 </tr>
-                                <tr class="border-t bg-gray-50">
-                                    <td class="p-3 font-semibold align-top">Înainte de mese</td>
-                                    <td class="p-3"><span class="font-medium">LR Aloe Vera Drinking Gel</span></td>
-                                    <td class="p-3">Suport mucoasă, peristaltism.</td>
+                                <tr class="bg-light-gray">
+                                    <td class="font-semibold">Înainte de mese</td>
+                                    <td><span class="font-medium">LR Aloe Vera Drinking Gel</span></td>
+                                    <td>Suport mucoasă, peristaltism.</td>
                                 </tr>
-                                <tr class="border-t">
-                                    <td class="p-3 font-semibold align-top">La masa de prânz</td>
-                                    <td class="p-3"><span class="font-medium">Herbalifeline MAX</span> (sau alt Omega-3)</td>
-                                    <td class="p-3">Reducere trigliceride, anti-inflamator.</td>
+                                <tr>
+                                    <td class="font-semibold">La masa de prânz</td>
+                                    <td><span class="font-medium">Herbalifeline MAX</span> (sau alt Omega-3)</td>
+                                    <td>Reducere trigliceride, anti-inflamator.</td>
                                 </tr>
-                                <tr class="border-t bg-gray-50">
-                                    <td class="p-3 font-semibold align-top">Între mese (după-amiaza)</td>
-                                    <td class="p-3"><span class="font-medium">Herbalife Fibre Măr & Ovăz</span> (cu 250ml apă)</td>
-                                    <td class="p-3">Aport de fibre, reglare tranzit, sațietate.</td>
+                                <tr class="bg-light-gray">
+                                    <td class="font-semibold">Între mese (după-amiaza)</td>
+                                    <td><span class="font-medium">Herbalife Fibre Măr & Ovăz</span> (cu 250ml apă)</td>
+                                    <td>Aport de fibre, reglare tranzit, sațietate.</td>
                                 </tr>
-                                 <tr class="border-t">
-                                    <td class="p-3 font-semibold align-top">Seara (înainte de culcare)</td>
-                                    <td class="p-3"><span class="font-medium">FitLine Restorate</span><br>+ <span class="font-medium">LR Pro 12+</span> (luate la 30 min distanță)</td>
-                                    <td class="p-3">Minerale (Mg, K, Zn), de-acidifiere, somn.<br>Refacere microbiom.</td>
+                                 <tr>
+                                    <td class="font-semibold">Seara (înainte de culcare)</td>
+                                    <td><span class="font-medium">FitLine Restorate</span><br>+ <span class="font-medium">LR Pro 12+</span> (luate la 30 min distanță)</td>
+                                    <td>Minerale (Mg, K, Zn), de-acidifiere, somn.<br>Refacere microbiom.</td>
                                  </tr>
                             </tbody>
                         </table>
@@ -291,106 +640,106 @@
                 </section>
 
                 <section>
-                    <h3 class="text-xl md:text-2xl font-bold text-[var(--brand-primary)] mb-4">Matrice de Suplimentare Țintită (pe categorii)</h3>
-                    <p class="text-gray-700 mb-4">Mai jos este o listă de opțiuni de la brandurile indicate, grupate pe nevoile specifice ale Violei. Acestea se pot combina strategic.</p>
-                    <div class="overflow-x-auto bg-white rounded-2xl shadow-lg border border-gray-200">
-                        <table class="w-full text-sm min-w-[700px]">
-                            <thead class="bg-gray-100">
+                    <h3>Matrice de Suplimentare Țintită (pe categorii)</h3>
+                    <p>Mai jos este o listă de opțiuni de la brandurile indicate, grupate pe nevoile specifice ale Violei. Acestea se pot combina strategic.</p>
+                    <div class="table-container">
+                        <table class="styled-table" data-min-width="700">
+                            <thead>
                                 <tr>
-                                    <th class="p-3 text-left font-semibold text-gray-700">Nevoie specifică</th>
-                                    <th class="p-3 text-left font-semibold text-gray-700">Herbalife</th>
-                                    <th class="p-3 text-left font-semibold text-gray-700">LR Health & Beauty</th>
-                                    <th class="p-3 text-left font-semibold text-gray-700">FitLine</th>
-                                    <th class="p-3 text-left font-semibold text-gray-700">Coral Club</th>
+                                    <th>Nevoie specifică</th>
+                                    <th>Herbalife</th>
+                                    <th>LR Health & Beauty</th>
+                                    <th>FitLine</th>
+                                    <th>Coral Club</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-t">
-                                    <td class="p-3 font-semibold">Reglare GI (Aloe)</td>
-                                    <td class="p-3">Concentrat Aloe Vera</td>
-                                    <td class="p-3">Aloe Vera Drinking Gel</td>
-                                    <td class="p-3">—</td>
-                                    <td class="p-3">Aloe-mannan</td>
+                                <tr>
+                                    <td class="font-semibold">Reglare GI (Aloe)</td>
+                                    <td>Concentrat Aloe Vera</td>
+                                    <td>Aloe Vera Drinking Gel</td>
+                                    <td>—</td>
+                                    <td>Aloe-mannan</td>
                                 </tr>
-                                <tr class="border-t bg-gray-50">
-                                    <td class="p-3 font-semibold">Reglare GI (Fibre)</td>
-                                    <td class="p-3">Fibre Măr & Ovăz</td>
-                                    <td class="p-3">Fiber Boost</td>
-                                    <td class="p-3">PowerCocktail (conține)</td>
-                                    <td class="p-3">Hi-Fiber</td>
+                                <tr class="bg-light-gray">
+                                    <td class="font-semibold">Reglare GI (Fibre)</td>
+                                    <td>Fibre Măr & Ovăz</td>
+                                    <td>Fiber Boost</td>
+                                    <td>PowerCocktail (conține)</td>
+                                    <td>Hi-Fiber</td>
                                 </tr>
-                                <tr class="border-t">
-                                    <td class="p-3 font-semibold">Reglare GI (Probiotic)</td>
-                                    <td class="p-3">—</td>
-                                    <td class="p-3">Pro 12+</td>
-                                    <td class="p-3">PowerCocktail (conține)</td>
-                                    <td class="p-3">Super-Flora</td>
+                                <tr>
+                                    <td class="font-semibold">Reglare GI (Probiotic)</td>
+                                    <td>—</td>
+                                    <td>Pro 12+</td>
+                                    <td>PowerCocktail (conține)</td>
+                                    <td>Super-Flora</td>
                                 </tr>
-                                <tr class="border-t bg-gray-50">
-                                    <td class="p-3 font-semibold">Trigliceride (Omega-3)</td>
-                                    <td class="p-3">Herbalifeline MAX</td>
-                                    <td class="p-3">Super Omega</td>
-                                    <td class="p-3">Omega 3+E</td>
-                                    <td class="p-3">Omega 3/60</td>
+                                <tr class="bg-light-gray">
+                                    <td class="font-semibold">Trigliceride (Omega-3)</td>
+                                    <td>Herbalifeline MAX</td>
+                                    <td>Super Omega</td>
+                                    <td>Omega 3+E</td>
+                                    <td>Omega 3/60</td>
                                 </tr>
-                                <tr class="border-t">
-                                    <td class="p-3 font-semibold">Vit. B (B1, B3, B12)</td>
-                                    <td class="p-3">Formula 2 (complex)</td>
-                                    <td class="p-3">Vita Aktiv</td>
-                                    <td class="p-3">PowerCocktail, Activize</td>
-                                    <td class="p-3">Tasty B</td>
+                                <tr>
+                                    <td class="font-semibold">Vit. B (B1, B3, B12)</td>
+                                    <td>Formula 2 (complex)</td>
+                                    <td>Vita Aktiv</td>
+                                    <td>PowerCocktail, Activize</td>
+                                    <td>Tasty B</td>
                                 </tr>
-                                <tr class="border-t bg-gray-50">
-                                    <td class="p-3 font-semibold">Vitamina D3</td>
-                                    <td class="p-3">Formula 2 (conține)</td>
-                                    <td class="p-3">Vita Aktiv (conține)</td>
-                                    <td class="p-3">PowerCocktail, Restorate</td>
-                                    <td class="p-3">Vitamin D3 Spray</td>
+                                <tr class="bg-light-gray">
+                                    <td class="font-semibold">Vitamina D3</td>
+                                    <td>Formula 2 (conține)</td>
+                                    <td>Vita Aktiv (conține)</td>
+                                    <td>PowerCocktail, Restorate</td>
+                                    <td>Vitamin D3 Spray</td>
                                 </tr>
-                                <tr class="border-t">
-                                    <td class="p-3 font-semibold">Fier (Iron)</td>
-                                    <td class="p-3">Formula 2 (conține)</td>
-                                    <td class="p-3">—</td>
-                                    <td class="p-3">PowerCocktail, Restorate</td>
-                                    <td class="p-3">Iron (chelat)</td>
+                                <tr>
+                                    <td class="font-semibold">Fier (Iron)</td>
+                                    <td>Formula 2 (conține)</td>
+                                    <td>—</td>
+                                    <td>PowerCocktail, Restorate</td>
+                                    <td>Iron (chelat)</td>
                                 </tr>
-                                <tr class="border-t bg-gray-50">
-                                    <td class="p-3 font-semibold">Minerale (Mg, K*)</td>
-                                    <td class="p-3">Formula 2 (Mg)</td>
-                                    <td class="p-3">Pro Balance (Mg, K)</td>
-                                    <td class="p-3">Restorate (Mg, K)</td>
-                                    <td class="p-3">Coral-Mine (Mg), PentaKan (K)</td>
+                                <tr class="bg-light-gray">
+                                    <td class="font-semibold">Minerale (Mg, K*)</td>
+                                    <td>Formula 2 (Mg)</td>
+                                    <td>Pro Balance (Mg, K)</td>
+                                    <td>Restorate (Mg, K)</td>
+                                    <td>Coral-Mine (Mg), PentaKan (K)</td>
                                 </tr>
-                                <tr class="border-t">
-                                    <td class="p-3 font-semibold">Colagen (Oase/Piele)</td>
-                                    <td class="p-3">Collagen Skin Booster</td>
-                                    <td class="p-3">5in1 Beauty Elixir</td>
-                                    <td class="p-3">Beauty</td>
-                                    <td class="p-3">Promarine Collagen</td>
+                                <tr>
+                                    <td class="font-semibold">Colagen (Oase/Piele)</td>
+                                    <td>Collagen Skin Booster</td>
+                                    <td>5in1 Beauty Elixir</td>
+                                    <td>Beauty</td>
+                                    <td>Promarine Collagen</td>
                                 </tr>
-                                <tr class="border-t bg-gray-50">
-                                    <td class="p-3 font-semibold">Detox (Metale/Antiox)</td>
-                                    <td class="p-3">—</td>
-                                    <td class="p-3">Pro Balance (alcalin)</td>
-                                    <td class="p-3">D-Drink, PowerCocktail</td>
-                                    <td class="p-3">Chlorella, Spirulina, Coral-Mine</td>
+                                <tr class="bg-light-gray">
+                                    <td class="font-semibold">Detox (Metale/Antiox)</td>
+                                    <td>—</td>
+                                    <td>Pro Balance (alcalin)</td>
+                                    <td>D-Drink, PowerCocktail</td>
+                                    <td>Chlorella, Spirulina, Coral-Mine</td>
                                 </tr>
-                                <tr class="border-t">
-                                    <td class="p-3 font-semibold">Stres/Cardio (Adaptogen)</td>
-                                    <td class="p-3">—</td>
-                                    <td class="p-3">Reishi Plus</td>
-                                    <td class="p-3">Q10 Plus</td>
-                                    <td class="p-3">Coenzyme Q10</td>
+                                <tr>
+                                    <td class="font-semibold">Stres/Cardio (Adaptogen)</td>
+                                    <td>—</td>
+                                    <td>Reishi Plus</td>
+                                    <td>Q10 Plus</td>
+                                    <td>Coenzyme Q10</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                     <p class="text-xs text-red-600 mt-3 font-semibold">*Notă importantă: Deficitul de potasiu (K) trebuie confirmat prin analize de sânge (ionogramă serică). Suplimentarea se face DOAR la recomandarea medicului, mai ales având în vedere funcția renală și proteinuria. Prioritizați potasiul din alimente (vezi Tab 1).</p>
+                     <p class="note-potasiu">*Notă importantă: Deficitul de potasiu (K) trebuie confirmat prin analize de sânge (ionogramă serică). Suplimentarea se face DOAR la recomandarea medicului, mai ales având în vedere funcția renală și proteinuria. Prioritizați potasiul din alimente (vezi Tab 1).</p>
                 </section>
 
                 <section>
-                    <h3 class="text-xl md:text-2xl font-bold text-[var(--brand-primary)] mb-4">Nutriție & stil de viață</h3>
-                    <ul class="list-disc pl-6 space-y-2 text-gray-800">
+                    <h3>Nutriție & stil de viață</h3>
+                    <ul class="space-y-2">
                         <li><span class="font-semibold">Farfurie anti-trigliceride:</span> ½ legume (fără amidon), ¼ proteine slabe (pește, pui, tofu), ¼ carbohidrați complecși low-GI (fasole, linte, quinoa). Zero zahăr, zero alcool.</li>
                         <li><span class="font-semibold">Grăsimi sănătoase:</span> Focus pe ulei de măsline, avocado, nuci, semințe și aportul de Omega-3 din suplimente/pește gras.</li>
                         <li><span class="font-semibold">Mișcare:</span> 30-40 min mers alert zilnic (crucial pt. cardio și tranzit). 2x/săpt. antrenament de forță (crucial pt. oase/colagen).</li>
@@ -402,7 +751,7 @@
 
         </main>
 
-        <!-- Footer NOU (preluat din oboseala.html) -->
+        <!-- Subsol (Footer) -->
         <footer class="main-footer">
              <div class="footer-social-links">
                 <!-- Facebook -->
@@ -417,7 +766,7 @@
                                 <stop stop-color="#feda75"/><stop offset=".25" stop-color="#fa7e1e"/><stop offset=".5" stop-color="#d62976"/><stop offset=".75" stop-color="#962fbf"/><stop offset="1" stop-color="#4f5bd5"/>
                             </radialGradient>
                         </defs>
-                        <path fill="url(#ig-gradient-footer)" d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.784.297-1.45.717-2.126 1.394C1.33 2.71.91 3.386.612 4.14c-.3.765-.5 1.635-.558 2.913-.058 1.28-.072 1.687-.072 4.947s.015 3.667.072 4.947c.06 1.277.26 2.148.558 2.913.3.765.718 1.438 1.394 2.126.677.678 1.342 1.096 2.126 1.394.765.3 1.635.5 2.913.558 1.28.058 1.687.072 4.947.072s3.667-.015 4.947-.072c1.277-.06 2.148-.26 2.913-.558.784-.297 1.45-.718 2.126-1.394.678-.677 1.096-1.342 1.394-2.126.3-.765.5-1.635-.558-2.913.058-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.26-2.148-.558-2.913-.3-.765-.718-1.438-1.394-2.126C21.314 1.33 20.64.91 19.86.612c-.765-.3-1.635-.5-2.913-.558C15.667.015 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.07 1.17.055 1.805.248 2.227.415.562.217.96.477 1.382.896.419.42.679.82.896 1.383.167.422.36 1.057.413 2.227.055 1.265.07 1.646.07 4.85s-.015 3.585-.07 4.85c-.053 1.17-.246 1.805-.413 2.227-.217.562-.477.96-.896 1.383-.42.419-.82.679-1.383.896-.422-.167-1.057.36-2.227.413-1.265.055-1.646.07-4.85.07s-3.585-.015-4.85-.07c-1.17-.053-1.805-.246-2.227-.413-.562-.217-.96-.477-1.383-.896-.419-.42-.679-.82-.896-1.383-.167-.422-.36-1.057-.413-2.227-.055-1.265-.07-1.646-.07-4.85s.015-3.585.07-4.85c.053-1.17.246 1.805.413-2.227.217-.562.477.96.896-1.383.42-.419.82-.679 1.383-.896.422-.167 1.057.36 2.227.413C8.415 2.176 8.797 2.16 12 2.16zm0 3.84c-3.405 0-6.162 2.757-6.162 6.162s2.757 6.162 6.162 6.162 6.162-2.757 6.162-6.162-2.757-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm4.42-6.837c-.552 0-1 .448-1 1s.448 1 1 1 1-.448 1-1-.448-1-1-1z"/>
+                        <path fill="url(#ig-gradient-footer)" d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.784.297-1.45.717-2.126 1.394C1.33 2.71.91 3.386.612 4.14c-.3.765-.5 1.635-.558 2.913-.058 1.28-.072 1.687-.072 4.947s.015 3.667.072 4.947c.06 1.277.26 2.148.558 2.913.3.765.718 1.438 1.394 2.126.677.678 1.342 1.096 2.126 1.394.765.3 1.635.5 2.913.558 1.28.058 1.687.072 4.947.072s3.667-.015 4.947-.072c1.277-.06 2.148-.26 2.913-.558.784-.297 1.45-.718 2.126-1.394.678-.677 1.096-1.342 1.394-2.126.3-.765-.5-1.635-.558-2.913.058-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.26-2.148-.558-2.913-.3-.765-.718-1.438-1.394-2.126C21.314 1.33 20.64.91 19.86.612c-.765-.3-1.635-.5-2.913-.558C15.667.015 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.07 1.17.055 1.805.248 2.227.415.562.217.96.477 1.382.896.419.42.679.82.896 1.383.167.422.36 1.057.413 2.227.055 1.265.07 1.646.07 4.85s-.015 3.585-.07 4.85c-.053 1.17-.246 1.805-.413 2.227-.217.562-.477.96-.896 1.383-.42.419-.82.679-1.383.896-.422-.167-1.057.36-2.227.413-1.265.055-1.646.07-4.85.07s-3.585-.015-4.85-.07c-1.17-.053-1.805-.246-2.227-.413-.562-.217-.96-.477-1.383-.896-.419-.42-.679-.82-.896-1.383-.167-.422-.36-1.057-.413-2.227-.055-1.265-.07-1.646-.07-4.85s.015-3.585.07-4.85c.053-1.17.246 1.805.413-2.227.217-.562.477.96.896-1.383.42-.419.82-.679 1.383-.896.422-.167 1.057.36 2.227.413C8.415 2.176 8.797 2.16 12 2.16zm0 3.84c-3.405 0-6.162 2.757-6.162 6.162s2.757 6.162 6.162 6.162 6.162-2.757 6.162-6.162-2.757-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm4.42-6.837c-.552 0-1 .448-1 1s.448 1 1 1 1-.448 1-1-.448-1-1-1z"/>
                     </svg>
                 </a>
                 <!-- Telegram -->
@@ -426,16 +775,15 @@
                 </a>
                 <!-- Beacons -->
                 <a href="https://beacons.ai/nutrisib" target="_blank" rel="noopener" title="Beacons">
-                    <img src="https://nutrisib.club/imagini/beacons.jpeg" alt="Beacons AI" style="border-radius: 50%;" onerror="this.onerror=null;this.src='https://placehold.co/32x32/ecf0f1/212529?text=B';">
+                    <img src="https://nutrisib.club/imagini/beacons.jpeg" alt="Beacons AI" style="border-radius: 50%; width: 32px; height: 32px;" onerror="this.onerror=null;this.src='https://placehold.co/32x32/ecf0f1/212529?text=B';">
                 </a>
             </div>
             <p>&copy; 2025 NUTRISIB. Toate drepturile rezervate.</p>
             <p>Acest material este o sinteză informativă și nu înlocuiește sfatul medical profesionist.</p>
             <p>dr.ing. Radu Pascu - 2025</p>
         </footer>
-        <!-- SFÂRȘITUL NOULUI FOOTER -->
 
-    </div> <!-- End of Main Article Container -->
+    </div> <!-- Sfârșitul .main-container -->
     
     <script>
         function changeTab(event, tabID) {
@@ -446,27 +794,21 @@
 
             let tablinks = document.getElementsByClassName("tab-button");
             for (let i = 0; i < tablinks.length; i++) {
-                // Modificat pentru a folosi o clasă CSS dedicată (preluat din victorpopescu.html)
-                tablinks[i].classList.remove('active-tab', 'border-blue-500', 'text-blue-600');
-                tablinks[i].classList.add('border-transparent', 'hover:border-gray-300');
+                tablinks[i].classList.remove('active-tab');
             }
 
             document.getElementById(tabID).classList.add('active');
-            // Modificat pentru a folosi o clasă CSS dedicată (preluat din victorpopescu.html)
-            event.currentTarget.classList.add('active-tab', 'border-blue-500', 'text-blue-600');
-            event.currentTarget.classList.remove('border-transparent', 'hover:border-gray-300');
+            event.currentTarget.classList.add('active-tab');
         }
 
-        // Set the default active tab
+        // Setează tab-ul activ implicit
         document.addEventListener('DOMContentLoaded', (event) => {
             document.getElementById('report').classList.add('active');
             const defaultTabButton = document.querySelector('[onclick="changeTab(event, \'report\')"]');
             if (defaultTabButton) {
-                defaultTabButton.classList.add('active-tab', 'border-blue-500', 'text-blue-600');
-                defaultTabButton.classList.remove('border-transparent', 'hover:border-gray-300');
+                defaultTabButton.classList.add('active-tab');
             }
         });
     </script>
 </body>
 </html>
-
