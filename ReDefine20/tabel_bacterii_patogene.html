@@ -3,58 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TBacterii patogene din microbiom</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Meta-informații SEO preluate și adaptate -->
+    <title>Bacterii Patogene - Ghid Detaliat (Nozocomiale și Alimentare)</title>
+    <meta name="description" content="Un tabel detaliat al bacteriilor patogene, grupat pe infecții nozocomiale și toxiinfecții alimentare, cu surse de contaminare și riscuri.">
+    <meta name="keywords" content="Radu Pascu, ReDefine, Nutrisib, tabel bacterii patogene, infecții nozocomiale, toxiinfecții alimentare, clostridium, salmonella, mrsa, redefine, microbiom, surse contaminare">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Am eliminat Chart.js, deoarece nu este folosit -->
+    
     <style>
+        /* --- Definirea Variabilelor (Strict necesare) --- */
+        :root {
+            --color-bg: #f3f4f6;
+            --color-bg-white: #ffffff;
+            --color-bg-table-header: #f3f4f6;
+            
+            --color-text-dark: #1f2937;
+            --color-text-light: #4b5563;
+            --color-text-white: #ffffff;
+            --color-text-footer: #bdc3c7;
+            --color-text-footer-link: #ecf0f1;
+            --color-footer-bg: #212529;
+
+            --color-brand-dark: #0A2463;
+            --color-brand-medium: #3E92CC;
+            
+            --color-border: #e5e7eb;
+
+            --color-box-red-bg: #fef2f2;
+            --color-box-red-text: #991b1b; 
+        }
+
+        /* --- Stiluri Globale (DIN MODEL) --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f1f5f9; / slate-100 /
-            color: #475569; / slate-800 /
-            padding: 1rem;
+            margin: 0;
+            padding: 0.5rem;
+            display: flex;
+            justify-content: center;
+            background-color: var(--color-bg);
+            color: var(--color-text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
+
         .container {
-            max-width: 1000px;
-            margin: auto;
-            background-color: #ffffff;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
+            background-color: var(--color-bg-white);
+            /* Lățime mărită pentru tabel */
+            max-width: 72rem; /* 6xl */
+            width: 100%;
+            border-radius: 1rem; 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); 
+            overflow: hidden;
+            border: 1px solid var(--color-border);
         }
+
+        main {
+            padding: 1.5rem;
+            overflow-x: auto; /* Pentru siguranță pe ecrane foarte mici */
+        }
+
+        /* --- Antet (Header) (DIN MODEL) --- */
+        header {
+            color: var(--color-text-white);
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(to bottom right, var(--color-brand-dark), var(--color-brand-medium));
+        }
+
+        header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            margin: 0 0 0.5rem 0;
+        }
+
+        header h2 {
+            font-size: 1.125rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin: 0;
+            max-width: 42rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* --- Stiluri Tabel (Adaptate) --- */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 1.5rem;
+            font-size: 0.875rem; 
         }
         th, td {
+            border: 1px solid var(--color-border);
             padding: 0.75rem;
             text-align: left;
-            border-bottom: 1px solid #e2e8f0; / slate-200 /
+            vertical-align: top;
         }
         th {
-            background-color: #e2e8f0; / slate-200 /
-            font-weight: 600;
-            color: #073B4C; / darkBlue /
+            background-color: var(--color-bg-table-header);
+            color: var(--color-brand-dark);
+            font-weight: 700;
         }
-        tr:hover {
-            background-color: #f8fafc; / slate-50 /
-        }
+        
+        /* Culoarea roșie pentru prima coloană */
         td:first-child {
-            font-weight: 600; / semi-bold for bacteria name /
-            color: #D8315B; / red from palette /
+            font-weight: 600;
+            color: var(--color-box-red-text);
         }
+        
+        /* Stil pentru antetul de secțiune (roșu) - adaptat */
         .section-header {
-            background-color: #D8315B; / red from palette /
-            color: white;
+            background-color: var(--color-box-red-bg);
+            color: var(--color-box-red-text);
             padding: 0.75rem;
             text-align: center;
             font-weight: 700;
-            margin-top: 2rem;
+            font-size: 1.125rem;
+            margin-top: 1.5rem;
             border-radius: 0.5rem;
         }
+        
+        /* Stil pentru antetul de categorie în interiorul tabelului */
+        .category-header-patogen td {
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 0.75rem;
+            background-color: var(--color-box-red-bg);
+            color: var(--color-box-red-text);
+            /* Asigură că se întinde pe toate coloanele */
+            column-span: all;
+        }
+
+        /* --- STILURI: Responsive pentru Tabel (Păstrate și adaptate) --- */
         @media (max-width: 768px) {
+            main {
+                padding: 1rem; 
+            }
             table, thead, tbody, th, td, tr {
                 display: block;
             }
@@ -63,69 +153,328 @@
                 top: -9999px;
                 left: -9999px;
             }
-            tr { border: 1px solid #ccc; margin-bottom: 1rem; }
+            tr { 
+                border: 1px solid var(--color-border); 
+                margin-bottom: 1rem; 
+                border-radius: 0.5rem; 
+                overflow: hidden; 
+            }
             td {
                 border: none;
-                border-bottom: 1px solid #eee;
+                border-bottom: 1px solid var(--color-border);
                 position: relative;
-                padding-left: 50%;
-                text-align: right;
+                /* Adaptat pentru 3 coloane */
+                padding-left: 45%; 
+                padding-top: 0.75rem;
+                padding-bottom: 0.75rem;
+                text-align: right; 
+                font-weight: 400; 
+                min-height: 2.5rem; 
             }
+            
+            /* Reaplica stilul roșu pentru mobil */
             td:first-child {
                 font-weight: 600;
-                color: #D8315B;
+                color: var(--color-box-red-text);
             }
+            
             td:before {
+                /* Stilul etichetei (ex: "Nume Bacterie:") */
                 position: absolute;
-                top: 6px;
-                left: 6px;
-                width: 45%;
-                padding-right: 10px;
+                top: 0;
+                left: 0;
+                 /* Adaptat pentru 3 coloane */
+                width: 40%; 
+                padding: 0.75rem;
                 white-space: nowrap;
                 text-align: left;
-                font-weight: bold;
-                color: #073B4C;
+                font-weight: 700; 
+                color: var(--color-brand-dark);
+                background-color: var(--color-bg-table-header); 
+                height: 100%;
+                box-sizing: border-box; 
             }
+            
+            /* Stil pentru antetul de categorie pe mobil */
+            tr.category-header-patogen {
+                display: block;
+                border: none;
+                margin-bottom: 1rem;
+                border-radius: 0.5rem;
+                overflow: hidden;
+            }
+            tr.category-header-patogen td {
+                display: block;
+                width: 100%;
+                padding: 0.75rem;
+                text-align: center;
+                border: none;
+                color: var(--color-box-red-text);
+                background-color: var(--color-box-red-bg);
+                font-weight: 700;
+                min-height: auto; /* Suprascrie min-height */
+            }
+            tr.category-header-patogen td:before {
+                display: none; /* Ascundem etichetele :before */
+            }
+
+            /* Conținutul etichetelor pentru 3 coloane */
             td:nth-of-type(1):before { content: "Nume Bacterie"; }
-            td:nth-of-type(2):before { content: "Probleme de Sănătate"; }
-            td:last-child { border-bottom: 0; }
+            td:nth-of-type(2):before { content: "Probleme Sănătate"; }
+            td:nth-of-type(3):before { content: "Surse Contaminare"; }
+            
+            td:last-child { 
+                border-bottom: 0; 
+            }
         }
+        
+        /* --- Subsol (Footer) (DIN MODEL) --- */
+        footer.infographic-footer {
+            background-color: var(--color-footer-bg);
+            color: var(--color-text-footer);
+            text-align: center;
+            padding: 0.5rem 2rem; 
+            font-size: 0.85rem;
+            border-top: none;
+        }
+        
+        footer.infographic-footer p {
+            margin: 0.1rem 0;
+            text-align: center;
+            color: var(--color-text-footer);
+        }
+
+        footer.infographic-footer a {
+            color: var(--color-text-footer-link);
+            text-decoration: none;
+        }
+        
+        footer.infographic-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-social-links a {
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+        
+        .footer-social-links a:hover {
+            transform: scale(1.1);
+        }
+
+        .footer-social-links svg, .footer-social-links img {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* --- Printare și Responsive (DIN MODEL) --- */
+        .no-print {
+            display: block;
+        }
+
+        @media print {
+            body {
+                font-size: 10pt;
+                padding: 0;
+            }
+            .no-print, .infographic-footer, .button-link, .center-link {
+                display: none;
+            }
+            header {
+                 background: var(--color-brand-dark) !important;
+                 color: var(--color-text-white) !important;
+                 -webkit-print-color-adjust: exact;
+                 color-adjust: exact;
+            }
+            /* Asigurăm că stilul responsiv nu se aplică la print */
+            @page {
+                size: A4 landscape; 
+            }
+            table, thead, tbody, th, td, tr {
+                display: table; 
+            }
+            tr {
+                page-break-inside: avoid;
+            }
+            th, td {
+                padding: 0.5rem;
+                text-align: left;
+                border-bottom: 1px solid var(--color-border);
+                position: static; 
+            }
+            td:before {
+                content: ""; 
+                display: none;
+            }
+        }
+
+        /* Media Queries pentru Responsive (DIN MODEL) */
+        @media (min-width: 640px) { /* sm */
+            body { padding: 1rem; }
+            header { padding: 2rem; }
+            header h1 { font-size: 2.25rem; }
+            header h2 { font-size: 1.25rem; }
+        }
+        
+        @media (min-width: 769px) { /* md+ (peste breakpoint-ul tabelului) */
+            body { padding: 1.5rem; }
+            main { padding: 2rem; }
+        }
+        
     </style>
 </head>
 <body>
+
     <div class="container">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-[#0A2463] mb-4">Tabel: bacterii patogene din microbiomul intestinal</h1>
-            <p class="text-lg text-slate-600">Creșterea necontrolată a acestor bacterii poate duce la probleme grave de sănătate. Înțelege riscurile!</p>
+        <header>
+            <h1>Bacterii patogene - Ghid extins</h1>
+            <h2>Creșterea necontrolată a acestor bacterii poate duce la probleme grave de sănătate. Înțelege riscurile!</h2>
         </header>
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nume bacterie</th>
+                        <th>Probleme de sănătate asociate</th>
+                        <th>Surse potențiale de contaminare</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- CATEGORIE NOUĂ -->
+                    <tr class="category-header-patogen">
+                        <td colspan="3">Patogeni asociați în principal cu toxiinfecțiile alimentare</td>
+                    </tr>
+                    
+                    <!-- BACTERII NOI ȘI EXISTENTE, ALFABETIZATE -->
+                    <tr>
+                        <td data-label="Nume Bacterie">Bacillus cereus</td>
+                        <td data-label="Probleme Sănătate">Toxiinfecție alimentară (două tipuri: diareică și emetică - vărsături), adesea autolimitată.</td>
+                        <td data-label="Surse Contaminare">Orez fiert și reîncălzit ("sindromul orezului prăjit"), paste, produse din carne, legume, lăsate la temperatura camerei.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Campylobacter jejuni</td>
+                        <td data-label="Probleme Sănătate">Toxiinfecții alimentare, diaree (adesea sanguinolentă), febră, crampe abdominale.</td>
+                        <td data-label="Surse Contaminare">Carne de pasăre crudă sau gătită insuficient, lapte nepasteurizat, apă contaminată.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Clostridium botulinum</td>
+                        <td data-label="Probleme Sănătate">Botulism (paralizie flască severă, potențial fatală), afectează sistemul nervos.</td>
+                        <td data-label="Surse Contaminare">Conserve de casă (legume, carne) sterilizate necorespunzător, miere (la sugari), pește fermentat.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Clostridium perfringens</td>
+                        <td data-label="Probleme Sănătate">Toxiinfecție alimentară (crampe abdominale intense, diaree apoasă), de obicei fără vărsături.</td>
+                        <td data-label="Surse Contaminare">Carne (vită, pasăre), tocănițe, sosuri (gravy), alimente gătite în cantități mari și lăsate să se răcească lent.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Escherichia coli (tulpinile patogene, ex: EHEC O157:H7)</td>
+                        <td data-label="Probleme Sănătate">Diaree hemoragică severă, sindrom hemolitic uremic (afectare renală).</td>
+                        <td data-label="Surse Contaminare">Carne de vită tocată (gătită insuficient), legume/fructe nespălate (spanac, salată), lapte nepasteurizat, apă contaminată.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Listeria monocytogenes</td>
+                        <td data-label="Probleme Sănătate">Listerioză (infecție gravă, în special la gravide, nou-născuți și imunosupresați), meningită, septicemie.</td>
+                        <td data-label="Surse Contaminare">Brânzeturi moi nepasteurizate, mezeluri (deli meats), pateu, pește afumat la rece, lapte nepasteurizat.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Salmonella enterica</td>
+                        <td data-label="Probleme Sănătate">Toxiinfecții alimentare, febră tifoidă, diaree, vărsături.</td>
+                        <td data-label="Surse Contaminare">Carne de pasăre crudă sau gătită insuficient, ouă crude, lapte nepasteurizat, apă și legume/fructe contaminate.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Shigella spp.</td>
+                        <td data-label="Probleme Sănătate">Dizenterie (diaree severă cu sânge și mucus), crampe abdominale, febră.</td>
+                        <td data-label="Surse Contaminare">Apă și alimente contaminate (prin contact fecal-oral), igienă precară a manipulatorilor de alimente.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Staphylococcus aureus (tulpinile enterotoxigene)</td>
+                        <td data-label="Probleme Sănătate">Toxiinfecții alimentare (greață, vărsături severe, rapide, datorate toxinei preformate).</td>
+                        <td data-label="Surse Contaminare">Alimente lăsate la temperatura camerei (salate cu maioneză, produse de patiserie cu cremă, șuncă), manipulate neigienic (toxina este produsă în aliment).</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Vibrio cholerae</td>
+                        <td data-label="Probleme Sănătate">Holera (diaree apoasă masivă, deshidratare severă, fatală fără tratament).</td>
+                        <td data-label="Surse Contaminare">Apă potabilă contaminată cu fecale, fructe de mare crude sau gătite insuficient (în special scoici) din ape contaminate.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Vibrio parahaemolyticus</td>
+                        <td data-label="Probleme Sănătate">Toxiinfecție alimentară (diaree apoasă, crampe abdominale, greață, vărsături).</td>
+                        <td data-label="Surse Contaminare">Fructe de mare crude sau gătite insuficient (stridii, midii, creveți).</td>
+                    </tr>
+                     <tr>
+                        <td data-label="Nume Bacterie">Vibrio vulnificus</td>
+                        <td data-label="Probleme Sănătate">Infecții grave ale rănilor (din apă de mare), septicemie (cu mortalitate ridicată) la consumul de fructe de mare crude.</td>
+                        <td data-label="Surse Contaminare">Stridii crude, contactul rănilor deschise cu apa de mare contaminată.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Yersinia enterocolitica</td>
+                        <td data-label="Probleme Sănătate">Yersinioză (febră, dureri abdominale intense, diaree), poate mima apendicita.</td>
+                        <td data-label="Surse Contaminare">Carne de porc crudă sau gătită insuficient (în special intestine), lapte nepasteurizat, apă contaminată.</td>
+                    </tr>
 
-        <div class="section-header">
-            Bacterii patogene (cu potențial de risc)
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nume bacterie</th>
-                    <th>Probleme de sănătate asociate</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>Clostridium difficile</td><td>Diaree severă, colită (inflamație a colonului).</td></tr>
-                <tr><td>Salmonella enterica</td><td>Toxiinfecții alimentare, febră tifoidă, diaree, vărsături.</td></tr>
-                <tr><td>Escherichia coli (anumite tulpini, ex: E. coli O157:H7)</td><td>Diaree hemoragică severă, sindrom hemolitic uremic (afectare renală).</td></tr>
-                <tr><td>Campylobacter jejuni</td><td>Toxiinfecții alimentare, diaree (adesea sanguinolentă), febră, crampe abdominale.</td></tr>
-                <tr><td>Shigella spp.</td><td>Dizenterie (diaree severă cu sânge și mucus), crampe abdominale, febră.</td></tr>
-                <tr><td>Staphylococcus aureus (tulpinile enterotoxigene)</td><td>Toxiinfecții alimentare (greață, vărsături severe).</td></tr>
-                <tr><td>Helicobacter pylori</td><td>Gastrită cronică, ulcer gastric și duodenal, risc crescut de cancer gastric.</td></tr>
-                <tr><td>Vibrio cholerae</td><td>Holera (diaree apoasă masivă, deshidratare severă, fatală fără tratament).</td></tr>
-                <tr><td>Yersinia enterocolitica</td><td>Yersinioză (febră, dureri abdominale intense, diaree), poate mima apendicita.</td></tr>
-                <tr><td>Klebsiella pneumoniae (anumite tulpini și disbioză)</td><td>Infecții urinare, pneumonie, septicemie; în intestin, disbioza poate contribui la sindromul de colon iritabil.</td></tr>
-            </tbody>
-        </table>
+                    <!-- CATEGORIE NOUĂ -->
+                    <tr class="category-header-patogen">
+                        <td colspan="3">Patogeni nozocomiali (spitalicești) și alți agenți patogeni relevanți</td>
+                    </tr>
+                    
 
-        <footer class="text-center text-sm text-slate-500 mt-8">
-            <p>&copy; dr.ing. Radu Pascu - 2025</p>
-        </footer>
+                     <tr>
+                        <td data-label="Nume Bacterie">Acinetobacter baumannii</td>
+                        <td data-label="Probleme Sănătate">Infecții nozocomiale grave: pneumonie asociată ventilației (VAP), infecții ale sângelui, infecții ale rănilor. Adesea multirezistentă la antibiotice (MDR).</td>
+                        <td data-label="Surse Contaminare">Medii spitalicești (suprafețe, echipamente medicale umede), pielea pacienților colonizați.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Clostridium difficile</td>
+                        <td data-label="Probleme Sănătate">Diaree severă, colită (inflamație a colonului). Adesea apare post-tratament cu antibiotice.</td>
+                        <td data-label="Surse Contaminare">Suprafețe contaminate (în special în spitale), contact fecal-oral, dezechilibru al florei post-antibiotice.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Enterococcus faecalis / faecium (VRE)</td>
+                        <td data-label="Probleme Sănătate">Infecții nozocomiale (urinare, ale rănilor chirurgicale, septicemie). VRE (Enterococi Rezistenți la Vancomicină) este o amenințare majoră.</td>
+                        <td data-label="Surse Contaminare">Medii spitalicești, catetere, mâinile personalului medical, echipamente contaminate.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Helicobacter pylori</td>
+                        <td data-label="Probleme Sănătate">Gastrită cronică, ulcer gastric și duodenal, risc crescut de cancer gastric.</td>
+                        <td data-label="Surse Contaminare">Apă și alimente contaminate, salivă (contact de la persoană la persoană, tacâmuri comune).</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Klebsiella pneumoniae (tulpinile MDR)</td>
+                        <td data-label="Probleme Sănătate">Infecții nozocomiale (urinare, pneumonie, septicemie). Tulpini multirezistente (producătoare de carbapenemaze - KPC) sunt critice.</td>
+                        <td data-label="Surse Contaminare">Medii spitalicești (catetere, ventilatoare), contact de la persoană la persoană, apă contaminată.</td>
+                    </tr>
+                     <tr>
+                        <td data-label="Nume Bacterie">Pseudomonas aeruginosa</td>
+                        <td data-label="Probleme Sănătate">Infecții nozocomiale (VAP, infecții ale rănilor, arsuri, infecții urinare), infecții la pacienți cu fibroză chistică. Adesea multirezistentă.</td>
+                        <td data-label="Surse Contaminare">Medii umede din spitale (chiuvete, ventilatoare, echipamente), soluții contaminate, sol, apă.</td>
+                    </tr>
+                    <tr>
+                        <td data-label="Nume Bacterie">Staphylococcus aureus (inclusiv MRSA)</td>
+                        <td data-label="Probleme Sănătate">Infecții ale pielii (furuncule), septicemie, pneumonie, infecții ale rănilor chirurgicale. MRSA (Meticilino-Rezistent) este o infecție nozocomială majoră.</td>
+                        <td data-label="Surse Contaminare">Pielea și nasul persoanelor (purtători sănătoși), echipamente medicale, suprafețe spitalicești, igienă precară a mâinilor.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+        <div id="footer-placeholder"></div>
     </div>
+    <script>        
+        // Încărcare subsol
+        fetch('https://nutrisib.club/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        });
+    </script>
+ 
+    <script src="https://nutrisib.club/script_protect.js" defer>  // Încărcare script protecție cu <div id="footer-placeholder"></div> în containerul principal! </script>   
 </body>
 </html>
+
