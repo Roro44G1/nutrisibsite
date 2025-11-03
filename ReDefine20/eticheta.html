@@ -3,365 +3,684 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Meta-informații SEO preluate din eticheta.html -->
     <title>Eticheta Nutrițională - Ghid detaliat</title>
+    <meta name="description" content="Învață să descifrezi etichetele alimentare pentru a face alegeri informate și sănătoase, fundamentate științific, în programul ReDefine.">
+    <meta name="keywords" content="eticheta nutrițională, redefine, ingrediente, aditivi, e-uri, zahăr, grăsimi, sare, fibre">
     
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Scriptul Chart.js din model (păstrat pentru uniformitate) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
+        /* --- Definirea Variabilelor (DIN MODEL) --- */
+        :root {
+            --color-bg: #f3f4f6;
+            --color-bg-white: #ffffff;
+            --color-bg-table-header: #f3f4f6;
+            --color-bg-table-row-even: #f9fafb;
+            
+            --color-text-dark: #1f2937;
+            --color-text-medium: #374151;
+            --color-text-light: #4b5563;
+            --color-text-white: #ffffff;
+            --color-text-footer: #bdc3c7;
+            --color-text-footer-link: #ecf0f1;
+            --color-footer-bg: #212529;
+
+            --text-dark: #212529;
+
+            --color-brand-dark: #0A2463;
+            --color-brand-medium: #3E92CC;
+            --color-brand-active: #2563eb;
+            
+            --color-border: #e5e7eb;
+            --color-border-hover: #d1d5db;
+
+            --color-box-yellow-bg: #fefce8;
+            --color-box-yellow-border: #facc15;
+            --color-box-yellow-text: #92400e;
+            
+            --color-box-red-bg: #fef2f2;
+            --color-box-red-border: #ef4444;
+            --color-box-red-text: #991b1b; 
+
+            --color-box-orange-bg: #fff7ed;
+            --color-box-orange-border: #f97316;
+            --color-box-orange-text: #ea580c;
+            
+            --color-box-yellow-light-bg: #fefce8;
+            --color-box-yellow-light-border: #ca8a04;
+
+            --color-box-green-bg: #f0fdf4;
+            --color-box-green-border: #22c55e;
+            --color-box-green-text: #15803d; 
+            
+            --color-box-purple-bg: #faf5ff;
+            --color-box-purple-border: #a855f7;
+            --color-box-purple-text: #9333ea;
+
+            --color-box-blue-bg: #eff6ff;
+            --color-box-blue-border: #3b82f6;
+            --color-box-blue-text: #1d4ed8; 
+
+            /* NOU: Definiție pentru caseta albastru-închis (din eticheta.html) */
+            --color-box-dark-blue-bg: #eff6ff;
+            --color-box-dark-blue-border: #0A2463;
+            --color-box-dark-blue-text: #0A2463;
+        }
+
+        /* --- Stiluri Globale (DIN MODEL) --- */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f9fa; /* Light background */
-            color: #212529; /* Dark text */
+            margin: 0;
+            padding: 0.5rem;
+            display: flex;
+            justify-content: center;
+            background-color: var(--color-bg);
+            color: var(--color-text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-        .chart-container {
-            position: relative;
-            height: 350px;
+
+        .container {
+            background-color: var(--color-bg-white);
+            max-width: 56rem; /* 4xl */
             width: 100%;
-            max-width: 800px;
+            border-radius: 1rem; /* rounded-2xl */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); /* shadow-xl */
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+        }
+
+        main {
+            padding: 1.5rem;
+        }
+
+        /* --- Antet (Header) (DIN MODEL) --- */
+        header {
+            color: var(--color-text-white);
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(to bottom right, var(--color-brand-dark), var(--color-brand-medium));
+        }
+
+        header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            margin: 0 0 0.5rem 0;
+        }
+
+        header h2 {
+            font-size: 1.125rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin: 0;
+            max-width: 42rem;
             margin-left: auto;
             margin-right: auto;
         }
-        @media (max-width: 768px) {
-            .chart-container {
-                height: 300px;
-            }
+
+        /* --- Stiluri de Conținut (DIN MODEL) --- */
+        section {
+            margin-bottom: 2rem; 
         }
-        .info-card {
-            background-color: white;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
+        
+        section:last-child {
+            margin-bottom: 0;
         }
-        .section-title {
-            font-size: 1.8em;
-            color: #2c3e50;
-            margin-bottom: 20px;
+
+        section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-brand-dark);
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 4px solid var(--color-brand-medium);
+            text-align: center; 
+        }
+
+        section h4 {
+            font-size: 1.25rem;
             font-weight: 600;
-            border-bottom: 2px solid #a3d9ff;
-            padding-bottom: 5px;
-            align-self: stretch;
-        }
-        .text-section {
-            padding: 2rem;
-            background-color: #ffffff;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-        }
-        .text-section h3 {
-            font-size: 1.5em;
-            font-weight: 600;
-            color: #0A2463;
+            color: var(--color-brand-dark);
+            margin-top: 1.5rem;
             margin-bottom: 1rem;
         }
-        .text-section ul {
-            list-style-type: disc;
-            padding-left: 1.5rem;
-        }
-        .text-section li {
-            margin-bottom: 0.5rem;
-        }
-        .comparison-card {
-            background-color: white;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        .comparison-image {
-            width: 100%;
-            max-width: 200px;
-            height: auto;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        .step-card {
-            background-color: white;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 1.5rem;
-            text-align: center;
-        }
-        .step-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            background-color: #0A2463; /* darkBlue */
-            color: white;
-            font-weight: bold;
+
+        section h5 {
+            font-size: 1.125rem;
+            font-weight: 700;
             margin-bottom: 0.75rem;
         }
-        .flow-connector {
+        
+        section p {
+            color: var(--color-text-medium);
+            text-align: justify;
+            margin-bottom: 1rem;
+            line-height: 1.625;
+        }
+        
+        section > p:first-of-type {
+            text-align: center;
+            color: var(--color-text-light);
+            max-width: 48rem; /* 3xl */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        p.list-header {
+            margin-top: 1rem;
+            font-weight: 600; /* Am adăugat font-weight */
+            color: var(--color-text-dark); /* Am adăugat culoare */
+        }
+        
+        /* --- Stil NOU (din eticheta.html) --- */
+        .text-section-styled {
+            background-color: var(--color-bg-white);
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border: 1px solid var(--color-border);
+            margin-bottom: 1.5rem;
+        }
+        .text-section-styled p {
+            text-align: justify;
+            margin-bottom: 0;
+        }
+        .text-section-styled p + p {
+             margin-top: 1rem;
+        }
+
+        /* --- Cutii de Notificări (DIN MODEL) --- */
+        .info-box {
+            margin-top: 1rem; /* Am crescut spațiul între casete */
+            padding: 1rem;
+            border-left-width: 4px;
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            margin-bottom: 1rem; 
+        }
+        .info-box strong {
+            font-weight: 700;
+            color: var(--color-text-dark);
+        }
+        .info-box h4 {
+             margin: 0 0 0.5rem 0;
+             font-size: 1.25rem;
+             font-weight: 700;
+        }
+        .info-box p {
+            text-align: left; 
+            margin-bottom: 0.5rem;
+        }
+        .info-box ul {
+            text-align: left;
+            padding-left: 1.25rem;
+            margin-top: 0.5rem;
+        }
+        /* Liste imbricate (din eticheta.html) */
+        .info-box ul ul {
+            list-style-type: circle;
+            margin-top: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-box-yellow {
+            background-color: var(--color-box-yellow-bg);
+            border-color: var(--color-box-yellow-border);
+            color: var(--color-box-yellow-text);
+        }
+        .info-box-yellow h4 { color: var(--color-box-yellow-text); }
+        .info-box-yellow strong {
+             color: var(--color-box-yellow-text);
+             font-weight: 700;
+        }
+        
+        .info-box-red {
+            background-color: var(--color-box-red-bg);
+            border-color: var(--color-box-red-border);
+            color: var(--color-box-red-text);
+        }
+        .info-box-red h4 { color: var(--color-box-red-text); }
+        .info-box-red p { color: var(--color-text-medium); }
+        .info-box-red strong { color: var(--color-text-dark); }
+        
+        .info-box-blue {
+            background-color: var(--color-box-blue-bg);
+            border-color: var(--color-box-blue-border);
+            color: var(--color-box-blue-text);
+        }
+        .info-box-blue h4 { color: var(--color-box-blue-text); }
+        .info-box-blue p { color: var(--color-text-medium); }
+        .info-box-blue strong { color: var(--color-text-dark); }
+        
+        .info-box-green {
+            background-color: var(--color-box-green-bg);
+            border-color: var(--color-box-green-border);
+            color: var(--color-box-green-text);
+        }
+        .info-box-green h4 { color: var(--color-box-green-text); }
+        .info-box-green p { color: var(--color-text-medium); }
+        .info-box-green strong { color: var(--color-text-dark); }
+        
+        /* NOU: Stil pentru caseta Sării (din eticheta.html) */
+        .info-box-dark-blue {
+            background-color: var(--color-box-dark-blue-bg);
+            border-color: var(--color-box-dark-blue-border);
+            color: var(--color-box-dark-blue-text);
+        }
+        .info-box-dark-blue h4 { color: var(--color-box-dark-blue-text); }
+        .info-box-dark-blue p { color: var(--color-text-medium); }
+        .info-box-dark-blue strong { color: var(--color-text-dark); }
+        
+        /* Caseta de concluzie (din modelul carbohidrati) */
+        .info-box-concluzie {
+            background-color: var(--color-brand-dark);
+            color: var(--color-text-white);
+            border-color: var(--color-brand-medium);
+        }
+        .info-box-concluzie p {
+            color: var(--color-text-white);
+            text-align: center;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+        
+        /* NOU: Stil pentru butonul de link (din eticheta.html) */
+        .button-link {
+            display: inline-block;
+            background-color: var(--color-brand-dark);
+            color: var(--color-text-white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            margin-top: 1rem; /* Am adăugat spațiu */
+            margin-bottom: 1.5rem;
+        }
+        .button-link:hover {
+            background-color: var(--color-brand-medium);
+        }
+        .center-link {
+             display: block;
+             text-align: center;
+        }
+
+        /* --- Liste (DIN MODEL) --- */
+        section ul, section ol {
+            padding-left: 1.25rem;
+            color: var(--color-text-medium);
+            margin-bottom: 1rem; /* Implicit */
+        }
+        section ul { list-style-type: disc; }
+        section ol { list-style-type: decimal; }
+        
+        /* --- Subsol (Footer) (DIN MODEL) --- */
+        footer.infographic-footer {
+            background-color: var(--color-footer-bg);
+            color: var(--color-text-footer);
+            text-align: center;
+            padding: 0.5rem 2rem; 
+            font-size: 0.85rem;
+            border-top: none;
+        }
+        
+        footer.infographic-footer p {
+            margin: 0.1rem 0;
+            text-align: center;
+            color: var(--color-text-footer);
+        }
+
+        footer.infographic-footer a {
+            color: var(--color-text-footer-link);
+            text-decoration: none;
+        }
+        
+        footer.infographic-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-social-links {
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 0.5rem 0;
+            gap: 20px;
+            margin-bottom: 0.5rem;
         }
-        .flow-connector span {
-            font-size: 3rem;
-            color: #adb5bd; /* gray-400 */
+        
+        .footer-social-links a {
+            display: inline-block;
+            transition: transform 0.2s ease;
         }
-        @media (min-width: 768px) {
-            .flow-connector.horizontal {
-                transform: rotate(0deg);
+        
+        .footer-social-links a:hover {
+            transform: scale(1.1);
+        }
+
+        .footer-social-links svg, .footer-social-links img {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* --- Printare și Responsive (DIN MODEL) --- */
+        .no-print {
+            display: block;
+        }
+
+        @media print {
+            body {
+                font-size: 10pt;
+                padding: 0;
             }
-            .flow-connector.vertical {
-                transform: rotate(90deg);
-                margin: 0 auto;
+            .no-print, .infographic-footer {
+                display: none;
+            }
+            .tab-content {
+                display: block !important;
+                padding: 0 !important;
+            }
+            .tab-content section {
+                page-break-inside: avoid;
+            }
+            h1, h2, h3, h4, h5 {
+                page-break-after: avoid;
+            }
+            header {
+                 background: var(--color-brand-dark) !important;
+                 color: var(--color-text-white) !important;
+                 -webkit-print-color-adjust: exact;
+                 color-adjust: exact;
+            }
+            .info-box, .text-section-styled {
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
+            .border-l-4 {
+                border-left-width: 4px;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
             }
         }
-        .note {
-            font-size: 0.85em;
-            color: #777;
-            margin-top: 20px;
-            text-align: center;
-            width: 100%;
+
+        /* Media Queries pentru Responsive (DIN MODEL) */
+        @media (min-width: 640px) { /* sm */
+            body { padding: 1rem; }
+            header { padding: 2rem; }
+            header h1 { font-size: 2.25rem; }
+            header h2 { font-size: 1.25rem; }
         }
+        
+        @media (min-width: 768px) { /* md */
+            body { padding: 1.5rem; }
+            main { padding: 2rem; }
+            section h3 { font-size: 1.875rem; }
+            section h4 { font-size: 1.5rem; }
+        }
+        
     </style>
 </head>
 <body>
-    
-    <div class="bg-white">
-        <main class="container mx-auto p-4 md:p-8 max-w-7xl">
-            <header class="text-center mb-16">
-                <h1 class="text-4xl md:text-5xl font-bold text-[#0A2463] mb-4">Eticheta Nutrițională: Busola ta alimentară</h1>
-                <p class="text-lg text-slate-600 max-w-3xl mx-auto">Învață să descifrezi etichetele alimentare pentru a face alegeri informate și sănătoase, fundamentate științific, în programul ReDefine.</p>
-            </header>
 
-            <section class="mb-16">
-                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">De ce este esențial să citim etichetele nutriționale?</h2>
-                <div class="text-section">
-                    <p class="text-slate-700 mb-4">Eticheta nutrițională reprezintă "buletinul de identitate" al oricărui produs alimentar procesat, oferind informații cruciale despre compoziția și valoarea sa nutritivă. Într-o piață alimentară din ce în ce mai complexă, dominată de produse ultra-procesate și strategii de marketing sofisticate, capacitatea de a interpreta corect aceste informații devine o competență fundamentală pentru menținerea sănătății metabolice și cardiovasculare. Programul ReDefine subliniază că înțelegerea etichetei este primul pas către autonomia alimentară și prevenirea bolilor cronice.</p>
-                    <p class="text-slate-700">De la reglementările Uniunii Europene (Regulamentul (UE) Nr. 1169/2011) care impun standarde stricte de etichetare, până la impactul direct asupra sănătății individuale, fiecare detaliu de pe etichetă contribuie la o decizie alimentară conștientă. O dietă echilibrată, bazată pe alimente integrale și neprocesate, este ideală, dar în realitatea cotidiană, produsele ambalate fac parte adesea din alimentația noastră. Prin urmare, decodificarea etichetei devine un instrument indispensabil pentru a naviga prin opțiunile disponibile și a alege "combustibilul" optim pentru corpul nostru.</p>
-                </div>
-            </section>
+    <div class="container">
 
-            <section class="mb-16">
-                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Cum citim eticheta nutrițională: o analiză detaliată</h2>
-                <p class="text-center text-slate-600 mb-8 max-w-4xl mx-auto">Decodificarea etichetei alimentare implică înțelegerea fiecărei secțiuni și a implicațiilor sale asupra sănătății. Iată la ce trebuie să fii atent:</p>
+        <!-- ANTET: Conținut înlocuit din eticheta.html -->
+        <header>
+            <h1>Eticheta nutrițională: busola ta alimentară</h1>
+            <h2>Învață să descifrezi etichetele alimentare pentru a face alegeri informate și sănătoase, fundamentate științific, în programul ReDefine.</h2>
+        </header>
+
+        <!-- NAVIGARE TAB-URI: Eliminată -->
+
+        <main>
+            <div id="report" class="tab-content active" style="display: block;">
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="info-card border-l-4 border-[#3E92CC]">
-                        <h3 class="text-2xl font-bold text-[#3E92CC] mb-3">1. Lista de ingrediente: ordinea contează!</h3>
-                        <p class="text-slate-700 mb-2">Conform reglementărilor, ingredientele sunt listate în <b>ordine descrescătoare a cantității</b> la momentul fabricării produsului. Aceasta înseamnă că primele 3-5 ingrediente constituie cea mai mare parte a produsului, oferind o imagine clară a compoziției sale dominante.</p>
-                        <p class="font-semibold mt-4">Verifică cu atenție prezența și poziția următoarelor:</p>
-                        <ul class="list-disc list-inside text-slate-600">
-                            <li><b>Zahărul și derivatele sale:</b> Căutați denumiri precum sirop de glucoză-fructoză, dextroză, sucroză, malț, sirop de agave, melasă, concentrat de suc de fructe, sirop de porumb, zaharoză, fructoză, lactoză, etc. O prezență timpurie în listă indică un conținut ridicat de zaharuri adăugate. Acestea pot duce la creșteri rapide ale glicemiei și la un răspuns insulinic intens, contribuind la rezistența la insulină și la acumularea de grăsime viscerală.</li>
-                            <li><b>Uleiuri și grăsimi procesate:</b> Uleiuri parțial hidrogenate (grăsimi trans), grăsimi de palmier sau cocos în exces. Grăsimile trans sunt extrem de dăunătoare, crescând colesterolul LDL ("rău") și scăzând colesterolul HDL ("bun"), contribuind semnificativ la inflamație sistemică și risc cardiovascular. Uleiurile de palmier și cocos, deși naturale, sunt bogate în grăsimi saturate și ar trebui consumate cu moderație.</li>
-                            <li><b>Făina albă rafinată:</b> Lipsită de fibre și nutrienți, contribuie la creșteri rapide ale glicemiei și la un răspuns insulinic similar zahărului.</li>
-                            <li><b>Aditivi alimentari (E-uri):</b> O listă lungă de E-uri sau prezența celor controversate (vezi secțiunea dedicată) este un semnal de alarmă. Acești aditivi pot avea efecte adverse asupra microbiotei intestinale, pot declanșa reacții inflamatorii sau alergice și pot fi asociați cu riscuri pe termen lung.</li>
-                        </ul>
-                        <p class="text-slate-700 mt-4"><b>Principiul "Mai puțin este mai mult":</b> Cu cât lista de ingrediente este mai scurtă și mai inteligibilă (ingrediente recunoscute ca alimente integrale), cu atât produsul este, în general, mai sănătos și mai puțin procesat.</p>
+                <section>
+                    <h3>De ce este esențial să citim etichetele nutriționale?</h3>
+                    <!-- CORECȚIE: Tailwind eliminat, înlocuit cu clasa .text-section-styled -->
+                    <div class="text-section-styled">
+                        <p>Eticheta nutrițională reprezintă "buletinul de identitate" al oricărui produs alimentar procesat, oferind informații cruciale despre compoziția și valoarea sa nutritivă. Într-o piață alimentară din ce în ce mai complexă, dominată de produse ultra-procesate și strategii de marketing sofisticate, capacitatea de a interpreta corect aceste informații devine o competență fundamentală pentru menținerea sănătății metabolice și cardiovasculare. Programul ReDefine subliniază că înțelegerea etichetei este primul pas către autonomia alimentară și prevenirea bolilor cronice.</p>
+                        <p>De la reglementările Uniunii Europene (Regulamentul (UE) Nr. 1169/2011) care impun standarde stricte de etichetare, până la impactul direct asupra sănătății individuale, fiecare detaliu de pe etichetă contribuie la o decizie alimentară conștientă. O dietă echilibrată, bazată pe alimente integrale și neprocesate, este ideală, dar în realitatea cotidiană, produsele ambalate fac parte adesea din alimentația noastră. Prin urmare, decodificarea etichetei devine un instrument indispensabil pentru a naviga prin opțiunile disponibile și a alege "combustibilul" optim pentru corpul nostru.</p>
                     </div>
-                    <div class="info-card border-l-4 border-[#F4C150]">
-                        <h3 class="text-2xl font-bold text-[#F4C150] mb-3">2. Declarația nutrițională: cifrele esențiale și implicațiile lor</h3>
-                        <p class="text-slate-700 mb-2">Această secțiune prezintă valorile energetice și nutriționale per 100g de produs (sau per porție), permițând o comparație standardizată între produse. Este esențial să înțelegem ce reprezintă fiecare categorie și cum influențează ele sănătatea:</p>
-                        <ul class="list-disc list-inside text-slate-600 space-y-1">
-                            <li><b>Energie:</b> Exprimată în kcal (kilocalorii) și kJ (kilojouli). Rețineți că 1 kcal ≈ 4.184 kJ. Aceasta indică aportul caloric total al produsului. Un aport caloric excesiv, chiar și din surse "sănătoase", poate duce la creștere în greutate.</li>
+                </section>
+
+                <section>
+                    <h3>Cum citim eticheta nutrițională: o analiză detaliată</h3>
+                    <p>Decodificarea etichetei alimentare implică înțelegerea fiecărei secțiuni și a implicațiilor sale asupra sănătății. Iată la ce trebuie să fii atent:</p>
+                    
+                    <!-- CORECȚIE: Grid-ul a fost înlocuit cu o stivă verticală de .info-box -->
+                    
+                    <div class="info-box info-box-blue">
+                        <h4>1. Lista de ingrediente: ordinea contează!</h4>
+                        <p>Conform reglementărilor, ingredientele sunt listate în <b>ordine descrescătoare a cantității</b> la momentul fabricării produsului. Aceasta înseamnă că primele 3-5 ingrediente constituie cea mai mare parte a produsului, oferind o imagine clară a compoziției sale dominante.</p>
+                        <p class="list-header">Verifică cu atenție prezența și poziția următoarelor:</p>
+                        <ul>
+                            <li><b>Zahărul și derivatele sale:</b> Căutați denumiri precum sirop de glucoză-fructoză, dextroză, sucroză, malț, sirop de agave, melasă, concentrat de suc de fructe, sirop de porumb, zaharoză, fructoză, lactoză, etc. O prezență timpurie în listă indică un conținut ridicat de zaharuri adăugate.</li>
+                            <li><b>Uleiuri și grăsimi procesate:</b> Uleiuri parțial hidrogenate (grăsimi trans), grăsimi de palmier sau cocos în exces. Grăsimile trans sunt extrem de dăunătoare, crescând colesterolul LDL ("rău") și scăzând colesterolul HDL ("bun").</li>
+                            <li><b>Făina albă rafinată:</b> Lipsită de fibre și nutrienți, contribuie la creșteri rapide ale glicemiei.</li>
+                            <li><b>Aditivi alimentari (E-uri):</b> O listă lungă de E-uri sau prezența celor controversate este un semnal de alarmă.</li>
+                        </ul>
+                        <p><b>Principiul "Mai puțin este mai mult":</b> Cu cât lista de ingrediente este mai scurtă și mai inteligibilă (ingrediente recunoscute ca alimente integrale), cu atât produsul este, în general, mai sănătos și mai puțin procesat.</p>
+                    </div>
+                    
+                    <div class="info-box info-box-yellow">
+                        <h4>2. Declarația nutrițională: cifrele esențiale și implicațiile lor</h4>
+                        <p>Această secțiune prezintă valorile energetice și nutriționale per 100g de produs (sau per porție), permițând o comparație standardizată între produse. Este esențial să înțelegem ce reprezintă fiecare categorie:</p>
+                        <ul>
+                            <li><b>Energie:</b> Exprimată în kcal (kilocalorii) și kJ (kilojouli).</li>
                             <li><b>Macronutrienți:</b>
                                 <ul>
-                                    <li><b>Grăsimi (total, saturate, trans):</b> Cantitatea totală de grăsimi, cu detalii despre grăsimile saturate (care ar trebui limitate la sub 10% din totalul caloric zilnic) și grăsimile trans (care ar trebui evitate complet). Un exces de grăsimi saturate și trans contribuie la dislipidemie și la inflamație cronică.</li>
-                                    <li><b>Carbohidrați (total, din care zaharuri):</b> Cantitatea totală de carbohidrați. Categoria "din care zaharuri" este crucială; un conținut ridicat indică un impact glicemic mare. Carbohidrații complecși (din cereale integrale, legume) sunt de preferat, oferind energie susținută și fibre.</li>
-                                    <li><b>Proteine:</b> Esențiale pentru sinteza tisulară, funcția enzimatică și hormonală, și menținerea masei musculare. Un aport proteic adecvat (aproximativ 0.8-1.2 g/kg corp/zi) contribuie la sațietate și la un metabolism eficient.</li>
+                                    <li><b>Grăsimi (total, saturate, trans):</b> Cantitatea totală de grăsimi, cu detalii despre grăsimile saturate (care ar trebui limitate) și grăsimile trans (care ar trebui evitate complet).</li>
+                                    <li><b>Carbohidrați (total, din care zaharuri):</b> Cantitatea totală de carbohidrați. Categoria "din care zaharuri" este crucială; un conținut ridicat indică un impact glicemic mare.</li>
+                                    <li><b>Proteine:</b> Esențiale pentru sinteza tisulară, funcția enzimatică și menținerea masei musculare.</li>
                                 </ul>
                             </li>
-                            <li><b>Fibre:</b> Cantitatea totală de fibre alimentare (solubile și insolubile). Fibrele sunt esențiale pentru sănătatea digestivă, reglarea glicemiei, reducerea colesterolului și susținerea unui microbiom intestinal sănătos prin efectul prebiotic. Un aport de cel puțin 25-30g/zi este recomandat.</li>
-                            <li><b>Sare (sodiu):</b> Cantitatea totală de sare (derivat din sodiu), cu impact direct asupra tensiunii arteriale. Un aport ridicat de sodiu (peste 1.5g/100g) este un factor de risc major pentru hipertensiunea arterială și afecțiunile cardiovasculare.</li>
-                            <li><b>Micronutrienți:</b> Vitamine și minerale, adesea exprimate ca procent din Valoarea Nutrițională de Referință (VNR). Un procentaj ridicat indică o densitate nutrițională superioară a produsului. Acești micronutrienți sunt co-factori esențiali în mii de reacții biochimice din corp.</li>
+                            <li><b>Fibre:</b> Esențiale pentru sănătatea digestivă, reglarea glicemiei și susținerea unui microbiom intestinal sănătos.</li>
+                            <li><b>Sare (sodiu):</b> Cantitatea totală de sare, cu impact direct asupra tensiunii arteriale.</li>
+                            <li><b>Micronutrienți:</b> Vitamine și minerale, adesea exprimate ca procent din Valoarea Nutrițională de Referință (VNR).</li>
                         </ul>
-                        <p class="text-slate-700 mt-4"><b>Atenție la "per porție":</b> Dimensiunea porției poate fi înșelătoare. Raportați întotdeauna valorile la 100g pentru o comparație standardizată și la consumul real al produsului.</p>
+                        <p><b>Atenție la "per porție":</b> Dimensiunea porției poate fi înșelătoare. Raportați întotdeauna valorile la 100g pentru o comparație standardizată și la consumul real al produsului.</p>
                     </div>
-                    <div class="info-card border-l-4 border-[#D8315B]">
-                        <h3 class="text-2xl font-bold text-[#D8315B] mb-3">3. Zahărul: inamicul ascuns și impactul metabolic</h3>
-                        <p class="text-slate-700 mb-2">Câmpul "din care zaharuri" include toate zaharurile, atât cele naturale (din fructe, lapte), cât și pe cele adăugate. Este crucial să limităm drastic zaharurile adăugate, având în vedere impactul lor sistemic asupra sănătății metabolice și cardiovasculare.</p>
-                        <p class="font-semibold mt-4">Denumiri de evitat în lista de ingrediente (pe lângă "zahăr"):</p>
-                        <ul class="list-disc list-inside text-slate-600 text-sm">
+                    
+                    <div class="info-box info-box-red">
+                        <h4>3. Zahărul: inamicul ascuns și impactul metabolic</h4>
+                        <p>Câmpul "din care zaharuri" include toate zaharurile (naturale și adăugate). Este crucial să limităm drastic zaharurile adăugate, având în vedere impactul lor sistemic asupra sănătății metabolice și cardiovasculare.</p>
+                        <p class="list-header">Denumiri de evitat în lista de ingrediente (pe lângă "zahăr"):</p>
+                        <ul>
                             <li>Sirop de glucoză-fructoză, sirop de porumb bogat în fructoză (HFCS), dextroză, sucroză, malț.</li>
-                            <li>Sirop de agave, melasă, concentrat de suc de fructe, nectar, miere (în produse procesate, chiar dacă naturale, sunt tot zaharuri adăugate și ar trebui limitate).</li>
+                            <li>Sirop de agave, melasă, concentrat de suc de fructe, nectar.</li>
                             <li>Orice ingredient care se termină în "-oză" (fructoză, lactoză, maltoză).</li>
                         </ul>
-                        <p class="text-slate-700 mt-4"><b>Impactul metabolic:</b> Consumul excesiv de zaharuri adăugate duce la creșteri rapide și repetate ale glicemiei, declanșând o secreție intensă de insulină. Pe termen lung, acest proces poate induce rezistența la insulină, o condiție precursoare diabetului de tip 2. Fructoza în exces este metabolizată predominant la nivel hepatic, contribuind la acumularea de grăsime la nivel hepatic (steatoză hepatică non-alcoolică - NAFLD) și la creșterea trigliceridelor. Aceasta, alături de inflamația sistemică cronică indusă de zaharuri, crește semnificativ riscul de boli cardiovasculare.</p>
-                        <p class="text-slate-700">De asemenea, zaharurile adăugate pot perturba echilibrul microbiotei intestinale, favorizând proliferarea bacteriilor patogene și a fungilor (cum ar fi Candida), contribuind la disbioză și la sindromul de intestin permeabil ("leaky gut").</p>
-                        <p class="text-slate-700"><b>Conținut de evitat:</b> Produse cu peste 5g zaharuri/100g, mai ales dacă zahărul sau derivatele sale sunt printre primele ingrediente. Cu cât mai puține grame de zaharuri adăugate, cu atât mai bine.</p>
-                        <p class="text-slate-700"><b>Recomandare OMS:</b> Limitați aportul de zaharuri adăugate la mai puțin de 10% din aportul caloric total zilnic, ideal sub 5% pentru beneficii suplimentare de sănătate.</p>
+                        <p><b>Impactul metabolic:</b> Consumul excesiv duce la creșteri rapide ale glicemiei, secreție intensă de insulină și, pe termen lung, la rezistență la insulină. Fructoza în exces contribuie la steatoză hepatică (ficat gras) și la creșterea trigliceridelor.</p>
+                        <p><b>Conținut de evitat:</b> Produse cu peste 5g zaharuri/100g, mai ales dacă zahărul este printre primele ingrediente.</p>
+                        <p><b>Recomandare OMS:</b> Limitați aportul de zaharuri adăugate la mai puțin de 10% din aportul caloric total zilnic, ideal sub 5%.</p>
                     </div>
-                    <div class="info-card border-l-4 border-[#06D6A0]">
-                        <h3 class="text-2xl font-bold text-[#06D6A0] mb-3">4. Grăsimile: calitatea contează pentru sănătatea cardiovasculară și celulară</h3>
-                        <p class="text-slate-700 mb-2">Monitorizarea cantității totale și, mai ales, a calității grăsimilor este crucială pentru sănătatea cardiovasculară, funcția cerebrală și integritatea celulară. Nu toate grăsimile sunt egale, iar alegerea corectă poate influența semnificativ profilul inflamator al organismului.</p>
-                        <ul class="list-disc list-inside text-slate-600 space-y-1">
-                            <li><b>Grăsimi saturate:</b> Deși necesare în cantități moderate pentru funcții hormonale și structurale, un exces (peste 5g/100g este un semnal de atenție) poate contribui la creșterea colesterolului LDL ("rău") și la inflamație. Surse comune includ carnea grasă, lactate integrale, uleiul de palmier și uleiul de cocos. Consumul ar trebui să fie limitat la sub 10% din totalul caloric zilnic.</li>
-                            <li><b>Grăsimi trans (uleiuri/grăsimi parțial hidrogenate):</b> Acestea sunt grăsimi artificiale, rezultate din procese industriale de hidrogenare. <b>Evitați-le complet!</b> Sunt extrem de dăunătoare, crescând colesterolul LDL și scăzând colesterolul HDL ("bun"), contribuind semnificativ la inflamație sistemică, disfuncție endotelială și risc cardiovascular. Căutați "grăsimi hidrogenate" sau "parțial hidrogenate" în lista de ingrediente.</li>
-                            <li><b>Grăsimi nesaturate (mono- și polinesaturate):</b> Acestea sunt grăsimi sănătoase și ar trebui să constituie majoritatea aportului de grăsimi, având roluri protective.
+                    
+                    <div class="info-box info-box-green">
+                        <h4>4. Grăsimile: calitatea contează pentru sănătatea cardiovasculară și celulară</h4>
+                        <p>Monitorizarea cantității totale și, mai ales, a calității grăsimilor este crucială pentru sănătatea cardiovasculară, funcția cerebrală și integritatea celulară.</p>
+                        <ul>
+                            <li><b>Grăsimi saturate:</b> Un exces (peste 5g/100g) poate contribui la creșterea colesterolului LDL ("rău"). Surse: carne grasă, lactate integrale, ulei de palmier/cocos.</li>
+                            <li><b>Grăsimi trans (uleiuri/grăsimi parțial hidrogenate):</b> Acestea sunt grăsimi artificiale. <b>Evitați-le complet!</b> Sunt extrem de dăunătoare, crescând LDL și scăzând HDL.</li>
+                            <li><b>Grăsimi nesaturate (mono- și polinesaturate):</b> Grăsimi sănătoase (ulei de măsline, avocado, pește gras, semințe de in, chia) care ar trebui să constituie majoritatea aportului.
                                 <ul>
-                                    <li><b>Mononesaturate:</b> (ex: ulei de măsline extravirgin, avocado, nuci) sunt benefice pentru sănătatea inimii.</li>
-                                    <li><b>Polinesaturate (Omega-3 și Omega-6):</b> Esențiale pentru funcția cerebrală, sănătatea celulară și reglarea inflamației. Este crucial să se asigure un echilibru optim între Omega-3 (anti-inflamator, din pește gras, semințe de in, chia) și Omega-6 (care, în exces, poate fi pro-inflamator, din uleiuri vegetale industriale, nuci, semințe). O dietă occidentală tipică are un raport dezechilibrat Omega-6:Omega-3, favorizând inflamația.</li>
+                                    <li>Este crucial să se asigure un echilibru optim între Omega-3 (anti-inflamator) și Omega-6 (pro-inflamator în exces).</li>
                                 </ul>
                             </li>
                         </ul>
-                        <p class="text-slate-700 mt-4"><b>Recomandare:</b> Alegeți produse cu un conținut scăzut de grăsimi saturate și zero grăsimi trans. Optați pentru surse de grăsimi nesaturate, în special cele bogate în Omega-3, și monitorizați raportul Omega-6:Omega-3 în dieta generală.</p>
+                        <p><b>Recomandare:</b> Alegeți produse cu un conținut scăzut de grăsimi saturate și zero grăsimi trans. Optați pentru surse de grăsimi nesaturate.</p>
                     </div>
-                    <div class="info-card border-l-4 border-[#0A2463]">
-                        <h3 class="text-2xl font-bold text-[#0A2463] mb-3">5. Sarea (sodiu): sursa de risc cardiovascular și retenție de fluide</h3>
-                        <p class="text-slate-700 mb-2">Un aport ridicat de sare (clorură de sodiu) este un factor major de risc pentru hipertensiunea arterială, care, la rândul său, crește riscul de boli cardiovasculare, accident vascular cerebral și afecțiuni renale. Sarea contribuie, de asemenea, la retenția de fluide și la edeme, afectând echilibrul hidric al organismului.</p>
-                        <ul class="list-disc list-inside text-slate-600 space-y-1">
-                            <li><b>Mecanism fiziologic:</b> Sodiul este principalul cation extracelular și joacă un rol esențial în menținerea echilibrului hidric și osmotic. Un exces de sodiu determină organismul să rețină apă pentru a dilua concentrația, crescând volumul sanguin și, implicit, tensiunea arterială. Pe termen lung, aceasta poate duce la rigidizarea arterelor și la suprasolicitarea cardiacă.</li>
-                            <li><b>Conținut de evitat:</b> Produse cu peste 1.5g sare/100g (echivalentul a 0.6g sodiu/100g) sunt considerate cu un conținut ridicat de sare și ar trebui limitate.</li>
-                            <li><b>Recomandare OMS:</b> Limitați aportul total de sare la maximum 5g pe zi (aproximativ o linguriță), inclusiv sarea "ascunsă" din alimentele procesate. Majoritatea populației depășește cu mult această limită.</li>
-                            <li><b>Atenție la sarea "ascunsă":</b> Peste 75% din sarea consumată provine din alimente procesate (pâine, mezeluri, brânzeturi, snacks-uri, supe instant, sosuri, alimente semipreparate). Verificați etichetele chiar și la produse care nu par sărate.</li>
+                    
+                    <!-- CORECȚIE: Am creat clasa .info-box-dark-blue -->
+                    <div class="info-box info-box-dark-blue">
+                        <h4>5. Sarea (sodiu): sursa de risc cardiovascular și retenție de fluide</h4>
+                        <p>Un aport ridicat de sare (clorură de sodiu) este un factor major de risc pentru hipertensiunea arterială, care crește riscul de boli cardiovasculare, accident vascular cerebral și afecțiuni renale. Contribuie, de asemenea, la retenția de fluide.</p>
+                        <ul>
+                            <li><b>Mecanism fiziologic:</b> Un exces de sodiu determină organismul să rețină apă pentru a dilua concentrația, crescând volumul sanguin și, implicit, tensiunea arterială.</li>
+                            <li><b>Conținut de evitat:</b> Produse cu peste 1.5g sare/100g (echivalentul a 0.6g sodiu/100g) sunt considerate cu un conținut ridicat de sare.</li>
+                            <li><b>Recomandare OMS:</b> Limitați aportul total de sare la maximum 5g pe zi (inclusiv sarea "ascunsă").</li>
+                            <li><b>Atenție la sarea "ascunsă":</b> Peste 75% din sarea consumată provine din alimente procesate (pâine, mezeluri, brânzeturi, snacks-uri, sosuri).</li>
                         </ul>
-                        <p class="text-slate-700 mt-4"><b>Alternative în bucătărie:</b> Pentru a reduce sarea adăugată fără a compromite gustul, utilizați ierburi aromatice proaspete sau uscate (busuioc, oregano, cimbru, rozmarin, mărar), mirodenii (piper negru, turmeric, ghimbir, usturoi granulat), suc de lămâie sau oțet balsamic sau oțet de mere pentru a intensifica aromele naturale ale alimentelor.</p>
+                        <p><b>Alternative în bucătărie:</b> Utilizați ierburi aromatice, mirodenii, suc de lămâie sau oțet pentru a intensifica aromele naturale.</p>
                     </div>
-                    <div class="info-card border-l-4 border-[#3E92CC]">
-                        <h3 class="text-2xl font-bold text-[#3E92CC] mb-3">6. Fibrele și proteinele: aliații tăi pentru sațietate, sănătate digestivă și controlul greutății</h3>
-                        <p class="text-slate-700 mb-2">Acești macronutrienți sunt cruciali pentru o dietă echilibrată, oferind sațietate, susținând sănătatea digestivă și contribuind la numeroase procese metabolice esențiale.</p>
-                        <ul class="list-disc list-inside text-slate-600 space-y-1">
+                    
+                    <div class="info-box info-box-blue">
+                        <h4>6. Fibrele și proteinele: aliații tăi pentru sațietate și sănătate digestivă</h4>
+                        <p>Acești macronutrienți sunt cruciali pentru o dietă echilibrată, oferind sațietate și susținând procese metabolice esențiale.</p>
+                        <ul>
                             <li><b>Fibre:</b>
                                 <ul>
-                                    <li><b>Rol fiziologic:</b> Fibrele alimentare (solubile și insolubile) sunt esențiale pentru motilitatea intestinală, prevenirea constipației și menținerea unui tranzit regulat. Fibrele solubile (ex: ovăz, mere, leguminoase) formează un gel care încetinește absorbția glucozei, stabilizând glicemia și contribuind la reducerea colesterolului LDL. Fibrele prebiotice (din ceapă, usturoi, sparanghel, banane verzi) hrănesc selectiv bacteriile benefice din microbiomul intestinal, susținând producția de acizi grași cu lanț scurt (SCFA) precum butiratul, care au efecte antiinflamatorii și nutritive pentru celulele colonului.</li>
-                                    <li><b>Cantitate recomandată:</b> Căutați produse cu peste 3g fibre/100g (considerată o sursă bună); peste 6g fibre/100g (considerată foarte bogată în fibre). Recomandarea zilnică pentru adulți este de 25-30g fibre.</li>
+                                    <li><b>Rol fiziologic:</b> Esențiale pentru motilitatea intestinală și prevenirea constipației. Fibrele solubile (ovăz, mere) încetinesc absorbția glucozei și reduc colesterolul. Fibrele prebiotice (ceapă, usturoi) hrănesc bacteriile benefice din microbiom.</li>
+                                    <li><b>Cantitate recomandată:</b> Căutați produse cu peste 3g fibre/100g (sursă bună) sau peste 6g/100g (bogată în fibre). Recomandarea zilnică este de 25-30g.</li>
                                 </ul>
                             </li>
                             <li><b>Proteine:</b>
                                 <ul>
-                                    <li><b>Rol fiziologic:</b> Proteinele sunt blocurile de construcție ale corpului, indispensabile pentru repararea și creșterea țesuturilor, sinteza enzimelor, hormonilor și anticorpilor (susținând sistemul imunitar). Ele au cel mai mare efect termic al alimentelor (TEF), ceea ce înseamnă că organismul consumă mai multă energie pentru a le digera și metaboliza.</li>
-                                    <li><b>Sațietate și controlul greutății:</b> Proteinele contribuie semnificativ la senzația de sațietate, reducând pofta de mâncare și ajutând la controlul porțiilor și la prevenirea supraalimentării. Aceasta se datorează influenței lor asupra hormonilor de sațietate (ex: GLP-1, PYY, CCK).</li>
-                                    <li><b>Cantitate recomandată:</b> O sursă bună de proteine conține peste 5g proteine/100g sau proteinele reprezintă peste 20% din valoarea energetică totală a produsului. Aportul optim variază între 0.8-1.2 g/kg corp/zi, în funcție de nivelul de activitate fizică și obiective.</li>
+                                    <li><b>Rol fiziologic:</b> Blocurile de construcție ale corpului, indispensabile pentru repararea țesuturilor, sinteza enzimelor, hormonilor și anticorpilor.</li>
+                                    <li><b>Sațietate și controlul greutății:</b> Contribuie semnificativ la senzația de sațietate, reducând pofta de mâncare și ajutând la controlul porțiilor.</li>
+                                    <li><b>Cantitate recomandată:</b> O sursă bună conține peste 5g proteine/100g.</li>
                                 </ul>
                             </li>
                         </ul>
-                        <p class="text-slate-700 mt-4"><b>Recomandare:</b> Prioritizează alimentele integrale, bogate natural în fibre și proteine, cum ar fi leguminoasele, cerealele integrale (quinoa, ovăz, hrișcă), nucile, semințele și sursele de proteine de calitate (carne slabă, pește, ouă, lactate fermentate).</p>
+                        <p><b>Recomandare:</b> Prioritizează alimentele integrale, bogate natural în fibre și proteine (leguminoase, cereale integrale, nuci, semințe, pește, ouă).</p>
                     </div>
-                </div>
-            </section>
-            
-            <section class="mb-16 text-center">
-                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Aditivi alimentari (E-uri): o analiză aprofundată și alternative</h2>
-                <p class="text-slate-600 mb-6 max-w-4xl mx-auto">Aditivii alimentari sunt substanțe adăugate produselor pentru a le îmbunătăți aspectul, gustul, textura sau termenul de valabilitate. Deși mulți sunt considerați siguri în doze mici, unii sunt controversați sau chiar periculoși. O listă scurtă de ingrediente, naturală, este întotdeauna de preferat.</p>
-                <a href="tabel_euri.html" class="inline-block bg-[#0A2463] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#3E92CC] transition duration-300 shadow-md text-lg">Vezi tabelul detaliat cu E-uri &raquo;</a>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="info-card border-l-4 border-[#D8315B]">
-                        <h3 class="text-2xl font-bold text-[#D8315B] mb-3">Aditivi cu grad ridicat de periculozitate (de evitați)</h3>
-                        <ul class="list-disc list-inside text-slate-700 space-y-2">
-                            <li><b>E123 (Amarant):</b> Colorant roșu, suspectat de a fi cancerigen și interzis în multe țări (SUA, Norvegia). Poate provoca reacții alergice și astm.
-                                <ul class="list-circle list-inside text-slate-600 text-sm">
-                                    <li>Înlocuitori: Pulbere/suc de sfeclă roșie, extract de rodie, aronia (extract), coacăze negre (extract).</li>
+                </section>
+                
+                <section>
+                    <h3>Aditivi alimentari (E-uri): o analiză aprofundată și alternative</h3>
+                    <p>Aditivii alimentari sunt substanțe adăugate produselor pentru a le îmbunătăți aspectul, gustul, textura sau termenul de valabilitate. Deși mulți sunt considerați siguri, unii sunt controversați. O listă scurtă de ingrediente este întotdeauna de preferat.</p>
+                    
+                    <!-- CORECȚIE: Am centrat butonul folosind o clasă wrapper -->
+                    <div class="center-link">
+                         <a href="tabel_euri.html" class="button-link">Vezi tabelul detaliat cu E-uri &raquo;</a>
+                    </div>
+                    
+                    <div class="info-box info-box-red">
+                        <h4>Aditivi cu grad ridicat de periculozitate (de evitați)</h4>
+                        <ul>
+                            <li><b>E123 (Amarant):</b> Colorant roșu, suspectat de a fi cancerigen și interzis în multe țări. Poate provoca reacții alergice și astm.
+                                <ul>
+                                    <li>Înlocuitori: Pulbere/suc de sfeclă roșie, extract de rodie, aronia.</li>
                                 </ul>
                             </li>
-                            <li><b>E249-E252 (Nitriți și nitrați):</b> Conservanți utilizați în special în carne procesată. Pot forma nitrozamine cancerigene la gătire (în special la temperaturi înalte), risc de metahemoglobinemie la sugari, hiperactivitate.
-                                <ul class="list-circle list-inside text-slate-600 text-sm">
-                                    <li>Înlocuitori: Sare de mare, condimente (rozmarin, cimbru), afumare la rece naturală, uscare, fermentare controlată, Vitamina C (acid ascorbic) ca antioxidant.</li>
+                            <li><b>E249-E252 (Nitriți și nitrați):</b> Conservanți în carne procesată. Pot forma nitrozamine cancerigene la gătire și pot provoca hiperactivitate.
+                                <ul>
+                                    <li>Înlocuitori: Sare de mare, condimente (rozmarin, cimbru), afumare naturală, uscare.</li>
                                 </ul>
                             </li>
-                            <li><b>E407 (Caragenan):</b> Agent de îngroșare și stabilizator, derivat din alge roșii. Poate provoca inflamație intestinală, ulcere și agrava sindromul de colon iritabil. Forma degradată (poligeenan) este un carcinogen cunoscut.
-                                <ul class="list-circle list-inside text-slate-600 text-sm">
-                                    <li>Înlocuitori: Agar-agar, gumă guar, gumă xantan, semințe de chia, pectine.</li>
+                            <li><b>E407 (Caragenan):</b> Agent de îngroșare. Poate provoca inflamație intestinală, ulcere și agrava sindromul de colon iritabil.
+                                <ul>
+                                    <li>Înlocuitori: Agar-agar, gumă guar, semințe de chia, pectine.</li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
-                    <div class="info-card border-l-4 border-[#F4C150]">
-                        <h3 class="text-2xl font-bold text-[#F4C150] mb-3">Aditivi controversați (de consumat cu prudență)</h3>
-                        <ul class="list-disc list-inside text-slate-700 space-y-2">
-                            <li><b>Coloranți azoici (E102 - Tartrazină, E110 - Galben Portocaliu S, E122 - Azorubină, E124 - Ponceau 4R, E129 - Roșu Allura AC, E151 - Negru Briliant BN, E155 - Brun HT):</b> Asociați cu hiperactivitatea la copii ("Southampton Six"), reacții alergice (urticarie, astm), rinită.
-                                <ul class="list-circle list-inside text-slate-600 text-sm">
-                                    <li>Înlocuitori: Turmeric, șofran, paprika, extracte naturale de fructe și legume (sfeclă roșie, morcov negru, spirulină, clorofilă, antociani din fructe de pădure).</li>
+                    
+                    <div class="info-box info-box-yellow">
+                        <h4>Aditivi controversați (de consumat cu prudență)</h4>
+                        <ul>
+                            <li><b>Coloranți azoici (E102, E110, E122, E124, E129, E151, E155):</b> Asociați cu hiperactivitatea la copii ("Southampton Six") și reacții alergice.
+                                <ul>
+                                    <li>Înlocuitori: Turmeric, șofran, paprika, extracte naturale (sfeclă, morcov, spirulină).</li>
                                 </ul>
                             </li>
-                            <li><b>E150c, E150d (Caramel amoniacal/sulfit de amoniu):</b> Utilizați pentru culoare. Pot conține 4-MEI (4-metilimidazol), un potențial carcinogen, și pot provoca probleme digestive la doze mari.
-                                <ul class="list-circle list-inside text-slate-600 text-sm">
-                                    <li>Înlocuitori: Caramel natural (din zahăr ars), extract de malț, cafea, cacao.</li>
+                            <li><b>E150c, E150d (Caramel amoniacal/sulfit de amoniu):</b> Pot conține 4-MEI (4-metilimidazol), un potențial carcinogen.
+                                <ul>
+                                    <li>Înlocuitori: Caramel natural, extract de malț, cafea, cacao.</li>
                                 </ul>
                             </li>
-                            <li><b>E210-E213 (Acid benzoic și benzoați):</b> Conservanți. Pot provoca reacții alergice (astm, urticarie) și hiperactivitate la copii, mai ales în prezența Vitaminei C (formare de benzen).
-                                <ul class="list-circle list-inside text-slate-600 text-sm">
-                                    <li>Înlocuitori: Oțet de mere, acid citric (din citrice), extract de rozmarin, uleiuri esențiale (cimbru, oregano), conservare prin fermentare.</li>
+                            <li><b>E210-E213 (Acid benzoic și benzoați):</b> Conservanți. Pot provoca reacții alergice și hiperactivitate.
+                                <ul>
+                                    <li>Înlocuitori: Oțet de mere, acid citric, extract de rozmarin.</li>
                                 </ul>
                             </li>
                             <li><b>E319, E320, E321 (TBHQ, BHA, BHT):</b> Antioxidanți sintetici. Suspectați de a fi perturbatori endocrini și potențial cancerigeni.
-                                <ul class="list-circle list-inside text-slate-600 text-sm">
-                                    <li>Înlocuitori: Tocopheroli (Vitamina E naturală), extract de rozmarin, acid ascorbic (Vitamina C).</li>
+                                <ul>
+                                    <li>Înlocuitori: Tocopheroli (Vitamina E), extract de rozmarin, Vitamina C.</li>
                                 </ul>
                             </li>
-                            <li><b>E621 (Glutamat monosodic - MSG):</b> Potențiator de gust. Asociați cu "Sindromul restaurantului chinezesc" (dureri de cap, palpitații, greață, amorțeală, slăbiciune) și poate agrava astmul.
-                                <ul class="list-circle list-inside text-slate-600 text-sm">
-                                    <li>Înlocuitori: Drojdie inactivă (fulgi de drojdie inactivă), ciuperci umami (shiitake), alge marine (kelp, kombu), roșii uscate, parmezan.</li>
+                            <li><b>E621 (Glutamat monosodic - MSG):</b> Potențiator de gust. Asociați cu "Sindromul restaurantului chinezesc" (dureri de cap, palpitații).
+                                <ul>
+                                    <li>Înlocuitori: Drojdie inactivă, ciuperci umami (shiitake), alge (kombu).</li>
                                 </ul>
                             </li>
-                            <li><b>Îndulcitori artificiali (E950 - Acesulfam K, E951 - Aspartam, E954 - Zaharină, E955 - Sucraloză):</b> Controverse privind siguranța pe termen lung, impact asupra microbiotei intestinale (pot altera echilibrul bacteriilor benefice) și potențiale efecte metabolice (rezistența la insulină, disfuncții glicemice).
-                                <ul class="list-circle list-inside text-slate-600 text-sm">
-                                    <li>Înlocuitori: Stevia, eritritol, xilitol (cu moderație), sirop de arțar, miere, nectar de cocos.</li>
+                            <li><b>Îndulcitori artificiali (E950, E951, E954, E955):</b> Controverse privind impactul asupra microbiotei intestinale și efectele metabolice.
+                                <ul>
+                                    <li>Înlocuitori: Stevia, eritritol, xilitol (cu moderație).</li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
-                </div>
-                <p class="text-slate-600 mt-8 max-w-4xl mx-auto"><b>Notă:</b> Această listă nu este exhaustivă, dar include unii dintre cei mai frecvenți și controversați aditivi. Principiul de bază este să minimizați consumul de produse cu liste lungi de aditivi și să optați pentru alimente cât mai naturale și neprocesate.</p>
-            </section>
+                    <p><b>Notă:</b> Această listă nu este exhaustivă. Principiul de bază este să minimizați consumul de produse cu liste lungi de aditivi și să optați pentru alimente cât mai naturale și neprocesate.</p>
+                </section>
 
-            <section>
-                <h2 class="text-3xl font-bold text-center text-[#0A2463] mb-8">Concluzie: puterea alegerilor informate în ReDefine</h2>
-                <div class="bg-[#0A2463] text-white rounded-2xl shadow-lg p-8 text-center max-w-4xl mx-auto">
-                    <p class="text-xl">Eticheta nutrițională este busola ta personală în programul ReDefine. Investind timp pentru a înțelege cum este generată, ce semnifică fiecare secțiune și ce ingrediente să eviți, vei dobândi control deplin asupra dietei tale. Nu mai ești la mâna marketingului sau a presupunerilor. Prin alegerea conștientă a alimentelor cu densitate nutrițională mare și evitarea aditivilor potențial dăunători, vei asigura corpului tău combustibilul de calitate necesar pentru energie, sănătate și o redefinire corporală durabilă. Fii un cititor de etichete educat și transformă-ți sănătatea!</p>
-                </div>
-            </section>
-
+                <section>
+                    <h3>Concluzie: puterea alegerilor informate în ReDefine</h3>
+                    <!-- CORECȚIE: Mapare la clasa de concluzie a modelului -->
+                    <div class="info-box info-box-concluzie">
+                        <p>Eticheta nutrițională este busola ta personală în programul ReDefine. Investind timp pentru a înțelege cum este generată, ce semnifică fiecare secțiune și ce ingrediente să eviți, vei dobândi control deplin asupra dietei tale. Nu mai ești la mâna marketingului sau a presupunerilor. Prin alegerea conștientă a alimentelor cu densitate nutrițională mare și evitarea aditivilor potențial dăunători, vei asigura corpului tău combustibilul de calitate necesar pentru energie, sănătate și o redefinire corporală durabilă. Fii un cititor de etichete educat și transformă-ți sănătatea!</p>
+                    </div>
+                </section>
+            </div>
         </main>
+
+        <!-- FOOTER: Preluat complet din model -->
+        <footer class="infographic-footer">
+            <div class="footer-social-links">
+                <!-- Facebook -->
+                <a href="https://www.facebook.com/NutrisibClub/" target="_blank" title="Facebook">
+                    <svg fill="#1877F2" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+                </a>
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/nutrisib2025/" target="_blank" title="Instagram">
+                    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="ig-gradient" gradientUnits="userSpaceOnUse" cx="20%" cy="107%" r="140%">
+                                <stop stop-color="#feda75"/><stop offset=".25" stop-color="#fa7e1e"/><stop offset=".5" stop-color="#d62976"/><stop offset=".75" stop-color="#962fbf"/><stop offset="1" stop-color="#4f5bd5"/>
+                            </radialGradient>
+                        </defs>
+                        <path fill="url(#ig-gradient)" d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.784.297-1.45.717-2.126 1.394C1.33 2.71.91 3.386.612 4.14c-.3.765-.5 1.635-.558 2.913-.058 1.28-.072 1.687-.072 4.947s.015 3.667.072 4.947c.06 1.277.26 2.148.558 2.913.3.765.718 1.438 1.394 2.126.677.678 1.342 1.096 2.126 1.394.765.3 1.635.5 2.913.558 1.28.058 1.687.072 4.947.072s3.667-.015 4.947-.072c1.277-.06 2.148-.26 2.913-.558.784-.297 1.45-.718 2.126-1.394.678-.677 1.096-1.342 1.394-2.126.3-.765.5-1.635-.558-2.913.058-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.26-2.148-.558 2.913-.3-.765-.718-1.438-1.394-2.126C21.314 1.33 20.64.91 19.86.612c-.765-.3-1.635-.5-2.913-.558C15.667.015 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.07 1.17.055 1.805.248 2.227.415.562.217.96.477 1.382.896.419.42.679.82.896 1.383.167.422.36 1.057.413 2.227.055 1.265.07 1.646.07 4.85s-.015 3.585-.07 4.85c-.053 1.17-.246 1.805-.413 2.227-.217.562-.477.96-.896 1.383-.42.419-.82.679-1.383.896-.422-.167-1.057.36-2.227.413-1.265.055-1.646.07-4.85.07s-3.585-.015-4.85-.07c-1.17-.053-1.805-.246-2.227-.413-.562-.217-.96-.477-1.383-.896-.419-.42-.679-.82-.896-1.383-.167-.422-.36-1.057-.413-2.227-.055-1.265-.07-1.646-.07-4.85s.015-3.585.07-4.85c.053-1.17.246 1.805.413 2.227.217-.562.477.96.896-1.383.42-.419.82-.679 1.383-.896.422-.167 1.057.36 2.227.413C8.415 2.176 8.797 2.16 12 2.16zm0 3.84c-3.405 0-6.162 2.757-6.162 6.162s2.757 6.162 6.162 6.162 6.162-2.757 6.162-6.162-2.757-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm4.42-6.837c-.552 0-1 .448-1 1s.448 1 1 1 1-.448 1-1-.448-1-1-1z"/>
+                    </svg>
+                </a>
+                <!-- Telegram -->
+                <a href="https://t.me/+JoASPEPw5d45NTZk" target="_blank" title="Telegram">
+                    <svg fill="#2AABEE" viewBox="0 0 24 24" aria-hidden="true"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0011.944 0zm5.642 8.246l-1.42 6.642c-.14.654-.53.818-1.08.508l-3.26-2.394-1.57 1.51c-.17.17-.31.31-.61.31l.22-3.31 5.9-5.32c.25-.22-.05-.34-.39-.12l-7.25 4.51-3.2-.998c-.65-.2-.67-.65.14-.96l12.4-4.75c.53-.2.97.17.81.85z"/></svg>
+                </a>
+                <!-- Beacons -->
+                <a href="https://beacons.ai/nutrisib" target="_blank" rel="noopener" title="Beacons">
+                    <img src="https://nutrisib.club/imagini/beacons.jpeg" alt="Beacons AI" onerror="this.onerror=null;this.src='https://placehold.co/32x32/ecf0f1/212529?text=B';">
+                </a>
+            </div>
+            <p>&copy; 2025 NUTRISIB. Toate drepturile rezervate.</p>
+            <p style="font-size: 0.8rem;">dr.ing. Radu Pascu - 2025</p>
+        </footer>
     </div>
-
-    <footer class="footer-copyright">
-        <p>Copyright: dr.ing. Radu Pascu - 2025</p>
-    </footer>
-
+    
     <script>
-        window.addEventListener('load', () => {
-            // No Chart.js specific charts are included in this infographic for now.
-            // Keeping the template for future chart additions if needed.
-        });
-    
-        // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
-        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
-
+         // SCRIPTURI DE SECURITATE (DIN MODEL)
+        document.addEventListener('contextmenu', function(e) {e.preventDefault()});
         document.addEventListener('keydown', function(e) {
-            // Blochează Ctrl+C (Copiere)
-            if (e.ctrlKey && e.key === 'c') {
-                e.preventDefault();
-            }
-            // Blochează Ctrl+U (View Source)
-            if (e.ctrlKey && e.key === 'u') {
-                e.preventDefault();
-            }
-            // Blochează F12 (Developer Tools)
-            if (e.key === 'F12') {
-                e.preventDefault();
-            }
-            // Blochează Ctrl+Shift+I (Developer Tools)
-            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-                e.preventDefault();
-            }
-             // Blochează Ctrl+Shift+J (Developer Tools Console)
-            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
-                e.preventDefault();
-            }
+            if (e.key === 'F12') {e.preventDefault();}                          // Disable F12
+            if (e.ctrlKey && e.key === 'U') {e.preventDefault()}                // Disable Ctrl+U       (Windows/Linux)
+            if (e.metaKey && e.key === 'U') {e.preventDefault()}                // Disable Cmd+U        (Mac)
+            if (e.ctrlKey && e.key === 'C') {e.preventDefault()}                // Disable CTRL+C       (Windows/Linux) 
+            if (e.metaKey && e.key === 'C') {e.preventDefault()}                // Disable Cmd+C        (Mac)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {e.preventDefault()}  // Disable Ctrl+Shift+I (Windows/Linux)
+            if (e.metaKey && e.altKey && e.key === 'I') {e.preventDefault()}    // Disable Cmd+Opt+I    (Mac)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {e.preventDefault()}  // Disable Ctrl+Shift+J (Windows/Linux)
+            if (e.metaKey && e.altKey && e.key === 'J') {e.preventDefault()}    // Disable Cmd+Opt+J    (Mac)
         });
 
-        // Activați primul tab la încărcarea paginii
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelector('.tab-button').click();
+        // Scriptul de încărcare a graficelor din eticheta.html (este gol, dar păstrăm structura)
+        window.addEventListener('load', () => {
+            // Nu sunt grafice de inițializat în acest fișier
         });
-    
     </script>
-
-
-    
 </body>
 </html>
