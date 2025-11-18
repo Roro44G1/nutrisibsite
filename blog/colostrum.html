@@ -16,229 +16,390 @@
     <meta property="og:image" content="https://nutrisib.club/imagini/colostru01.png" />
     <meta property="og:site_name" content="NUTRISIB" />
     <meta property="og:locale" content="ro_RO" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Am eliminat Chart.js pentru că nu este folosit în acest fișier -->
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
+        /* --- Definirea Variabilelor --- */
         :root {
-            --dark-blue: #0A2463;
-            --medium-blue: #3E92CC;
-            --text-dark: #212529;
-            --text-light: #475569;
-            --bg-light: #f8f9fa;
-            --bg-white: #ffffff;
-            --border-color: #dee2e6;
+            --color-bg: #f3f4f6;
+            --color-bg-white: #ffffff;
+            --color-bg-table-header: #f3f4f6;
+            --color-bg-table-row-even: #f9fafb;
+            
+            --color-text-dark: #1f2937;
+            --color-text-medium: #374151;
+            --color-text-light: #4b5563;
+            --color-text-white: #ffffff;
+            --color-text-footer: #bdc3c7;
+            --color-text-footer-link: #ecf0f1;
+            --color-footer-bg: #212529;
+
+            --color-brand-dark: #0A2463;
+            --color-brand-medium: #3E92CC;
+            --color-brand-active: #2563eb;
+            
+            --color-border: #e5e7eb;
+            
+            /* Culori specifice păstrate doar cele folosite (Blue) */
+            --color-box-blue-bg: #eff6ff;
+            --color-box-blue-border: #3b82f6;
+            --color-box-blue-text: #1d4ed8; 
         }
 
+        /* --- Stiluri Globale --- */
         body {
             font-family: 'Inter', sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            line-height: 1.8;
-            font-size: 16px;
+            padding: 0.5rem;
+            display: flex;
+            justify-content: center;
+            background-color: var(--color-bg);
+            color: var(--color-text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .container {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 20px 15px;
+            max-width: 56rem; /* 4xl */
+            width: 100%;
         }
 
+        main {
+            padding: 0;
+        }
+
+        /* --- Antet (Header) --- */
         header {
+            color: var(--color-text-white);
             text-align: center;
-            margin-bottom: 40px;
-            padding: 30px 20px;
-            background-color: var(--dark-blue);
-            color: var(--bg-white);
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            background: linear-gradient(to bottom right, var(--color-brand-dark), var(--color-brand-medium));
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         header h1 {
-            margin: 0;
-            font-size: 2.5rem;
+            font-size: 1.875rem;
             font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            margin: 0 0 0.5rem 0;
         }
         
         header p {
-            margin-top: 10px;
-            font-size: 1.1rem;
-            color: var(--bg-light);
+            font-size: 1.125rem;
+            font-weight: 300;
             opacity: 0.9;
-            max-width: 800px;
+            margin: 0;
+            max-width: 48rem;
             margin-left: auto;
             margin-right: auto;
+            color: var(--color-text-white);
+        }
+        
+        /* --- Wrapper de Secțiune --- */
+        .section-wrapper {
+            background-color: var(--color-bg-white);
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--color-border);
+            margin-bottom: 1rem;
+            padding: 1.5rem;
+            overflow: hidden;
+        }
+        .section-wrapper:last-child {
+            margin-bottom: 0;
         }
 
-        .content-card {
-            background-color: var(--bg-white);
-            border-radius: 12px;
-            padding: 30px 35px;
-            margin-bottom: 25px;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        /* --- Stiluri de Conținut --- */
+        section {
+            margin-bottom: 0; 
         }
 
-        .content-card h2 {
-            font-size: 2rem;
+        section h2 {
+            font-size: 1.8rem;
             font-weight: 700;
-            color: var(--dark-blue);
-            margin-top: 0;
-            margin-bottom: 25px;
-            border-bottom: 2px solid var(--medium-blue);
-            padding-bottom: 15px;
-        }
-        
-        .content-card h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-top: 30px;
-            margin-bottom: 15px;
-        }
-        
-        .content-card p {
-            color: var(--text-light);
-            font-size: 1.05rem;
-            margin-bottom: 18px;
-            text-align: justify;
-        }
-        
-        .content-card strong {
-            color: var(--text-dark);
-            font-weight: 600;
-        }
-
-        .content-card ul {
-            list-style-type: '✓ ';
-            padding-left: 20px;
-        }
-
-        .content-card li {
-            margin-bottom: 10px;
-            padding-left: 10px;
-            color: var(--text-light);
-            font-size: 1.05rem;
-        }
-
-        .figure-container {
-            margin: 30px auto;
             text-align: center;
-            max-width: 600px;
+            color: var(--color-brand-dark);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
         }
-        .figure-container img {
+
+        section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-brand-dark);
+            margin-bottom: 0.75rem;
+        }
+        
+        section h4 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--color-brand-dark);
+        }
+
+        section p {
+            color: var(--color-text-medium);
+            text-align: justify;
+            margin-bottom: 1rem;
+            line-height: 1.625;
+        }
+        
+        section p.intro-text, section p.section-intro {
+             font-size: 1rem;
+             text-align: center;
+             max-width: 56rem;
+             margin-left: auto;
+             margin-right: auto;
+        }
+
+        section p.small-note {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .small-note-left {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+            text-align: left;
+            margin-bottom: 0;
+        }
+        
+        section strong {
+            font-weight: 600;
+            color: var(--color-text-dark);
+        }
+
+        /* --- Liste --- */
+        section ul {
+            padding-left: 1.25rem;
+            color: var(--color-text-medium);
+            margin-bottom: 1rem;
+            list-style-type: none; /* Ascundem bullet-ul default pentru a folosi bifa */
+        }
+        section ul li {
+             margin-bottom: 0.5rem;
+             position: relative;
+             padding-left: 1.5rem;
+        }
+        /* Adăugăm bifa specifică layout-ului tău */
+        section ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--color-brand-medium);
+            font-weight: bold;
+        }
+        section ul ul {
+             margin-top: 0.5rem;
+        }
+        
+        /* --- Cutii de Notificări (Info Boxes) --- */
+        .info-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-left-width: 4px;
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            margin-bottom: 1rem; 
+        }
+        
+        .info-box-blue {
+            background-color: var(--color-box-blue-bg);
+            border-color: var(--color-box-blue-border);
+            color: var(--color-box-blue-text);
+        }
+        .info-box-blue p {
+            color: var(--color-text-medium);
+            margin-bottom: 0;
+        }
+        
+        /* --- Imagini --- */
+        .zwp-image-container {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .zwp-image-container img {
             max-width: 100%;
             height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            border: 1px solid var(--border-color);
-        }
-        .figure-container figcaption {
-            margin-top: 10px;
-            font-style: italic;
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-        
-        footer {
-            text-align: center;
-            padding: 25px;
-            margin-top: 40px;
-            font-size: 0.9rem;
-            color: var(--text-light);
-            border-top: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
-        @media (max-width: 768px) {
-            body { line-height: 1.7; }
-            .container { padding: 10px; }
-            header h1 { font-size: 1.8rem; }
-            header p { font-size: 1rem; }
-            .content-card { padding: 20px; }
-            .content-card h2 { font-size: 1.6rem; }
-            .content-card h3 { font-size: 1.3rem; }
-            .content-card p { font-size: 1rem; }
+        .zwp-image-container figcaption {
+            margin-top: 0.5rem;
+            font-style: italic;
+            color: var(--color-text-light);
+            font-size: 0.875rem;
         }
+
+        /* --- Subsol (Footer) --- */
+        footer.infographic-footer {
+            background-color: var(--color-footer-bg);
+            color: var(--color-text-footer);
+            text-align: center;
+            padding: 0.5rem 2rem; 
+            font-size: 0.85rem;
+            border-top: none;
+        }
+        
+        footer.infographic-footer p {
+            margin: 0.1rem 0;
+            text-align: center;
+            color: var(--color-text-footer);
+        }
+
+        footer.infographic-footer a {
+            color: var(--color-text-footer-link);
+            text-decoration: none;
+        }
+        
+        footer.infographic-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-social-links a {
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+        
+        .footer-social-links a:hover {
+            transform: scale(1.1);
+        }
+
+        .footer-social-links svg, .footer-social-links img {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            body { padding: 0; }
+            section h3 { text-align: center; }
+        }
+        @media (min-width: 640px) {
+            body { padding: 1rem; }
+            header { padding: 2rem; }
+            header h1 { font-size: 2.25rem; }
+            header p { font-size: 1.25rem; }
+        }
+        @media (min-width: 768px) {
+            .section-wrapper {
+                padding: 2rem;
+            }
+            header h1 { font-size: 2.5rem; }
+            section h2 { font-size: 1.875rem; }
+        }
+        
     </style>
 </head>
 <body>
 
-    <main class="container">
+    <div class="container">
+
         <header>
             <h1>Colostrum de la LR</h1>
             <p>O analiză completă a primului lapte, "aurul lichid" pentru un sistem imunitar de elită</p>
         </header>
-        
-        <article class="content-card">
-            <h2>Decodarea colostrului - fundamentul biologic al imunității</h2>
-            <p>Înainte de a analiza un produs specific, este esențial să înțelegem de ce colostrul este considerat una dintre cele mai valoroase și complexe substanțe nutritive din natură. Nu este lapte obișnuit; este un fluid bioactiv, proiectat de natură pentru a oferi un start exploziv în viață.</p>
 
-            <h3>Ce este colostrul și de ce este excepțional?</h3>
-            <p>Colostrul, cunoscut și ca "primul lapte", este fluidul secretat de glandele mamare ale mamiferelor în primele 24-72 de ore după naștere, înainte de apariția laptelui matur. Compoziția sa este radical diferită de cea a laptelui: este exponențial mai bogat în compuși imunitari, factori de creștere, vitamine și minerale, și mai sărac în lactoză. Rolul său biologic este critic: transferă imunitatea pasivă de la mamă la nou-născut și inițiază dezvoltarea corectă a tractului gastrointestinal. Colostrul bovin, în particular, este de interes științific major, deoarece conține o concentrație de factori imunitari de până la 40 de ori mai mare decât colostrul uman.</p>
+        <main>
+            <!-- Secțiunea 1: Decodarea colostrului -->
+            <div class="section-wrapper">
+                <section>
+                    <h3>Decodarea colostrului - fundamentul biologic al imunității</h3>
+                    <p>Înainte de a analiza un produs specific, este esențial să înțelegem de ce colostrul este considerat una dintre cele mai valoroase și complexe substanțe nutritive din natură. Nu este lapte obișnuit; este un fluid bioactiv, proiectat de natură pentru a oferi un start exploziv în viață.</p>
+    
+                    <h4>Ce este colostrul și de ce este excepțional?</h4>
+                    <p>Colostrul, cunoscut și ca "primul lapte", este fluidul secretat de glandele mamare ale mamiferelor în primele 24-72 de ore după naștere, înainte de apariția laptelui matur. Compoziția sa este radical diferită de cea a laptelui: este exponențial mai bogat în compuși imunitari, factori de creștere, vitamine și minerale, și mai sărac în lactoză. Rolul său biologic este critic: transferă imunitatea pasivă de la mamă la nou-născut și inițiază dezvoltarea corectă a tractului gastrointestinal. Colostrul bovin, în particular, este de interes științific major, deoarece conține o concentrație de factori imunitari de până la 40 de ori mai mare decât colostrul uman.</p>
+                    
+                    <div class="zwp-image-container">
+                        <img src="https://nutrisib.club/imagini/colostru01.png" style="max-width: 400px; height: auto;" alt="Diagrama componentelor bioactive din colostru" onerror="this.style.display='none'; this.parentElement.innerHTML+='<div style=\'padding:20px;background:#eee;border-radius:8px;color:#555;\'>[Imagine: Elementele bioactive din colostru]</div>'">
+                        <figcaption>Elementele bioactive din colostru</figcaption>
+                    </div>
+    
+                    <h4>Arsenalul bioactiv din colostru: componentele cheie</h4>
+                    <p>Superioritatea colostrului nu stă într-un singur ingredient, ci în sinergia unui complex de substanțe bioactive care acționează concertat:</p>
+                    <p><strong>1. Imunoglobulinele (Ig): pilonul apărării.</strong> Acestea sunt anticorpi specializați. Colostrul este extrem de bogat în Imunoglobulina G (IgG), care are capacitatea de a neutraliza o gamă largă de agenți patogeni, precum viruși și bacterii. Acționează ca o "armată de elită" care patrulează organismul și oferă o linie de apărare imediată.</p>
+                    <p><strong>2. Lactoferina: modulatorul inteligent.</strong> Această proteină are proprietăți remarcabile: este antivirală, antibacteriană, antifungică și antiinflamatoare. Unul dintre mecanismele sale cheie este legarea fierului, un mineral esențial pentru multiplicarea multor bacterii patogene. Prin "sechestrarea" fierului, lactoferina inhibă creșterea acestora, în timp ce sprijină celulele sistemului imunitar.</p>
+                    <p><strong>3. Factorii de creștere (IGF-1, TGF-α &amp; β): arhitecții regenerării.</strong> Colostrul este cea mai bogată sursă naturală de factori de creștere. Aceștia nu doar stimulează dezvoltarea normală la nou-născuți, ci, la adulți, joacă un rol crucial în repararea și regenerarea țesuturilor. Contribuie la vindecarea mucoasei intestinale (esențial în sindromul de intestin permeabil sau "leaky gut"), la refacerea masei musculare după efort și la menținerea sănătății pielii și a țesuturilor conjunctive.</p>
+                    <p><strong>4. Polipeptidele bogate în prolină (PRP): comunicatorii sistemului imunitar.</strong> Aceste mici lanțuri de aminoacizi acționează ca niște semnale, având un rol de reglare a timusului, "sediul central" al sistemului imunitar. PRP-urile pot calma un sistem imunitar hiperactiv (cum se întâmplă în bolile autoimune) sau pot stimula un sistem imunitar deficitar, ajutându-l să răspundă mai eficient la infecții.</p>
+                </section>
+            </div>
             
-            <div class="figure-container">
-                 <img src="../imagini/colostru01.png" alt="Diagrama componentelor bioactive din colostru">
-                <figcaption>Elementele bioactive din colostru</figcaption>
+            <!-- Secțiunea 2: Standardul LR -->
+            <div class="section-wrapper">
+                <section>
+                    <h3>Standardul LR Colostrum - excelența prin calitate și procesare</h3>
+                    <p>Cunoașterea beneficiilor generale ale colostrului este doar primul pas. Eficacitatea unui supliment depinde în mod critic de calitatea materiei prime și, mai ales, de metoda de procesare. Aici, produsele Colostrum de la LR stabilesc un standard de referință pe piață.</p>
+                    <div class="zwp-image-container">
+                        <img src="https://nutrisib.club/imagini/colostru02.png" style="max-width: 700px; height: auto;" alt="Diagrama componentelor bioactive din colostru" onerror="this.style.display='none'; this.parentElement.innerHTML+='<div style=\'padding:20px;background:#eee;border-radius:8px;color:#555;\'>[Imagine: Colostrum de la LR]</div>'">
+                        <figcaption>Colostrum de la LR</figcaption>
+                    </div>
+                    <h4>Diferențiatorii cheie ai LR Colostrum</h4>
+                    <p><strong>1. Origine și puritate controlate.</strong> LR utilizează exclusiv surplusul de colostru de la vaci crescute în ferme de înaltă calitate din Europa (în principal Germania). Se folosește doar colostrul din primele 12 ore post-partum, perioada cu cea mai mare concentrație de compuși bioactivi. Acest angajament asigură o materie primă superioară, necontaminată cu antibiotice sau hormoni.</p>
+                    <p><strong>2. Procesul de fabricație la rece: secretul conservării puterii bioactive.</strong> Acesta este, probabil, cel mai important avantaj tehnologic. Imunoglobulinele, enzimele și factorii de creștere sunt extrem de sensibili la căldură. Pasteurizarea clasică, folosită pentru laptele de consum, ar distruge iremediabil majoritatea acestor componente valoroase. LR utilizează un <strong>proces de fabricație la rece, patentat și blând</strong>, care degresează și elimină cazeina din colostru fără a-l expune la temperaturi ridicate. Astfel, produsul final păstrează intact întregul spectru de compuși bioactivi, garantând eficacitatea maximă.</p>
+                    <p><strong>3. Garanția calității: sigiliul SGS INSTITUT FRESENIUS.</strong> Pentru a oferi consumatorului o garanție absolută a calității, produsele Colostrum de la LR sunt testate de SGS INSTITUT FRESENIUS, unul dintre cele mai respectate laboratoare independente din Europa. Acest sigiliu nu este o certificare punctuală, ci implică un proces de monitorizare continuă: de la inspecția fermelor și testarea materiei prime, la verificarea fiecărui lot de produs finit. Acesta certifică faptul că produsul este pur, sigur și că respectă întocmai specificațiile de pe etichetă. Este o dovadă incontestabilă a unui produs premium.</p>
+                    <h4>Forme de prezentare: lichid vs. capsule</h4>
+                    <p>LR oferă colostru sub două forme, adaptate unor nevoi diferite:</p>
+                    <p><strong>Colostrum Lichid (Direct):</strong> Este forma cea mai pură și rapid asimilabilă, un produs premium pentru un suport imunitar intensiv. Este ideal în perioadele de convalescență, la primele semne de răceală, în sezoanele cu risc crescut de viroze sau pentru oricine dorește un efect rapid și puternic.</p>
+                    <p><strong>Colostrum Capsule:</strong> Conțin pulbere de colostru liofilizată (uscată prin înghețare, o altă metodă blândă de conservare). Sunt o opțiune excelentă pentru utilizare pe termen lung, pentru întreținerea constantă a sistemului imunitar și pentru conveniență în administrare (ușor de luat în călătorii).</p>
+                </section>
+            </div>
+            
+            <!-- Secțiunea 3: Aplicații practice -->
+            <div class="section-wrapper">
+                <section>
+                    <h3>Aplicații practice și utilizări ale colostrului</h3>
+                    <p>Datorită compoziției sale unice, colostrul este recunoscut pentru capacitatea sa de a întări rezistența organismului și de a oferi protecție împotriva agenților patogeni. Beneficiile sale se extind însă într-o arie largă de aplicații, fiind un aliat valoros pentru persoanele cu susceptibilitate crescută la infecții, oboseală cronică sau stres instalat.</p>
+                    <h4>Aplicații generale și beneficii demonstrate</h4>
+                    <ul>
+                        <li><strong>Tulburări imune și autoimune:</strong> Sprijină restaurarea sistemului imunitar după boală și modulează răspunsurile imune în afecțiuni precum Hashimoto.</li>
+                        <li><strong>Infecții recurente:</strong> Oferă suport împotriva infecțiilor bacteriene, virale și fungice (ex. Candida albicans).</li>
+                        <li><strong>Sănătate orală:</strong> Contribuie la prevenirea demineralizării smalțului dentar și apariția cariilor.</li>
+                        <li><strong>Sport și efort fizic intens:</strong> Datorită factorilor de creștere, accelerează recuperarea energetică și refacerea musculară, fiind un suport remarcabil pentru sportivii de performanță.</li>
+                        <li><strong>Managementul greutății și anti-aging:</strong> Reduce senzația de foame și favorizează creșterea masei musculare, care are un rol esențial în metabolismul grăsimilor. De asemenea, contribuie la întârzierea proceselor de îmbătrânire.</li>
+                        <li><strong>Recuperare și convalescență:</strong> Susține organismul în procesele de reabilitare după accidente, intervenții chirurgicale sau boli.</li>
+                    </ul>
+                    
+                    <h4>Rolul suportiv în afecțiuni complexe și oncologie</h4>
+                    <p>Cercetările moderne au evidențiat rolul important al componentelor din colostru, precum lactoferina, în diverse afecțiuni complexe. Studiile au arătat că aceste substanțe bioactive pot avea un efect inhibitor asupra unor linii celulare canceroase și pot inhiba angiogeneza (formarea de noi vase de sânge care hrănesc tumorile), reducând astfel riscul metastazelor. Este important de subliniat că rolul colostrului este unul de <strong>suport și prevenție</strong>. Acesta poate susține organismul în timpul tratamentelor oncologice și ajută la refacerea sistemului imunitar post-chimioterapie, însă nu este un medicament și nu poate vindeca boli. Orice abordare terapeutică trebuie discutată și supervizată de un medic specialist.</p>
+                    
+                    <h4>Concluzie finală: o investiție în imunitatea fundamentală</h4>
+                    <p>A alege Colostrum de la LR nu înseamnă doar a cumpăra un supliment, ci a investi într-un produs de o calitate excepțională, validată științific și certificată independent. Prin sursa controlată, procesarea la rece care protejează ingredientele active și garanția sigiliului Fresenius, LR oferă nu doar "aurul lichid" al naturii, ci cea mai bună versiune a acestuia, proiectată pentru a oferi un suport real, măsurabil și sigur pentru sistemul imunitar și regenerarea organismului.</p>
+                </section>
             </div>
 
-            <h3>Arsenalul bioactiv din colostru: componentele cheie</h3>
-            <p>Superioritatea colostrului nu stă într-un singur ingredient, ci în sinergia unui complex de substanțe bioactive care acționează concertat:</p>
-            <p><strong>1. Imunoglobulinele (Ig): pilonul apărării.</strong> Acestea sunt anticorpi specializați. Colostrul este extrem de bogat în Imunoglobulina G (IgG), care are capacitatea de a neutraliza o gamă largă de agenți patogeni, precum viruși și bacterii. Acționează ca o "armată de elită" care patrulează organismul și oferă o linie de apărare imediată.</p>
-            <p><strong>2. Lactoferina: modulatorul inteligent.</strong> Această proteină are proprietăți remarcabile: este antivirală, antibacteriană, antifungică și antiinflamatoare. Unul dintre mecanismele sale cheie este legarea fierului, un mineral esențial pentru multiplicarea multor bacterii patogene. Prin "sechestrarea" fierului, lactoferina inhibă creșterea acestora, în timp ce sprijină celulele sistemului imunitar.</p>
-            <p><strong>3. Factorii de creștere (IGF-1, TGF-α &amp; β): arhitecții regenerării.</strong> Colostrul este cea mai bogată sursă naturală de factori de creștere. Aceștia nu doar stimulează dezvoltarea normală la nou-născuți, ci, la adulți, joacă un rol crucial în repararea și regenerarea țesuturilor. Contribuie la vindecarea mucoasei intestinale (esențial în sindromul de intestin permeabil sau "leaky gut"), la refacerea masei musculare după efort și la menținerea sănătății pielii și a țesuturilor conjunctive.</p>
-            <p><strong>4. Polipeptidele bogate în prolină (PRP): comunicatorii sistemului imunitar.</strong> Aceste mici lanțuri de aminoacizi acționează ca niște semnale, având un rol de reglare a timusului, "sediul central" al sistemului imunitar. PRP-urile pot calma un sistem imunitar hiperactiv (cum se întâmplă în bolile autoimune) sau pot stimula un sistem imunitar deficitar, ajutându-l să răspundă mai eficient la infecții.</p>
-        </article>
-        
-        <article class="content-card">
-            <h2>Standardul LR Colostrum - excelența prin calitate și procesare</h2>
-            <p>Cunoașterea beneficiilor generale ale colostrului este doar primul pas. Eficacitatea unui supliment depinde în mod critic de calitatea materiei prime și, mai ales, de metoda de procesare. Aici, produsele Colostrum de la LR stabilesc un standard de referință pe piață.</p>
-            <div class="figure-container">
-                <img src="../imagini/colostru02.png" alt="Diagrama componentelor bioactive din colostru">
-                <figcaption>Colostrum de la LR</figcaption>
-            </div>
-            <h3>Diferențiatorii cheie ai LR Colostrum</h3>
-            <p><strong>1. Origine și puritate controlate.</strong> LR utilizează exclusiv surplusul de colostru de la vaci crescute în ferme de înaltă calitate din Europa (în principal Germania). Se folosește doar colostrul din primele 12 ore post-partum, perioada cu cea mai mare concentrație de compuși bioactivi. Acest angajament asigură o materie primă superioară, necontaminată cu antibiotice sau hormoni.</p>
-            <p><strong>2. Procesul de fabricație la rece: secretul conservării puterii bioactive.</strong> Acesta este, probabil, cel mai important avantaj tehnologic. Imunoglobulinele, enzimele și factorii de creștere sunt extrem de sensibili la căldură. Pasteurizarea clasică, folosită pentru laptele de consum, ar distruge iremediabil majoritatea acestor componente valoroase. LR utilizează un <strong>proces de fabricație la rece, patentat și blând</strong>, care degresează și elimină cazeina din colostru fără a-l expune la temperaturi ridicate. Astfel, produsul final păstrează intact întregul spectru de compuși bioactivi, garantând eficacitatea maximă.</p>
-            <p><strong>3. Garanția calității: sigiliul SGS INSTITUT FRESENIUS.</strong> Pentru a oferi consumatorului o garanție absolută a calității, produsele Colostrum de la LR sunt testate de SGS INSTITUT FRESENIUS, unul dintre cele mai respectate laboratoare independente din Europa. Acest sigiliu nu este o certificare punctuală, ci implică un proces de monitorizare continuă: de la inspecția fermelor și testarea materiei prime, la verificarea fiecărui lot de produs finit. Acesta certifică faptul că produsul este pur, sigur și că respectă întocmai specificațiile de pe etichetă. Este o dovadă incontestabilă a unui produs premium.</p>
-            <h3>Forme de prezentare: lichid vs. capsule</h3>
-            <p>LR oferă colostru sub două forme, adaptate unor nevoi diferite:</p>
-            <p><strong>Colostrum Lichid (Direct):</strong> Este forma cea mai pură și rapid asimilabilă, un produs premium pentru un suport imunitar intensiv. Este ideal în perioadele de convalescență, la primele semne de răceală, în sezoanele cu risc crescut de viroze sau pentru oricine dorește un efect rapid și puternic.</p>
-            <p><strong>Colostrum Capsule:</strong> Conțin pulbere de colostru liofilizată (uscată prin înghețare, o altă metodă blândă de conservare). Sunt o opțiune excelentă pentru utilizare pe termen lung, pentru întreținerea constantă a sistemului imunitar și pentru conveniență în administrare (ușor de luat în călătorii).</p>
-        </article>
-        
-        <article class="content-card">
-            <h2>Aplicații practice și utilizări ale colostrului</h2>
-            <p>Datorită compoziției sale unice, colostrul este recunoscut pentru capacitatea sa de a întări rezistența organismului și de a oferi protecție împotriva agenților patogeni. Beneficiile sale se extind însă într-o arie largă de aplicații, fiind un aliat valoros pentru persoanele cu susceptibilitate crescută la infecții, oboseală cronică sau stres instalat.</p>
-            <h3>Aplicații generale și beneficii demonstrate</h3>
-            <ul>
-                <li><strong>Tulburări imune și autoimune:</strong> Sprijină restaurarea sistemului imunitar după boală și modulează răspunsurile imune în afecțiuni precum Hashimoto.</li>
-                <li><strong>Infecții recurente:</strong> Oferă suport împotriva infecțiilor bacteriene, virale și fungice (ex. Candida albicans).</li>
-                <li><strong>Sănătate orală:</strong> Contribuie la prevenirea demineralizării smalțului dentar și apariția cariilor.</li>
-                <li><strong>Sport și efort fizic intens:</strong> Datorită factorilor de creștere, accelerează recuperarea energetică și refacerea musculară, fiind un suport remarcabil pentru sportivii de performanță.</li>
-                <li><strong>Managementul greutății și anti-aging:</strong> Reduce senzația de foame și favorizează creșterea masei musculare, care are un rol esențial în metabolismul grăsimilor. De asemenea, contribuie la întârzierea proceselor de îmbătrânire.</li>
-                <li><strong>Recuperare și convalescență:</strong> Susține organismul în procesele de reabilitare după accidente, intervenții chirurgicale sau boli.</li>
-            </ul>
-            <h3>Rolul suportiv în afecțiuni complexe și oncologie</h3>
-            <p>Cercetările moderne au evidențiat rolul important al componentelor din colostru, precum lactoferina, în diverse afecțiuni complexe. Studiile au arătat că aceste substanțe bioactive pot avea un efect inhibitor asupra unor linii celulare canceroase și pot inhiba angiogeneza (formarea de noi vase de sânge care hrănesc tumorile), reducând astfel riscul metastazelor. Este important de subliniat că rolul colostrului este unul de **suport și prevenție**. Acesta poate susține organismul în timpul tratamentelor oncologice și ajută la refacerea sistemului imunitar post-chimioterapie, însă nu este un medicament și nu poate vindeca boli. Orice abordare terapeutică trebuie discutată și supervizată de un medic specialist.</p>
-            <h3>Concluzie finală: o investiție în imunitatea fundamentală</h3>
-            <p>A alege Colostrum de la LR nu înseamnă doar a cumpăra un supliment, ci a investi într-un produs de o calitate excepțională, validată științific și certificată independent. Prin sursa controlată, procesarea la rece care protejează ingredientele active și garanția sigiliului Fresenius, LR oferă nu doar "aurul lichid" al naturii, ci cea mai bună versiune a acestuia, proiectată pentru a oferi un suport real, măsurabil și sigur pentru sistemul imunitar și regenerarea organismului.</p>
-        </article>
+        </main>
 
-    </main>
-
-    <footer>
-        <p>Copyright &copy; 2025 - dr.ing. Radu Pascu</p>
-    </footer>
-
+        <div id="footer-placeholder"></div>
+    </div>
+    
     <script>
-        document.addEventListener('contextmenu', event => event.preventDefault());
-        document.addEventListener('keydown', function(e) {
-            if ((e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 'C' || e.key === 'U' || (e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'i' || e.key === 'j')))) || e.key === 'F12') {
-                e.preventDefault();
-            }
+        // Încărcare subsol - Sintaxă simplă preluată exact din microbiom.html
+        fetch('https://nutrisib.club/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
         });
     </script>
+    <script src="https://nutrisib.club/script_protect.js" defer></script>
 </body>
 </html>
