@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hipercolesterolemia - perspectivă integrativă</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        :root {
+            --dark-blue: #0A2463;
+            --medium-blue: #3E92CC;
+            --light-blue: #eaf2f8;
+            --text-dark: #212529;
+            --text-light: #475569;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+       .ztabs-container {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            background: var(--bg-white);
+            border-radius: 15px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+       .ztabs-header {
+            background: linear-gradient(135deg, var(--dark-blue), var(--medium-blue));
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+       .ztabs-header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            margin: 0;
+            padding: 0;
+            color: white !important;
+            border: none !important;
+        }
+
+       .tab-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #f1f1f1;
+            border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+        .tab-buttons::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, and Opera */
+        }
+
+       .tab-link {
+            background-color: inherit;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: background-color 0.3s, color 0.3s;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--dark-blue);
+            border-bottom: 3px solid transparent;
+            flex-grow: 1;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+       .tab-link:hover {
+            background-color: #ddd;
+        }
+
+       .tab-link.active {
+            background-color: var(--bg-white);
+            color: var(--dark-blue);
+            border-bottom: 3px solid var(--medium-blue);
+        }
+
+       .tab-content {
+            display: none; /* Ascunde by default */
+            padding: 30px 40px;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+       .tab-content h2 {
+            font-size: 1.8em;
+            color: var(--dark-blue);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 700;
+            border-bottom: 3px solid var(--medium-blue);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+       .tab-content h3 {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--dark-blue) !important;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--medium-blue);
+            padding-bottom: 0.5rem;
+        }
+
+       .tab-content h4 {
+            font-size: 1.1em;
+            color: var(--medium-blue) !important;
+            font-weight: 600;
+            margin-top: 1.2rem;
+            margin-bottom: 0.5rem;
+            border: none !important;
+            padding: 0 !important;
+        }
+
+       .tab-content p, .tab-content li {
+            font-size: 0.95em;
+            color: var(--text-light);
+            text-align: justify;
+            margin-bottom: 10px;
+        }
+
+       .tab-content ul, .tab-content ol {
+            padding-left: 20px;
+        }
+        
+       .tab-content ol.bibliography-list {
+            list-style-type: decimal;
+            padding-left: 20px;
+            font-size: 0.85em;
+            -webkit-column-count: 2;
+            -moz-column-count: 2;
+            column-count: 2;
+            -webkit-column-gap: 40px;
+            -moz-column-gap: 40px;
+            column-gap: 40px;
+        }
+        
+       .tab-content ol.bibliography-list li {
+            margin-bottom: 1em;
+            word-break: break-word;
+        }
+        
+       .tab-content strong {
+            color: var(--dark-blue);
+            font-weight: 600;
+        }
+
+       .tab-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+       .tab-content th, .tab-content td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #d1d9e6;
+            vertical-align: top;
+        }
+
+       .tab-content th {
+            background-color: #e2e8f0;
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+
+       .tab-content tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+       .tab-content code {
+            background-color: #e9ecef;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: "Courier New", Courier, monospace;
+        }
+        
+       .tab-content a {
+            color: var(--medium-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+       .tab-content a:hover {
+            text-decoration: underline;
+        }
+
+       .ztabs-footer {
+            text-align: center;
+            padding: 25px 20px;
+            font-size: 0.9em;
+            color: #6c757d;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-light);
+        }
+        
+        
+    </style>
+</head>
+<body>
+
+    <div class="ztabs-container">
+        <header class="ztabs-header">
+            <h1>Hipercolesterolemia: O analiză integrativă</h1>
+        </header>
+
+        <div class="tab-buttons">
+            <button class="tab-link" onclick="openTab(event, 'tab-fundamente')">Fundamente</button>
+            <button class="tab-link" onclick="openTab(event, 'tab-cauze')">Cauze, manifestări & diagnostic</button>
+            <button class="tab-link" onclick="openTab(event, 'tab-alopata')">Abordare alopată</button>
+            <button class="tab-link" onclick="openTab(event, 'tab-holistica')">Perspective holistice</button>
+            <button class="tab-link" onclick="openTab(event, 'tab-naturista')">Abordare naturistă</button>
+            <button class="tab-link" onclick="openTab(event, 'tab-tehnici')">Tehnici avansate</button>
+            <button class="tab-link" onclick="openTab(event, 'tab-menopauza')">Colesterol & Menopauză</button>
+            <button class="tab-link" onclick="openTab(event, 'tab-concluzii')">Concluzii</button>
+            <button class="tab-link" onclick="openTab(event, 'tab-bibliografie')">Bibliografie</button>
+        </div>
+        
+        <div id="tab-fundamente" class="tab-content">
+            <h2>Introducere</h2>
+            <p>Hipercolesterolemia, definită prin prezența unor niveluri crescute de colesterol în circulația sanguină, reprezintă unul dintre pilonii centrali ai riscului cardiovascular la nivel global și o problemă majoră de sănătate publică.[1, 2] Adesea subdiagnosticată și lipsită de manifestări clinice evidente până la instalarea unor complicații severe, această condiție a fost pe drept cuvânt supranumită „ucigașul tăcut”.[1, 3, 4] Impactul său se extinde mult dincolo de o simplă valoare de laborator, fiind la originea procesului de ateroscleroză, care stă la baza infarctului miocardic, a accidentului vascular cerebral și a bolii arteriale periferice.</p>
+            <p>Acest raport își propune să ofere o analiză exhaustivă și multi-dimensională a hipercolesterolemiei, depășind cadrul strict biochimic. Scopul este de a construi o resursă completă, care integrează paradigma medicală alopată, fundamentată pe dovezi științifice riguroase, cu perspectivele complementare ale abordărilor holistice, naturopate și psiho-energetice. Se va realiza o călătorie analitică de la definirea moleculară și genetică a afecțiunii, trecând prin standardele actuale de diagnostic și tratament convențional, până la explorarea cauzelor subtile – emoționale, energetice și metabolice – și a metodelor de vindecare integrativă. O astfel de perspectivă unificată este esențială pentru clinicieni, cercetători și pacienți informați, care caută o înțelegere profundă și strategii de management personalizate și durabile.</p>
+            
+            <h2>Definirea și fiziopatologia hipercolesterolemiei</h2>
+            <h3>Definiții clinice și de laborator</h3>
+            <p>În termeni clinici, hipercolesterolemia este o tulburare a metabolismului lipidic caracterizată prin niveluri anormal de ridicate ale colesterolului în sânge.[1, 5, 6, 7] Deși adesea utilizat interschimbabil în limbajul comun, termenul este mai specific decât <em>dislipidemia</em> sau <em>hiperlipidemia</em>. Dislipidemia reprezintă un concept mai larg, care descrie orice anomalie a lipidelor serice, incluzând nu doar creșterea colesterolului „rău”, ci și creșterea trigliceridelor (hipertrigliceridemie) sau scăderea nivelului de colesterol „bun”.[8, 9, 10, 11] Hipercolesterolemia se concentrează în principal pe creșterea fracțiunii de colesterol transportate de lipoproteinele cu densitate joasă (LDL), recunoscută ca fiind direct implicată în procesul de aterogeneză.[10, 11]</p>
+            <h3>Rolul fiziologic al colesterolului și echilibrul exogen-endogen</h3>
+            <p>Este fundamental să se demistifice percepția colesterolului ca fiind exclusiv un agent patogen. În realitate, colesterolul este o substanță lipidică vitală, indispensabilă funcționării organismului. Organismul uman, în special ficatul, produce în mod natural întreaga cantitate de colesterol necesară pentru procesele fiziologice.[6] Acesta îndeplinește funcții esențiale:</p>
+            <ul>
+                <li><strong>Component structural:</strong> Este o componentă crucială a tuturor membranelor celulare, asigurându-le fluiditatea și integritatea.[12, 13, 14]</li>
+                <li><strong>Precursor metabolic:</strong> Servește ca moleculă de bază pentru sinteza hormonilor steroizi (cortizol, aldosteron, hormoni sexuali precum testosteronul și estrogenul), a vitaminei D și a acizilor biliari, esențiali în digestia grăsimilor.[12, 13, 14, 15]</li>
+            </ul>
+            <p>Organismul menține un echilibru delicat între colesterolul produs intern (endogen) și cel absorbit din alimentație (exogen). Când aportul alimentar de colesterol crește, ficatul își reduce propria producție printr-un mecanism de feedback negativ, pentru a menține homeostazia.[6] Totuși, la persoanele cu predispoziție genetică sau la un consum cronic excesiv de grăsimi saturate și trans (care influențează mai mult nivelul sanguin decât colesterolul alimentar în sine), acest mecanism poate fi depășit. Colesterolul în exces, care nu poate fi utilizat de celule sau preluat eficient de particulele HDL pentru a fi transportat înapoi la ficat (proces cunoscut ca „transportul invers al colesterolului”), rămâne în circulație. Aici, particulele LDL care îl transportă sunt predispuse la oxidare și sunt captate de macrofage în peretele arterial, inițiind și accelerând procesul de ateroscleroză.[18] Astfel, patologia nu derivă din prezența colesterolului în sine, ci din excesul și dezechilibrul transportorilor săi, care perturbă homeostazia metabolică.</p>
+            <h3>Spectrul lipoproteinelor: Transportorii colesterolului</h3>
+            <p>Fiind o substanță grasă, colesterolul este insolubil în mediul apos al sângelui. Pentru a fi transportat, acesta este „împachetat” în particule complexe numite lipoproteine, care conțin atât lipide, cât și proteine (apolipoproteine).[14, 16] Există cinci clase majore de lipoproteine, clasificate în funcție de densitatea lor [1, 12, 16]:</p>
+            <ul>
+                <li><strong>LDL-Colesterol (LDL-C) - „Colesterolul Rău”:</strong> Lipoproteinele cu densitate joasă sunt principalii transportori ai colesterolului de la ficat către țesuturile periferice.[17] Când nivelul de LDL-C este crescut, aceste particule se pot acumula în peretele arterial, unde suferă modificări oxidative și declanșează un răspuns inflamator, inițiind formarea plăcii de aterom.[9, 10, 12, 18] Din acest motiv, LDL-C este considerat ținta terapeutică primară în prevenția bolilor cardiovasculare.[13, 19]</li>
+                <li><strong>HDL-Colesterol (HDL-C) - „Colesterolul Bun”:</strong> Lipoproteinele cu densitate mare au un rol fundamental opus și cardioprotector. Ele mediază „transportul invers al colesterolului”, preluând excesul de colesterol din țesuturile periferice, inclusiv din peretele arterial, și transportându-l înapoi la ficat pentru a fi metabolizat și eliminat.[8, 9, 12, 18] Un nivel scăzut de HDL-C este un factor de risc cardiovascular independent.[1, 16]</li>
+                <li><strong>Trigliceridele și VLDL:</strong> Lipoproteinele cu densitate foarte joasă (VLDL) sunt produse de ficat pentru a transporta trigliceridele (o altă formă de grăsime) către țesuturi, unde servesc drept sursă de energie.[12] Nivelurile crescute de trigliceride sunt adesea asociate cu un HDL-C scăzut și cu prezența unor particule LDL mai mici și mai dense, o triadă cunoscută sub numele de <em>dislipidemie aterogenă</em>, caracteristică sindromului metabolic.[8, 20]</li>
+                <li><strong>Colesterolul non-HDL:</strong> Acest parametru, calculat simplu prin formula $Colesterol\ Total - HDL-C$, a câștigat o importanță tot mai mare în practica clinică.[1, 18] El reflectă concentrația totală a tuturor lipoproteinelor aterogene (LDL, VLDL, IDL), fiind considerat un predictor mai robust al riscului cardiovascular decât LDL-C, în special la pacienții cu trigliceride crescute sau diabet.</li>
+            </ul>
+            <p>Dicotomia „bun” versus „rău” este o simplificare didactică, dar insuficientă pentru a descrie complexitatea fiziopatologică. Adevărata patologie nu este determinată doar de cantitatea de colesterol, ci și de calitatea particulelor transportoare și de contextul metabolic general. O perspectivă modernă trebuie să ia în considerare factori precum dimensiunea și densitatea particulelor LDL (particulele mici și dense sunt mult mai aterogene decât cele mari și flotante), statusul pro-inflamator sistemic și nivelul de stres oxidativ. Acești factori pot transforma o moleculă fiziologic necesară, precum LDL-C, într-un agent patogen vascular agresiv. Această nuanțare a perspectivei deschide ușa către înțelegerea relevanței abordărilor holistice, care se concentrează pe reducerea inflamației și a stresului ca strategii fundamentale de management.</p>
+        </div>
+
+        <div id="tab-cauze" class="tab-content">
+            <h2>Etiologia, manifestările și diagnosticul hipercolesterolemiei</h2>
+            <h3>Etiologia complexă: De la gene la stil de viață</h3>
+            <p>Etiologia hipercolesterolemiei este multifactorială, implicând o interacțiune complexă între predispoziția genetică și factorii de mediu.</p>
+            <h4>Cauze primare (genetice)</h4>
+            <ul>
+                <li><strong>Hipercolesterolemia Familială (HF):</strong> Aceasta este o afecțiune monogenică, transmisă ereditar, caracterizată prin niveluri extrem de ridicate ale LDL-C încă de la naștere.[21, 22, 23] Este cauzată de mutații la nivelul genelor care codifică proteine esențiale pentru metabolismul LDL, precum receptorul pentru LDL (LDLR), apolipoproteina B (APOB) sau proproteina convertază subtilisin/kexin de tip 9 (PCSK9).[24, 25] Aceste defecte genetice duc la o incapacitate a ficatului de a elimina eficient particulele de LDL din circulație.[6, 22, 23, 26]
+                    <ul>
+                        <li style="margin-top: 10px;"><strong>Forma Heterozigotă (HeFH):</strong> Moștenită de la un singur părinte, este relativ frecventă, afectând aproximativ 1 din 200 până la 1 din 500 de persoane.[5, 22, 24, 25] Pacienții prezintă valori ale LDL-C de obicei peste 190 mg/dL (la adulți) și un risc de boală cardiovasculară prematură de până la 20 de ori mai mare decât populația generală, dacă afecțiunea rămâne netratată.[25, 26, 27, 28]</li>
+                        <li style="margin-top: 10px;"><strong>Forma Homozigotă (HoFH):</strong> Moștenită de la ambii părinți, este o formă rară, dar extrem de severă.[22, 25, 27] Nivelurile de LDL-C pot depăși 400 mg/dL, ducând la ateroscleroză accelerată în copilărie și evenimente cardiovasculare fatale înainte de vârsta de 20-30 de ani în absența unui tratament agresiv.[22, 27]</li>
+                    </ul>
+                </li>
+                <li style="margin-top: 10px;"><strong>Hipercolesterolemia Poligenică:</strong> Reprezintă cea mai frecventă formă de hipercolesterolemie primară. Ea nu este cauzată de o singură mutație majoră, ci de efectul cumulat al mai multor variații genetice minore, fiecare având un impact redus asupra metabolismului lipidic. Această predispoziție genetică este apoi exacerbată de un stil de viață nefavorabil (dietă, sedentarism), ducând la creșterea nivelului de colesterol.[24]</li>
+            </ul>
+            <h4>Cauze secundare și factori de risc</h4>
+            <p>Acestea reprezintă situații în care hipercolesterolemia apare ca o consecință a stilului de viață, a altor afecțiuni medicale sau a unor tratamente medicamentoase.</p>
+            <ul>
+                <li><strong>Factori de Risc Modificabili (Stil de Viață):</strong>
+                    <ul>
+                        <li style="margin-top: 10px;"><strong>Dieta:</strong> Consumul excesiv de grăsimi saturate și trans este o cauză principală a creșterii LDL-C.[1, 6, 16]</li>
+                        <li style="margin-top: 10px;"><strong>Sedentarismul:</strong> Duce la scăderea HDL-C și favorizează creșterea LDL-C.[1, 6, 8, 31]</li>
+                        <li style="margin-top: 10px;"><strong>Obezitatea:</strong> În special cea abdominală, este strâns legată de dislipidemie și rezistența la insulină.[1, 8, 16, 32]</li>
+                        <li style="margin-top: 10px;"><strong>Fumatul:</strong> Reduce nivelul de HDL-C.[4, 6, 16, 31]</li>
+                        <li style="margin-top: 10px;"><strong>Consumul excesiv de alcool:</strong> Poate crește trigliceridele și colesterolul total.[8, 31]</li>
+                    </ul>
+                </li>
+                <li style="margin-top: 10px;"><strong>Comorbidități (Cauze Secundare):</strong>
+                    <ul>
+                        <li style="margin-top: 10px;"><strong>Diabetul Zaharat, Hipotiroidismul, Bolile Renale Cronice, Bolile Hepatice.</strong>[6, 8, 10, 16]</li>
+                        <li style="margin-top: 10px;"><strong>Medicamente:</strong> Unele diuretice, beta-blocante, corticosteroizi, etc.[3, 8, 10, 16, 35]</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <h3>Manifestări clinice și consecințe sistemice</h3>
+            <h4>Prezentarea clinică - „Ucigașul tăcut”</h4>
+            <p>Caracteristica definitorie a hipercolesterolemiei este natura sa insidioasă și asimptomatică. Majoritatea pacienților nu prezintă niciun simptom specific timp de decenii, în timp ce procesul de ateroscleroză progresează silențios.[1, 4, 5, 6, 11, 24] În cazuri rare, de obicei asociate cu forme severe, moștenite genetic (precum HF), pot apărea semne clinice vizibile:</p>
+            <ul>
+                <li><strong>Xantoamele tendinoase:</strong> Noduli de colesterol în tendoane (ex. tendonul lui Ahile).[8, 11, 12, 16, 24, 27]</li>
+                <li><strong>Xantelasmele:</strong> Plăci gălbui la nivelul pleoapelor.[10, 11, 16, 24, 27, 31]</li>
+                <li><strong>Arcul cornean (Arcus lipoides):</strong> Un inel alb-cenușiu la periferia corneei, sugestiv pentru HF dacă apare la persoane sub 45 de ani.[8, 11, 22, 27, 28, 31]</li>
+            </ul>
+            <h4>Mecanismul central al complicațiilor - Ateroscleroza</h4>
+            <p>Consecințele devastatoare ale hipercolesterolemiei sunt mediate aproape în totalitate prin ateroscleroză, un proces cronic, inflamator și degenerativ al pereților arteriali.[2, 6, 10, 24] Acest proces duce la formarea plăcilor de aterom care îngustează arterele.</p>
+            <h4>Consecințele clinice majore (evenimente vasculare)</h4>
+            <p>Când plăcile de aterom devin instabile și se rup, apar evenimentele clinice acute:</p>
+            <ul>
+                <li><strong>Boala coronariană și Infarctul miocardic:</strong> Blocarea arterelor care irigă inima.[8, 16, 31]</li>
+                <li><strong>Accidentul vascular cerebral (AVC):</strong> Blocarea arterelor care irigă creierul.[5, 8, 10, 31]</li>
+                <li><strong>Boala arterială periferică:</strong> Îngustarea arterelor care irigă membrele inferioare.[1, 10, 16, 31]</li>
+            </ul>
+
+            <h3>Abordarea diagnostică modernă</h3>
+            <h4>Screening-ul și monitorizarea</h4>
+            <p>Având în vedere natura asimptomatică a hipercolesterolemiei, screening-ul activ prin analize de sânge (profilul lipidic) este piatra de temelie a diagnosticului precoce.[4, 12]</p>
+            <h4>Interpretarea valorilor și stratificarea riscului</h4>
+            <p>Decizia terapeutică se bazează pe evaluarea riscului cardiovascular total al pacientului, care integrează multipli factori.[1, 10, 11] Pe baza acestui risc, pacienții sunt clasificați în categorii de risc (scăzut, moderat, înalt, foarte înalt), care dictează țintele terapeutice.</p>
+            <table>
+                <caption><strong>Tabelul 1: Valori de referință pentru profilul lipidic la adulți (mg/dL)</strong></caption>
+                <thead>
+                    <tr>
+                        <th>Parametru</th>
+                        <th>Valoare optimă/normală</th>
+                        <th>Valoare la limită</th>
+                        <th>Valoare crescută/riscantă</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Colesterol Total</strong></td>
+                        <td>&lt; 200</td>
+                        <td>200-239</td>
+                        <td>≥ 240</td>
+                    </tr>
+                    <tr>
+                        <td><strong>LDL-Colesterol</strong></td>
+                        <td>&lt; 100</td>
+                        <td>130-159</td>
+                        <td>≥ 160</td>
+                    </tr>
+                    <tr>
+                        <td><strong>HDL-Colesterol</strong></td>
+                        <td>≥ 40 (Bărbați), ≥ 50 (Femei)</td>
+                        <td>-</td>
+                        <td>&lt; 40 (B), &lt; 50 (F)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Trigliceride</strong></td>
+                        <td>&lt; 150</td>
+                        <td>150-199</td>
+                        <td>≥ 200</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4>Ținte terapeutice pentru LDL-colesterol</h4>
+            <p>Țintele pentru LDL-C sunt personalizate în funcție de categoria de risc a pacientului.</p>
+            <table>
+                <caption><strong>Tabelul 2: Ținte terapeutice pentru LDL-colesterol (conform Ghidurilor ESC/EAS)</strong></caption>
+                <thead>
+                    <tr>
+                        <th>Categoria de risc CV</th>
+                        <th>Ținta primară LDL-C (mg/dL)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Risc foarte înalt</strong></td>
+                        <td>&lt; 55</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Risc înalt</strong></td>
+                        <td>&lt; 70</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Risc moderat</strong></td>
+                        <td>&lt; 100</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Risc scăzut</strong></td>
+                        <td>&lt; 116</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="tab-alopata" class="tab-content">
+            <h2>Paradigma terapeutică alopată</h2>
+            <h3>Modificarea stilului de viață - Piatra de temelie</h3>
+            <p>Indiferent de nivelul de risc sau de necesitatea tratamentului medicamentos, modificarea stilului de viață reprezintă prima linie de intervenție și o componentă esențială și non-negociabilă a oricărui plan de management pe termen lung.[10, 11, 16, 38, 44] Componentele cheie includ:</p>
+            <ul>
+                <li><strong>Dieta:</strong> Adoptarea unui regim alimentar sănătos pentru inimă, precum dieta mediteraneană, este fundamentală.[16, 24] Aceasta presupune reducerea drastică a aportului de grăsimi saturate și trans, și înlocuirea lor cu grăsimi mononesaturate (ulei de măsline, avocado, nuci) și polinesaturate (pește gras bogat în omega-3). Creșterea consumului de fibre solubile (din ovăz, orz, leguminoase, fructe și legume) contribuie activ la scăderea absorbției intestinale a colesterolului.[9, 12, 44, 45]</li>
+                <li><strong>Activitatea fizică:</strong> Ghidurile recomandă acumularea a cel puțin 150 de minute de activitate fizică de intensitate moderată (mers alert, ciclism, înot) sau 75 de minute de activitate de intensitate viguroasă pe săptămână.[8, 9]</li>
+                <li><strong>Controlul greutății:</strong> Menținerea unei greutăți corporale sănătoase (indice de masă corporală între 20 și 25 $kg/m^2$) este crucială, deoarece obezitatea, în special cea abdominală, este un motor metabolic pentru dislipidemie.[4, 8, 10]</li>
+                <li><strong>Renunțarea la fumat și moderarea alcoolului:</strong> Acestea sunt măsuri imperative pentru reducerea riscului cardiovascular global.[4, 8, 10, 44]</li>
+            </ul>
+            <h3>Hipercolesterolemia și sindromul metabolic: Un cerc vicios</h3>
+            <p>Sindromul metabolic reprezintă o constelație de anomalii metabolice interconectate care cresc exponențial riscul de boală cardiovasculară și diabet de tip 2.[32, 46, 47] Criteriile de diagnostic includ, de obicei, prezența a cel puțin trei dintre următoarele: obezitate abdominală, hipertensiune arterială, glicemie à jeun crescută, nivel crescut de trigliceride și nivel scăzut de HDL-colesterol.[20, 32, 48]</p>
+            <p>Elementul fiziopatologic central care leagă aceste componente este <strong>rezistența la insulină</strong>. Într-o stare de rezistență la insulină, ficatul devine hiperactiv, producând cantități mari de VLDL, bogate în trigliceride. Acestea duc la modificări calitative ale celorlalte lipoproteine: particulele LDL devin mai mici, mai dense și mult mai aterogene, iar particulele HDL devin disfuncționale și sunt eliminate mai rapid din circulație.[20, 48] Astfel, hipercolesterolemia și sindromul metabolic se potențează reciproc, creând un mediu pro-aterogen și pro-trombotic. Managementul eficient trebuie să adreseze simultan toate componentele acestui sindrom, nu doar valoarea izolată a LDL-C.</p>
+            <h3>Farmacoterapia modernă</h3>
+            <p>Când modificările stilului de viață nu sunt suficiente pentru a atinge țintele terapeutice, se inițiază tratamentul medicamentos.</p>
+            <ul>
+                <li><strong>Statinele:</strong> Reprezintă medicația de primă linie și standardul de aur în tratamentul hipercolesterolemiei.[1, 2, 39, 49]
+                    <ul>
+                        <li><em>Mecanism de acțiune:</em> Aceste medicamente inhibă competitiv enzima HMG-CoA reductaza, care este esențială pentru sinteza colesterolului în ficat.[11, 13] Reducerea producției interne de colesterol determină o creștere a numărului de receptori pentru LDL pe suprafața celulelor hepatice, ceea ce duce la o extragere mai eficientă a LDL-C din sânge.</li>
+                        <li><em>Eficacitate:</em> Reduc nivelul LDL-C cu 30% până la peste 50%, în funcție de tipul și doza statinei. Pe lângă efectul hipolipemiant, statinele au și efecte pleiotrope, precum reducerea inflamației și stabilizarea plăcilor de aterom.</li>
+                        <li><em>Efecte adverse:</em> Cel mai frecvent raportat efect advers este durerea musculară (mialgie), însă formele severe (rabdomioliza) sunt foarte rare. Se impune monitorizarea funcției hepatice și musculare, în special la inițierea tratamentului.[9]</li>
+                    </ul>
+                </li>
+                <li><strong>Ezetimib:</strong>
+                    <ul>
+                        <li><em>Mecanism de acțiune:</em> Acționează la nivelul intestinului subțire, unde blochează selectiv absorbția colesterolului provenit din alimentație și din bilă, prin inhibarea proteinei de transport Niemann-Pick C1-Like 1 (NPC1L1).[1, 13, 50]</li>
+                        <li><em>Utilizare:</em> Este frecvent utilizat în combinație cu o statină pentru a obține o scădere suplimentară a LDL-C, sau ca monoterapie la pacienții care nu tolerează statinele.</li>
+                    </ul>
+                </li>
+                <li><strong>Inhibitorii PCSK9 (Evolocumab, Alirocumab):</strong>
+                    <ul>
+                        <li><em>Mecanism de acțiune:</em> Aceștia sunt anticorpi monoclonali injectabili care neutralizează proteina PCSK9. În mod normal, PCSK9 se leagă de receptorii LDL și îi marchează pentru degradare. Prin inhibarea PCSK9, durata de viață a receptorilor LDL este prelungită, crescând dramatic capacitatea ficatului de a elimina colesterolul din sânge.[1, 13, 49, 50]</li>
+                        <li><em>Eficacitate:</em> Pot reduce LDL-C cu încă 50-60% atunci când sunt adăugați la terapia maximă cu statine și ezetimib.</li>
+                        <li><em>Utilizare:</em> Sunt rezervați pentru pacienții cu risc cardiovascular foarte înalt, în special cei cu hipercolesterolemie familială, care nu ating țintele terapeutice cu medicația orală.</li>
+                    </ul>
+                </li>
+                <li><strong>Alte terapii și terapii de viitor:</strong> Alte opțiuni includ acidul bempedoic, sechestranții de acizi biliari și fibrații (în principal pentru hipertrigliceridemie).[2, 16, 49, 51] O direcție promițătoare este reprezentată de terapiile bazate pe ARN (inclisiran) și de tehnicile de editare genică (CRISPR), care țintesc producția de PCSK9 și oferă potențialul unei reduceri de lungă durată a LDL-C cu administrări foarte rare.[52, 53]</li>
+            </ul>
+            <h3>Proceduri invazive</h3>
+            <p>Pentru cazurile cele mai severe și refractare la tratament, precum hipercolesterolemia familială homozigotă, se poate recurge la afereza LDL. Aceasta este o procedură extracorporeală, similară dializei, prin care sângele pacientului este trecut printr-un filtru special care îndepărtează selectiv lipoproteinele ce conțin apolipoproteina B (în principal LDL și VLDL).[1, 8, 23, 51]</p>
+        </div>
+
+        <div id="tab-holistica" class="tab-content">
+            <h2>Perspective holistice asupra metabolismului lipidic</h2>
+            <p>Dincolo de paradigma biochimică, abordările holistice oferă un cadru de înțelegere a modului în care factorii psiho-emoționali și energetici influențează metabolismul lipidic.</p>
+            <h3>Dimensiunea psiho-emoțională și psihosomatică</h3>
+            <p>Medicina psihosomatică recunoaște de mult timp legătura profundă dintre starea mentală și sănătatea fizică.</p>
+            <ul>
+                <li><strong>Stresul cronic:</strong> Este un factor de risc cardiovascular bine documentat.[12] Expunerea prelungită la stres activează cronic sistemul nervos simpatic ("luptă sau fugi") și axa hipotalamo-hipofizo-suprarenaliană, ducând la niveluri crescute de catecolamine (adrenalină) și cortizol. Acești hormoni de stres pot crește direct producția hepatică de VLDL și LDL, pot favoriza acumularea de grăsime viscerală, pot crește inflamația sistemică și pot induce disfuncție endotelială – toți fiind factori cheie în progresia aterosclerozei.[54, 55, 56]</li>
+                <li><strong>Tipare de personalitate și emoții:</strong> Anumite tipare comportamentale sunt asociate cu un risc cardiovascular crescut. Tipul de personalitate A, caracterizat prin ostilitate, nerăbdare și competitivitate, a fost legat istoric de boala coronariană.[57] Mai recent, tipul de personalitate D (distressed), definit prin tendința spre afectivitate negativă (anxietate, iritabilitate) și inhibiție socială, a fost identificat ca un predictor puternic al unui prognostic nefavorabil la pacienții cardiovasculari.[57] Emoțiile reprimate, precum furia, resentimentele sau tristețea cronică, pot genera o stare de tensiune internă care se traduce în dezechilibre fiziologice.[55, 58]</li>
+                <li><strong>Perspectiva metafizică (Louise Hay):</strong> Într-o abordare non-științifică, dar influentă în cercurile de dezvoltare personală, Louise Hay a asociat problemele legate de colesterol cu o cauză emoțională specifică: „înfundarea canalelor bucuriei” și „teama de a accepta bucuria”.[59, 60] Afirmația de vindecare propusă, „Aleg să iubesc viața”, sugerează o legătură între starea de anhedonie (incapacitatea de a simți plăcere) și dezechilibrele metabolice.</li>
+            </ul>
+            <h3>Medicina tradițională chineză (MTC)</h3>
+            <p>MTC interpretează hiperlipidemia nu ca pe o problemă a colesterolului, ci ca pe un dezechilibru energetic. Patologia este văzută ca o acumulare de „Umezeală-Flegmă” (Tan Zhuo), o substanță patologică vâscoasă care obstrucționează fluxul de Qi (energie vitală) și Sânge în meridiane și vase.[61] Două sisteme de organe (Zang-Fu) sunt considerate centrale în acest proces:</p>
+            <ul>
+                <li><strong>Splina (Pi):</strong> În MTC, Splina este responsabilă de transformarea și transportul nutrienților din alimente. O funcție deficitară a Splinei, cauzată de o dietă necorespunzătoare (prea multe grăsimi, dulciuri, alimente reci) sau de îngrijorare excesivă, duce la o metabolizare incompletă și la acumularea de Umezeală, care, în timp, se condensează în Flegmă.</li>
+                <li><strong>Ficatul (Gan):</strong> Ficatul asigură circulația liberă și armonioasă a Qi-ului în tot corpul. Stresul emoțional, în special furia, frustrarea și resentimentele, duc la „Stagnarea Qi-ului Ficatului”. Această stagnare poate perturba funcția Splinei și poate genera căldură internă, contribuind la transformarea Umezelii în Flegmă.</li>
+            </ul>
+            <p>Tratamentul în MTC vizează, prin urmare, tonifierea Splinei, deblocarea stagnării Qi-ului Ficatului și eliminarea Umezelii-Flegmă, folosind acupunctura și formule complexe de plante medicinale.[62, 63]</p>
+            <h3>Medicina ayurveda</h3>
+            <p>În viziunea ayurvedică, sănătatea este menținută de un foc digestiv puternic (Agni) și de echilibrul celor trei energii biologice fundamentale (dosha): Vata, Pitta și Kapha. Hipercolesterolemia (Medoroga) este considerată o tulburare a țesutului adipos (Meda Dhatu), cauzată în principal de un Agni slab și de un exces de Kapha dosha (energia asociată cu structura, lubrifierea și stabilitatea).[64, 65, 66, 67] Un Agni deficitar duce la o digestie incompletă și la formarea de Ama, o substanță toxică, lipicioasă, care blochează canalele de transport ale corpului (srotas) și se acumulează în țesuturi.[65, 66, 68] Tratamentul ayurvedic se concentrează pe:</p>
+            <ul>
+                <li><strong>Creșterea Agni:</strong> Prin utilizarea de condimente picante și ierburi digestive.</li>
+                <li><strong>Eliminarea Ama:</strong> Prin diete specifice și proceduri de detoxifiere (Panchakarma).</li>
+                <li><strong>Pacificarea Kapha dosha:</strong> Prin favorizarea alimentelor cu gust amar, astringent și picant și evitarea celor dulci, sărate și acre, precum și a alimentelor grele și reci.[65, 68]</li>
+                <li><strong>Fitoterapie:</strong> Se utilizează plante precum Guggulu, Turmeric, Arjuna și Amla.[64, 65, 68]</li>
+            </ul>
+            <p>Deși folosesc un limbaj diferit, aceste perspective holistice converg către o idee centrală remarcabilă: hipercolesterolemia nu este doar o problemă izolată de „grăsime în sânge”, ci o manifestare a unui dezechilibru sistemic mai profund, cu rădăcini în metabolismul digestiv, inflamație și stresul psiho-emoțional. Concepte precum „foc digestiv slab” (Agni), „stagnarea Qi-ului Ficatului” sau „blocarea canalelor bucuriei” pot fi interpretate ca metafore antice pentru interacțiunile complexe ale axei intestin-ficat-creier, un domeniu de cercetare intensă în medicina modernă. Această convergență oferă un argument puternic pentru adoptarea unor strategii de management integrative, care adresează simultan biochimia (prin dietă și medicamente), fiziologia (prin exerciții și managementul stresului) și starea psiho-emoțională.</p>
+        </div>
+
+        <div id="tab-naturista" class="tab-content">
+            <h2>Abordarea naturistă și suplimentarea inteligentă</h2>
+            <p>Abordarea naturistă poate completa, dar nu trebuie să înlocuiască, tratamentul medical convențional, în special la pacienții cu risc cardiovascular înalt. Utilizarea suplimentelor trebuie făcută cu prudență și, ideal, sub îndrumarea unui profesionist din domeniul sănătății, pentru a evita interacțiunile medicamentoase și efectele adverse.[35, 69] Eficacitatea multor suplimente este inferioară celei a statinelor.[70]</p>
+            <table>
+                <caption><strong>Tabelul 3: Sinoptic al suplimentelor naturiste pentru managementul colesterolului</strong></caption>
+                <thead>
+                    <tr>
+                        <th>Supliment</th>
+                        <th>Mecanism de acțiune principal</th>
+                        <th>Nivel de evidență</th>
+                        <th>Efect principal</th>
+                        <th>Doză uzuală</th>
+                        <th>Precauții/Interacțiuni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Drojdie de orez roșu</strong></td>
+                        <td>Conține monacolină K (lovastatină naturală), inhibă HMG-CoA reductaza.</td>
+                        <td>Studii clinice randomizate</td>
+                        <td>↓ LDL</td>
+                        <td>600-1200 mg de 2 ori/zi</td>
+                        <td>Risc de miopatie similar statinelor; a nu se combina cu statine; necesită monitorizare hepatică.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fibre solubile (Psyllium, Beta-glucan)</strong></td>
+                        <td>Leagă acizii biliari în intestin, crescând eliminarea lor și consumul hepatic de colesterol.</td>
+                        <td>Meta-analize</td>
+                        <td>↓ LDL, ↓ Colesterol Total</td>
+                        <td>5-10 g/zi</td>
+                        <td>Pot cauza balonare; necesită aport adecvat de lichide.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fitosteroli/Stanoli</strong></td>
+                        <td>Blochează competitiv absorbția colesterolului la nivel intestinal.</td>
+                        <td>Meta-analize</td>
+                        <td>↓ LDL</td>
+                        <td>2 g/zi</td>
+                        <td>Eficiență redusă în absența unei diete hipolipidice.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Acizi grași Omega-3</strong></td>
+                        <td>Reduc sinteza hepatică de VLDL.</td>
+                        <td>Meta-analize</td>
+                        <td>↓↓↓ Trigliceride</td>
+                        <td>2-4 g EPA+DHA/zi</td>
+                        <td>Pot crește ușor LDL-C; risc de sângerare la doze mari, interacțiuni cu anticoagulante.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Niacină (Vitamina B3)</strong></td>
+                        <td>Reduce producția hepatică de VLDL și catabolismul HDL.</td>
+                        <td>Studii clinice randomizate</td>
+                        <td>↓ LDL, ↓ Trigliceride, ↑↑ HDL</td>
+                        <td>1-3 g/zi (doar cu prescripție)</td>
+                        <td>Înroșirea pielii, risc de gută, hiperglicemie, toxicitate hepatică. A nu se autoadministra.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Berberină</strong></td>
+                        <td>Activează AMPK, crește expresia receptorilor LDL.</td>
+                        <td>Studii Clinice</td>
+                        <td>↓ LDL, ↓ Trigliceride</td>
+                        <td>500 mg de 2-3 ori/zi</td>
+                        <td>Tulburări gastrointestinale; interacțiuni medicamentoase multiple (ex: ciclosporină).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Coenzima Q10</strong></td>
+                        <td>Nu scade colesterolul; rol în producția de energie celulară.</td>
+                        <td>Studii clinice</td>
+                        <td>Neutru</td>
+                        <td>100-200 mg/zi</td>
+                        <td>Poate ameliora mialgia indusă de statine (dovezi neconcludente).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="tab-tehnici" class="tab-content">
+            <h2>Tehnici avansate de vindecare holistică</h2>
+            <p>Aceste tehnici nu țintesc direct nivelul de colesterol, ci acționează asupra mecanismelor de reglare a stresului și a sistemului nervos autonom, care influențează secundar sănătatea cardiovasculară și metabolică.</p>
+            <h3>Biorezonanță și Biofeedback</h3>
+            <ul>
+                <li><strong>Biorezonanța:</strong> Este o metodă din sfera medicinii energetice care nu are, la ora actuală, o validare științifică robustă pentru tratamentul dislipidemiilor. Este utilizată în practica holistică pentru reechilibrarea energetică generală și reducerea stresului.[76]</li>
+                <li><strong>Biofeedback-ul:</strong> În contrast, este o tehnică minte-corp validată științific, care permite unui individ să învețe să controleze funcții fiziologice considerate anterior involuntare, precum ritmul cardiac, tensiunea arterială sau temperatura pielii.[77, 78, 79] Prin monitorizarea în timp real a variabilității ritmului cardiac (HRV), o persoană poate învăța, prin exerciții de respirație și relaxare, să crească tonusul sistemului nervos parasimpatic (responsabil de relaxare și digestie) și să-l diminueze pe cel simpatic (responsabil de răspunsul la stres). Prin managementul eficient al stresului cronic, biofeedback-ul poate modula axa psiho-neuro-endocrino-imună, cu potențiale beneficii asupra markerilor metabolici, inclusiv colesterolul și trigliceridele.[80, 81, 82]</li>
+            </ul>
+            <h3>Tehnici de eliberare emoțională (EFT - Tapping)</h3>
+            <p>EFT este o tehnică de psihologie energetică ce combină elemente de terapie cognitivă (concentrarea pe o problemă specifică) cu stimularea fizică a unor puncte de acupunctură de pe față și corp.[83, 84, 85] Teoria de bază postulează că emoțiile negative sunt cauzate de o perturbare în sistemul energetic al corpului, iar tapping-ul ajută la restabilirea echilibrului. Studii clinice randomizate au demonstrat eficacitatea EFT în reducerea semnificativă a simptomelor de anxietate, depresie și stres post-traumatic.[85, 86, 87] Un studiu notabil a arătat că o oră de EFT a dus la o scădere medie de 37% a nivelului de cortizol (hormonul stresului), alături de reduceri semnificative ale tensiunii arteriale și ritmului cardiac.[88] Prin adresarea directă a cauzelor emoționale ale stresului, EFT poate influența indirect, dar puternic, fiziologia cardiovasculară.</p>
+            <h3>Meditația și vizualizarea ghidată</h3>
+            <p>Aceste practici induc o stare de relaxare profundă și reglează răspunsul la stres. Mecanismele de acțiune includ scăderea activității sistemului nervos simpatic, reducerea tensiunii arteriale, a ritmului cardiac și a markerilor inflamatori.[89, 90] În 2017, Asociația Americană a Inimii (AHA) a publicat o declarație științifică în care recunoaște că meditația poate fi considerată o intervenție complementară pentru reducerea riscului cardiovascular.[89] Un studiu amplu, bazat pe datele unui sondaj național din SUA, a arătat că persoanele care practicau meditația aveau o prevalență semnificativ mai mică a colesterolului ridicat, diabetului, hipertensiunii și bolii coronariene, chiar și după ajustarea pentru alți factori de risc.[91, 92]</p>
+            <p>Aceste tehnici avansate funcționează ca niște "meta-terapii". Ele nu tratează simptomul (colesterolul ridicat), ci reglează sistemul de operare central al organismului – sistemul nervos autonom și axa psiho-neuro-endocrino-imună. Prin recalibrarea răspunsului la stres, ele creează un mediu intern (milieu intérieur) mai puțin inflamator și mai echilibrat, în care procesele metabolice, inclusiv cel al lipidelor, au șansa de a se normaliza. Ele reprezintă veriga funcțională care conectează starea mentală și emoțională de biochimia sângelui.</p>
+        </div>
+
+        <div id="tab-menopauza" class="tab-content">
+            <h2>Colesterolul și sănătatea femeii: Rolul estrogenului și impactul menopauzei</h2>
+            <p>Relația dintre colesterol și hormonii sexuali feminini, în special estrogenul, este una complexă și cu implicații profunde asupra sănătății cardiovasculare a femeii pe parcursul vieții. Înțelegerea acestei "simbioze" este crucială pentru a gestiona corect riscul cardiovascular, în special în perioada de tranziție la menopauză.</p>
+            <h3>Rolul cardioprotector al estrogenului asupra profilului lipidic</h3>
+            <p>În perioada fertilă, estrogenul exercită o serie de efecte benefice asupra metabolismului lipidic, care contribuie la riscul cardiovascular mai redus al femeilor premenopauzale, comparativ cu bărbații de aceeași vârstă. Mecanismele sunt multiple și bine documentate:[94]</p>
+            <ul>
+                <li><strong>Creșterea HDL-colesterolului:</strong> Estrogenul stimulează producția hepatică de apolipoproteina A-I, componenta proteică principală a HDL, crescând astfel nivelul colesterolului 'bun' și îmbunătățind transportul invers al colesterolului.</li>
+                <li><strong>Scăderea LDL-colesterolului:</strong> Estrogenul crește numărul și activitatea receptorilor pentru LDL la nivelul ficatului, ceea ce duce la o eliminare mai eficientă a colesterolului 'rău' din circulație.</li>
+                <li><strong>Efecte asupra trigliceridelor:</strong> Efectul este mai complex, estrogenul putând crește ușor trigliceridele, dar acest lucru se întâmplă, de obicei, în contextul unui profil lipidic general favorabil și nu este considerat un efect negativ major.</li>
+                <li><strong>Efecte antioxidante și antiinflamatorii:</strong> Dincolo de lipide, estrogenul are și efecte directe la nivel vascular, reducând stresul oxidativ și inflamația, protejând astfel endoteliul și menținând elasticitatea arterială.</li>
+            </ul>
+            <h3>Tranziția la menopauză: O schimbare de paradigmă metabolică - mit sau adevăr științific?</h3>
+            <p>Scăderea dramatică a nivelului de estrogen care caracterizează menopauza anulează aceste efecte protectoare, ducând la o modificare semnificativă și adesea nefavorabilă a profilului lipidic. Această schimbare <strong>nu este un mit, ci un adevăr științific</strong> bine documentat prin studii ample, precum SWAN (Study of Women's Health Across the Nation).[33, 34, 95] Modificările tipice includ:</p>
+            <ul>
+                <li><strong>Creșterea colesterolului total și a LDL-C:</strong> În absența stimulului estrogenic, clearance-ul hepatic al LDL-C devine mai puțin eficient, ducând la creșterea valorilor serice cu o medie de 10-15%.</li>
+                <li><strong>Modificări calitative ale lipoproteinelor:</strong> Particulele LDL tind să devină mai mici și mai dense, fiind astfel mai aterogene și pătrunzând mai ușor în peretele arterial.</li>
+                <li><strong>Scăderea HDL-C:</strong> Nivelul colesterolului 'bun' scade sau, chiar dacă rămâne cantitativ similar, funcționalitatea sa protectoare poate fi diminuată.</li>
+                <li><strong>Creșterea trigliceridelor și a obezității abdominale:</strong> Modificările hormonale favorizează acumularea de grăsime viscerală, un factor cheie în dezvoltarea rezistenței la insulină și a dislipidemiei aterogene caracteristice sindromului metabolic.</li>
+            </ul>
+            <h3>Importanța menținerii echilibrului lipidic la menopauză</h3>
+            <p>Această tranziție hormonală și metabolică explică de ce riscul cardiovascular al femeilor crește exponențial după menopauză, ajungând să îl egaleze și chiar să îl depășească pe cel al bărbaților. Prin urmare, perioada perimenopauzală și postmenopauzală reprezintă o fereastră critică de oportunitate pentru intensificarea măsurilor de prevenție. Monitorizarea atentă a profilului lipidic, alături de optimizarea stilului de viață (dietă, exerciții fizice, managementul greutății și al stresului) devin esențiale. În multe cazuri, este necesară inițierea sau ajustarea terapiei medicamentoase pentru a controla aceste modificări lipidice și a menține riscul cardiovascular sub control, conform acelorași principii de stratificare a riscului aplicate populației generale.[95]</p>
+        </div>
+
+        <div id="tab-concluzii" class="tab-content">
+            <h2>Prevenția și concluzii</h2>
+            <h3>Prevenția: Fundamentul sănătății cardiovasculare pe termen lung</h3>
+            <p>Prevenția rămâne cea mai eficientă strategie în lupta împotriva hipercolesterolemiei și a consecințelor sale.</p>
+            <ul>
+                <li><strong>Prevenția primară:</strong> Vizează împiedicarea apariției bolii la persoanele sănătoase. Aceasta se bazează pe adoptarea unui stil de viață sănătos încă de la o vârstă fragedă, incluzând o dietă echilibrată, activitate fizică regulată, menținerea unei greutăți optime, evitarea fumatului și managementul stresului.[4, 30] Educația pentru sănătate și screening-ul periodic sunt esențiale.</li>
+                <li><strong>Prevenția secundară:</strong> Se aplică pacienților care au suferit deja un eveniment cardiovascular. În acest context, modificările stilului de viață devin și mai stringente și trebuie obligatoriu asociate cu o terapie medicamentoasă agresivă, pentru a atinge ținte de LDL-C foarte scăzute și a preveni recurența evenimentelor.[41, 93]</li>
+                <li><strong>Abordarea multidisciplinară:</strong> Managementul eficient al hipercolesterolemiei necesită o colaborare strânsă între medicul de familie, cardiolog, nutriționist, specialist în activitate fizică și, în funcție de nevoile pacientului, un psihoterapeut sau un terapeut holistic. O astfel de abordare personalizată asigură cele mai bune rezultate și o aderență optimă pe termen lung.[1]</li>
+            </ul>
+            <h3>Concluzii și direcții viitoare de cercetare</h3>
+            <p>Hipercolesterolemia este o afecțiune complexă, situată la intersecția dintre genetică, metabolism, stil de viață și starea psiho-emoțională. O înțelegere superficială, limitată la o singură valoare de laborator, este insuficientă. Managementul optim în secolul XXI necesită o abordare integrativă, care să utilizeze cu discernământ cele mai puternice instrumente ale medicinei alopate – diagnosticul de precizie, stratificarea riguroasă a riscului și terapiile farmacologice bazate pe dovezi – și să le completeze cu strategii holistice fundamentale, care adresează cauzele profunde ale dezechilibrului: nutriția, mișcarea, managementul stresului și al emoțiilor.</p>
+            <p>Pentru viitor, se conturează câteva direcții de cercetare promițătoare care ar putea consolida această paradigmă integrativă:</p>
+            <ul>
+                <li>Investigarea mecanismelor epigenetice prin care intervențiile minte-corp (meditație, biofeedback, EFT) modulează expresia genelor cheie în metabolismul lipidic (ex: LDLR, PCSK9).</li>
+                <li>Proiectarea de studii clinice randomizate care să compare eficacitatea protocoalelor integrate (ex: statină + dietă mediteraneană + program de reducere a stresului bazat pe mindfulness) versus tratamentul farmacologic standard.</li>
+                <li>Explorarea aprofundată a rolului microbiomului intestinal ca mediator între dietă, stres și profilul lipidic, și evaluarea potențialului terapeutic al intervențiilor personalizate asupra acestuia (probiotice, prebiotice, postbiotice).</li>
+                <li>Validarea biomarkerilor de stres și ai funcției autonome (ex: variabilitatea ritmului cardiac, cortizolul salivar) ca instrumente de monitorizare a răspunsului la tratament în managementul dislipidemiilor.</li>
+                <li>Izolarea și studierea compușilor activi din plantele medicinale utilizate în sistemele tradiționale (MTC, Ayurveda) pentru a dezvolta noi clase de medicamente hipolipemiante, cu mecanisme de acțiune inovatoare și profiluri de siguranță superioare.</li>
+            </ul>
+        </div>
+        
+       
+        <div id="tab-bibliografie" class="tab-content">
+            <h2>Bibliografie</h2>
+    <ol class="bibliography-list">
+                <li>Grundy, S. M., et al. (2019). 2018 AHA/ACC/AACVPR/AAPA/ABC/ACPM/ADA/AGS/APhA/ASPC/NLA/PCNA Guideline on the Management of Blood Cholesterol. *Circulation*, 139(25), e1082-e1143.</li>
+                <li>Ference, B. A., et al. (2017). Low-density lipoproteins cause atherosclerotic cardiovascular disease. 1. Evidence from genetic, epidemiologic, and clinical studies. A consensus statement from the European Atherosclerosis Society Consensus Panel. *European Heart Journal*, 38(32), 2459-2472.</li>
+                <li>Mach, F., et al. (2020). 2019 ESC/EAS Guidelines for the management of dyslipidaemias. *European Heart Journal*, 41(1), 111-188.</li>
+                <li>Yusuf, S., et al. (2004). Effect of potentially modifiable risk factors associated with myocardial infarction in 52 countries (the INTERHEART study): case-control study. *The Lancet*, 364(9438), 937-952.</li>
+                <li>Goldstein, J. L., & Brown, M. S. (2009). The LDL receptor. *Arteriosclerosis, Thrombosis, and Vascular Biology*, 29(4), 431-438.</li>
+                <li>Dietschy, J. M., & Turley, S. D. (2004). Thematic review series: The Human Cholesterol Balance. *Journal of Lipid Research*, 45(8), 1375-1397.</li>
+                <li>National Cholesterol Education Program (NCEP) Expert Panel on Detection, Evaluation, and Treatment of High Blood Cholesterol in Adults (Adult Treatment Panel III). (2002). Third Report of the National Cholesterol Education Program (NCEP) Expert Panel on Detection, Evaluation, and Treatment of High Blood Cholesterol in Adults (Adult Treatment Panel III) final report. *Circulation*, 106(25), 3143-3421.</li>
+                <li>Miller, M., et al. (2011). Triglycerides and cardiovascular disease: a scientific statement from the American Heart Association. *Circulation*, 123(20), 2292-2333.</li>
+                <li>Chapman, M. J., et al. (2011). Triglyceride-rich lipoproteins and high-density lipoprotein cholesterol in patients at high risk of cardiovascular disease: evidence and guidance for management. *European Heart Journal*, 32(11), 1345-1361.</li>
+                <li>Stone, N. J., et al. (2014). 2013 ACC/AHA guideline on the treatment of blood cholesterol to reduce atherosclerotic cardiovascular risk in adults. *Journal of the American College of Cardiology*, 63(25 Part B), 2889-2934.</li>
+                <li>Catapano, A. L., et al. (2016). 2016 ESC/EAS Guidelines for the Management of Dyslipidaemias. *European Heart Journal*, 37(39), 2999-3058.</li>
+                <li>Feingold, K. R. (2021). Introduction to Lipids and Lipoproteins. In *Endotext*. MDText.com, Inc.</li>
+                <li>Baigent, C., et al. (2005). Efficacy and safety of cholesterol-lowering treatment: prospective meta-analysis of data from 90,056 participants in 14 randomised trials of statins. *The Lancet*, 366(9493), 1267-1278.</li>
+                <li>Yeagle, P. L. (2016). *The structure of biological membranes*. CRC press.</li>
+                <li>Russell, D. W. (2003). The enzymes, regulation, and genetics of bile acid synthesis. *Annual Review of Biochemistry*, 72(1), 137-174.</li>
+                <li>Rosenson, R. S., et al. (2012). Dysfunctional high-density lipoprotein and atherosclerotic cardiovascular disease. *Nature Reviews Cardiology*, 9(1), 4-12.</li>
+                <li>Sniderman, A. D., et al. (2011). Why is apolipoprotein B a better marker of cardiovascular risk? *Current Opinion in Cardiology*, 26(4), 348-353.</li>
+                <li>Virani, S. S., et al. (2021). 2021 ACC Expert Consensus Decision Pathway on the Management of ASCVD Risk Reduction in Patients With Persistent Hypertriglyceridemia. *Journal of the American College of Cardiology*, 78(9), 960-993.</li>
+                <li>Robinson, J. G., et al. (2016). 2016 update on the management of blood cholesterol: a report of the National Lipid Association Expert Panel. *Journal of Clinical Lipidology*, 10(2), 225-243.</li>
+                <li>Grundy, S. M., et al. (2005). Diagnosis and Management of the Metabolic Syndrome. *Circulation*, 112(17), 2735-2752.</li>
+                <li>Goldberg, A. C., et al. (2011). Familial hypercholesterolemia: screening, diagnosis and management of pediatric and adult patients. *Journal of Clinical Lipidology*, 5(3), S1-S8.</li>
+                <li>Nordestgaard, B. G., et al. (2013). Familial hypercholesterolaemia is underdiagnosed and undertreated in the general population: guidance for clinicians to prevent coronary heart disease. *European Heart Journal*, 34(45), 3478-3490.</li>
+                <li>Cuchel, M., et al. (2014). Homozygous familial hypercholesterolaemia: new insights and guidance for clinicians to improve detection and clinical management. A position paper from the Consensus Panel on Familial Hypercholesterolaemia of the European Atherosclerosis Society. *European Heart Journal*, 35(32), 2146-2157.</li>
+                <li>Hopkins, P. N., et al. (2011). Coronary artery disease risk in familial combined hyperlipidemia and familial hypertriglyceridemia: a case-control comparison from the National Heart, Lung, and Blood Institute Family Heart Study. *Circulation*, 124(8), 917-925.</li>
+                <li>Sturm, A. C., et al. (2018). Clinical genetic testing for familial hypercholesterolemia: JACC scientific expert panel. *Journal of the American College of Cardiology*, 72(6), 662-680.</li>
+                <li>Defesche, J. C., et al. (2017). The diagnosis of familial hypercholesterolaemia. *Atherosclerosis*, 266, 99-105.</li>
+                <li>Raal, F. J., & Santos, R. D. (2012). Homozygous familial hypercholesterolemia: current perspectives on diagnosis and treatment. *Atherosclerosis*, 223(2), 262-268.</li>
+                <li>Benn, M., et al. (2012). Familial hypercholesterolemia in the Danish general population: prevalence, coronary artery disease, and cholesterol-lowering medication. *Journal of Clinical Endocrinology & Metabolism*, 97(11), 3956-3964.</li>
+                <li>Brix, T. H., et al. (2014). Cumulative risk of cardiovascular disease in patients with familial hypercholesterolemia. *Journal of the American College of Cardiology*, 63(18), 1889-1896.</li>
+                <li>Khera, A. V., et al. (2016). Diagnostic and therapeutic implications of seasonal and day-to-day variability in cholesterol levels. *Journal of the American College of Cardiology*, 67(13), 1544-1554.</li>
+                <li>Rizzo, M., & Berneis, K. (2006). The clinical relevance of low-density-lipoprotein size modulation by statins. *Journal of Clinical Lipidology*, 1(4), 285-294.</li>
+                <li>Després, J. P., & Lemieux, I. (2006). Abdominal obesity and metabolic syndrome. *Nature*, 444(7121), 881-887.</li>
+                <li>Matthews, K. A., et al. (1998). Menopause and risk factors for coronary heart disease. *New England Journal of Medicine*, 338(16), 1119-1124.</li>
+                <li>Derby, C. A., et al. (2000). Lipid changes during the menopause transition: the SWAN study. *American Journal of Epidemiology*, 152(1), 29-39.</li>
+                <li>Falkner, B. (2010). Hypertension in children and adolescents: epidemiology and natural history. *Pediatric Nephrology*, 25(7), 1219-1224.</li>
+                <li>Libby, P., et al. (2002). Inflammation and atherosclerosis. *Circulation*, 105(9), 1135-1143.</li>
+                <li>Expert Panel on Integrated Guidelines for Cardiovascular Health and Risk Reduction in Children and Adolescents. (2011). Expert panel on integrated guidelines for cardiovascular health and risk reduction in children and adolescents: summary report. *Pediatrics*, 128(Supplement 5), S213-S256.</li>
+                <li>Arnett, D. K., et al. (2019). 2019 ACC/AHA Guideline on the Primary Prevention of Cardiovascular Disease. *Circulation*, 140(11), e596-e646.</li>
+                <li>Visseren, F. L. J., et al. (2021). 2021 ESC Guidelines on cardiovascular disease prevention in clinical practice. *European Heart Journal*, 42(34), 3227-3337.</li>
+                <li>Piepoli, M. F., et al. (2016). 2016 European Guidelines on cardiovascular disease prevention in clinical practice. *European Heart Journal*, 37(29), 2315-2381.</li>
+                <li>SCORE2 working group and ESC Cardiovascular risk collaboration. (2021). SCORE2 risk prediction algorithms: new models to estimate 10-year risk of cardiovascular disease in Europe. *European Heart Journal*, 42(25), 2439-2454.</li>
+                <li>Lichtenstein, A. H., et al. (2021). 2021 Dietary Guidance to Improve Cardiovascular Health: A Scientific Statement From the American Heart Association. *Circulation*, 144(23), e472-e487.</li>
+                <li>Greenland, P., et al. (2010). 2010 ACCF/AHA guideline for assessment of cardiovascular risk in asymptomatic adults. *Journal of the American College of Cardiology*, 56(25), e50-e103.</li>
+                <li>Jenkins, D. J., et al. (2003). Effects of a dietary portfolio of cholesterol-lowering foods vs lovastatin on lipids and C-reactive protein. *JAMA*, 290(4), 502-510.</li>
+                <li>Sacks, F. M., et al. (2001). Effects on blood pressure of reduced dietary sodium and the Dietary Approaches to Stop Hypertension (DASH) diet. *New England Journal of Medicine*, 344(1), 3-10.</li>
+                <li>Alberti, K. G. M. M., et al. (2009). Harmonizing the metabolic syndrome. *Circulation*, 120(16), 1640-1645.</li>
+                <li>Saklayen, M. G. (2018). The global epidemic of the metabolic syndrome. *Current Hypertension Reports*, 20(2), 1-8.</li>
+                <li>Reaven, G. M. (1988). Banting lecture 1988. Role of insulin resistance in human disease. *Diabetes*, 37(12), 1595-1607.</li>
+                <li>Cholesterol Treatment Trialists’ (CTT) Collaboration. (2012). The effects of lowering LDL cholesterol with statin therapy in people at low risk of vascular disease: meta-analysis of individual data from 27 randomised trials. *The Lancet*, 380(9841), 581-590.</li>
+                <li>Cannon, C. P., et al. (2015). Ezetimibe added to statin therapy after acute coronary syndromes. *New England Journal of Medicine*, 372(25), 2387-2397.</li>
+                <li>Thompson, G. R., et al. (2008). LDL apheresis: a review. *Current Atherosclerosis Reports*, 10(1), 58-63.</li>
+                <li>Ray, K. K., et al. (2020). Safety and Efficacy of Bempedoic Acid to Reduce LDL Cholesterol. *New England Journal of Medicine*, 382(16), 1507-1519.</li>
+                <li>Fitzgerald, K., et al. (2017). A highly durable RNAi therapeutic for the treatment of hypercholesterolemia. *New England Journal of Medicine*, 376(1), 41-51.</li>
+                <li>Rozanski, A., et al. (2015). The epidemiology, pathophysiology, and management of psychosocial risk factors in cardiac practice: the emerging field of behavioral cardiology. *Journal of the American College of Cardiology*, 65(10), 1037-1051.</li>
+                <li>Steptoe, A., & Kivimäki, M. (2013). Stress and cardiovascular disease: an update on current knowledge. *Annual Review of Public Health*, 34, 337-354.</li>
+                <li>Chida, Y., & Steptoe, A. (2009). The association of anger and hostility with future coronary heart disease: a meta-analytic review of prospective evidence. *Journal of the American College of Cardiology*, 53(11), 936-946.</li>
+                <li>Denollet, J. (2005). DS14: standard assessment of negative affectivity, social inhibition, and Type D personality. *Psychosomatic Medicine*, 67(1), 89-97.</li>
+                <li>McEwen, B. S. (2008). Central effects of stress hormones in health and disease: Understanding the protective and damaging effects of stress and stress mediators. *European Journal of Pharmacology*, 583(2-3), 174-185.</li>
+                <li>Hay, L. L. (1984). *You can heal your life*. Hay House Inc.</li>
+                <li>Pert, C. B. (1997). *Molecules of emotion: The science behind mind-body medicine*. Simon and Schuster.</li>
+                <li>Wang, J., & Xiong, X. (2012). Evidence-based Chinese medicine for hypertension. *Evidence-Based Complementary and Alternative Medicine*, 2012, 978398.</li>
+                <li>Maciocia, G. (2015). *The Foundations of Chinese Medicine*. Elsevier Health Sciences.</li>
+                <li>Kaptchuk, T. J. (2000). *The Web That Has No Weaver: Understanding Chinese Medicine*. Contemporary Books.</li>
+                <li>Sharma, H., & Clark, C. (1998). *Contemporary Ayurveda*. The Ayurvedic Institute.</li>
+                <li>Lad, V. (2002). *Textbook of Ayurveda: Fundamental Principles*. The Ayurvedic Press.</li>
+                <li>Tirtha, S. S. (1998). *The Ayurveda Encyclopedia*. Ayurvedic Press.</li>
+                <li>Pole, S. (2013). *Ayurvedic Medicine: The Principles of Traditional Practice*. Singing Dragon.</li>
+                <li>Frawley, D. (2000). *Ayurvedic Healing: A Comprehensive Guide*. Lotus Press.</li>
+                <li>Cicero, A. F. G., & Colletti, A. (2017). Bibliometric analysis of the scientific literature on the effects of nutraceuticals in dyslipidemias. *Pharmacological Research*, 125, 126-137.</li>
+                <li>Burke, F. M. (2003). Red yeast rice for the treatment of dyslipidemia. *Current Atherosclerosis Reports*, 5(1), 73-78.</li>
+                <li>Becker, D. J., et al. (2008). Red yeast rice for dyslipidemia in statin-intolerant patients: a randomized controlled trial. *Annals of Internal Medicine*, 148(12), 883-891.</li>
+                <li>Bays, H. E., et al. (2017). Prescription omega-3 fatty acids and their lipid effects: a comprehensive literature review. *Postgraduate Medicine*, 129(7), 747-768.</li>
+                <li>AbuMweis, S. S., et al. (2008). Plant sterols/stanols as cholesterol lowering agents: A meta-analysis of randomized controlled trials. *Food & Nutrition Research*, 52(1), 1811.</li>
+                <li>Balk, E. M., et al. (2006). Effects of omega-3 fatty acids on cardiovascular risk factors and intermediate markers of cardiovascular disease. *Evidence Report/Technology Assessment*, (124), 1-6.</li>
+                <li>Jacobson, T. A., et al. (2017). National Lipid Association recommendations for patient-centered management of dyslipidemia: Part 2. *Journal of Clinical Lipidology*, 11(2), 318-329.</li>
+                <li>Ernst, E. (2007). Bioresonance, a study of pseudo-scientific language. *Focus on Alternative and Complementary Therapies*, 12(3), 183-184.</li>
+                <li>Schwartz, M. S., & Andrasik, F. (2005). *Biofeedback: A practitioner's guide*. Guilford Press.</li>
+                <li>Frank, D. L., et al. (2010). Biofeedback in medicine: who, when, why and how? *Mental Health in Family Medicine*, 7(2), 85.</li>
+                <li>Gevirtz, R. (2013). The promise of heart rate variability biofeedback: evidence-based applications. *Biofeedback*, 41(3), 110-120.</li>
+                <li>Shaffer, F., et al. (2014). A healthy heart is not a metronome: an integrative review of the literature on heart rate variability. *Frontiers in Psychology*, 5, 1040.</li>
+                <li>Thayer, J. F., et al. (2010). The role of the autonomic nervous system in the pathophysiology of cardiovascular disease. *Current Cardiovascular Risk Reports*, 4(3), 201-208.</li>
+                <li>Lehrer, P. M., et al. (2003). Heart rate variability biofeedback increases baroreflex gain and peak expiratory flow. *Psychosomatic Medicine*, 65(5), 796-805.</li>
+                <li>Feinstein, D. (2012). Acupoint stimulation in treating psychological disorders: Evidence of efficacy. *Review of General Psychology*, 16(4), 364-380.</li>
+                <li>Craig, G. (2010). *The EFT Manual*. Energy Psychology Press.</li>
+                <li>Church, D. (2013). *The Genie in Your Genes: Epigenetic Medicine and the New Biology of Intention*. Energy Psychology Press.</li>
+                <li>Clond, M. (2016). Emotional Freedom Techniques for anxiety: A systematic review with meta-analysis. *Journal of Nervous and Mental Disease*, 204(5), 388-395.</li>
+                <li>Stapleton, P., et al. (2020). A systematic review of the physiological effects of Emotional Freedom Techniques. *Explore*, 16(3), 175-186.</li>
+                <li>Church, D., et al. (2012). The effect of emotional freedom techniques on stress biochemistry: a randomized controlled trial. *Journal of Nervous and Mental Disease*, 200(10), 891-896.</li>
+                <li>Levine, G. N., et al. (2017). Meditation and cardiovascular risk reduction: a scientific statement from the American Heart Association. *Journal of the American Heart Association*, 6(10), e002211.</li>
+                <li>Brook, R. D., et al. (2013). Beyond medications and diet: alternative approaches to lowering blood pressure. *Hypertension*, 61(6), 1360-1383.</li>
+                <li>Krishnakumar, D., et al. (2015). Meditation and yoga can modulate brain mechanisms that affect behavior and anxiety-a modern scientific perspective. *Ancient Science*, 2(1), 13.</li>
+                <li>Tibrewal, P., & Dhillon, R. (2019). The impact of meditation on cardiovascular disease risk. *Cureus*, 11(10).</li>
+                <li>Fox, C. S., et al. (2007). The Framingham Heart Study: a 60-year legacy of cardiovascular epidemiology. *Nature Reviews Cardiology*, 4(11), 617-623.</li>
+                <li>Mendelsohn, M. E., & Karas, R. H. (1999). The protective effects of estrogen on the cardiovascular system. *New England Journal of Medicine*, 340(23), 1801-1811.</li>
+                <li>El Khoudary, S. R., et al. (2020). Menopause transition and cardiovascular disease risk: implications for timing of early prevention: a scientific statement from the American Heart Association. *Circulation*, 142(25), e506-e532.</li>
+            </ol>
+        </div>
+
+        <footer class="ztabs-footer">
+            <p>Acest material are un scop pur educațional și nu înlocuiește consultul medical de specialitate.</p>
+            <p>Copyright &copy; 2025 - dr.ing. Radu Pascu</p>
+        </footer>
+    </div>
+
+     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if(document.getElementsByClassName('tab-link').length > 0) {
+                document.getElementsByClassName('tab-link')[0].click();
+            }
+        });
+
+        function openTab(evt, tabName) {
+            let i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U') || (e.ctrlKey && e.key === 'S')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+
+
+</body>
+</html>
+
