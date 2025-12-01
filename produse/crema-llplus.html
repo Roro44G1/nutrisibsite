@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analiză Produs Crema Circulation LL+ - Raport Audit</title>
+    <meta name="description" content="Raport de audit tehnic, reglementar și farmacologic pentru produsul Crema Circulation LL+ (Essentaroma).">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* --- Definirea Variabilelor --- */
+        :root {
+            --color-bg: #f3f4f6;
+            --color-bg-white: #ffffff;
+            --color-bg-table-header: #f3f4f6;
+            --color-bg-table-row-even: #f9fafb;
+            
+            --color-text-dark: #1f2937;
+            --color-text-medium: #374151;
+            --color-text-light: #4b5563;
+            --color-text-white: #ffffff;
+            --color-text-footer: #bdc3c7;
+            --color-text-footer-link: #ecf0f1;
+            --color-footer-bg: #212529;
+
+            --text-dark: #212529;
+
+            --color-brand-dark: #0A2463;
+            --color-brand-medium: #3E92CC;
+            --color-brand-active: #2563eb;
+            
+            --color-border: #e5e7eb;
+            --color-border-hover: #d1d5db;
+
+            --color-box-yellow-bg: #fefce8;
+            --color-box-yellow-border: #facc15;
+            --color-box-yellow-text: #92400e;
+            
+            --color-box-red-bg: #fef2f2;
+            --color-box-red-border: #ef4444;
+            --color-box-red-text: #991b1b; 
+
+            --color-box-orange-bg: #fff7ed;
+            --color-box-orange-border: #f97316;
+            --color-box-orange-text: #ea580c;
+            
+            --color-box-yellow-light-bg: #fefce8;
+            --color-box-yellow-light-border: #ca8a04;
+
+            --color-box-green-bg: #f0fdf4;
+            --color-box-green-border: #22c55e;
+            
+            --color-box-purple-bg: #faf5ff;
+            --color-box-purple-border: #a855f7;
+            --color-box-purple-text: #9333ea;
+
+            --color-box-blue-bg: #eff6ff;
+            --color-box-blue-border: #3b82f6;
+            --color-box-blue-text: #1d4ed8; 
+
+            --color-box-table-header: #dbeafe;
+        }
+
+        /* --- Stiluri Globale --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0.5rem;
+            display: flex;
+            justify-content: center;
+            background-color: var(--color-bg);
+            color: var(--color-text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            background-color: var(--color-bg-white);
+            max-width: 64rem; /* 4xl extended width for tables */
+            width: 100%;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+        }
+
+        main {
+            padding: 1.5rem;
+        }
+
+        /* --- Antet (Header) --- */
+        header {
+            color: var(--color-text-white);
+            text-align: center;
+            padding: 1.5rem;
+            background: linear-gradient(to bottom right, var(--color-brand-dark), var(--color-brand-medium));
+        }
+
+        header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            margin: 0 0 0.5rem 0;
+        }
+
+        header h2 {
+            font-size: 1.125rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin: 0;
+            max-width: 48rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* --- Tab Navigation --- */
+        .tab-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+            padding: 0 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .tab-button {
+            background: var(--color-bg-white);
+            border: 1px solid var(--color-border);
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--color-text-medium);
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .tab-button:hover {
+            border-color: var(--color-brand-medium);
+            color: var(--color-brand-dark);
+        }
+
+        .tab-button.active {
+            background: var(--color-brand-medium);
+            color: #fff;
+            border-color: var(--color-brand-medium);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Stiluri de Conținut --- */
+        section {
+            margin-bottom: 2rem; 
+        }
+        
+        section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-brand-dark);
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--color-brand-medium);
+        }
+
+        section h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--color-brand-dark);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        section h5 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--color-text-dark);
+        }
+
+        section p {
+            color: var(--color-text-medium);
+            text-align: justify;
+            margin-bottom: 1rem;
+            line-height: 1.625;
+        }
+
+        /* --- Liste --- */
+        ul, ol {
+            padding-left: 1.5rem;
+            color: var(--color-text-medium);
+            margin-bottom: 1rem;
+        }
+        ul { list-style-type: disc; }
+        li { margin-bottom: 0.5rem; }
+
+        /* --- Cutii de Notificări (Info Boxes) --- */
+        .info-box {
+            margin-top: 1rem;
+            padding: 1.25rem;
+            border-left-width: 5px;
+            border-style: solid;
+            border-right-width: 0;
+            border-top-width: 0;
+            border-bottom-width: 0;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem; 
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .info-box strong {
+            font-weight: 700;
+        }
+
+        .info-box-yellow {
+            background-color: var(--color-box-yellow-bg);
+            border-color: var(--color-box-yellow-border);
+            color: var(--color-box-yellow-text);
+        }
+
+        .info-box-red {
+            background-color: var(--color-box-red-bg);
+            border-color: var(--color-box-red-border);
+            color: var(--color-box-red-text);
+        }
+
+        .info-box-blue {
+            background-color: var(--color-box-blue-bg);
+            border-color: var(--color-box-blue-border);
+            color: var(--color-box-blue-text);
+        }
+
+        .info-box-green {
+            background-color: var(--color-box-green-bg);
+            border-color: var(--color-box-green-border);
+            color: #166534;
+        }
+        
+        .info-box-concluzie {
+            background-color: var(--color-brand-dark);
+            color: var(--color-text-white);
+            border-color: var(--color-brand-medium);
+            text-align: center;
+        }
+        .info-box-concluzie p {
+            color: var(--color-text-white);
+            text-align: center;
+            margin: 0;
+        }
+
+        /* --- Tabele --- */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 0.5rem;
+            border: 1px solid var(--color-border);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background-color: var(--color-brand-dark);
+            color: #fff;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--color-border);
+            color: var(--color-text-medium);
+            vertical-align: top;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--color-bg-table-row-even);
+        }
+
+        tr:hover {
+            background-color: var(--color-box-blue-bg);
+        }
+
+        /* --- Footer --- */
+                /* --- Subsol (Footer) (Preluat din Model) --- */
+        footer.infographic-footer {
+            background-color: var(--color-footer-bg);
+            color: var(--color-text-footer);
+            text-align: center;
+            padding: 0.5rem 2rem;
+            font-size: 0.85rem;
+            border-top: none;
+        }
+        footer.infographic-footer p {
+            margin: 0.1rem 0;
+            text-align: center;
+            color: var(--color-text-footer);
+        }
+        footer.infographic-footer a {
+            color: var(--color-text-footer-link);
+            text-decoration: none;
+        }
+        footer.infographic-footer a:hover {
+            text-decoration: underline;
+        }
+        .footer-social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 0.5rem;
+        }
+        .footer-social-links a {
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+        .footer-social-links a:hover {
+            transform: scale(1.1);
+        }
+        .footer-social-links svg, .footer-social-links img {
+            width: 32px;
+            height: 32px;
+        }
+
+
+        /* --- Responsive (Preluat din Model + adaptări noi) --- */
+        @media (max-width: 768px) {
+            .chart-container { height: 300px; }
+            .pie-chart-container { height: 350px; max-width: 350px; }
+            main { padding: 0; } /* Padding eliminat */
+        }
+        
+        @media (min-width: 640px) { /* sm */
+            body { padding: 1rem; }
+            header { padding: 2rem; }
+            header h1 { font-size: 2.25rem; }
+            header p { font-size: 1.25rem; }
+        }
+        
+        @media (min-width: 768px) { /* md */
+            body { padding: 1.5rem; }
+            .section-wrapper {
+                padding: 2rem; /* Padding-ul s-a mutat aici */
+            }
+            header h1 { font-size: 2.5rem; }
+            section h2 { font-size: 1.875rem; }
+            
+            /* Trecem la 2 coloane - MODIFICARE APLICATĂ */
+            .card-grid-2,
+            .card-grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) { /* lg */
+            /* Trecem la 2 coloane - MODIFICARE APLICATĂ */
+            .card-grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>Analiză Produs "Crema Circulation LL+"</h1>
+            <h2>Raport de audit tehnic, reglementar și farmacologic (Essentaroma)</h2>
+        </header>
+
+        <div class="tab-nav">
+            <button class="tab-button active" onclick="openTab(event, 'tab1')">1. Rezumat & Reglementare</button>
+            <button class="tab-button" onclick="openTab(event, 'tab2')">2. Farmacologie & Ingrediente</button>
+            <button class="tab-button" onclick="openTab(event, 'tab3')">3. Riscuri & Inadvertențe</button>
+            <button class="tab-button" onclick="openTab(event, 'tab4')">4. Fișa Produs & Producător</button>
+            <button class="tab-button" onclick="openTab(event, 'tab5')">5. Claims & Concluzii</button>
+        </div>
+
+        <main>
+            <div id="tab1" class="tab-content active">
+                <section>
+                    <h3>1. Rezumat executiv și cadrul de analiză</h3>
+                    <p>Prezentul raport constituie o analiză exhaustivă, de nivel expert, a produsului cosmetic "Crema Circulation LL+ Bio", comercializat sub brandul Essent Aroma. Obiectivul acestui audit este de a evalua viabilitatea tehnică, conformitatea cu legislația Uniunii Europene și națională, veridicitatea afirmațiilor de marketing și identificarea eventualelor inadvertențe între etichetare, compoziție și materialele promoționale. Analiza se bazează pe documentația tehnică furnizată, coroborată cu principiile farmacognoziei, chimiei cosmetice și reglementările în vigoare (Regulamentul CE nr. 1223/2009).</p>
+                    <p>Documentul servește drept instrument de <em>due diligence</em> pentru evaluarea siguranței și eficacității produsului, fiind structurat pentru a oferi o imagine clară asupra riscurilor și oportunităților asociate acestui produs în contextul pieței de profil din România. Evaluarea a fost realizată luând în considerare trei piloni fundamentali: siguranța și stabilitatea formulei, plauzibilitatea farmacologică a eficacității și conformitatea strictă cu reglementările.</p>
+                    <div class="info-box info-box-blue">
+                        <p><strong>Verdict preliminar:</strong> În urma analizei detaliate a documentației, s-a stabilit un nivel de încredere <strong>Mediu-Ridicat</strong> în ceea ce privește potențialul terapeutic al ingredientelor, dar un nivel de încredere <strong>Scăzut-Mediu</strong> în ceea ce privește acuratețea etichetării și conformitatea afirmațiilor de marketing cu legislația cosmetică, din cauza unor revendicări medicale explicite care plasează produsul într-o zonă de risc legal (borderline product).</p>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>2. Analiza reglementară și auditul conformității legale</h3>
+                    <p>Un aspect critic al solicitării dumneavoastră vizează verificarea statutului legal al produsului, a afirmațiilor de pe etichetă și a înregistrărilor la autoritățile competente.</p>
+
+                    <h4>2.1. Încadrarea produsului și distincția CPNP vs. IBA</h4>
+                    <p>În solicitarea inițială, s-a cerut verificarea înregistrărilor CPNP și IBA. Este imperativ să clarificăm o distincție fundamentală în legislația românească și europeană.</p>
+                    
+                    <div class="info-box info-box-yellow">
+                        <h4>Institutul de Bioresurse Alimentare (IBA)</h4>
+                        <p>Această instituție se ocupă exclusiv cu notificarea și avizarea <strong>suplimentelor alimentare</strong> (produse ingerate). Deoarece "Crema Circulation LL+" este un produs cu aplicare topică (externă), așa cum se specifică clar la secțiunea "Mod de utilizare" și "Precauții" din documentul sursă ("Doar pentru uz extern. Nu ingerați"), acesta <strong>nu intră sub incidența IBA</strong>. Căutarea unei notificări IBA pentru o cremă este procedural incorectă.</p>
+                    </div>
+
+                    <p><strong>Portalul de Notificare a Produselor Cosmetice (CPNP):</strong> Conform Regulamentului (CE) nr. 1223/2009, toate produsele cosmetice puse pe piața UE trebuie notificate în portalul centralizat CPNP înainte de comercializare.</p>
+                    <p><strong>Analiza Situației:</strong> Documentul nu furnizează numărul de notificare CPNP. Aceasta este o informație critică lipsă. Fără acest număr, trasabilitatea produsului și legalitatea punerii pe piață nu pot fi verificate independent.</p>
+                    <p class="info-box info-box-red"><strong>Recomandare:</strong> Este obligatoriu să solicitați producătorului numărul de referință CPNP. Simpla mențiune a ingredientelor "agreate Ecocert" sau a standardelor GMP nu substituie obligația notificării CPNP.</p>
+
+                    <h4>2.2. Analiza revendicărilor medicale (Borderline Products)</h4>
+                    <p>Documentul abundă în afirmații care descriu tratarea sau prevenirea unor afecțiuni medicale. Conform articolului 2 din Regulamentul 1223/2009, un produs cosmetic este destinat "exclusiv sau în principal curățării, parfumării, modificării aspectului, protejării, menținerii în stare bună sau corectării mirosurilor corporale".</p>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Afirmație identificată</th>
+                                    <th>Clasificare legală</th>
+                                    <th>Risc asociat</th>
+                                    <th>Analiză și implicații</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>"Tratament pentru... tromboflebite"</td>
+                                    <td><strong>Revendicare medicală</strong></td>
+                                    <td style="color:red; font-weight:bold;">CRITIC</td>
+                                    <td>Tromboflebita este o inflamație a venei asociată cu formarea unui tromb. Este o urgență medicală. Un cosmetic nu poate trata tromboza.</td>
+                                </tr>
+                                <tr>
+                                    <td>"Varice / Vene varicoase"</td>
+                                    <td><strong>Revendicare medicală</strong></td>
+                                    <td style="color:orange; font-weight:bold;">RIDICAT</td>
+                                    <td>Varicele sunt o boală venoasă cronică. Cosmeticele pot ameliora aspectul, nu trata boala.</td>
+                                </tr>
+                                <tr>
+                                    <td>"Drenează edemele"</td>
+                                    <td><strong>Revendicare fiziologică</strong></td>
+                                    <td>MEDIU</td>
+                                    <td>Edemul este termen medical. Termenul cosmetic acceptat este "ajută la eliminarea apei din țesuturi".</td>
+                                </tr>
+                                <tr>
+                                    <td>"Antiinflamator"</td>
+                                    <td><strong>Revendicare farmacologică</strong></td>
+                                    <td>MEDIU-RIDICAT</td>
+                                    <td>Termen rezervat medicamentelor. Cosmeticele trebuie să folosească "calmant" sau "decongestionant".</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>2.3. Verificarea Standardelor GMP (ISO 22716)</h4>
+                    <p>Documentul menționează "standarde GMP". În UE, respectarea GMP conform ISO 22716 este o cerință legală obligatorie, nu un certificat opțional de excelență. Simpla menționare nu garantează calitatea fără o "Declarație de Conformitate cu GMP".</p>
+
+                    <h4>2.4. Auditul afirmațiilor "100% Natural" și "Bio"</h4>
+                    <p>Identificăm o inadvertență tehnică majoră. Pe etichetă apare "100% Natural", însă lista INCI conține surfactanți de sinteză (SLS, Sodium Cetearyl Sulfate) și conservanți sintetici (1,2-Hexanediol, Caprylyl Glycol). Producătorul se corectează la secțiunea "Informații suplimentare", declarând ">99% ingrediente naturale" și ">24% organice", ceea ce este onest, dar face ca afirmația "100% Natural" să fie o exagerare de marketing (Greenwashing).</p>
+                </section>
+            </div>
+
+            <div id="tab2" class="tab-content">
+                <section>
+                    <h3>3. Analiza farmacologică detaliată a ingredientelor</h3>
+                    <p>Pentru a valida eficacitatea produsului, vom deconstrui formula prezentată, analizând mecanismele de acțiune ale fiecărui ingredient activ și relevanța lor pentru patologia venoasă.</p>
+
+                    <h4>3.1. Complexul venotonic major</h4>
+                    
+                    <div class="info-box info-box-green">
+                        <h5>Aesculus Hippocastanum Bark Extract (Castan Sălbatic)</h5>
+                        <p><strong>Principiu activ:</strong> Escina (beta-escină).<br>
+                        <strong>Mecanism:</strong> Inhibă enzima hialuronidază, stabilizând peretele venos și reducând permeabilitatea.<br>
+                        <strong>Efect clinic:</strong> Reduce direct edemul și crește tonusul venos.</p>
+                    </div>
+
+                    <div class="info-box info-box-green">
+                        <h5>Vitis Vinifera Leaf Extract (Viță de Vie Roșie)</h5>
+                        <p><strong>Principiu activ:</strong> Flavonoide și Antocianozide.<br>
+                        <strong>Sinergie:</strong> Acționează ca "armură" antioxidantă, protejând colagenul vascular de degradarea oxidativă.</p>
+                    </div>
+
+                    <div class="info-box info-box-green">
+                        <h5>Hamamelis Virginiana Extract (Nucul Vrăjitoarelor)</h5>
+                        <p><strong>Efect astringent:</strong> Taninurile precipită proteinele, contractând țesuturile. Produce vasoconstricție locală, excelent pentru reducerea venelor superficiale (spider veins).</p>
+                    </div>
+
+                    <h4>3.2. Complexul de drenaj limfatic și antiinflamator</h4>
+                    <ul>
+                        <li><strong>Melilotus Officinalis (Sulfina):</strong> Conține cumarină, un limfokinetic potent care stimulează contracția vaselor limfatice ("dezumflă" piciorul).</li>
+                        <li><strong>Arnica Montana:</strong> Standardul de aur pentru traume, ajută la resorbția micro-hemoragiilor și reduce durerea.</li>
+                    </ul>
+
+                    <h4>3.3. Baza lipidică activă și vectorii de absorbție</h4>
+                    <ul>
+                        <li><strong>Calophyllum Inophyllum (Tamanu):</strong> Ulei cu efect rubefacient (stimulează circulația) și cicatrizant. Culoarea verde și mirosul specific sunt indicatori de calitate.</li>
+                        <li><strong>Jojoba și Ulei de Struguri:</strong> Asigură penetrarea activilor și o textură "uscată" potrivită masajului.</li>
+                    </ul>
+
+                    <h4>3.4. Aromaterapia funcțională</h4>
+                    <p>Produsul folosește o concentrație mare de uleiuri esențiale pentru efect terapeutic:</p>
+                    <ul>
+                        <li><strong>Niaouli & Cajeput:</strong> Decongestie venoasă și efect antispastic.</li>
+                        <li><strong>Mentha Arvensis (Mentă):</strong> Sursă de mentol care activează receptorii de rece (TRPM8), inducând vasoconstricție reflexă și analgezie.</li>
+                        <li><strong>Pelargonium Graveolens (Mușcată):</strong> Efect hemostatic și regenerant.</li>
+                    </ul>
+                </section>
+            </div>
+
+            <div id="tab3" class="tab-content">
+                <section>
+                    <h3>4. Analiza inadvertențelor și riscurilor chimice</h3>
+
+                    <div class="info-box info-box-red">
+                        <h4>4.1. Paradoxul SLS (Sodium Lauryl Sulfate)</h4>
+                        <p>Lista INCI include SLS, un surfactant anionic puternic. Deși probabil folosit în concentrație mică ca emulgator, prezența sa contrazice imaginea de produs "Bio/Natural" și poate fi iritant pentru pacienții cu dermatită de stază (piele fragilă). Este o alegere controversată pentru un produs "leave-on".</p>
+                    </div>
+
+                    <div class="info-box info-box-yellow">
+                        <h4>4.2. Sistemul de conservare "Fără Conservanți"</h4>
+                        <p>Produsul susține "Fără Conservanți", dar conține <em>1,2-Hexanediol</em> și <em>Caprylyl Glycol</em>. Tehnic, aceștia nu sunt listați ca și conservanți în regulament (sunt umectanți cu efect antimicrobian), deci afirmația trece legal, dar poate fi considerată înșelătoare pentru consumator. Totuși, sunt mai siguri decât parabenii.</p>
+                    </div>
+
+                    <h4>4.3. Alergeni potențiali</h4>
+                    <p>Cantitatea mare de uleiuri esențiale aduce o listă lungă de alergeni (limonene, linalool, etc.). Persoanele cu piele sensibilă trebuie să testeze produsul cu prudență.</p>
+                </section>
+
+                <section>
+                    <h3>10. Conflictul de marketing</h3>
+                    <p>Există discrepanțe între etichetă și realitatea chimică:</p>
+                    <ul>
+                        <li><strong>“100% NATURAL” vs Realitate:</strong> Minim 3-4 ingrediente (1,2-Hexanediol, Caprylyl Glycol, fosfați) nu sunt naturale în sens botanic. Verdict: <strong>Supra-claim</strong>.</li>
+                        <li><strong>“Fără conservanți”:</strong> Tehnic fals sau discutabil, deoarece există un sistem de conservare mascat. Verdict: <strong>Misleading</strong>.</li>
+                        <li><strong>“>99% ingrediente naturale”:</strong> Această afirmație din fișa tehnică este <strong>credibilă</strong>.</li>
+                    </ul>
+                </section>
+            </div>
+
+            <div id="tab4" class="tab-content">
+                <section>
+                    <h3>5. Analiza producătorului și a credibilității</h3>
+                    <p><strong>Essentaroma</strong> se poziționează ca un brand de nișă. Analiza formulei sugerează acces la consultanță de specialitate (sinergie bună), dar marketingul agresiv ("tratament tromboflebită") indică lipsa unei conformități legale riguroase.</p>
+                </section>
+
+                <section>
+                    <h3>6. Fișă de produs (document tehnic structurat)</h3>
+                    <div class="table-container">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Nume Comercial</strong></td>
+                                    <td>Circulation LL+ / Cremă Circulație LL+ Bio</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Producător</strong></td>
+                                    <td>Essentaroma</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Formă farmaceutică</strong></td>
+                                    <td>Emulsie Ulei-în-Apă (O/W), textură lejeră.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ingredient activ</strong></td>
+                                    <td>Complex Fitoterapeutic: Escină, Antociani, Cumarină.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bază emolientă</strong></td>
+                                    <td>Ulei de Jojoba, Tamanu, Struguri.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Status Bio</strong></td>
+                                    <td>>24% ingrediente organice. >99% origine naturală.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="report-section-block">
+                        <h5>Descriere Senzorială</h5>
+                        <p>Cremă de culoare alb-gălbuie sau ușor verzuie (datorită uleiului de Tamanu), cu miros pregnant proaspăt-medicinal. Induce o senzație imediată de răcorire (efect "Ice"). Nu lasă film gras.</p>
+                    </div>
+
+                    <div class="report-section-block">
+                        <h5>Mecanism de Acțiune Propus</h5>
+                        <ol>
+                            <li><strong>Faza Imediată:</strong> Răcorire și vasoconstricție reflexă (Mentol).</li>
+                            <li><strong>Faza Intermediară:</strong> Drenaj limfatic mecanic facilitat de masaj.</li>
+                            <li><strong>Faza Tardivă:</strong> Escina și flavonoidele îmbunătățesc rezistența capilară.</li>
+                        </ol>
+                    </div>
+                </section>
+            </div>
+
+            <div id="tab5" class="tab-content">
+                <section>
+                    <h3>7. Analiza afirmațiilor (Claims Substantiation & Risk Management)</h3>
+                    <p>Strategie de mitigare a riscurilor pentru departamentul de marketing:</p>
+                    
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Afirmație actuală (Riscantă)</th>
+                                    <th>Nivel de risc</th>
+                                    <th>Propunere de reformulare</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>"Tratament pentru tromboflebite"</td>
+                                    <td style="color:red; font-weight:bold;">CRITIC</td>
+                                    <td>"Adjuvant cosmetic pentru masajul picioarelor cu varicozități."</td>
+                                </tr>
+                                <tr>
+                                    <td>"Tratează varicele"</td>
+                                    <td style="color:orange; font-weight:bold;">RIDICAT</td>
+                                    <td>"Îmbunătățește aspectul pielii cu vene vizibile."</td>
+                                </tr>
+                                <tr>
+                                    <td>"100% Natural"</td>
+                                    <td style="color:orange; font-weight:bold;">RIDICAT</td>
+                                    <td>"99% Ingrediente de Origine Naturală"</td>
+                                </tr>
+                                <tr>
+                                    <td>"Antiinflamator"</td>
+                                    <td>MEDIU</td>
+                                    <td>"Calmant, liniștitor pentru pielea tensionată."</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section>
+                    <h3>11. Concluzii finale și recomandări strategice</h3>
+                    <p>Analiza produsului <strong>Crema Circulation LL+</strong> relevă un produs cu o dualitate pronunțată: o formulă solidă, farmacologic activă, dar cu probleme de conformitate și comunicare.</p>
+                    
+                    <div class="info-box info-box-concluzie">
+                        <p><strong>Recomandări Strategice pentru NUTRISIB:</strong></p>
+                        <ul style="text-align: left; margin-top: 10px;">
+                            <li><strong>Solicitați notificarea CPNP:</strong> Nu comercializați produsul fără această dovadă.</li>
+                            <li><strong>Mitigați riscul de marketing:</strong> Reformulați textele promoționale folosind propunerile din acest raport pentru a evita termenii medicali.</li>
+                            <li><strong>Poziționare:</strong> Promovați produsul ca soluție premium pentru "confortul picioarelor" și sinergia unică de ingrediente, nu ca medicament.</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+
+        </main>
+
+        <div id="footer-placeholder"></div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.className += " active";
+        }
+
+        // Încărcare subsol
+        fetch('https://nutrisib.club/footer.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        });
+    </script>
+    <script src="https://nutrisib.club/script_protect.js" defer></script>
+</body>
+</html>
