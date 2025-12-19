@@ -4,141 +4,510 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acord informat nutriție și stil de viață | Nutrisib</title>
-    <meta name="description" content="Formular de acord informat pentru pacienții Nutrisib. Detalii despre planul nutrițional, confidențialitate (GDPR) și parteneriatul cu dr. ing. Radu Pascu.">
+    <meta name="description" content="Formular de acord informat pentru pacienții Nutrisib. Detalii despre planul nutrițional ReDefine, angajament financiar, riscuri, confidențialitate (GDPR) și parteneriatul cu dr. ing. Radu Pascu.">
     <meta name="author" content="dr. ing. Radu Pascu">
-    <meta name="robots" content="noindex, nofollow"> <style>
+    <meta name="robots" content="noindex, nofollow">
+    
+    <meta property="og:title" content="Acord informat nutriție și stil de viață | Nutrisib">
+    <meta property="og:description" content="Formular de acord informat pentru pacienții Nutrisib. Detalii despre programul ReDefine și parteneriatul cu dr. ing. Radu Pascu.">
+    <meta property="og:type" content="article">
+    <meta property="og:locale" content="ro_RO">
+
+    <style>
+        /* Stiluri generale */
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             line-height: 1.6;
             color: #333;
-            max-width: 800px;
-            margin: 0 auto;
+            background-color: #f4f7f6;
+            margin: 0;
             padding: 20px;
-            background-color: #f9f9f9;
         }
         .container {
+            max-width: 800px;
+            margin: 0 auto;
             background: #fff;
             padding: 40px;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
+
+        /* Titluri și text */
         h1 {
-            font-size: 24px;
+            font-size: 26px;
             color: #2c3e50;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 15px;
             margin-bottom: 30px;
+            text-align: center;
         }
         h2 {
             font-size: 18px;
             color: #2c3e50;
-            margin-top: 25px;
-            margin-bottom: 15px;
+            margin-top: 30px;
+            border-left: 4px solid #0056b3;
+            padding-left: 10px;
         }
-        p, li {
-            font-size: 16px;
+        p, li { font-size: 15px; }
+        ul, ol { padding-left: 20px; }
+        
+        /* Highlight pentru secțiunea financiară */
+        .financial-clause {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
         }
-        ul {
-            padding-left: 20px;
+        
+        /* Stil pentru definiția NUTRISIB și Wellness */
+        .wellness-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+            margin-top: 15px;
         }
-        .field-group {
-            margin-bottom: 15px;
-        }
-        .signature-section {
-            margin-top: 50px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .signature-box {
-            width: 45%;
-            border-top: 1px solid #333;
+        .nutrisib-def {
+            font-weight: bold;
+            color: #0056b3;
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+            border-top: 1px dashed #ccc;
             padding-top: 10px;
         }
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 12px;
-            color: #777;
+
+        /* Formular */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input[type="text"], input[type="email"], input[type="date"], input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: inherit;
         }
+
+        /* Secțiunea de semnare - Tabs */
+        .signing-options {
+            background: #eef2f5;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 30px;
+            border: 1px solid #dce4ec;
+        }
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .radio-option input { margin-right: 8px; }
+
+        /* Containere pentru metodele de semnare */
+        .sign-method { display: none; }
+        .sign-method.active { display: block; animation: fadeIn 0.5s; }
+
+        /* Canvas pentru semnătură digitală */
+        canvas {
+            border: 2px dashed #aaa;
+            background: #fff;
+            cursor: crosshair;
+            width: 100%;
+            max-width: 100%;
+            height: 200px;
+            touch-action: none;
+            display: block;
+        }
+        .canvas-controls {
+            margin-top: 10px;
+            text-align: right;
+        }
+        
+        /* Butoane */
+        .btn {
+            background-color: #0056b3;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .btn:hover { background-color: #004494; }
+        .btn-secondary {
+            background-color: #6c757d;
+            font-size: 14px;
+            padding: 8px 16px;
+            font-weight: normal;
+        }
+        .btn-print {
+            background-color: #28a745;
+            margin-bottom: 15px;
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-print:hover { background-color: #218838; }
+
+        /* Footer */
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Stiluri specifice pentru PRINT */
+        @media print {
+            body { background: #fff; padding: 0; margin: 0; }
+            .container { box-shadow: none; width: 100%; max-width: 100%; padding: 0; margin: 0; }
+            .signing-options, .btn, .no-print { display: none !important; }
+            .financial-clause { border: 1px solid #ccc; background: none; }
+            .wellness-box { border: none; padding: 0; background: none; }
+            
+            input[type="text"], input[type="email"], input[type="date"], input[type="tel"] {
+                border: none;
+                border-bottom: 1px dotted #000;
+                padding: 0;
+                width: auto;
+                min-width: 200px;
+            }
+
+            .print-signature-area {
+                display: flex !important;
+                justify-content: space-between;
+                margin-top: 50px;
+                padding-top: 20px;
+            }
+            .print-box {
+                width: 45%;
+                border-top: 1px solid #000;
+                padding-top: 10px;
+            }
+        }
+        .print-signature-area { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Formular de acord informat și consimțământ pentru servicii nutriționale</h1>
+        <h1>Formular de acord informat și consimțământ pentru programul ReDefine</h1>
         <p><strong>Furnizor:</strong> Nutrisib <br> <strong>Specialist:</strong> dr. ing. Radu Pascu</p>
     </header>
 
-    <section id="identificare">
-        <h2>1. Identificarea clientului</h2>
-        <div class="field-group">Nume și prenume: .................................................................</div>
-        <div class="field-group">Cnp: .................................................................</div>
-        <div class="field-group">Data nașterii: .................................................................</div>
-        <div class="field-group">Email / telefon: .................................................................</div>
-    </section>
+   <form id="acordForm" name="acord-nutrisib" method="POST" data-netlify="true" enctype="multipart/form-data">
+        <input type="hidden" name="form-name" value="acord-nutrisib" />
 
-    <section id="scop">
-        <h2>2. Scopul și natura serviciilor</h2>
-        <p>Prezentul acord definește cadrul de colaborare dintre Nutrisib și dumneavoastră. Scopul nostru nu este doar pierderea în greutate, ci restabilirea echilibrului metabolic și fiziologic prin știință și logică.</p>
-        <p>Serviciile includ:</p>
-        <ul>
-            <li>Evaluarea stării nutriționale actuale pe baza anamnezei și a documentelor medicale furnizate.</li>
-            <li>Elaborarea unui plan nutrițional personalizat (urmărind, ca regulă generală, raportul de macronutrienți: 40% carbohidrați, 30% proteine, 30% grăsimi).</li>
-            <li>Educație nutrițională pentru înțelegerea cauzelor ("de ce"-ul) stării actuale.</li>
-            <li>Monitorizarea progresului și ajustarea strategiei.</li>
-        </ul>
-    </section>
-
-    <section id="parteneriat">
-        <h2>3. Declarația de parteneriat și responsabilități</h2>
-        <p>Nutrisib funcționează ca un ghid care oferă harta teritoriului dumneavoastră interior. Înțeleg și accept următoarele:</p>
-        <ul>
-            <li><strong>Rolul activ:</strong> sunt conștient că rezultatele depind direct de implementarea recomandărilor primite. Specialistul oferă strategia, dar eu sunt responsabil de execuție.</li>
-            <li><strong>Transparența datelor:</strong> mă oblig să furnizez informații complete și reale despre starea mea de sănătate, istoricul medical, alergiile alimentare și medicația curentă.</li>
-            <li><strong>Așteptări realiste:</strong> înțeleg că reconstrucția metabolică este un proces, nu un eveniment.</li>
-        </ul>
-    </section>
-
-    <section id="confidentialitate">
-        <h2>4. Confidențialitate și protecția datelor (gdpr)</h2>
-        <p>Datele dumneavoastră cu caracter personal și medical sunt prelucrate în strictă conformitate cu Regulamentul (UE) 2016/679.</p>
-        <ul>
-            <li>Datele sunt colectate exclusiv pentru elaborarea planului nutrițional și comunicarea directă.</li>
-            <li>Aveți dreptul de a solicita oricând accesul, rectificarea sau ștergerea datelor dumneavoastră.</li>
-        </ul>
-    </section>
-
-    <section id="riscuri">
-        <h2>5. Riscuri și limitări</h2>
-        <p>Dacă pe parcursul programului apar stări de disconfort major, mă oblig să informez imediat specialistul. Serviciile de nutriție nu înlocuiesc tratamentele medicale de urgență.</p>
-    </section>
-
-    <section id="consimtamant">
-        <h2>6. Consimțământ final</h2>
-        <p>Prin semnarea acestui document:</p>
-        <ol>
-            <li>Confirm că am citit și am înțeles termenii colaborării.</li>
-            <li>Îmi exprim acordul liber și neviciat pentru a participa la programul de consiliere nutrițională Nutrisib.</li>
-            <li>Consimt la prelucrarea datelor mele personale în scopurile menționate.</li>
-        </ol>
-
-        <div class="field-group">Data: .........................</div>
-
-        <div class="signature-section">
-            <div class="signature-box">
-                Semnătura clientului
+        <section id="Identificare">
+            <h2>1. Identificarea clientului</h2>
+            <div class="form-group">
+                <label for="nume">Nume și prenume:</label>
+                <input type="text" id="nume" name="nume" required placeholder="Ex: Popescu Ion">
             </div>
-            <div class="signature-box">
+            <div class="form-group">
+                <label for="cnp">CNP:</label>
+                <input type="text" id="cnp" name="cnp" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">Data nașterii:</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+            <div class="form-group">
+                <label for="contact">Email / telefon:</label>
+                <input type="text" id="contact" name="contact" required>
+            </div>
+        </section>
+
+        <section id="scop">
+            <h2>2. Scopul și natura serviciilor</h2>
+            <p>Prezentul acord definește cadrul de colaborare dintre Nutrisib și dumneavoastră în cadrul programului <strong>ReDefine</strong>. Scopul nostru este reconstrucția metabolică prin știință și logică, trecând de la simpla "reparare" la o redefinire a echilibrului interior.</p>
+            <p>Serviciile includ:</p>
+            <ul>
+                <li>Evaluarea stării nutriționale pe baza anamnezei și a analizelor.</li>
+                <li>Elaborarea planului nutrițional personalizat.</li>
+                <li><strong>Protocolul de suplimentare personalizat:</strong> pachetul de suplimente ReDefine, creat specific pentru nevoile biochimice identificate.</li>
+                <li>Educație nutrițională și monitorizare continuă.</li>
+            </ul>
+        </section>
+
+        <section id="program-financiar">
+            <h2>3. Programul ReDefine – durată și angajament financiar</h2>
+            <div class="financial-clause">
+                <p><strong>A. Durata programului:</strong><br>
+                Programul de redefinire metabolică este un proces unitar care se desfășoară pe o perioadă contractuală de <strong>4 luni</strong> consecutive. Această durată este necesară pentru a obține un răspuns fiziologic stabil și durabil.</p>
+                
+                <p><strong>B. Pachetul de suplimente ReDefine:</strong><br>
+                Protocolul include furnizarea lunară a pachetului personalizat de suplimente ReDefine. Clientul înțelege că aceste formule sunt comandate și rezervate special pentru profilul său metabolic.</p>
+                
+                <p><strong>C. Obligația de plată:</strong><br>
+                Prin semnarea acestui acord, clientul își exprimă <strong>consimțământul ferm și irevocabil pentru achiziția lunară a pachetului de suplimente</strong> pe toată durata celor 4 luni ale programului.</p>
+                <ul>
+                    <li>Clientul își asumă plata lunară a contravalorii pachetului de suplimente la termenele stabilite.</li>
+                    <li>Întreruperea unilaterală a programului nu exonerează clientul de obligația achitării suplimentelor deja comandate sau rezervate în sistemul de producție pentru luna în curs.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="parteneriat">
+            <h2>4. Declarația de parteneriat și responsabilități</h2>
+            <p>Înțeleg că Nutrisib este un partener și un ghid care oferă harta teritoriului meu interior. </p>
+            <p>Înțeleg și accept următoarele:</p>
+            <ul>
+                <li><strong>Rolul activ:</strong> Sunt conștient că rezultatele depind direct de implementarea recomandărilor primite. Specialistul oferă strategia și instrumentele, dar eu sunt responsabil de execuție.</li>
+                <li><strong>Transparența datelor:</strong> Mă oblig să furnizez informații complete și reale despre starea mea de sănătate și istoricul medical.</li>
+                <li><strong>Angajament pe termen mediu:</strong> Accept că reconstrucția metabolică este un proces care necesită timp, motiv pentru care am aderat la programul de 4 luni.</li>
+            </ul>
+        </section>
+
+        <section id="confidentialitate">
+            <h2>5. Confidențialitate și protecția datelor (GDPR)</h2>
+            <p>Datele dumneavoastră cu caracter personal și medical sunt prelucrate în strictă conformitate cu Regulamentul (UE) 2016/679.</p>
+            <ul>
+                <li>Datele sunt colectate exclusiv pentru elaborarea planului nutrițional, a protocolului de suplimentare și comunicarea directă.</li>
+                <li>Aveți dreptul de a solicita oricând accesul, rectificarea sau ștergerea datelor dumneavoastră.</li>
+            </ul>
+        </section>
+
+        <section id="rol-suplimente">
+            <h2>6. Rolul suplimentelor și viziunea holistică (Disclaimer)</h2>
+            <p>Suplimentele alimentare din pachetul ReDefine au rolul de a corecta carențele nutriționale, de a optimiza reacțiile biochimice și de a susține procesele fiziologice normale. Clientul înțelege și acceptă că acestea nu sunt medicamente și nu au rolul de a trata boli, ci de a restabili echilibrul.</p>
+
+            <div class="wellness-box">
+                <p>La <strong>NUTRISIB</strong>, credem că sănătatea nu este doar absența bolii, ci o stare dinamică de echilibru și prosperitate în toate aspectele vieții. Această stare holistică este ceea ce numim <strong>Wellness</strong> și se manifestă în 8 domenii interconectate:</p>
+                <ul>
+                    <li><strong>Fizic:</strong> Cum te simți în corpul tău – energie, vitalitate, rezistență.</li>
+                    <li><strong>Mental:</strong> Claritate, focus, managementul stresului, starea emoțională.</li>
+                    <li><strong>Spiritual:</strong> Conexiunea cu sinele, sensul și scopul în viață.</li>
+                    <li><strong>Financiar:</strong> Siguranță, libertate, gestionarea resurselor.</li>
+                    <li><strong>Ocupațional:</strong> Satisfacție profesională, echilibru muncă-viață.</li>
+                    <li><strong>Social:</strong> Relații armonioase, apartenență la o comunitate.</li>
+                    <li><strong>Intelectual:</strong> Curiozitate, învățare continuă, dezvoltare personală.</li>
+                    <li><strong>De Mediu:</strong> Locul în care trăiești și cum te influențează.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="riscuri">
+            <h2>7. Riscuri și limitări</h2>
+            <p>Dacă pe parcursul programului apar stări de disconfort major, mă oblig să informez imediat specialistul. Serviciile de nutriție nu înlocuiesc tratamentele medicale de urgență.</p>
+        </section>
+
+        <section id="consimtamant">
+            <h2>8. Consimțământ final</h2>
+            <p>Prin semnarea acestui document:</p>
+            <ol>
+                <li>Confirm că am citit și am înțeles termenii colaborării, în special durata de 4 luni a programului și rolul suplimentelor ca suport în cadrul unui stil de viață echilibrat.</li>
+                <li>Îmi exprim acordul ferm pentru achiziția și plata lunară a pachetului de suplimente personalizat ReDefine.</li>
+                <li>Consimt la prelucrarea datelor mele personale în scopurile menționate.</li>
+            </ol>
+        </section>
+        
+        <section class="signing-options no-print">
+            <h3>Alegeți metoda de semnare:</h3>
+            
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="signMethod" value="digital" checked onclick="toggleSignMethod('digital')">
+                    Semnează acum (ecran tactil / mouse)
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="signMethod" value="upload" onclick="toggleSignMethod('upload')">
+                    Printează, semnează și încarcă
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="signMethod" value="qualified" onclick="toggleSignMethod('qualified')">
+                    Semnătură electronică calificată
+                </label>
+            </div>
+
+            <div id="method-digital" class="sign-method active">
+                <p><small>Prin semnarea în caseta de mai jos, confirmați acceptarea termenilor contractuali și financiari de mai sus:</small></p>
+                <canvas id="signatureCanvas" width="700" height="200"></canvas>
+                <input type="hidden" name="signatureData" id="signatureData">
+                <div class="canvas-controls">
+                    <button type="button" class="btn btn-secondary" onclick="clearCanvas()">Șterge semnătura</button>
+                </div>
+            </div>
+
+            <div id="method-upload" class="sign-method">
+                <p>1. Completați datele de mai sus.<br>
+                   2. Apăsați butonul verde pentru a printa (sau salva ca PDF).<br>
+                   3. Semnați documentul fizic.<br>
+                   4. Încărcați o poză sau scanarea aici.</p>
+                
+                <button type="button" class="btn btn-print" onclick="window.print()">🖨️ Printează Formularul</button>
+                <br><br>
+                <label for="fileUpload">Încărcați documentul semnat (PDF, JPG, PNG):</label>
+                <input type="file" id="fileUpload" name="signedDocument" accept=".pdf, .jpg, .jpeg, .png">
+            </div>
+
+            <div id="method-qualified" class="sign-method">
+                <p>Dacă dețineți un certificat digital calificat (token), vă rugăm să descărcați formularul completat, să îl semnați digital și să îl încărcați aici.</p>
+                <button type="button" class="btn btn-print" onclick="window.print()">🖨️ Salvează ca PDF pentru semnare</button>
+                <br><br>
+                <label for="qualifiedUpload">Încărcați fișierul semnat (.p7s, .p7m, .pdf):</label>
+                <input type="file" id="qualifiedUpload" name="qualifiedDocument" accept=".p7s, .p7m, .pdf">
+            </div>
+        </section>
+
+        <div class="print-signature-area">
+            <div class="print-box">
+                Semnătura clientului (olograf)
+                <br>
+                <small>(Confirmare comandă lunară pachet ReDefine)</small>
+                <br><br><br>
+            </div>
+            <div class="print-box">
                 Semnătura specialistului (Nutrisib)
+                <br><br><br>
             </div>
         </div>
-    </section>
+        <div class="print-signature-area" style="margin-top:20px; border:none;">
+            Data: ..............................
+        </div>
+
+        <div class="no-print" style="margin-top: 30px;">
+            <button type="submit" class="btn" style="width: 100%; padding: 15px;">Trimite Acordul Finalizat</button>
+        </div>
+
+    </form>
 
     <footer>
         <p>&copy; dr. ing. Radu Pascu - 2025</p>
     </footer>
 </div>
+
+<script>
+    // Logica pentru comutarea între metodele de semnare
+    function toggleSignMethod(method) {
+        document.querySelectorAll('.sign-method').forEach(el => el.classList.remove('active'));
+        const selected = document.getElementById('method-' + method);
+        if (selected) selected.classList.add('active');
+    }
+
+    // --- Logica pentru CANVAS (Semnătură Digitală) ---
+    const canvas = document.getElementById('signatureCanvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let hasSigned = false;
+
+    function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        let clientX, clientY;
+        
+        if (e.changedTouches && e.changedTouches.length > 0) {
+            clientX = e.changedTouches[0].clientX;
+            clientY = e.changedTouches[0].clientY;
+        } else {
+            clientX = e.clientX;
+            clientY = e.clientY;
+        }
+
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
+        return {
+            x: (clientX - rect.left) * scaleX,
+            y: (clientY - rect.top) * scaleY
+        };
+    }
+
+    function startDraw(e) {
+        e.preventDefault(); 
+        isDrawing = true;
+        hasSigned = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+    }
+
+    function endDraw(e) {
+        if (!isDrawing) return;
+        e.preventDefault();
+        isDrawing = false;
+        saveSignature();
+    }
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', endDraw);
+    canvas.addEventListener('mouseout', endDraw);
+
+    canvas.addEventListener('touchstart', startDraw, {passive: false});
+    canvas.addEventListener('touchmove', draw, {passive: false});
+    canvas.addEventListener('touchend', endDraw);
+
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#000';
+
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        document.getElementById('signatureData').value = '';
+        hasSigned = false;
+    }
+
+    function saveSignature() {
+        const dataURL = canvas.toDataURL('image/png');
+        document.getElementById('signatureData').value = dataURL;
+    }
+
+    document.getElementById('acordForm').addEventListener('submit', function(e) {
+        const method = document.querySelector('input[name="signMethod"]:checked').value;
+        
+        if (method === 'digital') {
+            const sigData = document.getElementById('signatureData').value;
+            if (!sigData || !hasSigned) {
+                e.preventDefault();
+                alert('Vă rugăm să semnați în caseta dedicată înainte de a trimite.');
+            }
+        } else if (method === 'upload') {
+            const file = document.getElementById('fileUpload').value;
+            if (!file) {
+                e.preventDefault();
+                alert('Vă rugăm să încărcați documentul semnat (poză sau PDF).');
+            }
+        } else if (method === 'qualified') {
+            const file = document.getElementById('qualifiedUpload').value;
+            if (!file) {
+                e.preventDefault();
+                alert('Vă rugăm să încărcați documentul semnat digital.');
+            }
+        }
+    });
+</script>
 
 </body>
 </html>
