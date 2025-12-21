@@ -1,3 +1,5 @@
+/* FILE: css/styles.css */
+
 /* --- Variabile & Reset --- */
 :root {
     --color-bg: #f3f4f6;
@@ -15,6 +17,11 @@
     --color-box-blue-bg: #eff6ff;
     --color-box-blue-border: #3b82f6;
     --color-box-blue-text: #1d4ed8;
+    
+    /* --- CULORI FOOTER (NOI - conform constantinasimion.html) --- */
+    --color-text-footer: #bdc3c7;
+    --color-text-footer-link: #ecf0f1;
+    --color-footer-bg: #212529;
 
     --font-main: 'Inter', sans-serif;
 }
@@ -43,6 +50,15 @@ body {
     overflow: hidden;
     border: 1px solid var(--color-border);
     position: relative;
+    /* Asigură footer lipit jos dacă conținutul e mic */
+    display: flex;
+    flex-direction: column;
+    min-height: 95vh;
+}
+
+main {
+    padding: 1.5rem;
+    flex: 1; /* Împinge footer-ul jos */
 }
 
 /* --- Header --- */
@@ -77,13 +93,8 @@ body {
 .progress-bar {
     background-color: var(--color-brand-medium);
     height: 100%;
-    width: 14%; /* Start la tab 1 din 7 */
+    width: 14%; 
     transition: width 0.3s ease;
-}
-
-/* --- Main Content --- */
-main {
-    padding: 1.5rem;
 }
 
 /* --- Tabs Logic --- */
@@ -189,15 +200,50 @@ textarea {
     resize: vertical;
 }
 
-/* --- Checkboxes & Radios --- */
+/* --- Checkboxes & Radios (COMPACT & 2 COLUMNS) --- */
 .checkbox-group, .radio-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    flex-direction: column; /* Vertical list for readability */
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 coloane pe desktop */
+    gap: 0.5rem 1rem; /* Gap mic vertical (0.5rem), mediu orizontal (1rem) */
+    margin-top: 0.5rem;
 }
 
-.radio-group label, .checkbox-group label {
+/* Excepție pentru liste care trebuie să fie verticale (GDPR etc) */
+.radio-group.vertical, .checkbox-group.vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Stil pentru fiecare label din grup (compactare) */
+.checkbox-group label, .radio-group label {
+    font-weight: 400;
+    cursor: pointer;
+    display: flex;
+    align-items: center; /* Aliniere perfectă icon-text */
+    gap: 0.5rem;
+    margin-bottom: 0; /* Eliminăm marginea default */
+    padding: 0.25rem 0; /* Padding minim pentru click area */
+    line-height: 1.3;
+    font-size: 0.95rem;
+}
+
+/* Input-urile în sine */
+.checkbox-group input[type="checkbox"], 
+.radio-group input[type="radio"] {
+    margin: 0;
+    width: 1.1em;
+    height: 1.1em;
+    flex-shrink: 0; /* Să nu se strivească */
+}
+
+/* --- Radio Inline (Da/Nu) --- */
+.radio-inline {
+    display: flex;
+    gap: 2rem;
+}
+
+.radio-inline label {
     font-weight: 400;
     cursor: pointer;
     display: flex;
@@ -205,32 +251,15 @@ textarea {
     gap: 0.5rem;
 }
 
-/* Radio inline pentru intrebari yes/no */
-.radio-inline {
-    display: flex;
-    gap: 1.5rem;
-}
-
-.radio-inline label {
-    font-weight: 400;
-    cursor: pointer;
-}
-
-/* Style intrebari radio list */
+/* Style întrebări listă radio */
 .question-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #f0f0f0;
-    padding: 0.75rem 0;
+    padding: 0.5rem 0; /* Padding redus */
 }
-.question-row p { margin: 0; font-size: 0.95rem; font-weight: 600; }
-
-/* Custom toggle logic */
-.hidden-field {
-    display: none;
-    margin-top: 0.5rem;
-}
+.question-row p { margin: 0; font-size: 0.95rem; font-weight: 600; max-width: 70%; }
 
 /* --- Range Slider --- */
 .scale-group {
@@ -253,6 +282,12 @@ input[type="range"] {
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--color-border);
+}
+
+/* Custom toggle logic */
+.hidden-field {
+    display: none;
+    margin-top: 0.5rem;
 }
 
 /* --- Buttons --- */
@@ -289,7 +324,7 @@ button {
 }
 
 .btn-submit {
-    background: linear-gradient(to right, #22c55e, #16a34a); /* Green for submit */
+    background: linear-gradient(to right, #22c55e, #16a34a);
 }
 
 button:hover {
@@ -297,61 +332,77 @@ button:hover {
     transform: translateY(-1px);
 }
 
- /* --- Footer --- */
-        footer.infographic-footer {
-            background-color: var(--color-footer-bg);
-            color: var(--color-text-footer);
-            text-align: center;
-            padding: 0.5rem 2rem;
-            font-size: 0.85rem;
-            border-top: none;
-            margin-top: auto;
-        }
-        
-        footer.infographic-footer p {
-            margin: 0.1rem 0;
-            text-align: center;
-            color: var(--color-text-footer);
-        }
+/* --- FOOTER (NOU - Stiluri Refăcute conform cerinței) --- */
+footer.infographic-footer {
+    background-color: var(--color-footer-bg);
+    color: var(--color-text-footer);
+    text-align: center;
+    padding: 2rem 2rem; /* Spațiere mai generoasă ca în exemplu */
+    font-size: 0.85rem;
+    border-top: none;
+    margin-top: auto;
+}
 
-        footer.infographic-footer a {
-            color: var(--color-text-footer-link);
-            text-decoration: none;
-        }
-        
-        footer.infographic-footer a:hover {
-            text-decoration: underline;
-        }
+footer.infographic-footer p {
+    margin: 0.5rem 0;
+    text-align: center;
+    color: var(--color-text-footer);
+}
 
-        .footer-social-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 0.5rem;
-        }
-        
-        .footer-social-links a {
-            display: inline-block;
-            transition: transform 0.2s ease;
-        }
-        
-        .footer-social-links a:hover {
-            transform: scale(1.1);
-        }
+footer.infographic-footer a {
+    color: var(--color-text-footer-link);
+    text-decoration: none;
+    transition: color 0.2s;
+}
 
-        .footer-social-links svg, .footer-social-links img {
-            width: 32px;
-            height: 32px;
-        }
-        
-        .copyright {
-            font-size: 0.75rem;
-            color: #6c757d;
-            margin-top: 1rem;
-        }
+footer.infographic-footer a:hover {
+    text-decoration: underline;
+    color: #fff;
+}
+
+.footer-social-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 1rem;
+}
+
+.footer-social-links a {
+    display: inline-block;
+    transition: transform 0.2s ease;
+}
+
+.footer-social-links a:hover {
+    transform: scale(1.1);
+}
+
+.footer-social-links svg, 
+.footer-social-links img {
+    width: 24px;
+    height: 24px;
+    filter: invert(80%) sepia(5%) saturate(500%) hue-rotate(180deg) brightness(90%) contrast(85%); /* Ajustare pentru iconite ca să fie gri deschis */
+}
+
+.copyright {
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-top: 1.5rem;
+    border-top: 1px solid #343a40;
+    padding-top: 1rem;
+}
+
 /* --- Responsive --- */
 @media (max-width: 600px) {
     .grid-2 { grid-template-columns: 1fr; }
+    
+    /* Pe mobil revenim la o singură coloană pentru opțiuni */
+    .checkbox-group, .radio-group { 
+        grid-template-columns: 1fr; 
+        gap: 0.75rem; /* Puțin mai mult spațiu pe mobil pentru touch */
+    }
+    
     .question-row { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .question-row p { max-width: 100%; }
+    
     .app-header h1 { font-size: 1.5rem; }
 }
