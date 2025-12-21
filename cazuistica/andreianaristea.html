@@ -105,7 +105,25 @@
         ul { padding-left: 1.25rem; list-style-type: square; margin-bottom: 0.75rem; }
         li { margin-bottom: 0.2rem; font-size: 0.9rem; }
 
-        /* --- Stiluri Footer (Preluat din constantinasimion.html) --- */
+        .btn-print {
+            background-color: var(--color-brand-dark);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        
+        .btn-print:hover { background-color: var(--color-brand-medium); }
+
+        /* --- Stiluri Footer  --- */
         footer.infographic-footer {
             background-color: var(--color-footer-bg);
             color: var(--color-text-footer);
@@ -306,6 +324,10 @@
                 <h3>VI. Anexa I: Inventarul analizelor</h3>
                 <p>Așa cum am menționat, biologia dumneavoastră funcționează asemenea unui imperiu cu o istorie bogată, care necesită acum o lucrare de restaurare de mare precizie. Pentru a stabiliza fundațiile și a asigura prosperitatea „cetățenilor” (celulelor), avem nevoie de un inventar riguros al resurselor actuale.</p>
                 <p>Iată lista completă a indicatorilor necesari pentru calibrarea protocolului ReDefine, grupați conform standardelor de laborator:</p>
+                <button class="btn-print no-print" onclick="printAnalizeTable()">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/><path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/></svg>
+                    Tipărește lista de analize
+                </button>
                 <div class="table-container">
                     <table>
                         <thead>
@@ -365,6 +387,27 @@
     </div>
 
     <script>
+        function printAnalizeTable() {
+            const table = document.getElementById('tabel-analize-container').innerHTML;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Lista Analize - Andreiana Ristea</title>');
+            printWindow.document.write('<style>');
+            printWindow.document.write('body { font-family: "Inter", sans-serif; padding: 30px; color: #2c3e50; }');
+            printWindow.document.write('h2 { color: #1a2a44; border-bottom: 2px solid #4a6fa5; padding-bottom: 10px; margin-bottom: 20px; }');
+            printWindow.document.write('table { width: 100%; border-collapse: collapse; margin-top: 10px; }');
+            printWindow.document.write('th, td { border: 1px solid #dcdde1; padding: 10px; text-align: left; vertical-align: top; font-size: 14px; }');
+            printWindow.document.write('th { background-color: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 12px; }');
+            printWindow.document.write('</style></head><body>');
+            printWindow.document.write('<h2>Anexa I: Inventarul analizelor (KPI) - Andreiana Ristea</h2>');
+            printWindow.document.write('<p>Vă rugăm să prezentați această listă la laborator pentru recoltare.</p>');
+            printWindow.document.write(table);
+            printWindow.document.write('<p style="margin-top:30px; font-size:12px; color:#666; text-align:center; border-top: 1px solid #eee; padding-top: 10px;">Generat de NUTRISIB - dr.ing. Radu Pascu - 2025</p>');
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
+        }
+        
         // Încărcare subsol dinamic
         fetch('https://nutrisib.club/footer.html')
         .then(response => {
