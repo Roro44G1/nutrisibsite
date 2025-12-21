@@ -20,7 +20,7 @@ function nextTab() {
     
     // Dacă plecăm de la date personale (Tab index 1 -> Step 2), calculăm
     if (currentTab === 1) {
-        calculateNutrition();
+        calculeazaNutritie();
     }
 
     if (currentTab < tabs.length - 1) {
@@ -48,14 +48,21 @@ function validateForm(n) {
     return valid;
 }
 
+// Toggle pentru detalii (câmpuri ascunse)
 function toggleField(id, show) {
     const el = document.getElementById(id);
-    if(show) el.style.display = 'block';
-    else el.style.display = 'none';
+    if(show) {
+        el.style.display = 'block';
+        el.setAttribute('required', 'true');
+    } else {
+        el.style.display = 'none';
+        el.removeAttribute('required');
+        el.value = '';
+    }
 }
 
-// --- 2. LOGICA DE CALCUL (Din wellness.js original) ---
-function calculateNutrition() {
+// --- 2. LOGICA DE CALCUL (Din wellness - Copie.js) ---
+function calculeazaNutritie() {
     const sex = document.getElementById('sex')?.value;
     const varsta = Number(document.getElementById('varsta')?.value || 0);
     const inaltimeCm = Number(document.getElementById('inaltime')?.value || 0);
@@ -66,7 +73,7 @@ function calculateNutrition() {
 
     const inaltimeM = inaltimeCm / 100;
 
-    // IMC
+    // A. IMC (BMI)
     const imc = greutate / (inaltimeM * inaltimeM);
     let imcCategory = '';
     if (imc < 18.5) imcCategory = 'Subponderal';
@@ -76,70 +83,85 @@ function calculateNutrition() {
     else if (imc < 40) imcCategory = 'Obezitate grad II';
     else imcCategory = 'Obezitate grad III';
 
-    // RMB (Harris-Benedict revizuit)
+    // B. RMB (Harris-Benedict - din wellness - Copie.js)
     let rmb = 0;
     if (sex === 'Masculin') {
+        // RMB = 88.362 + (13.397 × kg) + (4.799 × cm) − (5.677 × ani)
         rmb = 88.362 + (13.397 * greutate) + (4.799 * inaltimeCm) - (5.677 * varsta);
     } else {
+        // RMB = 447.593 + (9.247 × kg) + (3.098 × cm) − (4.330 × ani)
         rmb = 447.593 + (9.247 * greutate) + (3.098 * inaltimeCm) - (4.330 * varsta);
     }
 
+    // C. RMA (Rata Metabolică Activă) & CMA
     const rma = rmb * activitate;
-    
-    // PGC Estimativ
-    const sexFactor = (sex === 'Masculin') ? 1 : 0;
-    const pgc = (1.20 * imc) + (0.23 * varsta) - (10.8 * sexFactor) - 5.4;
+    const cma = rma; // Default
 
-    // Update Input-uri Ascunse
+    // Populate Hidden Inputs
     document.getElementById('imc').value = imc.toFixed(2);
     document.getElementById('imc_category').value = imcCategory;
     document.getElementById('rmb').value = rmb.toFixed(0);
     document.getElementById('rma').value = rma.toFixed(0);
-    document.getElementById('pgc').value = pgc.toFixed(1);
+    document.getElementById('cma').value = cma.toFixed(0);
 }
 
-// Listeners pentru calcule live
+// Event Listeners pentru calcule live
 ['sex', 'varsta', 'inaltime', 'greutate', 'activitate'].forEach(id => {
     const el = document.getElementById(id);
-    if(el) el.addEventListener('change', calculateNutrition);
+    if(el) {
+        el.addEventListener('change', calculeazaNutritie);
+        el.addEventListener('input', calculeazaNutritie);
+    }
 });
 
-// Slider display
+// Slider Value Update
 const slider = document.getElementById('motivatie_range');
 if(slider) {
     slider.addEventListener('input', function() {
         document.getElementById('motivatie_val').textContent = this.value;
+        document.getElementById('motivatie_input').value = this.value;
     });
 }
 
-// --- 3. INJECTARE FOOTER (Ca în model) ---
+// --- 3. INJECTARE FOOTER (Fetch) ---
 fetch('https://nutrisib.club/footer.html')
 .then(response => response.text())
 .then(data => {
     document.getElementById('footer-placeholder').innerHTML = data;
 })
-.catch(err => console.log('Footer load error:', err));
+.catch(err => console.log('Eroare încărcare footer:', err));
 
-// --- 4. PDF GENERATION (La Submit) ---
-function handleFormSubmit(e) {
-    calculateNutrition();
-    
-    // Populare PDF
-    document.getElementById('pdf_nume').textContent = document.getElementById('nume').value + ' ' + document.getElementById('prenume').value;
-    document.getElementById('pdf_imc').textContent = document.getElementById('imc').value;
-    document.getElementById('pdf_rmb').textContent = document.getElementById('rmb').value;
+// --- 4. GENERARE PDF & SUBMIT ---
+const form = document.getElementById('wellnessForm');
+if(form) {
+    form.addEventListener('submit', function(e) {
+        // Nu prevenim default complet pentru a lăsa Netlify să facă POST
+        // Dar generăm PDF-ul înainte
+        calculeazaNutritie();
+        
+        // Populăm template-ul PDF ascuns
+        document.getElementById('pdf_nume').textContent = document.getElementById('nume').value + ' ' + document.getElementById('prenume').value;
+        document.getElementById('pdf_imc').textContent = document.getElementById('imc').value;
+        document.getElementById('pdf_imc_cat').textContent = document.getElementById('imc_category').value;
+        document.getElementById('pdf_rmb').textContent = document.getElementById('rmb').value;
+        document.getElementById('pdf_rma').textContent = document.getElementById('rma').value;
 
-    const element = document.getElementById('pdf-report');
-    element.style.display = 'block';
-    
-    const opt = {
-        margin: 10,
-        filename: 'Raport_Nutrisib.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+        // Generare
+        const element = document.getElementById('pdf-report');
+        element.style.display = 'block';
+        
+        const opt = {
+            margin: 10,
+            filename: 'Raport_Nutrisib.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
 
-    html2pdf().set(opt).from(element).save();
-    // Formularul va continua submit-ul către Netlify (action="success.html")
+        html2pdf().set(opt).from(element).save().then(() => {
+            element.style.display = 'none';
+        });
+        
+        // Lasăm formularul să continue către action="success.html"
+    });
 }

@@ -1,4 +1,4 @@
-/* --- RESET & VARIABILE (Din constantinasimion.html) --- */
+/* --- 1. RESET & VARIABILE (Din constantinasimion.html) --- */
 :root {
     --color-bg: #f3f4f6;
     --color-bg-white: #ffffff;
@@ -18,6 +18,8 @@
     --font-main: 'Inter', sans-serif;
 }
 
+*, *::before, *::after { box-sizing: border-box; }
+
 body {
     font-family: var(--font-main);
     background-color: var(--color-bg);
@@ -26,11 +28,12 @@ body {
     padding: 1rem;
     display: flex;
     justify-content: center;
+    line-height: 1.6;
 }
 
 .main-container {
     background-color: var(--color-bg-white);
-    max-width: 60rem;
+    max-width: 60rem; /* Wide layout */
     width: 100%;
     border-radius: 1rem;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
@@ -52,8 +55,13 @@ body {
 .app-header h2 { font-size: 1rem; font-weight: 300; opacity: 0.9; margin: 0 auto; max-width: 50rem; }
 
 /* Progress Bar */
-.progress-container { background: #e2e8f0; height: 6px; }
-.progress-bar { background: var(--color-brand-medium); height: 100%; width: 14%; transition: width 0.3s; }
+.progress-container { background: #e2e8f0; height: 6px; width: 100%; }
+.progress-bar { background: var(--color-brand-medium); height: 100%; width: 14%; transition: width 0.3s ease; }
+
+/* --- TABS --- */
+.tab { display: none; animation: fadeIn 0.4s ease; }
+.tab.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 /* --- CONTENT --- */
 main { padding: 2rem; flex: 1; }
@@ -69,12 +77,13 @@ h3 {
     margin-bottom: 1.5rem;
 }
 
-h4 { color: var(--color-text-medium); margin-top: 1.5rem; }
+h4 { color: var(--color-text-medium); margin-top: 1.5rem; margin-bottom: 0.5rem; font-size: 1.1rem; }
 
 .info-box-blue {
     background: #eff6ff; border: 1px solid #3b82f6; color: #1e3a8a;
     padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;
 }
+.info-box-blue ul { margin: 0; padding-left: 1.2rem; }
 
 /* --- INPUTS --- */
 .field-group { margin-bottom: 1.25rem; }
@@ -86,14 +95,15 @@ input[type="number"], input[type="date"], select, textarea {
     border: 1px solid var(--color-border);
     border-radius: 0.4rem;
     font-family: inherit; font-size: 1rem;
+    background: #fff;
 }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--color-brand-medium); }
 textarea { min-height: 100px; resize: vertical; }
 
-/* --- GRID LAYOUTS (Compactarea cerută) --- */
-/* Checkbox/Radio pe 2 coloane */
+/* --- GRID LAYOUTS (Compactarea cerută - 2 coloane) --- */
 .checkbox-grid, .radio-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr; /* 2 coloane FIX */
     gap: 0.5rem 1rem;
     background: #f9fafb;
     padding: 1rem;
@@ -103,7 +113,7 @@ textarea { min-height: 100px; resize: vertical; }
 
 .checkbox-grid label, .radio-grid label {
     display: flex; align-items: flex-start; gap: 0.6rem;
-    font-size: 0.95rem; cursor: pointer; font-weight: 400;
+    font-size: 0.95rem; cursor: pointer; font-weight: 400; margin: 0;
 }
 
 input[type="checkbox"], input[type="radio"] {
@@ -111,18 +121,26 @@ input[type="checkbox"], input[type="radio"] {
 }
 
 /* Input Grids */
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
 
 /* Radio Inline (Da/Nu) */
 .radio-inline { display: flex; gap: 2rem; margin-top: 0.5rem; }
-.radio-inline label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-weight: 400; }
+.radio-inline label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-weight: 400; margin: 0; }
 
-/* Question Lists */
-.question-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f0f0f0; padding: 0.6rem 0; }
-.question-row p { margin: 0; font-size: 0.95rem; max-width: 75%; }
+/* Question Lists (Table-like rows) */
+.question-list { display: grid; gap: 0.5rem; }
+.question-row { 
+    display: flex; justify-content: space-between; align-items: center; 
+    border-bottom: 1px solid #f0f0f0; padding: 0.6rem 0; 
+}
+.question-row p { margin: 0; font-size: 0.95rem; max-width: 75%; font-weight: 500; }
 
 .hidden-field { display: none; margin-top: 0.5rem; }
+
+/* Slider Scale */
+.scale-group { display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem; }
+input[type=range] { flex: 1; margin: 0; }
 
 /* --- BUTTONS --- */
 .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; border-top: 1px solid #eee; padding-top: 1rem; }
@@ -134,7 +152,10 @@ button {
 }
 .btn-primary { background: var(--color-brand-dark); color: white; }
 .btn-secondary { background: #e5e7eb; color: #374151; }
-.btn-submit { background: #22c55e; color: white; width: 100%; max-width: 300px; }
+.btn-submit { 
+    background: linear-gradient(to right, #22c55e, #16a34a); 
+    color: white; width: 100%; max-width: 300px; 
+}
 button:hover { opacity: 0.9; transform: translateY(-1px); }
 
 /* --- FOOTER STYLES (Pentru injectare) --- */
@@ -149,6 +170,8 @@ button:hover { opacity: 0.9; transform: translateY(-1px); }
 }
 .infographic-footer p { margin: 0.5rem 0; color: var(--color-text-footer); }
 .infographic-footer a { color: var(--color-text-footer-link); text-decoration: none; }
+.infographic-footer a:hover { text-decoration: underline; color: #fff; }
+
 .footer-social-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 1rem; }
 .footer-social-links img { width: 24px; height: 24px; filter: invert(80%) sepia(5%) saturate(500%) hue-rotate(180deg) brightness(90%) contrast(85%); }
 .copyright { font-size: 0.75rem; color: #6c757d; margin-top: 1.5rem; border-top: 1px solid #343a40; padding-top: 1rem; }
