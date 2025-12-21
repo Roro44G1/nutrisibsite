@@ -10,63 +10,72 @@ document.querySelectorAll('input[type="range"]').forEach(range => {
 
 // Exemplu de calcul de scoruri (simplificat).
 // Aici vom înlocui cu logica exactă din Jotform când ai nevoie.
-function calculeazaScoruri() {
-  // TODO: înlocuiește cu lista reală de câmpuri pentru fiecare domeniu
-  const fizicFields = ['fizic_energie']; // + restul
-  const mentalFields = []; // de completat
-  const spiritualFields = [];
-  const financiarFields = [];
-  const ocupationalFields = [];
-  const socialFields = [];
-  const intelectualFields = [];
-  const mediuFields = [];
+function calculeazaNutritie() {
+  const sex = document.getElementById('sex')?.value;
+  const varsta = Number(document.getElementById('varsta')?.value || 0);
+  const inaltimeCm = Number(document.getElementById('inaltime')?.value || 0);
+  const greutate = Number(document.getElementById('greutate')?.value || 0);
+  const activitate = Number(document.getElementById('activitate')?.value || 0);
 
-  function medie(ids) {
-    if (!ids.length) return 0;
-    let sum = 0;
-    ids.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) sum += Number(el.value || 0);
-    });
-    return sum / ids.length;
+  if (!sex || !varsta || !inaltimeCm || !greutate || !activitate) {
+    return; // nu calculăm până nu sunt completate toate
   }
 
-  const sFizic = medie(fizicFields);
-  const sMental = medie(mentalFields);
-  const sSpiritual = medie(spiritualFields);
-  const sFinanciar = medie(financiarFields);
-  const sOcupational = medie(ocupationalFields);
-  const sSocial = medie(socialFields);
-  const sIntelectual = medie(intelectualFields);
-  const sMediu = medie(mediuFields);
+  const inaltimeM = inaltimeCm / 100;
 
-  const total = (
-    sFizic + sMental + sSpiritual +
-    sFinanciar + sOcupational + sSocial +
-    sIntelectual + sMediu
-  ) / 8;
+  // IMC
+  const imc = greutate / (inaltimeM * inaltimeM);
 
-  document.getElementById('score_fizic').value = sFizic.toFixed(2);
-  document.getElementById('score_mental').value = sMental.toFixed(2);
-  document.getElementById('score_spiritual').value = sSpiritual.toFixed(2);
-  document.getElementById('score_financiar').value = sFinanciar.toFixed(2);
-  document.getElementById('score_ocupational').value = sOcupational.toFixed(2);
-  document.getElementById('score_social').value = sSocial.toFixed(2);
-  document.getElementById('score_intelectual').value = sIntelectual.toFixed(2);
-  document.getElementById('score_mediu').value = sMediu.toFixed(2);
-  document.getElementById('score_total').value = total.toFixed(2);
+  let imcCategory = '';
+  if (imc < 18.5) imcCategory = 'Subponderal';
+  else if (imc < 25) imcCategory = 'Normoponderal';
+  else if (imc < 30) imcCategory = 'Supraponderal';
+  else if (imc < 35) imcCategory = 'Obezitate grad I';
+  else if (imc < 40) imcCategory = 'Obezitate grad II';
+  else imcCategory = 'Obezitate grad III';
 
-  // Exemplu: profil în funcție de scor total (poți schimba logică)
-  let profil = 'În lucru';
-  if (total >= 8) profil = 'High Wellness';
-  else if (total >= 5) profil = 'Balanced';
-  else profil = 'Needs Support';
+  // Harris-Benedict (kcal/zi)
+  let rmb = 0;
+  if (sex === 'M') {
+    // masculin
+    // RMB = 88.362 + (13.397 × greutate kg) + (4.799 × înălțime cm) − (5.677 × vârsta ani)
+    rmb = 88.362 + 13.397 * greutate + 4.799 * inaltimeCm - 5.677 * varsta;
+  } else if (sex === 'F') {
+    // feminin
+    // RMB = 447.593 + (9.247 × greutate kg) + (3.098 × înălțime cm) − (4.330 × vârsta ani)
+    rmb = 447.593 + 9.247 * greutate + 3.098 * inaltimeCm - 4.330 * varsta;
+  }
 
-  document.getElementById('profil_wellness').value = profil;
+  const rma = rmb * activitate;      // Rata metabolică activă
+  const cma = rma;                   // aici poți adăuga ulterior ajustări (ex. -10% deficit etc.)
+
+  // scriem în câmpurile ascunse
+  document.getElementById('imc').value = imc.toFixed(2);
+  document.getElementById('imc_category').value = imcCategory;
+  document.getElementById('rmb').value = rmb.toFixed(0);
+  document.getElementById('rma').value = rma.toFixed(0);
+  document.getElementById('cma').value = cma.toFixed(0);
 }
 
-// Legăm calculul de submit, astfel încât scorurile să fie în Netlify Forms
-const form = document.getElementById('wellnessForm');
+// recalculăm când utilizatorul schimbă datele antropometrice
+['sex', 'varsta', 'inaltime', 'greutate', 'activitate'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener('change', calculeazaNutritie);
+    el.addEventListener('input', calculeazaNutritie);
+  }
+});
+
+// la submit calculăm atât scorurile (dacă le folosești), cât și partea nutrițională
+if (form) {
+  form.addEventListener('submit', function (e) {
+    calculeazaScoruri();    // dacă folosești scorurile de wellness
+    calculeazaNutritie();   // asigură-te că IMC/RMB etc. sunt setate
+
+    // nu anulăm submit-ul; Netlify îl procesează normal
+  });
+}
+
 
 if (form) {
   form.addEventListener('submit', function (e) {
@@ -75,3 +84,4 @@ if (form) {
     // nu dăm preventDefault, lăsăm Netlify să trimită formularul
   });
 }
+
