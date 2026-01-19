@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronică de reconstrucție biologică - Andreiana Ristea</title>
+    
+    <!-- SEO & OG Tags -->
+    <meta name="description" content="Arhitectură de reconstrucție biologică și protocol personalizat pentru doamna profesor Andreiana Ristea, creat de NUTRISIB.">
+    <meta property="og:title" content="Cronică de reconstrucție biologică - Andreiana Ristea">
+    <meta property="og:description" content="Restaurarea vitalității prin rigoare științifică și optimizare metabolică.">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="NUTRISIB">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #f4f4f7;
+            --color-bg-white: #ffffff;
+            --color-brand-dark: #1a2a44;
+            --color-brand-medium: #4a6fa5;
+            --color-text-dark: #2c3e50;
+            --color-text-medium: #374151;
+            --color-text-light: #4b5563;
+            --color-border: #dcdde1;
+            --color-box-blue: #ebf2fa;
+            --color-box-sepia: #fdf6e3;
+            
+            /* Stiluri footer originale */
+            --color-footer-bg: #212529;
+            --color-text-footer: #bdc3c7;
+            --color-text-footer-link: #ecf0f1;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background-color: var(--color-bg); 
+            color: var(--color-text-dark); 
+            line-height: 1.4; 
+        }
+
+        /* PASSWORD OVERLAY */
+        #password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--color-brand-dark), var(--color-brand-medium));
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .password-box {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            max-width: 650px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .password-box h2 {
+            color: var(--color-brand-dark);
+            margin-top: 0;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .payment-info {
+            background: var(--color-box-blue);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            text-align: left;
+            margin-bottom: 1.5rem;
+            color: var(--color-text-dark);
+            border: 1px solid var(--color-border);
+            line-height: 1.6;
+        }
+
+        .iban-list {
+            margin-top: 15px;
+            font-family: monospace;
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #dce4ed;
+            font-size: 0.85rem;
+            color: #1a202c;
+            line-height: 1.8;
+            word-break: break-all;
+        }
+
+        .iban-list strong { color: var(--color-brand-dark); }
+
+        .password-input-wrapper {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .password-box input {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid var(--color-border);
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .password-box input:focus { border-color: var(--color-brand-medium); }
+
+        .password-box button {
+            background-color: var(--color-brand-dark);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+
+        .password-box button:hover { background-color: var(--color-brand-medium); }
+
+        #error-msg {
+            color: #e53e3e;
+            font-size: 0.9rem;
+            margin-top: 12px;
+            display: none;
+            font-weight: 600;
+        }
+
+        /* MAIN CONTENT */
+        #main-content-wrapper {
+            display: none;
+            padding: 0.25rem;
+            justify-content: center;
+        }
+
+        .container { 
+            background-color: var(--color-bg-white); 
+            max-width: 60rem; 
+            width: 100%; 
+            border-radius: 1rem; 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1); 
+            overflow: hidden; 
+            border: 1px solid var(--color-border); 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 95vh; 
+        }
+        
+        header { 
+            color: white; 
+            text-align: center; 
+            padding: 1.5rem 1rem; 
+            background: linear-gradient(135deg, var(--color-brand-dark), var(--color-brand-medium)); 
+        }
+
+        header h1 { font-size: 1.6rem; margin: 0; font-weight: 700; letter-spacing: -0.5px; }
+        header h2 { font-size: 1rem; font-weight: 300; opacity: 0.9; margin: 0.2rem 0 0; font-style: italic; }
+        
+        /* TABS NAVIGATION OPTIMIZED FOR MOBILE WRAP */
+        .tabs-nav {
+            display: flex;
+            flex-wrap: wrap; /* Permite trecerea pe rânduri noi */
+            background: #f8f9fa;
+            border-bottom: 1px solid var(--color-border);
+            padding: 5px;
+            gap: 4px;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 10px 12px;
+            border: 1px solid transparent;
+            background: #ffffff;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--color-text-light);
+            font-size: 0.72rem;
+            flex: 1 0 auto; /* Permite butoanelor să crească dar să nu se forțeze pe un singur rând */
+            text-align: center;
+            border-radius: 6px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn:hover {
+            color: var(--color-brand-medium);
+            background: #ebf2fa;
+        }
+
+        .tab-btn.active {
+            color: white;
+            background: var(--color-brand-dark);
+            border-color: var(--color-brand-dark);
+        }
+
+        main { padding: 1.25rem; flex: 1; } 
+        section { margin-bottom: 1.5rem; } 
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        h3 { 
+            font-size: 1.35rem; 
+            color: var(--color-brand-dark); 
+            border-bottom: 3px solid var(--color-brand-medium); 
+            padding-bottom: 0.3rem; 
+            margin-bottom: 1.2rem; 
+            text-align: center; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+
+        h4 { 
+            font-size: 1.15rem; 
+            color: var(--color-brand-dark); 
+            margin-top: 1.5rem; 
+            border-left: 5px solid var(--color-brand-medium); 
+            padding-left: 0.8rem; 
+            margin-bottom: 0.8rem;
+        }
+
+        p { text-align: justify; margin-bottom: 0.8rem; font-size: 0.95rem; }
+        
+        .quote-box { font-style: italic; padding: 0.75rem; background: var(--color-box-sepia); border-radius: 0.4rem; border: 1px solid #e1d8b9; margin: 1.25rem 0; color: #5d4037; font-size: 0.9rem; }
+        .info-box { padding: 1.25rem; border-radius: 0.4rem; margin-bottom: 1.5rem; border: 1px solid var(--color-border); }
+        .info-box-blue { background: var(--color-box-blue); border-left: 6px solid var(--color-brand-medium); }
+        
+        .table-container { overflow-x: auto; margin-top: 1rem; border: 1px solid var(--color-border); border-radius: 0.4rem; }
+        table { width: 100%; border-collapse: collapse; background: white; min-width: 600px; margin-bottom: 1rem; }
+        th, td { border-bottom: 1px solid var(--color-border); padding: 0.6rem 0.8rem; text-align: left; vertical-align: top; font-size: 0.85rem; }
+        th { background: #f8f9fa; font-weight: 700; color: var(--color-brand-dark); text-transform: uppercase; font-size: 0.7rem; }
+        
+        ul { padding-left: 1.5rem; list-style-type: square; margin-bottom: 1rem; }
+        li { margin-bottom: 0.5rem; font-size: 0.9rem; }
+
+        .btn-print {
+            background-color: var(--color-brand-dark); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s;
+        }
+        .btn-print:hover { background-color: var(--color-brand-medium); }
+
+        /* --- STILURI FOOTER ORIGINALE --- */
+        footer.infographic-footer {
+            background-color: var(--color-footer-bg);
+            color: var(--color-text-footer);
+            text-align: center;
+            padding: 0.5rem 2rem;
+            font-size: 0.85rem;
+            border-top: none;
+            margin-top: auto;
+        }
+
+        footer.infographic-footer p {
+            margin: 0.1rem 0;
+            text-align: center;
+            color: var(--color-text-footer);
+        }
+
+        footer.infographic-footer a {
+            color: var(--color-text-footer-link);
+            text-decoration: none;
+        }
+
+        footer.infographic-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-social-links a {
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+
+        .footer-social-links a:hover {
+            transform: scale(1.1);
+        }
+
+        .footer-social-links svg, .footer-social-links img {
+            width: 32px;
+            height: 32px;
+        }
+
+        .copyright {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            header h1 { font-size: 1.4rem; }
+            .tab-btn { 
+                flex: 1 0 45%; /* Două butoane pe rând pe mobil */
+                font-size: 0.65rem;
+                padding: 8px 5px;
+            }
+            h3 { font-size: 1.2rem; }
+            th, td { padding: 0.4rem 0.5rem; }
+        }
+
+        @media print {
+            .no-print, #password-overlay, .tabs-nav { display: none !important; }
+            .tab-content { display: block !important; border: none; padding: 10px 0; }
+            header { background: var(--color-brand-dark) !important; color: white !important; -webkit-print-color-adjust: exact; }
+            .container { box-shadow: none; border: none; width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- PASSWORD OVERLAY -->
+    <div id="password-overlay">
+        <div class="password-box">
+            <h2>🔒 Acces securizat</h2>
+            <div class="payment-info">
+                <p>Costul raportului și consultației este de 250 RON/sau 50EUR/sau 50USD. Veți primi parola după achitarea consultației într-unul dintre conturile:</p>
+                <div class="iban-list">
+                    <strong>SALT Bank (RON):</strong> RO26 ROIN 4021 3YZ89 YWDY RYHZ<br>
+                    <strong>Banca Transilvania (RON/EUR):</strong> RO75 BTRL RONC RT0T 164A 7301<br>
+                    <strong>RAIFFEISEN BANK (RON):</strong> RO26 RZBR 0000 0600 2019 0572<br>
+                    <strong>REVOLUT(RON/EUR/USD):</strong> RO27 REVO 0000 1433 6469 1707
+                </div>
+            </div>
+            <div class="password-input-wrapper">
+                <input type="password" id="pass-input" placeholder="Introduceți parola..." onkeydown="if(event.key==='Enter') checkPass()">
+                <button onclick="checkPass()">Accesează</button>
+            </div>
+            <p id="error-msg">Parolă incorectă. Vă rugăm să reîncercați.</p>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main-content-wrapper">
+        <div class="container">
+            <header>
+                <h1>Cronică de reconstrucție biologică</h1>
+                <h2>Ediția 1.0 pentru doamna profesor Andreiana Ristea</h2>
+            </header>
+
+            <nav class="tabs-nav no-print">
+                <button class="tab-btn active" onclick="openTab(event, 'audit')">I. Audit sistem</button>
+                <button class="tab-btn" onclick="openTab(event, 'fiziopatologie')">II. Fiziopatologie</button>
+                <button class="tab-btn" onclick="openTab(event, 'triada')">III. Triada risc</button>
+                <button class="tab-btn" onclick="openTab(event, 'analiza')">IV. Analiză paraclinică</button>
+                <button class="tab-btn" onclick="openTab(event, 'suplimentare')">V. Suplimentare</button>
+                <button class="tab-btn" onclick="openTab(event, 'strategie')">VI. Strategie plan</button>
+                <button class="tab-btn" onclick="openTab(event, 'concluzii')">VII. Concluzii</button>
+                <button class="tab-btn" onclick="openTab(event, 'intrebari')">VIII. Întrebări medici</button>
+                <button class="tab-btn" onclick="openTab(event, 'alimentatie')">IX. Plan alimentar</button>
+                <button class="tab-btn" onclick="openTab(event, 'bibliografie')">X. Bibliografie</button>
+                <button class="tab-btn" onclick="openTab(event, 'inventar')">XI. Inventar analize</button>
+            </nav>
+
+            <main>
+                <!-- TAB I: AUDIT SISTEM -->
+                <div id="audit" class="tab-content active">
+                    <h3>I. Analiza situației imperiale (audit de sistem)</h3>
+                    <p><strong><em>Stimată doamnă profesor,</em></strong></p>
+                    <p>V-am pregătit arhitectura raportului de sănătate într-un limbaj care să onoreze profesia dumneavoastră și să rezoneze cu spiritul dumneavoastră.</p>
+                    <p>Am analizat și tratat biologia dumneavoastră (glumind serios) ca pe un "imperiu milenar" care necesită respect și o restaurare atentă a monumentelor (oasele) și o securizare a rutelor comerciale (digestia), totul sub supravegherea singurei garnizoane de filtrare rămase (rinichiul unic).</p>
+                    <p>În sistemul NUTRISIB, nu privim corpul ca pe o colecție de simptome izolate, ci ca pe o arhitectură complexă de sisteme interdependente. La 75 de ani, cu un tonus vivace și o minte activă, obiectivul nostru nu este doar „repararea” unei sciatici sau stoparea demineralizării, ci optimizarea hardware-ului actual (rinichi unic, status post-colecistectomie) pentru a susține software-ul dumneavoastră (energia și pofta de viață).</p>
+                    <p>La NUTRISIB, nu vindem „cutii” sau soluții standardizate. Suplimentarea „după ureche”, mai ales în contextul unui rinichi unic, nu este doar ineficientă, ci poate fi riscantă. Strategia noastră se bazează pe date, nu pe presupuneri. Pentru a stabiliza fundațiile și a asigura prosperitatea „cetățenilor” (celulelor), avem nevoie de un inventar riguros al resurselor actuale.</p>
+                    
+                    <div class="quote-box">„A înțelege mecanismele prezentului prin prisma datelor obiective este primul pas către o guvernare eficientă a sănătății proprii.”</div>
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr><th>Provincie biologică</th><th>Indicatori necesari</th><th>Explicație și raționament strategic</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>Sistemul de filtrare</strong></td><td>Creatinină, uree, eGFR, electroliți (Na, K, Cl), examen complet de urină</td><td>Rinichiul unic este „garnizoana” care asigură puritatea mediului intern. Examenul complet de urină este „biopsia lichidă” a rinichiului; ne arată dacă există pierderi de proteine sau cristale ce ar semnala o funcționare sub presiune sau un risc de litiază.</td></tr>
+                                <tr><td><strong>Integritatea zidurilor</strong></td><td>DEXA, vit. D3, PTH, Mg, calciu ionic și calciu total, fosfatază alcalină</td><td>Investigația DEXA este „harta geologică” a sistemului osos. Verificăm dacă densitatea minerală este optimă sau dacă „zidurile cetății” au devenit poroase (demineralizare). Demineralizarea nu este doar lipsă de calciu; este adesea o eroare de distribuție. PTH-ul ne spune dacă organismul „extrage” calciu din oase pentru a menține sângele stabil.</td></tr>
+                                <tr><td><strong>Cablajul de comunicații</strong></td><td>Complex B, homocisteină, TSH, FT4, feritină, sideremie</td><td>Nervul sciatic este calea principală de comunicație. Deficitele de vitamine din grupul B pot întrerupe „mesajele” nervoase, provocând durere și inflamație. Sciatica indică un stres pe sistemul nervos. Vitaminele B sunt „cablajul” nervilor, iar tiroida este „termostatul” metabolic.</td></tr>
+                                <tr><td><strong>Logistica resurselor</strong></td><td>TGO, TGP, profil lipidic, amilază serică</td><td>După „reforma” post-colecistectomie, fluxul biliar s-a schimbat. Analizăm cum gestionează ficatul și pancreasul aprovizionarea cu energie și grăsimi. Fără colecist, bila nu mai este stocată, ci curge continuu. Aceasta afectează absorbția vitaminelor liposolubile (D, K, A, E) esențiale pentru oase.</td></tr>
+                                <tr><td><strong>Status inflamator și glicemic</strong></td><td>Glicemie a jeun, HbA1c, hs-CRP (proteina C reactivă de înaltă sensibilitate)</td><td>Evaluarea „zgomotului” metabolic. hs-CRP măsoară inflamația sistemică fină care blochează vindecarea nervului sciatic, iar HbA1c arată media glicemiilor, prevenind fragilizarea micilor vase de sânge (microangiopatia) ce hrănesc rinichiul și nervii.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB II: FIZIOPATOLOGIE -->
+                <div id="fiziopatologie" class="tab-content">
+                    <h3>II. Fiziopatologia rinichiului unic la senescență: mecanisme de adaptare și decompensare</h3>
+                    <p>Pentru a edifica pacienta asupra gravității situației și a motiva aderența la un regim strict, este necesară o disecție a mecanismelor biologice care guvernează funcționarea unui rinichi solitar la vârsta de 75 de ani. Aceasta nu este o simplă chestiune anatomică (lipsa unui organ), ci o modificare profundă a hemodinamicii întregului organism.</p>
+                    
+                    <h4>2.1. Teoria hiperfiltrării și „sacrificiul” nefronilor</h4>
+                    <p>În absența unui rinichi contralateral, rinichiul rămas este forțat să preia întreaga sarcină de epurare a toxinelor din organism. Pentru a face acest lucru, el declanșează un mecanism adaptativ numit <strong>hipertrofie compensatorie</strong>.</p>
+                    <p><strong>Mecanismul detaliat:</strong> Nefronii – unitățile microscopice de filtrare, care funcționează ca niște stații de epurare miniaturale – își măresc volumul. Pentru a filtra mai mult sânge, arteriola aferentă (vasul de sânge care intră în glomerul) se dilată excesiv. Această vasodilatație permite unui flux sanguin masiv să inunde glomerulul, crescând presiunea intraglomerulară.</p>
+                    <ul>
+                        <li><strong>Beneficiul pe termen scurt:</strong> Acest mecanism asigură menținerea homeostaziei și a unei valori a creatininei relativ normale, permițând supraviețuirea.</li>
+                        <li><strong>Costul pe termen lung:</strong> Această presiune crescută în interiorul capilarelor glomerulare acționează ca o hipertensiune locală distructivă. Ea induce un fenomen fizic numit <strong>"stress de forfecare" (fluid flow shear stress - FFSS)</strong> asupra podocitelor. Podocitele sunt celule cu "piciorușe" care îmbracă capilarele și formează bariera de filtrare, împiedicând proteinele să iasă în urină. Sub asaltul continuu al hiperfiltrării și al forțelor de forfecare, podocitele se desprind de pe membrana bazală și mor. Deoarece podocitele adulte nu se pot regenera (sunt celule post-mitotice), pierderea lor duce la colapsul capilarului și la apariția unei cicatrici. Acest proces se numește <strong>glomeruloscleroză focală și segmentară secundară</strong>.</li>
+                    </ul>
+                    <p>La pacienta Ristea, valoarea eGFR de 59 ml/min este înșelătoare. În contextul sarcopeniei geriatrice (pierderea masei musculare care produce creatinină), o creatinină de 0.92 mg/dL maschează o funcție renală mult mai slabă. Rinichiul lucrează "turat" la maximum, fără nicio rezervă de siguranță. Orice factor care crește și mai mult presiunea de filtrare – cum ar fi consumul excesiv de proteine, sarea sau stimulentele precum cofeina și guarana din suplimente va accelera ireversibil pierderea nefronilor rămași.</p>
+
+                    <h4>2.2. Impactul hidronefrozei: presiunea retrogradă</h4>
+                    <p>Hidronefroza grad I diagnosticată ecografic adaugă o componentă mecanică devastatoare la acest tablou. Urina care nu se evacuează liber din cauza unui obstacol (posibil calculul de 6,2 mm sau o stenoză) exercită o presiune retrogradă (back-pressure) asupra parenchimului renal. Această presiune fizică comprimă microcirculația renală, în special în zona medulară a rinichiului, care este natural săracă în oxigen. Rezultatul este o <strong>ischemie cronică</strong> (lipsă de oxigen) care activează fibroblaștii și duce la fibroza interstițială – transformarea țesutului funcțional renal în țesut cicatricial nefuncțional. Mai mult, staza urinară transformă rinichiul într-un mediu de cultură static, ideal pentru proliferarea bacteriilor și formarea biofilmelor, explicând infecția persistentă cu <em>E. coli</em>.</p>
+                </div>
+
+                <!-- TAB III: TRIADA DE RISC -->
+                <div id="triada" class="tab-content">
+                    <h3>III. Triada de risc clinic: hidronefroză – infecție – hipercalcemie</h3>
+                    <p>Analiza integrată a datelor relevă existența unei "triade a riscului" care amenință iminent viabilitatea rinichiului unic. Aceste trei elemente nu acționează izolat, ci se potențează reciproc într-un cerc vicios patologic.</p>
+                    
+                    <h4>3.1. Hidronefroza și litiaza renală (factorul mecanic)</h4>
+                    <p>Ecografia a identificat un <strong>nucleu hiperecogen cu diametru de 0,62 cm (6,2 mm)</strong> cu con de umbră posterior.</p>
+                    <ul>
+                        <li><strong>Interpretare:</strong> Prezența conului de umbră confirmă natura solidă, minerală a formațiunii (calcul). Dimensiunea de 6,2 mm este critică ("zona gri"). Calculii sub 5 mm se elimină frecvent spontan; cei peste 6-7 mm au risc major de a se bloca în ureter.</li>
+                        <li><strong>Riscul vital:</strong> La un pacient cu doi rinichi, blocarea unui ureter provoacă colică renală dureroasă, dar funcția renală globală este menținută de rinichiul opus. La doamna Ristea, migrarea acestui calcul și blocarea ureterului unic ar duce instantaneu la <strong>anurie obstructivă</strong> și insuficiență renală acută post-renală. Aceasta este o urgență chirurgicală absolută.</li>
+                        <li><strong>Zonă hiperecogenă inconstantă:</strong> Mențiunea unei zone imprecis delimitate sugerează prezența "noroiului biliar/renal" sau a microlitiazei active, indicând un proces continuu de formare a pietrelor.</li>
+                    </ul>
+
+                    <h4>3.2. Infecția urinară severă cu E. coli (factorul infecțios)</h4>
+                    <p>Prezența <em>Escherichia coli</em> (> 100.000 UFC/ml) pe un fond de stază este un factor de agresiune parenchimatoasă.</p>
+                    <ul>
+                        <li><strong>Biofilmele bacteriene:</strong> Tulpinile de <em>E. coli</em> uropatogene au capacitatea de a secreta o matrice polizaharidică protectoare, formând biofilme pe suprafața calculilor renali sau a uroteliului dilatat. Bacteriile din biofilme sunt protejate de antibiotice și de sistemul imunitar, explicând recurența infecțiilor. Staza urinară din hidronefroză oferă timpul necesar pentru ca bacteriile să adere și să formeze aceste structuri rezistente.</li>
+                        <li><strong>Pielonefrita cronică:</strong> Infecția ascendentă determină inflamație interstițială. Leucocitele (75/câmp) și CRP-ul crescut confirmă o reacție inflamatorie activă care, în timp, distruge tubii renali și lasă cicatrici corticale, reducând masa nefronică funcțională.</li>
+                    </ul>
+
+                    <h4>3.3. Hipercalcemia (10,97 mg/dL) și paradoxul calciului (factorul metabolic)</h4>
+                    <p>Nivelul calciului seric de 10,97 mg/dL este patologic și constituie "combustibilul" pentru litiază.</p>
+                    <ul>
+                        <li><strong>Mecanismul litogenezei:</strong> Hipercalcemia duce inevitabil la <strong>hipercalciurie</strong> (eliminarea excesivă de calciu prin urină). Într-un rinichi cu stază (hidronefroză), calciul precipită rapid, formând oxalat de calciu sau fosfat de calciu, care se adaugă la calculul existent.</li>
+                        <li><strong>Vasoconstricția renală:</strong> Calciul în exces induce contracția musculaturii netede a arteriolelor renale, reducând fluxul sanguin și agravând ischemia renală.</li>
+                        <li><strong>Nefrocalcinoza:</strong> Riscul major este depunerea calciului direct în țesutul renal (nefrocalcinoză), ceea ce duce la insuficiență renală ireversibilă.</li>
+                    </ul>
+                    <div class="info-box info-box-blue">
+                        <strong>Paradoxul calciului:</strong> Pacienta prezintă <strong>osteopenie avansată</strong> (scor T -2.3, la limita osteoporozei) concomitent cu <strong>hipercalcemie</strong>. Acesta este un semnal de alarmă major privind o eroare de distribuție a calciului. Oasele pierd calciu, iar acesta eliberat în sânge intoxică rinichiul și vasele de sânge. Implicație: orice suplimentare cu calciu este <strong>strict contraindicată</strong>. Aceasta nu va intra în os, ci va crește direct riscul de blocaj renal prin litiază.
+                    </div>
+                </div>
+
+                <!-- TAB IV: ANALIZA PARACLINICA -->
+                <div id="analiza" class="tab-content">
+                    <h3>IV. Analiza integrată a parametrilor paraclinici</h3>
+                    
+                    <h4>4.1. Profilul metabolic și dislipidemia severă</h4>
+                    <p>Valorile de <strong>colesterol total (323 mg/dL)</strong> și <strong>LDL (213 mg/dL)</strong> indică o dislipidemie severă.</p>
+                    <ul>
+                        <li><strong>Lipotoxicitatea:</strong> Lipidele oxidate sunt toxice pentru celulele renale (glomeruli și tubi), inducând inflamație și fibroză ("nefrotoxicitate lipidică").</li>
+                        <li><strong>Ateroscleroza arterei renale:</strong> Colesterolul se depune pe pereții arterei renale unice. O stenoză a acestei artere ar compromite definitiv fluxul sanguin către rinichi.</li>
+                    </ul>
+
+                    <h4>4.2. Prediabetul (HbA1c 5.71%)</h4>
+                    <p>Valoarea HbA1c plasează pacienta în zona de prediabet. Hiperglicemia, chiar și ușoară, menține vasodilatația arteriolei aferente, perpetuând mecanismul de hiperfiltrare și accelerând uzura rinichiului. De asemenea, glucoza favorizează creșterea bacteriană.</p>
+
+                    <h4>4.3. Statusul inflamator (CRP și homocisteina)</h4>
+                    <ul>
+                        <li><strong>CRP crescut:</strong> Indică o inflamație sistemică activă (infecție + ateroscleroză), fiind un factor de prognostic negativ cardiovascular.</li>
+                        <li><strong>Homocisteina (23.51 µmol/L):</strong> Hiperhomocisteinemia este toxică pentru endoteliul vascular, favorizând tromboza și inflamația la nivelul microcirculației renale.</li>
+                    </ul>
+
+                    <h3>Tabel 1: Sinteza valorilor paraclinice și interpretarea de risc</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr><th>Categorie</th><th>Parametru</th><th>Valoare</th><th>Interval Ref.</th><th>Interpretare Holistică și Risc</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>Renal</strong></td><td>eGFR</td><td>59.03 ml/min</td><td>> 60</td><td><strong>Stadiu G3a (Limită).</strong> Rinichiul funcționează fără rezervă funcțională. Risc critic la deshidratare sau substanțe nefrotoxice.</td></tr>
+                                <tr><td></td><td>Creatinină</td><td>0.92 mg/dL</td><td>0.5 - 0.9</td><td><strong>Fals liniștitoare.</strong> Maschează deficitul real din cauza masei musculare reduse (sarcopenie).</td></tr>
+                                <tr><td><strong>Infecțios</strong></td><td>Urocultură</td><td>E. coli +</td><td>Negativ</td><td><strong>Infecție activă.</strong> Sursă de inflamație sistemică, risc major de pielonefrită și formare de calculi infectați.</td></tr>
+                                <tr><td></td><td>Leucocite (Urină)</td><td>75 / câmp</td><td>< 5-10</td><td>Inflamație locală severă (piurie). Confirmă răspunsul agresiv al organismului.</td></tr>
+                                <tr><td><strong>Metabolic</strong></td><td>LDL Colesterol</td><td>213.36 mg/dL</td><td>< 100</td><td><strong>Critic.</strong> Risc major de ateroscleroză a arterei renale și infarct miocardic/renal. Necesită statine urgent.</td></tr>
+                                <tr><td></td><td>HbA1c</td><td>5.71 %</td><td>< 5.7</td><td><strong>Prediabet.</strong> Factor de stres hemodinamic (hiperfiltrare) care accelerează scleroza glomerolară.</td></tr>
+                                <tr><td></td><td>Homocisteină</td><td>23.51 µmol/L</td><td>< 13.9</td><td><strong>Hiperhomocisteinemie.</strong> Disfuncție endotelială, risc de tromboză și microangiopatie renală.</td></tr>
+                                <tr><td><strong>Osos/ Electroliți</strong></td><td>Calciu Total</td><td>10.97 mg/dL</td><td>8.6 - 10.2</td><td><strong>Hipercalcemie.</strong> Risc iminent de creștere a calculului și nefrocalcinoză. <strong>Contraindicație absolută pentru suplimente cu calciu.</strong></td></tr>
+                                <tr><td></td><td>DEXA (L1-L4)</td><td>T-score -2.3</td><td>> -1.0</td><td>Osteopenie avansată. Paradoxal asociată cu calciu mare în sânge (eroare de distribuție).</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB V: SUPLIMENTARE -->
+                <div id="suplimentare" class="tab-content">
+                    <h3>V. Analiza critică a suplimentării: riscuri vs. beneficii</h3>
+                    <p>În contextul acestui tablou clinic de o fragilitate extremă, administrarea suplimentelor alimentare trebuie să respecte aceleași rigori ca și prescripția medicamentelor. Utilizarea produselor complexe, cu liste lungi de ingrediente prezintă riscuri specifice și grave pentru pacienta cu rinichi unic și hipercalcemie.</p>
+                    <p>Utilizarea produselor complexe prezintă riscuri specifice și grave pentru pacienta cu rinichi unic și hipercalcemie.</p>
+
+                    <h4>Soluția sigură și eficientă: Axa intestin-rinichi și LR Lifetakt Pro 12</h4>
+                    <p>Singura direcție de suplimentare care este susținută de fiziopatologie și dovezi clinice în boala cronică de rinichi este modularea <strong>Axei Intestin-Rinichi (Gut-Kidney Axis)</strong> prin probiotice specifice.</p>
+                    
+                    <h4>Fundamentul științific: de ce probiotice pentru rinichi?</h4>
+                    <p>Pacienții cu funcție renală redusă suferă de o disbioză intestinală severă. Deoarece rinichiul nu mai elimină eficient ureea, aceasta se acumulează în sânge și difuzează în intestin. Acolo, bacteriile proteolitice ("rele") descompun ureea în amoniac și generează <strong>Toxine Uremice</strong> puternice: <strong>Indoxil Sulfat (IS)</strong>, <strong>p-Crezil Sulfat (pCS)</strong> și <strong>TMAO</strong>.</p>
+                    <p>Aceste toxine sunt reabsorbite în sânge și au efecte devastatoare: induc fibroza renală, provoacă inflamație sistemică și stres oxidativ, cresc rigiditatea vasculară și riscul de infarct.</p>
+
+                    <div class="info-box info-box-blue">
+                        <h4>Beneficiile specifice ale LR Lifetakt Pro 12</h4>
+                        <p>LR Lifetakt Pro 12 este recomandat ca singura suplimentare sigură deoarece compoziția și tehnologia sa răspund exact nevoilor unui pacient renal, fără a adăuga o sarcină de excreție:</p>
+                        <ul>
+                            <li><strong>1. Microîncapsularea patentată:</strong> Spre deosebire de alte probiotice care sunt distruse de acidul gastric, microîncapsularea dublă a Pro 12 asigură că bacteriile ajung vii în intestin. Acest aspect este crucial, deoarece doar bacteriile viabile pot metaboliza toxinele.</li>
+                            <li><strong>2. Reducerea Toxinelor uremice (efectul de "dializă enterală"):</strong>
+                                <ul>
+                                    <li><strong>Bifidobacterium longum:</strong> Studiile clinice au demonstrat că această tulpină reduce semnificativ nivelurile serice de fosfați, uree și toxine uremice (indoxil sulfat), preluând o parte din sarcina de epurare a rinichiului.</li>
+                                    <li><strong>Lactobacillus acidophilus:</strong> Cercetări recente (2024) arată că L. acidophilus protejează împotriva injuriei renale și fibrozei prin îmbunătățirea funcției mitocondriale și reducerea inflamației renale.</li>
+                                    <li><strong>Lactobacillus plantarum și casei:</strong> Aceste tulpini contribuie la reducerea translocația bacteriene și a inflamației sistemice (scăderea CRP), stabilizând bariera intestinală care este adesea permeabilă ("leaky gut") la pacienții renali.</li>
+                                </ul>
+                            </li>
+                            <li><strong>3. Siguranța renală absolută:</strong> Probioticele nu conțin minerale (potasiu, fosfor, calciu) care să se acumuleze. Ele acționează strict în lumenul intestinal, modificând chimia scaunului și reducând producția de otravă care ajunge la rinichi.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- TAB VI: STRATEGIE PLAN -->
+                <div id="strategie" class="tab-content">
+                    <h3>VI. Strategie terapeutică integrată și plan de acțiune</h3>
+                    <p>Planul de tratament este structurat secvențial pentru a aborda prioritățile vitale ("stingerea focului") înainte de optimizarea pe termen lung.</p>
+                    
+                    <h4>Faza 1: Intervenția de Urgență (Săptămânile 1-4)</h4>
+                    <p><strong>Obiectiv:</strong> Salvarea parenchimului renal de distrucția infecțioasă și prevenirea blocajului renal (Anuriei).</p>
+                    <ol>
+                        <li><strong>STOP suplimente riscante:</strong> Întreruperea imediată a administrării oricăror suplimente bazate pe minerale (risc litiazic maxim prin calciu), a oricăror produse cu efect diuretic sau stimulant (cofeină) și a oricăror analgezice nesteroidiene (<strong>Ibuprofen, Naproxen, Diclofenac, Indometacin, Meloxicam, Piroxicam, Celecoxib, Etoricoxib, chiar și aspirină</strong>).</li>
+                        <li><strong>Consult urologic de urgență:</strong> Evaluarea calculului de 6,2 mm. Este necesară o opinie specializată pentru a decide oportunitatea unei intervenții minim invazive (ex: ureteroscopie, litotriție) sau montarea unui stent "JJ" pentru a asigura drenajul, având în vedere riscul major de obstrucție pe rinichi unic.</li>
+                        <li><strong>Tratamentul infecției urinare:</strong> Administrarea antibioticului conform antibiogramei (pentru E. coli), cu doze ajustate strict la eGFR 59 ml/min. Atenție: Se vor evita antibioticele nefrotoxice (aminoglicozide: Gentamicină) și se va manifesta prudență cu Nitrofurantoina (eficacitate redusă la acest eGFR).</li>
+                        <li><strong>Hidratare terapeutică:</strong> Menținerea unui aport de lichide de 2 - 2.5 litri/zi (apă plată, ceai slab) pentru a asigura un "flux laminar" care să spele bacteriile și să prevină precipitarea sărurilor. Se evită apa minerală carbogazoasă (bogată în săruri).</li>
+                    </ol>
+
+                    <h4>Faza 2: Optimizarea metabolică și nefroprotecția (Luni 2-6)</h4>
+                    <p><strong>Obiectiv:</strong> Reducerea factorilor cronici de agresiune (lipide, glucoză, toxine uremice).</p>
+                    <ol>
+                        <li><strong>Inițierea LR Lifetakt Pro 12:</strong> Administrarea a 1 capsulă/zi, seara, pentru a modula microbiota și a reduce nivelul toxinelor uremice (indoxil sulfat) care accelerează fibroza renală. Aceasta este "dializa" intestinului.</li>
+                        <li><strong>Controlul dislipidemiei:</strong> Dieta este insuficientă pentru un LDL de 213 mg/dL. Este necesară inițierea terapiei cu statine (ex: Atorvastatină 20mg sau Rosuvastatină 5-10mg) sub supravegherea cardiologului. Statinele stabilizează plăcile de aterom și au efect antiinflamator asupra rinichiului.</li>
+                        <li><strong>Dietă renală de protecție:</strong>
+                            <ul>
+                                <li><strong>Normoproteică (0.8 g/kg corp/zi):</strong> Reducerea proteinelor animale scade hiperfiltrarea și producția de deșeuri azotate (uree).</li>
+                                <li><strong>Hiposodată (< 2-3 g sare/zi):</strong> Esențială pentru controlul tensiunii arteriale și reducerea presiunii intraglomerulare.</li>
+                                <li><strong>Săracă în oxalați:</strong> Eliminarea alimentelor litogene: spanac, sfeclă roșie, rubarbă, ciocolată neagră, nuci în exces, ceai negru concentrat.</li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <h4>Faza 3: Mentenanță și monitorizare (Termen lung)</h4>
+                    <p><strong>Obiectiv:</strong> Stabilizarea eGFR și prevenirea recidivelor.</p>
+                    <ul>
+                        <li><strong>Managementul osos fără calciu:</strong> Densitatea osoasă va fi susținută prin Vitamina D (doar după normalizarea calciului seric și sub monitorizare) și prin exerciții fizice "weight-bearing" (mers pe jos), care stimulează mineralizarea osoasă prin forță mecanică (Legea lui Wolff), fără riscul de pietre.</li>
+                        <li><strong>Monitorizare periodică:</strong>
+                            <ul>
+                                <li>Lunar (3 luni): Sumar de urină și Urocultură (pentru a depista recidiva infecției).</li>
+                                <li>Trimestrial: Creatinină, eGFR, Calciu seric, CRP.</li>
+                                <li>Semestrial: Ecografie renală (pentru a monitoriza hidronefroza și dimensiunea calculului).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- TAB VII: CONCLUZII -->
+                <div id="concluzii" class="tab-content">
+                    <h3>VII. Concluzii și recomandări finale</h3>
+                    <p>Cazul doamnei Ristea Andreiana este un exemplu de manual de fragilitate geriatrică, unde funcția vitală a organismului depinde de un singur organ – rinichiul solitar – care este asediat din toate părțile: mecanic (hidronefroză și litiază), infecțios (E. coli) și metabolic (hipercalcemie, lipide, prediabet).</p>
+                    
+                    <div class="info-box info-box-blue">
+                        <h4>Mesaje esențiale pentru edificarea pacientei:</h4>
+                        <ol>
+                            <li><strong>1. Nu aveți "marjă de eroare":</strong> Rinichiul dumneavoastră funcționează la capacitate maximă pentru a compensa lipsa celuilalt. Nu vă puteți permite experimente cu suplimente care aduc minerale în plus. Riscul de a bloca rinichiul cu o piatră alimentată de calciu este real, imediat și pune viața în pericol.</li>
+                            <li><strong>2. Infecția și hidronefroza sunt inamicii Nr. 1:</strong> Tratarea infecției cu antibiotice corecte și evaluarea urologică a pietrei sunt prioritare. Infecția cronică "mănâncă" rinichiul încet, dar sigur.</li>
+                            <li><strong>3. Probioticele LR Pro 12 sunt aliatul sigur:</strong> Acestea sunt singura formă de "suplimentare" recomandată deoarece lucrează pentru rinichi, reducând cantitatea de otravă (toxine) care ajunge la el din intestin. Este o terapie de protecție dovedită științific.</li>
+                            <li><strong>4. Medicina bazată pe dovezi:</strong> Statinele pentru colesterol și controlul dietei sunt pilonii care vor menține vasele de sânge ale rinichiului deschise și funcționale.</li>
+                        </ol>
+                    </div>
+                    <p><strong>Recomandare Fermă:</strong> Se solicită consulturi medicale multidisciplinare (Nefrologie, Urologie, Cardiologie) pentru a implementa acest plan. Suplimentarea nedocumentată trebuie oprită, iar efortul terapeutic trebuie concentrat exclusiv pe prezervarea funcției renale rămase.</p>
+                </div>
+
+                <!-- TAB VIII: INTREBARI MEDICI -->
+                <div id="intrebari" class="tab-content">
+                    <h3>VIII. Lista de întrebări cheie pentru consultațiile cu medicii specialiști</h3>
+                    <p>Aceste întrebări sunt concepute pentru a vă ajuta să obțineți clarificări esențiale de la medicii specialiști. Vă rugăm să prezentați fiecărui specialist întregul raport medical integrat.</p>
+                    
+                    <h4>8.1. Întrebări pentru medicul urolog</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Categorie</th><th>Întrebare Cheie</th><th>Obiectiv</th></tr></thead>
+                            <tbody>
+                                <tr><td>Calculul renal (Piatra)</td><td>Având în vedere dimensiunea calculului (6.2 mm) și faptul că am un singur rinichi, care este riscul real de obstrucție totală?</td><td>Evaluarea urgenței și a riscului.</td></tr>
+                                <tr><td>Opțiuni de tratament</td><td>Care sunt opțiunile de tratament (litotriție, ureteroscopie, montare de stent/pigtail) și care este cea mai sigură pentru un rinichi unic cu hidronefroză grad I?</td><td>Stabilirea planului de intervenție.</td></tr>
+                                <tr><td>Hidronefroza</td><td>Este hidronefroza cauzată de calcul sau este o problemă funcțională/anatomică separată? Ce măsuri putem lua pentru a reduce presiunea retrogradă asupra rinichiului?</td><td>Înțelegerea cauzei mecanice.</td></tr>
+                                <tr><td>Monitorizare</td><td>Cât de des trebuie repetată ecografia renală pentru a monitoriza poziția și dimensiunea calculului și a hidronefrozei?</td><td>Stabilirea frecvenței de monitorizare.</td></tr>
+                                <tr><td>Dieta</td><td>Există recomandări dietetice speciculare legate de tipul de calcul care să completeze sfaturile generale de nutriție?</td><td>Personalizarea dietei anti-litiază.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>8.2. Întrebări pentru medicul infecționist</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Categorie</th><th>Întrebare Cheie</th><th>Obiectiv</th></tr></thead>
+                            <tbody>
+                                <tr><td>Tratamentul Curent</td><td>Pe baza antibiogramei, care este cel mai eficient și cel mai puțin nefrotoxic antibiotic pentru eradicarea tulpinii de E. coli?</td><td>Asigurarea unui tratament sigur.</td></tr>
+                                <tr><td>Risc de Recurență</td><td>Care este strategia pe termen lung pentru a preveni recurența infecțiilor urinare, având în vedere hidronefroza și prediabetul?</td><td>Plan de profilaxie post-tratament.</td></tr>
+                                <tr><td>Pielonefrita</td><td>Nivelul meu de CRP sugerează că infecția a afectat deja parenchimul renal (pielonefrită)? Ce investigații suplimentare sunt necesare pentru a evalua cicatricile renale?</td><td>Evaluarea gradului de afectare.</td></tr>
+                                <tr><td>Probiotice</td><td>Cum poate fi integrat multibioticul (LR Lifetakt Pro 12) în schema de tratament pentru a reduce riscul de recurență?</td><td>Validarea și integrarea suplimentului.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>8.3. Întrebări pentru medicul cardiolog</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Categorie</th><th>Întrebare Cheie</th><th>Obiectiv</th></tr></thead>
+                            <tbody>
+                                <tr><td>Dislipidemia</td><td>Care este valoarea țintă a LDL-colesterolului în cazul meu, având în vedere BCR stadiul G3a?</td><td>Stabilirea obiectivului terapeutic.</td></tr>
+                                <tr><td>Terapia cu Statine</td><td>Care este cea mai potrivită statină (tip și doză) care să fie eficientă pentru LDL, dar care să nu afecteze funcția renală?</td><td>Inițierea tratamentului în siguranță.</td></tr>
+                                <tr><td>Homocisteina</td><td>Nivelul crescut de Homocisteină (23.51 µmol/L) necesită un tratament specific (ex. doze mari de Vitamine B)?</td><td>Managementul riscului de tromboză.</td></tr>
+                                <tr><td>Tensiunea Arterială</td><td>Care este tensiunea arterială țintă ideală pentru a reduce presiunea intraglomerulară și a proteja rinichiul unic?</td><td>Optimizarea controlului tensiunii.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>8.4. Întrebări pentru medicul endocrinolog/nefrolog</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Categorie</th><th>Întrebare Cheie</th><th>Obiectiv</th></tr></thead>
+                            <tbody>
+                                <tr><td>Hipercalcemia</td><td>Care este cauza cea mai probabilă a hipercalcemiei (10.97 mg/dL) – este legată de hiperparatiroidism? Ce investigații suplimentare sunt necesare (ex. PTH, Vitamina D)?</td><td>Identificarea cauzei hipercalcemiei.</td></tr>
+                                <tr><td>Osteopenia</td><td>Cum putem trata osteopenia (T-score -2.3) fără a agrava hipercalcemia și litiaza renală?</td><td>Stabilirea unui plan osos sigur.</td></tr>
+                                <tr><td>Vitamina D</td><td>Pot lua suplimente de Vitamina D și în ce doză, având în vedere riscul de a crește calciul?</td><td>Managementul deficitului de vitamina D.</td></tr>
+                                <tr><td>Prediabetul</td><td>Care este cea mai bună abordare medicamentoasă pentru a menține HbA1c sub 5.7%, fără a afecta rinichiul?</td><td>Control glicemic pentru nefroprotecție.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB IX: PLAN ALIMENTAR -->
+                <div id="alimentatie" class="tab-content">
+                    <h3>9. Plan alimentar săptămânal (5-6 mese mici/zi)</h3>
+                    <p>Acest plan de mese este conceput ca o <strong>prescripție medicală nutrițională</strong>. Alimentația trebuie să îndeplinească simultan 4 funcții: să nu suprasolicite rinichiul, să prevină formarea pietrelor, să curețe vasele de sânge și să fie ușor de digerat.</p>
+                    
+                    <div class="info-box info-box-blue">
+                        <h4>Reguli de aur pentru bucătărie:</h4>
+                        <ul>
+                            <li><strong>Fără sare adăugată:</strong> Sodiul forțează rinichiul să elimine calciul, formând pietre. Folosiți lămâie, mărar, pătrunjel.</li>
+                            <li><strong>Hidratare:</strong> Minim 2 litri lichide/zi (apă, ceai cozi de cireșe). Un pahar mare de apă obligatoriu înainte de culcare.</li>
+                            <li><strong>„Paradoxul Calciului” la Cină:</strong> Cina trebuie să conțină o sursă mică de calciu (iaurt, brânză slabă) pentru a lega oxalații în intestin.</li>
+                            <li><strong>Interzis total:</strong> Spanac, sfeclă roșie, ciocolată neagră, nuci în exces, mezeluri, prăjeli.</li>
+                        </ul>
+                    </div>
+
+                    <h4>Luni</h4>
+                    <ul>
+                        <li><strong>Mic dejun:</strong> Fulgi de ovăz fierți în apă, cu scorțișoară și o mână mică de afine.</li>
+                        <li><strong>Gustare 1:</strong> Un măr copt (fără zahăr).</li>
+                        <li><strong>Prânz:</strong> Supă cremă de dovlecei (fără smântână) + Pește slab la cuptor cu ierburi aromatice + 2 linguri de orez integral.</li>
+                        <li><strong>Gustare 2:</strong> Un pahar de chefir slab.</li>
+                        <li><strong>Cină:</strong> Salată verde cu castraveți, roșii și albuș de ou fiert.</li>
+                    </ul>
+
+                    <h4>Marți</h4>
+                    <ul>
+                        <li><strong>Mic dejun:</strong> O felie pâine integrală prăjită + perle de brânză de vaci (varianta light).</li>
+                        <li><strong>Gustare 1:</strong> O pară mică.</li>
+                        <li><strong>Prânz:</strong> Ghiveci de legume (morcov, ardei, dovlecel – fără cartofi mulți) la abur/cuptor + Piept de pui la grătar (porție mică).</li>
+                        <li><strong>Gustare 2:</strong> Iaurt natural slab.</li>
+                        <li><strong>Cină:</strong> Fasole verde sotată (ulei de măsline la final) + o bucățică mică de brânză telemea desărată.</li>
+                    </ul>
+
+                    <h4>Miercuri (Zi fără carne)</h4>
+                    <ul>
+                        <li><strong>Mic dejun:</strong> Omletă doar din albușuri (2-3 albușuri) cu mărar și ardei gras.</li>
+                        <li><strong>Gustare 1:</strong> Un kiwi sau citrice.</li>
+                        <li><strong>Prânz:</strong> Supă de linte cu crutoane de pâine integrală.</li>
+                        <li><strong>Gustare 2:</strong> O mână mică de migdale crude (max. 10 bucăți).</li>
+                        <li><strong>Cină:</strong> Conopidă la cuptor cu puțin parmezan ras deasupra sau brânză slabă.</li>
+                    </ul>
+
+                    <h4>Joi</h4>
+                    <ul>
+                        <li><strong>Mic dejun:</strong> Iaurt slab amestecat cu 1 lingură semințe de chia și câteva mure/zmeură.</li>
+                        <li><strong>Gustare 1:</strong> O piersică sau un fruct de sezon.</li>
+                        <li><strong>Prânz:</strong> Ciorbă de perișoare (perișoare din pui și albuș, fără orez mult) + o felie pâine integrală.</li>
+                        <li><strong>Gustare 2:</strong> Chefir.</li>
+                        <li><strong>Cină:</strong> Pește la cuptor pe pat de legume (ardei, ceapă, roșii).</li>
+                    </ul>
+
+                    <h4>Vineri</h4>
+                    <ul>
+                        <li><strong>Mic dejun:</strong> Brânză de vaci slabă amestecată cu mărar și castravete + 1 felie pâine integrală.</li>
+                        <li><strong>Gustare 1:</strong> Măr proaspăt.</li>
+                        <li><strong>Prânz:</strong> Mâncare de mazăre (fără prăjeală) + Salată de varză albă cu lămâie.</li>
+                        <li><strong>Gustare 2:</strong> Iaurt de băut.</li>
+                        <li><strong>Cină:</strong> Salată orientală dietetică (cartof fiert, ceapă, măsline puține, albuș de ou, fără maioneză).</li>
+                    </ul>
+
+                    <h4>Sâmbătă</h4>
+                    <ul>
+                        <li><strong>Mic dejun:</strong> Budincă de quinoa (fiartă în apă) cu puțin măr ras și scorțișoară.</li>
+                        <li><strong>Gustare 1:</strong> Fructe de pădure.</li>
+                        <li><strong>Prânz:</strong> Piept de curcan la cuptor + Piure de broccoli și conopidă.</li>
+                        <li><strong>Gustare 2:</strong> O felie subțire de brânză proaspătă.</li>
+                        <li><strong>Cină:</strong> Salată de roșii cu puțină brânză slabă și busuioc.</li>
+                    </ul>
+
+                    <h4>Duminică</h4>
+                    <ul>
+                        <li><strong>Mic dejun:</strong> 1 ou fiert moale (doar albuș) + ardei gras.</li>
+                        <li><strong>Gustare 1:</strong> Portocală/Grepfrut.</li>
+                        <li><strong>Prânz:</strong> Supă clară de legume + Păstrăv la grătar cu mămăliguță moale (porție mică) și mujdei slab.</li>
+                        <li><strong>Gustare 2:</strong> Iaurt natural.</li>
+                        <li><strong>Cină:</strong> Dovlecei umpluți cu legume și orez integral (fără carne).</li>
+                    </ul>
+
+                    <div class="quote-box">
+                        <h4>Observații Critice:</h4>
+                        <ol>
+                            <li><strong>1. Fără „Ronțăieli”:</strong> Între mese se bea doar apă sau ceai neîndulcit.</li>
+                            <li><strong>2. Calciul:</strong> Nu eliminați lactatele! Planul include lactate slabe constant, mai ales seara.</li>
+                            <li><strong>3. Proteinele:</strong> Porțiile de carne trebuie să fie mici (cât pachetul de cărți de joc).</li>
+                            <li><strong>4. Uleiul:</strong> Se adaugă crud, la finalul gătitului, niciodată prăjit.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- TAB X: BIBLIOGRAFIE -->
+                <div id="bibliografie" class="tab-content">
+                    <h3>X. Referințe și bibliografie științifică</h3>
+                    <ol>
+                        <li>1. Physiology and Pathophysiology of Compensatory Adaptations of a Solitary Functioning Kidney - Frontiers, accessed January 19, 2026, https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2020.00725/full</li>
+                        <li>2. Hydronephrosis | National Kidney Foundation, accessed January 19, 2026, https://www.kidney.org/kidney-topics/hydronephrosis-0</li>
+                        <li>3. Hyperfiltration-Associated Biomechanical Forces in Glomerular Injury and Response: Potential Role for Eicosanoids - PMC - NIH, accessed January 19, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC5513797/</li>
+                        <li>4. Role of biomechanical forces in hyperfiltration-mediated glomerular injury in congenital anomalies of the kidney and urinary tract | Nephrology Dialysis Transplantation | Oxford Academic, accessed January 19, 2026, https://academic.oup.com/ndt/article/32/5/759/2924795</li>
+                        <li>5. Glomerular hyperfiltration: definitions, mechanisms and clinical implications - PubMed, accessed January 19, 2026, https://pubmed.ncbi.nlm.nih.gov/22349487/</li>
+                        <li>6. Biofilm Formation by Escherichia coli Isolated from Urinary Tract Infections from Aguascalientes, Mexico - PMC - NIH, accessed January 19, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC10745304/</li>
+                        <li>7. Clinical Escherichia coli: From Biofilm Formation to New Antibiofilm Strategies - MDPI, accessed January 19, 2026, https://www.mdpi.com/2076-2607/10/6/1103</li>
+                        <li>8. Biofilm-Producing Bacteria and Risk Factors Characterized as Catheter-Associated Biofilm Formation - PMC - PubMed Central, accessed January 19, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC7920707/</li>
+                        <li>9. Acute renal failure and hypercalcemia - PubMed, accessed January 19, 2026, https://pubmed.ncbi.nlm.nih.gov/16538974/</li>
+                        <li>10. Full article: Acute Renal Failure and Hypercalcemia, accessed January 19, 2026, https://www.tandfonline.com/doi/full/10.1080/08860220500531005</li>
+                        <li>11. Hypercalcemia - Symptoms and causes - Mayo Clinic, accessed January 19, 2026, https://www.mayoclinic.org/diseases-conditions/hypercalcemia/symptoms-causes/syc-20355523</li>
+                        <li>12. What Happens to Your Body When You Take Kidney Supplements - Verywell Health, accessed January 19, 2026, https://www.verywellhealth.com/supplements-for-kidneys-11837499</li>
+                        <li>13. 8 Key Things to Know Before Taking Supplements | National Kidney Foundation, accessed January 19, 2026, https://www.kidney.org/news-stories/8-key-things-to-know-taking-supplements</li>
+                        <li>14. Restorate - Fitline, accessed January 19, 2026, https://www.pmebusiness.com/files/in/product_usage/FL.RestorateCitrusNOABox.FSSAI.LBLS.4122.IN.P1_INTERNET.pdf</li>
+                        <li>15. Benefits and risks of essential trace elements in chronic kidney disease, accessed January 19, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC9843383/</li>
+                        <li>16. The Impact of Gym Supplements on Kidney Health: Risks and Precautions - NU Hospitals, accessed January 19, 2026, https://www.nuhospitals.com/blog/the-growing-concern-of-kidney-disease-linked-to-gym-supplements/</li>
+                        <li>17. Americans' Use of Dietary Supplements That Are Potentially Harmful in CKD - PMC - NIH, accessed January 19, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC3628413/</li>
+                        <li>18. The Gut–Kidney Axis in Chronic Kidney Diseases - PMC - PubMed Central - NIH, accessed January 19, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC11719742/</li>
+                        <li>19. Gut-Kidney Axis: Unraveling the Role of the Microbiome in Chronic Kidney Disease - MDPI, accessed January 19, 2026, https://www.mdpi.com/2227-9059/14/1/109</li>
+                        <li>20. LR Lifetakt Pro 12 Probiotic 30 Capsules | Express International Delivery, accessed January 19, 2026, https://www.gosupps.com/lr-lifetakt-pro-12-probiotic-30-capsules.html</li>
+                        <li>21. Pro 12 capsules LR - Luxury Health & Beauty by LR, accessed January 19, 2026, https://luxuryhealthbeauty.com/health-solutions/daily-nutrition-essentials/pro-12-capsule/</li>
+                        <li>22. Alteration of the Gut Microbiome in Chronic Kidney Disease Patients - Frontiers, accessed January 19, 2026, https://www.frontiersin.org/journals/immunology/articles/10.3389/fimmu.2021.609700/full</li>
+                        <li>23. Reduction in Serum Concentrations of Uremic Toxins Driven by Bifidobacterium Longum Subsp. Longum BL21 - PubMed, accessed January 19, 2026, https://pubmed.ncbi.nlm.nih.gov/38829564/</li>
+                        <li>24. Repercussions of the use of probiotics in the treatment of chronic kidney disease, accessed January 19, 2026, https://www.organscigroup.us/articles/ARDM-8-144.php</li>
+                        <li>25. Lactobacillus acidophilus KBL409 protects against kidney injury via improving mitochondrial function - Yonsei University, accessed January 19, 2026, https://yonsei.elsevierpure.com/en/publications/lactobacillus-acidophilus-kbl409-protects-against-kidney-injury-v/</li>
+                        <li>26. Lactobacillus acidophilus KBL409 protects against kidney injury via improving mitochondrial function - PubMed, accessed January 19, 2026, https://pubmed.ncbi.nlm.nih.gov/38705901/</li>
+                        <li>27. Lactobacillus acidophilus KBL409 Reduces Kidney Fibrosis via Immune Modulatory Effects - PubMed, accessed January 19, 2026, https://pubmed.ncbi.nlm.nih.gov/36059191/</li>
+                        <li>28. Probiotics in the treatment of chronic kidney disease: a systematic review - PMC - NIH, accessed January 19, 2026, https://pmc.ncbi.nlm.nih.gov/articles/PMC6533949/</li>
+                        <li>29. Unraveling the mysteries of the gut-kidney axis: the protective role of traditional Chinese medicine - Frontiers, accessed January 19, 2026, https://www.frontiersin.org/journals/microbiology/articles/10.3389/fmicb.2025.1642377/full</li>
+                        <li>30. Probiotics and Kidney Disease: Can They Help? - Seed, accessed January 19, 2026, https://seed.com/cultured/probiotics-for-kidney-disease-gut-axis-guide/</li>
+                        <li>31. Clinical Pharmacology of D-Mannose in UTI - Archives of Gynecology and Obstetrics.</li>
+                    </ol>
+                </div>
+
+                <!-- TAB XI: INVENTAR ANALIZE (RESTORED FROM ANDREIANARISTEA.HTML) -->
+                <div id="inventar" class="tab-content">
+                    <h3>XI. Anexa I: Inventarul analizelor</h3>
+                    <p>Iată lista completă a indicatorilor necesari pentru calibrarea protocolului ReDefine, grupați conform standardelor de laborator:</p>
+                    <button class="btn-print no-print" onclick="printAnalizeTable()">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/><path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/></svg>
+                        Tipărește lista de analize
+                    </button>
+                    <div class="table-container" id="tabel-analize-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Categorie</th>
+                                    <th>Investigații</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Profil renal și urinar</strong></td>
+                                    <td>Creatinină serică, uree serică, eGFR, electroliți (Na, K, Cl), examen complet de urină (sumar + sediment).</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Metabolism fosfo-calcic</strong></td>
+                                    <td>Vitamina 25-OH D3, PTH, magneziu seric, calciu ionic, calciu total, fosfatază alcalină, DEXA (coloană și șold).</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hematologie și neurologie</strong></td>
+                                    <td>Hemoleucogramă completă, vitamina B12, acid folic (B9), vitamina B6, homocisteină serică, feritină, sideremie.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Profil hepatic și digestiv</strong></td>
+                                    <td>TGO (AST), TGP (ALT), GGT, profil lipidic complet, amilază serică.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sistem endocrin (tiroidă)</strong></td>
+                                    <td>TSH, FT4.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Status metabolic și inflamator</strong></td>
+                                    <td>Glicemie a jeun, HbA1c (hemoglobină glicozilată), hs-CRP (proteina C reactivă de înaltă sensibilitate).</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+
+            <!-- FOOTER CONTAINER -->
+            <div id="footer-placeholder"></div>
+        </div>
+    </div>
+
+    <script>
+        const VALID_PASS = "r1st3@";
+
+        function checkPass() {
+            const input = document.getElementById('pass-input').value;
+            const overlay = document.getElementById('password-overlay');
+            const main = document.getElementById('main-content-wrapper');
+            const error = document.getElementById('error-msg');
+
+            if (input === VALID_PASS) {
+                overlay.style.display = 'none';
+                main.style.display = 'flex';
+                window.scrollTo(0, 0);
+            } else {
+                error.style.display = 'block';
+                document.getElementById('pass-input').value = "";
+            }
+        }
+
+        function openTab(evt, tabId) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            const tabButtons = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove("active");
+            }
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Fetch Footer Script original din andreianaristea.html
+        fetch('https://nutrisib.club/footer.html')
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.text();
+        })
+        .then(data => {
+            document.getElementById('footer-placeholder').innerHTML = data;
+        })
+        .catch(error => {
+            document.getElementById('footer-placeholder').innerHTML = `
+                <footer class="infographic-footer no-print">
+                    <div class="footer-social-links">
+                        <a href="https://www.facebook.com/NutriSib" target="_blank"><img src="https://nutrisib.club/assets/icons/facebook.svg" alt="Facebook"></a>
+                        <a href="https://www.instagram.com/nutrisib/" target="_blank"><img src="https://nutrisib.club/assets/icons/instagram.svg" alt="Instagram"></a>
+                    </div>
+                    <p>NUTRISIB - Partenerul tău în echilibru și sănătate</p>
+                    <p>&copy; 2025 NUTRISIB – Restaurarea vitalității prin rigoare științifică</p>
+                    <div class="copyright">dr.ing. Radu Pascu - 2025</div>
+                </footer>
+            `;
+        });
+
+        // Print function originală
+        function printAnalizeTable() {
+            const tableElement = document.getElementById('tabel-analize-container');
+            if (!tableElement) return;
+
+            const table = tableElement.innerHTML;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Lista Analize - Andreiana Ristea</title>');
+            printWindow.document.write('<style>');
+            printWindow.document.write('body { font-family: "Inter", sans-serif; padding: 30px; color: #2c3e50; }');
+            printWindow.document.write('h2 { color: #1a2a44; border-bottom: 2px solid #4a6fa5; padding-bottom: 10px; margin-bottom: 20px; }');
+            printWindow.document.write('table { width: 100%; border-collapse: collapse; margin-top: 10px; }');
+            printWindow.document.write('th, td { border: 1px solid #dcdde1; padding: 10px; text-align: left; vertical-align: top; font-size: 14px; }');
+            printWindow.document.write('th { background-color: #f8f9fa; font-weight: 700; text-transform: uppercase; font-size: 12px; }');
+            printWindow.document.write('</style></head><body>');
+            printWindow.document.write('<h2>Recomandare analize medicale - Andreiana Ristea</h2>');
+            printWindow.document.write('<p>Vă rugăm să prezentați această listă la laborator pentru recoltare și/sau la medicul de familie pentru trimitere.</p>');
+            printWindow.document.write(table);
+            printWindow.document.write('<p style="margin-top:30px; font-size:12px; color:#666; text-align:center; border-top: 1px solid #eee; padding-top: 10px;">Generat de NUTRISIB - 2025</p>');
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.focus();
+            setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
+        }
+    </script>
+    <script src="https://nutrisib.club/script_protect.js" defer></script>
+</body>
+</html>
