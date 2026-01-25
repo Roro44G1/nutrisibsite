@@ -16,10 +16,31 @@
 body {font-family: 'Open Sans', sans-serif; background-color: #333; padding: 20px; display: flex; flex-direction: column; align-items: center;}
 
 /* A4 Container */
-.a4-page { width: 210mm; height: 297mm; position: relative; overflow: hidden; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #f4f4f4; background-size: cover; background-position: center;}
+.a4-page { 
+    width: 210mm; 
+    height: 297mm; 
+    position: relative; 
+    overflow: hidden; 
+    margin-bottom: 30px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+    background-color: #f4f4f4; 
+    background-size: cover; 
+    background-position: center;
+    /* Adăugat pentru context stivuire la print */
+    z-index: 0;
+}
 
 /* Blur Layer */
-.a4-page::before {content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; backdrop-filter: blur(12px); background: rgba(255, 255, 255, 0.55); z-index: 1;}
+.a4-page::before {
+    content: ''; 
+    position: absolute; 
+    top: 0; left: 0; right: 0; bottom: 0; 
+    backdrop-filter: blur(12px); 
+    background: rgba(255, 255, 255, 0.55); 
+    z-index: 1;
+    /* Adăugat display block pentru siguranță */
+    display: block;
+}
 
 /* Content Layer */
 .content-layer {position: relative; z-index: 2; height: 100%; padding: 10mm; display: flex; flex-direction: column; justify-content: flex-start;}
@@ -142,15 +163,16 @@ p, li { color: var(--text-dark); line-height: 1.6; font-size: 0.85rem; text-alig
         margin: 0; 
         page-break-after: always; 
         box-shadow: none; 
+        /* Forțăm printarea background-ului */
         -webkit-print-color-adjust: exact !important; 
         print-color-adjust: exact !important;
         position: relative;
     }
 
-    /* Asigură că pseudo-elementul de blur (alb semitransparent) e vizibil la print */
+    /* Activăm stratul alb semitransparent peste imagine la print */
     .a4-page::before {
         display: block !important;
-        background: rgba(255, 255, 255, 0.65) !important; /* Ajustează opacitatea aici dacă e nevoie (0.5 - 0.8) */
+        background: rgba(255, 255, 255, 0.65) !important; /* Ajustează opacitatea (0.5 - 0.8) pentru intensitatea dorită */
         z-index: 1;
         position: absolute;
         top: 0; left: 0; width: 100%; height: 100%;
@@ -166,21 +188,4 @@ p, li { color: var(--text-dark); line-height: 1.6; font-size: 0.85rem; text-alig
 
     .cert-label { color: #000; text-shadow: none; } 
     /*.glass-box { box-shadow: none; border: 1px solid #ccc; }*/
-}
-
-/* --- STILURI SPECIFICE FIX-T+ (Theme Override) --- */
-
-/* Schimbă titlurile H1 în movul specific Fix-T */
-.theme-fixt h1 { color: #6a1b9a; }
-
-/* Schimbă subtitlurile și accentele în mov/indigo */
-.theme-fixt h2, 
-.theme-fixt h4,
-.theme-fixt .hero-subtitle,
-.theme-fixt .benefit-item h3::before,
-.theme-fixt .ing-name,
-.theme-fixt .step-title,
-.theme-fixt strong,
-.theme-fixt .safety-warning {
-    color: #4a148c; /* Un mov mai închis pentru contrast bun */
 }
