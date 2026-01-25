@@ -5,329 +5,155 @@
     --brand-purple: #8e2b88;
     --brand-green: #009b4d;
     --text-dark: #2c2c2c;
-    --text-light-grey: #444; /* Ușor mai închis pentru contrast mai bun la print */
-    --glass-bg: rgba(255, 255, 255, 0.92); 
+    --text-light-grey: #555;
+    --glass-bg: rgba(255, 255, 255, 0.94); /* Ușor mai opac pentru lizibilitate */
     --glass-border: 1px solid rgba(255, 255, 255, 0.6);
-    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-    --gap-std: 10px; 
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    --gap-std: 10px; /* Spațiere mărită pentru a umple pagina */
 }
-
-/* Setări Globale Pagină pentru PDF/Print */
-@page {
-    size: A4;
-    margin: 0; /* Elimină marginile browserului */
-}
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
-    font-family: 'Open Sans', sans-serif; 
-    background-color: #555; /* Fundal doar pentru vizualizare pe ecran */
-    padding: 20px; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center;
-    -webkit-print-color-adjust: exact; /* Asigură printarea culorilor */
-    print-color-adjust: exact;
-}
+body {font-family: 'Open Sans', sans-serif; background-color: #333; padding: 20px; display: flex; flex-direction: column; align-items: center;}
 
 /* A4 Container */
-.a4-page { 
-    width: 210mm; 
-    height: 297mm; 
-    position: relative; 
-    overflow: hidden; 
-    margin-bottom: 30px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-    background-color: #ffffff; 
-    background-size: cover; 
-    background-position: center;
-    page-break-after: always; /* Rupe pagina corect la print */
-}
+.a4-page { width: 210mm; height: 297mm; position: relative; overflow: hidden; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); background-color: #f4f4f4; background-size: cover; background-position: center;}
 
-/* Blur Layer - Subtil */
-.a4-page::before {
-    content: ''; 
-    position: absolute; 
-    top: 0; left: 0; right: 0; bottom: 0; 
-    backdrop-filter: blur(8px); /* Blur redus puțin pentru claritate */
-    background: rgba(255, 255, 255, 0.6); 
-    z-index: 1;
-}
+/* Blur Layer */
+.a4-page::before {content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; backdrop-filter: blur(12px); background: rgba(255, 255, 255, 0.55); z-index: 1;}
 
 /* Content Layer */
-.content-layer {
-    position: relative; 
-    z-index: 2; 
-    height: 100%; 
-    padding: 10mm 12mm; /* Margini interioare sigure */
-    display: flex; 
-    flex-direction: column; 
-    justify-content: flex-start;
-}
+.content-layer {position: relative; z-index: 2; height: 100%; padding: 10mm; display: flex; flex-direction: column; justify-content: flex-start;}
 
 /* Typography */
 h1, h2, h3, h4 { font-family: 'Montserrat', sans-serif; }
+h1 { color: var(--brand-purple); font-weight: 800; font-size: 2.2rem; line-height: 1.1; margin-bottom: 2px; }
+h2 { color: var(--brand-green); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; }
+h3 { color: var(--brand-purple); font-size: 1rem; margin-bottom: 6px; font-weight: 700;}
+h4 { color: var(--brand-green); font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; border-bottom: 3px solid var(--brand-purple); display: inline-block;padding-bottom: 2px;}
+p, li { color: var(--text-dark); line-height: 1.6; font-size: 0.85rem; text-align: justify; }
 
-h1 { 
-    color: var(--brand-purple); 
-    font-weight: 800; 
-    font-size: 2.2rem; 
-    line-height: 1; 
-    margin-bottom: 5px; 
-    letter-spacing: -0.5px;
-}
-
-h2 { 
-    color: var(--brand-green); 
-    font-size: 1.1rem; 
-    text-transform: uppercase; 
-    letter-spacing: 1px; 
-}
-
-h3 { 
-    color: var(--brand-purple); 
-    font-size: 0.95rem; 
-    margin-bottom: 4px; 
-    font-weight: 700;
-}
-
-h4 { 
-    color: var(--brand-green); 
-    font-size: 0.9rem; 
-    font-weight: 700; 
-    margin-bottom: 8px; 
-    text-transform: uppercase; 
-    border-bottom: 2px solid var(--brand-purple); 
-    display: inline-block; 
-    padding-bottom: 2px;
-}
-
-p, li { 
-    color: var(--text-dark); 
-    line-height: 1.5; /* Ușor mai compact */
-    font-size: 0.82rem; 
-    text-align: justify; 
-    hyphens: auto; /* Rupe cuvintele lungi */
-}
+/* Text Boost Classes */
+.text-boost p {font-size: 0.95rem ; line-height: 1.6;}
 
 /* Glass Box */
 .glass-box {
     background: var(--glass-bg);
-    border-radius: 10px;
+    border-radius: 12px;
     border: var(--glass-border);
     box-shadow: var(--glass-shadow);
-    padding: 12px 15px;
+    padding: 15px;
     margin-bottom: var(--gap-std);
+    backdrop-filter: blur(8px);
 }
 
 /* --- PAGE 1 SPECIFIC --- */
-.header-logo {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    margin-bottom: 10px; 
-    position: relative; 
-    z-index: 5; 
-}
-.header-logo img { height: 60px; width: auto; }
-.website-link {
-    font-family: 'Montserrat', sans-serif; 
-    font-size: 0.9rem; 
-    color: var(--brand-purple); 
-    font-weight: 700; 
-    text-decoration: none; 
-}
+.header-logo {text-align: right; margin-bottom: 10px; position: relative; z-index: 5; }
+.header-logo img {height: 65px; width: auto; }
 
-.hero-section {
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    margin-bottom: 10px; 
-    flex-direction: row-reverse; 
-    min-height: 140px; 
-}
-.hero-text { width: 65%; text-align: right; }
-.hero-subtitle { 
-    font-size: 1.1rem; 
-    color: var(--brand-green); 
-    font-weight: 600; 
-    margin-top: 5px; 
-    line-height: 1.2;
-}
+.website-link {font-family: 'Montserrat', sans-serif; font-size: 0.8rem; color: var(--brand-purple); font-weight: 700; text-decoration: none; display: block; margin-top: -4px;}
 
-/* Imaginea Hero - Resetată pentru consistență */
-.hero-image {
-    width: 32%; 
-    position: relative; 
-    z-index: 20; 
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.hero-image img {
-    max-width: 100%; 
-    max-height: 180px; 
-    height: auto; 
-    filter: drop-shadow(0 8px 12px rgba(142, 43, 136, 0.3)); 
-    /* Eliminăm transformările extreme care pot tăia imaginea la alte produse */
-    transform: scale(1.1); 
-}
+.hero-section {display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--gap-std); flex-direction: row-reverse; min-height: 160px; }
+.hero-text { width: 60%; }
+.hero-subtitle { font-size: 1.3rem; color: var(--brand-green); font-weight: 600; margin-top: 10px; font-family: 'Montserrat', sans-serif; line-height: 1.3;}
+.hero-image {width: 35%; position: relative; margin-top: 0; margin-bottom: -15px; z-index: 20; text-align: center;}
+.hero-image img {width: 100%; max-width: 220px; height: auto; filter: drop-shadow(0 10px 15px rgba(142, 43, 136, 0.4)); transform: translateX(-30px) translateY(-20px) scale(1.4) rotate(3deg); transform-origin: center bottom;}
 
-.benefits-grid {
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    row-gap: 8px; 
-    column-gap: 25px;
-}
-.benefit-item h3::before { content: '✦'; color: var(--brand-green); margin-right: 4px; }
+/*transform: translateY(-20px) scale(1.4) rotate(3deg); transform-origin: center bottom;}*/
+.benefits-grid {display: grid; grid-template-columns: 1fr 1fr; row-gap: 12px; column-gap: 40px;}
+.benefit-item h3::before {content: '✦'; color: var(--brand-green); margin-right: 2px; }
+.target-section {margin-top: auto; margin-bottom: 0;}
+.target-section ul {display: grid; grid-template-columns: 1fr 1fr; gap: 4px 4px; list-style: none;}
 
-.target-section { margin-top: auto; margin-bottom: 0; }
-.target-section ul { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 5px; 
-    list-style: none; 
-}
 .target-section li {
-    background: rgba(142, 43, 136, 0.08);
-    padding: 5px 8px;
-    border-radius: 8px;
+    background: rgba(142, 43, 136, 0.1);
+    padding: 6px 6px;
+    border-radius: 15px;
     font-weight: 600;
     color: var(--brand-purple);
-    font-size: 0.72rem;  
+    font-size: 0.75rem;  
     display: flex;
     align-items: center;
-    line-height: 1.2;
 }
-.target-section li::before { content: '✓'; margin-right: 5px; color: var(--brand-green); font-weight: 800; }
+.target-section li::before {content: '✓'; margin-right: 6px; color: var(--brand-green);}
 
 /* --- PAGE 2 SPECIFIC --- */
-.page2-balanced .glass-box { padding: 10px 12px; margin-bottom: 8px; }
-.page2-title { text-align: center; margin-bottom: 8px; padding: 8px !important; }
-.page2-title h1 { font-size: 1.4rem; margin-bottom: 2px; } 
-.page2-title p { 
-    text-align: center; 
-    font-style: italic; 
-    color: var(--brand-green); 
-    font-weight: 600; 
-    font-size: 0.75rem; 
-    text-transform: uppercase;
-}
+.page2-balanced .glass-box {padding: 10px 10px; margin-bottom: 10px;}
+.page2-title {text-align: center; margin-bottom: 10px; padding: 5px !important;}
+.page2-title h1 { font-size: 1.5rem; } 
+.page2-title p { text-align: center; font-style: italic; color: var(--brand-green); font-weight: 600; font-size: 0.8rem;}
 
-.ingredients-container { column-count: 2; column-gap: 20px; }
-.ing-group { 
-    break-inside: avoid; 
-    margin-bottom: 8px; 
-    background: rgba(255,255,255,0.5); /* Ușor contrast pentru grupuri */
-    padding: 5px;
-    border-radius: 6px;
-}
+.ingredients-container {column-count: 2; column-gap: 15px; }
+.ing-group {break-inside: avoid; margin-bottom: 2px; }
 .ing-group-title {
     background: var(--brand-purple);
     color: white;
-    padding: 3px 8px;
+    padding: 4px 4px;
     border-radius: 4px;
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     margin-bottom: 4px;
     display: inline-block;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
-.ing-item { margin-bottom: 3px; font-size: 0.75rem; line-height: 1.35; }
-.ing-name { color: var(--brand-green); font-weight: 700; }
-.ing-latin { font-style: italic; color: #666; font-size: 0.7rem; }
+.ing-item {margin-bottom: 4px; font-size: 0.8rem; line-height: 1.4; text-align: left;}
+.ing-name {color: var(--brand-green); font-weight: 700;}
+.ing-latin {font-style: italic; color: var(--text-light-grey); font-size: 0.75rem; }
 
 /* Protocol Box */
-.protocol-steps { 
-    display: flex; 
-    justify-content: space-around; 
-    margin-top: 5px; 
-    text-align: center; 
-    gap: 10px;
-}
-.step { width: 32%; }
-.step-icon { font-size: 1.5rem; color: var(--brand-purple); display: block; margin-bottom: 2px; }
-.step-title { font-weight: 700; color: var(--brand-green); margin-bottom: 2px; font-size: 0.75rem; text-transform: uppercase; }
-.step p { font-size: 0.7rem; margin-bottom: 0; text-align: center; line-height: 1.2; }
+.protocol-box {background: rgba(255, 255, 255, 0.96);}
+.protocol-steps {display: flex; justify-content: space-around; margin-top: 2px; text-align: center;}
+.step {width: 30%;}
+.step-icon {font-size: 1.8rem; color: var(--brand-purple); display: block; margin-bottom: 2px;}
+.step-title {font-weight: 700; color: var(--brand-green); margin-bottom: 2px; font-size: 0.8rem; text-transform: uppercase;}
+.step p {font-size: 0.75rem; margin-bottom: 0; text-align: center; line-height: 1.3;}
 
 /* Emotional Section */
-.emotional-section { display: flex; gap: 15px; padding: 10px; margin-top: auto; align-items: center; }
-.emotional-img-wrapper { flex: 0 0 30%; }
-.emotional-img-wrapper img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.brand-tagline { 
-    color: var(--brand-purple); 
-    font-weight: 800; 
-    margin-top: 8px; 
-    display: block; 
-    font-family: 'Montserrat', sans-serif; 
-    font-size: 0.75rem; 
-    text-align: center; 
-}
+.emotional-section {display: flex; gap: 10px; padding: 10px; margin-top: auto;}
+.emotional-img-wrapper {flex: 0 0 35%; display: flex; align-items: center; justify-content: center;}
+.emotional-img-wrapper img {width: auto; max-width: 100%; height: auto; object-fit: contain; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.15);}
+.brand-tagline { color: var(--brand-purple); font-weight: 800; margin-top: 12px; display: block; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; text-align: center; }
 
 /* Certifications Bar */
-.cert-bar { display: flex; justify-content: space-evenly; align-items: flex-start; margin-top: 5px; padding: 5px 0; }
-.cert-item { display: flex; flex-direction: column; align-items: center; text-align: center; width: 18%; }
-.cert-circle {
-    width: 42px; height: 42px; 
-    border: 2px solid var(--brand-purple); 
-    border-radius: 50%; 
-    display: flex; align-items: center; justify-content: center; 
-    position: relative;
-    background: rgba(255,255,255,0.95);
-    margin-bottom: 3px;
-}
-.cert-circle i { font-size: 1.2rem; color: #333; }
-.cert-circle.natural i { color: var(--brand-green); }
-.inner-text { font-weight: 800; font-size: 0.6rem; color: #333; font-family: 'Montserrat', sans-serif; }
-.diagonal-line { position: absolute; width: 100%; height: 2px; background-color: #333; transform: rotate(-45deg); top: 50%; left: 0; }
-.check-badge {
-    position: absolute; top: -2px; right: -2px; 
-    background: var(--brand-green); color: white; 
-    border-radius: 50%; width: 16px; height: 16px; 
-    font-size: 0.7rem; display: flex; align-items: center; justify-content: center; 
-    border: 2px solid white;
-}
-/* Text alb cu umbră pentru lizibilitate pe orice fundal */
-.cert-label {
-    font-size: 0.55rem; 
-    font-weight: 700; 
-    color: #fff; 
-    text-transform: uppercase; 
-    line-height: 1.1; 
-    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-}
-.cert-label span { display: block; font-weight: 600; font-size: 0.5rem; color: #eee; }
+.cert-bar {display: flex; justify-content: space-between; align-items: center; margin-top: 2px; padding: 2px 0;}
+.cert-item {display: flex; flex-direction: column; align-items: center; text-align: center; width: 20%;}
+.cert-circle {width: 48px; height: 48px; border: 2px solid var(--brand-purple); border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative;background: rgba(255,255,255,0.9);margin-bottom: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+.cert-circle i {font-size: 1.3rem; color: #333;}
+.cert-circle.natural {border-color: var(--brand-purple);}
+.cert-circle.natural i {color: var(--brand-green); font-size: 1.5rem;}
+.inner-text {font-weight: 800; font-size: 0.65rem; color: #333; font-family: 'Montserrat', sans-serif;}
+.diagonal-line {position: absolute; width: 100%; height: 2px; background-color: #333; transform: rotate(-45deg); top: 50%; left: 0;}
+.check-badge {position: absolute; top: -4px; right: -4px; background: var(--brand-green); color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; border: 2px solid white;}
+
+/* Text alb pentru sigle */
+.cert-label {font-size: 0.65rem; font-weight: 700; color: #ffffff; text-transform: uppercase; line-height: 1.1; text-shadow: 1px 1px 2px rgba(0,0,0,0.9);}
+.cert-label span {display: block; color: rgba(255, 255, 255, 0.9); font-weight: 700; font-size: 0.55rem;}
 
 /* Footer */
-.safety-footer { 
-    padding: 5px 10px !important; 
-    margin-bottom: 0 !important; 
-    margin-top: 5px; 
-    text-align: center; 
-    position: relative;
-}
-.safety-warning { 
-    color: var(--brand-purple); 
-    font-weight: 700; 
-    font-size: 0.65rem; 
-    margin: 0; 
-    line-height: 1.2;
-}
-.design-credit { 
-    font-size: 0.5rem; 
-    color: #000; /* Negru conform cerinței */
-    font-style: italic; 
-    position: absolute; 
-    right: 5px; 
-    bottom: -12px; 
-    opacity: 0.7;
+.safety-footer {font-size: 0.75rem; color: var(--text-light-grey); padding: 2px 2px; margin-bottom: 0; margin-top: 5px; display: flex; justify-content: center; align-items: center; position: relative;}
+.safety-warning {color: var(--brand-purple); font-weight: 600; margin: 0; text-align: center; width: 100%;}
+.design-credit {font-size: 0.6rem; color: #ffffff; font-style: italic; position: absolute; right: 0; bottom: -15px; line-height: 1;}
+
+@media print {
+    body { background: none; padding: 0; }
+    .a4-page { margin: 0; page-break-after: always; box-shadow: none; -webkit-print-color-adjust: exact; }
+    .cert-label { color: #000; text-shadow: none; } /* Fallback print */
+    /*.glass-box { box-shadow: none; border: 1px solid #ccc; }*/
 }
 
-/* MEDIA PRINT - Curățare finală */
-@media print {
-    body { background: none; padding: 0; margin: 0; }
-    .a4-page { margin: 0; box-shadow: none; border: none; page-break-after: always; }
-    .glass-box { box-shadow: none; border: 1px solid rgba(0,0,0,0.1); }
+/* --- STILURI SPECIFICE FIX-T+ (Theme Override) --- */
+
+/* Schimbă titlurile H1 în movul specific Fix-T */
+.theme-fixt h1 { color: #6a1b9a; }
+
+/* Schimbă subtitlurile și accentele în mov/indigo */
+.theme-fixt h2, 
+.theme-fixt h4,
+.theme-fixt .hero-subtitle,
+.theme-fixt .benefit-item h3::before,
+.theme-fixt .ing-name,
+.theme-fixt .step-title,
+.theme-fixt strong,
+.theme-fixt .safety-warning {
+    color: #4a148c; /* Un mov mai închis pentru contrast bun */
 }
