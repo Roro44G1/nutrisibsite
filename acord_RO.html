@@ -210,6 +210,16 @@
             border-color: var(--error-red);
         }
 
+        /* Stil specific pentru secțiunea tutorelui */
+        #guardian-section {
+            border-top: 2px dashed var(--medium-blue);
+            margin-top: 20px;
+            padding-top: 15px;
+            background-color: #fffbeb; /* Ușor galben pentru atenționare */
+            border-radius: 6px;
+            padding: 15px;
+        }
+
         .signing-options {
             background: #fff;
             padding: 1.5rem;
@@ -362,6 +372,8 @@
             footer.infographic-footer p { color: #000; }
             .print-signature-area { display: flex !important; justify-content: space-between; margin-top: 30px; padding-top: 15px; }
             .print-box { width: 45%; border-top: 1px solid #000; padding-top: 10px; font-size: 10pt; }
+            
+            #guardian-section { border-top: 1px solid #000; background: none; }
         }
         .print-signature-area { display: none; }
     </style>
@@ -374,13 +386,9 @@
             <p><strong>Programul ReDefine</strong> | Furnizor: Nutrisib | Specialist: dr. ing. Radu Pascu</p>
         </header>
 
-        <form id="acordForm"
-              name="acord-nutrisib-ro"
-              method="POST"
-              data-netlify="true"
-              enctype="multipart/form-data">
-          <input type="hidden" name="form-name" value="acord-nutrisib-ro" />
-          <input type="hidden" name="redirect" value="https://nutrisib.club/success.html" />
+       <form id="acordForm" name="acord-nutrisib" method="POST" action="success.html" data-netlify="true" enctype="multipart/form-data">
+            <input type="hidden" name="form-name" value="acord-nutrisib" />
+
             <section class="infographic-section" id="Identificare">
                 <div class="section-title">
                     <div class="icon">
@@ -406,8 +414,27 @@
                     </div>
                 </div>
 
+                <!-- SECȚIUNE TUTORE (Se activează doar pentru minori) -->
+                <div id="guardian-section" style="display: none;">
+                    <div class="form-group-full">
+                        <label style="color: var(--dark-blue); font-weight: bold; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 15px; display: block;">
+                            <span style="color: var(--error-red);">! Client Minor:</span> Date Reprezentant Legal / Părinte / Tutore
+                        </label>
+                    </div>
+                    <div class="form-grid-row">
+                        <div class="form-group">
+                            <label for="guardian_name">Nume și Prenume Părinte:</label>
+                            <input type="text" id="guardian_name" name="guardian_name" placeholder="Ex: Popescu Maria">
+                        </div>
+                        <div class="form-group">
+                            <label for="guardian_cnp">CNP Părinte/Tutore:</label>
+                            <input type="text" id="guardian_cnp" name="guardian_cnp" maxlength="13" placeholder="CNP Reprezentant Legal">
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Adresa: Județ, Loc, Cod -->
-                <div class="form-grid-3">
+                <div class="form-grid-3" style="margin-top: 15px;">
                     <div class="form-group">
                         <label for="judet">Județ:</label>
                         <select id="judet" name="judet" required>
@@ -644,7 +671,7 @@
                                 <stop stop-color="#feda75"/><stop offset=".25" stop-color="#fa7e1e"/><stop offset=".5" stop-color="#d62976"/><stop offset=".75" stop-color="#962fbf"/><stop offset="1" stop-color="#4f5bd5"/>
                             </radialGradient>
                         </defs>
-                        <path fill="url(#ig-gradient)" d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.784.297-1.45.717-2.126 1.394C1.33 2.71.91 3.386.612 4.14c-.3.765-.5 1.635-.558 2.913-.058 1.28-.072 1.687-.072 4.947s.015 3.667.072 4.947c.06 1.277.26 2.148.558 2.913.3.765.718 1.438 1.394 2.126.677.678 1.342 1.096 2.126 1.394.765.3 1.635.5 2.913.558 1.28.058 1.687.072 4.947.072s3.667-.015 4.947-.072c1.277-.06 2.148-.26 2.913-.558.784-.297 1.45-.718 2.126-1.394.678-.677 1.096-1.342 1.394-2.126.3-.765.5-1.635-.558-2.913.058-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.26-2.148-.558-2.913-.3-.765-.718-1.438-1.394-2.126C21.314 1.33 20.64.91 19.86.612c-.765-.3-1.635-.5-2.913-.558C15.667.015 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.07 1.17.055 1.805.248 2.227.415.562.217.96.477 1.382.896.419.42.679.82.896 1.383.167.422.36 1.057.413 2.227.055 1.265.07 1.646.07 4.85s-.015 3.585-.07 4.85c-.053 1.17-.246 1.805-.413 2.227-.217.562-.477.96-.896 1.383-.42.419-.82.679-1.383-.896-.422-.167-1.057.36-2.227.413-1.265.055-1.646.07-4.85.07s-3.585-.015-4.85-.07c-1.17-.053-1.805-.246-2.227-.413-.562-.217-.96-.477-1.383-.896-.419-.42-.679-.82-.896-1.383-.167-.422-.36-1.057-.413-2.227-.055-1.265-.07-1.646-.07-4.85s.015-3.585.07-4.85c.053-1.17.246-1.805.413-2.227.217-.562.477.96.896 1.383.42-.419.82-.679 1.383-.896.422-.167 1.057.36 2.227.413C8.415 2.176 8.797 2.16 12 2.16zm0 3.84c-3.405 0-6.162 2.757-6.162 6.162s2.757 6.162 6.162 6.162 6.162-2.757 6.162-6.162-2.757-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm4.42-6.837c-.552 0-1 .448-1 1s.448 1 1 1 1-.448 1-1-.448-1-1-1z"/>
+                        <path fill="url(#ig-gradient)" d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.784.297-1.45.717-2.126 1.394C1.33 2.71.91 3.386.612 4.14c-.3.765-.5 1.635-.558 2.913-.058 1.28-.072 1.687-.072 4.947s.015 3.667.072 4.947c.06 1.277.26 2.148.558 2.913.3.765.718 1.438 1.394 2.126.677.678 1.342 1.096 2.126 1.394.765.3 1.635.5 2.913.558 1.28.058 1.687.072 4.947.072s3.667-.015 4.947-.072c1.277-.06 2.148-.26 2.913-.558.784-.297 1.45-.718 2.126-1.394.678-.677 1.096-1.342 1.394-2.126.3-.765.5-1.635-.558-2.913.058-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.26-2.148-.558-2.913-.3-.765-.718-1.438-1.394-2.126C21.314 1.33 20.64.91 19.86.612c-.765-.3-1.635-.5-2.913-.558C15.667.015 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.07 1.17.055 1.805.248 2.227.415.562.217.96.477 1.382.896.419.42.679.82.896 1.383.167.422.36 1.057.413 2.227.055 1.265.07 1.646.07 4.85s-.015 3.585-.07 4.85c-.053 1.17-.246 1.805-.413 2.227-.217.562-.477.96-.896 1.383-.42.419-.82.679-1.383-.896-.422-.167-1.057.36-2.227.413-1.265.055-1.646.07-4.85.07s-3.585-.015-4.85-.07c-1.17-.053-1.805-.246-2.227-.413-.562-.217-.96-.477-1.383-.896-.419-.42-.679-.82-.896-1.383-.167-.422-.36-1.057-.413-2.227-.055-1.265-.07-1.646-.07-4.85s.015-3.585.07-4.85c.053-1.17.246-1.805.413-2.227.217-.562.477.96.896 1.383.42-.419.82-.679 1.383-.896.422-.167 1.057.36 2.227.413C8.415 2.176 8.797 2.16 12 2.16zm0 3.84c-3.405 0-6.162 2.757-6.162 6.162s2.757 6.162 6.162 6.162 6.162-2.757 6.162-6.162-2.757-6.162-6.162-2.757-6.162-6.162-2.757-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm4.42-6.837c-.552 0-1 .448-1 1s.448 1 1 1 1-.448 1-1-.448-1-1-1z"/>
                     </svg>
                 </a>
                 <!-- Telegram -->
@@ -711,21 +738,60 @@
             return `${century}${aa}-${ll}-${zz}`;
         }
 
+        // --- 3. CALCUL VÂRSTĂ ---
+        function calculateAge(dateString) {
+            const today = new Date();
+            const birthDate = new Date(dateString);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
         function handleCNPChange(input) {
             const cnpVal = input.value;
             const errorMsg = document.getElementById('cnpError');
             const dobInput = document.getElementById('dob');
+            
+            // Elemente pentru secțiunea tutorelui
+            const guardianSection = document.getElementById('guardian-section');
+            const guardianName = document.getElementById('guardian_name');
+            const guardianCnp = document.getElementById('guardian_cnp');
 
             if (validateCNP(cnpVal)) {
                 errorMsg.style.display = 'none';
                 input.setCustomValidity("");
                 const extractedDate = extractDateFromCNP(cnpVal);
                 dobInput.value = extractedDate;
+
+                // Verificare Vârstă
+                const age = calculateAge(extractedDate);
+                
+                if (age < 18) {
+                    // Este minor - afișează secțiunea și fă câmpurile obligatorii
+                    guardianSection.style.display = 'block';
+                    guardianName.setAttribute('required', 'required');
+                    guardianCnp.setAttribute('required', 'required');
+                } else {
+                    // Este major - ascunde secțiunea și scoate required
+                    guardianSection.style.display = 'none';
+                    guardianName.removeAttribute('required');
+                    guardianCnp.removeAttribute('required');
+                    guardianName.value = ''; // Curăță câmpurile
+                    guardianCnp.value = '';
+                }
+
             } else {
                 if (cnpVal.length > 0) {
                     errorMsg.style.display = 'block';
                     input.setCustomValidity("CNP Invalid");
                     dobInput.value = "";
+                    // Ascunde secțiunea tutorelui dacă CNP e invalid
+                    guardianSection.style.display = 'none';
+                    guardianName.removeAttribute('required');
+                    guardianCnp.removeAttribute('required');
                 } else {
                     errorMsg.style.display = 'none';
                     input.setCustomValidity("");
@@ -818,41 +884,37 @@
         }
 
         document.getElementById('acordForm').addEventListener('submit', function(e) {
-    // Validări existente (CNP, semnătură, fișiere)
-    const cnpInput = document.getElementById('cnp');
-    if (!validateCNP(cnpInput.value)) {
-        e.preventDefault();
-        alert('Vă rugăm să introduceți un CNP valid înainte de a trimite.');
-        cnpInput.focus();
-        return;
-    }
-    
-    const method = document.querySelector('input[name="signMethod"]:checked').value;
-    if (method === 'digital') {
-        const sigData = document.getElementById('signatureData').value;
-        if (!sigData && !hasSigned) {
-            e.preventDefault();
-            alert('Vă rugăm să semnați în căsuța dedicată înainte de a trimite.');
-            return;
-        }
-    } else if (method === 'upload') {
-        const file = document.getElementById('fileUpload').files[0];
-        if (!file) {
-            e.preventDefault();
-            alert('Vă rugăm să încărcați documentul semnat (poză sau PDF).');
-            return;
-        }
-    } else if (method === 'qualified') {
-        const file = document.getElementById('qualifiedUpload').files[0];
-        if (!file) {
-            e.preventDefault();
-            alert('Vă rugăm să încărcați documentul semnat digital.');
-            return;
-        }
-    }
-    
-    // Netlify gestionează submit-ul - nu mai faci nimic aici
-});
+            // Validare CNP finală
+            const cnpInput = document.getElementById('cnp');
+            if (!validateCNP(cnpInput.value)) {
+                e.preventDefault();
+                alert("Vă rugăm să introduceți un CNP valid înainte de a trimite.");
+                cnpInput.focus();
+                return;
+            }
+
+            const method = document.querySelector('input[name="signMethod"]:checked').value;
+            
+            if (method === 'digital') {
+                const sigData = document.getElementById('signatureData').value;
+                if (!sigData || !hasSigned) {
+                    e.preventDefault();
+                    alert('Vă rugăm să semnați în caseta dedicată înainte de a trimite.');
+                }
+            } else if (method === 'upload') {
+                const file = document.getElementById('fileUpload').value;
+                if (!file) {
+                    e.preventDefault();
+                    alert('Vă rugăm să încărcați documentul semnat (poză sau PDF).');
+                }
+            } else if (method === 'qualified') {
+                const file = document.getElementById('qualifiedUpload').value;
+                if (!file) {
+                    e.preventDefault();
+                    alert('Vă rugăm să încărcați documentul semnat digital.');
+                }
+            }
+        });
 
         // Script de securitate (Preluat din disclaimer_RO.html)
         document.addEventListener('contextmenu', event => event.preventDefault()); 
