@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programul de recunoștință de 28 de zile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --dark-blue: #0A2463;
+            --medium-blue: #3E92CC;
+            --text-dark: #212529;
+            --text-light: #475569;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-color: #e0e0e0;
+
+            /* Paletă de culori pastelate, foarte pale */
+            --card-pale-blue: #f0f7ff;
+            --card-pale-green: #effaf5;
+            --card-pale-yellow: #fffcf2;
+            --card-pale-purple: #f9f5ff;
+            
+            /* Culori derivate pentru hover/active */
+            --card-pale-green-darker: #e0f2e9;
+            --card-pale-blue-darker: #e0f0ff;
+            --card-pale-yellow-darker: #fef9e7;
+            --card-pale-purple-darker: #f2eefc;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] > summary .arrow-down {
+            transform: rotate(180deg);
+        }
+
+        /* --- Optimized Accordion Styles --- */
+        .week-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.125rem;
+            transition: background-color 0.2s;
+        }
+        .day-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #1f2937;
+            transition: background-color 0.2s;
+        }
+        .day-content {
+            padding: 1rem;
+            border-top: 1px solid;
+            line-height: 1.65;
+            color: var(--text-light);
+        }
+        .day-accordion {
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            overflow: hidden;
+            background-color: var(--bg-white);
+        }
+
+        /* --- Color Themes for Weeks --- */
+        /* Week 1 - Green */
+        .week-1 > summary { color: #14532d; background-color: var(--card-pale-green); }
+        .week-1[open] > summary { background-color: var(--card-pale-green-darker); }
+        .week-1 .day-content { border-color: var(--card-pale-green-darker); }
+
+        /* Week 2 - Blue */
+        .week-2 > summary { color: #1e40af; background-color: var(--card-pale-blue); }
+        .week-2[open] > summary { background-color: var(--card-pale-blue-darker); }
+        .week-2 .day-content { border-color: var(--card-pale-blue-darker); }
+
+        /* Week 3 - Yellow */
+        .week-3 > summary { color: #854d0e; background-color: var(--card-pale-yellow); }
+        .week-3[open] > summary { background-color: var(--card-pale-yellow-darker); }
+        .week-3 .day-content { border-color: var(--card-pale-yellow-darker); }
+
+        /* Week 4 - Purple */
+        .week-4 > summary { color: #5b21b6; background-color: var(--card-pale-purple); }
+        .week-4[open] > summary { background-color: var(--card-pale-purple-darker); }
+        .week-4 .day-content { border-color: var(--card-pale-purple-darker); }
+
+        .ztabs-header {
+            background-color: var(--dark-blue);
+            color: white;
+            padding: 20px 10px;
+            text-align: center;
+        }
+        
+        .ztabs-header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            margin: 0;
+            padding: 0;
+            color: white!important;
+            border: none!important;
+        }
+
+        .zwp-section-title {
+            font-size: 1.25em;
+            color: var(--dark-blue);
+            margin-bottom: 25px;
+            font-weight: 700;
+            border-bottom: 3px solid var(--medium-blue);
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+        <header class="ztabs-header">
+            <h1>Programul de recunoștință de 28 de zile</h1>
+        </header>
+        <div class="mb-12">     
+            <h2 class="zwp-section-title">După cartea <span class="italic">Magia</span> de Rhonda Byrne</h2>
+            <div class="mt-6 flex justify-center">
+                <img src="../imagini/recunostinta.jpg" alt="Sunt recunoscător pentru...">
+            </div>
+        </div>
+        
+
+        <main class="space-y-3" id="accordion-container">
+            <!-- Introducere -->
+            <details class="bg-white rounded-lg shadow-sm group toplevel-accordion">
+                <summary class="flex justify-between items-center p-5 cursor-pointer font-semibold text-gray-800 text-lg">
+                    Introducere
+                    <svg class="w-6 h-6 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <div class="p-5 border-t border-gray-200 text-gray-600 leading-relaxed">
+                    <p>Cartea „Magia” conține 28 de practici ale recunoștinței, concepute special pentru ca tu să înveți cum să practici recunoștința pentru a fi mai sănătos, pentru a avea mai mulți bani, relații mai bune, un job mai bun și pentru a-ți realiza cele mai îndrăznețe vise. Vei învăța, de asemenea, cum să evapori problemele și să transformi orice situație negativă.</p>
+                    <h3 class="text-xl font-bold mt-4 mb-2 text-gray-800">Tu la ce visezi?</h3>
+                    <p>Scopul multora din tehnicile magice care urmează este de a te ajuta să-ți împlinești visele. În acest scop, trebuie să îți fie foarte clar ce anume îți dorești. Așadar, fă o listă cu tot ceea ce-ți dorești în toate domeniile vieții tale. Gândește-te cât mai detaliat la tot ceea ce dorești să devii, să ai și să faci în domeniul relațiilor, al carierei, al sănătății, în cel financiar și în orice alt domeniu al vieții care ți se pare interesant.</p>
+                    <p>O modalitate simplă de a te organiza mai bine constă în gruparea dorințelor tale pe categorii:</p>
+                    <ul class="list-disc pl-8 space-y-1">
+                        <li>Sănătate și corp</li>
+                        <li>Carieră și muncă</li>
+                        <li>Bani</li>
+                        <li>Relații</li>
+                        <li>Dorințe personale</li>
+                        <li>Lucruri materiale</li>
+                    </ul>
+                    <p class="mt-4">Dacă ți-ai clarificat ce anume îți dorești de la viață, puterea magică a recunoștinței poate opera mult mai eficient în direcția în care dorești să îți schimbi viața, ceea ce înseamnă că ești pregătit pentru marea aventură pe care ești pe punctul de a o începe!</p>
+                    <h3 class="text-xl font-bold mt-4 mb-2 text-gray-800">Crezi în magie?</h3>
+                    <p class="text-center italic my-4">„Cei care nu cred în magie nu o vor găsi niciodată.”</p>
+                    <p>Când eram mici, priveam viața cu uimire și încântare. Cele mai mici lucruri ni se păreau fascinante. Credeam că totul e frumos în lume, că fiecare zi va fi o nouă aventură și că totul în jur e un fel de magie. Apoi am crescut și ne-am lovit de responsabilități, probleme și dificultăți care au făcut ca magia să dispară.</p>
+                    <p>Cartea „Magia” spune că în 28 de zile îți va readuce magia în viață și îți va arăta cum să trăiești viața pe care o visezi. Cum? Prin practicarea recunoștinței.</p>
+                    <p class="text-center font-semibold my-4 p-4 bg-blue-50 rounded-lg">„Celui care este recunoscător i se va da și mai mult decât are. Iar celui care nu este recunoscător, i se va lua și ce are.”</p>
+                    <p>Recunoștința are la bază un principiu științific, enunțat de Newton, cunoscut sub numele de principiul acțiunii și reacțiunii: când un corp acționează asupra altui corp cu o forță (numită forță de acțiune), cel de-al doilea corp acționează și el asupra primului cu o forță (numită forță de reacțiune) de aceeași mărime și de aceeași direcție, dar de sens contrar. Cu alte cuvinte, de fiecare dată când vei da ceva, vei primi același ceva, dar din partea cealaltă.</p>
+                    <p>Cu cât ești mai recunoscător pentru lucrurile pe care le ai, cu atât vei primi mai multe lucruri pentru care să fii recunoscător. Cu cât te plângi mai mult, cu cât ești mai nemulțumit, cu atât vei primi mai multe lucruri de care să te plângi și să fii nemulțumit. E matematic, dovedit științific.</p>
+                    <h3 class="text-xl font-bold mt-4 mb-2 text-gray-800">E viața ta magică?</h3>
+                    <p>Magia din viața ta este direct proporțională cu recunoștința ta pentru ceea ce ai. Uită-te la câți bani ai, la cât de sănătos ești, la cât de fericit ești, la cât de mulți prieteni ai, la relațiile tale, la cariera ta. Domeniile în care o duci foarte bine sunt cele în care folosești recunoștința. Cele în care ai lipsuri sunt cele în care recunoștința lipsește.</p>
+                    <h3 class="text-xl font-bold mt-4 mb-2 text-gray-800">Formula magică</h3>
+                    <p>Gândește-te și folosește intenționat cuvântul „mulțumesc”. Cu cât te vei gândi și vei spune mai des cuvântul „mulțumesc”, cu atât mai recunoscător te vei simți. Cu cât vei gândi și te vei simți în mod intenționat recunoscător mai mult, cu atât vei primi mai multă abundență.</p>
+                    <p>Recunoștința este un sentiment. Ținta ta în practicarea recunoștinței este să te simți în mod intenționat, cât mai recunoscător, pentru că recunoștința este forța care accelerează magia în viața ta. Cu cât sentimentul recunoștinței va fi mai real și mai sincer, cu atât viața ta se va schimba mai repede. Dacă vei practica recunoștința puțin, viața ta se va schimba puțin. Dacă vei practica recunoștința mult, în fiecare zi, viața ta se va schimba dramatic în moduri pe care nu ți le poți imagina.</p>
+                    <p class="font-semibold mt-4">Primele două practici trebuie repetate în fiecare zi. Practica numărul 1 dimineața, iar practica numărul 2 seara. În felul ăsta, îți vei începe și îți vei termina ziua într-o stare de recunoștință.</p>
+                </div>
+            </details>
+
+            <!-- Săptămâna 1 -->
+            <details class="rounded-lg shadow-sm group toplevel-accordion week-1">
+                <summary class="week-summary">
+                    Săptămâna 1
+                    <svg class="w-6 h-6 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <div class="p-2 md:p-4 space-y-3">
+                    <!-- Ziua 1 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 1: Enumeră binecuvântările din viața ta<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <p>Imediat ce te trezești, fă o listă cu 10 lucruri pentru care ești recunoscător. Lucruri pentru care poți fi recunoscător: sănătate, carieră, bani, familie, relații, bunuri materiale, succese, oportunități, oameni etc.</p>
+                            <p>Scrie în dreptul lor de ce ești recunoscător.</p>
+                            <p>Recitește lista, fie în gând, fie cu voce tare, apoi, pentru fiecare lucru de pe listă, mulțumește de 3 ori și simte recunoștința cât poți de mult.</p>
+                            <p>Repetă acești trei pași în fiecare dimineață pentru următoarele 27 de zile, iar în fiecare zi găsește noi motive de a fi recunoscător.</p>
+                        </div>
+                    </details>
+                    <!-- Ziua 2 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 2: Piatra magică<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <p>Iată ce ai de făcut azi:</p>
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Dimineața când te trezești, enumeră binecuvântările din viața ta (tehnica magică 1), scrie o listă cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”. În fiecare zi, lista să fie cu alte binecuvântări.</li>
+                                <li>Pe parcursul zilei, găsește „piatra recunoștinței”. Ai nevoie de o piatră relativ mică, una care să îți placă să o ții în mână. Poate să fie o piatră de pe stradă, o piatră mai deosebită ori o piatră prețioasă pe care o ai deja.</li>
+                                <li>În fiecare seară, ține piatra recunoștinței în mână și gândește-te la cele mai bune lucruri care ți s-au întâmplat peste zi și mulțumește pentru fiecare din ele.</li>
+                                <li>Repetă această practică în fiecare seară pentru următoarele 26 de zile.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 3 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 3: Relațiile magice<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                           <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Tehnica magică pe care o vei aplica astăzi constă în a le fi recunoscător oamenilor din viața ta pentru că sunt exact așa cum sunt! Dacă toți oamenii din viața ta ți-ar spune „te iubesc exact așa cum ești”, tu cum te-ai simți? Chiar dacă te bucuri de relații bune cu toți oamenii, acestea vor deveni încă și mai armonioase dacă vei aplica această tehnică. Cu fiecare nou motiv de recunoștință față de o altă persoană, magia recunoștinței tale se va amplifica, iar relațiile tale vor deveni mai strânse și îți vor oferi mai multă împlinire și bucurie decât ai fi crezut vreodată.</li>
+                                <li>Alege 3 dintre cele mai strânse relații ale tale. Pot fi părinții tăi, frații, prieteni buni, unchi, mătuși, colegi etc. Fă rost de fotografiile celor 3 persoane (să fie singură sau alături de tine în fotografie).</li>
+                                <li>Afișează fotografia persoanei în fața ta și scrie cinci motive pentru care te simți cel mai recunoscător pentru existența ei în viața ta. Repetă procedura și pentru celelalte două persoane.</li>
+                                <li>Începe fiecare frază cu cuvintele magice „îți mulțumesc”. Adresează-te persoanei pe numele ei, iar apoi notează motivul pentru care te simți recunoscător. De exemplu: „Îți mulțumesc, mamă, pentru că m-ai sprijinit atât de mult în timpul facultății.”</li>
+                                <li>Ia cu tine fotografiile oriunde ai merge azi. Așază-le de fiecare dată în fața ta și uită-te cât mai des la ele. Fă acest lucru de cel puțin 3 ori de-a lungul zilei și mulțumește-le celor 3 persoane folosind cuvântul magic „îți mulțumesc”. Exemplu: „Îți mulțumesc, George.”</li>
+                                <li>Seara, înainte de culcare, ia în mână piatra magică și rostește cuvântul „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                     <!-- Ziua 4 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 4: Sănătate magică<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Practica sănătății magice începe prin citirea următoarelor paragrafe. După ce citești rândul scris cu litere îngroșate pentru o parte anume a corpului tău, închide ochii și repetă fraza în sinea ta, simțindu-te cât mai recunoscător poți pentru respectiva parte corporală. Îți reamintesc că dacă te vei gândi de ce te simți recunoscător pentru ea, starea de recunoștință se va intensifica în mod natural, și cu cât mai intensă va fi, cu atât mai rapid vei vedea apariția unor rezultate uluitoare la nivelul corpului tău.</li>
+                                <li>Gândește-te la picioarele și la tălpile tale; ele reprezintă principalul tău mijloc de transport de-a lungul întregii vieți. Gândește-te la toate lucrurile pe care le faci cu picioarele, de la păstrarea echilibrului la exerciții fizice, dans, condus… Pe scurt, capacitatea de a merge îți oferă libertatea de a te bucura de viață! De aceea, spune: <span class="font-semibold">„Mulțumesc pentru picioarele și tălpile mele!”</span> Spune-o sincer și cu ardoare.</li>
+                                <li>Gândește-te la brațele și la mâinile tale, la toate lucrurile pe care le apuci sau le faci cu ajutorul lor de-a lungul unei zile. Ele îți permit să mănânci, să scrii, să te îmbraci etc. Mâinile le folosești nonstop în fiecare zi, aproape clipă de clipă; fără ajutorul lor ai depinde de alți oameni. De aceea, spune: <span class="font-semibold">„Mulțumesc pentru mâinile, palmele și degetele mele!”</span></li>
+                                <li>Gândește-te la cele 5 simțuri și cât de uimitoare sunt ele. Simțul gustului îți oferă o plăcere fără egal ori de câte ori mănânci ceva bun. Poți să-ți imaginezi viața fără gust? De aceea, spune: <span class="font-semibold">„Mulțumesc pentru uimitorul meu simț al gustului!”</span></li>
+                                <li>Simțul mirosului îți permite să experimentezi miresmele florilor, ale ierbii proaspăt cosite, ale gătitului etc. De aceea, spune: <span class="font-semibold">„Mulțumesc pentru uimitorul meu simț al mirosului!”</span></li>
+                                <li>Dacă nu ai avea simț tactil, nu ai putea face diferența dintre cald și rece, moale sau ascuțit, catifelat sau aspru. Acest simț îți permite să oferi celor dragi o îmbrățișare plină de iubire sau să strângi mâna cuiva cu prietenie. De aceea, spune: <span class="font-semibold">„Mulțumesc pentru uimitorul meu simț al atingerii!”</span></li>
+                                <li>Gândește-te acum la miracolul vederii, care îți permite să vezi fețele celor dragi, să citești, să contempli frumusețea naturii etc. Încearcă să te legi odată la ochi cu o eșarfă timp de o oră și vei ajunge să apreciezi mult mai mult simțul văzului. De aceea, spune: <span class="font-semibold">„Mulțumesc pentru ochii mei care îmi permit să văd totul!”</span></li>
+                                <li>Gândește-te la urechile tale, care îți permit să auzi vocea celorlalți și a ta, astfel poți comunica cu ei. Poți asculta muzică, vorbi la telefon, asculta sunetele naturii etc. De aceea, spune: <span class="font-semibold">„Mulțumesc pentru uimitorul meu simț al auzului!”</span></li>
+                                <li>Folosirea oricăruia din cele 5 simțuri ar fi imposibilă fără ajutorul creierului, care procesează milioane de informații pe secundă. De aceea, spune: <span class="font-semibold">„Mulțumesc pentru creierul meu și uimitoarea mea minte!”</span></li>
+                                <li>Gândește-te acum la miliardele de celule care lucrează fără încetare în corpul tău pentru a-ți asigura sănătatea și viața. Spune: <span class="font-semibold">„Vă mulțumesc, celulele mele!”</span></li>
+                                <li>Gândește-te la toate organele tale care îți susțin viața, filtrând, purificând și regenerând tot organismul tău. De aceea, spune: <span class="font-semibold">„Vă mulțumesc, organele mele, pentru că funcționați atât de perfect!”</span></li>
+                                <li>Un alt miracol este inima ta; de activitatea ei depinde viața tuturor celorlalte organe, căci inima menține fluxul vieții la nivelul întregului corp. De aceea, spune: <span class="font-semibold">„Mulțumesc pentru inima mea puternică și sănătoasă!”</span></li>
+                                <li>În continuare, ia o foaie de hârtie și scrie cu litere mari și îngroșate: <span class="font-semibold uppercase tracking-wider">Darul sănătății mă menține în viață.</span></li>
+                                <li>Poartă la tine această foaie astăzi și pune-o la vedere oriunde te-ai duce. De cel puțin 4 ori în decursul zilei, citește afirmația cât mai lent și lasă-te pătruns de recunoștință pentru sublimul dar al sănătății.</li>
+                                <li>Seara, înainte de culcare, ia în mână piatra magică și rostește cuvântul „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 5 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 5: Banii magici<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Dacă nu ai suficienți bani, este bine să înțelegi că grijile, invidia, gelozia, dezamăgirea, îndoielile sau teama legată de bani nu te vor ajuta niciodată să câștigi mai mult, deoarece toate aceste emoții negative derivă din sentimentul lipsei de recunoștință pentru banii pe care îi ai. Lamentările, certurile și frustrările legate de bani, criticarea prețurilor nu sunt gesturi de recunoștință și, deci, nu pot duce la rezolvarea situației tale financiare. De aceea, uită situația în care te afli și exprimă-ți sincer recunoștința față de banii pe care îi ai pentru a le amplifica astfel numărul în mod miraculos!</li>
+                                <li>Așază-te într-o poziție confortabilă și amintește-ți de zilele copilăriei și de toate ocaziile în care altcineva a plătit pentru tine. Căci dacă îți exprimi recunoștința pentru banii primiți în trecut, numărul lor va crește în mod magic în viitor! Ori de câte ori îți amintești de o astfel de ocazie, spune din toată inima „mulțumesc”.</li>
+                                <li>Ia o bancnotă de 1 leu sau o altă bancnotă de valoare mică și lipește pe ea un sticker pe care scrie: <span class="font-semibold">„Mulțumesc pentru toți banii pe care i-am primit de-a lungul vieții mele.”</span></li>
+                                <li>Poartă la tine de-a lungul zilei bancnota. Cel puțin de două ori sau cât de des dorești, scoate bancnota magică și ține-o în mână. Citește cuvintele scrise pe ea și simte-te sincer recunoscător pentru nenumărații bani pe care i-ai primit de-a lungul vieții tale.</li>
+                                <li>În zilele următoare, așază bancnota magică într-un loc în care să o poți vedea cât mai frecvent, pentru a-ți reaminti să fii recunoscător pentru abundența financiară de care te-ai bucurat de-a lungul vremii.</li>
+                                <li>Seara, înainte de culcare, ia în mână piatra magică și rostește cuvântul „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 6 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 6: Ieșirea magică din starea de negativitate<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Alege o situație din viața ta pe care dorești să o rezolvi.</li>
+                                <li>Scrie o listă cu 10 motive de recunoștință legate de situația respectivă.</li>
+                                <li>La sfârșit, încheie acest exercițiu scriind cuvintele: „Mulțumesc, mulțumesc, mulțumesc pentru această soluție perfectă.”</li>
+                                <li>Cel puțin azi, încearcă să nu faci nicio afirmație negativă de-a lungul întregii zile. Chiar dacă te trezești că ai gândit sau ai spus ceva negativ, poți încheia întotdeauna cu afirmația magică: „Da, dar trebuie să recunosc că mă simt sincer recunoscător pentru…”</li>
+                                <li>Seara, înainte de culcare, ia în mână piatra magică și rostește cuvântul „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 7 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 7: Ingredientul magic<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Astăzi, înainte de a mânca sau a bea ceva, privește alimentul sau băutura din fața ta și rostește cu voce tare sau în sinea ta „mulțumesc”. Dacă dorești, poți presăra peste ele praf magic, într-un gest simbolic.</li>
+                                <li>Pentru a-ți amplifica această stare de recunoștință, gândește-te puțin la toți oamenii care au contribuit la masa ta actuală.</li>
+                                <li>Exprimarea recunoștinței pentru mâncare și apă întreține magia în viața ta, având efecte pozitive asupra tuturor domeniilor acesteia, ajutându-te să-ți îndeplinești toate visele.</li>
+                                <li>Seara, înainte de culcare, ia în mână piatra magică și rostește cuvântul „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <!-- Săptămâna 2 -->
+            <details class="rounded-lg shadow-sm group toplevel-accordion week-2">
+                <summary class="week-summary">
+                    Săptămâna 2
+                    <svg class="w-6 h-6 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <div class="p-2 md:p-4 space-y-3">
+                    <!-- Ziua 8 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 8: Munca magică<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <p>Recunoștința oferită muncii este direct proporțională cu recompensele și satisfacțiile primite în schimb. Cu alte cuvinte, tu ești cel care controlează ceea ce primești în schimbul muncii tale, prin recunoștința pe care i-o oferi!</p>
+                            <p>Ar fi bine să-ți iubești activitatea, indiferent în ce constă ea, și să o practici întotdeauna cu entuziasm, fără să cobori niciodată ștacheta. Chiar dacă munca ta actuală nu este ceea ce ai visat că vei face în această viață, singura manieră de a ajunge să faci ceea ce visezi constă în a fi recunoscător pentru ceea ce ai deja.</p>
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Sarcina pe care o ai de făcut azi e să-ți imaginezi că ai un șef invizibil care te urmează oriunde ai merge și ține evidența tuturor gândurilor și sentimentelor tale legate de slujba pe care o ai sau activitatea pe care o desfășori. Așa că misiunea ta e să descoperi cât mai multe lucruri pentru care te simți sincer recunoscător.</li>
+                                <li>De fiecare dată când descoperi un nou motiv de recunoștință, spune-ți: „Mă simt recunoscător pentru…” și simte cât mai intens acest lucru.</li>
+                                <li>Seara, înainte de culcare, ia în mână piatra magică și rostește cuvântul „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 9 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 9: Magnetul care atrage bani<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Ia toate facturile curente neplătite și aplică puterea magică a recunoștinței: scrie pe fiecare factură: „Mulțumesc pentru bani!”. Simte recunoștința pentru faptul că ai banii necesari pentru plata facturilor, indiferent dacă ai banii sau nu.</li>
+                                <li>Caută 10 facturi mai vechi, pe care le-ai plătit deja, și scrie pe factură „Mulțumesc – plătită”. Simte recunoștința pentru că ai avut banii să plătești aceste facturi.</li>
+                                <li>Seara, înainte de culcare, ia în mână piatra magică și rostește cuvântul „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                     <!-- Ziua 10 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 10: Praful magic asupra tuturor<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <p>Recunoștința este o energie foarte puternică, iar ea se îndreaptă întotdeauna în direcția în care o focalizăm. Dacă te gândești la recunoștință ca la un praf magic, ori de câte ori îți exprimi recunoștința față de o persoană pentru ceva ce ai primit de la ea, tu presari practic praf magic asupra ei! Puternica energie pozitivă a prafului magic îi influențează pe toți cei asupra cărora îl presari.</p>
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Astăzi, presară praf magic asupra unui număr de minim 10 persoane pentru serviciile de care ai beneficiat. Mulțumește-le direct sau în sinea ta acestora, umplându-te de recunoștință.</li>
+                                <li>Dacă se întâmplă să stai astăzi în casă, amintește-ți de 10 ocazii în care alți oameni te-au ajutat sau ți-au oferit un serviciu. Poate fi un serviciu pe care ți l-a făcut un prieten, poștașul, gunoierii, un vânzător dintr-un magazin etc.</li>
+                                <li>Seara, înainte de culcare, ia în mână piatra magică și rostește cuvântul „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 11 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 11: O dimineață magică<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <p>Modalitatea cea mai simplă și mai ușoară de a te asigura că vei avea parte de o zi plină de magie constă în a-ți umple dimineața cu vibrația recunoștinței. Prin încorporarea acestei vibrații în rutina ta de dimineață, te vei putea bucura de beneficiile sale magice de-a lungul întregii zile.</p>
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>De îndată ce te-ai trezit, spune cuvântul magic „mulțumesc”, înainte de a face orice altceva.</li>
+                                <li>De când deschizi ochii și până ești gata de plecare din casă, continuă să repeți la infinit cuvântul magic „mulțumesc” pentru tot ceea ce faci și pentru toate obiectele pe care le atingi și le folosești.</li>
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Seara, înainte de culcare, ia în mână piatra magică și rostește cuvântul „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 12 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 12: Oameni magici care au făcut diferența<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <p>Orice om a primit de-a lungul vieții ajutor, sprijin sau călăuzire din partea altor oameni, în momentele în care avea cea mai mare nevoie de acestea. Uneori, o altă persoană ne schimbă întregul curs al vieții prin încurajările sau sfaturile sale, sau pur și simplu pentru că se afla la locul potrivit, la momentul oportun. Viața continuă, iar noi uităm de aceste momente în care altcineva ne-a influențat sau ne-a schimbat viața. Uneori, nici măcar nu realizăm impactul pe care l-a avut o persoană asupra noastră decât după mult timp, când ne privim retrospectiv viața și realizăm că ne-a ajutat în mod decisiv să ne schimbăm viața în bine.</p>
+                            <p class="font-semibold mt-4">Iată ce ai de făcut azi:</p>
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Găsește un loc în care nu poți fi deranjat și fă o listă cu 3 persoane care au avut un rol decisiv în viața ta.</li>
+                                <li>Lucrează individual cu fiecare dintre ei. Adresează-te cu voce tare, ca și cum ar fi de față, și spune-le de ce le ești recunoscător și cât de mult ți-au schimbat cursul vieții.</li>
+                                <li>Seara, înainte de culcare, ia în mână piatra magică și rostește cuvântul „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 13 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 13: Trăiește o zi magică<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Imediat după trezire, fă o trecere în revistă a planurilor tale de peste zi și mulțumește din inimă pentru derularea lor impecabilă. Evocă mental toate activitățile pe care îți propui să le realizezi de-a lungul zilei, până la momentul orei de culcare. Repetă cuvântul magic „mulțumesc” pentru fiecare activitate, imaginându-ți că îl rostești seara, și simte o stare de recunoștință profundă pentru că totul ți-a mers atât de bine.</li>
+                                <li>În decursul zilei, folosește cât mai mult cuvântul „mulțumesc”.</li>
+                                <li>După ce termini lista de sarcini, încheie exercițiul spunând: „Și mulțumesc pentru veștile foarte bune pe care le-am primit azi!”.</li>
+                                <li>Seara, înainte de culcare, ia în mână piatra magică și rostește cuvântul „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 14 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 14: Magie și miracole vindecătoare<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Amintește-ți de trei momente din viața ta în care te-ai simțit la apogeu și mulțumește sincer pentru asta. (Momente când te-ai simțit plin de energie și în care ai fost fericit în mod natural.)</li>
+                                <li>Gândește-te la starea de sănătate de care te bucuri acum și fii recunoscător fiecărui organ sau simț fizic care funcționează bine la ora actuală (minim 5 organe).</li>
+                                <li>În continuare, alege un aspect corporal pe care dorești să-l îmbunătățești și gândește-te la starea lui ideală. Exprimă-ți recunoștința pentru această stare ideală.</li>
+                                <li>Seara, înainte de culcare, ia în mână piatra magică și rostește cuvântul „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <!-- Săptămâna 3 -->
+            <details class="rounded-lg shadow-sm group toplevel-accordion week-3">
+                <summary class="week-summary">
+                    Săptămâna 3
+                    <svg class="w-6 h-6 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <div class="p-2 md:p-4 space-y-3">
+                    <!-- Ziua 15 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 15: Transformă-ți toate dorințele în realitate<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Așază-te la calculator sau în fața jurnalului tău și creează o listă cu zece dorințe principale. Scrie de 3 ori „mulțumesc” înaintea fiecăreia, ca și cum acestea ți-ar fi fost deja îndeplinite. Spre exemplu: „Mulțumesc, mulțumesc, mulțumesc pentru [dorința ta]”.</li>
+                                <li>Răspunde mental la următoarele întrebări, folosindu-ți imaginația, ca și cum dorința ți-ar fi fost deja îndeplinită:
+                                    <ul class="list-disc pl-8 space-y-1">
+                                        <li>Ce emoții ai simțit atunci când dorința ți-a fost îndeplinită?</li>
+                                        <li>Care a fost prima persoană căreia i-ai spus că dorința ți-a fost îndeplinită și cum te-ai exprimat?</li>
+                                        <li>Care este primul lucru pe care l-ai făcut, când ai aflat că dorința ți-a fost îndeplinită? Detaliază-ți cât mai mult reacția.</li>
+                                    </ul>
+                                </li>
+                                <li>În final, recitește lista dorințelor și apasă mai mult pe cuvintele magice „mulțumesc”, astfel încât să simți mai intens ca oricând starea de recunoștință.</li>
+                                <li>Dacă dorești, îți poți crea un panou magic al dorințelor, lipind pe el imagini asociate cu dorințele tale. Taie astfel de ilustrații din diferite reviste și lipește-le pe panou. Așază panoul într-un loc în care să îl poți vedea cât mai des. Nu uita să lipești pe panou și cuvintele magice: „MULȚUMESC, MULȚUMESC, MULȚUMESC!” cu caractere mari și îngroșate.</li>
+                                <li>Seara, înainte de culcare, ia în mână piatra magică și rostește cuvântul „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 16 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 16: Vindecă-ți relațiile într-o manieră magică<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Alege o relație dificilă, problematică sau destrămată, pe care dorești să o vindeci.</li>
+                                <li>Fă în scris o listă cu zece lucruri pentru care te simți recunoscător persoanei în cauză. Adresează-te persoanei pe numele ei și exprimă-ți recunoștința față de ea: „[Numele persoanei], îți sunt recunoscător pentru [ce anume]?”.</li>
+                                <li>Înainte de culcare, ia în mână piatra magică și rostește cuvântul magic „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 17 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 17: Cecul magic<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <p>Printează-l de <a href="https://www.facebook.com/photo.php?fbid=651073368317930&set=gm.632969366789053&type=1" target="_blank" class="text-blue-600 hover:text-blue-800">aici</a>.</p>
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Completează cecul magic cu suma de bani pe care dorești să o primești, cu numele tău și data de azi.</li>
+                                <li>Ține cecul în mână și gândește-te la lucrul pe care dorești să-l cumperi sau să îl faci cu acești bani. Simte fericire și recunoștință pentru că ai primit acești bani.</li>
+                                <li>Ia cecul magic cu tine azi, pune-l într-un loc unde să îl vezi des. Cel puțin de două ori, ia cecul în mână, imaginează-ți că folosești banii pentru a cumpăra ce îți dorești și simte-te recunoscător ca și cum chiar ai cumpăra cu adevărat.</li>
+                                <li>La sfârșitul zilei, pune cecul magic într-un loc în care poți să-l vezi în fiecare zi. Când primești efectiv banii sau lucrul pe care ți-l doreai, completează un nou cec cu o altă sumă de bani și repetă pașii 2-4.</li>
+                                <li>Înainte de culcare, ia în mână piatra magică și rostește cuvântul magic „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 18 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 18: Lista magică a lucrurilor de făcut<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Imediat ce te trezești, fă o listă cu 10 lucruri pentru care ești recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Fă o listă cu toate lucrurile importante din viața ta care ai dori să se rezolve de la sine și intituleaz-o „Lista magică a lucrurilor de făcut”.</li>
+                                <li>Alege trei puncte din listă și imaginează-ți că fiecare situație s-a rezolvat ca prin magie.</li>
+                                <li>Fă acest lucru cel puțin timp de 1 minut pentru fiecare situație în parte, convins că aceasta s-a rezolvat și lasă-te umplut de recunoștință.</li>
+                                <li>Înainte de culcare, ia în mână piatra magică și rostește cuvântul magic „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 19 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 19: Pașii magici<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Fă 100 de pași magici (durează aproximativ 90 de secunde) și lasă-te umplut de recunoștință. Aplică tehnica oricând dorești în decursul zilei.</li>
+                                <li>La fiecare pas, repetă cuvântul magic „mulțumesc”.</li>
+                                <li>Înainte de culcare, ia în mână piatra magică și rostește cuvântul magic „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 20 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 20: Magia inimii<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                           <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta (tehnica magică 1): scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Focalizează-ți atenția și mintea asupra zonei inimii.</li>
+                                <li>Închide ochii și începe să repeți cuvântul magic „mulțumesc”, continuând să-ți păstrezi focalizarea.</li>
+                                <li>Recitește lista celor 10 dorințe și practică magia inimii pentru fiecare din acestea. În acest scop, citește în sinea ta sau cu voce tare fiecare dorință de pe listă, iar la sfârșit închide ochii, focalizează-ți mintea asupra zonei inimii și repetă cuvântul magic „mulțumesc” de mai multe ori, fără să te grăbești.</li>
+                                <li>Există câteva „trucuri” pe care le poți practica pentru a deprinde mai ușor magia inimii. Spre exemplu, îți poți așeza mâna dreaptă pe piept, fapt care îți va ajuta mintea să se focalizeze mai ușor asupra inimii în timp ce repeți cuvântul magic „mulțumesc”. Totodată, îți poți imagina că acest cuvânt este rostit de inima ta, nu de minte.</li>
+                                <li>Înainte de culcare, ia în mână piatra magică și rostește cuvântul magic „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 21 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 21: Rezultate fabuloase<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta: scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>La începutul zilei, alege 3 situații diferite care sunt importante pentru tine și în care îți dorești să obții rezultate fabuloase.</li>
+                                <li>Notează cele 3 situații pe o foaie de hârtie, ca și cum ai scrie după ce acestea s-au întâmplat: „Mulțumesc pentru rezultatul fabulos al [situației]!”.</li>
+                                <li>În plus, alege de-a lungul zilei 3 situații neașteptate care ți se întâmplă azi (ex: înainte de a da un telefon, înainte de cumpărături etc.) și aplică puterea recunoștinței pentru a te bucura de rezultate fabuloase. Spune în sinea ta și simte cuvintele magice: „Mulțumesc pentru rezultatul fabulos al [situației]!”.</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <!-- Săptămâna 4 -->
+            <details class="rounded-lg shadow-sm group toplevel-accordion week-4">
+                <summary class="week-summary">
+                    Săptămâna 4
+                    <svg class="w-6 h-6 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </summary>
+                <div class="p-2 md:p-4 space-y-3">
+                    <!-- Ziua 22 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 22: Chiar în fața ochilor<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta: scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>La începutul zilei, ia lista cu cele 10 dorințe pe care ai creat-o cu ceva timp în urmă.</li>
+                                <li>Recitește fiecare dorință de pe listă și imaginează-ți pentru un minut că ea ți-a fost îndeplinită. Umple-te de o recunoștință profundă, ca și cum te-ai bucura chiar acum de împlinirea dorinței tale.</li>
+                                <li>Poartă această listă cu tine azi și, de cel puțin două ori, ia lista, citește fiecare dorință și simte cât de multă recunoștință poți.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 23 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 23: Aerul magic pe care-l respiri<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta: scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>În decursul zilei de azi, devino de 5 ori conștient în mod deliberat de aerul pe care-l respiri. Trage aer în piept de 5 ori, simte cum aerul îți umple plămânii și bucuria pe care ți-o aduce expirația.</li>
+                                <li>După fiecare set de expirații, rostește cuvintele magice: „Mulțumesc pentru aerul magic pe care-l respir.” Umple-te cu o recunoștință cât mai sinceră pentru neprețuitul dar al aerului dătător de viață!</li>
+                                <li>Înainte de culcare, ia în mână piatra magică și rostește cuvântul magic „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 24 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 24: Bagheta magică<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta: scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Alege trei persoane apropiate pe care ai vrea să le ajuți cu și mai multă sănătate, bunăstare și fericire.</li>
+                                <li>Fă rost de câte o fotografie a fiecăreia, dacă este posibil, și pune-le în fața ta în timp ce faci această practică.</li>
+                                <li>Pe rând, ia fotografia fiecărei persoane în mână. Închide ochii și vizualizează pentru un minut cum primești vestea bună că acea persoană și-a rezolvat problemele, oricare ar fi acestea.</li>
+                                <li>Deschide ochii și, ținând fotografia în mână, spune încet: „mulțumesc, mulțumesc, mulțumesc pentru sănătatea, fericirea sau prosperitatea lui [numele persoanei]”.</li>
+                                <li>După ce termini cu o persoană, repetă pașii pentru toate cele trei persoane pe care le-ai ales.</li>
+                                <li>Înainte de culcare, ia în mână piatra magică și rostește cuvântul magic „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 25 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 25: Semnalul magic<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta: scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Azi trebuie să identifici semnalele magice. Ce înseamnă un semnal magic? Sunt mesaje de la Univers care îți reamintesc să fii recunoscător pentru ceea ce îți dorești. De exemplu, dacă mergi pe stradă și auzi o ambulanță, asta ar putea fi semnalul magic pentru ca tu să fii recunoscător pentru sănătatea ta.</li>
+                                <li>Dacă treci pe lângă un bancomat, semnalul magic ar putea fi să fii recunoscător pentru banii pe care îi vei primi. Dacă vezi pe cineva citind ziarul, semnalul magic ar putea fi că vei primi vești bune.</li>
+                                <li>Azi, trebuie să fii atent la ce se întâmplă în jurul tău și să identifici minim 7 semnale magice în evenimentele din jurul tău.</li>
+                                <li>Înainte de culcare, ia în mână piatra magică și rostește cuvântul magic „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 26 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 26: Transformarea magică a greșelilor în binecuvântări<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta: scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Alege o greșeală pe care ai făcut-o în viață.</li>
+                                <li>Găsește 10 motive pentru care te simți recunoscător în urma greșelii făcute și scrie-le pe o foaie. Pentru a-ți fi mai ușor să găsești acele binecuvântări ascunse, întreabă-te: „Ce am învățat din această greșeală? Care au fost lucrurile bune care au rezultat din această greșeală?”.</li>
+                                <li>Înainte de culcare, ia în mână piatra magică și rostește cuvântul magic „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 27 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 27: Oglinda magică<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                            <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta: scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>De fiecare dată când te uiți astăzi în oglindă, spune-ți „mulțumesc”, cu o intensitate a trăirii mai mare decât oricând până acum.</li>
+                                <li>Dacă ești cu adevărat curajos, în timp ce te uiți în oglindă, spune trei lucruri pentru care te simți recunoscător că exiști.</li>
+                                <li>Înainte de culcare, ia în mână piatra magică și rostește cuvântul magic „mulțumesc”, exprimându-ți astfel recunoștința pentru lucrul cel mai bun care ți s-a întâmplat în ziua respectivă.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <!-- Ziua 28 -->
+                    <details class="day-accordion">
+                        <summary class="day-summary">Ziua 28: Amintește-ți de magie<svg class="w-5 h-5 transform transition-transform arrow-down" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                        <div class="day-content">
+                           <ul class="list-disc pl-8 space-y-1">
+                                <li>Enumeră binecuvântările din viața ta: scrie lista cu 10 binecuvântări și motivele pentru care te simți recunoscător. Recitește apoi lista, iar după fiecare binecuvântare spune: „mulțumesc, mulțumesc, mulțumesc”.</li>
+                                <li>Amintește-ți de magie evocând binecuvântările de ieri. Întreabă-te: „Care sunt lucrurile bune care mi s-au întâmplat ieri?”. Revizuiește ziua de ieri până când te simți satisfăcut. Notează toate lucrurile bune care ți s-au întâmplat.</li>
+                                <li>Spune „mulțumesc” pentru fiecare lucru bun pe care ți-l amintești.</li>
+                                <li>Începând de azi, fă în fiecare zi o listă cu lucrurile bune care s-au întâmplat cu o zi înainte; o poți face în scris sau în gând.</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const accordions = document.querySelectorAll('#accordion-container details');
+
+            accordions.forEach(accordion => {
+                accordion.addEventListener('toggle', (event) => {
+                    const toggledAccordion = event.target;
+                    
+                    if (toggledAccordion.open) {
+                        // Determine the scope of closing: either top-level or day-level
+                        const isTopLevel = toggledAccordion.classList.contains('toplevel-accordion');
+                        const scope = isTopLevel 
+                            ? document.querySelectorAll('.toplevel-accordion')
+                            : toggledAccordion.parentElement.querySelectorAll('.day-accordion');
+
+                        scope.forEach(sibling => {
+                            if (sibling !== toggledAccordion) {
+                                sibling.open = false;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+
+        // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
+        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
+
+        document.addEventListener('keydown', function(e) {
+            // Blochează Ctrl+C (Copiere)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+U (View Source)
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+            }
+            // Blochează F12 (Developer Tools)
+            if (e.key === 'F12') {
+                e.preventDefault();
+            }
+            // Blochează Ctrl+Shift+I (Developer Tools)
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+            }
+             // Blochează Ctrl+Shift+J (Developer Tools Console)
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+            }
+        });  
+
+    </script>
+    
+</body>
+</html>

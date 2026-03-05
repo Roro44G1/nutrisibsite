@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zinc</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --primary-color: #3498db; /* O nuanță de albastru */
+            --primary-color-dark: #2980b9;
+            --secondary-color: #2c3e50;
+            --background-color: #f4f6f7;
+            --text-color: #34495e;
+            --card-background: #ffffff;
+            --light-gray-background: #f8f9fa;
+            --border-color: #e0e0e0;
+            --accent-green: #27ae60;
+            --accent-red: #e74c3c;
+            --base-font-family: 'Roboto', sans-serif;
+            --border-radius-large: 15px;
+            --border-radius-small: 10px;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: var(--base-font-family);
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .infographic-container {
+            max-width: 950px;
+            width: 100%;
+            background: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-medium);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .infographic-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 10px;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .section {
+            padding: 25px 45px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.9em;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-color-dark);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .subsection {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--light-gray-background);
+            border-radius: var(--border-radius-small);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid transparent;
+        }
+
+        .subsection:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-left-color: var(--primary-color);
+        }
+
+        .subsection-title {
+            font-size: 1.4em;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .subsection p,.subsection ul,.subsection ol {
+            font-size: 0.98em;
+            margin-bottom: 12px;
+        }
+
+        .subsection ul,.subsection ol {
+            padding-left: 20px;
+        }
+
+        .subsection li {
+            margin-bottom: 10px;
+        }
+
+        .subsection b,.subsection strong {
+            color: var(--secondary-color);
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 25px;
+            padding: 15px 20px;
+            background-color: #ebf5fb;
+            border-left: 4px solid var(--primary-color);
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+        
+        .warning-note {
+            background-color: #f9ebea;
+            border-left-color: var(--accent-red);
+        }
+        
+        .holistic-note {
+            background-color: #e8f8f5;
+            border-left-color: var(--accent-green);
+       }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 12px;
+            color: var(--primary-color-dark);
+            vertical-align: middle;
+        }
+        
+        .subsection-icon {
+             font-size: 1.5em;
+             margin-right: 10px;
+             color: var(--primary-color);
+        }
+        
+        .icon-small {
+            font-size: 1.5em;
+            margin-right: 8px;
+            color: var(--primary-color);
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: var(--light-gray-background);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-gray-background);
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 25px 20px; }
+            .section-content {
+                flex-direction: column;
+            }
+            .subsection {
+                min-width: unset;
+            }
+            .infographic-header {
+                font-size: 2em;
+            }
+            .section-title {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="infographic-container">
+        <header class="infographic-header">
+            Zinc
+        </header>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
+            <div class="section-content">
+                <div class="subsection" style="flex: 2;">
+                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul principal în organism</h3>
+                     <p><b>Zincul (Zn)</b> este un oligoelement esențial, vital pentru o multitudine de procese biologice, acționând ca un cofactor pentru peste 300 de enzime.</p>
+                     <ul>
+                         <li><b>Funcția imunitară:</b> Acesta este cel mai cunoscut rol al său. Este esențial pentru dezvoltarea și funcționarea celulelor imunitare (limfocite T, celule NK), ajutând organismul să lupte eficient împotriva infecțiilor.</li>
+                         <li><b>Vindecarea rănilor și sănătatea pielii:</b> Este vital pentru sinteza colagenului și diviziunea celulară, accelerând repararea țesuturilor. Este benefic în acnee și alte afecțiuni dermatologice.</li>
+                         <li><b>Sinteza ADN-ului și a proteinelor:</b> Este indispensabil pentru creșterea, dezvoltarea și repararea celulară.</li>
+                         <li><b>Simțurile gustului și mirosului:</b> Este necesar pentru funcționarea corectă a papilelor gustative și a receptorilor olfactivi.</li>
+                         <li><b>Funcția hormonală și reproducere:</b> Este esențial pentru producția de testosteron, sănătatea prostatei și fertilitatea masculină, dar și pentru reglarea insulinei.</li>
+                         <li><b>Acțiune antioxidantă:</b> Este o componentă a enzimei superoxid dismutaza (Cu/Zn-SOD) și protejează celulele de stresul oxidativ.</li>
+                     </ul>
+                </div>
+                 <div class="subsection" style="flex: 1.5;">
+                    <h3 class="subsection-title"><span class="subsection-icon">🦪</span>Surse alimentare</h3>
+                    <p>Zincul din surse animale (hemic) este mai bine absorbit decât cel din surse vegetale (non-hemic), care poate fi legat de fitați.</p>
+                     <ul>
+                        <li><b>Fructe de mare:</b> Stridii (cea mai bogată sursă), crab, homar.</li>
+                        <li><b>Carne roșie:</b> Vită, miel.</li>
+                        <li><b>Carne de pasăre:</b> Pui, curcan.</li>
+                        <li><b>Semințe:</b> Semințe de dovleac, cânepă, susan.</li>
+                        <li><b>Leguminoase:</b> Năut, linte, fasole.</li>
+                        <li><b>Nuci:</b> Caju, migdale.</li>
+                        <li><b>Produse lactate și ouă.</b></li>
+                        <li><b>Ciocolată neagră.</b></li>
+                     </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit și Exces</h2>
+             <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Simptome cauzate de deficit</h3>
+                    <p>Deficiența de zinc este comună, în special la vegetarieni, vârstnici și persoanele cu afecțiuni digestive.</p>
+                    <ul>
+                        <li><b>Imunitate slăbită:</b> Răceli și infecții frecvente.</li>
+                        <li><b>Probleme dermatologice:</b> Vindecare lentă a rănilor, acnee, dermatită, căderea părului.</li>
+                        <li><b>Alterarea gustului și mirosului.</b></li>
+                        <li><b>Retard de creștere și dezvoltare</b> la copii.</li>
+                        <li><b>Pete albe pe unghii (leuconichie).</b></li>
+                        <li><b>Afectarea fertilității masculine.</b></li>
+                        <li><b>"Ceață mentală"</b> și dificultăți de concentrare.</li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Exces și toxicitate</h3>
+                    <p>Excesul de zinc este aproape întotdeauna cauzat de suplimentare excesivă, nu de aportul alimentar.</p>
+                     <ul>
+                        <li><b>Deficiență de cupru:</b> Acesta este principalul risc. Dozele mari de zinc pe termen lung interferează cu absorbția cuprului, putând duce la anemie și probleme neurologice.</li>
+                        <li><b>Simptome gastrointestinale:</b> Greață, vărsături, crampe abdominale, diaree.</li>
+                        <li><b>Afectarea funcției imunitare:</b> Paradoxal, un exces cronic poate suprima imunitatea.</li>
+                        <li><b>Scăderea colesterolului HDL ("bun").</b></li>
+                    </ul>
+                </div>
+             </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">⚖️</span>Echilibrul Zinc-Cupru</h3>
+                    <p>Zincul și cuprul concurează pentru aceiași transportori în procesul de absorbție. Un raport ideal între zinc și cupru este considerat a fi între <strong>8:1 și 12:1</strong>. Suplimentarea pe termen lung cu zinc fără a asigura un aport adecvat de cupru poate duce la o deficiență indusă de cupru, cu consecințe neurologice și hematologice.</p>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
+                    <p><b>În MTC</b>, zincul este legat de <b>Esența (Jing) a Rinichilor</b>, fiind crucial pentru creștere, reproducere și dezvoltare. De asemenea, susține <b>Wei Qi</b> (energia defensivă, imunitatea) și funcția <b>Plămânilor</b> (prima linie de apărare).</p>
+                    <p><b>În Ayurveda</b>, zincul este esențial pentru <b>Shukra Dhatu</b> (țesutul reproductiv) și pentru menținerea <b>Ojas</b> (vitalitatea și imunitatea). Poate ajuta la echilibrarea <b>Pitta</b> (prin rolul în vindecarea pielii) și <b>Kapha</b>.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
+            <p>Din perspectivă holistică, zincul este asociat cu <b>echilibrul interior, integritatea și capacitatea de a-ți simți și exprima propria valoare</b>. Reflectă rezistența noastră la influențele externe, atât fizice, cât și emoționale.</p>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">💔</span>Deficit</h3>
+                    <p>Un deficit de zinc poate fi legat de:</p>
+                    <ol>
+                        <li><b>Vulnerabilitate emoțională:</b> O lipsă de granițe emoționale, o tendință de a fi ușor copleșit de emoțiile altora.<br><i>Manifestare fizică: Imunitate slăbită.</i></li>
+                        <li><b>Lipsa de autoapreciere:</b> Zincul este legat de simțul gustului, care simbolic poate reprezenta "gustul vieții". Un deficit poate indica o lipsă de bucurie sau un sentiment de a nu fi "suficient de bun".</li>
+                    </ol>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
+                    <p>Obiectivele pe care le susține zincul pot fi atinse prin:</p>
+                    <ul>
+                        <li><b>Practici de încredere în sine</b> și de stabilire a limitelor (ex: afirmarea "Nu" atunci când este necesar).</li>
+                        <li><b>Exerciții de exprimare creativă</b> (artă, scris, dans) pentru a-ți manifesta unicitatea.</li>
+                        <li><b>Meditații</b> pentru a întări câmpul energetic și a te conecta la sursa de putere interioară.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
+            <div class="section-content">
+                <div class="subsection">
+                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Doze recomandate</h3>
+                     <p>Necesarul de zinc variază în funcție de vârstă și sex.</p>
+                     <table>
+                         <thead>
+                             <tr>
+                                 <th>Grup de populație</th>
+                                 <th>DZR (mg/zi)</th>
+                                 <th>Limită superioară (UL)</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>Bărbați (19+ ani)</td>
+                                 <td>11</td>
+                                 <td>40</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei (19+ ani)</td>
+                                 <td>8</td>
+                                 <td>40</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei însărcinate</td>
+                                 <td>11</td>
+                                 <td>40</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei care alăptează</td>
+                                 <td>12</td>
+                                 <td>40</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
+                    <p>Suplimentarea cu zinc trebuie făcută informat, ținând cont de echilibrul cu cuprul.</p>
+                    <div class="note warning-note">
+                        <p><b>Avertisment critic:</b> Suplimentarea pe termen lung cu doze mari de zinc (<strong>peste 40 mg/zi</strong>) poate induce o <strong>deficiență de cupru</strong>, cu consecințe neurologice și hematologice. Dacă luați un supliment cu zinc, asigurați-vă că acesta conține și o cantitate mică de cupru (ex: 15 mg zinc cu 1 mg cupru) sau discutați cu medicul. Nu depășiți limita superioară fără recomandare medicală.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="footer-copyright">
+            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
+            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        </div>
+    </main>
+</body>
+</html>

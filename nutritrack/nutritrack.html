@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator Calorii - Aplicație pentru Calculul Caloriilor unei Mese</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .food-item:hover {
+            transform: translateY(-2px);
+            transition: all 0.2s ease;
+        }
+        .meal-item {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-primary-50 to-emerald-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+         Header 
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-primary-800 mb-2">🍽️ Calculator Calorii</h1>
+            <p class="text-primary-600 text-lg">Calculează caloriile și macronutrienții mesei tale</p>
+        </header>
+
+        <div class="grid lg:grid-cols-2 gap-8">
+             Food Search Section 
+            <div class="glass-effect rounded-2xl p-6 shadow-xl">
+                <h2 class="text-2xl font-semibold text-primary-800 mb-4 flex items-center">
+                    🔍 Caută Alimente
+                </h2>
+                
+                <div class="mb-4">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Caută alimente..." 
+                        class="w-full px-4 py-3 border border-primary-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all"
+                    >
+                </div>
+
+                <div class="mb-4">
+                    <select id="categoryFilter" class="w-full px-4 py-3 border border-primary-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none">
+                        <option value="">Toate categoriile</option>
+                    </select>
+                </div>
+
+                <div id="foodList" class="space-y-2 max-h-96 overflow-y-auto">
+                     Food items will be populated here 
+                </div>
+            </div>
+
+             Meal Summary Section 
+            <div class="glass-effect rounded-2xl p-6 shadow-xl">
+                <h2 class="text-2xl font-semibold text-primary-800 mb-4 flex items-center">
+                    📊 Rezumatul Mesei
+                </h2>
+
+                <div id="mealItems" class="space-y-3 mb-6 max-h-64 overflow-y-auto">
+                    <p class="text-primary-600 text-center py-8">Nu ai adăugat încă alimente în masă</p>
+                </div>
+
+                <div class="border-t border-primary-200 pt-4">
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="bg-primary-100 rounded-xl p-4 text-center">
+                            <div class="text-2xl font-bold text-primary-800" id="totalCalories">0</div>
+                            <div class="text-sm text-primary-600">Calorii</div>
+                        </div>
+                        <div class="bg-primary-100 rounded-xl p-4 text-center">
+                            <div class="text-2xl font-bold text-primary-800" id="totalWeight">0g</div>
+                            <div class="text-sm text-primary-600">Greutate</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-2 text-center">
+                        <div class="bg-blue-100 rounded-lg p-3">
+                            <div class="font-semibold text-blue-800" id="totalProtein">0g</div>
+                            <div class="text-xs text-blue-600">Proteine</div>
+                        </div>
+                        <div class="bg-yellow-100 rounded-lg p-3">
+                            <div class="font-semibold text-yellow-800" id="totalCarbs">0g</div>
+                            <div class="text-xs text-yellow-600">Carbohidrați</div>
+                        </div>
+                        <div class="bg-red-100 rounded-lg p-3">
+                            <div class="font-semibold text-red-800" id="totalFat">0g</div>
+                            <div class="text-xs text-red-600">Grăsimi</div>
+                        </div>
+                        <div class="bg-green-100 rounded-lg p-3">
+                            <div class="font-semibold text-green-800" id="totalFiber">0g</div>
+                            <div class="text-xs text-green-600">Fibre</div>
+                        </div>
+                    </div>
+
+                    <button 
+                        onclick="clearMeal()" 
+                        class="w-full mt-4 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+                    >
+                        🗑️ Șterge Masa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let foodsDatabase = [];
+        let currentMeal = [];
+
+        // Load foods database
+        async function loadFoodsDatabase() {
+            try {
+                const response = await fetch('foods-database.json');
+                const data = await response.json();
+                foodsDatabase = data.foods;
+                populateCategories();
+                displayFoods(foodsDatabase);
+            } catch (error) {
+                console.error('Eroare la încărcarea bazei de date:', error);
+                // Fallback data in case JSON file is not accessible
+                foodsDatabase = [
+                    {id: 1, name: "Piept de pui", category: "Carne", calories: 165, protein: 31, carbs: 0, fat: 3.6, fiber: 0},
+                    {id: 2, name: "Orez alb", category: "Cereale", calories: 130, protein: 2.7, carbs: 28, fat: 0.3, fiber: 0.4},
+                    {id: 3, name: "Broccoli", category: "Legume", calories: 34, protein: 2.8, carbs: 7, fat: 0.4, fiber: 2.6}
+                ];
+                populateCategories();
+                displayFoods(foodsDatabase);
+            }
+        }
+
+        // Populate category filter
+        function populateCategories() {
+            const categories = [...new Set(foodsDatabase.map(food => food.category))].sort();
+            const categoryFilter = document.getElementById('categoryFilter');
+            
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        // Display foods
+        function displayFoods(foods) {
+            const foodList = document.getElementById('foodList');
+            foodList.innerHTML = '';
+
+            foods.forEach(food => {
+                const foodItem = document.createElement('div');
+                foodItem.className = 'food-item bg-white rounded-xl p-4 border border-primary-200 hover:border-primary-400 cursor-pointer shadow-sm';
+                foodItem.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-semibold text-primary-800">${food.name}</h3>
+                        <span class="text-xs bg-primary-100 text-primary-700 px-2 py-1 rounded-full">${food.category}</span>
+                    </div>
+                    <div class="text-sm text-primary-600 mb-3">
+                        ${food.calories} cal/100g • P: ${food.protein}g • C: ${food.carbs}g • G: ${food.fat}g
+                        ${food.fiber > 0 ? ` • F: ${food.fiber}g` : ''}
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="number" class="quantity-input w-20 px-2 py-1 border border-primary-200 rounded text-sm" 
+                               placeholder="100" min="1" value="100">
+                        <span class="text-xs text-primary-600">g</span>
+                        <button onclick="addToMeal(${food.id})" 
+                                class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-1 rounded-lg text-sm font-medium transition-colors">
+                            Adaugă
+                        </button>
+                    </div>
+                `;
+                foodList.appendChild(foodItem);
+            });
+        }
+
+        // Add food to meal
+        function addToMeal(foodId) {
+            const food = foodsDatabase.find(f => f.id === foodId);
+            const quantityInput = event.target.parentElement.querySelector('.quantity-input');
+            const quantity = parseInt(quantityInput.value) || 100;
+
+            const mealItem = {
+                ...food,
+                quantity: quantity,
+                totalCalories: Math.round((food.calories * quantity) / 100),
+                totalProtein: Math.round((food.protein * quantity) / 100 * 10) / 10,
+                totalCarbs: Math.round((food.carbs * quantity) / 100 * 10) / 10,
+                totalFat: Math.round((food.fat * quantity) / 100 * 10) / 10,
+                totalFiber: Math.round((food.fiber * quantity) / 100 * 10) / 10
+            };
+
+            currentMeal.push(mealItem);
+            updateMealDisplay();
+            quantityInput.value = 100; // Reset quantity
+        }
+
+        // Remove food from meal
+        function removeFromMeal(index) {
+            currentMeal.splice(index, 1);
+            updateMealDisplay();
+        }
+
+        // Update meal display
+        function updateMealDisplay() {
+            const mealItems = document.getElementById('mealItems');
+            
+            if (currentMeal.length === 0) {
+                mealItems.innerHTML = '<p class="text-primary-600 text-center py-8">Nu ai adăugat încă alimente în masă</p>';
+            } else {
+                mealItems.innerHTML = currentMeal.map((item, index) => `
+                    <div class="meal-item bg-white rounded-xl p-4 border border-primary-200 shadow-sm">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-semibold text-primary-800">${item.name}</h4>
+                            <button onclick="removeFromMeal(${index})" 
+                                    class="text-red-500 hover:text-red-700 font-bold text-lg">×</button>
+                        </div>
+                        <div class="text-sm text-primary-600 mb-2">${item.quantity}g • ${item.totalCalories} cal</div>
+                        <div class="text-xs text-primary-500">
+                            P: ${item.totalProtein}g • C: ${item.totalCarbs}g • G: ${item.totalFat}g
+                            ${item.totalFiber > 0 ? ` • F: ${item.totalFiber}g` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Update totals
+            const totals = currentMeal.reduce((acc, item) => ({
+                calories: acc.calories + item.totalCalories,
+                weight: acc.weight + item.quantity,
+                protein: acc.protein + item.totalProtein,
+                carbs: acc.carbs + item.totalCarbs,
+                fat: acc.fat + item.totalFat,
+                fiber: acc.fiber + item.totalFiber
+            }), { calories: 0, weight: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 });
+
+            document.getElementById('totalCalories').textContent = totals.calories;
+            document.getElementById('totalWeight').textContent = totals.weight + 'g';
+            document.getElementById('totalProtein').textContent = Math.round(totals.protein * 10) / 10 + 'g';
+            document.getElementById('totalCarbs').textContent = Math.round(totals.carbs * 10) / 10 + 'g';
+            document.getElementById('totalFat').textContent = Math.round(totals.fat * 10) / 10 + 'g';
+            document.getElementById('totalFiber').textContent = Math.round(totals.fiber * 10) / 10 + 'g';
+        }
+
+        // Clear meal
+        function clearMeal() {
+            if (currentMeal.length > 0 && confirm('Ești sigur că vrei să ștergi toată masa?')) {
+                currentMeal = [];
+                updateMealDisplay();
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            filterFoods(searchTerm, category);
+        });
+
+        document.getElementById('categoryFilter').addEventListener('change', function() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const category = this.value;
+            filterFoods(searchTerm, category);
+        });
+
+        function filterFoods(searchTerm, category) {
+            let filteredFoods = foodsDatabase;
+
+            if (searchTerm) {
+                filteredFoods = filteredFoods.filter(food => 
+                    food.name.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            if (category) {
+                filteredFoods = filteredFoods.filter(food => food.category === category);
+            }
+
+            displayFoods(filteredFoods);
+        }
+
+        // Initialize app
+        loadFoodsDatabase();
+    </script>
+</body>
+</html>

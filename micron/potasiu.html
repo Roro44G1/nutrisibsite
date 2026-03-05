@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potasiu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --primary-color: #f1c40f; /* O nuanță de galben vibrant */
+            --primary-color-dark: #f39c12;
+            --secondary-color: #2c3e50;
+            --background-color: #f4f6f7;
+            --text-color: #34495e;
+            --card-background: #ffffff;
+            --light-gray-background: #f8f9fa;
+            --border-color: #e0e0e0;
+            --accent-blue: #3498db;
+            --accent-green: #27ae60;
+            --accent-red: #e74c3c;
+            --base-font-family: 'Roboto', sans-serif;
+            --border-radius-large: 15px;
+            --border-radius-small: 10px;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: var(--base-font-family);
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .infographic-container {
+            max-width: 950px;
+            width: 100%;
+            background: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-medium);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .infographic-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 10px;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .section {
+            padding: 25px 45px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.9em;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-color-dark);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .subsection {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--light-gray-background);
+            border-radius: var(--border-radius-small);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid transparent;
+        }
+
+        .subsection:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-left-color: var(--primary-color);
+        }
+
+        .subsection-title {
+            font-size: 1.4em;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .subsection p,.subsection ul,.subsection ol {
+            font-size: 0.98em;
+            margin-bottom: 12px;
+        }
+
+        .subsection ul,.subsection ol {
+            padding-left: 20px;
+        }
+
+        .subsection li {
+            margin-bottom: 10px;
+        }
+
+        .subsection b,.subsection strong {
+            color: var(--secondary-color);
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 25px;
+            padding: 15px 20px;
+            background-color: #fef9e7;
+            border-left: 4px solid var(--primary-color);
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+        
+        .warning-note {
+            background-color: #f9ebea;
+            border-left-color: var(--accent-red);
+        }
+        
+        .holistic-note {
+            background-color: #e8f8f5;
+            border-left-color: var(--accent-green);
+       }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 12px;
+            color: var(--primary-color-dark);
+            vertical-align: middle;
+        }
+        
+        .subsection-icon {
+             font-size: 1.5em;
+             margin-right: 10px;
+             color: var(--primary-color);
+        }
+        
+        .icon-small {
+            font-size: 1.5em;
+            margin-right: 8px;
+            color: var(--primary-color);
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: var(--light-gray-background);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-gray-background);
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 25px 20px; }
+            .section-content {
+                flex-direction: column;
+            }
+            .subsection {
+                min-width: unset;
+            }
+            .infographic-header {
+                font-size: 2em;
+            }
+            .section-title {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="infographic-container">
+        <header class="infographic-header">
+            Potasiu
+        </header>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
+            <div class="section-content">
+                <div class="subsection" style="flex: 2;">
+                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul principal în organism</h3>
+                     <p><b>Potasiul (K)</b> este un mineral esențial și principalul electrolit intracelular, vital pentru funcția electrică a celulelor din corp.</p>
+                     <ul>
+                         <li><b>Echilibrul fluidelor și funcția celulară:</b> Lucrează în tandem cu sodiul prin <strong>pompa de sodiu-potasiu</strong> pentru a menține echilibrul fluidelor și potențialul de membrană, esențial pentru viața celulară.</li>
+                         <li><b>Funcția nervoasă și musculară:</b> Este crucial pentru generarea impulsurilor nervoase și pentru contracția musculară. Acest lucru este vital pentru toți mușchii, inclusiv pentru <strong>mușchiul inimii</strong>, unde ajută la menținerea unui ritm cardiac normal.</li>
+                         <li><b>Reglarea tensiunii arteriale:</b> Un aport adecvat de potasiu ajută la contrabalansarea efectelor sodiului, contribuind la relaxarea vaselor de sânge și la scăderea tensiunii arteriale.</li>
+                         <li><b>Sănătatea oaselor:</b> Poate ajuta la menținerea densității minerale osoase prin neutralizarea acizilor din dietă, reducând astfel pierderea de calciu din oase.</li>
+                         <li><b>Metabolismul carbohidraților:</b> Este implicat în stocarea glicogenului (forma de stocare a glucozei) în ficat și mușchi.</li>
+                     </ul>
+                </div>
+                 <div class="subsection" style="flex: 1.5;">
+                    <h3 class="subsection-title"><span class="subsection-icon">🍌</span>Surse alimentare</h3>
+                    <p>Majoritatea oamenilor își pot asigura necesarul de potasiu printr-o dietă bogată în fructe și legume proaspete.</p>
+                     <ul>
+                        <li><b>Fructe:</b> Banane, avocado, portocale, pepene galben, fructe uscate (caise, prune).</li>
+                        <li><b>Legume:</b> Cartofi (în special copți cu coajă), cartofi dulci, spanac, sfeclă elvețiană, roșii (inclusiv sos).</li>
+                        <li><b>Leguminoase:</b> Fasole (albă, neagră), linte, năut.</li>
+                        <li><b>Nuci și semințe.</b></li>
+                        <li><b>Produse lactate:</b> Lapte, iaurt.</li>
+                        <li><b>Pește:</b> Somon, cod.</li>
+                     </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit (Hipokaliemie) și Exces (Hiperkaliemie)</h2>
+             <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Simptome cauzate de deficit</h3>
+                    <p>Deficitul de potasiu (hipokaliemia) apare de obicei din cauza pierderilor excesive (prin vărsături, diaree, diuretice), nu neapărat din aport alimentar scăzut.</p>
+                    <ul>
+                        <li><b>Slăbiciune musculară și crampe.</b></li>
+                        <li><b>Oboseală și letargie.</b></li>
+                        <li><b>Palpitații și aritmii cardiace.</b></li>
+                        <li><b>Constipație și balonare.</b></li>
+                        <li><b>Creșterea tensiunii arteriale.</b></li>
+                        <li><b>Sete și urinare frecventă.</b></li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Exces și siguranță</h3>
+                    <p>Excesul de potasiu (hiperkaliemia) este rar la persoanele cu funcție renală normală, dar poate fi o urgență medicală. Apare de obicei la persoanele cu boală cronică de rinichi sau din cauza anumitor medicamente.</p>
+                     <ul>
+                        <li><b>Slăbiciune musculară și paralizie.</b></li>
+                        <li><b>Aritmii cardiace severe</b>, putând duce la stop cardiac.</li>
+                        <li><b>Greață.</b></li>
+                        <li><b>Puls slab sau absent.</b></li>
+                    </ul>
+                </div>
+             </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">⚖️</span>Echilibrul Sodiu-Potasiu</h3>
+                    <p>Din punct de vedere funcțional, <strong>raportul sodiu-potasiu</strong> este mai important decât nivelul absolut al fiecărui mineral. Dieta ancestrală era bogată în potasiu și săracă în sodiu. Dieta modernă, bogată în alimente procesate, a inversat acest raport, contribuind la hipertensiune și boli cardiovasculare. O strategie cheie pentru sănătate este creșterea aportului de alimente bogate în potasiu și reducerea sodiului procesat.</p>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
+                    <p><b>În MTC</b>, potasiul este legat de echilibrul fluidelor, guvernat de <b>Rinichi</b> și <b>Plămâni</b>. Rolul său în funcția cardiacă îl asociază cu <b>Inima</b>, iar cel muscular cu <b>Splina</b>.</p>
+                    <p><b>În Ayurveda</b>, potasiul ajută la echilibrarea <b>Vata dosha</b> (prin susținerea sistemului nervos și muscular) și <b>Pitta dosha</b>. Un exces poate agrava <b>Kapha dosha</b>.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
+            <p>Din perspectivă holistică, potasiul este asociat cu <b>echilibrul emoțional, fluiditatea și adaptabilitatea</b>. Rezonează cu ritmurile noastre interne și cu abilitatea de a ne mișca și de a ne simți bine în fluxul vieții.</p>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">💔</span>Deficit</h3>
+                    <p>Un deficit de potasiu poate fi legat de:</p>
+                    <ol>
+                        <li><b>Dezechilibru emoțional și instabilitate:</b> Dificultăți în a-ți menține calmul în situații stresante.<br><i>Manifestare fizică: Iregularități ale ritmului cardiac, oboseală.</i></li>
+                        <li><b>Lipsa de adaptabilitate și rigiditate:</b> Dificultatea de a te adapta la noi circumstanțe sau de a "curge" cu evenimentele.</li>
+                        <li><b>Senzație de "drenare" emoțională.</b></li>
+                    </ol>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
+                    <p>Obiectivele pe care le susține potasiul pot fi atinse prin:</p>
+                    <ul>
+                        <li><b>Practici care încurajează fluxul și mișcarea</b> (dans, tai chi, yoga fluidă).</li>
+                        <li><b>Terapii</b> pentru explorarea și eliberarea emoțiilor reprimate.</li>
+                        <li><b>Meditații</b> pentru echilibrare emoțională și acceptarea schimbării.</li>
+                        <li><b>Stabilirea unor limite sănătoase</b> pentru a evita "drenajul" energetic.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
+            <div class="section-content">
+                <div class="subsection">
+                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Aport adecvat (AI)</h3>
+                     <p>Majoritatea populației are un aport sub-optim de potasiu.</p>
+                     <table>
+                         <thead>
+                             <tr>
+                                 <th>Grup de populație</th>
+                                 <th>AI (mg/zi)</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>Bărbați (19+ ani)</td>
+                                 <td>3.400</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei (19+ ani)</td>
+                                 <td>2.600</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei însărcinate</td>
+                                 <td>2.900</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei care alăptează</td>
+                                 <td>2.800</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
+                    <p>Suplimentarea cu potasiu trebuie făcută cu mare prudență.</p>
+                    <div class="note warning-note">
+                        <p><b>Avertisment critic:</b> Suplimentele cu potasiu trebuie luate <strong>doar la recomandarea și sub supravegherea unui medic</strong>. Persoanele cu <strong>boală cronică de rinichi</strong> sau cele care iau anumite medicamente (inhibitori ACE, sartani, diuretice care economisesc potasiul) sunt la risc crescut de hiperkaliemie, o condiție ce poate fi fatală. Cea mai sigură metodă de a crește aportul este prin consumul de alimente bogate în potasiu.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="footer-copyright">
+            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
+            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        </div>
+    </main>
+</body>
+</html>

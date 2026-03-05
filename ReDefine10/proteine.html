@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infografic: Ghidul Complet al Proteinelor</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9; /* bg-slate-100 */
+            color: #475569; /* text-slate-800 */
+        }
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <main class="container mx-auto p-4 md:p-8 max-w-7xl">
+
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#073B4C] mb-4">Ghidul complet al proteinelor</h1>
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto">Proteinele sunt "blocurile de construcție" esențiale ale corpului. Descoperă de ce sunt cruciale, de unde le obții și cum să le integrezi corect în dieta ta.</p>
+            <nav class="mt-8">
+                <a href="index.html" class="inline-block bg-[#118AB2] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#073B4C] transition duration-300 shadow-md">← Înapoi la meniu</a>
+            </nav>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <div class="lg:col-span-1 md:col-span-2 bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center justify-center text-center">
+                <h2 class="text-2xl font-bold text-[#118AB2] mb-3">Știai că?</h2>
+                <p class="text-6xl font-bold text-[#FF6B6B] mb-3">~16%</p>
+                <p class="text-slate-600">din greutatea totală a corpului este formată din proteine, fiind al doilea cel mai abundent compus după apă.</p>
+            </div>
+
+            <div class="lg:col-span-2 md:col-span-2 bg-white rounded-2xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-[#118AB2] text-center mb-4">Rolurile cruciale ale proteinelor</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center">
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <span class="text-3xl">🧱</span>
+                        <p class="font-semibold mt-2">Construcție și Reparare</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <span class="text-3xl">⚙️</span>
+                        <p class="font-semibold mt-2">Enzime și Hormoni</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <span class="text-3xl">🛡️</span>
+                        <p class="font-semibold mt-2">Funcție Imunitară</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <span class="text-3xl">🚚</span>
+                        <p class="font-semibold mt-2">Transport Nutrienți</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <span class="text-3xl">💧</span>
+                        <p class="font-semibold mt-2">Echilibru Fluide</p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-lg">
+                        <span class="text-3xl">⚡</span>
+                        <p class="font-semibold mt-2">Sursă de Energie</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lg:col-span-3 bg-white rounded-2xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-center text-[#118AB2] mb-2">Surse de Proteine: Comparație</h2>
+                 <p class="text-center text-slate-600 mb-6">Conținutul de proteine variază semnificativ. Iată o comparație între surse de top animale și vegetale (grame per 100g produs).</p>
+                <div class="chart-container">
+                    <canvas id="proteinCompareChart"></canvas>
+                </div>
+            </div>
+
+            <div class="md:col-span-1 bg-white rounded-2xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-center text-[#118AB2] mb-2">Completitudine Proteine Vegetale</h2>
+                <p class="text-center text-slate-600 mb-6">Din sursele vegetale analizate, o parte sunt "complete", conținând toți aminoacizii esențiali.</p>
+                <div class="chart-container h-64 md:h-80">
+                    <canvas id="completenessDonut"></canvas>
+                </div>
+            </div>
+            
+             <div class="md:col-span-1 bg-white rounded-2xl shadow-lg p-6 flex flex-col justify-center">
+                <h2 class="text-2xl font-bold text-center text-[#118AB2] mb-4">Necesarul Proteic Zilnic</h2>
+                <div class="flex flex-col space-y-4">
+                    <div class="bg-slate-50 p-4 rounded-lg text-center">
+                        <p class="font-semibold text-slate-600">Persoană Sedentară</p>
+                        <p class="text-3xl font-bold text-[#06D6A0]">0.8 g / kg corp</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg text-center">
+                        <p class="font-semibold text-slate-600">Sportiv / Persoană Activă</p>
+                        <p class="text-3xl font-bold text-[#FF6B6B]">1.2 - 2.2 g / kg corp</p>
+                    </div>
+                </div>
+                <p class="text-sm text-center mt-4 text-slate-500">Necesarul crescut al sportivilor susține refacerea și creșterea musculară.</p>
+            </div>
+            
+            <div class="lg:col-span-3 bg-white rounded-2xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-center text-[#118AB2] mb-6">Extremele: Deficit vs. Exces de Proteine</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold text-center text-red-500 mb-4">Efectele Deficitului 🔻</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-center"><span class="text-2xl mr-3">📉</span> Pierderea masei musculare</li>
+                            <li class="flex items-center"><span class="text-2xl mr-3">🤕</span> Imunitate slăbită și vindecare lentă</li>
+                            <li class="flex items-center"><span class="text-2xl mr-3">😴</span> Oboseală cronică și letargie</li>
+                            <li class="flex items-center"><span class="text-2xl mr-3">💧</span> Edeme (umflarea țesuturilor)</li>
+                            <li class="flex items-center"><span class="text-2xl mr-3">💇</span> Păr și unghii fragile</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-center text-amber-500 mb-4">Efectele Excesului 🔺</h3>
+                         <ul class="space-y-3">
+                            <li class="flex items-center"><span class="text-2xl mr-3">🫘</span> Stres asupra rinichilor</li>
+                            <li class="flex items-center"><span class="text-2xl mr-3">🦴</span> Risc de gută și pierderi de calciu</li>
+                            <li class="flex items-center"><span class="text-2xl mr-3">😟</span> Probleme digestive și deshidratare</li>
+                            <li class="flex items-center"><span class="text-2xl mr-3">⚖️</span> Potențială creștere în greutate</li>
+                            <li class="flex items-center"><span class="text-2xl mr-3">❤️</span> Risc cardiovascular (din surse grase)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lg:col-span-3 bg-white rounded-2xl shadow-lg p-6 text-center">
+                <h2 class="text-2xl font-bold text-[#118AB2] mb-2">Tabel Detaliat cu Surse Proteice</h2>
+                <p class="text-slate-600 mb-6">Pentru o analiză amănunțită a conținutului de proteine, calorii și statutului aminoacizilor esențiali pentru diverse alimente vegetale și animale, accesați tabelul nostru complet.</p>
+                <a href="tabel_proteine.html" class="inline-block bg-[#06D6A0] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#073B4C] transition duration-300 shadow-md text-lg">Vezi Tabelul Complet cu Proteine &raquo;</a>
+            </div>
+
+            <div class="lg:col-span-3 bg-white rounded-2xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-center text-[#118AB2] mb-2">Top Surse Proteice Vegetale</h2>
+                <p class="text-center text-slate-600 mb-6">Aceste surse vegetale sunt campioane la conținutul de proteine (grame per 100g produs).</p>
+                <div class="chart-container">
+                    <canvas id="topVeggieChart"></canvas>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3 bg-white rounded-2xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-center text-[#118AB2] mb-6">Suplimentele proteice: un ajutor modern</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h3 class="font-semibold text-lg mb-2">De ce să le consideri?</h3>
+                        <ul class="list-disc list-inside space-y-2 text-slate-600">
+                            <li>**Convenabil și Rapid:** Ideal pentru un stil de viață ocupat.</li>
+                            <li>**Puritate și Calitate:** Surse curate de proteine, fără grăsimile și contaminanții din unele cărnuri.</li>
+                            <li>**Absorbție Rapidă:** Perfecte pentru recuperarea post-antrenament.</li>
+                            <li>**Control Caloric:** Ușor de integrat într-un plan alimentar precis.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                        <div class="flex items-center">
+                            <span class="text-4xl mr-4">🛡️</span>
+                            <div>
+                                <h4 class="font-bold text-[#073B4C]">Siguranța în sport</h4>
+                                <p class="text-slate-600">Pentru sportivi, alegeți doar produse certificate, cum ar fi cele de pe **Lista de la Köln**, pentru a evita substanțele interzise.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        const colorPalette = {
+            darkBlue: '#073B4C',
+            mediumBlue: '#118AB2',
+            green: '#06D6A0',
+            yellow: '#FFD166',
+            red: '#FF6B6B',
+            slate: '#64748b'
+        };
+
+        const tooltipConfig = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    labels: {
+                        font: {
+                           family: 'Inter',
+                        }
+                    }
+                }
+            }
+        };
+
+        function wrapLabel(label, maxLength = 16) {
+            if (label.length <= maxLength) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + ' ' + word).length > maxLength) {
+                    lines.push(currentLine.trim());
+                    currentLine = word;
+                } else {
+                    currentLine += ' ' + word;
+                }
+            });
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        function initProteinCompareChart() {
+            const ctx = document.getElementById('proteinCompareChart').getContext('2d');
+            const data = {
+                labels: ['Piept de Pui', wrapLabel('Semințe de Cânepă'), 'Soia Texturată', 'Carne de Vită', 'Ton', 'Linte'],
+                datasets: [{
+                    label: 'g Proteine / 100g',
+                    data: [31, 31.5, 22.5, 28, 26.5, 9.5],
+                    backgroundColor: [
+                        colorPalette.red,
+                        colorPalette.green,
+                        colorPalette.green,
+                        colorPalette.red,
+                        colorPalette.red,
+                        colorPalette.green,
+                    ],
+                    borderColor: 'rgba(255, 255, 255, 0.5)',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                }]
+            };
+            new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: { ...tooltipConfig,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                     scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Grame de Proteine' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initCompletenessDonut() {
+            const ctx = document.getElementById('completenessDonut').getContext('2d');
+            const data = {
+                labels: ['Proteine Vegetale Complete', 'Proteine Vegetale Incomplete'],
+                datasets: [{
+                    label: 'Număr de Surse',
+                    data: [10, 21],
+                    backgroundColor: [
+                        colorPalette.green,
+                        colorPalette.yellow,
+                    ],
+                    hoverOffset: 4
+                }]
+            };
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: { ...tooltipConfig,
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
+        }
+
+        function initTopVeggieChart() {
+            const ctx = document.getElementById('topVeggieChart').getContext('2d');
+            const rawLabels = ['Spirulina (uscată)', 'Semințe de Cânepă Decorticate', 'Semințe de Dovleac', 'Unt de arahide', 'Arahide', 'Drojdie de bere inactivă', 'Semințe de Floarea Soarelui', 'Unt de migdale'];
+            const data = {
+                labels: rawLabels.map(label => wrapLabel(label)),
+                datasets: [{
+                    label: 'g Proteine / 100g',
+                    data: [57, 31.5, 26.5, 24.5, 24, 22.5, 21.5, 20.5],
+                    backgroundColor: colorPalette.mediumBlue,
+                    borderColor: 'rgba(255, 255, 255, 0.5)',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                }]
+            };
+            new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: { ...tooltipConfig,
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Grame de Proteine' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        window.addEventListener('load', () => {
+            initProteinCompareChart();
+            initCompletenessDonut();
+            initTopVeggieChart();
+        });
+    </script>
+</body>
+</html>

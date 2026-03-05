@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raport Nutrițional - Andi David</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-color: #f4f7f6;
+            --container-bg-color: #ffffff;
+            --primary-text-color: #333333;
+            --secondary-text-color: #555555;
+            --header-bg: #2c3e50; /* Albastru închis pentru antet */
+            --primary-accent-color: #2980b9; /* Albastru puternic */
+            --secondary-accent-color: #3498db; /* Albastru deschis */
+            --border-color: #dee2e6;
+            --tab-inactive-bg: #e9ecef;
+            --tab-active-bg: var(--container-bg-color);
+            --summary-box-bg: #eaf2f8;
+            --summary-box-border: #aed6f1;
+            --error-color: #c0392b;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.7;
+            font-weight: 400;
+            /* Stiluri pentru a preveni selecția textului */
+            -webkit-user-select: none; /* Safari */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Standard syntax */
+        }
+
+       .main-container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: var(--container-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        
+        .page-header {
+            background-color: var(--header-bg);
+            color: white;
+            padding: 25px 30px;
+        }
+        
+        .page-header h1 {
+            color: white;
+            margin: 0;
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+        
+        .page-header p {
+            color: #bdc3c7;
+            margin: 5px 0 0;
+            font-size: 1.1em;
+            font-weight: 300;
+        }
+
+       .tab-container {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: var(--tab-inactive-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+       .tab-button {
+            flex-grow: 1;
+            padding: 15px 10px;
+            cursor: pointer;
+            border: none;
+            background-color: var(--tab-inactive-bg);
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--secondary-text-color);
+            transition: background-color 0.3s, color 0.3s, opacity 0.3s;
+            border-bottom: 4px solid transparent;
+            text-align: center;
+        }
+
+       .tab-button:hover {
+            background-color: #d8e0e6;
+            color: var(--primary-accent-color);
+        }
+
+       .tab-button.active {
+            background-color: var(--tab-active-bg);
+            color: var(--primary-accent-color);
+            border-bottom: 4px solid var(--primary-accent-color);
+        }
+
+       .tab-content {
+            display: none;
+            padding: 25px 30px;
+            min-height: 70vh;
+            max-height: 70vh;
+            overflow-y: auto;
+       }
+
+       .tab-content.active {
+            display: block;
+        }
+        
+        h2, h3, h4, h5 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: var(--header-bg);
+            border-bottom: 2px solid var(--primary-accent-color);
+            padding-bottom: 10px;
+            margin-top: 1.2em;
+            margin-bottom: 1em;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: var(--primary-accent-color);
+            margin-top: 1.5em;
+        }
+        
+        h4 {
+            font-size: 1.2em;
+            color: var(--header-bg);
+            font-style: italic;
+        }
+        
+        h5 {
+            font-size: 1.1em;
+            color: var(--secondary-accent-color);
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+
+        p, li {
+            font-size: 1em;
+            color: var(--secondary-text-color);
+            text-align: justify;
+            font-weight: 400;
+        }
+
+        a {
+            color: var(--primary-accent-color);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95em;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e9ecef;
+            font-weight: 700;
+            color: var(--header-bg);
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        ul, ol {
+            padding-left: 25px;
+        }
+        
+        blockquote {
+            border-left: 4px solid var(--secondary-accent-color);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .summary-box {
+            background-color: var(--summary-box-bg);
+            border: 1px solid var(--summary-box-border);
+            border-left: 5px solid var(--primary-accent-color);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .summary-box h4 {
+            margin-top: 0;
+            color: var(--header-bg);
+            font-style: normal;
+        }
+        .summary-box ol, .summary-box ul {
+            padding-left: 20px;
+        }
+
+       .bibliography-list {
+            list-style-type: none;
+            padding-left: 0;
+            counter-reset: item;
+            column-count: 2;
+            column-gap: 40px;
+        }
+       .bibliography-list li {
+            margin-bottom: 15px;
+            padding-left: 35px;
+            position: relative;
+            text-align: left;
+       }
+       .bibliography-list li::before {
+            content: "[" counter(item) "]";
+            counter-increment: item;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+            color: var(--primary-accent-color);
+        }
+
+        .page-footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--container-bg-color);
+            color: var(--primary-text-color);
+            font-size: 0.85em;
+        }
+        .page-footer p {
+            text-align: center;
+            margin: 0;
+            color: var(--primary-text-color);
+        }
+        
+        /* Password Protection Styles */
+        .tab-button.locked {
+            opacity: 0.6;
+            cursor: pointer;
+        }
+        .tab-button.locked:hover {
+            background-color: #d8e0e6;
+            color: var(--secondary-text-color);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            padding: 30px 40px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        
+        .modal-content h3 {
+            margin-top: 0;
+            color: var(--header-bg);
+        }
+        
+        .modal-content input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .modal-content button {
+            background-color: var(--primary-accent-color);
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 700;
+        }
+        
+        .modal-content button:hover {
+            background-color: var(--header-bg);
+        }
+        
+        #password-error {
+            color: var(--error-color);
+            font-weight: bold;
+            height: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <header class="page-header">
+            <h1>Raport nutrițional și de sănătate integrativă</h1>
+            <p>Un plan de acțiune personalizat pentru Andi David</p>
+        </header>
+
+        <div class="tab-container">
+            <button class="tab-button" data-tab="introducere">Introducere</button>
+            <button class="tab-button protected" data-tab="riscuri">Riscuri și presiuni</button>
+            <button class="tab-button protected" data-tab="perspectiva-emotionala">Perspectiva emoțională</button>
+            <button class="tab-button protected" data-tab="energie-hidratare">Energie & Hidratare</button>
+            <button class="tab-button protected" data-tab="sistem-digestiv">Sistem digestiv</button>
+            <button class="tab-button protected" data-tab="sistem-osos">Sistem osos</button>
+            <button class="tab-button protected" data-tab="micronutrienti">Micronutrienți</button>
+            <button class="tab-button protected" data-tab="plan-alimentar">Plan alimentar</button>
+            <button class="tab-button protected" data-tab="protocol">Protocol echilibrare</button>
+            <button class="tab-button protected" data-tab="bibliografie">Bibliografie</button>
+        </div>
+
+        <div id="introducere" class="tab-content">
+            <h2>Rezumat și premisele raportului</h2>
+            
+            <h4>Notă preliminară și declinarea responsabilității medicale</h4>
+            <p>Acest raport a fost elaborat ca răspuns la rezultatele unei evaluări de status general și nutrițional pentru Andi David, un sportiv de performanță în vârstă de 11 ani. Documentul reprezintă o analiză de nivel expert și un set de directive nutriționale și holistice fundamentate pe informațiile furnizate. Este esențial de subliniat că acest protocol are un caracter informativ și nu substituie un consult medical direct, un diagnostic clinic sau un tratament personalizat. Recomandările din acest raport trebuie implementate exclusiv sub supravegherea unei echipe multidisciplinare, care să includă medicul pediatru al copilului, un medic specializat în medicină sportivă, un dietetician autorizat sau un nutriționist cu specializare în nutriția sportivă, și, având în vedere noile perspective adăugate, un psiholog sau psihoterapeut specializat în lucrul cu copiii și sportivii. [1] Scopul acestui document este de a oferi un cadru solid, bazat pe dovezi științifice, pentru a ghida discuțiile cu acești specialiști și pentru a construi un plan de acțiune coerent și eficient.</p>
+            
+            <div class="summary-box">
+                <h4>Datele evaluării pentru Andi David</h4>
+                <ul>
+                    <li><strong>Beneficiar:</strong> ANDI DAVID</li>
+                    <li><strong>Vârsta:</strong> 11 ani</li>
+                    <li><strong>Greutate:</strong> 45 kg</li>
+                    <li><strong>Înălțime:</strong> 160 cm</li>
+                </ul>
+                <h4>Aspecte relevante identificate în evaluare:</h4>
+                <!--<li>Deficit de <a href="https://vitmin.netlify.app/zinc.html" target="_blank">zinc</a>, <a href="https://vitmin.netlify.app/seleniu.html" target="_blank">seleniu</a>, <a href="https://vitmin.netlify.app/potasiu.html" target="_blank">potasiu</a>, <a href="https://vitmin.netlify.app/magneziu.html" target="_blank">magneziu</a>, <a href="https://vitmin.netlify.app/cupru.html" target="_blank">cupru</a></li>-->
+                <!--<li>Deficit de <a href="https://vitmin.netlify.app/vitamina_b1.html" target="_blank">vitamina B1</a>, <a href="https://vitmin.netlify.app/vitamina_b2.html" target="_blank">B2</a>, <a href="https://vitmin.netlify.app/vitamina_c.html" target="_blank">C</a>, <a href="https://vitmin.netlify.app/vitamina_e.html" target="_blank">E</a></li>-->
+                <ol>
+                    <li>Deficiențe ușoare în metabolismul proteic</li>
+                    <li>Coeficient de absorbție colonică scăzut</li>
+                    <li>Coeficient scăzut de bacterii intestinale</li>
+                    <li>Urobilinogen crescut</li>
+                    <li>Densitate non-minerală osoasă scăzută</li>
+                    <li>Coeficient crescut de osteoporoză</li>
+                    <li>Deficit de <a href="https://vitmin.netlify.app/zinc.html" target="_blank">zinc</a>, seleniu, potasiu, <a href="https://vitmin.netlify.app/magneziu.html" target="_blank">magneziu</a>, cupru</li>
+                    <li>Deficit de <a href="https://vitmin.netlify.app/vitamina_b1.html" target="_blank">vitamina B1</a>, B2, C, <a href="https://vitmin.netlify.app/vitamina_e.html" target="_blank">E</a></li>
+                    <li>Dezechilibre de aminoacizi (exces ușor de lizină, triptofan, treonină, histidină, arginină)</li>
+                    <li>Semne de deshidratare și deficit de electroliți</li>
+                </ol>
+            </div>
+
+            <h3>O abordare integrată pentru un sportiv în creștere</h3>
+            <p>Acest raport analizează în profunzime rezultatele evaluării. Perspectiva adoptată este una holistică, recunoscând că cele zece puncte identificate nu sunt probleme izolate, ci simptome interconectate ale unor dezechilibre mai profunde. Cauzele fundamentale par a fi o combinație între cerințele energetice excepționale ale sportului de performanță, o sănătate intestinală care necesită suport și un posibil impact al stresului psiho-emoțional asupra fiziologiei. Protocolul de față nu se concentrează doar pe corectarea punctuală a deficitelor, ci propune o strategie de reconstrucție a sănătății de la temelie, având ca piloni:</p>
+            <ul>
+                <li>Asigurarea unui aport energetic și hidric adecvat efortului.</li>
+                <li>Restaurarea sănătății digestive pentru a maximiza absorbția nutrienților.</li>
+                <li>Abordarea cauzelor emoționale și a impactului stresului.</li>
+                <li>Fortificarea sistemului osos aflat într-o perioadă critică de dezvoltare.</li>
+                <li>Repleția țintită a stocurilor de vitamine și minerale.</li>
+            </ul>
+            <p>Scopul final este de a-i oferi lui Andi David un fundament solid pentru o carieră sportivă lungă, performantă și, mai presus de orice, sănătoasă.</p>
+        </div>
+
+        <div id="riscuri" class="tab-content">
+            <h2>Pericolele ascunse: nutriția neglijată și presiunea emoțională</h2>
+        </div>
+        
+        <div id="perspectiva-emotionala" class="tab-content">
+            <h2>Perspectiva holistică și cauzele emoționale – conexiunea minte-corp</h2>
+        </div>
+        
+        <div id="energie-hidratare" class="tab-content">
+            <h2>Alimentarea tânărului atlet: fundamentele energetice și de hidratare</h2>
+        </div>
+
+        <div id="sistem-digestiv" class="tab-content">
+            <h2>Reconstrucția din interior: strategie pentru restaurarea digestivă și metabolică</h2>
+        </div>
+        
+        <div id="sistem-osos" class="tab-content">
+            <h2>Fortificarea viitorului: un protocol proactiv pentru sănătatea scheletică</h2>
+        </div>
+        
+        <div id="micronutrienti" class="tab-content">
+            <h2>Repleția țintită a micronutrienților esențiali</h2>
+        
+            <h3>Refacerea stocurilor de vitamine cheie pentru energie și protecție</h3>
+        </div>
+        
+        <div id="plan-alimentar" class="tab-content">
+            <h2>Planul de acțiune integrat: de la teorie la practică</h2>
+            <p>Această secțiune transpune toate recomandările anterioare într-un plan practic și aplicabil. Scopul este de a oferi un model flexibil pe care părintele, în colaborare cu specialiștii, îl poate adapta pentru a asigura o nutriție optimă.</p>
+        
+            <h3>Exemplu de plan alimentar integrat pe 7 zile</h3>
+            <h4>Tabelul 4: Exemplu de plan alimentar săptămânal pentru recuperare și performanță</h4>
+        </div>
+        <div id="protocol" class="tab-content">
+            <h3>Protocol de echilibrare electrolitică și cu micronutrienți</h3>
+            <h4>Recomandări specifice</h4>
+        </div>
+        
+        <div id="bibliografie" class="tab-content">
+            <h2>Bibliografie</h2>
+          </div>
+        <footer class="page-footer">
+            <p>Copyright &copy; 2025 - dr.ing. Radu Pascu</p>
+        </footer>
+    </div>
+
+     <!-- Password Modal -->
+    <div id="password-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>Acces restricționat</h3>
+            <p>Pentru a vizualiza acest conținut, vă rugăm introduceți parola. ATENȚIE! Acest raport este contra cost. Parola se primește după plată!</p>
+            <p id="password-error"></p>
+            <input type="password" id="password-input" placeholder="Parola...">
+            <button id="submit-password">Confirmă</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const modal = document.getElementById('password-modal');
+            const passwordInput = document.getElementById('password-input');
+            const submitPasswordBtn = document.getElementById('submit-password');
+            const passwordError = document.getElementById('password-error');
+
+            if (!modal || !passwordInput || !submitPasswordBtn || !passwordError || tabButtons.length === 0) {
+                console.error("Initialization failed: One or more required elements are missing from the DOM.");
+                return; 
+            }
+            <!-- Password encription H256  const correctPassword = '26edf789H25#7890675hgab3ef344h6kj90g2facde436hfe32190h';-->
+            const correctPassword = '26edf789H25#7890675hgab3ef344h6kj90g2facde436hfe32190h';
+            let isUnlocked = false;
+            let requestedTab = null;
+
+            function initializeTabs() {
+                tabButtons[0].classList.add('active');
+                document.getElementById(tabButtons[0].dataset.tab).classList.add('active');
+
+                tabButtons.forEach((btn, index) => {
+                    if (index > 0) {
+                        btn.classList.add('locked');
+                    }
+                });
+            }
+
+            function openTab(tabId) {
+                tabContents.forEach(content => content.classList.remove('active'));
+                tabButtons.forEach(button => button.classList.remove('active'));
+
+                document.getElementById(tabId).classList.add('active');
+                document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+            }
+
+            function unlockTabs() {
+                isUnlocked = true;
+                document.querySelectorAll('.tab-button.locked').forEach(btn => {
+                    btn.classList.remove('locked');
+                });
+                modal.style.display = 'none';
+                passwordInput.value = '';
+                passwordError.textContent = '';
+                if (requestedTab) {
+                    openTab(requestedTab);
+                    requestedTab = null;
+                }
+            }
+            
+            function checkPassword() {
+                if (passwordInput.value === correctPassword) {
+                    unlockTabs();
+                } else {
+                    passwordError.textContent = 'Parolă incorectă. Încercați din nou. ';
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            }
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    if (this.classList.contains('protected') && !isUnlocked) {
+                        requestedTab = tabId;
+                        modal.style.display = 'flex';
+                        passwordInput.focus();
+                    } else if (!this.classList.contains('locked')) {
+                        openTab(tabId);
+                    }
+                });
+            });
+
+            submitPasswordBtn.addEventListener('click', checkPassword);
+            
+            passwordInput.addEventListener('keyup', function(event) {
+                passwordError.textContent = '';
+                if (event.key === 'Enter') {
+                    submitPasswordBtn.click();
+                }
+            });
+
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    passwordError.textContent = '';
+                    passwordInput.value = '';
+                }
+            });
+
+            initializeTabs();
+        });
+    </script>
+
+</body>
+</html>

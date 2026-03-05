@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seleniu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --primary-color: #95a5a6; /* O nuanță de gri-argintiu */
+            --primary-color-dark: #7f8c8d;
+            --secondary-color: #2c3e50;
+            --background-color: #f4f6f7;
+            --text-color: #34495e;
+            --card-background: #ffffff;
+            --light-gray-background: #f8f9fa;
+            --border-color: #e0e0e0;
+            --accent-blue: #3498db;
+            --accent-green: #27ae60;
+            --accent-red: #e74c3c;
+            --base-font-family: 'Roboto', sans-serif;
+            --border-radius-large: 15px;
+            --border-radius-small: 10px;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: var(--base-font-family);
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .infographic-container {
+            max-width: 950px;
+            width: 100%;
+            background: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-medium);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .infographic-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 10px;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .section {
+            padding: 25px 45px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.9em;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-color-dark);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .subsection {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--light-gray-background);
+            border-radius: var(--border-radius-small);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid transparent;
+        }
+
+        .subsection:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-left-color: var(--primary-color);
+        }
+
+        .subsection-title {
+            font-size: 1.4em;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .subsection p,.subsection ul,.subsection ol {
+            font-size: 0.98em;
+            margin-bottom: 12px;
+        }
+
+        .subsection ul,.subsection ol {
+            padding-left: 20px;
+        }
+
+        .subsection li {
+            margin-bottom: 10px;
+        }
+
+        .subsection b,.subsection strong {
+            color: var(--secondary-color);
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 25px;
+            padding: 15px 20px;
+            background-color: #f4f6f7;
+            border-left: 4px solid var(--primary-color);
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+        
+        .warning-note {
+            background-color: #f9ebea;
+            border-left-color: var(--accent-red);
+        }
+        
+        .holistic-note {
+            background-color: #e8f8f5;
+            border-left-color: var(--accent-green);
+       }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 12px;
+            color: var(--primary-color-dark);
+            vertical-align: middle;
+        }
+        
+        .subsection-icon {
+             font-size: 1.5em;
+             margin-right: 10px;
+             color: var(--primary-color);
+        }
+        
+        .icon-small {
+            font-size: 1.5em;
+            margin-right: 8px;
+            color: var(--primary-color);
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: var(--light-gray-background);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-gray-background);
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 25px 20px; }
+            .section-content {
+                flex-direction: column;
+            }
+            .subsection {
+                min-width: unset;
+            }
+            .infographic-header {
+                font-size: 2em;
+            }
+            .section-title {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="infographic-container">
+        <header class="infographic-header">
+            Seleniu
+        </header>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
+            <div class="section-content">
+                <div class="subsection" style="flex: 2;">
+                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul principal în organism</h3>
+                     <p><b>Seleniul (Se)</b> este un oligoelement esențial care își exercită majoritatea funcțiilor prin încorporarea sa în proteine speciale, numite <strong>selenoproteine</strong>.</p>
+                     <ul>
+                         <li><b>Antioxidant puternic:</b> Este o componentă cheie a familiei de enzime <strong>glutation peroxidaza (GPx)</strong>, unii dintre cei mai importanți antioxidanți ai organismului. Aceștia protejează celulele de stresul oxidativ și regenerează alți antioxidanți.</li>
+                         <li><b>Funcția glandei tiroide:</b> Tiroida este organul cu cea mai mare concentrație de seleniu. Selenoproteinele (deiodinazele) sunt esențiale pentru conversia hormonului tiroidian <strong>T4 (forma inactivă) în T3 (forma activă)</strong> și pentru a proteja tiroida de stresul oxidativ generat în timpul producției de hormoni.</li>
+                         <li><b>Întărirea sistemului imunitar:</b> Joacă un rol vital în funcționarea normală a sistemului imunitar, ajutând la producția de anticorpi și la un răspuns eficient împotriva infecțiilor.</li>
+                         <li><b>Sănătatea cardiovasculară:</b> Prin acțiunea sa antioxidantă și antiinflamatorie, contribuie la menținerea sănătății inimii și a vaselor de sânge.</li>
+                         <li><b>Fertilitatea masculină:</b> Este important pentru producția de spermă sănătoasă și pentru motilitatea acesteia.</li>
+                         <li><b>Detoxifiere:</b> Poate contribui la protejarea organismului împotriva toxicității unor metale grele, cum ar fi mercurul.</li>
+                     </ul>
+                </div>
+                 <div class="subsection" style="flex: 1.5;">
+                    <h3 class="subsection-title"><span class="subsection-icon">🌰</span>Surse alimentare</h3>
+                    <p>Conținutul de seleniu din alimente depinde direct de concentrația sa în sol.</p>
+                     <ul>
+                        <li><b>Nuci braziliene:</b> Sunt, de departe, cea mai bogată sursă. Doar 1-2 nuci pot asigura necesarul zilnic.</li>
+                        <li><b>Fructe de mare și pește:</b> Ton, sardine, somon, stridii, creveți.</li>
+                        <li><b>Carne:</b> Vită, pui, curcan, ficat.</li>
+                        <li><b>Ouă.</b></li>
+                        <li><b>Cereale integrale:</b> Orez brun, ovăz.</li>
+                        <li><b>Semințe de floarea-soarelui.</b></li>
+                        <li><b>Ciuperci.</b></li>
+                     </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit și Exces (Selenoză)</h2>
+             <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Simptome cauzate de deficit</h3>
+                    <p>Deficiența apare în zonele cu soluri sărace în seleniu și este asociată cu un risc crescut pentru anumite afecțiuni.</p>
+                    <ul>
+                        <li><b>Funcție tiroidiană compromisă:</b> Risc crescut de hipotiroidism și de afecțiuni autoimune precum tiroidita Hashimoto.</li>
+                        <li><b>Imunitate slăbită:</b> Susceptibilitate crescută la infecții.</li>
+                        <li><b>Probleme cardiace:</b> Boala Keshan, o formă de cardiomiopatie, este specifică zonelor cu deficit sever.</li>
+                        <li><b>Dureri musculare și slăbiciune.</b></li>
+                        <li><b>Căderea părului și unghii fragile.</b></li>
+                        <li><b>"Ceață mentală".</b></li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Exces și toxicitate (Selenoza)</h3>
+                    <p>Seleniul are o <strong>fereastră terapeutică îngustă</strong>, ceea ce înseamnă că diferența dintre doza benefică și cea toxică este mică. Excesul (selenoza) apare de obicei din suplimentare necontrolată.</p>
+                     <ul>
+                        <li><b>Căderea părului și unghii fragile sau deformate.</b></li>
+                        <li><b>Respirație cu miros de usturoi.</b></li>
+                        <li><b>Gust metalic în gură.</b></li>
+                        <li><b>Oboseală și iritabilitate.</b></li>
+                        <li><b>Leziuni cutanate și erupții.</b></li>
+                        <li><b>Tulburări gastrointestinale.</b></li>
+                        <li><b>În cazuri severe, probleme neurologice.</b></li>
+                    </ul>
+                </div>
+             </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">🤝</span>Sinergii și antagonisme</h3>
+                    <p><b>Sinergii (lucrează împreună cu):</b></p>
+                    <ul>
+                        <li><b>Vitamina E:</b> Acționează sinergic ca antioxidanți pentru a proteja membranele celulare.</li>
+                        <li><b>Iod:</b> Ambele sunt cruciale pentru sănătatea tiroidei. Un deficit de seleniu poate agrava efectele unui deficit de iod.</li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
+                    <p><b>În MTC</b>, seleniul susține <b>Wei Qi</b> (energia defensivă, imunitatea) și <b>Yang-ul Rinichilor</b> (prin rolul în funcția tiroidiană, care este "focul" metabolic).</p>
+                    <p><b>În Ayurveda</b>, seleniul este un nutrient care sporește <b>Ojas</b> (vitalitatea și imunitatea) și susține <b>Agni</b> (focul metabolic). Ajută la echilibrarea <b>Pitta</b> (prin acțiunea antiinflamatorie) și <b>Kapha</b> (prin susținerea metabolismului).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
+            <p>Din perspectivă holistică, seleniul este asociat cu <b>protecția, integritatea personală și capacitatea de a face față agresiunilor (fizice și emoționale)</b>. Rezonează cu "scutul" nostru interior și cu vitalitatea energetică.</p>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">💔</span>Deficit</h3>
+                    <p>Un deficit de seleniu poate fi legat de:</p>
+                    <ol>
+                        <li><b>Vulnerabilitate emoțională:</b> Un sentiment de a fi expus, fragil, sau lipsit de protecție în fața criticilor sau a energiilor negative.<br><i>Manifestare fizică: Imunitate slăbită.</i></li>
+                        <li><b>Dezechilibre energetice:</b> O lipsă de "scânteie" interioară, un sentiment de epuizare.<br><i>Manifestare fizică: Disfuncții tiroidiene.</i></li>
+                        <li><b>Lipsa de încredere în propria intuiție.</b></li>
+                    </ol>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
+                    <p>Obiectivele pe care le susține seleniul pot fi atinse prin:</p>
+                    <ul>
+                        <li><b>Practici de întărire a granițelor personale</b> și a autoapărării energetice.</li>
+                        <li><b>Lucrul cu stima de sine</b> și recunoașterea propriei valori.</li>
+                        <li><b>Terapii</b> pentru eliberarea sentimentelor de victimizare și cultivarea rezilienței.</li>
+                        <li><b>Meditații</b> pentru a reconecta cu vocea interioară și cu intuiția.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
+            <div class="section-content">
+                <div class="subsection">
+                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Doze recomandate</h3>
+                     <p>Necesarul de seleniu este mic, dar vital.</p>
+                     <table>
+                         <thead>
+                             <tr>
+                                 <th>Grup de populație</th>
+                                 <th>DZR (mcg/zi)</th>
+                                 <th>Limită superioară (UL)</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>Adulți (19+ ani)</td>
+                                 <td>55</td>
+                                 <td>400</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei însărcinate</td>
+                                 <td>60</td>
+                                 <td>400</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei care alăptează</td>
+                                 <td>70</td>
+                                 <td>400</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
+                    <p>Suplimentarea cu seleniu trebuie făcută cu mare atenție.</p>
+                    <div class="note warning-note">
+                        <p><b>Avertisment critic:</b> Din cauza ferestrei terapeutice înguste, <strong>nu luați suplimente cu doze mari de seleniu (peste 200 mcg/zi) pe termen lung fără recomandarea unui medic</strong> și, ideal, fără monitorizarea nivelurilor serice. Consumul zilnic a mai mult de câteva nuci braziliene poate duce cu ușurință la depășirea limitei superioare de siguranță.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="footer-copyright">
+            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
+            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        </div>
+    </main>
+</body>
+</html>

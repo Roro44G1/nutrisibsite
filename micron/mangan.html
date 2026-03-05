@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mangan</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+        :root {
+            --primary-color: #8D6E63; /* O nuanță de bronz-maroniu */
+            --primary-color-dark: #6D4C41;
+            --secondary-color: #2c3e50;
+            --background-color: #f4f6f7;
+            --text-color: #34495e;
+            --card-background: #ffffff;
+            --light-gray-background: #f8f9fa;
+            --border-color: #e0e0e0;
+            --accent-blue: #3498db;
+            --accent-green: #27ae60;
+            --accent-red: #e74c3c;
+            --base-font-family: 'Roboto', sans-serif;
+            --border-radius-large: 15px;
+            --border-radius-small: 10px;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: var(--base-font-family);
+            line-height: 1.7;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .infographic-container {
+            max-width: 950px;
+            width: 100%;
+            background: var(--card-background);
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-medium);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .infographic-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 10px;
+            text-align: center;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .section {
+            padding: 25px 45px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-size: 1.9em;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 3px solid var(--primary-color-dark);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            width: 100%;
+        }
+        
+        .subsection {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--light-gray-background);
+            border-radius: var(--border-radius-small);
+            padding: 25px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid transparent;
+        }
+
+        .subsection:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-left-color: var(--primary-color);
+        }
+
+        .subsection-title {
+            font-size: 1.4em;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .subsection p,.subsection ul,.subsection ol {
+            font-size: 0.98em;
+            margin-bottom: 12px;
+        }
+
+        .subsection ul,.subsection ol {
+            padding-left: 20px;
+        }
+
+        .subsection li {
+            margin-bottom: 10px;
+        }
+
+        .subsection b,.subsection strong {
+            color: var(--secondary-color);
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 25px;
+            padding: 15px 20px;
+            background-color: #efebe9;
+            border-left: 4px solid var(--primary-color);
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+        
+        .warning-note {
+            background-color: #f9ebea;
+            border-left-color: var(--accent-red);
+        }
+        
+        .holistic-note {
+            background-color: #e8f8f5;
+            border-left-color: var(--accent-green);
+       }
+
+        .icon {
+            font-size: 1.5em;
+            margin-right: 12px;
+            color: var(--primary-color-dark);
+            vertical-align: middle;
+        }
+        
+        .subsection-icon {
+             font-size: 1.5em;
+             margin-right: 10px;
+             color: var(--primary-color);
+        }
+        
+        .icon-small {
+            font-size: 1.5em;
+            margin-right: 8px;
+            color: var(--primary-color);
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .footer-copyright {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9em;
+            color: #6c757d;
+            background-color: var(--light-gray-background);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-gray-background);
+        }
+
+        @media (max-width: 768px) {
+            .section { padding: 25px 20px; }
+            .section-content {
+                flex-direction: column;
+            }
+            .subsection {
+                min-width: unset;
+            }
+            .infographic-header {
+                font-size: 2em;
+            }
+            .section-title {
+                font-size: 1.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="infographic-container">
+        <header class="infographic-header">
+            Mangan
+        </header>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
+            <div class="section-content">
+                <div class="subsection" style="flex: 2;">
+                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul principal în organism</h3>
+                     <p><b>Manganul (Mn)</b> este un oligoelement esențial, crucial pentru o gamă largă de funcții biologice. Acționează ca un cofactor pentru numeroase enzime.</p>
+                     <ul>
+                         <li><b>Antioxidant puternic:</b> Este o componentă esențială a enzimei <strong>mangan superoxid dismutaza (Mn-SOD)</strong>, principalul antioxidant din mitocondrii ("uzinele energetice" ale celulelor). Protejează celulele de stresul oxidativ generat în timpul producției de energie.</li>
+                         <li><b>Sănătatea oaselor și a țesuturilor conjunctive:</b> Este vital pentru formarea oaselor, cartilajelor și a colagenului. Activează enzimele (glicoziltransferaze) necesare pentru sinteza proteoglicanilor, molecule esențiale pentru structura țesutului conjunctiv.</li>
+                         <li><b>Metabolismul macronutrienților:</b> Joacă un rol cheie în metabolismul carbohidraților (gluconeogeneză), proteinelor și colesterolului.</li>
+                         <li><b>Funcția cerebrală și neurologică:</b> Contribuie la sănătatea creierului și a sistemului nervos, fiind implicat în sinteza neurotransmițătorilor și în protecția neuronilor.</li>
+                         <li><b>Coagularea sângelui:</b> Este un cofactor pentru enzimele implicate în procesul de coagulare, alături de vitamina K.</li>
+                     </ul>
+                </div>
+                 <div class="subsection" style="flex: 1.5;">
+                    <h3 class="subsection-title"><span class="subsection-icon">🌰</span>Surse alimentare</h3>
+                    <p>Manganul este răspândit în alimente, în special în cele de origine vegetală.</p>
+                     <ul>
+                        <li><b>Cereale integrale:</b> Ovăz, hrișcă, orez brun, pâine integrală.</li>
+                        <li><b>Nuci și semințe:</b> Alune de pădure, nuci pecan, semințe de dovleac.</li>
+                        <li><b>Leguminoase:</b> Linte, năut, fasole.</li>
+                        <li><b>Legume cu frunze verzi:</b> Spanac, kale.</li>
+                        <li><b>Fructe:</b> Ananas, fructe de pădure.</li>
+                        <li><b>Ceai negru și verde.</b></li>
+                        <li><b>Condimente:</b> Scorțișoară, cuișoare.</li>
+                     </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit și Exces</h2>
+             <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Simptome cauzate de deficit</h3>
+                    <p>Deficiența de mangan din dietă este foarte rară la om.</p>
+                    <ul>
+                        <li><b>Probleme osoase:</b> Demineralizare osoasă, creștere încetinită.</li>
+                        <li><b>Probleme dermatologice:</b> Erupții cutanate.</li>
+                        <li><b>Alterarea metabolismului:</b> Modificări ale metabolismului lipidelor și carbohidraților.</li>
+                        <li><b>Tulburări de dispoziție.</b></li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Exces și toxicitate</h3>
+                    <p>Toxicitatea manganului este o problemă serioasă, dar apare aproape exclusiv din expunerea cronică la praf de mangan în medii industriale (ex: sudură, minerit), nu din alimentație.</p>
+                     <ul>
+                        <li><b>Neurotoxicitate:</b> Acumularea de mangan în creier poate provoca o afecțiune neurologică numită <strong>manganism</strong>, cu simptome similare bolii Parkinson (tremor, rigiditate, instabilitate la mers).</li>
+                        <li><b>Simptome psihiatrice:</b> Iritabilitate, halucinații, modificări de dispoziție.</li>
+                    </ul>
+                </div>
+             </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">🤝</span>Sinergii și antagonisme</h3>
+                    <p><b>Sinergii (lucrează împreună cu):</b></p>
+                    <ul>
+                        <li><b>Siliciu, Cupru, Zinc:</b> Esențiale, alături de mangan, pentru sănătatea țesutului conjunctiv.</li>
+                        <li><b>Vitaminele B:</b> Susțin metabolismul energetic.</li>
+                    </ul>
+                     <p><b>Antagonisme (competiție sau blocaj):</b></p>
+                     <ul>
+                        <li><b>Fierul și Calciul:</b> Dozele mari din suplimente pot concura cu manganul pentru absorbție.</li>
+                    </ul>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
+                    <p><b>În MTC</b>, manganul susține <b>Oasele (guvernate de Rinichi)</b> și <b>Tendoanele (guvernate de Ficat)</b>. Prin rolul său în metabolism, este legat de funcția de transformare a <b>Splinei</b>.</p>
+                    <p><b>În Ayurveda</b>, manganul este important pentru integritatea <b>Asthi Dhatu</b> (țesutul osos) și <b>Mamsa Dhatu</b> (țesutul muscular). Poate ajuta la echilibrarea <b>Vata dosha</b> (prin susținerea sistemului nervos) și <b>Kapha dosha</b> (prin rolul metabolic).</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
+            <p>Din perspectivă holistică, manganul este asociat cu <b>echilibrul energetic, transformarea și fluiditatea mișcării (fizice și emoționale)</b>. Rezonează cu capacitatea noastră de a procesa și utiliza energia și de a ne adapta.</p>
+            <div class="section-content">
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">💔</span>Deficit</h3>
+                    <p>Un deficit de mangan poate fi legat de:</p>
+                    <ol>
+                        <li><b>Blocaje creative și dificultăți de transformare:</b> Incapacitatea de a depăși obstacole sau de a accesa noi soluții creative.<br><i>Manifestare fizică: Metabolism lent.</i></li>
+                        <li><b>Rigiditate în adaptare la schimbare:</b> O lipsă de flexibilitate emoțională, o rezistență la schimbare.<br><i>Manifestare fizică: Probleme articulare.</i></li>
+                    </ol>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
+                    <p>Obiectivele pe care le susține manganul pot fi atinse prin:</p>
+                    <ul>
+                        <li><b>Practici care încurajează integrarea și echilibrul</b> (ex: yoga, tai chi, dans liber).</li>
+                        <li><b>Exerciții creative</b> pentru a debloca fluxul de energie (pictură, scris).</li>
+                        <li><b>Meditații</b> pentru a cultiva adaptabilitatea și a elibera rigiditatea mentală.</li>
+                        <li><b>Conectarea cu natura</b> pentru a sprijini "împământarea" și echilibrul energetic.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
+            <div class="section-content">
+                <div class="subsection">
+                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Aport adecvat (AI)</h3>
+                     <p>Deoarece deficiența este rară, s-a stabilit un Aport Adecvat (AI).</p>
+                     <table>
+                         <thead>
+                             <tr>
+                                 <th>Grup de populație</th>
+                                 <th>AI (mg/zi)</th>
+                                 <th>Limită superioară (UL)</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                 <td>Bărbați (19+ ani)</td>
+                                 <td>2.3</td>
+                                 <td>11</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei (19+ ani)</td>
+                                 <td>1.8</td>
+                                 <td>11</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei însărcinate</td>
+                                 <td>2.0</td>
+                                 <td>11</td>
+                             </tr>
+                             <tr>
+                                 <td>Femei care alăptează</td>
+                                 <td>2.6</td>
+                                 <td>11</td>
+                             </tr>
+                         </tbody>
+                     </table>
+                </div>
+                <div class="subsection">
+                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
+                    <p>Suplimentarea cu mangan trebuie făcută cu mare prudență.</p>
+                    <div class="note warning-note">
+                        <p><b>Avertisment critic:</b> Excesul de mangan este <strong>neurotoxic</strong>. <strong>Nu luați suplimente cu doze mari de mangan</strong> fără recomandarea explicită a unui medic și monitorizarea nivelurilor. Riscul de toxicitate este mult mai mare la persoanele cu afecțiuni hepatice, deoarece ficatul este principalul organ de eliminare a manganului. O dietă variată este cea mai sigură metodă de a asigura un aport adecvat.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="footer-copyright">
+            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
+            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        </div>
+    </main>
+</body>
+</html>

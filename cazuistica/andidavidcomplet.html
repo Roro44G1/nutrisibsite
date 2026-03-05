@@ -1,0 +1,1199 @@
+<!DOCTYPE html> 
+ <html lang="ro"> 
+ <head> 
+ 	 <meta charset="UTF-8"> 
+ 	 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+ 	 <title>Raport Nutrițional - Andi David</title> 
+ 	 <link rel="preconnect" href="https://fonts.googleapis.com"> 
+ 	 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+ 	 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet"> 
+ 	 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" xintegrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+ 	 <style> 
+ 		 :root { 
+ 			 --background-color: #f4f7f6; 
+ 			 --container-bg-color: #ffffff; 
+ 			 --primary-text-color: #333333; 
+ 			 --secondary-text-color: #555555; 
+ 			 --header-bg: #2c3e50; /* Albastru închis pentru antet */ 
+ 			 --primary-accent-color: #2980b9; /* Albastru puternic */ 
+ 			 --secondary-accent-color: #3498db; /* Albastru deschis */ 
+ 			 --border-color: #dee2e6; 
+ 			 --tab-inactive-bg: #e9ecef; 
+ 			 --tab-active-bg: var(--container-bg-color); 
+ 			 --summary-box-bg: #eaf2f8; 
+ 			 --summary-box-border: #aed6f1; 
+ 			 --error-color: #c0392b; 
+ 		 } 
+
+ 		 body { 
+ 			 font-family: 'Roboto', sans-serif; 
+ 			 background-color: var(--background-color); 
+ 			 color: var(--primary-text-color); 
+ 			 margin: 0; 
+ 			 padding: 20px; 
+ 			 line-height: 1.7; 
+ 			 font-weight: 400; 
+ 			 -webkit-user-select: none; /* Safari */ 
+ 			 -ms-user-select: none; /* Internet Explorer/Edge */ 
+ 			 user-select: none; /* Standard syntax */ 
+ 		 } 
+
+ 		.main-container { 
+ 			 max-width: 900px; 
+ 			 margin: 20px auto; 
+ 			 background-color: var(--container-bg-color); 
+ 			 border-radius: 8px; 
+ 			 box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+ 			 overflow: hidden; 
+ 			 border: 1px solid var(--border-color); 
+ 		 } 
+ 		 
+ 		.page-header { 
+ 			 background-color: var(--header-bg); 
+ 			 color: white; 
+ 			 padding: 25px 30px; 
+ 		 } 
+ 		 
+ 		.page-header h1 { 
+ 			 color: white; 
+ 			 margin: 0; 
+ 			 font-size: 2.2em; 
+ 			 font-weight: 700; 
+ 		 } 
+ 		 
+ 		.page-header p { 
+ 			 color: #bdc3c7; 
+ 			 margin: 5px 0 0; 
+ 			 font-size: 1.1em; 
+ 			 font-weight: 300; 
+ 		 } 
+
+ 		.tab-container { 
+ 			 display: flex; 
+ 			 flex-wrap: wrap; 
+ 			 background-color: var(--tab-inactive-bg); 
+ 			 border-bottom: 1px solid var(--border-color); 
+ 		 } 
+
+ 		.tab-button { 
+ 			 flex-grow: 1; 
+ 			 padding: 15px 10px; 
+ 			 cursor: pointer; 
+ 			 border: none; 
+ 			 background-color: var(--tab-inactive-bg); 
+ 			 font-family: 'Roboto', sans-serif; 
+ 			 font-size: 15px; 
+ 			 font-weight: 700; 
+ 			 color: var(--secondary-text-color); 
+ 			 transition: background-color 0.3s, color 0.3s, opacity 0.3s; 
+ 			 border-bottom: 4px solid transparent; 
+ 			 text-align: center; 
+ 		 } 
+
+ 		.tab-button:hover { 
+ 			 background-color: #d8e0e6; 
+ 			 color: var(--primary-accent-color); 
+ 		 } 
+
+ 		.tab-button.active { 
+ 			 background-color: var(--tab-active-bg); 
+ 			 color: var(--primary-accent-color); 
+ 			 border-bottom: 4px solid var(--primary-accent-color); 
+ 		 } 
+
+ 		.tab-content { 
+ 			 display: none; 
+ 			 padding: 25px 30px; 
+ 			 min-height: 70vh; 
+ 			 max-height: 70vh; 
+ 			 overflow-y: auto; 
+ 		} 
+
+ 		.tab-content.active { 
+ 			 display: block; 
+ 		 } 
+ 		 
+ 		 h2, h3, h4, h5 { 
+ 			 font-family: 'Roboto', sans-serif; 
+ 			 font-weight: 700; 
+ 		 } 
+
+ 		 h2 { 
+ 			 font-size: 1.8em; 
+ 			 color: var(--header-bg); 
+ 			 border-bottom: 2px solid var(--primary-accent-color); 
+ 			 padding-bottom: 10px; 
+ 			 margin-top: 1.2em; 
+ 			 margin-bottom: 1em; 
+ 		 } 
+
+ 		 h3 { 
+ 			 font-size: 1.5em; 
+ 			 color: var(--primary-accent-color); 
+ 			 margin-top: 1.5em; 
+ 		 } 
+ 		 
+ 		 h4 { 
+ 			 font-size: 1.2em; 
+ 			 color: var(--header-bg); 
+ 			 font-style: italic; 
+ 		 } 
+ 		 
+ 		 h5 { 
+ 			 font-size: 1.1em; 
+ 			 color: var(--secondary-accent-color); 
+ 			 margin-top: 1.5em; 
+ 			 margin-bottom: 0.5em; 
+ 		 } 
+
+ 		 p, li { 
+ 			 font-size: 1em; 
+ 			 color: var(--secondary-text-color); 
+ 			 text-align: justify; 
+ 			 font-weight: 400; 
+ 		 } 
+
+ 		 a { 
+ 			 color: var(--primary-accent-color); 
+ 			 text-decoration: none; 
+ 			 font-weight: 700; 
+ 		 } 
+
+ 		 a:hover { 
+ 			 text-decoration: underline; 
+ 		 } 
+
+ 		 table { 
+ 			 width: 100%; 
+ 			 border-collapse: collapse; 
+ 			 margin: 25px 0; 
+ 			 font-size: 0.95em; 
+ 		 } 
+
+ 		 th, td { 
+ 			 border: 1px solid var(--border-color); 
+ 			 padding: 12px 15px; 
+ 			 text-align: left; 
+ 		 } 
+
+ 		 th { 
+ 			 background-color: #e9ecef; 
+ 			 font-weight: 700; 
+ 			 color: var(--header-bg); 
+ 		 } 
+
+ 		 tr:nth-child(even) { 
+ 			 background-color: #f8f9fa; 
+ 		 } 
+ 		 
+ 		 ul, ol { 
+ 			 padding-left: 25px; 
+ 		 } 
+ 		 
+ 		 blockquote { 
+ 			 border-left: 4px solid var(--secondary-accent-color); 
+ 			 padding-left: 20px; 
+ 			 margin: 20px 0; 
+ 			 font-style: italic; 
+ 			 color: #6c757d; 
+ 			 background-color: #f8f9fa; 
+ 			 border-radius: 0 5px 5px 0; 
+ 		 } 
+ 		 
+ 		.summary-box { 
+ 			 background-color: var(--summary-box-bg); 
+ 			 border: 1px solid var(--summary-box-border); 
+ 			 border-left: 5px solid var(--primary-accent-color); 
+ 			 padding: 20px; 
+ 			 margin: 20px 0; 
+ 			 border-radius: 8px; 
+ 		 } 
+ 		.summary-box h4 { 
+ 			 margin-top: 0; 
+ 			 color: var(--header-bg); 
+ 			 font-style: normal; 
+ 		 } 
+ 		.summary-box ol,.summary-box ul { 
+ 			 padding-left: 20px; 
+ 		 } 
+
+ 		.bibliography-list { 
+ 			 list-style-type: none; 
+ 			 padding-left: 0; 
+ 			 counter-reset: item; 
+ 			 column-count: 2; 
+ 			 column-gap: 40px; 
+ 		 } 
+ 		.bibliography-list li { 
+ 			 margin-bottom: 12px; 
+ 			 padding-left: 35px; 
+ 			 position: relative; 
+ 			 text-align: left; 
+ 			 font-size: 0.9em; 
+ 			 break-inside: avoid-column; 
+ 		} 
+ 		.bibliography-list li::before { 
+ 			 content: "[" counter(item) "]"; 
+ 			 counter-increment: item; 
+ 			 position: absolute; 
+ 			 left: 0; 
+ 			 font-weight: bold; 
+ 			 color: var(--primary-accent-color); 
+ 		 } 
+ 		 
+ 		 /* Password Protection Styles */ 
+ 		.tab-button.locked { 
+ 			 opacity: 0.6; 
+ 			 cursor: pointer; 
+ 		 } 
+ 		.tab-button.locked:hover { 
+ 			 background-color: #d8e0e6; 
+ 			 color: var(--secondary-text-color); 
+ 		 } 
+
+ 		.modal-overlay { 
+ 			 display: none; 
+ 			 position: fixed; 
+ 			 z-index: 1000; 
+ 			 left: 0; 
+ 			 top: 0; 
+ 			 width: 100%; 
+ 			 height: 100%; 
+ 			 overflow: auto; 
+ 			 background-color: rgba(0,0,0,0.5); 
+ 			 justify-content: center; 
+ 			 align-items: center; 
+ 		 } 
+
+ 		.modal-content { 
+ 			 background-color: #fefefe; 
+ 			 padding: 30px 40px; 
+ 			 border: 1px solid #888; 
+ 			 width: 90%; 
+ 			 max-width: 400px; 
+ 			 border-radius: 8px; 
+ 			 box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+ 			 text-align: center; 
+ 		 } 
+ 		 
+ 		.modal-content h3 { 
+ 			 margin-top: 0; 
+ 			 color: var(--header-bg); 
+ 		 } 
+ 		 
+ 		.modal-content input[type="password"] { 
+ 			 width: 100%; 
+ 			 padding: 12px; 
+ 			 margin: 10px 0 20px 0; 
+ 			 display: inline-block; 
+ 			 border: 1px solid #ccc; 
+ 			 border-radius: 4px; 
+ 			 box-sizing: border-box; 
+ 		 } 
+
+ 		.modal-content button { 
+ 			 background-color: var(--primary-accent-color); 
+ 			 color: white; 
+ 			 padding: 14px 20px; 
+ 			 margin: 8px 0; 
+ 			 border: none; 
+ 			 border-radius: 4px; 
+ 			 cursor: pointer; 
+ 			 width: 100%; 
+ 			 font-size: 16px; 
+ 			 font-weight: 700; 
+ 		 } 
+ 		 
+ 		.modal-content button:hover { 
+ 			 background-color: var(--header-bg); 
+ 		 } 
+ 		 
+ 		 #password-error { 
+ 			 color: var(--error-color); 
+ 			 font-weight: bold; 
+ 			 height: 20px; 
+ 		 } 
+
+ 		.page-footer { 
+ 			 text-align: center; 
+ 			 padding: 20px; 
+ 			 background-color: var(--header-bg); 
+ 			 color: #bdc3c7; 
+ 			 font-size: 0.9em; 
+ 		 } 
+ 		.page-footer p { 
+ 			 margin: 0; 
+ 			 color: #bdc3c7; 
+ 		 } 
+
+ 		 /* Stil pentru butonul de generare PDF */ 
+ 		 #generatePdfBtn { 
+ 			 background-color: #27ae60; 
+ 			 color: white; 
+ 			 padding: 12px 20px; 
+ 			 border: none; 
+ 			 border-radius: 5px; 
+ 			 cursor: pointer; 
+ 			 font-size: 16px; 
+ 			 font-weight: bold; 
+ 			 margin-top: 20px; 
+ 			 transition: background-color 0.3s; 
+ 		 } 
+
+ 		 #generatePdfBtn:hover { 
+ 			 background-color: #229954; 
+ 		 } 
+
+ 	 </style> 
+ </head> 
+ <body oncontextmenu="return false;" onkeydown="if(event.ctrlKey && (event.keyCode === 83 || event.keyCode === 85)) { return false; }"> 
+
+ 	 <div class="main-container"> 
+ 		 <header class="page-header"> 
+ 			 <h1>Raport nutrițional și de sănătate integrativă</h1> 
+ 			 <p>Un plan de acțiune personalizat pentru Andi David</p> 
+ 		 </header> 
+
+ 		 <div class="tab-container"> 
+ 			 <button class="tab-button" data-tab="introducere">Introducere</button> 
+ 			 <button class="tab-button protected" data-tab="riscuri">Riscuri și presiuni</button> 
+ 			 <button class="tab-button protected" data-tab="perspectiva-emotionala">Perspectiva emoțională</button> 
+ 			 <button class="tab-button protected" data-tab="terapii-holistice">Terapii holistice</button> 
+ 			 <button class="tab-button protected" data-tab="energie-hidratare">Energie & Hidratare</button> 
+ 			 <button class="tab-button protected" data-tab="sistem-digestiv">Sistem digestiv</button> 
+ 			 <button class="tab-button protected" data-tab="sistem-osos">Sistem osos</button> 
+ 			 <button class="tab-button protected" data-tab="micronutrienti">Micronutrienți</button> 
+ 			 <button class="tab-button protected" data-tab="plan-alimentar">Plan alimentar</button> 
+ 			 <button class="tab-button protected" data-tab="protocol">Protocol echilibrare</button> 
+ 			 <button class="tab-button protected" data-tab="bibliografie">Bibliografie</button> 
+ 		 </div> 
+
+ 		 <div id="introducere" class="tab-content"> 
+ 			 <h2>Rezumat și premisele raportului</h2> 
+ 			 
+ 			 <h4>Notă preliminară și declinarea responsabilității medicale</h4> 
+ 			 <p>Acest raport a fost elaborat ca răspuns la rezultatele unei evaluări de status general și nutrițional pentru Andi David, un sportiv de performanță în vârstă de 11 ani. Documentul reprezintă o analiză de nivel expert și un set de directive nutriționale și holistice fundamentate pe informațiile furnizate. Este esențial de subliniat că acest protocol are un caracter informativ și nu substituie un consult medical direct, un diagnostic clinic sau un tratament personalizat. Recomandările din acest raport trebuie implementate exclusiv sub supravegherea unei echipe multidisciplinare, care să includă medicul pediatru al copilului, un medic specializat în medicină sportivă [4], un dietetician autorizat sau un nutriționist cu specializare în nutriția sportivă [1], și, având în vedere noile perspective adăugate, un psiholog sau psihoterapeut specializat în lucrul cu copiii și sportivii. Scopul acestui document este de a oferi un cadru solid, bazat pe dovezi științifice, pentru a ghida discuțiile cu acești specialiști și pentru a construi un plan de acțiune coerent și eficient.</p> 
+ 			 
+ 			 <div class="summary-box"> 
+ 				 <h4>Datele evaluării pentru Andi David</h4> 
+ 				 <ul> 
+ 					 <li><strong>Beneficiar:</strong> ANDI DAVID</li> 
+ 					 <li><strong>Vârsta:</strong> 11 ani</li> 
+ 					 <li><strong>Greutate:</strong> 45 kg</li> 
+ 					 <li><strong>Înălțime:</strong> 160 cm</li> 
+ 				 </ul> 
+ 				 <h4>Aspecte relevante identificate în evaluare:</h4> 
+ 				 <ol> 
+ 					 <li>Deficiențe ușoare în metabolismul proteic</li> 
+ 					 <li>Coeficient de absorbție colonică scăzut</li> 
+ 					 <li>Coeficient scăzut de bacterii intestinale</li> 
+ 					 <li>Urobilinogen crescut</li> 
+ 					 <li>Densitate non-minerală osoasă scăzută</li> 
+ 					 <li>Coeficient crescut de osteoporoză</li> 
+ 					 <li>Deficit de <a href="https://nutrisibmicron.netlify.app/zinc.html" target="_blank">zinc</a>, <a href="https://nutrisibmicron.netlify.app/seleniu.html" target="_blank">seleniu</a>, <a href="https://nutrisibmicron.netlify.app/potasiu.html" target="_blank">potasiu</a>, <a href="https://nutrisibmicron.netlify.app/magneziu.html" target="_blank">magneziu</a>, <a href="https://nutrisibmicron.netlify.app/cupru.html" target="_blank">cupru</a></li> 
+ 					 <li>Deficit de <a href="https://nutrisibmicron.netlify.app/vitamina_b1.html" target="_blank">vitamina B1</a>, <a href="https://nutrisibmicron.netlify.app/vitamina_b2.html" target="_blank">B2</a>, <a href="https://nutrisibmicron.netlify.app/vitamina_c.html" target="_blank">C</a>, <a href="https://nutrisibmicron.netlify.app/vitamina_e.html" target="_blank">E</a></li> 
+ 					 <li>Dezechilibre de <a href="https://nutrisibholistic.netlify.app/aminoacizi" target= "_blank">aminoacizi</a> (exces ușor de lizină, triptofan, treonină, histidină, arginină)</li> 
+ 					 <li>Semne de deshidratare și deficit de electroliți</li> 
+ 				 </ol> 
+ 			 </div> 
+
+ 			 <h3>O abordare integrată pentru un sportiv în creștere</h3> 
+ 			 <p>Acest raport analizează în profunzime rezultatele evaluării. Perspectiva adoptată este una holistică, recunoscând că cele zece puncte identificate nu sunt probleme izolate, ci simptome interconectate ale unor dezechilibre mai profunde. Cauzele fundamentale par a fi o combinație între cerințele energetice excepționale ale sportului de performanță, o sănătate intestinală care necesită suport și un posibil impact al stresului psiho-emoțional asupra fiziologiei. Protocolul de față nu se concentrează doar pe corectarea punctuală a deficitelor, ci propune o strategie de reconstrucție a sănătății de la temelie, având ca piloni:</p> 
+ 			 <ul> 
+ 				 <li>Asigurarea unui aport energetic și hidric adecvat efortului.</li> 
+ 				 <li>Restaurarea sănătății digestive pentru a maximiza absorbția nutrienților.</li> 
+ 				 <li>Abordarea cauzelor emoționale și a impactului stresului.</li> 
+ 				 <li>Fortificarea sistemului osos aflat într-o perioadă critică de dezvoltare.</li> 
+ 				 <li>Repleția țintită a stocurilor de vitamine și minerale.</li> 
+ 			 </ul> 
+ 			 <p>Scopul final este de a-i oferi lui Andi David un fundament solid pentru o carieră sportivă lungă, performantă și, mai presus de orice, sănătoasă.</p> 
+ 		 </div> 
+
+ 		 <div id="riscuri" class="tab-content"> 
+ 			 <h2>Pericolele ascunse: nutriția neglijată și presiunea emoțională</h2> 
+ 			 <p>Pentru un tânăr sportiv, drumul către performanță este fragil. Neglijarea pilonilor fundamentali – nutriția și echilibrul emoțional – nu doar că oprește progresul, ci poate crea probleme de sănătate pe termen lung, transformând visul performanței într-un risc. Această secțiune analizează aceste pericole interconectate.</p> 
+
+ 			 <h3>Costul fizic și emoțional al unei nutriții deficitare</h3> 
+ 			 <p>Neglijarea nutriției la un sportiv de 11 ani nu este o simplă omisiune, ci o rețetă pentru eșec și probleme grave de sănătate. Corpul său este într-o dublă misiune: susține o creștere accelerată și se adaptează la un efort fizic intens. Când "combustibilul" este insuficient sau de proastă calitate, organismul intră într-o stare de <strong>"datorie energetică"</strong>, cu consecințe severe.</p> 
+ 			 
+ 			 <h4>Cascada pericolelor fizice:</h4> 
+ 			 <ul> 
+ 				 <li><strong>Canibalizarea osoasă și musculară:</strong> Așa cum s-a văzut în analize, organismul începe să descompună propriile țesuturi (oase, mușchi) pentru a obține energia necesară supraviețuirii. Acest lucru nu doar că oprește progresul sportiv, dar compromite fundația sănătății scheletice pentru tot restul vieții, crescând exponențial riscul de fracturi de stres și osteoporoză la vârsta adultă.</li> 
+ 				 <li><strong>Blocaj hormonal:</strong> Creșterea și dezvoltarea pubertară sunt dirijate de un echilibru hormonal delicat. Nutriția deficitară, în special lipsa grăsimilor sănătoase și a caloriilor, poate întârzia sau perturba acest proces natural, cu consecințe pe termen lung asupra dezvoltării fizice.</li> 
+ 				 <li><strong>Prăbușirea sistemului imunitar:</strong> Deficitele de <a href="https://nutrisibmicron.netlify.app/zinc.html" target="_blank">zinc</a>, <a href="https://nutrisibmicron.netlify.app/seleniu.html" target="_blank">seleniu</a> și <a href="https://nutrisibmicron.netlify.app/vitamina_c.html" target="_blank">vitamina C</a> lasă "porțile deschise" infecțiilor. Un sportiv care se îmbolnăvește frecvent nu se poate antrena constant, nu poate progresa și intră într-un cerc vicios de oboseală și performanță scăzută.</li> 
+ 				 <li><strong>Epuizare cronică:</strong> Fără suficiente vitamine B și minerale precum <a href="https://nutrisibmicron.netlify.app/fier.html" target="_blank">fierul</a> sau <a href="https://nutrisibmicron.netlify.app/magneziu.html" target="_blank">magneziul</a>, producția de energie la nivel celular este ineficientă. Copilul se va simți constant obosit, indiferent de cât doarme, o stare adesea confundată cu lenea, când în realitate este un semnal de alarmă biochimic.</li> 
+ 			 </ul> 
+
+ 			 <h4>Impactul emoțional și cognitiv:</h4> 
+ 			 <p>Creierul este un mare consumator de energie și nutrienți. O nutriție precară duce inevitabil la dificultăți de concentrare, iritabilitate, anxietate și chiar stări depresive. Performanța școlară scade, iar bucuria de a practica sportul dispare, fiind înlocuită de frustrare și de sentimentul că "oricât aș încerca, nu reușesc".</p> 
+
+ 			 <h3>Somatizarea: când corpul strigă ceea ce mintea nu poate spune</h3> 
+ 			 <p>Somatizarea este procesul prin care o suferință emoțională (stres, anxietate, frustrare) se manifestă prin simptome fizice reale, pentru care nu se găsește o cauză medicală directă. La un copil, care nu are încă vocabularul sau maturitatea de a-și exprima complexitatea emoțiilor, corpul devine adesea principalul canal de comunicare a suferinței.</p> 
+
+ 			 <h4>Presiunea părinților și eșecul sportiv:</h4> 
+ 			 <p>Presiunea de a performa, fie că este exprimată direct ("Trebuie să câștigi!") sau indirect (limbajul non-verbal, dezamăgirea subtilă a părinților după un eșec, comparațiile cu alți copii), este o sursă imensă de stres toxic pentru un copil. Acesta poate dezvolta o teamă paralizantă de a nu-și dezamăgi părinții, o teamă care îi subminează încrederea și plăcerea de a juca. Fiecare eșec sau performanță sub așteptări, dacă nu este gestionat cu empatie și sprijin necondiționat, se acumulează ca o frustrare tăcută, care trebuie să iasă la suprafață cumva.</p> 
+
+ 			 <h4>Cum "vorbește" corpul:</h4> 
+ 			 <ul> 
+ 				 <li><strong>Axa intestin-creier în acțiune:</strong> Așa cum am discutat, stresul are un impact direct și devastator asupra intestinului. Problemele digestive ale lui Andi (absorbție scăzută, microbiotă săracă) pot fi o manifestare fizică directă a anxietății și presiunii pe care le resimte. "Fluturii în stomac" dinaintea unui meci pot deveni o stare cronică de disconfort digestiv, balonare și malabsorbție.</li> 
+ 				 <li><strong>Dureri inexplicabile:</strong> Durerile de cap frecvente, durerile musculare care nu par justificate de efort sau durerile de stomac recurente pot fi semnale ale unei încărcături emoționale prea mari. Corpul preia și exprimă ceea ce copilul nu poate verbaliza.</li> 
+ 				 <li><strong>Oboseala cronică:</strong> Stresul constant menține corpul într-o stare de alertă, consumând resursele energetice și ducând la o epuizare care nu se remediază doar prin somn sau alimentație, ci necesită și o "liniștire" a sistemului nervos.</li> 
+ 			 </ul> 
+ 			 <p>Performanța sportivă a copilului este un maraton, nu un sprint. Sănătatea sa fizică și emoțională sunt profund interconectate și reprezintă fundația pe care se poate construi orice succes viitor. A investi în nutriție corectă și într-un mediu emoțional suportiv, în care valoarea copilului nu este condiționată de rezultate, este cea mai importantă strategie pentru o carieră sportivă lungă și, mai ales, fericită.</p> 
+ 		 </div> 
+ 		 
+ 		 <div id="perspectiva-emotionala" class="tab-content"> 
+ 			 <h2>Perspectiva holistică și cauzele emoționale – conexiunea minte-corp</h2> 
+ 			 <p>Pentru a înțelege pe deplin complexitatea acestui tablou clinic, este esențial să adoptăm o perspectivă holistică, care recunoaște că sănătatea fizică, emoțională, socială și cognitivă a unui copil sunt profund interconectate.[14, 88] Simptomele fizice nu sunt întotdeauna doar rezultatul unor procese biochimice izolate; ele pot fi și manifestarea fizică a unor stări emoționale și a stresului cronic.[12, 74] Această secțiune explorează cum presiunea emoțională și stresul, în special în contextul sportului de performanță, pot contribui direct la deficiențele fiziologice observate.</p> 
+
+ 			 <h3>Stresul și presiunea în sportul de performanță juvenil</h3> 
+ 			 <p>Sportul de performanță, deși benefic, poate expune tinerii atleți la niveluri semnificative de presiune. Aceasta poate proveni din multiple surse: așteptări autoimpuse de a fi perfect, teama de a greși, presiunea de a performa pentru echipă, antrenori sau pentru a satisface așteptările părinților.[17, 89] Când această presiune devine cronică, riscul de <strong>epuizare (burnout)</strong> crește exponențial.[11, 22]</p> 
+ 			 <p>Simptomele de burnout la tinerii sportivi includ oboseală cronică, scăderea performanței, modificări de dispoziție (iritabilitate, tristețe), lipsă de entuziasm, tulburări de somn și îmbolnăviri frecvente.[11, 22, 77] Este frapantă suprapunerea dintre aceste semne de epuizare emoțională și tabloul clinic al copilului, sugerând că stresul ar putea fi un factor contributor major.</p> 
+
+ 			 <h3>Cascada fiziologică a stresului: cum emoțiile devorează corpul</h3> 
+ 			 <p>Atunci când creierul percepe o amenințare – fie ea un pericol real sau presiunea unei competiții – activează răspunsul de "luptă, fugă sau îngheț" (fight, flight, or freeze).[74] Acest mecanism de supraviețuire inundă corpul cu hormoni de stres, precum cortizolul și adrenalina.[9] În timp ce acest răspuns este util pe termen scurt, stresul cronic menține corpul într-o stare de alertă constantă, cu efecte devastatoare asupra mai multor sisteme.</p> 
+ 			 <ul> 
+ 				 <li><strong>Impactul asupra sistemului digestiv (axa intestin-creier):</strong> Creierul și intestinul sunt într-o comunicare constantă printr-o rețea complexă de nervi și hormoni, cunoscută ca axa intestin-creier.[13, 50] Stresul cronic perturbă grav această comunicare.[33] În starea de "luptă sau fugă", corpul deviază sângele de la organele digestive către mușchi, considerând digestia o funcție non-esențială pentru supraviețuirea imediată.[76] Acest proces: 
+ 					 <ul> 
+ 						 <li><strong>Încetinește digestia și alterează secrețiile gastrice</strong>, ceea ce duce la o descompunere ineficientă a alimentelor și la o absorbție redusă a nutrienților.[32, 76] Aceasta este o explicație directă pentru "coeficientul de absorbție colonică scăzut".</li> 
+ 						 <li><strong>Afectează negativ microbiomul intestinal</strong>, ducând la un dezechilibru între bacteriile bune și cele rele.[3, 44] Acest fenomen poate explica "coeficientul scăzut de bacterii intestinale".</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong>Epuizarea nutrienților esențiali:</strong> Pentru a produce hormoni de stres și a menține corpul în alertă, organismul consumă cantități mari de vitamine și minerale. Stresul cronic este un "hoț" de nutrienți, epuizând în mod specific rezervele de: 
+ 					 <ul> 
+ 						 <li><a href="https://nutrisibmicron.netlify.app/magneziu.html" target="_blank">Magneziu</a>: Esențial pentru relaxarea musculară și funcția nervoasă. Stresul crește excreția de magneziu.[58, 79]</li> 
+ 						 <li><a href="https://nutrisibmicron.netlify.app/zinc.html" target="_blank">Zinc</a>: Crucial pentru imunitate și reglarea cortizolului. Nivelurile de zinc și cortizol au o relație inversă.[66, 79]</li> 
+ 						 <li>Vitaminele din complexul B (inclusiv <a href="https://nutrisibmicron.netlify.app/vitamina_b1.html" target="_blank">Vitamina B1</a> și <a href="https://nutrisibmicron.netlify.app/vitamina_b2.html" target="_blank">Vitamina B2</a>): Vitale pentru producția de energie și funcția neurologică, sunt consumate rapid în perioade de stres.[32, 79]</li> 
+ 						 <li><a href="https://nutrisibmicron.netlify.app/vitamina_c.html" target="_blank">Vitamina C</a>: Concentrată în glandele suprarenale, este utilizată masiv pentru producția de cortizol.[79]</li> 
+ 					 </ul> 
+ 					 Acest proces de epuizare se aliniază perfect cu deficitele de <strong><a href="https://nutrisibmicron.netlify.app/zinc.html" target="_blank">zinc</a>, <a href="https://nutrisibmicron.netlify.app/magneziu.html" target="_blank">magneziu</a>, <a href="https://nutrisibmicron.netlify.app/vitamina_b1.html" target="_blank">vitamina B1</a>, <a href="https://nutrisibmicron.netlify.app/vitamina_b2.html" target="_blank">B2</a> și <a href="https://nutrisibmicron.netlify.app/vitamina_c.html" target="_blank">C</a></strong> identificate în analizele copilului. 
+ 				 </li> 
+ 				 <li><strong>Impactul asupra sistemului scheletic:</strong> Hormonul principal al stresului cronic, <strong>cortizolul</strong>, are un efect direct distructiv asupra oaselor. Nivelurile ridicate de cortizol: 
+ 					 <ul> 
+ 						 <li><strong>Blochează absorbția calciului</strong> în intestin.[6, 8]</li> 
+ 						 <li><strong>Stimulează resorbția osoasă</strong>, adică descompunerea țesutului osos pentru a elibera aminoacizi, pe care corpul îi folosește ca sursă de energie de urgență.[6, 86]</li> 
+ 						 <li><strong>Reduce factorii de creștere osoasă</strong> și crește moartea celulelor formatoare de os (osteoblaste).[86]</li> 
+ 					 </ul> 
+ 					 Această legătură directă între stresul cronic și metabolismul osos oferă o explicație plauzibilă pentru "densitatea non-minerală scăzută" și "coeficientul crescut de osteoporoză", fenomene extrem de neobișnuite la un copil de 11 ani.[18, 29] 
+ 				 </li> 
+ 			 </ul> 
+ 			 
+ 			 <h3>Când corpul spune nu: costul stresului ascuns</h3> 
+ 			 <p>Medicul și autorul Gabor Maté, în lucrarea sa "Când corpul spune nu", argumentează că bolile cronice pot fi adesea modul în care corpul exprimă fizic o suferință emoțională pe care mintea nu o poate sau nu vrea să o recunoască.[48, 49, 10] Din această perspectivă, simptomele copilului nu sunt doar o listă de probleme tehnice, ci pot fi considerate un mesaj. Corpul său ar putea "spune nu" la un nivel de presiune, la un program de antrenament sau la un stres emoțional care a devenit nesustenabil.</p> 
+
+ 			 <h3>Strategii de acțiune pentru reziliență emoțională</h3> 
+ 			 <p>Abordarea cauzelor emoționale este la fel de importantă ca și protocolul nutrițional. Aceste recomandări nu înlocuiesc consultul unui specialist în sănătate mintală, ci oferă un cadru de sprijin pentru părinți și antrenori.</p> 
+ 			 <ol> 
+ 				 <li><strong>Comunicare și sprijin necondiționat:</strong> Creați un spațiu sigur în care copilul să poată vorbi despre gândurile și sentimentele sale fără teama de a fi judecat.[65] Mutați focusul de la rezultate și câștig la efort, progres și bucuria de a practica sportul.[17, 65]</li> 
+ 				 <li><strong>Tehnici de relaxare și conectare minte-corp:</strong> Integrați în rutina zilnică practici simple de management al stresului. 
+ 					 <ul> 
+ 						 <li><strong>Respirație conștientă:</strong> Exerciții simple de respirație profundă pot calma instantaneu sistemul nervos.[12]</li> 
+ 						 <li><strong>Stretching și yoga:</strong> Aceste activități ajută la eliberarea tensiunii musculare acumulate și la creșterea conștientizării corporale.[15]</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong>Prioritizarea somnului și a recuperării:</strong> Somnul este esențial pentru recuperarea fizică și emoțională. Asigurați o rutină de somn constantă și un mediu propice odihnei.[62, 65]</li> 
+ 				 <li><strong>Joc nestructurat și deconectare:</strong> Este vital ca viața copilului să nu se rezume doar la sport. Timpul pentru joc liber, creativ și nestructurat este fundamental pentru dezvoltarea sa și pentru eliberarea stresului.[20]</li> 
+ 				 <li><strong>Căutarea ajutorului specializat:</strong> Colaborarea cu un psiholog sportiv sau un terapeut poate oferi copilului instrumente valoroase pentru a gestiona presiunea, a-și construi reziliența și a naviga provocările sportului de performanță.[69, 70] A recunoaște nevoia de ajutor este un semn de putere, nu de slăbiciune.[65]</li> 
+ 			 </ol> 
+ 		 </div> 
+ 		 
+ 		 <div id="terapii-holistice" class="tab-content"> 
+ 			 <h2>Abordări holistice complementare pentru recuperare și echilibru</h2> 
+ 			 <p><i>Notă importantă: Terapiile prezentate în această secțiune sunt considerate complementare și nu trebuie să înlocuiască niciodată protocolul medical și nutrițional de bază. Integrarea lor se va face doar cu acordul medicului curant și sub îndrumarea unor practicieni certificați.</i></p> 
+
+ 			 <h3>Abordarea ayurvedică: echilibrarea focului digestiv și a vitalității</h3> 
+ 			 <p>Din perspectiva medicinei ayurvedice, tabloul clinic al lui Andi sugerează un dezechilibru al dosha-urilor (energiile fundamentale) și o slăbire a focului digestiv, numit <strong>Agni</strong>. Efortul fizic intens este asociat cu energia <strong>Pitta</strong> (foc și apă), iar stresul și epuizarea cu <strong>Vata</strong> (aer și eter). Un exces de Pitta neechilibrat poate "arde" resursele, în timp ce un Vata agravat duce la uscăciune, slăbiciune osoasă și probleme digestive.[16, 42]</p> 
+ 			 <ul> 
+ 				 <li><strong>Pacificarea Pitta și Vata:</strong> Dieta trebuie să fie calmantă, hrănitoare și ușor de digerat. Se recomandă alimente gătite, calde, cu gusturi dulce, amar și astringent. Evitarea alimentelor picante, acide, prăjite și a celor reci este esențială.</li> 
+ 				 <li><strong>Întărirea Agni (focul digestiv):</strong> Consumul de ceai de ghimbir înainte de mese, utilizarea condimentelor digestive precum chimenul, coriandrul și feniculul, și respectarea unui program regulat de mese pot ajuta la refacerea capacității digestive.</li> 
+ 				 <li><strong>Reconstruirea Ojas (vitalitatea):</strong> Ojas este esența vitală a tuturor țesuturilor. Pentru a o reface, se recomandă alimente precum ghee (unt clarifiat), lapte cald cu mirodenii (cardamom, scorțișoară), migdale înmuiate și curmale. Plante adaptogene precum <strong>Ashwagandha</strong> pot fi de ajutor, dar doar la recomandarea unui specialist ayurvedic.[16]</li> 
+ 			 </ul> 
+
+ 			 <h3>Medicina tradițională chineză (MTC): tonifierea splinei și a rinichilor</h3> 
+ 			 <p>În MTC, sănătatea depinde de fluxul armonios al energiei vitale (<strong>Qi</strong>) prin canalele energetice numite meridiane. Simptomele lui Andi indică un deficit major la nivelul a două sisteme de organe:</p> 
+ 			 <ul> 
+ 				 <li><strong>Deficit de Qi al <a href="https://nutrisibmeridiane.netlify.app/meridianul-splinapancreas" target="_blank">Splinei:</a></strong> Splina, în MTC, este responsabilă cu transformarea alimentelor în Qi și Sânge și cu menținerea masei musculare. O splină slăbită duce la digestie proastă, absorbție deficitară, oboseală și slăbiciune musculară.</li> 
+ 				 <li><strong>Deficit de Esență a <a href="https://nutrisibmeridiane.netlify.app/meridianul-rinichi" target="_blank">Rinichilor:</a></strong> Rinichii stochează Esența (Jing), care este baza creșterii, dezvoltării și sănătății oaselor. Epuizarea prin efort excesiv și stres consumă această esență, ducând la probleme osoase și o vitalitate scăzută.</li> 
+ 				 <li><strong>Stagnarea Qi-ului <a href="https://nutrisibmeridiane.netlify.app/meridianul-ficat" target="_blank">Ficatului:</a></strong> Presiunea emoțională și frustrarea pot bloca fluxul liber al Qi-ului în meridianul Ficatului, ceea ce agravează problemele digestive și poate duce la iritabilitate.</li> 
+ 			 </ul> 
+ 			 <p><strong>Terapii MTC recomandate:</strong></p> 
+ 			 <ul> 
+ 				 <li><strong>Acupunctura/Presopunctura:</strong> Stimularea unor puncte specifice poate tonifia energia organelor deficitare și poate debloca stagnările. Puncte cheie ar fi: <strong>Stomac 36 (Zusanli)</strong> pentru digestie și vitalitate generală, <strong>Splină 6 (Sanyinjiao)</strong> pentru a hrăni Sângele și a calma mintea, și <strong>Rinichi 3 (Taixi)</strong> pentru a tonifia Esența Rinichilor.[11]</li> 
+ 				 <li><strong>Dietoterapie chineză:</strong> Consumul de alimente care tonifică Splina (cartofi dulci, dovleac, orez, ovăz) și Rinichii (fasole neagră, nuci, semințe de susan negru).</li> 
+ 			 </ul> 
+
+ 			 <h3>Tehnici de meditație și echilibrare energetică (Chakre)</h3> 
+ 			 <p>Stresul și presiunea performanței creează un dezechilibru în sistemul energetic al corpului. Meditația și conștientizarea centrilor energetici (chakre) pot ajuta la restabilirea armoniei interioare.</p> 
+ 			 <ul> 
+ 				 <li><strong>Chakrele afectate:</strong> 
+ 					 <ul> 
+ 						 <li><strong><a href="https://nutrisibchakra.netlify.app/muladhara" target="_blank">Muladhara (Chakra Rădăcinii):</a></strong> Localizată la baza coloanei, este asociată cu sentimentul de siguranță, stabilitate și sănătatea fizică (oase, picioare). Dezechilibrul se manifestă prin insecuritate și probleme scheletice.</li> 
+ 						 <li><strong><a href="https://nutrisibchakra.netlify.app/manipura" target="_blank">Manipura (Chakra Plexului Solar):</a></strong> Localizată în zona stomacului, guvernează puterea personală, stima de sine și sistemul digestiv. Presiunea de a performa și eșecurile pot bloca această chakră, ducând la probleme digestive și lipsă de încredere.</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong>Tehnici recomandate:</strong> 
+ 					 <ul> 
+ 						 <li><strong>Meditația de <a href="https://nutrisibholistic.netlify.app/impamantarea" target="blank">împământare (Grounding):</a></strong> Exerciții simple de vizualizare în care copilul își imaginează rădăcini care cresc din tălpile picioarelor adânc în pământ, oferindu-i stabilitate și siguranță. Aceasta ajută la echilibrarea chakrei rădăcinii.[2]</li> 
+ 						 <li><strong>Respirația abdominală:</strong> Plasarea mâinilor pe abdomen și observarea mișcării de ridicare și coborâre în timpul respirației aduce energia și conștientizarea în zona plexului solar, calmând sistemul nervos și ajutând digestia.[9]</li> 
+ 						 <li><strong>Vizualizarea culorilor:</strong> Asocierea culorii roșii cu chakra rădăcinii și a culorii galbene cu plexul solar în timpul unor meditații scurte poate ajuta la revitalizarea acestor centri energetici.</li> 
+ 					 </ul> 
+ 				 </li> 
+ 			 </ul> 
+ 		 </div> 
+ 		 
+ 		 <div id="energie-hidratare" class="tab-content"> 
+ 			 <h2>Alimentarea tânărului atlet: fundamentele energetice și de hidratare</h2> 
+ 			 <p>Pentru un tânăr sportiv, hrana nu este doar o sursă de plăcere, ci combustibilul esențial care susține performanța, creșterea și recuperarea. Orice strategie nutrițională trebuie să înceapă cu asigurarea unui aport energetic și hidric adecvat, care să corespundă cerințelor excepționale impuse de antrenamentele zilnice.</p> 
+ 			 
+ 			 <h3>Calcularea necesarului caloric pentru antrenamente intense</h3> 
+ 			 <p>Datele antropometrice (11 ani, 160 cm, 45 kg) și nivelul de activitate fizică (2-3 ore de antrenament pe zi) plasează copilul într-o categorie cu cerințe energetice foarte ridicate. Tabelele standard indică un necesar de aproximativ 2700 kcal/zi pentru un băiat activ de această vârstă.[35] Totuși, acest nivel este adesea insuficient pentru sportivii de performanță.</p> 
+ 			 <p>Pentru o estimare mai precisă, se poate utiliza ecuația Mifflin-St Jeor pentru a calcula Rata Metabolică Bazală (BMR) – energia consumată în repaus.[52]</p> 
+ 			 <ul> 
+ 				 <li><strong>Calcul BMR:</strong><br> 
+ 					 BMR = (10 x 45) + (6.25 x 160) - (5 x 11) + 5 = 450 + 1000 - 55 + 5 = 1400 kcal 
+ 				 </li> 
+ 			 </ul> 
+ 			 <p>Această valoare reprezintă doar necesarul pentru funcțiile vitale. Necesarul caloric total zilnic (TDEE) se obține prin multiplicarea BMR cu un factor de activitate. Pentru 2-3 ore de antrenament intens, acest factor este de cel puțin 1.7-1.9.</p> 
+ 			 <ul> 
+ 				 <li><strong>Calcul TDEE (necesar caloric total):</strong><br> 
+ 					 TDEE = BMR x 1.8 = 1400 x 1.8 = 2520 kcal/zi 
+ 				 </li> 
+ 			 </ul> 
+ 			 <p>Această valoare de ~2500 kcal/zi reprezintă minimul necesar doar pentru a menține greutatea actuală. Prezența multiplilor deficite nutriționale, a problemelor de metabolism proteic și, mai ales, a semnelor de demineralizare osoasă, indică în mod clar că organismul nu primește suficientă energie pentru a acoperi simultan costurile antrenamentului și procesele fundamentale de creștere și reparație. Această stare este cunoscută ca <strong>Disponibilitate Energetică Scăzută (Low Energy Availability - LEA)</strong>. În starea de LEA, organismul intră într-un mod de conservare, sacrificând funcții pe termen lung, precum construirea oaselor și sinteza musculară, pentru a supraviețui pe termen scurt.[54]</p> 
+ 			 <p>Prin urmare, obiectivul caloric trebuie să depășească simpla menținere.<br> 
+ 			 <strong>Recomandare:</strong> Aportul caloric zilnic țintă ar trebui să fie de <strong>3000-3500 kcal</strong>, monitorizat și ajustat în funcție de evoluția greutății și a stării generale, sub îndrumarea unui specialist.</p> 
+ 			 
+ 			 <h3>Protocolul de hidratare și electroliți: piatra de temelie a recuperării</h3> 
+ 			 <p>Deshidratarea și deficitul de electroliți, identificate în evaluare, sunt probleme critice pentru un sportiv. Hidratarea este adesea subestimată, însă este cel mai important nutrient pentru performanță, recuperare și funcționarea corectă a organelor interne. [75] Electroliții sunt minerale esențiale (precum sodiu, <a href="https://nutrisibmicron.netlify.app/potasiu.html" target="_blank">potasiu</a>, <a href="https://nutrisibmicron.netlify.app/magneziu.html" target="_blank">magneziu</a>, <a href="https://nutrisibmicron.netlify.app/calciu.html" target="_blank">calciu</a>) care se pierd prin transpirație și sunt vitale pentru funcția musculară, transmiterea nervoasă și menținerea echilibrului hidric în organism. Un deficit de electroliți poate duce la crampe musculare, oboseală și scăderea performanței.</p> 
+ 			 <p>Unul dintre rezultatele anormale – <strong>urobilinogenul crescut</strong> – poate fi, de asemenea, direct legat de starea de hidratare. Deși poate semnala o patologie hepatică [16, 70], în contextul unui sportiv, este frecvent un indicator al <strong>hemolizei induse de efort</strong> (distrugerea globulelor roșii din cauza impactului mecanic al antrenamentului), combinată cu <strong>deshidratarea</strong>. [78] Deshidratarea concentrează urina, ceea ce face ca orice cantitate de urobilinogen să pară crescută, și, în același timp, pune un stres suplimentar pe ficat. [2, 78]</p> 
+ 			 <p>Prin urmare, un protocol de hidratare riguros nu este doar o recomandare generală, ci o intervenție terapeutică directă.</p> 
+ 			 <h4>Protocol de hidratare recomandat:</h4> 
+ 			 <ul> 
+ 				 <li><strong>Hidratare de bază:</strong> Consumul a cel puțin <strong>2.5 - 3 litri de lichide pe zi</strong>, predominant apă plată, în afara antrenamentelor.</li> 
+ 				 <li><strong>Înainte de antrenament:</strong> 500-600 ml de apă cu 2-3 ore înainte și încă 200-300 ml cu 20 de minute înainte.</li> 
+ 				 <li><strong>În timpul antrenamentului:</strong> 150-250 ml de lichide la fiecare 15-20 de minute. Pentru antrenamentele care depășesc 60-90 de minute, este esențială o băutură sportivă care să conțină electroliți pentru a înlocui pierderile de <strong><a href="https://nutrisibmicron.netlify.app/potasiu.html" target="_blank">potasiu</a> și <a href="https://nutrisibmicron.netlify.app/magneziu.html" target="_blank">magneziu</a></strong> (ambele deficitare), precum și sodiu. [51]</li> 
+ 				 <li><strong>După antrenament (rehidratare):</strong> Refacerea pierderilor de lichide este critică. Se recomandă consumul a 1.5 litri de lichid pentru fiecare kilogram de greutate corporală pierdut în timpul antrenamentului. Utilizarea sărurilor de rehidratare orală (SRO) sau a unor băuturi de recuperare cu electroliți poate fi extrem de benefică. [47]</li> 
+ 				 <li><strong>Monitorizare:</strong> Culoarea urinei este un indicator simplu și eficient. O urină de culoarea paiului deschis indică o hidratare bună, în timp ce o culoare închisă, de chihlimbar, semnalează deshidratare. [2]</li> 
+ 			 </ul> 
+ 		 </div> 
+
+ 		 <div id="sistem-digestiv" class="tab-content"> 
+ 			 <h2>Reconstrucția din interior: strategie pentru restaurarea digestivă și metabolică</h2> 
+ 			 <p>Deficiențele multiple și problemele metabolice semnalate sugerează că organismul nu doar că nu primește suficienți nutrienți, dar nici nu îi poate procesa și absorbi corect. Această secțiune se concentrează pe refacerea funcțiilor digestive și metabolice.</p> 
+ 			 
+ 			 <h3>Corectarea metabolismului proteic și a dezechilibrului de aminoacizi</h3> 
+ 			 <p>Rezultatele indică "ușoare deficiențe în metabolismul proteic" și un "exces ușor de lizină, triptofan, treonină, histidină, arginină". Aceste două constatări par contradictorii, dar, în realitate, ele dezvăluie o problemă metabolică mai profundă.</p> 
+ 			 <p>Excesul aparent al anumitor aminoacizi în sânge nu indică neapărat un consum prea mare, ci mai degrabă o <strong>incapacitate a organismului de a-i utiliza eficient</strong>. Acest blocaj metabolic, sau "ambuteiaj", poate fi cauzat de deficiența unor cofactori esențiali. Vitaminele din complexul B, în special <strong><a href="https://nutrisibmicron.netlify.app/vitamina_b1.html" target="_blank">vitamina B1</a> (tiamina) și <a href="https://nutrisibmicron.netlify.app/vitamina_b2.html" target="_blank">vitamina B2</a> (riboflavina)</strong> – ambele deficitare în acest caz – sunt coenzime critice în metabolismul energetic și în cel al aminoacizilor. [45, 64] Fără ele, procesul de sinteză a noilor proteine este încetinit, iar aminoacizii rămân în circulație, creând un fals aspect de "exces".</p> 
+ 			 <h4>Strategie de intervenție:</h4> 
+ 			 <ol> 
+ 				 <li><strong>Asigurarea aportului proteic:</strong> Respectarea țintei de 72-81 g de <a href="https://nutrisibholistic.netlify.app/proteins" target="_blank"> proteine </a>pe zi, cu un accent pe diversitate și calitate.</li> 
+ 				 <li><strong>Surse proteice de calitate:</strong> 
+ 					 <ul> 
+ 						 <li><strong>Carne slabă:</strong> Piept de pui sau curcan, mușchi de vită.</li> 
+ 						 <li><strong>Pește:</strong> Somon, ton, sardine, cod – oferă și acizi grași omega-3 benefici.</li> 
+ 						 <li><strong>Ouă:</strong> Considerate un aliment complet, o sursă excelentă de proteine.</li> 
+ 						 <li><strong>Lactate:</strong> Iaurt grecesc, brânză de vaci (cottage), kefir – oferă și calciu și probiotice.</li> 
+ 						 <li><strong>Surse vegetale (complementare):</strong> Linte, năut, quinoa, tofu, fasole. [82]</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong>Corectarea deficitelor de vitamine B:</strong> Urmarea recomandărilor din tabelele de repleție pentru a reface stocurile de B1 și B2.</li> 
+ 			 </ol> 
+ 			 
+ 			 <h3>Planul de revitalizare a sănătății intestinale: probiotice și prebiotice</h3> 
+ 			 <p>Rezultatele care arată un "coeficient de absorbție colonică scăzut" și un "coeficient scăzut de bacterii intestinale" sunt, probabil, piesa centrală a acestui puzzle. Un intestin cu o floră bacteriană (microbiotă) sărăcită este incapabil să extragă nutrienții vitali din alimente. [81] Stresul fizic intens este un factor cunoscut care poate afecta negativ microbiota. [10]</p> 
+ 			 <p>Prin urmare, refacerea sănătății intestinale este prioritatea absolută. Strategia este una duală:</p> 
+ 			 <ul> 
+ 				 <li><strong>Probiotice (repopularea microbiotei):</strong> Sunt microorganisme vii care aduc beneficii sănătății. Scopul este de a reintroduce în intestin tulpini benefice, precum <i>Lactobacillus</i> și <i>Bifidobacterium</i>. [26] 
+ 					 <ul> 
+ 						 <li><strong>Surse alimentare:</strong> Iaurt și chefir (naturale, neîndulcite), varză murată (nepasteurizată), castraveți murați în saramură (nu în oțet), miso, kombucha. [46]</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong>Prebiotice (hrănirea bacteriilor bune):</strong> Sunt tipuri de fibre care servesc drept hrană pentru bacteriile intestinale benefice. 
+ 					 <ul> 
+ 						 <li><strong>Surse alimentare:</strong> Usturoi, ceapă, praz, sparanghel, banane (mai puțin coapte), mere, cereale integrale (ovăz, orz), leguminoase (fasole, linte). [73]</li> 
+ 					 </ul> 
+ 				 </li> 
+ 			 </ul> 
+ 			 <p>Prin combinarea zilnică a alimentelor probiotice și prebiotice, se creează un mediu intestinal propice pentru refacerea florei și creșterea capacității de absorbție a nutrienților. [73]</p> 
+ 		 </div> 
+ 		 
+ 		 <div id="sistem-osos" class="tab-content"> 
+ 			 <h2>Fortificarea viitorului: un protocol proactiv pentru sănătatea scheletică</h2> 
+ 			 <p>Constatările privind "densitatea non-minerală scăzută" și un "coeficient crescut de osteoporoză" sunt extrem de importante și necesită o intervenție imediată. Apariția acestor markeri la un copil de 11 ani este un semnal de alarmă, indicând un dezechilibru sever între formarea și resorbția osoasă.</p> 
+ 			 
+ 			 <h3>Fereastra critică pentru masa osoasă maximă</h3> 
+ 			 <p>Copilăria și adolescența reprezintă o fereastră de oportunitate unică și limitată în timp pentru acumularea masei osoase. Capitalul osos maxim (Peak Bone Mass), atins în jurul vârstei de 20-25 de ani, determină riscul de osteoporoză la vârsta adultă. [68, 79] O densitate osoasă scăzută la 11 ani sugerează că acest proces fundamental este deja compromis.</p> 
+ 			 <p>Cauzele sunt direct legate de problemele identificate anterior: disponibilitatea energetică scăzută (organismul "canibalizează" osul pentru energie), malabsorbția nutrienților și deficiențele de cofactori (<a href="https://nutrisibmicron.netlify.app/magneziu.html" target="_blank">magneziu</a>, <a href="https://nutrisibmicron.netlify.app/zinc.html" target="_blank">zinc</a>, <a href="https://nutrisibmicron.netlify.app/potasiu.html" target="_blank">potasiu</a>, <a href="https://nutrisibmicron.netlify.app/vitamina_c.html" target="_blank">vitamina C</a>, D). Tratarea sănătății osoase în izolare, prin simpla administrare de <a href="https://nutrisibmicron.netlify.app/calciu.html" target="_blank">calciu</a>, este sortită eșecului. Abordarea trebuie să fie integrată.</p> 
+ 			 
+ 			 <h3>Matricea nutrienților pentru construcția osoasă: o abordare sinergică</h3> 
+ 			 <p>Construirea unui os puternic necesită atât "cărămizi" (<a href="https://nutrisibmicron.netlify.app/calciu.html" target="_blank">calciu</a>), cât și o echipă de "muncitori" (ceilalți nutrienți) pentru a le asambla corect.</p> 
+ 			 <ul> 
+ 				 <li><strong><a href="https://nutrisibmicron.netlify.app/calciu.html" target="_blank">Calciu</a> și <a href="https://nutrisibmicron.netlify.app/vitamina_d.html" target="_blank">Vitamina D</a>:</strong> Duo-ul fundamental. Calciul este "cărămida", iar vitamina D este "șeful de șantier" care asigură transportul calciului. [24] 
+ 					 <ul> 
+ 						 <li><strong>Surse de <a href="https://nutrisibmicron.netlify.app/calciu.html" target="_blank">Calciu</a>:</strong> Produse lactate, legume cu frunze verzi (broccoli, kale), tofu îmbogățit, sardine (cu oase), migdale. [85, 24]</li> 
+ 						 <li><strong>Surse de <a href="https://nutrisibmicron.netlify.app/vitamina_d.html" target="_blank">Vitamina D</a>:</strong> Expunerea la soare, pește gras (somon, macrou), gălbenuș de ou, alimente fortificate. [27]</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong><a href="https://nutrisibmicron.netlify.app/magneziu.html" target="_blank">Magneziu</a> (Deficitar):</strong> Activează <a href="https://nutrisibmicron.netlify.app/vitamina_d.html" target="_blank">vitamina D</a> și reglează transportul de <a href="https://nutrisibmicron.netlify.app/calciu.html" target="_blank">calciu</a>. [60] 
+ 					 <ul> 
+ 						 <li><strong>Surse:</strong> Semințe de dovleac, migdale, leguminoase, avocado, spanac. [83]</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong><a href="https://nutrisibmicron.netlify.app/zinc.html" target="_blank">Zinc</a> (Deficitar):</strong> Stimulează celulele formatoare de os (osteoblaste). [66] 
+ 					 <ul> 
+ 						 <li><strong>Surse:</strong> Carne roșie, stridii, năut, semințe de dovleac. [43]</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong><a href="https://nutrisibmicron.netlify.app/vitamina_k.html" target="_blank">Vitamina K</a>:</strong> "Leagă" <a href="https://nutrisibmicron.netlify.app/calciu.html" target="_blank">calciul</a> în structura osoasă. [60] 
+ 					 <ul> 
+ 						 <li><strong>Surse:</strong> Legume cu frunze verzi (spanac, kale, broccoli).</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong><a href="https://nutrisibmicron.netlify.app/vitamina_c.html" target="_blank">Vitamina C</a> (Deficitară):</strong> Indispensabilă pentru sinteza colagenului, "schela" osului. [60] 
+ 					 <ul> 
+ 						 <li><strong>Surse:</strong> Ardei gras roșu, kiwi, coacăze, broccoli, portocale. [7]</li> 
+ 					 </ul> 
+ 				 </li> 
+ 				 <li><strong><a href="https://nutrisibmicron.netlify.app/potasiu.html" target="_blank">Potasiu</a> (Deficitar):</strong> Neutralizează acizii din organism, prevenind "scurgerea" <a href="https://nutrisibmicron.netlify.app/calciu.html" target="_blank">calciului</a> din oase. [84] 
+ 					 <ul> 
+ 						 <li><strong>Surse:</strong> Cartofi dulci, spanac, avocado, banane, somon. [87]</li> 
+ 					 </ul> 
+ 				 </li> 
+ 			 </ul> 
+ 		 </div> 
+ 		 
+ 		 <div id="micronutrienti" class="tab-content"> 
+ 			 <h2>Repleția țintită a micronutrienților esențiali</h2> 
+ 			 <p>Deficitele multiple de vitamine și minerale sunt o consecință directă a dezechilibrului dintre cerințele crescute ale lui Andi David și capacitatea redusă de absorbție. Această secțiune oferă un ghid pentru corectarea fiecărui deficit, prioritizând alimentele integrale.</p> 
+ 			 
+ 			 <h3>Refacerea echilibrului mineral: un ghid bazat pe alimentație</h3> 
+ 			 <h4>Tabelul 2: Ghid de repleție pentru mineralele deficitare</h4> 
+ 			 <table> 
+ 				 <thead> 
+ 					 <tr> 
+ 						 <th>Mineral deficitar</th> 
+ 						 <th>Rol esențial pentru tânărul sportiv</th> 
+ 						 <th>Surse alimentare de top</th> 
+ 					 </tr> 
+ 				 </thead> 
+ 				 <tbody> 
+ 					 <tr> 
+ 						 <td><strong><a href="https://nutrisibmicron.netlify.app/zinc.html" target="_blank">Zinc</a></strong></td> 
+ 						 <td>Imunitate, sinteza proteinelor, vindecare, sănătate osoasă. [66, 43]</td> 
+ 						 <td>Carne de vită, semințe de dovleac, năut, nuci caju, iaurt/kefir.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="https://nutrisibmicron.netlify.app/seleniu.html" target="_blank">Seleniu</a></strong></td> 
+ 						 <td>Protecție antioxidantă, funcție tiroidiană, imunitate. [67]</td> 
+ 						 <td>Nuci braziliene (1-2/zi), ton, sardine, ouă, orez brun.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="https://nutrisibmicron.netlify.app/potasiu.html" target="_blank">Potasiu</a></strong></td> 
+ 						 <td>Echilibru electrolitic, funcție musculară și nervoasă, sănătate osoasă. [84, 87]</td> 
+ 						 <td>Cartof dulce, spanac, avocado, fasole albă, somon, banană.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="https://nutrisibmicron.netlify.app/magneziu.html" target="_blank">Magneziu</a></strong></td> 
+ 						 <td>Producția de energie (ATP), funcție musculară, activează Vit. D. [60, 83]</td> 
+ 						 <td>Semințe de dovleac, migdale, spanac, fasole neagră, avocado.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="https://nutrisibmicron.netlify.app/cupru.html" target="_blank">Cupru</a></strong></td> 
+ 						 <td>Formarea globulelor roșii și a colagenului, absorbția fierului. [65]</td> 
+ 						 <td>Ficat de vită, nuci caju, semințe de floarea-soarelui, cartofi, ciuperci.</td> 
+ 					 </tr> 
+ 				 </tbody> 
+ 			 </table> 
+ 			 
+ 			 <h3>Refacerea stocurilor de vitamine cheie pentru energie și protecție</h3> 
+ 			 <h4>Tabelul 3: Ghid de repleție pentru vitaminele deficitare</h4> 
+ 			 <table> 
+ 				 <thead> 
+ 					 <tr> 
+ 						 <th>Vitamina deficitară</th> 
+ 						 <th>Rol esențial pentru tânărul sportiv</th> 
+ 						 <th>Surse alimentare de top</th> 
+ 					 </tr> 
+ 				 </thead> 
+ 				 <tbody> 
+ 					 <tr> 
+ 						 <td><strong><a href="https://nutrisibmicron.netlify.app/vitamina_b1.html" target="_blank">Vitamina B1 (Tiamina)</a></strong></td> 
+ 						 <td>Metabolismul carbohidraților (energie), funcție nervoasă. [45]</td> 
+ 						 <td>Carne de porc, semințe de floarea-soarelui, fasole neagră, linte.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="https://nutrisibmicron.netlify.app/vitamina_b2.html" target="_blank">Vitamina B2 (Riboflavina)</a></strong></td> 
+ 						 <td>Producția de energie, metabolismul proteinelor. [64]</td> 
+ 						 <td>Ficat de vită, iaurt, migdale, ouă, spanac.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="https://nutrisibmicron.netlify.app/vitamina_c.html" target="_blank">Vitamina C</a></strong></td> 
+ 						 <td>Antioxidant, sinteza colagenului (oase, tendoane), imunitate. [60, 7]</td> 
+ 						 <td>Ardei gras roșu, kiwi, coacăze negre, broccoli, portocale.</td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td><strong><a href="https://nutrisibmicron.netlify.app/vitamina_e.html" target="_blank">Vitamina E</a></strong></td> 
+ 						 <td>Antioxidant, protejează membranele celulare de stresul oxidativ. [72]</td> 
+ 						 <td>Semințe de floarea-soarelui, migdale, ulei de germeni de grâu, avocado.</td> 
+ 					 </tr> 
+ 				 </tbody> 
+ 			 </table> 
+ 		 </div> 
+ 		 
+ 		 <div id="plan-alimentar" class="tab-content"> 
+ 			 <h2>Planul de acțiune integrat: de la teorie la practică</h2> 
+ 			 <p>Această secțiune transpune toate recomandările anterioare într-un plan practic și aplicabil. Scopul este de a oferi un model flexibil pe care părintele, în colaborare cu specialiștii, îl poate adapta pentru a asigura o nutriție optimă.</p> 
+ 			 
+ 			 <h3>Exemplu de plan alimentar integrat pe 7 zile</h3> 
+ 			 <h4>Tabelul 4: Exemplu de plan alimentar săptămânal pentru recuperare și performanță</h4> 
+ 			 <table id="planAlimentarTable"> 
+ 				 <thead> 
+ 					 <tr> 
+ 						 <th>Micul dejun (7:00)</th> 
+ 						 <th>Gustare 1 (10:00)</th> 
+ 						 <th>Prânz (13:00)</th> 
+ 						 <th>Gustare 2 (16:00 - pre-antrenament)</th> 
+ 						 <th>Cină (19:30 - post-antrenament)</th> 
+ 						 <th>Gustare 3 (21:00)</th> 
+ 					 </tr> 
+ 				 </thead> 
+ 				 <tbody> 
+ 					 <tr> 
+ 						 <td>Omletă din 3 ouă cu spanac și brânză, 2 felii pâine integrală. <i>(Proteine, Vit. B2/D/K, Mg, Fe)</i></td> 
+ 						 <td>Iaurt grecesc (200g) cu 1 banană feliată. <i>(Proteine, Probiotice, K, Prebiotice)</i></td> 
+ 						 <td>Piept de pui la grătar (150g) cu quinoa (1 cană) și salată de ardei roșu. <i>(Proteine, Carbohidrați complecși, Vit. C)</i></td> 
+ 						 <td>Măr cu 2 linguri de unt de arahide. <i>(Carbohidrați, Grăsimi sănătoase, Proteine)</i></td> 
+ 						 <td>Somon la cuptor (150g) cu cartofi dulci copți și broccoli la abur. <i>(Proteine, Omega-3, Vit. D, K, Potasiu, Mg, Vit. C)</i></td> 
+ 						 <td>Un pahar de chefir. <i>(Probiotice, Calciu)</i></td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td>Terci de ovăz (1 cană) preparat cu lapte, 1 lingură semințe de chia, nuci și fructe de pădure. <i>(Carbohidrați complecși, Fibre, Omega-3, Mg, Vit. C)</i></td> 
+ 						 <td>Un pumn de migdale (30g) și o portocală. <i>(Grăsimi sănătoase, Mg, Vit. E, Vit. C)</i></td> 
+ 						 <td>Tocăniță de vită (150g) cu linte (1 cană) și morcovi. <i>(Proteine, Fe, Zn, Fibre, Vit. B1)</i></td> 
+ 						 <td>Pâine integrală cu avocado și felii de curcan. <i>(Carbohidrați, Grăsimi sănătoase, Proteine)</i></td> 
+ 						 <td>Ficat de vită (100g) gătit cu ceapă, servit cu piure de cartofi. <i>(Fe, Zn, Cu, Vit. A, B2, B12)</i></td> 
+ 						 <td>Brânză de vaci (cottage) cu bucăți de ananas. <i>(Proteine cu absorbție lentă, Enzime)</i></td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td>Smoothie: 1 cană lapte, 1 cupă proteină zer, 1/2 avocado, 1 banană, 1 lingură semințe de in. <i>(Proteine, Grăsimi sănătoase, K, Mg, Fibre)</i></td> 
+ 						 <td>2 ouă fierte tari. <i>(Proteine, Vit. D)</i></td> 
+ 						 <td>Sardine la conservă (1 cutie) pe pâine integrală, cu salată verde. <i>(Calciu, Vit. D, Proteine, Omega-3)</i></td> 
+ 						 <td>Iaurt grecesc (200g) cu 1 linguriță miere. <i>(Proteine, Carbohidrați rapizi, Probiotice)</i></td> 
+ 						 <td>Paste integrale cu sos de roșii, năut și spanac. <i>(Carbohidrați complecși, Fibre, Proteine vegetale, Mg)</i></td> 
+ 						 <td>1-2 nuci braziliene. <i>(Seleniu)</i></td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td>Iaurt grecesc (250g) cu semințe de dovleac, semințe de floarea-soarelui și kiwi. <i>(Proteine, Probiotice, Zn, Mg, Vit. E/C)</i></td> 
+ 						 <td>Un baton proteic de calitate (aprox. 20g proteine). <i>(Proteine, Carbohidrați)</i></td> 
+ 						 <td>Supă cremă de fasole neagră cu o lingură de smântână și crutoane integrale. <i>(Proteine, Fibre, Mg, Vit. B1)</i></td> 
+ 						 <td>Banană și un pahar de lapte. <i>(K, Carbohidrați, Calciu)</i></td> 
+ 						 <td>Piept de curcan la grătar (150g) cu orez brun și sparanghel. <i>(Proteine, Carbohidrați complecși, Vit. B1/K)</i></td> 
+ 						 <td>Un pahar de lapte cald. <i>(Calciu, Triptofan)</i></td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td>Clătite proteice (făcute cu făină integrală și pudră proteică) cu fructe de pădure. <i>(Proteine, Carbohidrați, Vit. C)</i></td> 
+ 						 <td>Brânză de vaci (150g) cu felii de castravete și roșii. <i>(Proteine, Hidratare)</i></td> 
+ 						 <td>Salată mare cu ton (1 conservă), fasole albă, ceapă roșie, porumb și dressing de iaurt. <i>(Proteine, Fibre, K, Se)</i></td> 
+ 						 <td>Un pumn de nuci caju și caise uscate. <i>(Grăsimi sănătoase, Mg, Cu, K)</i></td> 
+ 						 <td>Tofu la grătar (200g) cu legume stir-fry (broccoli, ardei, ciuperci) și sos de soia. <i>(Proteine vegetale, Calciu, Vitamine)</i></td> 
+ 						 <td>Iaurt simplu. <i>(Probiotice)</i></td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td>Ouă ochiuri (3) cu șuncă de calitate, servite cu felii de avocado și roșii. <i>(Proteine, Grăsimi sănătoase, K, Licopen)</i></td> 
+ 						 <td>Smoothie: kefir, spanac, măr și o lingură de unt de migdale. <i>(Probiotice, Prebiotice, Mg, Vit. K)</i></td> 
+ 						 <td>Ciorbă de perișoare (carne de vită) cu mult pătrunjel proaspăt. <i>(Proteine, Zn, Fe, Vit. C)</i></td> 
+ 						 <td>Orez cu lapte și scorțișoară. <i>(Carbohidrați, Calciu)</i></td> 
+ 						 <td>Pizza de casă pe blat integral cu sos de roșii, mozzarella, ciuperci și pui. <i>(Masă echilibrată, de refacere)</i></td> 
+ 						 <td>Un măr. <i>(Fibre, Prebiotice)</i></td> 
+ 					 </tr> 
+ 					 <tr> 
+ 						 <td>Mic dejun variat, la alegere.</td> 
+ 						 <td>Gustare la alegere.</td> 
+ 						 <td>Masă de prânz în familie (ex: friptură de vită la cuptor cu garnitură de legume rădăcinoase). <i>(Proteine, Zn, Fe)</i></td> 
+ 						 <td>Fructe proaspete.</td> 
+ 						 <td>Resturile de la prânz sau o masă ușoară: salată cu ou fiert și brânză. <i>(Proteine, Calciu)</i></td> 
+ 						 <td>Un pahar de chefir. <i>(Probiotice)</i></td> 
+ 					 </tr> 
+ 				 </tbody> 
+ 			 </table> 
+ 			 <button id="generatePdfBtn">Generează PDF cu Planul Alimentar</button> 
+ 		 </div> 
+ 		 <div id="protocol" class="tab-content"> 
+ 			 <h3>Protocol de echilibrare electrolitică și cu micronutrienți</h3> 
+ 			 <p>Filosofia principală trebuie să fie <strong>"alimentul pe primul loc"</strong> ("food-first"). Totuși, în contextul unor deficiențe multiple și a unor cerințe fiziologice excepționale, suplimentarea țintită și temporară poate acționa ca o punte, accelerând procesul de recuperare. Orice supliment trebuie administrat doar la recomandarea și sub monitorizarea medicului sau a dieteticianului.[56]</p> 
+ 			 
+ 			 <h4>Recomandări specifice</h4> 
+ 			 <p><i>Notă importantă: Acestea sunt recomandări cu scop informativ, bazate pe produsele disponibile. Alegerea finală și dozajul trebuie stabilite de un specialist.</i></p> 
+ 			 
+ 			 <h5>1. Hidratare celulară și mineralizare</h5> 
+              <p>O hidratare adecvată este piatra de temelie a sănătății, însă conceptul modern de "hidratare inteligentă" depășește simplul consum de apă. Adevărata eficiență a hidratării se măsoară la nivel celular, unde apa nu este doar un lichid, ci un transportator esențial și un mediu pentru nenumărate reacții biochimice. Pentru ca apa să pătrundă eficient în interiorul celulelor (spațiul intracelular), este necesară o balanță fină de electroliți – minerale precum potasiu, sodiu, magneziu și calciu. Acești "gardieni" ai hidratării reglează presiunea osmotică și mențin potențialul electric al membranelor celulare, un proces vital pentru transmiterea impulsurilor nervoase, contracția musculară și producția de energie.</p> 
+              <p>La nivelul membranei fiecărei celule se află canale ionice specializate – pori proteici care permit trecerea selectivă a ionilor de sodiu (Na+), potasiu (K+) și calciu (Ca2+). Funcționarea optimă a acestor canale este esențială. O "curățare" sau menținere a eficienței acestor canale nu implică o acțiune mecanică, ci asigurarea unui mediu biochimic optim. Acest lucru este realizat în principal de pompa de sodiu-potasiu (Na+/K+), un motor celular care consumă energie (ATP) pentru a pompa activ sodiul în afara celulei și potasiul în interiorul ei. Acest proces menține gradientul electrochimic necesar vieții, asigurând că celulele rămân hidratate, energizate și capabile să comunice. Un aport insuficient de potasiu sau un exces de sodiu perturbă acest echilibru, ducând la deshidratare celulară, oboseală și o funcționare sub-optimă a întregului organism.</p> 
+              <p>În paralel cu hidratarea, protecția celulară împotriva stresului oxidativ este fundamentală. Procesele metabolice normale generează în mod inevitabil specii reactive de oxigen (SRO), cunoscute ca radicali liberi. În exces, aceștia pot deteriora structuri vitale precum ADN-ul, proteinele și lipidele membranare. Deși mulți antioxidanți sunt benefici, o strategie cu adevărat avansată implică utilizarea unui agent antioxidant <em>selectiv</em>. Un astfel de antioxidant are capacitatea unică de a neutraliza specific cei mai dăunători radicali liberi (precum radicalul hidroxil, ·OH), lăsând neatinse speciile reactive de oxigen care au roluri utile în semnalizarea celulară și funcția imunitară. Datorită dimensiunii sale moleculare extrem de mici, un astfel de agent poate pătrunde cu ușurință în interiorul celulei, ajungând până la mitocondrii – "centralele energetice" – pentru a le proteja direct de daunele oxidative. Mai mult, un antioxidant de elită contribuie la crearea unui Potențial de Oxido-Reducere (POR) negativ în mediul celular, susținând starea reductivă naturală a organismului, care este esențială pentru sănătate și longevitate. Acesta are și proprietăți antiinflamatorii, ajutând la calmarea inflamației cronice de grad redus, adesea asociată cu stresul oxidativ.</p> 
+ 			 <ul> 
+ 				 <li><strong><a hef="https://ro.coral.club/shop/coral-mine.html?offer=2220" target="_blank"> Coral-Mine:</a></strong> Compoziție minerală din coral fosil de adâncime, care, adăugată în apa de băut, o îmbogățește cu minerale ionice (în special <a href="https://nutrisibmicron.netlify.app/calciu.html" target="_blank">calciu</a> și <a href="https://nutrisibmicron.netlify.app/magneziu.html" target="_blank">magneziu</a>). Beneficiul principal este îmbunătățirea proprietăților apei, facilitând o hidratare mai eficientă la nivel celular și contribuind la echilibrul acido-bazic al organismului.</li> 
+ 				 <li><strong><a hef="https://ro.coral.club/shop/h-500.html?offer=91883&app_redirect=y" target="_blank">H-500:</a></strong> Un antioxidant puternic care ajută la neutralizarea radicalilor liberi generați în timpul efortului fizic intens. Contribuie la creșterea rezistenței și la reducerea timpului de recuperare prin scăderea nivelului de acid lactic.</li> 
+ 				 <li><strong><a hef="https://ro.coral.club/shop/oceanmin.html?offer=225130" target="_blank"> Oceanmin:</a></strong> Conține un concentrat de peste 70 de minerale din apele oceanice de mare adâncime. Este o sursă excelentă de <a href="https://nutrisibmicron.netlify.app/magneziu.html" target="_blank">magneziu</a>, un mineral esențial pentru funcția musculară, producția de energie și combaterea oboselii, fiind deosebit de util pentru un sportiv cu deficit confirmat.</li> 
+ 			 </ul> 
+
+ 			 <h5>2. Suport cu micronutrienți și sănătate intestinală</h5> 
+ 			 <ul> 
+ 				 <li><strong><a href="https://ro.coral.club/shop/super-flora.html" target="_blank"> Super-Flora:</a> </strong> Produs care combină probiotice (bifido- și lactobacterii) cu prebioticul inulină. Este o alegere excelentă pentru a reface microbiota intestinală, a îmbunătăți digestia și a crește absorbția nutrienților.</li> 
+ 				 <li><strong><a href="https://ro.coral.club/shop/coral-magnesium.html?app_redirect=y"  target="_blank"> Coral-Magnesium:</a></strong> Conținând forme cu absorbție superioară (taurat și glicinat), este ideal pentru repleția rapidă a deficitului de <a href="https://nutrisibmicron.netlify.app/magneziu.html" target="_blank">magneziu</a>, esențial pentru funcția musculară și osoasă.</li> 
+ 				 <li><strong><a href="https://ro.coral.club/shop/tasty-b.html" target="_blank"> Tasty B:</a></strong> Un complex de vitamine B într-o formă masticabilă, potrivită pentru copii, care poate ajuta la deblocarea căilor metabolice energetice și proteice.</li> 
+ 				 <li><strong><a href="https://ro.coral.club/shop/zinc-methionine-15-mg.html?app_redirect=y"target="_blank"> Zinc 25 mg</a> și <a href="https://ro.coral.club/shop/selenium.html?app_redirect=y"target="_blank"> Selenium 100 mcg:</a></strong> Suplimente dedicate pentru corectarea țintită a deficitelor de <a href="https://nutrisibmicron.netlify.app/zinc.html" target="_blank">zinc</a> și <a href="https://nutrisibmicron.netlify.app/seleniu.html" target="_blank">seleniu</a>, respectând dozajul indicat de specialist.</li> 
+ 				 <li><strong><a href="https://www.fitline.com/ro/ro-ro/products/0705068" target="_blank">PowerCocktail Junior:</a></strong> Este un complex special conceput pentru copii, care combină vitamine și minerale esențiale. Conține vitaminele din complexul B (inclusiv <a href="https://nutrisibmicron.netlify.app/vitamina_b1.html" target="_blank">B1</a> și <a href="https://nutrisibmicron.netlify.app/vitamina_b2.html" target="_blank">B2</a>), <a href="https://nutrisibmicron.netlify.app/vitamina_c.html" target="_blank">vitamina C</a>, <a href="https://nutrisibmicron.netlify.app/vitamina_e.html" target="_blank">vitamina E</a>, precum și minerale cheie. Conceptul NTC® (Nutrient Transport Concept) specific mărcii urmărește o biodisponibilitate crescută, fiind o opțiune bună pentru a adresa multiplele deficite identificate.</li> 
+ 			 </ul> 
+ 			 
+ 			 <h5>3. Suport cu acizi grași Omega-3: Fundamentul sănătății celulare și antiinflamatorii</h5>
+             <p>Acizii grași <strong>Omega-3</strong> sunt o clasă de grăsimi polinesaturate esențiale, ceea ce înseamnă că organismul uman nu îi poate produce singur și trebuie să îi obțină obligatoriu din alimentație. Aceștia nu sunt doar o sursă de energie, ci reprezintă componente structurale vitale ale fiecărei celule din corp și joacă un rol crucial în reglarea proceselor biologice, de la inflamație la funcția cognitivă.</p>
+             
+             <p><strong>Structura chimică și tipurile principale de Omega-3</strong></p>
+             <p>Din punct de vedere chimic, "Omega-3" se referă la poziția primei duble legături pe lanțul de carbon al acidului gras, care se află la al treilea atom de carbon de la capătul metil (omega). Există trei tipuri principale de acizi grași Omega-3, cu surse și funcții distincte:</p>
+             <ol>
+                <li><strong>Acidul alfa-linolenic (ALA)</strong>:
+                    <ul>
+                        <li><strong>Sursă</strong>: Este singurul Omega-3 esențial găsit în cantități semnificative în surse <strong>vegetale</strong>: semințe de in, semințe de chia, nuci, ulei de rapiță și soia.</li>
+                        <li><strong>Caracteristici</strong>: ALA este considerat un acid gras "părinte". Organismul îl folosește în principal pentru energie, dar poate converti o mică parte din el în formele active, EPA și DHA. Acest proces de conversie este însă <strong>extrem de ineficient</strong>, studiile arătând că doar un procent mic (sub 5-10%) din ALA este transformat în EPA și o fracțiune și mai mică (sub 0.5%) în DHA. De aceea, bazarea exclusivă pe surse vegetale pentru Omega-3 este adesea insuficientă pentru a acoperi necesarul funcțional al organismului.</li>
+                    </ul>
+                </li>
+                <li><strong>Acidul eicosapentaenoic (EPA)</strong>:
+                    <ul>
+                        <li><strong>Sursă</strong>: Se găsește predominant în surse <strong>animale marine</strong>, precum peștele gras (somon, macrou, hering, sardine) și uleiul de krill.</li>
+                        <li><strong>Caracteristici</strong>: EPA este renumit pentru rolul său puternic <strong>antiinflamator</strong>. Organismul îl utilizează pentru a produce molecule de semnalizare numite eicosanoide, care ajută la reducerea inflamației cronice, un factor de risc major în bolile cardiovasculare și autoimune.</li>
+                    </ul>
+                </li>
+                <li><strong>Acidul docosahexaenoic (DHA)</strong>:
+                    <ul>
+                        <li><strong>Sursă</strong>: La fel ca EPA, se găsește în principal în <strong>peștele gras</strong> și uleiurile marine.</li>
+                        <li><strong>Caracteristici</strong>: DHA este un component structural esențial, nu doar funcțional. Reprezintă peste 90% din acizii grași Omega-3 din <strong>creier</strong> și este o componentă majoră a <strong>retinei</strong>. Este absolut vital pentru dezvoltarea creierului la făt și copil, precum și pentru menținerea funcției cognitive, a memoriei și a sănătății neuronale la adulți.</li>
+                    </ul>
+                </li>
+             </ol>
+
+             <p><strong>Beneficii esențiale pentru sănătate</strong></p>
+             <p>Un aport adecvat de Omega-3, în special EPA și DHA, este asociat cu o gamă largă de beneficii:</p>
+             <ul>
+                <li><strong>Sănătatea inimii și a circulației</strong>: Reduc nivelul trigliceridelor din sânge, scad tensiunea arterială, încetinesc dezvoltarea plăcilor de aterom în artere (ateroscleroza) și reduc riscul de aritmii cardiace. Asigură fluiditatea sângelui și flexibilitatea vaselor de sânge.</li>
+                <li><strong>Sănătatea creierului</strong>: DHA este crucial pentru menținerea fluidității membranelor neuronale, facilitând comunicarea între celulele nervoase. Un aport optim susține memoria, concentrarea și starea de spirit, având un rol protector împotriva declinului cognitiv și a bolilor neurodegenerative.</li>
+                <li><strong>Reducerea inflamației</strong>: Prin producerea de compuși antiinflamatori, Omega-3 contrabalansează efectele pro-inflamatorii ale altor substanțe din organism, fiind benefic în afecțiuni precum artrita reumatoidă și alte boli autoimune.</li>
+                <li><strong>Sănătatea ochilor</strong>: Concentrația mare de DHA în retină subliniază importanța sa pentru menținerea vederii și protecția împotriva degenerescenței maculare.</li>
+             </ul>
+
+             <p><strong>Echilibrul critic: Raportul Omega-6 : Omega-3</strong></p>
+             <p>La fel de important ca și consumul de Omega-3 este raportul acestuia cu acizii grași <strong>Omega-6</strong> (precum acidul linoleic). Deși și aceștia sunt esențiali, acizii Omega-6, atunci când sunt consumați în exces, promovează inflamația. Ei sunt precursorii unor eicosanoide care, în cantități mari, pot duce la o stare de <strong>inflamație cronică de grad redus</strong> în tot corpul.</p>
+             <ul>
+                <li><strong>Surse principale de Omega-6</strong>: Uleiurile vegetale rafinate (de floarea-soarelui, porumb, soia), margarina, alimentele procesate, prăjelile și produsele de patiserie.</li>
+             </ul>
+             <p>Dieta ancestrală a omului avea un raport Omega-6 : Omega-3 echilibrat, estimat între <strong>1:1 și 4:1</strong>. Din păcate, dieta modernă a schimbat dramatic acest echilibru.</p>
+             <ul>
+                <li><strong>Situația actuală</strong>: La nivel global, în dietele vestice, raportul a ajuns la valori alarmante de <strong>15:1 până la 20:1</strong>, sau chiar mai mult. În <strong>zona Balcanică</strong>, unde consumul de ulei de floarea-soarelui este tradițional și foarte ridicat, acest raport este adesea și mai dezechilibrat, contribuind la o incidență crescută a bolilor inflamatorii și cardiovasculare.</li>
+             </ul>
+             <p><strong>De ce este vital acest echilibru?</strong> Ambele tipuri de acizi grași "concurează" pentru aceleași enzime în procesul de conversie. Un exces de Omega-6 va acapara aceste enzime, blocând practic producția de compuși antiinflamatori din Omega-3 și favorizând o stare pro-inflamatorie cronică. Menținerea unui raport net favorabil pentru Omega-3 (ideal sub 4:1) prin creșterea consumului de pește gras și reducerea uleiurilor vegetale rafinate este una dintre cele mai puternice strategii nutriționale pentru a combate inflamația și a proteja sănătatea pe termen lung.</p>
+             
+ 			 <ul> 
+ 				 <li><strong><a href="https://www.pmebusiness.com/us/shop/fitline/fitline-products/special-products/fitline-microsolve-omega-3/?TP=6289743&lang=en" target="_blank">FitLine microSolve Omega 3</a>:</strong> Acest supliment utilizează tehnologia microSolve pentru a crește biodisponibilitatea acizilor grași Omega-3 (EPA și DHA). Aceștia sunt esențiali pentru reducerea inflamației sistemice induse de efort, pentru sănătatea membranelor celulare și pentru funcția cognitivă, aspecte cruciale pentru un sportiv în creștere.</li> 
+ 				 <li><strong><a href="https://ro.coral.club/shop/o-mega-3-tg.html?offer=2191" target="_blank">O-Mega-3 TG (Coral Club)</a>:</strong> Oferă acizi grași Omega-3 în forma lor naturală de trigliceride (TG), care este recunoscută pentru o absorbție superioară. Acest produs susține sănătatea cardiovasculară, fluiditatea sângelui și flexibilitatea articulațiilor, contribuind la o recuperare mai eficientă.</li> 
+ 			 </ul> 
+
+ 			 <h5>4. Suport proteic pentru recuperare</h5> 
+ 			 <ul> 
+ 				 <li><strong><a href="https://www.herbalife.com/ro-ro/u/products/herbalife24-rebuild-strength-ciocolata-1000g-403k" target="_blank">Herbalife24 Rebuild Strength</a>:</strong> Este un shake de recuperare post-antrenament, bogat în proteine (25g per porție, din concentrat și izolat proteic din zer). Conține și aminoacizi cu catenă ramificată (BCAA), L-glutamină și un amestec de carbohidrați pentru a reface rapid rezervele de glicogen și a sprijini reconstrucția musculară.</li> 
+ 				 <li><strong><a href="https://www.fitline.com/ro/ro-ro/products/0704022?tp=6703128" target="_blank">FitLine ProShape Amino</a>:</strong> Conține un amestec de toți aminoacizii esențiali, care sunt "cărămizile" fundamentale ale proteinelor. Utilizarea acestui produs în jurul antrenamentelor poate ajuta la protejarea masei musculare (efect anti-catabolic) și la optimizarea sintezei proteice, fiind deosebit de util într-un context de metabolism proteic deficitar.</li> 
+ 			 </ul> 
+
+ 			 <h3>Dincolo de farfurie: rolul somnului, al recuperării și al mediului suportiv</h3> 
+ 			 <p>Nutriția este doar unul dintre pilonii recuperării. Fără un somn adecvat, organismul nu poate valorifica nutrienții consumați. În timpul somnului profund au loc cele mai importante procese de reparație tisulară, eliberare a hormonului de creștere și consolidare osoasă. Asigurarea a 9-11 ore de somn de calitate pe noapte este la fel de importantă ca și respectarea planului alimentar. De asemenea, managementul stresului și includerea unor zile de recuperare activă sau pasivă în programul de antrenament sunt esențiale pentru a permite organismului să se refacă și să se adapteze la efort.[59]</p> 
+ 			 <p><strong>Rolul familiei și al anturajului este fundamental.</strong> Un copil care simte presiune constantă, ale cărui rezultate sunt mereu analizate critic și a cărui valoare este percepută ca fiind dependentă de succesul sportiv, va trăi într-o stare cronică de stres. Acest mediu toxic poate anula beneficiile oricărui plan nutrițional. Familia și antrenorii au datoria de a crea un spațiu sigur, în care copilul este apreciat pentru efortul său, pentru disciplină și pentru bucuria de a practica sportul, indiferent de rezultatul de pe tabela de marcaj. Dragostea și acceptarea necondiționată sunt cel mai puternic "supliment" pentru sănătatea emoțională și, implicit, fizică a unui tânăr sportiv.</p> 
+ 			 
+ 			 <h2>Concluzie: o cale către sănătate durabilă și excelență atletică</h2> 
+ 			 <p>Tabloul clinic prezentat este complex și necesită o abordare serioasă, structurată și multidisciplinară. Vestea bună este că organismul unui tânăr are o capacitate remarcabilă de vindecare și adaptare. Prin implementarea unui protocol integrat, care adresează atât nevoile fizice, cât și pe cele emoționale, sub îndrumare medicală, este pe deplin posibil nu doar să se corecteze deficiențele actuale, ci și să se construiască o fundație solidă pentru o carieră sportivă lungă, sănătoasă și de succes.</p> 
+ 			 <h4>Pilonii centrali ai acestui plan de recuperare sunt:</h4> 
+ 			 <ol> 
+ 				 <li><strong>Alimentare adecvată:</strong> Ieșirea din starea de deficit energetic prin atingerea unui aport caloric de 3000-3500 kcal/zi, cu o distribuție optimă a macronutrienților.</li> 
+ 				 <li><strong>Vindecarea intestinului:</strong> Prioritizarea sănătății digestive prin consumul de alimente probiotice și prebiotice, pentru a debloca absorbția nutrienților.</li> 
+ 				 <li><strong>Reziliență emoțională:</strong> Recunoașterea și gestionarea stresului prin comunicare deschisă, tehnici de relaxare și, dacă este necesar, suport psihologic specializat.</li> 
+ 				 <li><strong>Construirea matricei osoase:</strong> Furnizarea unui aport bogat și diversificat din toți nutrienții esențiali pentru reconstrucția scheletică.</li> 
+ 				 <li><strong>Hidratare inteligentă:</strong> Implementarea unui protocol riguros de hidratare cu apă și electroliți pentru a susține funcțiile metabolice.</li> 
+ 			 </ol> 
+ 			 <p>Abordarea acestei situații cu calm, rigoare și sprijinul unei echipe de specialiști va transforma această provocare într-o oportunitate de a-i oferi tânărului atlet cele mai bune instrumente nutriționale și emoționale pentru a-și atinge potențialul maxim, protejându-i în același timp cel mai de preț bun: sănătatea.</p> 
+
+ 		 </div> 
+ 		 
+ 		 <div id="bibliografie" class="tab-content"> 
+ 			 <h2>Bibliografie</h2> 
+ 			 <ol class="bibliography-list"> 
+ 				 <li>Brenner, J. S. (2007). Overuse injuries, overtraining, and burnout in child and adolescent athletes. *Pediatrics*, 119(6), 1242-1245.</li> 
+ 				 <li>DiFiori, J. P., et al. (2014). Overuse injuries and burnout in youth sports: a position statement from the American Medical Society for Sports Medicine. *Clinical journal of sport medicine*, 24(1), 3-20.</li> 
+ 				 <li>Thomas, D. T., Erdman, K. A., & Burke, L. M. (2016). American College of Sports Medicine Joint Position Statement. Nutrition and Athletic Performance. *Medicine and science in sports and exercise*, 48(3), 543-568.</li> 
+ 				 <li>American Dietetic Association, Dietitians of Canada, & American College of Sports Medicine. (2009). Position of the American Dietetic Association, Dietitians of Canada, and the American College of Sports Medicine: Nutrition and athletic performance. *Journal of the American Dietetic Association*, 109(3), 509-527.</li> 
+ 				 <li>Engel, G. L. (1977). The need for a new medical model: a challenge for biomedicine. *Science*, 196(4286), 129-136.</li> 
+ 				 <li>World Health Organization. (1948). *Preamble to the Constitution of the World Health Organization as adopted by the International Health Conference*.</li> 
+ 				 <li>Cohen, S., Janicki-Deverts, D., & Miller, G. E. (2007). Psychological stress and disease. *JAMA*, 298(14), 1685-1687.</li> 
+ 				 <li>Sapolsky, R. M. (2004). *Why zebras don't get ulcers: The acclaimed guide to stress, stress-related diseases, and coping*. Holt paperbacks.</li> 
+ 				 <li>Wylleman, P., & Lavallee, D. (2004). A developmental perspective on transitions faced by athletes. *Developmental sport and exercise psychology: A lifespan perspective*, 507-527.</li> 
+ 				 <li>Fraser-Thomas, J., Côté, J., & Deakin, J. (2005). Youth sport programs: An avenue to foster positive youth development. *Physical education and sport pedagogy*, 10(1), 19-40.</li> 
+ 				 <li>Gustafsson, H., Kenttä, G., & Hassmén, P. (2011). Athlete burnout: an integrated model and future research directions. *International Review of Sport and Exercise Psychology*, 4(1), 3-24.</li> 
+ 				 <li>Goodger, K., Gorely, T., Lavallee, D., & Harwood, C. (2007). Burnout in sport: A systematic review. *Sports medicine*, 37(12), 1079-1090.</li> 
+ 				 <li>Smith, R. E. (1986). Toward a cognitive-affective model of athletic burnout. *Journal of Sport and Exercise Psychology*, 8(1), 36-50.</li> 
+ 				 <li>Chrousos, G. P. (2009). Stress and disorders of the stress system. *Nature reviews endocrinology*, 5(7), 374-381.</li> 
+ 				 <li>Mayer, E. A. (2011). Gut feelings: the emerging biology of gut–brain communication. *Nature reviews neuroscience*, 12(8), 453-466.</li> 
+ 				 <li>Cryan, J. F., & O'Mahony, S. M. (2011). The microbiome-gut-brain axis: from bowel to behavior. *Neurogastroenterology & Motility*, 23(3), 187-192.</li> 
+ 				 <li>Konturek, P. C., Brzozowski, T., & Konturek, S. J. (2011). Stress and the gut: pathophysiology, clinical consequences, diagnostic approaches and treatment options. *Journal of physiology and pharmacology*, 62(6), 591-599.</li> 
+ 				 <li>Sodhi, C. P., & Hackam, D. J. (2014). The gut-liver axis. *Pediatric surgery*, 49(5), 662-666.</li> 
+ 				 <li>Kim, Y. K., & Shin, C. (2018). The microbiota-gut-brain axis in neuropsychiatric disorders: pathophysiological mechanisms and novel treatments. *Current neuropharmacology*, 16(5), 559-573.</li> 
+ 				 <li>Bailey, M. T. (2014). The gut-brain-microbiota axis: a new paradigm in the context of stress and allostasis. *Stress*, 17(5), 393-401.</li> 
+ 				 <li>Madison, A., & Kiecolt-Glaser, J. K. (2019). Stress, depression, diet, and the gut microbiota: human-bacteria interactions at the core of psychoneuroimmunology and nutrition. *Current opinion in behavioral sciences*, 28, 105-110.</li> 
+ 				 <li>Nielsen, F. H. (2020). Magnesium deficiency and increased inflammation: current perspectives. *Journal of inflammation research*, 13, 263.</li> 
+ 				 <li>Tardy, A. L., Pouteau, E., Marquez, D., Yilmaz, C., & Scholey, A. (2020). Vitamins and minerals for energy, fatigue and cognition: a narrative review of the biochemical and clinical evidence. *Nutrients*, 12(1), 228.</li> 
+ 				 <li>Prasad, A. S. (2008). Zinc in human health: effect of zinc on immune cells. *Molecular medicine*, 14(5-6), 353-357.</li> 
+ 				 <li>Chiodini, I., & Scillitani, A. (2007). Glucocorticoid-induced osteoporosis: an update on pathophysiology and treatment. *European Journal of Endocrinology*, 157(1), 1-13.</li> 
+ 				 <li>Weinstein, R. S. (2012). Glucocorticoid-induced bone disease. *New England Journal of Medicine*, 366(22), 2131-2131.</li> 
+ 				 <li>Canalis, E. (1996). Mechanisms of glucocorticoid action in bone: implications to glucocorticoid-induced osteoporosis. *Journal of clinical endocrinology & metabolism*, 81(10), 3441-3447.</li> 
+ 				 <li>Gatti, D., Rossini, M., & Adami, S. (2013). Glucocorticoid-induced osteoporosis. *Rheumatic Disease Clinics*, 39(4), 817-831.</li> 
+ 				 <li>Iqbal, M. M. (2001). Osteoporosis: epidemiology, diagnosis, and treatment. *Southern medical journal*, 94(9), 893-902.</li> 
+ 				 <li>Maté, G. (2011). *When the body says no: The cost of hidden stress*. Vintage Canada.</li> 
+ 				 <li>Maté, G. (2003). *The hungry ghost: A biopsychosocial perspective on addiction, from an interview with Gabor Maté*. Democracy Now.</li> 
+ 				 <li>Dantzer, R., O'Connor, J. C., Freund, G. G., Johnson, R. W., & Kelley, K. W. (2008). From inflammation to sickness and depression: when the immune system subjugates the brain. *Nature reviews neuroscience*, 9(1), 46-56.</li> 
+ 				 <li>Field, T. (2014). Yoga research review. *Complementary therapies in clinical practice*, 20(4), 226-231.</li> 
+ 				 <li>Ginsburg, K. R. (2007). The importance of play in promoting healthy child development and maintaining strong parent-child bonds. *Pediatrics*, 119(1), 182-191.</li> 
+ 				 <li>Institute of Medicine. (2005). *Dietary Reference Intakes for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids*. The National Academies Press.</li> 
+ 				 <li>Mifflin, M. D., St Jeor, S. T., Hill, L. A., Scott, B. J., Daugherty, S. A., & Koh, Y. O. (1990). A new predictive equation for resting energy expenditure in healthy individuals. *The American journal of clinical nutrition*, 51(2), 241-247.</li> 
+ 				 <li>Mountjoy, M., et al. (2018). IOC consensus statement on relative energy deficiency in sport (RED-S): 2018 update. *British journal of sports medicine*, 52(11), 687-697.</li> 
+ 				 <li>Burke, L. M., Hawley, J. A., Wong, S. H., & Jeukendrup, A. E. (2011). Carbohydrates for training and competition. *Journal of sports sciences*, 29(sup1), S17-S27.</li> 
+ 				 <li>Rodriguez, N. R., Di Marco, N. M., & Langley, S. (2009). American College of Sports Medicine position stand. Nutrition and athletic performance. *Medicine and science in sports and exercise*, 41(3), 709-731.</li> 
+ 				 <li>Jäger, R., et al. (2017). International society of sports nutrition position stand: protein and exercise. *Journal of the International Society of Sports Nutrition*, 14(1), 20.</li> 
+ 				 <li>Phillips, S. M., & Van Loon, L. J. (2011). Dietary protein for athletes: from requirements to optimum adaptation. *Journal of sports sciences*, 29(sup1), S29-S38.</li> 
+ 				 <li>van Vliet, S., Burd, N. A., & van Loon, L. J. (2015). The skeletal muscle anabolic response to plant-versus animal-based protein consumption. *The Journal of nutrition*, 145(9), 1981-1991.</li> 
+ 				 <li>Sawka, M. N., Burke, L. M., Eichner, E. R., Maughan, R. J., Montain, S. J., & Stachenfeld, N. S. (2007). American College of Sports Medicine position stand. Exercise and fluid replacement. *Medicine and science in sports and exercise*, 39(2), 377-390.</li> 
+ 				 <li>Foulke, G. E. (1990). Hematuria and proteinuria in the asymptomatic patient. *Emergency medicine clinics of North America*, 8(3), 563-575.</li> 
+ 				 <li>Roche, M., & Vitting, K. (2014). Urobilinogen. *StatPearls [Internet]*.</li> 
+ 				 <li>Telford, R. D., et al. (2003). Footstrike is the major cause of hemolysis during running. *Journal of Applied Physiology*, 94(1), 38-42.</li> 
+ 				 <li>Armstrong, L. E. (2007). Assessing hydration status: the elusive gold standard. *Journal of the American College of Nutrition*, 26(sup5), 575S-584S.</li> 
+ 				 <li>Shirreffs, S. M., & Sawka, M. N. (2011). Fluid and electrolyte needs for training, competition, and recovery. *Journal of sports sciences*, 29(sup1), S39-S46.</li> 
+ 				 <li>Maughan, R. J. (1998). The sports drink as a functional food: formulations for successful performance. *Proceedings of the Nutrition Society*, 57(1), 15-23.</li> 
+ 				 <li>Maughan, R. J., & Shirreffs, S. M. (2010). Dehydration and rehydration in competative sport. *Scandinavian journal of medicine & science in sports*, 20, 40-47.</li> 
+ 				 <li>Manz, F. (2007). The role of thiamin in the etiology of the Wernicke-Korsakoff syndrome. *Current opinion in clinical nutrition and metabolic care*, 10(6), 723-728.</li> 
+ 				 <li>Powers, H. J. (2003). Riboflavin (vitamin B-2) and health. *The American journal of clinical nutrition*, 77(6), 1352-1360.</li> 
+ 				 <li>Thursby, E., & Juge, N. (2017). Introduction to the human gut microbiota. *Biochemical Journal*, 474(11), 1823-1836.</li> 
+ 				 <li>Clark, A., & Mach, N. (2016). Exercise-induced stress behavior, gut-microbiota-brain axis and diet: a systematic review for athletes. *Journal of the International Society of Sports Nutrition*, 13(1), 43.</li> 
+ 				 <li>Hill, C., et al. (2014). Expert consensus document: The International Scientific Association for Probiotics and Prebiotics consensus statement on the scope and appropriate use of the term probiotic. *Nature reviews Gastroenterology & hepatology*, 11(8), 506-514.</li> 
+ 				 <li>Marco, M. L., et al. (2017). Health benefits of fermented foods: microbiota and beyond. *Current opinion in biotechnology*, 44, 94-102.</li> 
+ 				 <li>Slavin, J. (2013). Fiber and prebiotics: mechanisms and health benefits. *Nutrients*, 5(4), 1417-1435.</li> 
+ 				 <li>Gollop, N. D., et al. (2016). Raised concentrations of urobilinogen in urine of endurance athletes. *International journal of sports medicine*, 37(13), 1067-1071.</li> 
+ 				 <li>Rizzoli, R., Bischoff-Ferrari, H., Dawson-Hughes, B., & Weaver, C. (2014). Nutrition and bone health in women after the menopause. *Women's Health*, 10(6), 599-608.</li> 
+ 				 <li>The Golden Years. (2016). *Peak Bone Mass in Women*. National Institutes of Health.</li> 
+ 				 <li>Heaney, R. P. (2006). Calcium, dairy products and osteoporosis. *Journal of the American College of Nutrition*, 25(sup5), 399S-412S.</li> 
+ 				 <li>Weaver, C. M., & Heaney, R. P. (2006). *Calcium in human health*. Humana Press.</li> 
+ 				 <li>Weaver, C. M., et al. (2016). Calcium plus vitamin D supplementation and risk of fractures: an updated meta-analysis from the National Osteoporosis Foundation. *Osteoporosis international*, 27(1), 367-376.</li> 
+ 				 <li>Palacios, C. (2006). The role of nutrients in bone health, from A to Z. *Critical reviews in food science and nutrition*, 46(8), 621-628.</li> 
+ 				 <li>Holick, M. F. (2007). Vitamin D deficiency. *New England journal of medicine*, 357(3), 266-281.</li> 
+ 				 <li>Wacker, M., & Holick, M. F. (2013). Sunlight and Vitamin D: A global perspective for health. *Dermato-endocrinology*, 5(1), 51-108.</li> 
+ 				 <li>Schwalfenberg, G. K., & Genuis, S. J. (2017). The Importance of Magnesium in Clinical Healthcare. *Scientifica*, 2017.</li> 
+ 				 <li>Rude, R. K., Singer, F. R., & Gruber, H. E. (2009). Skeletal and hormonal effects of magnesium deficiency. *Journal of the American College of Nutrition*, 28(2), 131-141.</li> 
+ 				 <li>Volpe, S. L. (2013). Magnesium in disease prevention and overall health. *Advances in nutrition*, 4(3), 378S-383S.</li> 
+ 				 <li>Price, C. T., Langford, J. R., & Liporace, F. A. (2012). Essential nutrients for bone health and a review of their availability in the average North American diet. *The open orthopaedics journal*, 6, 143.</li> 
+ 				 <li>Lowe, N. M., Fekete, K., & Decsi, T. (2012). Methods of assessment of zinc status in humans: a systematic review. *The American journal of clinical nutrition*, 95(6), 1491-1509.</li> 
+ 				 <li>Carr, A. C., & Maggini, S. (2017). Vitamin C and immune function. *Nutrients*, 9(11), 1211.</li> 
+ 				 <li>Tucker, K. L., Hannan, M. T., Chen, H., Cupples, L. A., Wilson, P. W., & Kiel, D. P. (1999). Potassium, magnesium, and fruit and vegetable intakes are associated with greater bone mineral density in elderly men and women. *The American journal of clinical nutrition*, 69(4), 727-736.</li> 
+ 				 <li>He, F. J., & MacGregor, G. A. (2008). Beneficial effects of potassium on human health. *Physiologia plantarum*, 133(4), 725-735.</li> 
+ 				 <li>Weaver, C. M. (2009). Potassium and health. *Advances in nutrition*, 3(5), 759-760.</li> 
+ 				 <li>U.S. Department of Agriculture, Agricultural Research Service. (2019). *FoodData Central*.</li> 
+ 				 <li>Rayman, M. P. (2012). Selenium and human health. *The Lancet*, 379(9822), 1256-1268.</li> 
+ 				 <li>Schrauzer, G. N. (2000). Selenomethionine: a review of its nutritional significance, metabolism and toxicity. *Journal of nutritional biochemistry*, 11(7-8), 415-419.</li> 
+ 				 <li>Prohaska, J. R. (2014). Copper and the developing and mature nervous system. *Nutritional neuroscience*, 17(5), 193-206.</li> 
+ 				 <li>Lonsdale, D. (2006). A review of the biochemistry, metabolism and clinical benefits of thiamin (e) and its derivatives. *Evidence-based complementary and alternative medicine*, 3(1), 49-59.</li> 
+ 				 <li>Thakur, K., Tomar, S. K., Singh, A. K., Mandal, S., & Arora, S. (2017). Riboflavin and health: A review of the literature. *Journal of food science*, 82(11), 2548-2557.</li> 
+ 				 <li>Traber, M. G., & Atkinson, J. (2007). Vitamin E, antioxidant and nothing more. *Free Radical Biology and Medicine*, 43(1), 4-15.</li> 
+ 				 <li>Rizvi, S., et al. (2014). The role of vitamin e in human health and some diseases. *Sultan Qaboos University Medical Journal*, 14(2), e157.</li> 
+ 				 <li>Sen, C. K., Khanna, S., & Roy, S. (2006). Tocotrienols: Vitamin E beyond tocopherols. *Life sciences*, 78(18), 2088-2098.</li> 
+ 				 <li>Institute of Medicine. (2000). *Dietary Reference Intakes for Vitamin C, Vitamin E, Selenium, and Carotenoids*. The National Academies Press.</li> 
+ 				 <li>Schneeman, B. O. (2001). Satiety and the role of dietary fiber. *Journal of the American Dietetic Association*, 101(9), 1013-1014.</li> 
+ 				 <li>Mero, A. A., et al. (2010). Effect of sport-specific training on ghrelin, leptin and adiponectin concentrations in adolescent athletes. *European journal of applied physiology*, 110(3), 633-641.</li> 
+ 				 <li>Jäger, R., et al. (2019). International Society of Sports Nutrition Position Stand: probiotics. *Journal of the International Society of Sports Nutrition*, 16(1), 1-21.</li> 
+ 				 <li>Sanders, M. E., et al. (2019). Probiotics and prebiotics in intestinal health and disease: from biology to the clinic. *Nature Reviews Gastroenterology & Hepatology*, 16(10), 605-616.</li> 
+ 				 <li>Watson, A. M. (2017). Sleep and athletic performance. *Current sports medicine reports*, 16(6), 413-418.</li> 
+ 			 </ol> 
+ 		 </div> 
+
+ 		 <footer class="page-footer"> 
+ 			 <p>Copyright &copy; 2025 - dr.ing. Radu Pascu</p> 
+ 		 </footer> 
+ 	 </div> 
+
+ 	 <!-- Password Modal --> 
+ 	 <div id="password-modal" class="modal-overlay"> 
+ 		 <div class="modal-content"> 
+ 			 <h3>Acces restricționat</h3> 
+ 			 <p>Pentru a vizualiza acest conținut, vă rugăm introduceți parola.</p> 
+ 			 <p id="password-error"></p> 
+ 			 <input type="password" id="password-input" placeholder="Parola..."> 
+ 			 <button id="submit-password">Confirmă</button> 
+ 		 </div> 
+ 	 </div> 
+
+ 	 <script> 
+ 		 document.addEventListener('DOMContentLoaded', function() { 
+ 			 const tabButtons = document.querySelectorAll('.tab-button'); 
+ 			 const tabContents = document.querySelectorAll('.tab-content'); 
+ 			 const modal = document.getElementById('password-modal'); 
+ 			 const passwordInput = document.getElementById('password-input'); 
+ 			 const submitPasswordBtn = document.getElementById('submit-password'); 
+ 			 const passwordError = document.getElementById('password-error'); 
+              const generatePdfBtn = document.getElementById('generatePdfBtn');
+
+ 			 if (!modal || !passwordInput || !submitPasswordBtn || !passwordError || tabButtons.length === 0) { 
+ 				 console.error("Initialization failed: One or more required elements are missing from the DOM."); 
+ 				 return;  
+ 			 } 
+
+ 			 const correctPassword = '123'; 
+ 			 let isUnlocked = false; 
+ 			 let requestedTab = null; 
+
+ 			 function initializeTabs() { 
+ 				 tabButtons[0].classList.add('active'); 
+ 				 document.getElementById(tabButtons[0].dataset.tab).classList.add('active'); 
+
+ 				 tabButtons.forEach((btn, index) => { 
+ 					 if (index > 0) { 
+ 						 btn.classList.add('locked'); 
+ 					 } 
+ 				 }); 
+ 			 } 
+
+ 			 function openTab(tabId) { 
+ 				 tabContents.forEach(content => content.classList.remove('active')); 
+ 				 tabButtons.forEach(button => button.classList.remove('active')); 
+
+ 				 document.getElementById(tabId).classList.add('active'); 
+ 				 document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active'); 
+ 			 } 
+
+ 			 function unlockTabs() { 
+ 				 isUnlocked = true; 
+ 				 document.querySelectorAll('.tab-button.locked').forEach(btn => { 
+ 					 btn.classList.remove('locked'); 
+ 				 }); 
+ 				 modal.style.display = 'none'; 
+ 				 passwordInput.value = ''; 
+ 				 passwordError.textContent = ''; 
+ 				 if (requestedTab) { 
+ 					 openTab(requestedTab); 
+ 					 requestedTab = null; 
+ 				 } 
+ 			 } 
+ 			 
+ 			 function checkPassword() { 
+ 				 if (passwordInput.value === correctPassword) { 
+ 					 unlockTabs(); 
+ 				 } else { 
+ 					 passwordError.textContent = 'Parolă incorectă. Încercați din nou.'; 
+ 					 passwordInput.value = ''; 
+ 					 passwordInput.focus(); 
+ 				 } 
+ 			 } 
+
+ 			 tabButtons.forEach(button => { 
+ 				 button.addEventListener('click', function() { 
+ 					 const tabId = this.dataset.tab; 
+ 					 if (this.classList.contains('protected') && !isUnlocked) { 
+ 						 requestedTab = tabId; 
+ 						 modal.style.display = 'flex'; 
+ 						 passwordInput.focus(); 
+ 					 } else if (!this.classList.contains('locked')) { 
+ 						 openTab(tabId); 
+ 					 } 
+ 				 }); 
+ 			 }); 
+
+ 			 submitPasswordBtn.addEventListener('click', checkPassword); 
+ 			 
+ 			 passwordInput.addEventListener('keyup', function(event) { 
+ 				 passwordError.textContent = ''; 
+ 				 if (event.key === 'Enter') { 
+ 					 submitPasswordBtn.click(); 
+ 				 } 
+ 			 }); 
+
+ 			 modal.addEventListener('click', function(event) { 
+ 				 if (event.target === modal) { 
+ 					 modal.style.display = 'none'; 
+ 					 passwordError.textContent = ''; 
+ 					 passwordInput.value = ''; 
+ 				 } 
+ 			 }); 
+              
+            // Funcția principală pentru generarea PDF-ului, declanșată de buton.
+            async function generatePlanPDF() {
+                console.log('Se inițiază generarea PDF-ului...');
+                generatePdfBtn.innerText = 'Se generează...';
+                generatePdfBtn.disabled = true;
+
+                const element = document.getElementById('planAlimentarTable');
+                
+                // Datele fontului DejaVuSans în format base64.
+                const fontBase64 = "AAEAAAAPAIAAAwBwRkZUTWc4k/gAAAeUAAAAHE9TLzK9p1ocAAABgAAAAGBjbWFwDSsLdQAABUAAAAA0Y3Z0IAOWAlAAAAcAAAAABGZwZ21P+p+gAAAxAAAAA0Z2FzcAAAABAAAAHkAAAACGdseWYordDsAAAEsAAAAehoZWFkAvOH6QAAAEwAAAA2aGhlYQaaBDsAAABQAAAAJGhtdHgA/gJgAAABMAAAACBsb2NhAIQDigAAAyAAAAAwbWF4cAAeA+0AAAFIAAAAHG5hbWUg4/tX0AAABxAAAAAxcG9zdAALBAgAAAdMAAAAIXByZXAF8gXMAAADfAAAAAIAAAAAAQAAAADPgMpaAAAAAM+AyloAAAAAAOYE/gGLAAAAAwAACAACAAAAAAAAAAEAAAiN/agAAg3+AIsDVwAPAAEAAAAAAAAAAAAAAAAAAADWAAEAAADWAAEAAAAAAAEAAQAAAEgAAQAAAAAAAgAACAACAAEAAAAAAI4A/gADAAEECQABAAAAAAAEAAEECQACAAQACAAEECQADAAgAEAECQAEAAwAsAEAECQAGAA4A6AEAAAAAAAAAAAAARABlAHYAYQAgAFMAcwBhAG4AcwAgAEIAYQBzAGUAAAAAAAEAAgADAAQABQAGAAcACAAJAAoACwAMAA0ADgAPABAAEQASABMAFAAVABYAFwAYABkAGgAbABwAHQAeAB8AIAAhACIAIwAkACUAJgAnACgAKQAqACsALAAtAC4ALwAwADEAMgAzADQANQA2ADcAOAA5ADoAOwA8AD0APgA/AEAAQQBCAEMARABFAEYARwBIAEkASgBLAEwATQBOAE8AUABRAFIAUwBUAFUAVgBXAFgAWQBaAFsAXABdAF4AXwBgAGEAYgBjAGQAZQBmAGcAaABpAGoAawBsAG0AbgBvAHAAcQByAHMAdAB1AGMAcwB0AHUAdgB3AHgAewB8AH0AfQB+AH8AgACCAIMAhQCGAIcAiACJAIsAjQCPAJEAlgCXAJoAnQCdAKAAogCiAKMApACmAKgAqQCrAKwArwDAAMMAxADGAMgAyQDMAM0AzwDRANMA1QDXANgA2gDcAN4A3wDkAOYA5wDoAOoA7ADtAO4A7wDxAPMA9AD2APcA+gD7AQMBBwEOARMBFQEXARkBGwEdASEBIwElAScBKQErAS0BLwExATMBBQE5ATsBPwFBAUMBRQFHAUkBSwFNAU8BUQFTAVUBVwFZAVsBXQFfAWMBZAFnAWkBaQFrAW0Bbv//AAAAAAEAAgADAAQABQAGAAcACAAJAAoACwAMAA0ADgAPABAAEQASABMAFAAVABYAFwAYABkAGgAbABwAHQAeAB8AIAAhACIAIwAkACUAJgAnACgAKQAqACsALAAtAC4ALwAwADEAMgAzADQANQA2ADcAOAA5ADoAOwA8AD0APgA/AEAAQQBCAEMARABFAEYARwBIAEkASgBLAEwATQBOAE8AUABRAFIAUwBUAFUAVgBXAFgAWQBaAFsAXABdAF4AXwBgAGEAYgBjAGQAZQBmAGcAaABpAGoAawBsAG0AbgBvAHAAcQByAHMAdAB1AGMAcwB0AHUAdgB3AHgAewB8AH0AfQB+AH8AgACCAIMAhQCGAIcAiACJAIsAjQCPAJEAlgCXAJoAnQCdAKAAogCiAKMApACmAKgAqQCrAKwArwDAAMMAxADGAMgAyQDMAM0AzwDRANMA1QDXANgA2gDcAN4A3wDkAOYA5wDoAOoA7ADtAO4A7wDxAPMA9AD2APcA+gD7AQMBBwEOARMBFQEXARkBGwEdASEBIwElAScBKQErAS0BLwExATMBBQE5ATsBPwFBAUMBRQFHAUkBSwFNAU8BUQFTAVUBVwFZAVsBXQFfAWMBZAFnAWkBaQFrAW0Bbv//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA-";
+
+                // Creăm un element de stil nou
+                const style = document.createElement('style');
+                style.id = 'temp-pdf-font'; // Adăugăm un ID pentru a-l putea elimina ulterior
+                // Definim regula @font-face care încarcă fontul din datele base64
+                style.innerHTML = `
+                    @font-face {
+                        font-family: 'DejaVuSans';
+                        src: url(data:font/ttf;base64,${fontBase64}) format('truetype');
+                        font-weight: normal;
+                        font-style: normal;
+                    }
+                `;
+                // Adăugăm stilul în <head>-ul documentului
+                document.head.appendChild(style);
+                
+                // Aplicăm temporar fontul pe elementul pe care îl convertim
+                element.style.fontFamily = "'DejaVuSans', sans-serif";
+
+                try {
+                    // Definirea opțiunilor pentru html2pdf
+                    const options = {
+                        margin:       [10, 10, 10, 10], // Margini în mm [sus, stânga, jos, dreapta]
+                        filename:     'plan-alimentar-andi-david.pdf',
+                        image:        { type: 'jpeg', quality: 0.98 },
+                        html2canvas:  { 
+                            scale: 2, // Crește rezoluția pentru text mai clar
+                            useCORS: true, 
+                            logging: false
+                        },
+                        jsPDF:        { 
+                            unit: 'mm', 
+                            format: 'a4', 
+                            orientation: 'landscape'
+                        }
+                    };
+
+                    // Generăm și salvăm PDF-ul.
+                    // Deoarece fontul este acum randat corect de browser, nu mai este necesară injectarea manuală în jsPDF.
+                    await html2pdf().from(element).set(options).save();
+                    console.log('PDF-ul a fost generat și descărcat cu succes.');
+
+                } catch (error) {
+                    console.error('A apărut o eroare la generarea PDF-ului:', error);
+                    alert('Nu s-a putut genera PDF-ul. Verificați consola pentru detalii.');
+                } finally {
+                    // Curățenie: eliminăm stilul injectat și resetăm stilul elementului
+                    document.head.removeChild(style);
+                    element.style.fontFamily = '';
+                    generatePdfBtn.innerText = 'Generează PDF cu Planul Alimentar';
+                    generatePdfBtn.disabled = false;
+                }
+            }
+            
+            if (generatePdfBtn) {
+                generatePdfBtn.addEventListener('click', generatePlanPDF);
+            }
+
+ 			 initializeTabs(); 
+ 		 }); 
+ 	 </script> 
+
+ </body> 
+ </html>
