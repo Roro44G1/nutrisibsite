@@ -826,46 +826,77 @@
         </div>
     </div>
 
-    <script>
-        // Încărcare footer extern
-        fetch('https://nutrisib.club/footer.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('footer-placeholder').innerHTML = data;
-        })
-        .catch(err => console.error('Eroare footer:', err));
+<script>
+        // Meniu mobil
+        const mobileBtn = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.onclick = () => {
+                const isVisible = mobileMenu.style.display === 'block';
+                mobileMenu.style.display = isVisible ? 'none' : 'block';
+            };
+        }
 
         // Logică modale
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-            document.body.style.overflow = '';
+        function toggleModal(id, show) {
+            const m = document.getElementById(id);
+            if (m) {
+                m.classList.toggle('active', show);
+                document.body.style.overflow = show ? 'hidden' : '';
+            }
         }
 
-        document.getElementById('openPrivacyLink').onclick = () => openModal('privacyModal');
-        document.getElementById('openDisclaimerLink').onclick = () => openModal('disclaimerModal');
+        const btnP = document.getElementById('openPrivacyBtn');
+        if(btnP) btnP.onclick = (e) => { e.preventDefault(); toggleModal('privacyModal', true); };
         
-        ['closePrivacyModalButton', 'closePrivacyModalFooterButton'].forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.onclick = () => closeModal('privacyModal');
+        const btnD = document.getElementById('openDisclaimerBtn');
+        if(btnD) btnD.onclick = (e) => { e.preventDefault(); toggleModal('disclaimerModal', true); };
+
+        // Evenimente închidere Modal Politică
+        ['closeModalButton', 'closeModalFooterButton'].forEach(id => {
+            const b = document.getElementById(id);
+            if(b) b.onclick = () => toggleModal('privacyModal', false);
         });
-        
-        ['closeDisclaimerModalButton', 'closeDisclaimerModalFooterButton'].forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.onclick = () => closeModal('disclaimerModal');
+
+        // Evenimente închidere Modal Disclaimer
+        ['closeDiscX', 'closeDiscBtn'].forEach(id => {
+            const b = document.getElementById(id);
+            if(b) b.onclick = () => toggleModal('disclaimerModal', false);
         });
 
         window.onclick = (e) => {
             if (e.target.classList.contains('modal-overlay')) {
-                e.target.classList.remove('active');
-                document.body.style.overflow = '';
+                toggleModal('privacyModal', false);
+                toggleModal('disclaimerModal', false);
             }
         };
+
+        // QR Code vCard
+        const contactText = `BEGIN:VCARD\nVERSION:3.0\nFN:dr.ing. Radu Vasile Pascu\nORG:Nutrisib\nTEL;TYPE=WORK,VOICE:+40770276406\nEMAIL:nutrisib.club@gmail.com\nURL:https://www.nutrisib.club\nEND:VCARD`;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const qrc = document.getElementById("qrcode-vcard");
+            if (qrc && typeof QRCode !== 'undefined') {
+                new QRCode(qrc, { text: contactText, width: 144, height: 144, colorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H });
+            }
+        });
+
+        // Injecție Footer Extern
+        fetch('https://nutrisib.club/footer.html')
+            .then(r => r.text())
+            .then(d => {
+                const c = document.getElementById('footer-placeholder');
+                if (c) c.innerHTML = d;
+            })
+            .catch(e => console.error('Eroare footer:', e));
+
+        // Securitate
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'u')) e.preventDefault();
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J'))) e.preventDefault();
+        });
     </script>
-    
     <script src="https://nutrisib.club/script_protect.js" defer></script>
 </body>
 </html>
