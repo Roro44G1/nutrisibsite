@@ -1,61 +1,51 @@
 // netlify/functions/claude-proxy.js
-// Proxy serverless pentru Anthropic API — rezolvă CORS
 
-exports.handler = async function(event, context) {
+exports.handler = async function(event) {
 
-  // CORS headers — definite primele
   const headers = {
     'Access-Control-Allow-Origin':  '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Content-Type': 'application/json',
   };
 
-  // Preflight OPTIONS — PRIMUL check obligatoriu
+  // Răspunde la ORICE preflight
   if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers, body: '' };
+    return { statusCode: 204, headers, body: '' };
   }
 
-  // Permite doar POST
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method Not Allowed' }) };
+    return { statusCode: 200, headers, body: JSON.stringify({ error: 'Trimite POST' }) };
+  }
+
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    return {
+      statusCode: 200, headers,
+      body: JSON.stringify({ error: 'ANTHROPIC_API_KEY lipsa in Netlify env vars' })
+    };
   }
 
   try {
-    const body = JSON.parse(event.body);
+    const payload = JSON.parse(event.body || '{}');
 
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) {
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({ error: 'ANTHROPIC_API_KEY nu este setat in Netlify Environment Variables' })
-      };
-    }
-
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type':      'application/json',
         'x-api-key':         apiKey,
         'anthropic-version': '2023-06-01',
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(payload),
     });
 
-    const data = await response.json();
-
-    return {
-      statusCode: response.status,
-      headers,
-      body: JSON.stringify(data),
-    };
+    const data = await resp.json();
+    return { statusCode: 200, headers, body: JSON.stringify(data) };
 
   } catch (err) {
     return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify({ error: err.message }),
+      statusCode: 200, headers,
+      body: JSON.stringify({ error: 'Eroare proxy: ' + err.message })
     };
   }
 };
