@@ -1025,3 +1025,341 @@ header.infographic-header p { font-size: 1rem; opacity: 0.9; max-width: 700px; m
     font-size: 1.15rem;
     margin: 0;
 }
+
+/* ==========================================================================
+   STILURI SPECIFICE BLOG — de adăugat la sfârșitul fișierului celos.css
+   Pagina: /blog/index.html
+   ========================================================================== */
+
+/* --- Culori accent per categorie blog --- */
+:root {
+    --col-sanatate:    #e53e3e;
+    --col-nutritie:    #2d8a4e;
+    --col-lifestyle:   var(--color-brand-medium); /* #3E92CC */
+    --col-terapie:     var(--color-gold);          /* #C5A021 */
+    --col-suplimente:  #7c3aed;
+    --col-infografice: var(--color-brand-medium);
+}
+
+/* --- Wrapper pagină blog (înlocuiește padding body global) --- */
+.blog-nav-outer {
+    padding: 1rem 1rem 0;
+    background-color: #e8edf2;
+}
+@media (min-width: 768px) {
+    .blog-nav-outer { padding: 1.5rem 1.5rem 0; }
+}
+
+.blog-page-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 1rem 3rem;
+    background-color: #e8edf2;
+}
+@media (min-width: 768px) {
+    .blog-page-wrap { padding: 1rem 1.5rem 3rem; }
+}
+
+/* Asigură vizibilitate nav-links pe desktop în contextul blog */
+@media (min-width: 769px) {
+    .nav-links { display: flex !important; }
+}
+
+/* --- Hero Banner Blog --- */
+.blog-hero {
+    background: var(--color-navy);
+    background-image: linear-gradient(135deg, #0A2463 0%, #1a3a7a 50%, #0e3060 100%);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-card);
+}
+.blog-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+}
+.blog-hero h1 {
+    /* Folosește stilul .hero-title din celos.css */
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    color: var(--color-pearl);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+    position: relative;
+    margin-bottom: 0.75rem;
+}
+.blog-hero p {
+    font-family: 'Lora', serif;
+    color: var(--color-gold);
+    font-size: 1.05rem;
+    margin: 0 auto;
+    max-width: 680px;
+    line-height: 1.6;
+    position: relative;
+}
+.blog-hero .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-top: 2rem;
+    position: relative;
+    flex-wrap: wrap;
+}
+.blog-hero .hero-stat-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    color: white;
+    font-weight: 800;
+    line-height: 1;
+}
+.blog-hero .hero-stat-label {
+    font-size: 0.72rem;
+    color: var(--color-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    margin-top: 0.2rem;
+    font-family: 'Inter', sans-serif;
+}
+
+/* --- Bara de filtrare categorii --- */
+.blog-filter-bar {
+    background: var(--color-pearl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: 0 0.5rem;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    box-shadow: var(--shadow-card);
+}
+.blog-filter-bar::-webkit-scrollbar { display: none; }
+
+.blog-filter-tabs {
+    display: flex;
+    gap: 0;
+    min-width: max-content;
+}
+
+.blog-filter-tab {
+    padding: 0.85rem 1.1rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    cursor: pointer;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.blog-filter-tab::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 5px;
+    background: currentColor;
+    opacity: 0.5;
+    vertical-align: middle;
+}
+.blog-filter-tab[data-cat="all"]::before { display: none; }
+.blog-filter-tab:hover { color: var(--color-navy); }
+.blog-filter-tab.active { color: var(--color-navy); border-bottom-color: var(--color-navy); }
+.blog-filter-tab[data-cat="sanatate"]   { color: var(--col-sanatate); }
+.blog-filter-tab[data-cat="nutritie"]   { color: var(--col-nutritie); }
+.blog-filter-tab[data-cat="lifestyle"]  { color: var(--col-lifestyle); }
+.blog-filter-tab[data-cat="terapie"]    { color: var(--col-terapie); }
+.blog-filter-tab[data-cat="suplimente"] { color: var(--col-suplimente); }
+.blog-filter-tab[data-cat="infografice"]{ color: var(--col-infografice); }
+
+/* --- Secțiune categorie --- */
+.blog-category-section { margin-bottom: 2.5rem; }
+.blog-category-section.hidden { display: none; }
+
+.blog-category-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+.blog-category-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.blog-category-header h2 {
+    font-family: 'Lora', serif !important;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--color-navy);
+    margin: 0;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+.blog-category-line {
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+}
+.blog-category-count {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    background: var(--color-brand-light);
+    padding: 0.2rem 0.6rem;
+    border-radius: 99px;
+    white-space: nowrap;
+}
+
+/* --- Grid carduri (max 2 coloane) --- */
+.blog-cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+@media (min-width: 700px) {
+    .blog-cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --- Card articol orizontal cu imagine --- */
+.blog-article-card {
+    display: flex;
+    flex-direction: row;
+    background: white;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-border);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    min-height: 135px;
+    box-shadow: var(--shadow-card);
+    animation: blogCardFadeUp 0.35s ease both;
+}
+.blog-article-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(10, 36, 99, 0.13);
+}
+
+@keyframes blogCardFadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Imagine card */
+.blog-card-image-wrap {
+    width: 130px;
+    flex-shrink: 0;
+    overflow: hidden;
+    position: relative;
+}
+@media (min-width: 500px) {
+    .blog-card-image-wrap { width: 150px; }
+}
+.blog-card-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+.blog-article-card:hover .blog-card-image-wrap img {
+    transform: scale(1.06);
+}
+
+/* Badge categorie pe imagine */
+.blog-card-cat-badge {
+    position: absolute;
+    bottom: 7px;
+    left: 7px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 0.15rem 0.45rem;
+    border-radius: 99px;
+    color: white;
+}
+
+/* Corp card */
+.blog-card-body {
+    padding: 0.9rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+}
+.blog-card-body h3 {
+    font-family: 'Lora', serif !important;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-navy);
+    line-height: 1.3;
+    margin-bottom: 0.35rem;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+}
+.blog-card-body p {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+    line-height: 1.5;
+    flex-grow: 1;
+    margin: 0 !important;
+    text-align: left !important;
+}
+.blog-card-footer {
+    display: flex;
+    align-items: center;
+    margin-top: 0.6rem;
+}
+.blog-card-link-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+.blog-card-arrow { transition: transform 0.2s; }
+.blog-article-card:hover .blog-card-arrow { transform: translateX(3px); }
+
+/* --- Accent bordură stângă + culori per categorie --- */
+.blog-accent-sanatate    { border-left: 3px solid var(--col-sanatate); }
+.blog-accent-nutritie    { border-left: 3px solid var(--col-nutritie); }
+.blog-accent-lifestyle   { border-left: 3px solid var(--col-lifestyle); }
+.blog-accent-terapie     { border-left: 3px solid var(--col-terapie); }
+.blog-accent-suplimente  { border-left: 3px solid var(--col-suplimente); }
+.blog-accent-infografice { border-left: 3px solid var(--col-infografice); }
+
+.blog-accent-sanatate    .blog-card-cat-badge  { background: var(--col-sanatate); }
+.blog-accent-nutritie    .blog-card-cat-badge  { background: var(--col-nutritie); }
+.blog-accent-lifestyle   .blog-card-cat-badge  { background: var(--col-lifestyle); }
+.blog-accent-terapie     .blog-card-cat-badge  { background: var(--col-terapie); }
+.blog-accent-suplimente  .blog-card-cat-badge  { background: var(--col-suplimente); }
+.blog-accent-infografice .blog-card-cat-badge  { background: var(--col-infografice); }
+
+.blog-accent-sanatate    .blog-card-link-text  { color: var(--col-sanatate); }
+.blog-accent-nutritie    .blog-card-link-text  { color: var(--col-nutritie); }
+.blog-accent-lifestyle   .blog-card-link-text  { color: var(--col-lifestyle); }
+.blog-accent-terapie     .blog-card-link-text  { color: var(--col-terapie); }
+.blog-accent-suplimente  .blog-card-link-text  { color: var(--col-suplimente); }
+.blog-accent-infografice .blog-card-link-text  { color: var(--col-infografice); }
