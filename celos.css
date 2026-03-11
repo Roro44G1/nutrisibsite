@@ -32,7 +32,7 @@ h2, h3, .hero-subtitle, .section-desc, .card-inner-title, .method-title {
     font-family: 'Lora', serif !important;
 }
 
-body, p, li, .nav-links a, .btn, .btn-gold, .btn-card, .card-inner-text, .legal-btn, .investment-list li {
+body, p, li, .nav-links a, .btn, .btn-gold, .btn-pearl, .btn-card, .card-inner-text, .legal-btn, .investment-list li {
     font-family: 'Inter', sans-serif !important;
 }
 
@@ -274,23 +274,34 @@ body {
 }
 
 .btn-primary { background-color: var(--color-navy); color: var(--color-pearl); }
-.btn-primary:hover { background-color: var(--color-pearl); }
+.btn-primary:hover { background-color: var(--color-pearl); color: var(--color-navy); }
 
-.btn-gold {
+/* BUTON REFACTORIZAT: PEARL CU TEXT NAVY ÎN RELIEF 3D */
+.btn-gold, .btn-pearl {
     display: inline-block;
-    background-color: var(--color-gold);
+    background-color: var(--color-pearl);
     color: var(--color-navy);
     padding: 0.85rem 2.5rem;
     border-radius: 9999px;
-    font-weight: 700;
+    font-weight: 800;
     text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s;
+    /* Efect 3D: o margine inferioară solidă și o umbră difuză */
+    box-shadow: 0 4px 0 #cbd5e1, 0 6px 10px rgba(0,0,0,0.15);
+    transition: all 0.15s ease;
     border: none;
     text-align: center;
 }
-.btn-gold:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+
+.btn-gold:hover, .btn-pearl:hover {
+    /* La hover/apăsare se lasă puțin în jos mecanic */
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #cbd5e1, 0 4px 6px rgba(0,0,0,0.15);
+}
+
+.btn-gold:active, .btn-pearl:active {
+    /* La click complet dispare buza 3D, simulând o apăsare fizică */
+    transform: translateY(4px);
+    box-shadow: 0 0 0 #cbd5e1, 0 1px 3px rgba(0,0,0,0.15);
 }
 
 .btn-outline {
@@ -480,7 +491,7 @@ body {
     text-decoration: line-through;
     text-decoration-color: #ef4444;
     margin-top: 1rem;
-	align-items: center;
+    align-items: center;
 }
 .price, .price-new {
     font-size: 3rem;
@@ -489,7 +500,7 @@ body {
     line-height: 1;
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
-	align-items: center;
+    align-items: center;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -671,6 +682,9 @@ header.infographic-header p { font-size: 1rem; opacity: 0.9; max-width: 700px; m
     height: 64px;
     flex-shrink: 0;
     object-fit: contain;
+    background-color: var(--color-navy); /* Fundal Navy conform cerinței */
+    padding: 8px;
+    border-radius: 8px;
 }
 .parameter-content h3 {
     font-size: 1.2rem;
@@ -704,47 +718,11 @@ header.infographic-header p { font-size: 1rem; opacity: 0.9; max-width: 700px; m
     font-weight: 800;
 }
 
-/* --- Stiluri specifice pentru boxa de investiție (evaluare.html) --- */
-.lista-oferta {
-    list-style: none;
-    padding-left: 0; 
-}
-.lista-oferta li {
-    position: relative;
-    padding-left: 1.8rem;
-    margin-bottom: 0.75rem;
-}
-.lista-oferta li::before {
-    content: "✓"; 
-    position: absolute;
-    left: 0;
-    color: var(--color-navy); 
-    font-weight: 700;
-    font-size: 1.1rem;
-}
-.price-old {
-    font-size: 1.5rem;
-    color: #9ca3af;
-    text-decoration: line-through;
-    text-decoration-color: #ef4444;
-    margin-top: 1rem;
-}
-.price-new {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--color-navy);
-    line-height: 1;
-    margin-bottom: 1rem;
-    font-family: 'Montserrat', sans-serif;
-}
-
 .tech-grid {
     display: grid;
     grid-template-columns: 1fr; /* Asta le ține una sub alta, pe o singură coloană! */
     gap: 1.5rem;
 }
-
-/* --- ADAUGĂ ASTA LA FINALUL celos.css PENTRU eval_biorez.html --- */
 
 /* 1. Grid-ul specific pentru Tehnologii (pe 1 coloana desktop, ca in HTML-ul original) */
 .info-grid {
@@ -794,101 +772,7 @@ header.infographic-header p { font-size: 1rem; opacity: 0.9; max-width: 700px; m
     font-weight: 700;
 }
 
-/* 3. Stilurile specifice pentru cardurile de Măsurători */
-.measure-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-}
-@media (min-width: 768px) {
-    .measure-grid { grid-template-columns: repeat(2, 1fr); }
-}
-.measure-box {
-    background-color: var(--color-brand-light);
-    border-left: 4px solid var(--color-brand-medium);
-    padding: 1.5rem;
-    border-radius: 0 8px 8px 0;
-}
-.measure-box h3 { 
-    font-size: 1.2rem; 
-    color: var(--color-navy); 
-    border-bottom: 2px solid var(--color-brand-medium); 
-    padding-bottom: 0.5rem; 
-    margin-bottom: 1rem; 
-}
-.measure-box p { margin: 0; font-size: 0.95rem; }
 
-/* 4. Lista cu buline din Investment Box */
-.investment-list {
-    list-style: disc;
-    padding-left: 1.5rem;
-    text-align: left;
-    margin-top: 1rem;
-}
-
-/* --- ADAUGĂ LA FINALUL celos.css PENTRU eval_tanita.html --- */
-
-/* Stilul listei de parametri (cele 14 carduri) */
-.parameter-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-.parameter-card {
-    display: flex;
-    align-items: flex-start;
-    background-color: #f9fafb;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    padding: 1.5rem;
-    gap: 1.5rem;
-}
-.parameter-icon {
-    width: 64px;
-    height: 64px;
-    flex-shrink: 0;
-    object-fit: contain;
-    background-color: var(--color-navy); /* Fundal Navy conform cerinței */
-    padding: 8px;
-    border-radius: 8px;
-}
-.parameter-content h3 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    color: var(--color-navy);
-    border-bottom: none !important;
-}
-.parameter-content p {
-    margin: 0 !important;
-    text-align: left !important;
-}
-
-@media (max-width: 600px) {
-    .parameter-card { flex-direction: column; align-items: center; text-align: center; }
-    .parameter-content p { text-align: center !important; }
-}
-
-/* Stilul listei de beneficii cu bife */
-.benefits-list {
-    list-style: none;
-    padding: 0;
-    max-width: 600px;
-    margin: 0 auto;
-}
-.benefits-list li {
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--color-border);
-    color: var(--color-navy);
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-}
-.benefits-list li::before {
-    content: "✓";
-    color: var(--color-brand-medium);
-    margin-right: 10px;
-    font-weight: 800;
-}
 /* =========================================================
    STILURI SPECIFICE PENTRU MANIFEST (celos.HTML)
    ========================================================= */
@@ -1067,6 +951,30 @@ header.infographic-header p { font-size: 1rem; opacity: 0.9; max-width: 700px; m
 }
 .article-section tr:nth-child(even) {
     background-color: #f9fafb;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 12px 24px;
+    margin: 10px 0;
+    background-color: var(--color-navy);
+    color: var(--color-text-white) !important;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 8px;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.cta-button:hover {
+    background-color: var(--color-brand-medium);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+.cta-button.secondary {
+    background-color: var(--color-text-medium);
+}
+.cta-button.secondary:hover {
+    background-color: var(--color-text-light);
 }
 
 .article-section.cta-center {
