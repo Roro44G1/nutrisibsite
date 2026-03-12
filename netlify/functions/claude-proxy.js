@@ -9,7 +9,6 @@ exports.handler = async function(event) {
     'Content-Type': 'application/json',
   };
 
-  // Răspunde la ORICE preflight
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers, body: '' };
   }
@@ -20,10 +19,7 @@ exports.handler = async function(event) {
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    return {
-      statusCode: 200, headers,
-      body: JSON.stringify({ error: 'ANTHROPIC_API_KEY lipsa in Netlify env vars' })
-    };
+    return { statusCode: 200, headers, body: JSON.stringify({ error: 'API key lipsa' }) };
   }
 
   try {
@@ -39,13 +35,18 @@ exports.handler = async function(event) {
       body: JSON.stringify(payload),
     });
 
-    const data = await resp.json();
+    const rawText = await resp.text();
+    console.log('STATUS:', resp.status);
+    console.log('BODY:', rawText.substring(0, 500));
+
+    let data;
+    try { data = JSON.parse(rawText); }
+    catch(e) { return { statusCode: 200, headers, body: JSON.stringify({ error: 'JSON invalid', raw: rawText.substring(0,300) }) }; }
+
+    // Returnează tot răspunsul brut — inclusiv erori Anthropic
     return { statusCode: 200, headers, body: JSON.stringify(data) };
 
   } catch (err) {
-    return {
-      statusCode: 200, headers,
-      body: JSON.stringify({ error: 'Eroare proxy: ' + err.message })
-    };
+    return { statusCode: 200, headers, body: JSON.stringify({ error: 'Proxy: ' + err.message }) };
   }
 };
