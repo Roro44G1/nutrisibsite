@@ -17,20 +17,139 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://nutrisib.club/celos.css">
     <style>
-        .accordion-item {border-radius:var(--radius-card);border:1px solid var(--color-border);margin-bottom:.5rem;overflow:hidden}
-        .accordion-toggle {width:100%;display:flex;justify-content:space-between;align-items:center;padding:.85rem 1.25rem;background:var(--color-pearl);border:none;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600;color:var(--color-navy);text-align:left;transition:background .2s}
+        /* ── Accordion base ── */
+        .accordion-item {border-radius:var(--radius-card);border:1px solid var(--color-border);margin-bottom:.5rem;overflow:hidden;transition:box-shadow .2s}
+        .accordion-item:hover{box-shadow:0 2px 10px rgba(0,0,0,.08)}
+        .accordion-toggle {width:100%;display:flex;justify-content:flex-start;align-items:center;padding:.85rem 1.25rem;background:var(--color-pearl);border:none;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600;color:var(--color-navy);text-align:left;transition:background .2s;gap:.5rem}
+        .accordion-toggle .spacer{flex:1}
+        .accordion-toggle .proba-badge{margin-left:auto}
         .accordion-toggle:hover,.accordion-toggle[aria-expanded="true"]{background:var(--color-brand-light)}
-        .accordion-icon {font-size:1.2rem;font-weight:400;color:var(--color-brand-medium);transition:transform .25s;flex-shrink:0;margin-left:1rem}
+        .accordion-icon {font-size:1.2rem;font-weight:400;transition:transform .25s;flex-shrink:0;margin-left:.5rem}
         .accordion-toggle[aria-expanded="true"] .accordion-icon{transform:rotate(45deg)}
         .accordion-content {display:none;padding:1rem 1.25rem;border-top:1px solid var(--color-border)}
         .accordion-content p,.accordion-content li{font-size:.88rem;line-height:1.65;margin-bottom:.45rem;color:var(--color-text-medium)}
         .accordion-content ol,.accordion-content ul{padding-left:1.4rem;margin:.4rem 0}
         .accordion-content strong{color:var(--color-navy)}
         .accordion-content hr{border:none;border-top:1px solid var(--color-border);margin:.75rem 0}
-        .accordion-item-color1 .accordion-toggle{border-left:4px solid var(--color-brand-medium)}
-        .accordion-item-color2 .accordion-toggle{border-left:4px solid #2d8a4e}
-        .accordion-item-color3 .accordion-toggle{border-left:4px solid #7c3aed}
+
+        /* ── Acordeoane colorate pe tip de probă ── */
+        /* 🔴 Sânge */
+        .accordion-sange .accordion-toggle{border-left:5px solid #e53e3e;background:linear-gradient(to right,rgba(229,62,62,.06),transparent)}
+        .accordion-sange .accordion-toggle:hover,.accordion-sange .accordion-toggle[aria-expanded="true"]{background:linear-gradient(to right,rgba(229,62,62,.12),var(--color-brand-light))}
+        .accordion-sange .accordion-icon{color:#e53e3e}
+        .accordion-sange .proba-badge{background:#fff1f2;color:#9b2226;border:1px solid #fca5a5}
+
+        /* 🟡 Urină */
+        .accordion-urina .accordion-toggle{border-left:5px solid #C5A021;background:linear-gradient(to right,rgba(197,160,33,.06),transparent)}
+        .accordion-urina .accordion-toggle:hover,.accordion-urina .accordion-toggle[aria-expanded="true"]{background:linear-gradient(to right,rgba(197,160,33,.12),var(--color-brand-light))}
+        .accordion-urina .accordion-icon{color:#C5A021}
+        .accordion-urina .proba-badge{background:#fffbeb;color:#78350f;border:1px solid #fcd34d}
+
+        /* 🟢 Secreții respiratorii (exsudat, spută) */
+        .accordion-respirator .accordion-toggle{border-left:5px solid #2d8a4e;background:linear-gradient(to right,rgba(45,138,78,.06),transparent)}
+        .accordion-respirator .accordion-toggle:hover,.accordion-respirator .accordion-toggle[aria-expanded="true"]{background:linear-gradient(to right,rgba(45,138,78,.12),var(--color-brand-light))}
+        .accordion-respirator .accordion-icon{color:#2d8a4e}
+        .accordion-respirator .proba-badge{background:#f0fdf4;color:#14532d;border:1px solid #86efac}
+
+        /* 🟣 Secreții genito-urinare, PAP, spermă */
+        .accordion-genital .accordion-toggle{border-left:5px solid #7c3aed;background:linear-gradient(to right,rgba(124,58,237,.06),transparent)}
+        .accordion-genital .accordion-toggle:hover,.accordion-genital .accordion-toggle[aria-expanded="true"]{background:linear-gradient(to right,rgba(124,58,237,.12),var(--color-brand-light))}
+        .accordion-genital .accordion-icon{color:#7c3aed}
+        .accordion-genital .proba-badge{background:#faf5ff;color:#4c1d95;border:1px solid #c4b5fd}
+
+        /* 🟤 Materii fecale */
+        .accordion-fecale .accordion-toggle{border-left:5px solid #d97706;background:linear-gradient(to right,rgba(217,119,6,.06),transparent)}
+        .accordion-fecale .accordion-toggle:hover,.accordion-fecale .accordion-toggle[aria-expanded="true"]{background:linear-gradient(to right,rgba(217,119,6,.12),var(--color-brand-light))}
+        .accordion-fecale .accordion-icon{color:#d97706}
+        .accordion-fecale .proba-badge{background:#fffbeb;color:#78350f;border:1px solid #fcd34d}
+
+        /* 🩺 Imagistică */
+        .accordion-imagistica .accordion-toggle{border-left:5px solid #0ea5e9;background:linear-gradient(to right,rgba(14,165,233,.06),transparent)}
+        .accordion-imagistica .accordion-toggle:hover,.accordion-imagistica .accordion-toggle[aria-expanded="true"]{background:linear-gradient(to right,rgba(14,165,233,.12),var(--color-brand-light))}
+        .accordion-imagistica .accordion-icon{color:#0ea5e9}
+        .accordion-imagistica .proba-badge{background:#f0f9ff;color:#0c4a6e;border:1px solid #7dd3fc}
+
+        /* Badge tip probă */
+        .proba-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;font-weight:700;font-family:'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.05em;padding:.15rem .55rem;border-radius:99px;flex-shrink:0;white-space:nowrap}
+
+        /* Legendă nav culori */
+        .probe-legend{display:flex;flex-wrap:wrap;gap:.4rem .75rem;align-items:center;padding:.5rem 1rem;background:var(--color-pearl);border-bottom:1px solid var(--color-border)}
+        .probe-legend-item{display:flex;align-items:center;gap:.3rem;font-size:.75rem;font-weight:600;color:var(--color-text-medium)}
+        .probe-legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+        /* Etichete tip probă în secțiunile de valori de referință */
+        .proba-tip-header{display:flex;align-items:center;gap:.6rem;margin:1.25rem 0 .6rem}
+        .proba-tip-header .badge-mare{font-size:.76rem;font-weight:700;font-family:'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.06em;padding:.25rem .7rem;border-radius:6px}
+        .badge-sange{background:#fff1f2;color:#9b2226;border:1px solid #fca5a5}
+        .badge-urina{background:#fffbeb;color:#78350f;border:1px solid #fcd34d}
+        .badge-hormoni{background:#faf5ff;color:#4c1d95;border:1px solid #c4b5fd}
+        .badge-speciale{background:#faf5ff;color:#4c1d95;border:1px solid #c4b5fd}
+        .badge-stres{background:#f0fdf4;color:#14532d;border:1px solid #86efac}
+        .badge-imagistica{background:#f0f9ff;color:#0c4a6e;border:1px solid #7dd3fc}
+
+        /* ── Card layout imagini ── */
+        .card-img-stanga{display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap}
+        .card-img-stanga .card-text{flex:1;min-width:260px}
+        .card-img-stanga .card-img-wrap{flex:0 0 auto;width:min(42%,320px)}
+        .card-img-stanga .card-img-wrap img{width:100%;border-radius:10px;display:block;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+        .card-img-centru{display:flex;gap:1.5rem;align-items:flex-start;flex-wrap:wrap}
+        .card-img-centru .ci-img{flex:0 0 auto;width:min(30%,220px)}
+        .card-img-centru .ci-img img{width:100%;border-radius:10px;display:block;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+        .card-img-centru .ci-text{flex:1;min-width:220px}
+        .card-img-centru .img-caption{font-size:.79rem;color:var(--color-text-light);font-style:italic;margin-top:.35rem}
+
+        /* ── Nav defilant augmentat ── */
+        .blog-filter-bar{position:sticky;top:0;z-index:100;background:white;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+        .filter-bar-inner{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--color-brand-medium) #e5e7eb;padding:0 .5rem}
+        .filter-bar-inner::-webkit-scrollbar{height:3px}
+        .filter-bar-inner::-webkit-scrollbar-track{background:#f1f5f9}
+        .filter-bar-inner::-webkit-scrollbar-thumb{background:var(--color-brand-medium);border-radius:2px}
+        .blog-filter-tabs{display:flex;flex-wrap:nowrap;min-width:max-content;gap:0;padding:.3rem 0}
+        .filter-group-label{font-size:.62rem;font-weight:800;font-family:'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.08em;padding:.35rem .6rem .2rem;opacity:.7;white-space:nowrap;align-self:flex-end;border-bottom:2px solid transparent}
+        .blog-filter-tab{padding:.55rem .9rem;font-size:.76rem;font-weight:700;font-family:'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;text-decoration:none !important;border-radius:4px 4px 0 0}
+        .blog-filter-tab:hover{background:var(--color-brand-light);opacity:1 !important}
+        .blog-filter-tab.active{border-bottom-color:currentColor;background:var(--color-brand-light)}
+        .blog-filter-tab.sub{font-size:.68rem;opacity:.75;padding:.55rem .65rem}
+
+        /* ── Images responsive ── */
         .art-card img{max-width:100%;border-radius:8px;margin:.5rem 0;display:block}
+        .zwp-image-container{margin:.75rem 0}
+        .zwp-image-container img{max-width:100%;height:auto;border-radius:8px;display:block}
+
+        /* ── Tabele responsive ── */
+        .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--color-brand-medium) #e5e7eb;border-radius:var(--radius-card)}
+        .table-wrap::-webkit-scrollbar{height:4px}
+        .table-wrap::-webkit-scrollbar-track{background:#f1f5f9;border-radius:4px}
+        .table-wrap::-webkit-scrollbar-thumb{background:var(--color-brand-medium);border-radius:4px}
+
+        /* ── SVG/grafice responsive ── */
+        svg{height:auto;max-width:100%}
+
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:768px){
+            .container-main{padding:0 .5rem}
+            .hero-card{padding:1.5rem 1rem}
+            .hero-title{font-size:1.35rem}
+            .hero-subtitle{font-size:.85rem}
+            .art-card{padding:.9rem .85rem}
+            .section-anchor-header h2{font-size:1rem}
+            .accordion-toggle{padding:.75rem 1rem;font-size:.83rem}
+            .card-img-stanga{flex-direction:column-reverse}
+            .card-img-stanga .card-img-wrap{width:100%}
+            .card-img-centru img{max-width:100%}
+            .proba-badge{font-size:.63rem;padding:.12rem .45rem}
+            .probe-legend{padding:.4rem .85rem;gap:.3rem .5rem}
+            .probe-legend-item{font-size:.7rem}
+            .nav-links{flex-direction:column;gap:.3rem}
+        }
+        @media(max-width:480px){
+            .hero-title{font-size:1.15rem}
+            .art-card{padding:.75rem .7rem}
+            .accordion-toggle{padding:.65rem .85rem;font-size:.8rem}
+            .blog-filter-tab{font-size:.68rem;padding:.5rem .7rem}
+            .blog-filter-tab.sub{font-size:.6rem;padding:.5rem .5rem}
+        }
     </style>
 </head>
 <body id="top">
@@ -57,30 +176,28 @@
         </div>
     </div>
 
-    <div class="blog-filter-bar" style="position:sticky;top:0;z-index:100;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch">
-        <div class="blog-filter-tabs" style="flex-wrap:nowrap;min-width:max-content">
-            <a href="#preambul" class="blog-filter-tab active" style="color:var(--color-navy);text-decoration:none">Preambul</a>
-            <a href="#pregatire" class="blog-filter-tab" style="color:#e53e3e;text-decoration:none">Pregătire</a>
-            <a href="#sange" class="blog-filter-tab" style="color:#e53e3e;text-decoration:none">Sânge</a>
-            <a href="#hlc" class="blog-filter-tab" style="color:#e53e3e;opacity:0.75;font-size:0.72rem;text-decoration:none">HLC</a>
-            <a href="#biochimie" class="blog-filter-tab" style="color:#e53e3e;opacity:0.75;font-size:0.72rem;text-decoration:none">Biochimie</a>
-            <a href="#urina" class="blog-filter-tab" style="color:#3E92CC;text-decoration:none">Urină</a>
-            <a href="#sumar-urina" class="blog-filter-tab" style="color:#3E92CC;opacity:0.75;font-size:0.72rem;text-decoration:none">Sumar</a>
-            <a href="#sediment" class="blog-filter-tab" style="color:#3E92CC;opacity:0.75;font-size:0.72rem;text-decoration:none">Sediment</a>
-            <a href="#urina-24h" class="blog-filter-tab" style="color:#3E92CC;opacity:0.75;font-size:0.72rem;text-decoration:none">24h</a>
-            <a href="#hormoni" class="blog-filter-tab" style="color:#7c3aed;text-decoration:none">Profil hormonal</a>
-            <a href="#tiroidieni" class="blog-filter-tab" style="color:#7c3aed;opacity:0.75;font-size:0.72rem;text-decoration:none">Tiroidă</a>
-            <a href="#sexuali" class="blog-filter-tab" style="color:#7c3aed;opacity:0.75;font-size:0.72rem;text-decoration:none">Sexuali</a>
-            <a href="#suprarenali" class="blog-filter-tab" style="color:#7c3aed;opacity:0.75;font-size:0.72rem;text-decoration:none">Suprarenali</a>
-            <a href="#speciale" class="blog-filter-tab" style="color:#7c3aed;text-decoration:none">Speciale</a>
-            <a href="#imunitar" class="blog-filter-tab" style="color:#7c3aed;opacity:0.75;font-size:0.72rem;text-decoration:none">Imunitar</a>
-            <a href="#vitamine" class="blog-filter-tab" style="color:#7c3aed;opacity:0.75;font-size:0.72rem;text-decoration:none">Vitamine</a>
-            <a href="#stresoxidativ" class="blog-filter-tab" style="color:#2d8a4e;text-decoration:none">Stres oxidativ</a>
-            <a href="#imagistica" class="blog-filter-tab" style="color:#3E92CC;text-decoration:none">Imagistică</a>
-            <a href="#ecografie" class="blog-filter-tab" style="color:#3E92CC;opacity:0.75;font-size:0.72rem;text-decoration:none">Ecografie</a>
-            <a href="#endoscopie" class="blog-filter-tab" style="color:#3E92CC;opacity:0.75;font-size:0.72rem;text-decoration:none">Endoscopie</a>
-            <a href="#ct-rmn" class="blog-filter-tab" style="color:#3E92CC;opacity:0.75;font-size:0.72rem;text-decoration:none">CT/RMN</a>
+    <div class="blog-filter-bar">
+        <!-- Legendă coduri culoare -->
+        <div class="probe-legend">
+            <span class="probe-legend-item"><span class="probe-legend-dot" style="background:#e53e3e"></span>Sânge</span>
+            <span class="probe-legend-item"><span class="probe-legend-dot" style="background:#C5A021"></span>Urină</span>
+            <span class="probe-legend-item"><span class="probe-legend-dot" style="background:#7c3aed"></span>Hormoni</span>
+            <span class="probe-legend-item"><span class="probe-legend-dot" style="background:#2d8a4e"></span>Stres oxidativ</span>
+            <span class="probe-legend-item"><span class="probe-legend-dot" style="background:#0ea5e9"></span>Imagistică</span>
         </div>
+        <!-- Bara de navigare cu scroll vizibil -->
+        <div class="filter-bar-inner">
+            <div class="blog-filter-tabs">
+                <a href="#preambul" class="blog-filter-tab active" style="color:var(--color-navy)">Preambul</a>
+                <a href="#pregatire" class="blog-filter-tab" style="color:#e53e3e">🔴 Pregătire</a>
+                <a href="#sange" class="blog-filter-tab" style="color:#e53e3e">🩸 Sânge</a>
+                <a href="#urina" class="blog-filter-tab" style="color:#C5A021">🟡 Urină</a>
+                <a href="#hormoni" class="blog-filter-tab" style="color:#7c3aed">🟣 Hormoni</a>
+                <a href="#speciale" class="blog-filter-tab" style="color:#7c3aed">🟣 Speciale</a>
+                <a href="#stresoxidativ" class="blog-filter-tab" style="color:#2d8a4e">🟢 Stres oxidativ</a>
+                <a href="#imagistica" class="blog-filter-tab" style="color:#0ea5e9">🩺 Imagistică</a>
+            </div>
+        </div> 
     </div>
 
     <div style="padding:0 0 1rem">
@@ -92,22 +209,129 @@
                 <a href="#top" class="back-top">↑ Sus</a>
             </div>
             <div class="art-card">
-				<h3>Rolul analizelor medicale în medicina modernă</h3>
-				<p>Analizele de laborator reprezintă un pilon fundamental al practicii medicale contemporane, oferind o fereastră obiectivă asupra proceselor biochimice și fiziologice din organism. Aceste investigații sunt esențiale într-un spectru larg de contexte clinice, de la evaluările de rutină menite să prevină afecțiuni, până la diagnosticarea precisă a bolilor, monitorizarea eficacității unui tratament și evaluarea prognosticului. Un set de analize uzuale, efectuat anual, poate evalua funcțiile principalelor organe, precum ficatul, rinichii și glanda tiroidă, și poate identifica precoce factori de risc pentru boli cronice, cum ar fi diabetul zaharat sau afecțiunile cardiovasculare. Prin cuantificarea markerilor specifici, medicul obține indicii esențiale care, coroborate cu examenul clinic și istoricul pacientului, permit depistarea problemelor de sănătate în stadii incipiente, adesea înainte de manifestarea simptomelor.</p>
-				<div class="zwp-image-container">
-				  <img alt="Ilustrație analize medicale de laborator" align="center" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0A2463/FFFFFF?text=Analize+Medicale';" src="https://nutrisib.club/imagini/analizemedicale.jpg" width="50%"/>
-				</div>
+                <h3>Rolul analizelor medicale în medicina modernă</h3>
+                <div class="card-img-stanga">
+                    <div class="card-text">
+                        <p>Analizele de laborator reprezintă un pilon fundamental al practicii medicale contemporane, oferind o fereastră obiectivă asupra proceselor biochimice și fiziologice din organism. Aceste investigații sunt esențiale într-un spectru larg de contexte clinice, de la evaluările de rutină menite să prevină afecțiuni, până la diagnosticarea precisă a bolilor, monitorizarea eficacității unui tratament și evaluarea prognosticului.</p>
+                        <p>Un set de analize uzuale, efectuat anual, poate evalua funcțiile principalelor organe, precum ficatul, rinichii și glanda tiroidă, și poate identifica precoce factori de risc pentru boli cronice, cum ar fi diabetul zaharat sau afecțiunile cardiovasculare. Prin cuantificarea markerilor specifici, medicul obține indicii esențiale care, coroborate cu examenul clinic și istoricul pacientului, permit depistarea problemelor de sănătate în stadii incipiente, adesea înainte de manifestarea simptomelor.</p>
+                    </div>
+                    <div class="card-img-wrap">
+                        <img alt="Ilustrație analize medicale de laborator" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0A2463/FFFFFF?text=Analize+Medicale';" src="https://nutrisib.club/imagini/analizemedicale.jpg"/>
+                    </div>
+                </div>
 			</div>
+
+            <!-- ══ CARD MEDICINA 3.0 ══ -->
+            <div class="art-card" style="border-top:3px solid var(--color-gold,#C5A021); background:linear-gradient(135deg,rgba(197,160,33,.04),rgba(27,42,74,.03));">
+                <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap;">
+                    <span style="font-size:1.6rem">🔬</span>
+                    <div>
+                        <h3 style="margin:0;border:none;padding:0;font-size:1.05rem;">Medicina 3.0 — de ce biomarkerii sunt fundamentali</h3>
+                        <p style="margin:0;font-size:.78rem;color:var(--color-text-light);font-style:italic;">Paradigma care tratează <em>pacientul</em>, nu boala</p>
+                    </div>
+                </div>
+
+                <!-- Layout: imagine stânga + tabel dreapta -->
+                <div style="display:flex;gap:1.25rem;align-items:flex-start;flex-wrap:wrap;margin:.75rem 0 1.25rem;">
+                <div style="flex:0 0 auto;width:min(28%,200px);">
+                    <img src="https://mcsorengo.ch/wp-content/uploads/2025/10/Prestazioni-medicina-interna_gestione-patologie-croniche.jpg"
+                         onerror="this.onerror=null;this.src='https://placehold.co/400x500/1B2A4A/C5A021?text=Medicina+3.0';"
+                         alt="Medicina 3.0 — paradigma preventivă personalizată"
+                         style="width:100%;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,.15);display:block;"/>
+                    <p style="font-size:.72rem;color:var(--color-text-light);font-style:italic;margin:.4rem 0 0;text-align:center;line-height:1.4;">Medicina 3.0 — evaluare holistică, tratament personalizat</p>
+                </div>
+                <div style="flex:1;min-width:260px;">
+                <div class="table-wrap" style="margin:0;">
+                    <table style="width:100%;border-collapse:collapse;font-size:.78rem;">
+                        <thead>
+                            <tr style="background:var(--color-navy);color:white;">
+                                <th style="padding:.4rem .6rem;text-align:left;font-family:'Montserrat',sans-serif;font-weight:700;border-radius:6px 0 0 0;width:20%;">Dimensiune</th>
+                                <th style="padding:.4rem .6rem;text-align:left;font-weight:700;width:25%;">🏥 Med. 1.0</th>
+                                <th style="padding:.4rem .6rem;text-align:left;font-weight:700;width:25%;">💊 Med. 2.0</th>
+                                <th style="padding:.4rem .6rem;text-align:left;font-weight:700;border-radius:0 6px 0 0;width:30%;">🔬 Med. 3.0</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:white;">
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);font-weight:700;color:var(--color-navy);">Abordare</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:var(--color-text-medium);">Empirică, pe simptome observabile</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:var(--color-text-medium);">Protocol standard pe diagnostic de boală</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:#78350f;font-weight:600;">Protocol personalizat per pacient, nu per boală</td>
+                            </tr>
+                            <tr style="background:var(--color-brand-light,#eaf2f8);">
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);font-weight:700;color:var(--color-navy);">Timing intervenție</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:var(--color-text-medium);">Când simptomele devin evidente</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:var(--color-text-medium);">Când diagnosticul este confirmat</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:#78350f;font-weight:600;">Înainte de boală — prevenție activă pe date obiective</td>
+                            </tr>
+                            <tr style="background:white;">
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);font-weight:700;color:var(--color-navy);">Instrumentul central</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:var(--color-text-medium);">Examen clinic vizual</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:var(--color-text-medium);">Analize standard + ghiduri de tratament</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:#78350f;font-weight:600;">Biomarkeri extinsi + date longitudinale + context de viață</td>
+                            </tr>
+                            <tr style="background:var(--color-brand-light,#eaf2f8);">
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);font-weight:700;color:var(--color-navy);">Valori de referință</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:var(--color-text-medium);">Nu există sistematizate</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:var(--color-text-medium);">„Normal" = intervalul populației generale</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:#78350f;font-weight:600;">„Optim" = intervalul funcțional al acestui pacient</td>
+                            </tr>
+                            <tr style="background:white;">
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);font-weight:700;color:var(--color-navy);">Tratamentul</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:var(--color-text-medium);">Remedii empirice, plante</td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:var(--color-text-medium);">Protocol universal: <em>aceeași boală = același medicament</em></td>
+                                <td style="padding:.38rem .5rem;border-bottom:1px solid var(--color-border);color:#78350f;font-weight:600;">Personalizat: <em>același diagnostic, tratamente diferite per pacient</em></td>
+                            </tr>
+                            <tr style="background:var(--color-brand-light,#eaf2f8);">
+                                <td style="padding:.38rem .5rem;font-weight:700;color:var(--color-navy);">Rolul pacientului</td>
+                                <td style="padding:.38rem .5rem;color:var(--color-text-medium);">Pasiv — urmează indicațiile</td>
+                                <td style="padding:.38rem .5rem;color:var(--color-text-medium);">Semi-activ — se conformează protocolului</td>
+                                <td style="padding:.38rem .5rem;color:#78350f;font-weight:600;">Activ — CEO al propriei biologii, decizii informate</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+                </div>
+
+                <!-- 3 piloni -->
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75rem;margin-bottom:1rem;">
+                    <div style="background:white;border-radius:8px;padding:.85rem 1rem;border-left:4px solid #e53e3e;">
+                        <p style="margin:0 0 .3rem;font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:800;color:#e53e3e;text-transform:uppercase;letter-spacing:.05em;">01 · Detectare precoce</p>
+                        <p style="margin:0;font-size:.84rem;color:var(--color-text-medium);line-height:1.6;">Biomarkerii identifică disfuncțiile <strong>cu ani înainte</strong> ca simptomele să apară. Medicina 3.0 intervine în faza reversibilă, nu după ce organele sunt lezate.</p>
+                    </div>
+                    <div style="background:white;border-radius:8px;padding:.85rem 1rem;border-left:4px solid #C5A021;">
+                        <p style="margin:0 0 .3rem;font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:800;color:#C5A021;text-transform:uppercase;letter-spacing:.05em;">02 · Evaluare holistică</p>
+                        <p style="margin:0;font-size:.84rem;color:var(--color-text-medium);line-height:1.6;">Niciun biomarker nu există în izolare. Un LDL crescut interpretrat fără HDL, trigliceride, inflamație (hs-CRP) și context metabolic nu spune nimic relevant.</p>
+                    </div>
+                    <div style="background:white;border-radius:8px;padding:.85rem 1rem;border-left:4px solid #7c3aed;">
+                        <p style="margin:0 0 .3rem;font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:800;color:#7c3aed;text-transform:uppercase;letter-spacing:.05em;">03 · Terapie personalizată</p>
+                        <p style="margin:0;font-size:.84rem;color:var(--color-text-medium);line-height:1.6;">Două persoane cu același diagnostic pot necesita intervenții complet diferite. Medicina 3.0 adresează <em>persoana din spatele diagnosticului</em>, nu diagnosticul.</p>
+                    </div>
+                </div>
+
+                <div style="background:linear-gradient(to right,rgba(197,160,33,.1),rgba(197,160,33,.03));border-left:4px solid #C5A021;border-radius:0 8px 8px 0;padding:.75rem 1rem;">
+                    <p style="margin:0;font-size:.86rem;color:var(--color-text-medium);line-height:1.7;">
+                        <strong style="color:var(--color-navy);">De ce contează acest ghid pentru tine:</strong> Valorile din paginile următoare sunt instrumente de navigare biologică, nu simple cifre. Înțelegând ce măsoară fiecare parametru și din ce tip de probă provine, poți purta o conversație informată cu medicul tău și poți lua decizii active despre propria sănătate — esența Medicinei 3.0.
+                    </p>
+                </div>
+            </div>
+
 
 			<div class="art-card">
 				<h3>Demistificarea "intervalului de referință": de ce "normal" este un concept relativ</h3>
 				<p>Fiecare buletin de analize prezintă rezultatele pacientului în comparație cu un „interval de referință” sau „valori normale”. Este esențial de înțeles că acest interval nu reprezintă o limită absolută între sănătate și boală, ci un concept statistic. Aceste intervale sunt stabilite prin testarea unui număr mare de indivizi considerați sănătoși și reprezintă, de obicei, intervalul în care se încadrează 95% din rezultatele acestei populații. Prin urmare, o valoare situată ușor în afara acestui interval nu indică în mod automat prezența unei patologii. Interpretarea corectă depinde de o multitudine de factori, ceea ce face ca noțiunea de „normal” să fie extrem de relativă.</p>
-				<div class="zwp-image-container">
-					<img alt="Ilustrație intervale de referință" align="center" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0A2463/FFFFFF?text=Analize+Medicale';" src="https://nutrisib.club/imagini/analizemedicale02.png" width="60%"/>
-				</div>
-				<p>Unul dintre cei mai importanți factori de variabilitate este metodologia utilizată de laborator. Diferite laboratoare pot folosi aparatură, reactivi și tehnici analitice distincte, ceea ce duce la intervale de referință diferite pentru același parametru. De exemplu, intervalul de referință pentru TSH (hormonul de stimulare tiroidiană) la un laborator poate fi 0.27-4.20 µUI/mL, în timp ce la altul poate fi 0.35-4.94 µUI/mL. O persoană care își monitorizează funcția tiroidiană și efectuează analize la laboratoare diferite ar putea observa o modificare a valorii absolute a TSH-ului care nu reflectă o schimbare fiziologică reală, ci doar o diferență de calibrare. Din acest motiv, pentru monitorizarea pe termen lung a unei condiții medicale, este recomandată efectuarea analizelor la același laborator pentru a asigura consistența și comparabilitatea rezultatelor.</p>
-				<p>Pe lângă variația inter-laborator, factorii fiziologici individuali joacă un rol crucial. Vârsta, sexul și statusul fiziologic, precum sarcina, influențează semnificativ majoritatea parametrilor biologici. De exemplu, valorile normale ale hemoglobinei sunt diferite la bărbați față de femei, iar creatinina serică variază în funcție de masa musculară, fiind în general mai mare la bărbați. În timpul sarcinii, mulți parametri se modifică fiziologic; progesteronul atinge niveluri foarte înalte, în timp ce TSH-ul tinde să scadă, în special în primul trimestru.</p>
-				<p>Stilul de viață are, de asemenea, un impact considerabil. Dieta, nivelul de activitate fizică, fumatul și stresul pot altera temporar sau cronic anumiți markeri. Un efort fizic intens poate duce la o creștere tranzitorie a proteinelor în urină, iar o dietă bogată în proteine poate crește nivelul ureei serice. Rezultatele anormale sunt adesea marcate vizual pe buletinul de analize (încadrate într-un chenar sau colorate cu roșu) pentru a atrage atenția, însă semnificația clinică a acestor abateri trebuie stabilită exclusiv de către medic. Acesta va integra rezultatul în contextul clinic complet al pacientului, transformând o simplă cifră într-o informație relevantă pentru starea de sănătate individuală.</p>
+                <div class="card-img-centru">
+                    <div class="ci-img">
+                        <img alt="Intervalul de referință — concept statistic" onerror="this.onerror=null;this.src='https://placehold.co/400x500/0A2463/FFFFFF?text=Intervale';" src="https://nutrisib.club/imagini/analizemedicale02.png"/>
+                        <p class="img-caption">Intervalul de referință — concept statistic, nu limită absolută.</p>
+                    </div>
+                    <div class="ci-text">
+						<p>Unul dintre cei mai importanți factori de variabilitate este metodologia utilizată de laborator. Diferite laboratoare pot folosi aparatură, reactivi și tehnici analitice distincte, ceea ce duce la intervale de referință diferite pentru același parametru. De exemplu, intervalul de referință pentru TSH (hormonul de stimulare tiroidiană) la un laborator poate fi 0.27-4.20 µUI/mL, în timp ce la altul poate fi 0.35-4.94 µUI/mL. O persoană care își monitorizează funcția tiroidiană și efectuează analize la laboratoare diferite ar putea observa o modificare a valorii absolute a TSH-ului care nu reflectă o schimbare fiziologică reală, ci doar o diferență de calibrare. Din acest motiv, pentru monitorizarea pe termen lung a unei condiții medicale, este recomandată efectuarea analizelor la același laborator pentru a asigura consistența și comparabilitatea rezultatelor.</p>
+					</div>
+				<p>Pe lângă variația inter-laborator, factorii fiziologici individuali joacă un rol crucial. Vârsta, sexul și statusul fiziologic, precum sarcina, influențează semnificativ majoritatea parametrilor biologici. De exemplu, valorile normale ale hemoglobinei sunt diferite la bărbați față de femei, iar creatinina serică variază în funcție de masa musculară, fiind în general mai mare la bărbați. În timpul sarcinii, mulți parametri se modifică fiziologic; progesteronul atinge niveluri foarte înalte, în timp ce TSH-ul tinde să scadă, în special în primul trimestru. Stilul de viață are, de asemenea, un impact considerabil. Dieta, nivelul de activitate fizică, fumatul și stresul pot altera temporar sau cronic anumiți markeri. Un efort fizic intens poate duce la o creștere tranzitorie a proteinelor în urină, iar o dietă bogată în proteine poate crește nivelul ureei serice. Rezultatele anormale sunt adesea marcate vizual pe buletinul de analize (încadrate într-un chenar sau colorate cu roșu) pentru a atrage atenția, însă semnificația clinică a acestor abateri trebuie stabilită exclusiv de către medic. Acesta va integra rezultatul în contextul clinic complet al pacientului, transformând o simplă cifră într-o informație relevantă pentru starea de sănătate individuală.</p>
+                    
+                </div>
 			</div>
         </section>
 
@@ -119,18 +343,23 @@
             </div>
             <div class="art-card">
 <h3>Ghid de pregătire pentru recoltare: asigurarea acurateții rezultatelor</h3>
-<p>Acuratețea unui rezultat de laborator depinde în mod critic de calitatea probei recoltate. O pregătire necorespunzătoare a pacientului poate duce la rezultate eronate, care pot masca o problemă reală sau pot sugera una inexistentă. Respectarea instrucțiunilor de recoltare este, așadar, un pas esențial.</p>
-<div class="zwp-image-container">
-<img alt="Pregătire recoltare analize medicalee de laborator" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0A2463/FFFFFF?text=Analize+Medicale';" src="https://nutrisib.club/imagini/analizemedicale03.png" width="100%"/>
+<div style="overflow:hidden;">
+    <img alt="Pregătire recoltare analize medicale de laborator"
+         onerror="this.onerror=null;this.src='https://placehold.co/600x800/0A2463/FFFFFF?text=Pregatire+Recoltare';"
+         src="https://nutrisib.club/imagini/analizemedicale03.png"
+         style="float:right;width:min(48%,380px);margin:0 0 1rem 1.5rem;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.15);"/>
+    <p>Acuratețea unui rezultat de laborator depinde în mod critic de calitatea probei recoltate. O pregătire necorespunzătoare a pacientului poate duce la rezultate eronate, care pot masca o problemă reală sau pot sugera una inexistentă. Respectarea instrucțiunilor de recoltare este, prin urmare, un pas esențial pe care nicio analiză nu îl poate compensa ulterior.</p>
+    <p>Principalii factori care influențează calitatea probei sunt: <strong>regimul alimentar anterior recoltării</strong>, <strong>activitatea fizică</strong>, <strong>consumul de medicamente</strong>, <strong>ora recoltării</strong> și <strong>tehnica de recoltare</strong>. Fiecare tip de probă biologică — sânge, urină, secreții — are propriile cerințe specifice, detaliate în acordeoanele de mai jos. Citirea cu atenție a instrucțiunilor înainte de a merge la laborator poate face diferența între un rezultat valid și o recoltare neconformă care trebuie repetată.</p>
+    <p>Un aspect adesea neglijat este <strong>stresul emoțional</strong> din ziua recoltării: cortizolul eliberat în situații de stres poate modifica semnificativ glicemia, tensiunea și markerii inflamatori. Se recomandă repaus de 15–30 minute înainte de recoltarea sângelui, în special pentru parametrii cardiovasculari și endocrini.</p>
 </div>
 </div>
 
 <div class="art-card">
 <div id="accordion-container">
 <!-- Item 1: SANGE (Culoare 1 - Albastru) -->
-<div class="accordion-item accordion-item-color1">
+<div class="accordion-item accordion-sange">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Recoltarea <b>probelor de SÂNGE</b></span>
+<span>Recoltarea <b>probelor de SÂNGE</b></span> <span class="spacer"></span><span class="proba-badge accordion-sange">🩸 Sânge</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -145,9 +374,9 @@
 </div>
 </div>
 <!-- Item 2: URINA SPOT (Culoare 2 - Verde) -->
-<div class="accordion-item accordion-item-color2">
+<div class="accordion-item accordion-urina">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Recoltarea <b>probelor de URINĂ</b> - colectare probe <b>URINĂ SPOT</b> (emisie spontană), examen SUMAR DE URINĂ</span>
+<span>Recoltarea <b>probelor de URINĂ</b> - colectare probe <b>URINĂ SPOT</b> (emisie spontană), examen SUMAR DE URINĂ</span> <span class="spacer"></span><span class="proba-badge urina">🟡 Urină spot</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -170,9 +399,9 @@
 </div>
 </div>
 <!-- Item 3: URINA 24h (Culoare 1 - Albastru) -->
-<div class="accordion-item accordion-item-color1">
+<div class="accordion-item accordion-urina">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Recoltarea <b>probelor de URINĂ</b> - colectarea probei <b>URINĂ 24h</b></span>
+<span>Recoltarea <b>probelor de URINĂ</b> - colectarea probei <b>URINĂ 24h</b></span> <span class="spacer"></span><span class="proba-badge urina">🟡 Urină 24h</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -193,9 +422,9 @@
 </div>
 </div>
 <!-- Item 4: UROCULTURA (Culoare 2 - Verde) -->
-<div class="accordion-item accordion-item-color2">
+<div class="accordion-item accordion-urina">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Recoltarea <b>probelor de URINĂ</b> - colectare probe pentru <b>UROCULTURĂ</b></span>
+<span>Recoltarea <b>probelor de URINĂ</b> - colectare probe pentru <b>UROCULTURĂ</b></span> <span class="spacer"></span><span class="proba-badge urina">🟡 Urocultură</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -214,9 +443,9 @@
 </div>
 </div>
 <!-- Item 5: TEST ADDIS (Culoare 1 - Albastru) -->
-<div class="accordion-item accordion-item-color1">
+<div class="accordion-item accordion-urina">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Recoltarea <b>probelor de URINĂ</b> - colectare probe pentru <b>TEST ADDIS</b></span>
+<span>Recoltarea <b>probelor de URINĂ</b> - colectare probe pentru <b>TEST ADDIS</b></span> <span class="spacer"></span><span class="proba-badge urina">🟡 Urină 3h</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -233,9 +462,9 @@
 </div>
 </div>
 <!-- Item 6: CHLAMYDIA / MYCOPLASMA (Culoare 2 - Verde) -->
-<div class="accordion-item accordion-item-color2">
+<div class="accordion-item accordion-urina">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Recoltarea <b>probelor de URINĂ</b> - colectare probe pentru <b>CHLAMYDIA / MYCOPLASMA secreții uretrale</b></span>
+<span>Recoltarea <b>probelor de URINĂ</b> - colectare probe pentru <b>CHLAMYDIA / MYCOPLASMA secreții uretrale</b></span> <span class="spacer"></span><span class="proba-badge urina">🟡 Urină/uretrală</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -249,9 +478,9 @@
 </div>
 </div>
 <!-- Item 7: EXSUDAT FARINGIAN SI NAZAL (Culoare 1 - Albastru) -->
-<div class="accordion-item accordion-item-color1">
+<div class="accordion-item accordion-respirator">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Recoltarea <b>EXSUDATULUI FARINGIAN și NAZAL</b> / examenul microbiologic al secrețiilor oro-faringiene</span>
+<span>Recoltarea <b>EXSUDATULUI FARINGIAN și NAZAL</b> / examenul microbiologic al secrețiilor oro-faringiene</span> <span class="spacer"></span><span class="proba-badge respirator">🟢 Secreție resp.</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -267,9 +496,9 @@
 </div>
 </div>
 <!-- Item 8: SPUTA (Culoare 2 - Verde) -->
-<div class="accordion-item accordion-item-color2">
+<div class="accordion-item accordion-respirator">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Recoltarea <b>SPUTEI </b>/ examenul microbiologic al secrețiilor traheo-bronșice</span>
+<span>Recoltarea <b>SPUTEI </b>/ examenul microbiologic al secrețiilor traheo-bronșice</span> <span class="spacer"></span><span class="proba-badge respirator">🟢 Spută</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -283,9 +512,9 @@
 </div>
 </div>
 <!-- Item 9: SECRETII URO-GENITALE (Culoare 1 - Albastru) -->
-<div class="accordion-item accordion-item-color1">
+<div class="accordion-item accordion-genital">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Recoltarea <b>SECREȚIILOR URO-GENITALE</b> pentru examenele microbiologice / culturi</span>
+<span>Recoltarea <b>SECREȚIILOR URO-GENITALE</b> pentru examenele microbiologice / culturi</span> <span class="spacer"></span><span class="proba-badge genital">🟣 Secreție UG</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -299,9 +528,9 @@
 </div>
 </div>
 <!-- Item 10: ALTE SECRETII PURULENTE (Culoare 2 - Verde) -->
-<div class="accordion-item accordion-item-color2">
+<div class="accordion-item accordion-genital">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Recoltarea <b>ALTOR SECREȚII PURULENTE</b>. pentru examenele microbiologice / culturi</span>
+<span>Recoltarea <b>ALTOR SECREȚII PURULENTE</b>. pentru examenele microbiologice / culturi</span> <span class="spacer"></span><span class="proba-badge genital">🟣 Secreție</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -315,9 +544,9 @@
 </div>
 </div>
 <!-- Item 11: EXAMEN PAP (Culoare 1 - Albastru) -->
-<div class="accordion-item accordion-item-color1">
+<div class="accordion-item accordion-genital">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Recoltarea <b>EXAMENULUI PAP </b> / examenul citologic cervico-vaginal - citologie PAP</span>
+<span>Recoltarea <b>EXAMENULUI PAP </b> / examenul citologic cervico-vaginal - citologie PAP</span> <span class="spacer"></span><span class="proba-badge genital">🟣 Citologie PAP</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -331,9 +560,9 @@
 </div>
 </div>
 <!-- Item 12: SPERMA (Culoare 2 - Verde) -->
-<div class="accordion-item accordion-item-color2">
+<div class="accordion-item accordion-genital">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Recoltarea <b>SPERMEI</b> / spermogramă și spermocultură</span>
+<span>Recoltarea <b>SPERMEI</b> / spermogramă și spermocultură</span> <span class="spacer"></span><span class="proba-badge genital">🟣 Spermă</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -354,9 +583,9 @@
 </div>
 </div>
 <!-- Item 13: MATERII FECALE (Culoare 1 - Albastru) -->
-<div class="accordion-item accordion-item-color1">
+<div class="accordion-item accordion-fecale">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Recoltarea <b>MATERIILOR FECALE</b> - determinări coprologice</span>
+<span>Recoltarea <b>MATERIILOR FECALE</b> - determinări coprologice</span> <span class="spacer"></span><span class="proba-badge fecale">🟤 Materii fecale</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -391,9 +620,9 @@
 </div>
 </div>
 <!-- Item 14: IMAGISTICA (Culoare 2 - Verde) -->
-<div class="accordion-item accordion-item-color2">
+<div class="accordion-item accordion-imagistica">
 <button aria-expanded="false" class="accordion-toggle" type="button">
-<span>Pregătirea pentru <b>Investigații Imagistice</b> (Eco, CT, RMN, Endoscopie)</span>
+<span>Pregătirea pentru <b>Investigații Imagistice</b> (Eco, CT, RMN, Endoscopie)</span> <span class="spacer"></span><span class="proba-badge imagistica">🩺 Imagistică</span>
 <span class="accordion-icon">+</span>
 </button>
 <div class="accordion-content">
@@ -458,6 +687,8 @@
                 <a href="#top" class="back-top">↑ Sus</a>
             </div>
             <div class="art-card">
+<div class="proba-tip-header"><span class="badge-mare badge-sange">🩸 Probe din sânge</span><span style="font-size:.8rem;color:var(--color-text-light);">Recoltare a jeun, dimineața</span></div>
+
 <p>Acestea sunt testele de bază, efectuate frecvent pentru a oferi o imagine de ansamblu asupra stării generale de sănătate, de la numărul de celule sanguine la funcția organelor vitale.</p>
 </div>
 
@@ -612,11 +843,13 @@
 
         <!-- ═════════ URINĂ ═════════ -->
         <section id="urina" class="content-section">
-            <div class="section-anchor-header" style="border-left-color:#3E92CC">
+            <div class="section-anchor-header" style="border-left-color:#C5A021">
                 <h2>Urină</h2>
                 <a href="#top" class="back-top">↑ Sus</a>
             </div>
             <div class="art-card">
+<div class="proba-tip-header"><span class="badge-mare badge-urina">🟡 Probe din urină</span><span style="font-size:.8rem;color:var(--color-text-light);">Jet mijlociu, recipient steril</span></div>
+
 <p>Analiza urinei, o procedură non-invazivă, este o "biopsie lichidă" a organismului, oferind informații cruciale despre funcția renală, starea de hidratare, infecții urinare și afecțiuni sistemice precum diabetul sau bolile hepatice. Excreția anumitor substanțe (glucoză, proteine, corpi cetonici) sau celule (leucocite, eritrocite) în urină semnalează adesea o problemă metabolică sau o leziune la nivelul tractului urinar, permițând un diagnostic precoce.</p>
 </div>
 
@@ -688,6 +921,8 @@
                 <a href="#top" class="back-top">↑ Sus</a>
             </div>
             <div class="art-card">
+<div class="proba-tip-header"><span class="badge-mare badge-hormoni">🟣 Profil hormonal (sânge)</span><span style="font-size:.8rem;color:var(--color-text-light);">Recoltare la ore specifice indicate de medic</span></div>
+
 <p>Hormonii sunt mesageri chimici care reglează procese complexe, de la metabolism și creștere, la reproducere și starea de spirit.</p>
 </div>
 
@@ -774,6 +1009,8 @@
             </div>
             <div id="imunitar" style="scroll-margin-top:62px"></div>
 <div class="art-card">
+<div class="proba-tip-header"><span class="badge-mare badge-speciale">🟣 Analize speciale (sânge/alte probe)</span><span style="font-size:.8rem;color:var(--color-text-light);">Condiții speciale per test</span></div>
+
 <p>Aceste teste avansate sunt recomandate de medic pentru a investiga afecțiuni specifice, de la statusul nutrițional și imunitar, la funcții endocrine complexe.</p>
 </div>
 
@@ -831,6 +1068,8 @@
                 <a href="#top" class="back-top">↑ Sus</a>
             </div>
             <div class="art-card">
+<div class="proba-tip-header"><span class="badge-mare badge-stres">🟢 Stres oxidativ (sânge/urină)</span><span style="font-size:.8rem;color:var(--color-text-light);">Fără antioxidanți cu 48h înainte</span></div>
+
 <p>Acest panel evaluează echilibrul nutrițional și nivelul de stres la care sunt supuse celulele organismului. Deficiențele de vitamine sau minerale, precum și un exces de radicali liberi, pot sta la baza multor afecțiuni cronice.</p>
 </div>
 
@@ -886,6 +1125,8 @@
             </div>
             <div id="ecografie" style="scroll-margin-top:62px"></div>
 <div class="art-card">
+<div class="proba-tip-header"><span class="badge-mare badge-imagistica">🩺 Investigații imagistice</span><span style="font-size:.8rem;color:var(--color-text-light);">Pregătire specifică per investigație</span></div>
+
 <h3>Ecografia abdominală</h3>
 <p><strong>Ce investighează:</strong> Ecografia abdominală este o metodă de diagnostic neinvazivă, neiradiantă și larg accesibilă care utilizează ultrasunete pentru a vizualiza în timp real organele interne din abdomen. Este adesea prima investigație imagistică recomandată pentru o gamă largă de simptome abdominale.</p>
 <p><strong>Organe vizate:</strong> Ficatul, colecistul (vezica biliară), căile biliare, pancreasul, splina, rinichii, vezica urinară, prostata la bărbați, uterul și ovarele la femei, precum și vasele mari de sânge (aorta, vena cavă).</p>
