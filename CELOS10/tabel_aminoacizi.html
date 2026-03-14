@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harta aminoacizilor — enciclopedie completă · Nutrisib</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+    <style>
+        /* ── Harta aminoacizilor ── */
+
+        /* Navigare rapidă */
+        .jump-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            padding: 0.9rem 1rem;
+            background: white;
+            border-radius: var(--radius-card);
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-card);
+            margin-bottom: 1.25rem;
+        }
+        .jump-bar a {
+            font-size: 0.72rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            padding: 0.25rem 0.6rem;
+            border-radius: 99px;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-medium);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .jump-bar a:hover { background: var(--color-navy); color: white; border-color: var(--color-navy); }
+        .jump-bar .jb-eaa { border-color: #e53e3e; color: #e53e3e; }
+        .jump-bar .jb-cond { border-color: #7c3aed; color: #7c3aed; }
+        .jump-bar .jb-nee { border-color: #2d8a4e; color: #2d8a4e; }
+
+        /* Secțiune titlu */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.75rem 0 1rem;
+        }
+        .section-divider h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            white-space: nowrap;
+            margin: 0;
+            padding: 0.3rem 0.9rem;
+            border-radius: 99px;
+            color: white;
+        }
+        .section-divider.eaa h2    { background: #e53e3e; }
+        .section-divider.cond h2   { background: #7c3aed; }
+        .section-divider.nee h2    { background: #2d8a4e; }
+        .section-divider-line {
+            flex: 1;
+            height: 2px;
+            background: var(--color-border);
+            border-radius: 99px;
+        }
+
+        /* Card aminoacid */
+        .aa-card {
+            background: white;
+            border-radius: var(--radius-card);
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-card);
+            margin-bottom: 1rem;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 160px 1fr;
+        }
+        @media (max-width: 600px) {
+            .aa-card { grid-template-columns: 1fr; }
+        }
+
+        /* Coloana stânga: imagine + identitate */
+        .aa-identity {
+            background: var(--color-pearl);
+            border-right: 1px solid var(--color-border);
+            padding: 1rem 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.5rem;
+        }
+        @media (max-width: 600px) {
+            .aa-identity {
+                border-right: none;
+                border-bottom: 1px solid var(--color-border);
+                flex-direction: row;
+                text-align: left;
+                padding: 0.75rem 1rem;
+            }
+        }
+        .aa-img {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: white;
+            padding: 4px;
+            border: 1px solid var(--color-border);
+        }
+        @media (max-width: 600px) {
+            .aa-img { width: 60px; height: 60px; }
+        }
+        .aa-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--color-navy);
+            line-height: 1.2;
+        }
+        .aa-abbr {
+            font-size: 0.72rem;
+            color: var(--color-text-light);
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 0.05em;
+        }
+        .aa-formula {
+            font-family: monospace;
+            font-size: 0.78rem;
+            color: var(--color-brand-medium);
+            font-weight: 600;
+            background: var(--color-brand-light);
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+        }
+        .aa-badge {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 0.15rem 0.5rem;
+            border-radius: 99px;
+        }
+        .badge-eaa  { background: #fee2e2; color: #e53e3e; }
+        .badge-cond { background: #ede9fe; color: #7c3aed; }
+        .badge-nee  { background: #d1fae5; color: #2d8a4e; }
+
+        /* Coloana dreapta: date */
+        .aa-data {
+            padding: 0.85rem 1rem;
+        }
+        .aa-data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.5rem;
+        }
+        @media (max-width: 900px) {
+            .aa-data-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 600px) {
+            .aa-data-grid { grid-template-columns: 1fr; }
+        }
+        .aa-col h4 {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-family: 'Inter', sans-serif;
+            margin: 0 0 0.3rem 0;
+            padding-bottom: 0.25rem;
+            border-bottom: 2px solid;
+        }
+        .aa-col.functii h4   { color: var(--color-navy);        border-color: var(--color-brand-medium); }
+        .aa-col.deficit h4   { color: #e53e3e;                  border-color: #fca5a5; }
+        .aa-col.exces h4     { color: #b45309;                  border-color: #fcd34d; }
+        .aa-col.surse h4     { color: #2d8a4e;                  border-color: #86efac; }
+        .aa-col ul {
+            margin: 0;
+            padding-left: 1rem;
+            list-style: disc;
+        }
+        .aa-col li {
+            font-size: 0.78rem;
+            color: var(--color-text-medium);
+            line-height: 1.45;
+            margin-bottom: 0.2rem;
+        }
+        .aa-col li strong { color: var(--color-navy); }
+        /* Surse — bold inline */
+        .aa-col.surse li {
+            color: var(--color-text-light);
+            font-size: 0.76rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container-main">
+
+    <header class="nav-bar">
+        <a href="../index.html" class="nav-brand">
+            <img src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="Sigla Nutrisib" class="logo-image" onerror="this.style.display='none'">
+        </a>
+        <div class="nav-links">
+            <a href="../index.html">Acasă</a>
+            <a href="../index.html#povestea">Povestea</a>
+            <a href="../index.html#metoda">Metoda</a>
+            <a href="../blog/index.html" class="active">Blog</a>
+            <a href="../contact.html">Contact</a>
+        </div>
+        <button class="mobile-menu-btn" onclick="const nav=document.querySelector('.nav-links');nav.style.display=(nav.style.display==='flex'?'none':'flex')">☰</button>
+    </header>
+
+    <div class="hero-card">
+        <div class="hero-content">
+            <h1 class="hero-title">Harta aminoacizilor</h1>
+            <p class="hero-subtitle">Enciclopedie completă — funcții, consecințe, surse și structura 3D a tuturor celor 20 de aminoacizi</p>
+        </div>
+    </div>
+
+    <!-- Navigare rapidă -->
+    <div class="content-card" style="padding:0.5rem 1rem">
+        <div class="jump-bar">
+            <span style="font-size:0.7rem;font-weight:700;color:var(--color-text-light);font-family:'Inter',sans-serif;align-self:center;margin-right:0.3rem">SALT LA →</span>
+            <a href="#histidina" class="jb-eaa">Histidină</a>
+            <a href="#izoleucina" class="jb-eaa">Izoleucină</a>
+            <a href="#leucina" class="jb-eaa">Leucină</a>
+            <a href="#lizina" class="jb-eaa">Lizină</a>
+            <a href="#metionina" class="jb-eaa">Metionină</a>
+            <a href="#fenilalanina" class="jb-eaa">Fenilalanină</a>
+            <a href="#treonina" class="jb-eaa">Treonină</a>
+            <a href="#triptofan" class="jb-eaa">Triptofan</a>
+            <a href="#valina" class="jb-eaa">Valină</a>
+            <a href="#arginina" class="jb-cond">Arginină</a>
+            <a href="#cisteina" class="jb-cond">Cisteină</a>
+            <a href="#glutamina" class="jb-cond">Glutamină</a>
+            <a href="#glicina" class="jb-cond">Glicină</a>
+            <a href="#prolina" class="jb-cond">Prolină</a>
+            <a href="#serina" class="jb-cond">Serină</a>
+            <a href="#tirozina" class="jb-cond">Tirozină</a>
+            <a href="#alanina" class="jb-nee">Alanină</a>
+            <a href="#asparagina" class="jb-nee">Asparagină</a>
+            <a href="#ac-aspartic" class="jb-nee">Ac. aspartic</a>
+            <a href="#ac-glutamic" class="jb-nee">Ac. glutamic</a>
+        </div>
+    </div>
+
+    <section class="content-card">
+
+        <!-- ══════════════════════════════════════
+             ESENȚIALI
+        ══════════════════════════════════════ -->
+        <div class="section-divider eaa">
+            <h2>Aminoacizi esențiali (EAA)</h2>
+            <div class="section-divider-line"></div>
+            <span style="font-size:0.72rem;color:var(--color-text-light);white-space:nowrap">9 aminoacizi — obligatoriu din dietă</span>
+        </div>
+
+        <!-- HISTIDINĂ -->
+        <div class="aa-card" id="histidina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://upload.wikimedia.org/wikipedia/commons/b/ba/L-histidine-zwitterion-from-xtal-1993-3D-balls-B.png" alt="Histidină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Histidină</div>
+                    <div class="aa-abbr">His · H</div>
+                    <div class="aa-formula">C₆H₉N₃O₂</div>
+                    <span class="aa-badge badge-eaa">Esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Precursor al <strong>histaminei</strong> — neurotransmițător vital pentru răspunsul imun, digestie, funcția sexuală și ciclul somn-veghe</li>
+                            <li>Menține integritatea tecilor de <strong>mielinlizin</strong> care protejează celulele nervoase</li>
+                            <li>Contribuie la producerea de celule roșii și albe din sânge</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li><strong>Nutrițional/Clinic:</strong> Poate cauza anemie, în special la persoanele cu afecțiuni renale cronice sau artrită reumatoidă</li>
+                            <li><strong>Genetic:</strong> Histidinemia (deficit de histidază) — în general benignă, rar asociată cu întârzieri de dezvoltare</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Poate induce tulburări de alimentație și de memorie</li>
+                            <li>Doze mari scad nivelul de BCAA și cresc amoniacul plasmatic — contraindicată la pacienți cu afecțiuni hepatice</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column: 1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>carne</li><li>pește</li><li>ouă</li><li>lactate</li><li>soia</li><li>fasole</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- IZOLEUCINĂ -->
+        <div class="aa-card" id="izoleucina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/L-isoleucine-3D-balls.png" alt="Izoleucină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Izoleucină</div>
+                    <div class="aa-abbr">Ile · I · BCAA</div>
+                    <div class="aa-formula">C₆H₁₃NO₂</div>
+                    <span class="aa-badge badge-eaa">Esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Esențială pentru metabolismul muscular și sinteza proteinelor</li>
+                            <li>Implicată în funcția imunitară, producția de hemoglobină și reglarea nivelului de energie și zahăr în sânge</li>
+                            <li>Prezentă în concentrații mari în țesutul muscular</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li><strong>Nutrițional:</strong> Pierdere de masă musculară (sarcopenie) și tremurături — risc crescut la vârstnici</li>
+                            <li><strong>Genetic:</strong> Parte a dezechilibrului din boala siropului de arțar (MSUD)</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Toxicitate redusă. Studii pe animale: doze foarte mari pot crește volumul urinar și greutatea rinichilor, fără leziuni histopatologice</li>
+                            <li>Datele la om sunt limitate</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>carne</li><li>pește</li><li>ouă</li><li>linte</li><li>nuci</li><li>semințe</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LEUCINĂ -->
+        <div class="aa-card" id="leucina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/L-leucine-3D-balls.png" alt="Leucină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Leucină</div>
+                    <div class="aa-abbr">Leu · L · BCAA</div>
+                    <div class="aa-formula">C₆H₁₃NO₂</div>
+                    <span class="aa-badge badge-eaa">Esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Cel mai puternic activator al căii <strong>mTOR</strong> — inițiază sinteza proteinelor musculare (MPS)</li>
+                            <li>Stimulează producția hormonului de creștere</li>
+                            <li>Contribuie la vindecarea rănilor, repararea țesutului osos și muscular și la reglarea glicemiei</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li><strong>Nutrițional:</strong> Leziuni ale pielii, căderea părului și oboseală cronică; poate fi asociat cu leucopenie</li>
+                            <li><strong>Genetic:</strong> Acumularea toxică în boala siropului de arțar (MSUD) este problema principală</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Doze extrem de mari pot perturba absorbția altor BCAA (izoleucina și valina) prin competiție pe transportori</li>
+                            <li>Poate crește rezistența la insulină în doze farmacologice foarte mari</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>carne de vită</li><li>pui</li><li>pește</li><li>ouă</li><li>lactate</li><li>soia</li><li>fasole</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LIZINĂ -->
+        <div class="aa-card" id="lizina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://upload.wikimedia.org/wikipedia/commons/d/d2/L-Allysine-zwitterion-3D-balls.png" alt="Lizină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Lizină</div>
+                    <div class="aa-abbr">Lys · K</div>
+                    <div class="aa-formula">C₆H₁₄N₂O₂</div>
+                    <span class="aa-badge badge-eaa">Esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Esențială pentru sinteza <strong>colagenului</strong> și carnitinei</li>
+                            <li>Rol în absorbția calciului și menținerea densității osoase</li>
+                            <li>Implicată în producția de anticorpi, hormoni și enzime</li>
+                            <li>Aminoacidul limitant în cereale — important în combinații vegetariene</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Anemie, oboseală, greață, pierderea poftei de mâncare și imunodeficiență</li>
+                            <li>Niveluri scăzute observate în Parkinson, hipotiroidism și boli renale</li>
+                            <li><strong>Genetic:</strong> Erorile metabolismului lizinei sunt rare — pot cauza retard mintal</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Doze mari (>15g/zi) pot cauza crampe abdominale, diaree și calculi renali la persoane predispuse</li>
+                            <li>Poate interfera cu absorbția argininei în doze farmacologice</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>carne</li><li>pește</li><li>ouă</li><li>lactate</li><li>leguminoase</li><li>quinoa</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- METIONINĂ -->
+        <div class="aa-card" id="metionina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://upload.wikimedia.org/wikipedia/commons/c/c5/L-methionine-B-3D-balls.png" alt="Metionină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Metionină</div>
+                    <div class="aa-abbr">Met · M</div>
+                    <div class="aa-formula">C₅H₁₁NO₂S</div>
+                    <span class="aa-badge badge-eaa">Esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Aminoacid cu sulf — esențial pentru metabolism și detoxifiere</li>
+                            <li>Precursor pentru cisteină, taurină și antioxidantul major <strong>glutation</strong></li>
+                            <li>Implicată în creșterea țesuturilor și absorbția mineralelor esențiale (zinc, seleniu)</li>
+                            <li>Donator de grupe metil în reacții de metilare — epigenetică</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Ficat gras (steatoză hepatică), slăbiciune musculară și anemie</li>
+                            <li>Creștere întârziată, piele fragilă, păr și unghii afectate</li>
+                            <li><strong>Genetic:</strong> Homocistinuria clasică — risc cardiovascular și trombotic crescut</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Crește nivelul de <strong>homocisteină</strong> plasmatică — factor de risc cardiovascular major</li>
+                            <li>Doze mari pot fi hepatotoxice și pot afecta funcția renală</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>carne</li><li>pește</li><li>ouă</li><li>semințe de floarea-soarelui</li><li>nuci braziliene</li><li>cereale integrale</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FENILALANINĂ -->
+        <div class="aa-card" id="fenilalanina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/L-phenylalanine-3D-balls.png" alt="Fenilalanină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Fenilalanină</div>
+                    <div class="aa-abbr">Phe · F</div>
+                    <div class="aa-formula">C₉H₁₁NO₂</div>
+                    <span class="aa-badge badge-eaa">Esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Precursor al tirozinei, dopaminei, norepinefrinei și epinefrinei</li>
+                            <li>Implicată în producția de melanină — pigmentul pielii și al părului</li>
+                            <li>Rol în starea de alertă, concentrare și memorie</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Confuzie, lipsă de energie, depresie, pierderea memoriei</li>
+                            <li>Scăderea producției de neurotransmițători cheie</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li><strong>Genetic: Fenilcetonurie (PKU)</strong> — boală gravă în care fenilalanina se acumulează toxic în creier, cauzând retard mintal sever dacă nu este tratată prin dietă restrictivă</li>
+                            <li>Persoanele cu PKU trebuie să evite aspartamul (E951)</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>carne</li><li>pește</li><li>ouă</li><li>lactate</li><li>soia</li><li>nuci</li><li>semințe de dovleac</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TREONINĂ -->
+        <div class="aa-card" id="treonina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://upload.wikimedia.org/wikipedia/commons/7/74/L-Threonine-3D-balls.png" alt="Treonină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Treonină</div>
+                    <div class="aa-abbr">Thr · T</div>
+                    <div class="aa-formula">C₄H₉NO₃</div>
+                    <span class="aa-badge badge-eaa">Esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Componentă structurală a colagenului, elastinei și a smalțului dentar</li>
+                            <li>Sprijină funcția hepatică (metabolismul lipidic) și funcția imunitară</li>
+                            <li>Rol în producerea mucusului protector al tractului gastrointestinal</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Iritabilitate, oboseală, confuzie mentală</li>
+                            <li>Creștere întârziată la copii</li>
+                            <li>Compromiterea integrității mucoasei intestinale</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Doze mari pot cauza greață și tulburări gastrointestinale</li>
+                            <li>Poate contribui la niveluri crescute de amoniac (hiperamonemia) în boli hepatice</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>carne de pui</li><li>pește</li><li>ouă</li><li>lactate</li><li>linte</li><li>semințe de cânepă</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRIPTOFAN -->
+        <div class="aa-card" id="triptofan">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/L-tryptophan-3D-balls.png" alt="Triptofan 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Triptofan</div>
+                    <div class="aa-abbr">Trp · W</div>
+                    <div class="aa-formula">C₁₁H₁₂N₂O₂</div>
+                    <span class="aa-badge badge-eaa">Esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Precursor al <strong>serotoninei</strong> (neurotransmițătorul „bunăstării") și <strong>melatoninei</strong> (hormonul somnului)</li>
+                            <li>Implicat în reglarea stării de spirit, somnului și apetitului</li>
+                            <li>Precursor al vitaminei B3 (niacina)</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Depresie, anxietate, insomnie, iritabilitate</li>
+                            <li>Deficit sever de niacină → <strong>pelagra</strong> (dermatită, diaree, demență)</li>
+                            <li>Apetit crescut și creștere în greutate</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Suplimentarea în doze mari poate cauza somnolență excesivă și greață</li>
+                            <li><strong>Sindromul eozinofiliei-mialgia</strong> — asociat cu suplimente contaminate (nu cu triptofanul în sine)</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>curcan</li><li>pui</li><li>pește</li><li>ouă</li><li>lactate</li><li>soia</li><li>semințe de dovleac</li><li>ciocolată neagră</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VALINĂ -->
+        <div class="aa-card" id="valina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/L-valine-3D-balls.png" alt="Valină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Valină</div>
+                    <div class="aa-abbr">Val · V · BCAA</div>
+                    <div class="aa-formula">C₅H₁₁NO₂</div>
+                    <span class="aa-badge badge-eaa">Esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Stimulează creșterea și regenerarea musculară</li>
+                            <li>Furnizează energie mușchilor în timpul efortului fizic</li>
+                            <li>Menține echilibrul de azot în organism</li>
+                            <li>Competiție cu triptofanul pe bariera hemato-encefalică — rol în reducerea oboselii centrale</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Perturbări neurologice și tulburări de coordonare musculară</li>
+                            <li>Parte a dezechilibrului din boala siropului de arțar (MSUD)</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Toxicitate redusă în doze alimentare normale</li>
+                            <li>Doze farmacologice pot cauza halucinații și senzație de furnicături la nivelul pielii</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>carne</li><li>pește</li><li>ouă</li><li>lactate</li><li>ciuperci</li><li>cereale integrale</li><li>soia</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════
+             CONDIȚIONAT ESENȚIALI
+        ══════════════════════════════════════ -->
+        <div class="section-divider cond">
+            <h2>Condiționat esențiali</h2>
+            <div class="section-divider-line"></div>
+            <span style="font-size:0.72rem;color:var(--color-text-light);white-space:nowrap">7 aminoacizi — esențiali în stres fiziologic intens</span>
+        </div>
+
+        <!-- ARGININĂ -->
+        <div class="aa-card" id="arginina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Arginine-3D-balls-by-AHRLS-2012.png/1920px-Arginine-3D-balls-by-AHRLS-2012.png" alt="Arginină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Arginină</div>
+                    <div class="aa-abbr">Arg · R</div>
+                    <div class="aa-formula">C₆H₁₄N₄O₂</div>
+                    <span class="aa-badge badge-cond">Cond. esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Precursor al <strong>oxidului nitric (NO)</strong> — vasodilatator esențial pentru sănătatea cardiovasculară</li>
+                            <li>Participă la ciclul ureei (eliminarea amoniacului)</li>
+                            <li>Stimulează eliberarea hormonului de creștere și a insulinei</li>
+                            <li>Rol în vindecarea rănilor și funcția imunitară</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Disfuncție endotelială și hipertensiune arterială</li>
+                            <li>Vindecare întârziată a rănilor, imunodeficiență</li>
+                            <li><strong>Genetic:</strong> Argininemia — hiperamoniemie, spasticitate, retard mintal</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Poate agrava infecțiile cu herpes simplex (virusul utilizează arginina)</li>
+                            <li>Doze mari pot cauza greață, crampe abdominale și diaree</li>
+                            <li>Contraindicată post-infarct miocardic acut (studii controversate)</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>carne roșie</li><li>pui</li><li>pește</li><li>nuci</li><li>semințe de dovleac</li><li>soia</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CISTEINĂ -->
+        <div class="aa-card" id="cisteina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/L-cysteine-3D-balls.png" alt="Cisteină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Cisteină</div>
+                    <div class="aa-abbr">Cys · C</div>
+                    <div class="aa-formula">C₃H₇NO₂S</div>
+                    <span class="aa-badge badge-cond">Cond. esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Precursor al <strong>glutationului</strong> — cel mai important antioxidant intracelular</li>
+                            <li>Componentă structurală cheie a cheratinei (păr, unghii, piele)</li>
+                            <li>Formează punți disulfidice — esențiale pentru structura 3D a proteinelor</li>
+                            <li>Rol în detoxifiere hepatică</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Stres oxidativ crescut, imunitate scăzută</li>
+                            <li>Căderea părului, unghii fragile, piele deteriorată</li>
+                            <li><strong>Genetic:</strong> Cistinuria — formare de calculi renali din cistină</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Doze foarte mari pot fi neurotoxice</li>
+                            <li>Poate interfera cu acțiunea insulinei în doze farmacologice</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>ouă</li><li>carne de pui</li><li>broccoli</li><li>usturoi</li><li>ceapă</li><li>semințe de floarea-soarelui</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GLUTAMINĂ -->
+        <div class="aa-card" id="glutamina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://upload.wikimedia.org/wikipedia/commons/e/e2/L-Glutamine-3D-balls.png" alt="Glutamină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Glutamină</div>
+                    <div class="aa-abbr">Gln · Q</div>
+                    <div class="aa-formula">C₅H₁₀N₂O₃</div>
+                    <span class="aa-badge badge-cond">Cond. esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Sursa primară de energie pentru <strong>enterocite</strong> (celulele intestinale) și celulele imunitare</li>
+                            <li>Menține integritatea barierei intestinale — prevenind „leaky gut"</li>
+                            <li>Cel mai abundent aminoacid liber din plasma sanguină</li>
+                            <li>Rol în sinteza nucleotidelor și gluconeogeneză</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Compromiterea barierei intestinale și imunosupresie</li>
+                            <li>Atrofie intestinală în stări catabolice (traume, arsuri, sepsis)</li>
+                            <li>Recuperare lentă după intervenții chirurgicale</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Contraindicată în epilepsie (poate crește activitatea excitotoxică)</li>
+                            <li>Doze mari pot crește nivelul de amoniac în boli hepatice avansate</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>carne de vită</li><li>pui</li><li>pește</li><li>ouă</li><li>tofu</li><li>varză</li><li>spanac</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GLICINĂ -->
+        <div class="aa-card" id="glicina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Glycine-3D-balls.png" alt="Glicină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Glicină</div>
+                    <div class="aa-abbr">Gly · G</div>
+                    <div class="aa-formula">C₂H₅NO₂</div>
+                    <span class="aa-badge badge-cond">Cond. esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Cel mai mic aminoacid — constituie 1/3 din colagen</li>
+                            <li>Neurotransmițător inhibitor în măduva spinării și trunchiul cerebral</li>
+                            <li>Precursor al creatinei, porfiridinelor și purinelor</li>
+                            <li>Rol în detoxifiere hepatică (conjugare cu acizi biliari)</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Sinteza de colagen insuficientă — afecțiuni articulare și ale pielii</li>
+                            <li>Capacitate de detoxifiere hepatică redusă</li>
+                            <li><strong>Genetic:</strong> Hiperglicinemie noncetozică — acumulare cerebrală, encefalopatia neonatală severă</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Considerată sigură în doze alimentare</li>
+                            <li>Doze farmacologice mari pot cauza somnolență și amețeli</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>piele de pui/porc</li><li>bulion de oase</li><li>gelatină</li><li>pește</li><li>leguminoase</li><li>spanac</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROLINĂ -->
+        <div class="aa-card" id="prolina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/L-proline-3D-balls.png" alt="Prolină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Prolină</div>
+                    <div class="aa-abbr">Pro · P</div>
+                    <div class="aa-formula">C₅H₉NO₂</div>
+                    <span class="aa-badge badge-cond">Cond. esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Componentă esențială a <strong>colagenului</strong> și a altor proteine structurale</li>
+                            <li>Aminoacid unic — catena laterală formează un inel cu grupul amino, introducând un „cot" în structura proteinelor</li>
+                            <li>Rol în regenerarea cartilajelor, tendoanelor și ligamentelor</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Vindecare lentă a rănilor și fragilitate articulară</li>
+                            <li><strong>Genetic:</strong> Hiperprolinemia tip I și II — pot cauza convulsii și retard mintal</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Date limitate privind toxicitatea prin supradozaj la om</li>
+                            <li>Niveluri foarte mari (hiperprolinemie genetică) asociate cu manifestări neurologice</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>bulion de oase</li><li>carne</li><li>pește</li><li>ouă</li><li>produse lactate</li><li>varză</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SERINĂ -->
+        <div class="aa-card" id="serina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/L-serine-3D-balls.png" alt="Serină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Serină</div>
+                    <div class="aa-abbr">Ser · S</div>
+                    <div class="aa-formula">C₃H₇NO₃</div>
+                    <span class="aa-badge badge-cond">Cond. esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Precursor al <strong>fosfatidilserinei</strong> — fosfolipid esențial al membranelor neuronale</li>
+                            <li>Implicată în sinteza creatinei, sfingomieline și glicine</li>
+                            <li>Co-agonist al receptorilor NMDA de glutamat — rol în plasticitatea sinaptică</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Tulburări neurologice: neuropatie periferică, retard mental</li>
+                            <li><strong>Genetic:</strong> Defecte ale biosintezei L-serinei — microcefalie, psihoză, ichtioza</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Studii pe animale sugerează că doze foarte mari pot fi neurotoxice</li>
+                            <li>Date insuficiente la om pentru stabilirea unui nivel de toxicitate</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>soia</li><li>ouă</li><li>carne</li><li>pește</li><li>alge marine</li><li>semințe de in</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TIROZINĂ -->
+        <div class="aa-card" id="tirozina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/L-Tyrosine-zwitterion-3D-balls.png/1920px-L-Tyrosine-zwitterion-3D-balls.png" alt="Tirozină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Tirozină</div>
+                    <div class="aa-abbr">Tyr · Y</div>
+                    <div class="aa-formula">C₉H₁₁NO₃</div>
+                    <span class="aa-badge badge-cond">Cond. esențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Sintetizată din fenilalanină. Precursor direct pentru <strong>catecolamine</strong> (dopamină, norepinefrină, epinefrină), hormonii tiroidieni (tiroxină) și pigmentul melanină</li>
+                            <li>Rol important în răspunsul la stres și funcția cognitivă</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Oboseală, stări depresive, imunitate scăzută, tulburări cardiovasculare și scăderea performanței cognitive, în special în condiții de stres</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Suplimentele pot interacționa cu medicamentele pentru tiroidă (levotiroxină) și cu inhibitorii MAO</li>
+                            <li><strong>Genetic: Tirozinemia</strong> (tip I, II, III) — tip I cel mai sever: insuficiență hepatică și renală, risc de carcinom hepatocelular</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse alimentare bogate</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>carne</li><li>pește</li><li>ouă</li><li>lactate</li><li>nuci</li><li>semințe</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════
+             NEESENȚIALI
+        ══════════════════════════════════════ -->
+        <div class="section-divider nee">
+            <h2>Aminoacizi neesențiali</h2>
+            <div class="section-divider-line"></div>
+            <span style="font-size:0.72rem;color:var(--color-text-light);white-space:nowrap">4 aminoacizi — sintetizați de organism</span>
+        </div>
+
+        <!-- ALANINĂ -->
+        <div class="aa-card" id="alanina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/L-alanine-3D-balls.png" alt="Alanină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Alanină</div>
+                    <div class="aa-abbr">Ala · A</div>
+                    <div class="aa-formula">C₃H₇NO₂</div>
+                    <span class="aa-badge badge-nee">Neesențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Rol central în <strong>ciclul glucoză-alanină</strong>, transportând azotul de la mușchi la ficat pentru eliminare ca uree</li>
+                            <li>Implicată în metabolismul glucozei și poate fi folosită ca sursă de energie</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li>Oboseală, rezistență fizică scăzută și atrofie musculară</li>
+                            <li><strong>Genetic:</strong> Tulburări asociate cu metabolismul său pot cauza retard psihomotor și convulsii</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li><strong>Genetic: Hiper-beta-alaninemia</strong> — boală metabolică rară, acumulare de beta-alanină cu efecte neurotoxice (convulsii, letargie, encefalopatie)</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>Sintetizată de organism · carne · pește · ouă</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ASPARAGINĂ -->
+        <div class="aa-card" id="asparagina">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/L-asparagine-3D-balls.png" alt="Asparagină 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Asparagină</div>
+                    <div class="aa-abbr">Asn · N</div>
+                    <div class="aa-formula">C₄H₈N₂O₃</div>
+                    <span class="aa-badge badge-nee">Neesențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Esențială pentru funcționarea normală a creierului și a celulelor nervoase</li>
+                            <li>Implicată în sinteza glicoproteinelor și în controlul sintezei de amoniac</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li><strong>Genetic: Deficit de asparagin sintetază</strong> — boală rară și severă: microcefalie progresivă, hipotonie, convulsii, spasticitate, cvadriplegie spastică</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Datele privind toxicitatea prin supradozaj la om sunt practic inexistente în literatura de specialitate</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>Sintetizată de organism · sparanghel · cartofi · leguminoase · nuci</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACID ASPARTIC -->
+        <div class="aa-card" id="ac-aspartic">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/L-aspartic-acid-3D-balls.png" alt="Acid aspartic 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Acid aspartic</div>
+                    <div class="aa-abbr">Asp · D (aspartat)</div>
+                    <div class="aa-formula">C₄H₇NO₄</div>
+                    <span class="aa-badge badge-nee">Neesențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Acționează ca neurotransmițător excitator în creier</li>
+                            <li>Intermediar cheie în ciclul Krebs și în ciclul ureei</li>
+                            <li>Participă la sinteza altor aminoacizi și a nucleotidelor</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li><strong>Genetic:</strong> Tulburări ereditare ale metabolismului: citrulinemia tip II și aciduria dicarboxilică — simptome de la asimptomatice la hiperamoniemie, retard mintal și convulsii</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Rolul său în patogeneza unor tulburări psihiatrice și neurologice este studiat, dar riscurile unui consum crescut prin suplimentare nu sunt pe deplin elucidate</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>Sintetizat de organism · sparanghel · avocado · carne · pește · ouă</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACID GLUTAMIC -->
+        <div class="aa-card" id="ac-glutamic">
+            <div class="aa-identity">
+                <img class="aa-img" src="https://upload.wikimedia.org/wikipedia/commons/7/71/L-Glutamic-acid-3D-balls.png" alt="Acid glutamic 3D" loading="lazy">
+                <div>
+                    <div class="aa-name">Acid glutamic</div>
+                    <div class="aa-abbr">Glu · E (glutamat)</div>
+                    <div class="aa-formula">C₅H₉NO₄</div>
+                    <span class="aa-badge badge-nee">Neesențial</span>
+                </div>
+            </div>
+            <div class="aa-data">
+                <div class="aa-data-grid">
+                    <div class="aa-col functii">
+                        <h4>Funcții principale</h4>
+                        <ul>
+                            <li>Principalul <strong>neurotransmițător excitator</strong> din sistemul nervos central — esențial pentru învățare și memorie</li>
+                            <li>Rol central în metabolismul celular și în detoxifierea amoniacului în creier (ciclul glutamat-glutamină)</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col deficit">
+                        <h4>Consecințe deficit</h4>
+                        <ul>
+                            <li><strong>Genetic:</strong> Defectele genetice în enzimele care îl metabolizează contribuie la epilepsie, edem cerebral și anomalii neurologice</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col exces">
+                        <h4>Consecințe exces</h4>
+                        <ul>
+                            <li>Excesul sinaptic duce la <strong>excitotoxicitate</strong> — stres oxidativ și moarte neuronală</li>
+                            <li>Implicat în boli neurodegenerative (SLA, Alzheimer) și leziuni cerebrale ischemice</li>
+                        </ul>
+                    </div>
+                    <div class="aa-col surse" style="grid-column:1/-1">
+                        <h4>Surse</h4>
+                        <ul style="display:flex;flex-wrap:wrap;gap:0.2rem 1rem;list-style:none;padding:0">
+                            <li>Sintetizat de organism · carne · pește · roșii · ciuperci · brânzeturi maturate (umami)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p style="font-size:0.72rem;color:var(--color-text-light);margin-top:1.5rem;text-align:center">
+            Imagini 3D: Wikimedia Commons, licență CC BY-SA · Sursa: datele științifice din litertura de specialitate
+        </p>
+
+    </section>
+
+    <div id="footer-placeholder"></div>
+</div>
+
+<script>fetch('https://nutrisib.club/footer.html').then(r=>r.text()).then(data=>{const c=document.getElementById('footer-placeholder');if(c)c.innerHTML=data;}).catch(err=>console.error('Footer error:',err));</script>
+<script src="https://nutrisib.club/script_protect.js" defer></script>
+</body>
+</html>

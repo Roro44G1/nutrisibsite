@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agent Uniformizare v3.0 — Nutrisib</title>
+<title>Agent Uniformizare v3.0 — Nutrisib - 12.03.14.32</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: Inter, sans-serif; background: #f1f5f9; min-height: 100vh; padding: 1rem; color: #1f2937; }
@@ -79,7 +79,7 @@
   <div class="header">
     <div class="header-icon">⚙</div>
     <div>
-      <div class="header-title">Agent Uniformizare v3.0 — Nutrisib</div>
+      <div class="header-title">Agent Uniformizare v3.0 — Nutrisib - 12.03.14.32</div>
       <div class="header-sub">8 reguli active · celos.css · nav standard · footer injectat · lățime uniformă</div>
     </div>
   </div>
@@ -380,8 +380,9 @@ async function callAPI(html, name) {
   });
   if (!res.ok) { const e = await res.json().catch(()=>({})); throw new Error(e?.error?.message || 'HTTP '+res.status); }
   const d = await res.json();
+  if (d.error) throw new Error('Anthropic error: ' + d.error.message + ' [' + d.error.type + ']');
   const text = (d.content?.map(b=>b.text||'').join('')||'').trim();
-  if (!text || text.length < 50) throw new Error('Răspuns gol sau blocat');
+  if (!text || text.length < 50) throw new Error('Gol. stop=' + d.stop_reason + ' usage=' + JSON.stringify(d.usage));
   return text.replace(/^```html\n?/i,'').replace(/\n?```$/i,'').trim();
 }
 

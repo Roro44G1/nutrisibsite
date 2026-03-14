@@ -23,6 +23,109 @@
     <!-- Stiluri globale din celos.css -->
     <link rel="stylesheet" href="https://nutrisib.club/celos.css">
 
+
+    <style>
+    /* ── Motor de căutare ── */
+    .search-wrap {
+        padding: 0.75rem 1rem 0.25rem;
+        position: relative;
+    }
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: var(--color-pearl, #f8fafc);
+        border: 2px solid var(--color-border, #e5e7eb);
+        border-radius: 99px;
+        padding: 0.5rem 1rem 0.5rem 1.1rem;
+        gap: 0.6rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .search-box:focus-within {
+        border-color: var(--color-brand-medium, #3E92CC);
+        box-shadow: 0 0 0 3px rgba(62,146,204,0.15);
+    }
+    .search-icon {
+        font-size: 1rem;
+        color: #9ca3af;
+        flex-shrink: 0;
+        pointer-events: none;
+    }
+    #blog-search-input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.92rem;
+        color: var(--color-text-dark, #1f2937);
+        outline: none;
+        min-width: 0;
+    }
+    #blog-search-input::placeholder { color: #9ca3af; }
+    #search-clear {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #9ca3af;
+        font-size: 1.1rem;
+        line-height: 1;
+        padding: 0 0.1rem;
+        flex-shrink: 0;
+        transition: color 0.15s;
+    }
+    #search-clear:hover { color: var(--color-navy, #0A2463); }
+    #search-clear.visible { display: block; }
+
+    .search-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.35rem 0.5rem 0;
+        font-size: 0.78rem;
+        color: #9ca3af;
+        min-height: 1.6rem;
+    }
+    #search-count { font-weight: 600; color: var(--color-brand-medium, #3E92CC); }
+    #search-hint { font-style: italic; }
+
+    /* Highlight în titluri/descrieri */
+    .search-hl {
+        background: #fef08a;
+        color: #713f12;
+        border-radius: 2px;
+        padding: 0 1px;
+    }
+
+    /* Card ascuns la search */
+    .blog-article-card.search-hidden { display: none !important; }
+
+    /* Mesaj "nimic găsit" per secțiune */
+    .search-empty-msg {
+        display: none;
+        grid-column: 1 / -1;
+        padding: 1.5rem;
+        text-align: center;
+        color: #9ca3af;
+        font-size: 0.88rem;
+        font-style: italic;
+    }
+
+    /* Secțiune complet ascunsă când 0 rezultate */
+    .blog-category-section.search-section-hidden { display: none; }
+
+    /* Mesaj global "fără rezultate" */
+    #search-no-results {
+        display: none;
+        padding: 3rem 1rem;
+        text-align: center;
+    }
+    #search-no-results h3 {
+        font-size: 1.1rem;
+        color: var(--color-navy, #0A2463);
+        margin-bottom: 0.5rem;
+    }
+    #search-no-results p { font-size: 0.88rem; color: #6b7280; }
+    </style>
 </head>
 <body>
 
@@ -50,11 +153,11 @@
                 <p class="hero-subtitle"><em>Resurse științifice, sfaturi documentate și studii de caz despre nutriție, sănătate, stil de viață și suplimente premium — <strong>decodate pentru tine</strong>.</em></p>
                 <div class="hero-stats">
                     <div class="hero-stat">
-                        <div class="hero-stat-num">45+</div>
+                        <div class="hero-stat-num">79+</div>
                         <div class="hero-stat-label">Articole</div>
                     </div>
                     <div class="hero-stat">
-                        <div class="hero-stat-num">6</div>
+                        <div class="hero-stat-num">7</div>
                         <div class="hero-stat-label">Categorii</div>
                     </div>
                     <div class="hero-stat">
@@ -72,13 +175,43 @@
             <button class="blog-filter-tab active" data-cat="all">Toate</button>
             <button class="blog-filter-tab" data-cat="sanatate">Sănătate</button>
             <button class="blog-filter-tab" data-cat="nutritie">Nutriție</button>
-            <button class="blog-filter-tab" data-cat="lifestyle">Stil de viață</button>
+            <button class="blog-filter-tab" data-cat="lifestyle">Lifestyle</button>
             <button class="blog-filter-tab" data-cat="terapie">Terapii</button>
             <button class="blog-filter-tab" data-cat="suplimente">Suplimente</button>
             <button class="blog-filter-tab" data-cat="infografice">Infografice</button>
+            <button class="blog-filter-tab" data-cat="tabele">Tabele</button>
                 </div>
             </div>
         </section>
+
+
+        <!-- ===== SEARCH ===== -->
+        <section class="content-card" style="padding:0 0.5rem 0.25rem;margin-bottom:1rem;">
+            <div class="search-wrap">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input
+                        id="blog-search-input"
+                        type="search"
+                        placeholder="Caută articol, categorie, cuvânt cheie…"
+                        autocomplete="off"
+                        spellcheck="false"
+                        aria-label="Caută în articole"
+                    >
+                    <button id="search-clear" aria-label="Șterge căutarea">✕</button>
+                </div>
+                <div class="search-meta">
+                    <span id="search-count"></span>
+                    <span id="search-hint">Scrie minim 2 caractere</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mesaj global fără rezultate -->
+        <div id="search-no-results">
+            <h3>Niciun rezultat găsit</h3>
+            <p>Încearcă un alt termen de căutare sau răsfoiește categoriile.</p>
+        </div>
 
         <!-- ===== ARTICLES ===== -->
         <section class="content-card">
@@ -90,7 +223,7 @@
                 <div class="blog-category-dot" style="background:var(--col-sanatate)"></div>
                 <h2>Sănătate</h2>
                 <div class="blog-category-line"></div>
-                <span class="blog-category-count">13 articole</span>
+                <span class="blog-category-count">17 articole</span>
             </div>
             <div class="blog-cards-grid">
                 <a href="bioactive.html" class="blog-article-card blog-accent-sanatate">
@@ -288,6 +421,66 @@
                         </div>
                     </div>
                 </a>
+                <a href="../CELOS20/hidratare.html" class="blog-article-card blog-accent-sanatate">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300&q=80&fit=crop" alt="Hidratare" loading="lazy">
+                        <span class="blog-card-cat-badge">Sănătate</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Hidratarea: piatra de temelie a sănătății</h3>
+                            <p>Cât, când și cum să bei apă pentru energie, metabolism și sănătate optimă — ghid CELOS 2.0.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-sanatate)">Citește <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS20/microbiom.html" class="blog-article-card blog-accent-sanatate">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=300&q=80&fit=crop" alt="Microbiom" loading="lazy">
+                        <span class="blog-card-cat-badge">Sănătate</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Microbiomul: universul invizibil</h3>
+                            <p>Lumea din noi — universul care ne guvernează sănătatea, imunitatea și starea de spirit.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-sanatate)">Citește <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS20/enzimele.html" class="blog-article-card blog-accent-sanatate">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=300&q=80&fit=crop" alt="Enzime" loading="lazy">
+                        <span class="blog-card-cat-badge">Sănătate</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Enzimele: catalizatorii vieții</h3>
+                            <p>Muncitorii minusculi dar esențiali ai tractului digestiv — cum le susținem activitatea.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-sanatate)">Citește <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS20/neurotransmitatorii.html" class="blog-article-card blog-accent-sanatate">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=300&q=80&fit=crop" alt="Neurotransmițători" loading="lazy">
+                        <span class="blog-card-cat-badge">Sănătate</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Neurotransmițătorii: chimia fericirii</h3>
+                            <p>Cum alimentația îți poate reechilibra chimia fericirii, dispoziția și performanța cognitivă.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-sanatate)">Citește <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
             </div>
         </section>
 
@@ -297,7 +490,7 @@
                 <div class="blog-category-dot" style="background:var(--col-nutritie)"></div>
                 <h2>Nutriție</h2>
                 <div class="blog-category-line"></div>
-                <span class="blog-category-count">4 articole</span>
+                <span class="blog-category-count">9 articole</span>
             </div>
             <div class="blog-cards-grid">
                 <a href="proteine.html" class="blog-article-card blog-accent-nutritie">
@@ -360,6 +553,81 @@
                         </div>
                     </div>
                 </a>
+                <a href="../CELOS20/reducemcalorii.html" class="blog-article-card blog-accent-nutritie">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=300&q=80&fit=crop" alt="Reducem caloriile" loading="lazy">
+                        <span class="blog-card-cat-badge">Nutriție</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Reducem caloriile inteligent</h3>
+                            <p>Cum să reducem caloriile fără să reducem porțiile sau plăcerea — strategii bazate pe știință.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-nutritie)">Citește <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS20/carbohidrati.html" class="blog-article-card blog-accent-nutritie">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80&fit=crop" alt="Carbohidrați și fibre" loading="lazy">
+                        <span class="blog-card-cat-badge">Nutriție</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Carbohidrații și Fibrele</h3>
+                            <p>De la energie rapidă la digestie optimă: rolul crucial al glucidelor și fibrelor în organism.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-nutritie)">Citește <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS20/grasimi.html" class="blog-article-card blog-accent-nutritie">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&q=80&fit=crop" alt="Grăsimi" loading="lazy">
+                        <span class="blog-card-cat-badge">Nutriție</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Grăsimile — Esențiale, dar alege inteligent</h3>
+                            <p>Grăsimi bune vs. dăunătoare: ghid complet pentru sănătatea ta cardiovasculară și celulară.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-nutritie)">Citește <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS20/micronutrienti.html" class="blog-article-card blog-accent-nutritie">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=300&q=80&fit=crop" alt="Micronutrienți" loading="lazy">
+                        <span class="blog-card-cat-badge">Nutriție</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Micronutrienții: micii giganți ai sănătății</h3>
+                            <p>Universul mineralelor și vitaminelor — fără de care nicio funcție biologică nu ar fi posibilă.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-nutritie)">Citește <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS20/fitonutrienti.html" class="blog-article-card blog-accent-nutritie">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&q=80&fit=crop" alt="Fitonutrienți" loading="lazy">
+                        <span class="blog-card-cat-badge">Nutriție</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Fitonutrienții: culorile farfuriei</h3>
+                            <p>Un curcubeu de substanțe care dau culoare vieții și farfuriei tale — plante, pigmenți, sănătate.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-nutritie)">Citește <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
             </div>
         </section>
 
@@ -369,7 +637,7 @@
                 <div class="blog-category-dot" style="background:var(--col-lifestyle)"></div>
                 <h2>Stil de viață / Dezvoltare personală</h2>
                 <div class="blog-category-line"></div>
-                <span class="blog-category-count">4 articole</span>
+                <span class="blog-category-count">9 articole</span>
             </div>
             <div class="blog-cards-grid">
                 <a href="facmlm.html" class="blog-article-card blog-accent-lifestyle">
@@ -432,6 +700,51 @@
                         </div>
                     </div>
                 </a>
+                <a href="../CELOS20/planificare.html" class="blog-article-card blog-accent-lifestyle">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=300&q=80&fit=crop" alt="Planificarea meselor" loading="lazy">
+                        <span class="blog-card-cat-badge">Lifestyle</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Planificarea meselor: strategia succesului</h3>
+                            <p>Organizează-ți mesele eficient pentru rezultate durabile și eliminarea alegerilor impulsive.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-lifestyle)">Citește <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS20/miscare.html" class="blog-article-card blog-accent-lifestyle">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&q=80&fit=crop" alt="Mișcare" loading="lazy">
+                        <span class="blog-card-cat-badge">Lifestyle</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Planul de mișcare: energia și vitalitatea</h3>
+                            <p>Mișcarea regulată completează perfect o nutriție echilibrată — ghid practic CELOS 2.0.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-lifestyle)">Citește <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS20/somnul.html" class="blog-article-card blog-accent-lifestyle">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=300&q=80&fit=crop" alt="Somn" loading="lazy">
+                        <span class="blog-card-cat-badge">Lifestyle</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Repausul și somnul: pilon al stilului de viață</h3>
+                            <p>De ce este somnul crucial și cum îl optimizezi pentru regenerare, hormoni și performanță.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-lifestyle)">Citește <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
             </div>
         </section>
 
@@ -441,7 +754,7 @@
                 <div class="blog-category-dot" style="background:var(--col-terapie)"></div>
                 <h2>Terapii</h2>
                 <div class="blog-category-line"></div>
-                <span class="blog-category-count">4 articole</span>
+                <span class="blog-category-count">9 articole</span>
             </div>
             <div class="blog-cards-grid">
                 <a href="recunostinta.html" class="blog-article-card blog-accent-terapie">
@@ -498,6 +811,21 @@
                         <div>
                             <h3>Boli degenerative</h3>
                             <p>Perspective și abordări pentru încetinirea proceselor degenerative: Alzheimer, demență senilă.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-terapie)">Citește <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS20/wellness.html" class="blog-article-card blog-accent-terapie">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&q=80&fit=crop" alt="Wellness" loading="lazy">
+                        <span class="blog-card-cat-badge">Terapii</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Conceptul de wellness: o abordare holistică</h3>
+                            <p>Integrarea celor 8 dimensiuni ale bunăstării umane pentru o viață sănătoasă și împlinită.</p>
                         </div>
                         <div class="blog-card-footer">
                             <span class="blog-card-link-text" style="color:var(--col-terapie)">Citește <span class="blog-card-arrow">→</span></span>
@@ -690,7 +1018,7 @@
                 <div class="blog-category-dot" style="background:var(--col-infografice)"></div>
                 <h2>Infografice</h2>
                 <div class="blog-category-line"></div>
-                <span class="blog-category-count">15 infografice</span>
+                <span class="blog-category-count">31 infografice</span>
             </div>
             <div class="blog-cards-grid">
                 <a href="infocopil.html" class="blog-article-card blog-accent-infografice">
@@ -777,21 +1105,6 @@
                         <div>
                             <h3>Diverticulita</h3>
                             <p>Informații pentru o afecțiune gravă. Durerile abdominale nu înseamnă doar indigestii.</p>
-                        </div>
-                        <div class="blog-card-footer">
-                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
-                        </div>
-                    </div>
-                </a>
-                <a href="infoeticheta.html" class="blog-article-card blog-accent-infografice">
-                    <div class="blog-card-image-wrap">
-                        <img src="https://images.unsplash.com/photo-1607349913338-fca6f7fc42d0?w=300&q=80&fit=crop" alt="Eticheta nutrițională" loading="lazy">
-                        <span class="blog-card-cat-badge">Infografic</span>
-                    </div>
-                    <div class="blog-card-body">
-                        <div>
-                            <h3>Eticheta nutrițională</h3>
-                            <p>ABC-ul alimentației corecte. Învață să citești informațiile de pe ambalaje.</p>
                         </div>
                         <div class="blog-card-footer">
                             <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
@@ -918,6 +1231,318 @@
                         </div>
                     </div>
                 </a>
+                <a href="../CELOS10/ghid15.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=300&q=80&fit=crop" alt="GHID: Rutina de 15 minute" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>GHID: Rutina de 15 minute</h3>
+                            <p>De la prizonier în propriul corp la creatorul propriei vitalități — energie, detoxifiere și claritate.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/redefinire_corporala.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=300&q=80&fit=crop" alt="Redefinire corporală" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Redefinire corporală</h3>
+                            <p>Fundația programului ReDefine: mănâncă sătul și atinge-ți obiectivele reducând caloriile, nu porțiile.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/proteine.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=300&q=80&fit=crop" alt="Proteinele" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Proteinele</h3>
+                            <p>Blocurile de construcție ale corpului — surse, beneficii și mituri demontate, vizual și concis.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/carbohidrati.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&q=80&fit=crop" alt="Carbohidrații și Fibrele" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Carbohidrații și Fibrele</h3>
+                            <p>De la energie rapidă la digestie optimă: rolul crucial al fibrelor, vizualizat simplu.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/grasimi.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=300&q=80&fit=crop" alt="Grăsimile" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Grăsimile</h3>
+                            <p>Esențiale, dar alege inteligent — ghid vizual pentru grăsimi sănătoase și nesănătoase.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/hidratare.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=300&q=80&fit=crop" alt="Hidratarea" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Hidratarea</h3>
+                            <p>Piatra de temelie a sănătății: cât, cum și de ce este apa vitală — format grafic.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/fitonutrienti.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&q=80&fit=crop" alt="Fitonutrienții" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Fitonutrienții</h3>
+                            <p>Curcubeul din farfurie: micii giganți care îți protejează sănătatea, pe înțelesul tuturor.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/micronutrienti.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=300&q=80&fit=crop" alt="Micronutrienții" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Micronutrienții</h3>
+                            <p>Necesari în cantități mici, vitali pentru toate procesele corporale — ghid grafic complet.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/enzime.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=300&q=80&fit=crop" alt="Enzimele" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Enzimele</h3>
+                            <p>Catalizatorii vieții: cheia unei digestii și absorbții optime a nutrienților, vizualizat.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/microbiom.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=300&q=80&fit=crop" alt="Microbiomul" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Microbiomul</h3>
+                            <p>Universul invizibil al sănătății — digestie, imunitate și stare de spirit, în format grafic.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/plan_miscare.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&q=80&fit=crop" alt="Planul de mișcare" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Planul de mișcare</h3>
+                            <p>De la beneficii la nutriția specifică: cum să integrezi mișcarea în viața ta, pas cu pas.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/wellness.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=300&q=80&fit=crop" alt="Conceptul de wellness" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Conceptul de wellness</h3>
+                            <p>Cele 8 dimensiuni ale bunăstării și bateria wellness — abordare holistică în format vizual.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/neurotransmitatori.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=300&q=80&fit=crop" alt="Neurotransmițătorii" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Neurotransmițătorii</h3>
+                            <p>Chimia fericirii: cum axa creier-intestin influențează starea ta de spirit — grafic.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/planificare_mese.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=300&q=80&fit=crop" alt="Planificarea meselor" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Planificarea meselor</h3>
+                            <p>Ore, proporții, gustări și meal prep — strategia succesului nutrițional în format grafic.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/repaus_somn.html" class="blog-article-card blog-accent-infografice">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=300&q=80&fit=crop" alt="Repausul și somnul" loading="lazy">
+                        <span class="blog-card-cat-badge">Infografic</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Repausul și somnul</h3>
+                            <p>Pilonii esențiali ai sănătății: de ce somnul de calitate îți transformă întreaga biologie.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:var(--col-infografice)">Vezi <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- TABELE -->
+        <section class="blog-category-section" data-section="tabele">
+            <div class="blog-category-header">
+                <div class="blog-category-dot" style="background:#2d8a4e"></div>
+                <h2>Tabele de referință</h2>
+                <div class="blog-category-line"></div>
+                <span class="blog-category-count">5 tabele</span>
+            </div>
+            <div class="blog-cards-grid">
+                <a href="../CELOS10/tabel_proteine.html" class="blog-article-card blog-accent-tabele">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=300&q=80&fit=crop" alt="Tabel: conținut proteine" loading="lazy">
+                        <span class="blog-card-cat-badge" style="background:#e8f5e9;color:#2d8a4e">Tabel</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Tabel: conținut proteine</h3>
+                            <p>Referință detaliată a proteinelor și caloriilor din surse vegetale și animale.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:#2d8a4e">Deschide <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/tabel_euri.html" class="blog-article-card blog-accent-tabele">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=300&q=80&fit=crop" alt="Tabel: aditivi alimentari (E-uri)" loading="lazy">
+                        <span class="blog-card-cat-badge" style="background:#e8f5e9;color:#2d8a4e">Tabel</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Tabel: aditivi alimentari (E-uri)</h3>
+                            <p>Ghid complet al codurilor E, pericole și alternative sănătoase.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:#2d8a4e">Deschide <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/tabel_bacterii_benefice.html" class="blog-article-card blog-accent-tabele">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=300&q=80&fit=crop" alt="Tabel: bacterii benefice" loading="lazy">
+                        <span class="blog-card-cat-badge" style="background:#e8f5e9;color:#2d8a4e">Tabel</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Tabel: bacterii benefice</h3>
+                            <p>Microorganismele prietenoase care îți susțin sănătatea intestinală și imunitatea.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:#2d8a4e">Deschide <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/tabel_bacterii_patogene.html" class="blog-article-card blog-accent-tabele">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=300&q=80&fit=crop" alt="Tabel: bacterii patogene" loading="lazy">
+                        <span class="blog-card-cat-badge" style="background:#e8f5e9;color:#2d8a4e">Tabel</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Tabel: bacterii patogene</h3>
+                            <p>Riscurile asociate cu dezechilibrele microbiene și bacteriile periculoase.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:#2d8a4e">Deschide <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+                <a href="../CELOS10/tabel_aminoacizi.html" class="blog-article-card blog-accent-tabele">
+                    <div class="blog-card-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=300&q=80&fit=crop" alt="Tabel: aminoacizi" loading="lazy">
+                        <span class="blog-card-cat-badge" style="background:#e8f5e9;color:#2d8a4e">Tabel</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div>
+                            <h3>Tabel: aminoacizi</h3>
+                            <p>Referință completă a celor 20 de aminoacizi — funcții, surse, valori și clasificări.</p>
+                        </div>
+                        <div class="blog-card-footer">
+                            <span class="blog-card-link-text" style="color:#2d8a4e">Deschide <span class="blog-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
             </div>
         </section>
 
@@ -960,5 +1585,167 @@
         .catch(err => console.error('Footer error:', err));
 </script>
 <script src="https://nutrisib.club/script_protect.js" defer></script>
+
+<script>
+(function() {
+    // ── Construiește indexul din DOM ────────────────────────────────
+    var cards = Array.from(document.querySelectorAll('.blog-article-card'));
+    var index = cards.map(function(card) {
+        var h3  = card.querySelector('h3');
+        var p   = card.querySelector('.blog-card-body > div > p');
+        var badge = card.querySelector('.blog-card-cat-badge');
+        var section = card.closest('.blog-category-section');
+        return {
+            el:      card,
+            title:   h3   ? h3.textContent   : '',
+            desc:    p    ? p.textContent    : '',
+            cat:     badge ? badge.textContent : '',
+            section: section ? section.getAttribute('data-section') : '',
+            origTitle: h3   ? h3.innerHTML   : '',
+            origDesc:  p    ? p.innerHTML    : '',
+        };
+    });
+
+    // ── Referințe DOM ───────────────────────────────────────────────
+    var input    = document.getElementById('blog-search-input');
+    var clearBtn = document.getElementById('search-clear');
+    var countEl  = document.getElementById('search-count');
+    var hintEl   = document.getElementById('search-hint');
+    var noRes    = document.getElementById('search-no-results');
+    var sections = Array.from(document.querySelectorAll('.blog-category-section'));
+    var filterTabs = Array.from(document.querySelectorAll('.blog-filter-tab'));
+
+    // Adaugă mesaje "empty" în fiecare grid
+    sections.forEach(function(sec) {
+        var grid = sec.querySelector('.blog-cards-grid');
+        if (!grid) return;
+        var msg = document.createElement('p');
+        msg.className = 'search-empty-msg';
+        msg.textContent = 'Niciun articol nu corespunde căutării în această categorie.';
+        grid.appendChild(msg);
+    });
+
+    // ── Highlight ───────────────────────────────────────────────────
+    function escapeRe(s) {
+        return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    function highlight(text, query) {
+        if (!query) return text;
+        var re = new RegExp('(' + escapeRe(query) + ')', 'gi');
+        return text.replace(re, '<mark class="search-hl">$1</mark>');
+    }
+
+    // ── Funcția principală de căutare ───────────────────────────────
+    var activeCategory = 'all';
+    var lastQuery = '';
+
+    function doSearch(query) {
+        lastQuery = query;
+        var q = query.trim().toLowerCase();
+        var isSearching = q.length >= 2;
+
+        // Reset highlights
+        index.forEach(function(item) {
+            var h3 = item.el.querySelector('h3');
+            var p  = item.el.querySelector('.blog-card-body > div > p');
+            if (h3) h3.innerHTML = item.origTitle;
+            if (p)  p.innerHTML  = item.origDesc;
+        });
+
+        if (!isSearching) {
+            // Reafișează tot (respectând filtrul de categorie activ)
+            index.forEach(function(item) {
+                var show = (activeCategory === 'all' || item.section === activeCategory);
+                item.el.classList.toggle('search-hidden', !show);
+            });
+            sections.forEach(function(sec) {
+                var catMatch = (activeCategory === 'all' || sec.getAttribute('data-section') === activeCategory);
+                sec.classList.toggle('search-section-hidden', !catMatch);
+                var msg = sec.querySelector('.search-empty-msg');
+                if (msg) msg.style.display = 'none';
+            });
+            countEl.textContent = '';
+            hintEl.textContent  = q.length === 1 ? 'Scrie minim 2 caractere' : 'Scrie minim 2 caractere';
+            noRes.style.display = 'none';
+            clearBtn.classList.toggle('visible', q.length > 0);
+            return;
+        }
+
+        hintEl.textContent = '';
+        clearBtn.classList.add('visible');
+
+        // Filtrare + highlight
+        var totalVisible = 0;
+        index.forEach(function(item) {
+            var catOk = (activeCategory === 'all' || item.section === activeCategory);
+            var textMatch = (
+                item.title.toLowerCase().includes(q) ||
+                item.desc.toLowerCase().includes(q)  ||
+                item.cat.toLowerCase().includes(q)   ||
+                item.section.toLowerCase().includes(q)
+            );
+            var show = catOk && textMatch;
+            item.el.classList.toggle('search-hidden', !show);
+
+            if (show) {
+                totalVisible++;
+                // Aplică highlight
+                var h3 = item.el.querySelector('h3');
+                var p  = item.el.querySelector('.blog-card-body > div > p');
+                if (h3) h3.innerHTML = highlight(item.origTitle, query.trim());
+                if (p)  p.innerHTML  = highlight(item.origDesc,  query.trim());
+            }
+        });
+
+        // Afișează/ascunde secțiuni + mesaje empty
+        sections.forEach(function(sec) {
+            var catOk = (activeCategory === 'all' || sec.getAttribute('data-section') === activeCategory);
+            if (!catOk) { sec.classList.add('search-section-hidden'); return; }
+            var cards = sec.querySelectorAll('.blog-article-card:not(.search-hidden)');
+            var hasResults = cards.length > 0;
+            sec.classList.toggle('search-section-hidden', !hasResults);
+            var msg = sec.querySelector('.search-empty-msg');
+            if (msg) msg.style.display = 'none'; // secțiunile fără rezultate sunt ascunse complet
+        });
+
+        // Număr rezultate
+        countEl.textContent = totalVisible === 0
+            ? ''
+            : totalVisible + (totalVisible === 1 ? ' rezultat' : ' rezultate');
+
+        noRes.style.display = totalVisible === 0 ? 'block' : 'none';
+    }
+
+    // ── Events ──────────────────────────────────────────────────────
+    input.addEventListener('input', function() {
+        doSearch(input.value);
+    });
+
+    clearBtn.addEventListener('click', function() {
+        input.value = '';
+        input.focus();
+        doSearch('');
+    });
+
+    // Sincronizare cu filtrul de categorie
+    filterTabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            activeCategory = tab.getAttribute('data-cat') || 'all';
+            doSearch(input.value);
+        });
+    });
+
+    // Keyboard: Escape șterge căutarea
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            input.value = '';
+            doSearch('');
+            input.blur();
+        }
+    });
+
+})();
+</script>
+
 </body>
 </html>

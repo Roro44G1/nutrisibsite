@@ -4,9 +4,15 @@
 
 /* --- Variabile de culoare --- */
 :root {
-    --color-pearl: #f8fafc; 
+       /* --- Varianta 1
+	--color-pearl: #F5F5F0; 
     --color-navy: #0A2463;
-    --color-gold: #C5A021;
+    --color-gold: #C5A021;  --- */
+	
+	--color-pearl: #F8FAFC; 
+    --color-navy: #1B2A4A;
+    --color-gold: #C5A021;  
+	
     --color-text-dark: #1f2937;
     --color-text-medium: #374151;
     --color-text-light: #4b5563;
@@ -28,7 +34,12 @@ h1, .hero-title, .section-title, .tech-title {
     font-family: 'Montserrat', sans-serif;
 }
 
-h2, h3, .hero-subtitle, .section-desc, .card-inner-title, .method-title {
+.hero-subtitle {
+    font-family: 'Lora', serif !important;
+	color: var(--color-gold);
+}
+
+h2, h3, .section-desc, .card-inner-title, .method-title {
     font-family: 'Lora', serif !important;
 }
 
@@ -243,7 +254,7 @@ body {
 
 .hero-subtitle, .hero-text {
     font-size: 1.1rem;
-    color: var(--color-gold);
+    color: var(--color-pearl);
     margin-bottom: 1.5rem;
     max-width: 800px;
     margin-left: auto;
@@ -1390,3 +1401,297 @@ header.infographic-header p { font-size: 1rem; opacity: 0.9; max-width: 700px; m
 .blog-accent-terapie     .blog-card-link-text  { color: var(--col-terapie); }
 .blog-accent-suplimente  .blog-card-link-text  { color: var(--col-suplimente); }
 .blog-accent-infografice .blog-card-link-text  { color: var(--col-infografice); }
+
+
+/* ============================================================
+   STILURI ARTICOLE BLOG — de adăugat în celos.css
+   Folosite în: aminoacizi.html, harta-aminoacizi.html
+   și orice articol viitor cu structură similară
+   ============================================================ */
+
+
+/* ── 1. BARA DE NAVIGARE ARTICOL (blog-filter-bar sticky) ─────
+   Folosire: adaugă style="position:sticky;top:0;z-index:100"
+   pe elementul .blog-filter-bar din fiecare articol.
+   Bara din blog/index.html rămâne neschimbată.
+   Notă: .blog-filter-bar, .blog-filter-tabs, .blog-filter-tab
+   sunt deja definite în celos.css — nu le redefinim.
+   ──────────────────────────────────────────────────────────── */
+.blog-filter-bar-scroll::-webkit-scrollbar { display: none; }
+
+
+/* ── 2. NAVIGARE RAPIDĂ CU PILL-URI (jump-bar) ────────────────
+   Folosire în harta-aminoacizi.html și pagini similare
+   ──────────────────────────────────────────────────────────── */
+.jump-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0.9rem 1rem;
+    background: white;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 1.25rem;
+}
+.jump-bar a {
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    text-decoration: none;
+    padding: 0.25rem 0.6rem;
+    border-radius: 99px;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-medium);
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+.jump-bar a:hover       { background: var(--color-navy); color: white; border-color: var(--color-navy); }
+.jump-bar .jb-eaa       { border-color: var(--col-sanatate);   color: var(--col-sanatate); }
+.jump-bar .jb-cond      { border-color: var(--col-suplimente); color: var(--col-suplimente); }
+.jump-bar .jb-nee       { border-color: var(--col-nutritie);   color: var(--col-nutritie); }
+
+
+/* ── 3. SEPARATOR DE SECȚIUNE CU PILL COLORAT ─────────────────
+   Folosire: <div class="section-divider eaa|cond|nee">
+   ──────────────────────────────────────────────────────────── */
+.section-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1.75rem 0 1rem;
+}
+.section-divider h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0.3rem 0.9rem;
+    border-radius: 99px;
+    color: white;
+}
+.section-divider.eaa  h2 { background: var(--col-sanatate); }
+.section-divider.cond h2 { background: var(--col-suplimente); }
+.section-divider.nee  h2 { background: var(--col-nutritie); }
+.section-divider-line {
+    flex: 1;
+    height: 2px;
+    background: var(--color-border);
+    border-radius: 99px;
+}
+
+
+/* ── 4. CARD AMINOACID (aa-card) ──────────────────────────────
+   Layout grid: coloana identitate (160px) + coloana date
+   ──────────────────────────────────────────────────────────── */
+.aa-card {
+    background: white;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 1rem;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 160px 1fr;
+}
+@media (max-width: 600px) {
+    .aa-card { grid-template-columns: 1fr; }
+}
+
+/* Coloana stânga */
+.aa-identity {
+    background: var(--color-pearl);
+    border-right: 1px solid var(--color-border);
+    padding: 1rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+}
+@media (max-width: 600px) {
+    .aa-identity {
+        border-right: none;
+        border-bottom: 1px solid var(--color-border);
+        flex-direction: row;
+        text-align: left;
+        padding: 0.75rem 1rem;
+    }
+}
+.aa-img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: white;
+    padding: 4px;
+    border: 1px solid var(--color-border);
+}
+@media (max-width: 600px) {
+    .aa-img { width: 60px; height: 60px; }
+}
+.aa-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--color-navy);
+    line-height: 1.2;
+}
+.aa-abbr {
+    font-size: 0.72rem;
+    color: var(--color-text-light);
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.05em;
+}
+.aa-formula {
+    font-family: monospace;
+    font-size: 0.78rem;
+    color: var(--color-brand-medium);
+    font-weight: 600;
+    background: var(--color-brand-light);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+}
+.aa-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 99px;
+}
+.badge-eaa  { background: #fee2e2; color: var(--col-sanatate); }
+.badge-cond { background: #ede9fe; color: var(--col-suplimente); }
+.badge-nee  { background: #d1fae5; color: var(--col-nutritie); }
+
+/* Coloana dreapta */
+.aa-data { padding: 0.85rem 1rem; }
+.aa-data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+}
+@media (max-width: 900px) { .aa-data-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .aa-data-grid { grid-template-columns: 1fr; } }
+
+.aa-col h4 {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'Inter', sans-serif;
+    margin: 0 0 0.3rem 0;
+    padding-bottom: 0.25rem;
+    border-bottom: 2px solid;
+}
+.aa-col.functii h4 { color: var(--color-navy);        border-color: var(--color-brand-medium); }
+.aa-col.deficit h4 { color: var(--col-sanatate);      border-color: #fca5a5; }
+.aa-col.exces h4   { color: #b45309;                  border-color: #fcd34d; }
+.aa-col.surse h4   { color: var(--col-nutritie);      border-color: #86efac; }
+.aa-col ul  { margin: 0; padding-left: 1rem; list-style: disc; }
+.aa-col li  { font-size: 0.78rem; color: var(--color-text-medium); line-height: 1.45; margin-bottom: 0.2rem; }
+.aa-col li strong { color: var(--color-navy); }
+.aa-col.surse li   { color: var(--color-text-light); font-size: 0.76rem; }
+
+
+/* ── 5. CARDURI ARTICOL (art-card) ───────────────────────────
+   Pentru articole cu conținut structurat pe subcapitole
+   ──────────────────────────────────────────────────────────── */
+.art-card {
+    background: white;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 0.85rem;
+}
+.art-card-intro { background: var(--color-pearl); }
+
+.art-card h3 {
+    font-size: 1rem;
+    color: var(--color-navy);
+    margin: 0 0 0.75rem 0;
+    padding-bottom: 0.35rem;
+    border-bottom: 2px solid var(--color-brand-light);
+}
+.art-card h4 {
+    font-size: 0.88rem;
+    color: var(--color-brand-medium);
+    font-weight: 700;
+    margin: 0.85rem 0 0.3rem 0;
+}
+.art-card p, .art-card li {
+    font-size: 0.91rem;
+    color: var(--color-text-medium);
+    line-height: 1.65;
+    margin-bottom: 0.4rem;
+}
+.art-card ul, .art-card ol { padding-left: 1.3rem; margin: 0.3rem 0 0.4rem; }
+.art-card strong { color: var(--color-navy); }
+.art-card em     { color: var(--color-text-light); }
+.art-card a      { color: var(--color-brand-medium); font-weight: 600; }
+.art-card code   { background: #e9ecef; padding: 1px 4px; border-radius: 3px; font-family: monospace; font-size: 0.87em; }
+
+/* Tabel responsiv în art-card */
+.art-card .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0.75rem 0; }
+.art-card table       { width: 100%; border-collapse: collapse; font-size: 0.82em; min-width: 500px; }
+.art-card th, .art-card td {
+    padding: 0.5rem 0.65rem;
+    text-align: left;
+    border: 1px solid #d1d9e6;
+    vertical-align: top;
+    line-height: 1.4;
+}
+.art-card th                    { background: #e2e8f0; font-weight: 700; color: var(--color-navy); white-space: nowrap; }
+.art-card tr:nth-child(even)    { background: var(--color-pearl); }
+
+
+/* ── 6. HEADER SECȚIUNE CU ANCORĂ ────────────────────────────
+   Bara laterală colorată + titlu + link "↑ Sus"
+   ──────────────────────────────────────────────────────────── */
+.content-section { margin-bottom: 2.5rem; scroll-margin-top: 60px; }
+.art-card[id]    { scroll-margin-top: 60px; }
+
+.section-anchor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-left: 5px solid var(--color-navy);
+    padding: 0.5rem 0 0.5rem 1rem;
+    margin-bottom: 1rem;
+}
+.section-anchor-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--color-navy);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.back-top { font-size: 0.72rem; color: var(--color-text-light); text-decoration: none; font-family: 'Inter', sans-serif; font-weight: 600; }
+.back-top:hover { color: var(--color-navy); }
+
+
+/* ── 7. CARD-LINK EXTERN (ex: link către harta-aminoacizi) ───
+   ──────────────────────────────────────────────────────────── */
+.harta-link-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fee2e2;
+    border: 1px solid #fca5a5;
+    border-radius: var(--radius-card);
+    padding: 1rem 1.5rem;
+    margin-bottom: 0.85rem;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s;
+}
+.harta-link-card:hover   { transform: translateX(4px); }
+.harta-link-card h3      { margin: 0; font-size: 0.95rem; color: #991b1b; }
+.harta-link-card p       { margin: 0.2rem 0 0; font-size: 0.82rem; color: #b91c1c; }
+.harta-link-card .arrow  { font-size: 1.5rem; color: var(--col-sanatate); }
