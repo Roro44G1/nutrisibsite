@@ -14,19 +14,63 @@
     <link rel="stylesheet" href="https://nutrisib.club/celos.css">
     <style>
         /* ── Stiluri locale minime pentru tab-uri și componente specifice ── */
-        .tab-bar {
+        /* ── Tab bar — derulabilă cu săgeți și scrollbar vizibil ── */
+        .tab-bar-wrap {
+            position: relative;
             background: white;
             border: 1px solid var(--color-border);
             border-radius: var(--radius-card);
             box-shadow: var(--shadow-card);
             margin-bottom: 1.5rem;
-            overflow-x: auto;
-            scrollbar-width: none;
         }
-        .tab-bar::-webkit-scrollbar { display: none; }
+        /* Fade gradient stânga/dreapta — indiciu vizual scroll */
+        .tab-bar-wrap::before,
+        .tab-bar-wrap::after {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 48px;
+            pointer-events: none;
+            z-index: 2;
+            transition: opacity 0.25s;
+        }
+        .tab-bar-wrap::before {
+            left: 0;
+            background: linear-gradient(to right, rgba(255,255,255,0.95) 0%, transparent 100%);
+            border-radius: var(--radius-card) 0 0 var(--radius-card);
+        }
+        .tab-bar-wrap::after {
+            right: 0;
+            background: linear-gradient(to left, rgba(255,255,255,0.95) 0%, transparent 100%);
+            border-radius: 0 var(--radius-card) var(--radius-card) 0;
+        }
+        .tab-bar-wrap.at-start::before { opacity: 0; }
+        .tab-bar-wrap.at-end::after    { opacity: 0; }
+
+        /* Zona scrollabilă */
+        .tab-bar {
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-brand-medium) #e5e7eb;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .tab-bar::-webkit-scrollbar { height: 4px; }
+        .tab-bar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 0 0 var(--radius-card) var(--radius-card);
+        }
+        .tab-bar::-webkit-scrollbar-thumb {
+            background: var(--color-brand-medium);
+            border-radius: 4px;
+        }
+        .tab-bar::-webkit-scrollbar-thumb:hover { background: var(--color-navy); }
+
         .tab-nav {
             display: flex;
             min-width: max-content;
+            padding: 0 4px;
         }
         .tab-btn {
             padding: 0.9rem 1.25rem;
@@ -42,13 +86,45 @@
             background: none;
             transition: all 0.2s;
             white-space: nowrap;
+            position: relative;
+            z-index: 1;
         }
-        .tab-btn:hover { color: var(--color-navy); }
+        .tab-btn:hover { color: var(--color-navy); background: var(--color-brand-light); }
         .tab-btn.active {
             color: var(--color-navy);
             border-bottom-color: var(--color-navy);
             background: var(--color-brand-light);
         }
+        /* Săgeți de navigare */
+        .tab-arrow {
+            position: absolute;
+            top: 50%; transform: translateY(-50%);
+            z-index: 3;
+            width: 28px; height: 28px;
+            background: white;
+            border: 1px solid var(--color-border);
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-navy);
+            font-size: 0.95rem;
+            line-height: 1;
+            transition: all 0.18s;
+            user-select: none;
+        }
+        .tab-arrow:hover {
+            background: var(--color-navy);
+            color: white;
+            border-color: var(--color-navy);
+            box-shadow: 0 3px 8px rgba(27,42,74,0.25);
+        }
+        .tab-arrow.arrow-left  { left: 6px; }
+        .tab-arrow.arrow-right { right: 6px; }
+        .tab-arrow.hidden { opacity: 0; pointer-events: none; }
+
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
@@ -347,16 +423,20 @@
     </div>
 
     <!-- ══ TAB BAR ══ -->
-    <div class="tab-bar">
-        <nav class="tab-nav">
-            <button class="tab-btn active" onclick="openTab('analiza',this)">Analiza de sistem</button>
-            <button class="tab-btn" onclick="openTab('filozofie',this)">Paradigma &amp; mecanisme</button>
-            <button class="tab-btn" onclick="openTab('celos6',this)">Arhitectura C.E.L.O.S.</button>
-            <button class="tab-btn" onclick="openTab('suplimente',this)">Protocol nutraceutic</button>
-            <button class="tab-btn" onclick="openTab('tcm',this)">Analiză TCM</button>
-            <button class="tab-btn" onclick="openTab('planmese',this)">Plan nutrițional</button>
-            <button class="tab-btn" onclick="openTab('biomarkeri',this)">Biomarkeri &amp; monitorizare</button>
-        </nav>
+    <div class="tab-bar-wrap" id="tabBarWrap">
+        <button class="tab-arrow arrow-left hidden" id="tabArrowLeft" aria-label="Tab-uri precedente">&#8249;</button>
+        <button class="tab-arrow arrow-right" id="tabArrowRight" aria-label="Tab-uri următoare">&#8250;</button>
+        <div class="tab-bar" id="tabBar">
+            <nav class="tab-nav">
+                <button class="tab-btn active" onclick="openTab('analiza',this)">1. Analiza de sistem</button>
+                <button class="tab-btn" onclick="openTab('filozofie',this)">2. Paradigmă &amp; mecanisme</button>
+                <button class="tab-btn" onclick="openTab('celos6',this)">3. Arhitectura C.E.L.O.S.</button>
+                <button class="tab-btn" onclick="openTab('suplimente',this)">4. Protocol nutraceutic</button>
+                <button class="tab-btn" onclick="openTab('tcm',this)">5. Analiză TCM</button>
+                <button class="tab-btn" onclick="openTab('planmese',this)">6. Plan nutrițional</button>
+                <button class="tab-btn" onclick="openTab('biomarkeri',this)">7. Biomarkeri &amp; monitorizare</button>
+            </nav>
+        </div>
     </div>
 
     <!-- ══════════════════════════════════════
@@ -446,6 +526,361 @@
             </div>
             <p style="font-size:0.82rem; color:var(--color-text-light); margin:0;">→ Analiză completă a meridianelor în tab-ul 5.</p>
         </div>
+
+        <!-- ══ CARD 2 — RAPORT DE EVALUARE CLINICĂ ══ -->
+        <div class="section-anchor-header" style="border-left-color:#e53e3e; margin-top:0.5rem;">
+            <h2>Raport de evaluare clinică — sinteză metabolică și compoziție corporală</h2>
+        </div>
+
+        <!-- 1. Profil antropometric -->
+        <div class="art-card">
+            <h3>1. Profilul antropometric și evaluarea statutului ponderal</h3>
+            <p>În medicina metabolică, stabilirea precisă a profilului antropometric nu reprezintă o simplă formalitate statistică, ci fundamentul pe care construim predicția riscului de morbiditate. Identificarea corectă a gradului de deviere de la parametrii ideali ne permite să înțelegem presiunea mecanică și biochimică la care este supus organismul — oferind punctul de plecare esențial în inversarea proceselor patologice cronice.</p>
+
+            <!-- Tabel antropometric -->
+            <div style="overflow-x:auto; margin:1rem 0;">
+                <table style="width:100%; border-collapse:collapse; font-size:0.87rem;">
+                    <thead>
+                        <tr style="background:var(--color-navy); color:white;">
+                            <th style="padding:0.6rem 0.9rem; text-align:left; font-family:'Montserrat',sans-serif; border-radius:6px 0 0 0;">Parametru</th>
+                            <th style="padding:0.6rem 0.9rem; text-align:center; font-weight:700;">Valoare măsurată</th>
+                            <th style="padding:0.6rem 0.9rem; text-align:left; font-weight:700; border-radius:0 6px 0 0;">Interpretare clinică</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background:white;">
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); font-weight:600; color:var(--color-navy);">Greutate / Înălțime</td>
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); text-align:center; font-weight:700; color:var(--color-brand-medium);">68,4 kg / 160 cm</td>
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Indicatori primari pentru calculul indicilor de risc sistemic.</td>
+                        </tr>
+                        <tr style="background:var(--color-brand-light);">
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); font-weight:600; color:var(--color-navy);">Indice de masă corporală (IMC)</td>
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); text-align:center; font-weight:700; color:#ed8936;">26,7 kg/m²</td>
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Indică supraponderabilitate cu tendință spre obezitate.</td>
+                        </tr>
+                        <tr style="background:white;">
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); font-weight:600; color:var(--color-navy);">Gradul de obezitate (ODB)</td>
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); text-align:center; font-weight:700; color:#e53e3e;">126%</td>
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Depășire cu 26% a pragului fiziologic optim.</td>
+                        </tr>
+                        <tr style="background:var(--color-brand-light);">
+                            <td style="padding:0.6rem 0.9rem; font-weight:600; color:var(--color-navy);">Constituție fizică</td>
+                            <td style="padding:0.6rem 0.9rem; text-align:center; font-weight:700; color:#e53e3e;">„2-Obez"</td>
+                            <td style="padding:0.6rem 0.9rem; color:var(--color-text-medium);">Dezechilibru confirmat între țesutul adipos și cel slab (muscular).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Grafic IMC — gauge SVG -->
+            <div style="margin:1.25rem 0 0.5rem; text-align:center;">
+                <p style="font-family:'Montserrat',sans-serif; font-size:0.82rem; font-weight:700; color:var(--color-navy); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.6rem;">Scala IMC — poziționarea Carmenului</p>
+                <svg viewBox="0 0 480 90" xmlns="http://www.w3.org/2000/svg" style="max-width:480px; width:100%; display:block; margin:0 auto;">
+                    <!-- Segmente IMC -->
+                    <rect x="10"  y="28" width="80" height="22" rx="4" fill="#3E92CC" opacity="0.85"/>
+                    <rect x="92"  y="28" width="90" height="22" rx="4" fill="#2D8A4E" opacity="0.85"/>
+                    <rect x="184" y="28" width="80" height="22" rx="4" fill="#ed8936" opacity="0.85"/>
+                    <rect x="266" y="28" width="80" height="22" rx="4" fill="#e53e3e" opacity="0.85"/>
+                    <rect x="348" y="28" width="122" height="22" rx="4" fill="#9b2226" opacity="0.85"/>
+                    <!-- Etichete categorii -->
+                    <text x="50"  y="24" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Subponderal</text>
+                    <text x="137" y="24" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Normal</text>
+                    <text x="224" y="24" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Supraponderal</text>
+                    <text x="306" y="24" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Obezitate I</text>
+                    <text x="409" y="24" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Obezitate II–III</text>
+                    <!-- Valori limită -->
+                    <text x="10"  y="62" font-size="8.5" fill="#6b7280" font-family="Inter,sans-serif">16</text>
+                    <text x="88"  y="62" font-size="8.5" fill="#6b7280" font-family="Inter,sans-serif">18,5</text>
+                    <text x="178" y="62" font-size="8.5" fill="#6b7280" font-family="Inter,sans-serif">25</text>
+                    <text x="261" y="62" font-size="8.5" fill="#6b7280" font-family="Inter,sans-serif">30</text>
+                    <text x="343" y="62" font-size="8.5" fill="#6b7280" font-family="Inter,sans-serif">35</text>
+                    <!-- Indicator Carmen IMC 26,7 — în zona supraponderal, aprox x=202 -->
+                    <polygon points="202,28 196,16 208,16" fill="#1B2A4A"/>
+                    <text x="202" y="13" text-anchor="middle" font-size="9" fill="#1B2A4A" font-weight="bold" font-family="Montserrat,sans-serif">26,7</text>
+                    <text x="202" y="80" text-anchor="middle" font-size="8.5" fill="#e53e3e" font-weight="bold" font-family="Inter,sans-serif">Carmen — supraponderal →obezitate</text>
+                </svg>
+            </div>
+
+            <div class="note-box" style="margin-top:0.75rem;">
+                ⚠️ Clasificarea <strong>„2-Obez"</strong> la 57 de ani este un indicator critic. Schimbările hormonale specifice post-menopauzei accelerează redistribuirea adipoasă și reducerea densității osoase. Această stare nu este o cifră antropometrică — reflectă un efort compensatoriu constant al întregului motor metabolic intern.
+            </div>
+        </div>
+
+        <!-- 2. Dinamica metabolică -->
+        <div class="art-card">
+            <h3>2. Dinamica metabolică și homeostazia hidrică</h3>
+            <p>Rata metabolică de bază (BMR) și statusul de hidratare sunt pilonii vitalității celulare. Orice dezechilibru în acest sector compromite capacitatea organismului de a oxida eficient substraturile energetice și blochează lipoliza — procesul de mobilizare a grăsimilor stocate.</p>
+
+            <!-- Grid 2×2 indicatori -->
+            <div class="method-grid" style="margin:1rem 0;">
+                <div class="card-inner-gray" style="border-left:4px solid #e53e3e;">
+                    <p class="card-icon">🔥</p>
+                    <p class="card-inner-title">Vârstă metabolică: 59 ani</p>
+                    <p class="card-inner-text">Organismul funcționează la un nivel de uzură cu <strong>2 ani peste vârsta reală</strong> — încetinirea proceselor regenerative este deja instalată.</p>
+                </div>
+                <div class="card-inner-gray" style="border-left:4px solid #ed8936;">
+                    <p class="card-icon">💧</p>
+                    <p class="card-inner-title">Hidratare: 42,9% (29,4 kg)</p>
+                    <p class="card-inner-text">Sub pragul optim feminin de 45–60%. Deficitul hidric este o <strong>barieră majoră în calea lipolizei</strong> — arderea grăsimilor necesită un mediu apos optim.</p>
+                </div>
+                <div class="card-inner-gray" style="border-left:4px solid var(--color-gold);">
+                    <p class="card-icon">⚡</p>
+                    <p class="card-inner-title">BMR: 1.287 kcal/zi</p>
+                    <p class="card-inner-text">Metabolism de repaus scăzut. Orice surplus caloric este stocat rapid ca țesut adipos. Protejarea masei musculare existente este <strong>obligatorie</strong>.</p>
+                </div>
+                <div class="card-inner-gray" style="border-left:4px solid var(--color-brand-medium);">
+                    <p class="card-icon">🔄</p>
+                    <p class="card-inner-title">Distribuția fluidelor</p>
+                    <p class="card-inner-text">Raport intracelular/extracelular (16,2 L / 8,3 L) sugerează o eficiență redusă în transportul nutrienților la nivel celular.</p>
+                </div>
+            </div>
+
+            <!-- Grafic hidratare vs țintă -->
+            <div style="margin:1rem 0 0.5rem;">
+                <p style="font-family:'Montserrat',sans-serif; font-size:0.82rem; font-weight:700; color:var(--color-navy); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.75rem;">Compoziția corporală — distribuție actuală</p>
+                <svg viewBox="0 0 460 130" xmlns="http://www.w3.org/2000/svg" style="max-width:460px; width:100%; display:block; margin:0 auto;">
+                    <!-- Etichetă stânga -->
+                    <text x="8" y="38" font-size="9" fill="#374151" font-family="Inter,sans-serif" font-weight="600">Masă grasă</text>
+                    <text x="8" y="68" font-size="9" fill="#374151" font-family="Inter,sans-serif" font-weight="600">Masă musculară</text>
+                    <text x="8" y="98" font-size="9" fill="#374151" font-family="Inter,sans-serif" font-weight="600">Apă corporală</text>
+                    <!-- Bare fundal -->
+                    <rect x="110" y="24" width="280" height="18" rx="4" fill="#f3f4f6"/>
+                    <rect x="110" y="54" width="280" height="18" rx="4" fill="#f3f4f6"/>
+                    <rect x="110" y="84" width="280" height="18" rx="4" fill="#f3f4f6"/>
+                    <!-- Bare valori (din 68,4 kg total) -->
+                    <!-- Masă grasă: 26,1 kg / 68,4 = 38,2% → 280×0,382=107 -->
+                    <rect x="110" y="24" width="107" height="18" rx="4" fill="#e53e3e" opacity="0.85"/>
+                    <!-- Masă musculară: 40,2 kg / 68,4 = 58,8% → 280×0,588=165 -->
+                    <rect x="110" y="54" width="165" height="18" rx="4" fill="#2D8A4E" opacity="0.85"/>
+                    <!-- Apă: 29,4 kg / 68,4 = 43% → 280×0,43=120, optim 52% → 146 -->
+                    <rect x="110" y="84" width="120" height="18" rx="4" fill="#3E92CC" opacity="0.85"/>
+                    <!-- Linie optim apă -->
+                    <line x1="256" y1="80" x2="256" y2="106" stroke="#C5A021" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <text x="258" y="79" font-size="8" fill="#C5A021" font-family="Inter,sans-serif">optim 52%</text>
+                    <!-- Valori -->
+                    <text x="222" y="37" font-size="9" fill="white" font-weight="bold" font-family="Inter,sans-serif">26,1 kg (38,2%)</text>
+                    <text x="222" y="67" font-size="9" fill="white" font-weight="bold" font-family="Inter,sans-serif">40,2 kg (58,8%)</text>
+                    <text x="222" y="97" font-size="9" fill="white" font-weight="bold" font-family="Inter,sans-serif">29,4 kg (42,9%)</text>
+                    <!-- Legendă -->
+                    <rect x="110" y="116" width="10" height="10" rx="2" fill="#e53e3e" opacity="0.85"/>
+                    <text x="124" y="125" font-size="8.5" fill="#374151" font-family="Inter,sans-serif">Masă grasă — țintă reducere: −14 kg</text>
+                    <rect x="280" y="116" width="10" height="10" rx="2" fill="#3E92CC" opacity="0.85"/>
+                    <text x="294" y="125" font-size="8.5" fill="#374151" font-family="Inter,sans-serif">Apă — deficit față de optim</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- 3. Compoziție corporală și risc visceral -->
+        <div class="art-card">
+            <h3>3. Analiza compartimentală — distribuția adipoasă și masa musculară</h3>
+            <p>Din perspectivă clinică, calitatea compoziției corporale — raportul grăsime/mușchi — este mult mai relevantă pentru sănătatea pe termen lung decât greutatea brută. Excesul de grăsime viscerală funcționează ca un <strong>organ endocrin pro-inflamator</strong>. Conservarea masei musculare actuale este vitală: aceasta reprezintă singurul „consumator" activ de energie capabil să susțină arderea grăsimilor.</p>
+
+            <!-- Grafic corp — siluetă simplificată cu distribuție grăsime -->
+            <div style="display:flex; flex-wrap:wrap; gap:1.5rem; align-items:flex-start; margin:1rem 0;">
+
+                <!-- SVG siluetă + distribuție -->
+                <div style="flex:0 0 auto; text-align:center;">
+                    <p style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--color-navy); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">Distribuția adipoasă</p>
+                    <svg viewBox="0 0 160 300" xmlns="http://www.w3.org/2000/svg" style="width:130px; display:block; margin:0 auto;">
+                        <!-- Corp simplificat -->
+                        <!-- Cap -->
+                        <circle cx="80" cy="28" r="22" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+                        <!-- Gât -->
+                        <rect x="72" y="48" width="16" height="12" rx="3" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+                        <!-- Trunchi — zona abdominală evidențiată roșu (viscerală) -->
+                        <ellipse cx="80" cy="120" rx="40" ry="52" fill="#fee2e2" stroke="#e53e3e" stroke-width="2"/>
+                        <text x="80" y="110" text-anchor="middle" font-size="8" fill="#9b2226" font-family="Inter,sans-serif" font-weight="700">Grăsime</text>
+                        <text x="80" y="122" text-anchor="middle" font-size="8" fill="#9b2226" font-family="Inter,sans-serif" font-weight="700">viscerală</text>
+                        <text x="80" y="134" text-anchor="middle" font-size="9" fill="#9b2226" font-family="Inter,sans-serif" font-weight="800">Nivel 8</text>
+                        <!-- Brațe -->
+                        <ellipse cx="34" cy="120" rx="12" ry="38" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+                        <ellipse cx="126" cy="120" rx="12" ry="38" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+                        <!-- Șolduri + WHR indicator -->
+                        <ellipse cx="80" cy="195" rx="36" ry="28" fill="#fef3c7" stroke="#C5A021" stroke-width="2"/>
+                        <text x="80" y="196" text-anchor="middle" font-size="7.5" fill="#78450a" font-family="Inter,sans-serif" font-weight="700">WHR 0,95</text>
+                        <text x="80" y="207" text-anchor="middle" font-size="7" fill="#78450a" font-family="Inter,sans-serif">↑ prag 0,85</text>
+                        <!-- Picioare -->
+                        <rect x="56" y="222" width="22" height="58" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+                        <rect x="82" y="222" width="22" height="58" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+                    </svg>
+                </div>
+
+                <!-- Indicatori tabel -->
+                <div style="flex:1; min-width:200px;">
+                    <div class="suppl-item" style="border-left-color:#e53e3e; margin-bottom:0.75rem;">
+                        <h4 style="color:#e53e3e;">🔴 Masă grasă totală: 38,2% — 26,1 kg</h4>
+                        <p>Valoare care confirmă diagnosticul de obezitate. <strong>Obiectiv strategic: reducere de −14 kg</strong> pentru a atinge ținta de 54 kg grăsime.</p>
+                    </div>
+                    <div class="suppl-item" style="border-left-color:#e53e3e; margin-bottom:0.75rem;">
+                        <h4 style="color:#e53e3e;">🔴 Grăsime viscerală: nivelul 8</h4>
+                        <p>La limita superioară a zonei acceptabile (1–9 = acceptabil; 10+ = risc). Tendință de acumulare periculoasă în jurul organelor interne — efect pro-inflamator direct.</p>
+                    </div>
+                    <div class="suppl-item" style="border-left-color:#C5A021; margin-bottom:0.75rem;">
+                        <h4 style="color:#78450a;">⚠️ Raport talie–șold (WHR): 0,95</h4>
+                        <p>Depășește critic pragul feminin de 0,85. Confirmă o distribuție <strong>androidă (abdominală)</strong> a grăsimii — factorul de risc cardiovascular cel mai puternic predictor.</p>
+                    </div>
+                    <div class="suppl-item" style="border-left-color:#2d8a4e;">
+                        <h4 style="color:#2d8a4e;">✅ Masă musculară: 40,2 kg — de conservat integral</h4>
+                        <p>Obiectiv de control muscular: <strong>0 kg pierdere permisă</strong>. Pierderea masei musculare ar prăbuși BMR-ul și ar face imposibilă menținerea pe termen lung.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Riscuri clinice -->
+        <div class="art-card">
+            <h3>4. Sinteza riscurilor clinice — axa hepato-cardiovasculară și glicemică</h3>
+            <p>Metabolismul lipidic, integritatea hepatică și funcția cardiovasculară sunt interdependente. O anomalie într-un sector declanșează un efect de domino: grăsimile neprocesate se acumulează în ficat (steatoză), circulă în exces în sânge (dislipidemie) și se depun pe pereții arteriali (ateroscleroză), reducând elasticitatea coronariană.</p>
+
+            <!-- Grafic „efect de domino" — flux orizontal SVG -->
+            <div style="margin:1rem 0; overflow-x:auto;">
+                <svg viewBox="0 0 520 80" xmlns="http://www.w3.org/2000/svg" style="max-width:520px; width:100%; display:block; margin:0 auto;">
+                    <!-- Noduri domino -->
+                    <rect x="5"   y="15" width="88" height="48" rx="8" fill="#fee2e2" stroke="#e53e3e" stroke-width="1.5"/>
+                    <text x="49"  y="36" text-anchor="middle" font-size="8.5" fill="#9b2226" font-weight="bold" font-family="Inter,sans-serif">Hipertriglice-</text>
+                    <text x="49"  y="48" text-anchor="middle" font-size="8.5" fill="#9b2226" font-weight="bold" font-family="Inter,sans-serif">ridemie 5,639</text>
+                    <text x="49"  y="59" text-anchor="middle" font-size="7.5" fill="#e53e3e" font-family="Inter,sans-serif">risc acut CV</text>
+                    <!-- Săgeată -->
+                    <path d="M95 39 L106 39" stroke="#9b2226" stroke-width="2" marker-end="url(#arr)"/>
+                    <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9b2226"/></marker></defs>
+
+                    <rect x="108" y="15" width="88" height="48" rx="8" fill="#fef3c7" stroke="#C5A021" stroke-width="1.5"/>
+                    <text x="152" y="36" text-anchor="middle" font-size="8.5" fill="#78450a" font-weight="bold" font-family="Inter,sans-serif">Steatoză</text>
+                    <text x="152" y="48" text-anchor="middle" font-size="8.5" fill="#78450a" font-weight="bold" font-family="Inter,sans-serif">hepatică</text>
+                    <text x="152" y="59" text-anchor="middle" font-size="7.5" fill="#C5A021" font-family="Inter,sans-serif">index 0,602</text>
+                    <path d="M198 39 L209 39" stroke="#9b2226" stroke-width="2" marker-end="url(#arr)"/>
+
+                    <rect x="211" y="15" width="88" height="48" rx="8" fill="#fee2e2" stroke="#e53e3e" stroke-width="1.5"/>
+                    <text x="255" y="36" text-anchor="middle" font-size="8.5" fill="#9b2226" font-weight="bold" font-family="Inter,sans-serif">Hiperinsu-</text>
+                    <text x="255" y="48" text-anchor="middle" font-size="8.5" fill="#9b2226" font-weight="bold" font-family="Inter,sans-serif">linemie</text>
+                    <text x="255" y="59" text-anchor="middle" font-size="7.5" fill="#e53e3e" font-family="Inter,sans-serif">coef. 0,398</text>
+                    <path d="M301 39 L312 39" stroke="#9b2226" stroke-width="2" marker-end="url(#arr)"/>
+
+                    <rect x="314" y="15" width="88" height="48" rx="8" fill="#fef3c7" stroke="#C5A021" stroke-width="1.5"/>
+                    <text x="358" y="36" text-anchor="middle" font-size="8.5" fill="#78450a" font-weight="bold" font-family="Inter,sans-serif">Risc renal</text>
+                    <text x="358" y="48" text-anchor="middle" font-size="8.5" fill="#78450a" font-weight="bold" font-family="Inter,sans-serif">cronic</text>
+                    <text x="358" y="59" text-anchor="middle" font-size="7.5" fill="#C5A021" font-family="Inter,sans-serif">acid uric ↑</text>
+                    <path d="M404 39 L415 39" stroke="#9b2226" stroke-width="2" marker-end="url(#arr)"/>
+
+                    <rect x="417" y="15" width="96" height="48" rx="8" fill="#fce7f3" stroke="#7c3aed" stroke-width="1.5"/>
+                    <text x="465" y="36" text-anchor="middle" font-size="8.5" fill="#4c1d95" font-weight="bold" font-family="Inter,sans-serif">Ateroscleroză</text>
+                    <text x="465" y="48" text-anchor="middle" font-size="8.5" fill="#4c1d95" font-weight="bold" font-family="Inter,sans-serif">+ AIT risc</text>
+                    <text x="465" y="59" text-anchor="middle" font-size="7.5" fill="#7c3aed" font-family="Inter,sans-serif">↑ recidivă</text>
+                </svg>
+            </div>
+
+            <!-- Ierarhia riscurilor -->
+            <p style="font-family:'Montserrat',sans-serif; font-size:0.82rem; font-weight:700; color:var(--color-navy); text-transform:uppercase; letter-spacing:0.06em; margin:1rem 0 0.6rem 0;">Ierarhia alertelor clinice</p>
+
+            <div style="display:flex; flex-direction:column; gap:0.6rem;">
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; background:#fff1f2; border-left:4px solid #e53e3e; border-radius:0 8px 8px 0; padding:0.75rem 1rem;">
+                    <span style="font-family:'Montserrat',sans-serif; font-size:1.1rem; font-weight:900; color:#e53e3e; flex-shrink:0;">1</span>
+                    <div>
+                        <p style="font-weight:700; color:var(--color-navy); margin:0 0 0.2rem 0; font-size:0.9rem;">Urgență metabolică și vasculară — trigliceride 5,639</p>
+                        <p style="font-size:0.84rem; color:var(--color-text-medium); margin:0;">Cel mai critic risc: predispune la eveniment cardiovascular acut sau pancreatită severă. Coeficientul de metabolizare lipidică de 0,907 confirmă incapacitatea organismului de a procesa aceste grăsimi.</p>
+                    </div>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; background:#fff8e1; border-left:4px solid #C5A021; border-radius:0 8px 8px 0; padding:0.75rem 1rem;">
+                    <span style="font-family:'Montserrat',sans-serif; font-size:1.1rem; font-weight:900; color:#C5A021; flex-shrink:0;">2</span>
+                    <div>
+                        <p style="font-weight:700; color:var(--color-navy); margin:0 0 0.2rem 0; font-size:0.9rem;">Steatoză hepatică confirmată — index 0,602</p>
+                        <p style="font-size:0.84rem; color:var(--color-text-medium); margin:0;">Infiltrare adipoasă a parenchimului hepatic, consecință directă a obezității. Ficatul supraîncărcat nu poate metaboliza eficient nici suplimentele din protocol fără suport hepatoprotector (Liver Support).</p>
+                    </div>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; background:#fff1f2; border-left:4px solid #e53e3e; border-radius:0 8px 8px 0; padding:0.75rem 1rem;">
+                    <span style="font-family:'Montserrat',sans-serif; font-size:1.1rem; font-weight:900; color:#e53e3e; flex-shrink:0;">3</span>
+                    <div>
+                        <p style="font-weight:700; color:var(--color-navy); margin:0 0 0.2rem 0; font-size:0.9rem;">Blocaj hormonal prin hiperinsulinemie — coeficient 0,398</p>
+                        <p style="font-size:0.84rem; color:var(--color-text-medium); margin:0;">Secreție excesivă de insulină creează un cerc vicios: insulina crescută blochează mobilizarea grăsimilor stocate și favorizează depunerea de noi rezerve. Cromul din ProBalance adresează direct rezistența la insulină.</p>
+                    </div>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; background:#eaf2f8; border-left:4px solid var(--color-brand-medium); border-radius:0 8px 8px 0; padding:0.75rem 1rem;">
+                    <span style="font-family:'Montserrat',sans-serif; font-size:1.1rem; font-weight:900; color:var(--color-brand-medium); flex-shrink:0;">4</span>
+                    <div>
+                        <p style="font-weight:700; color:var(--color-navy); margin:0 0 0.2rem 0; font-size:0.9rem;">Risc renal cronic — acid uric crescut</p>
+                        <p style="font-size:0.84rem; color:var(--color-text-medium); margin:0;">Nivelul crescut de acid uric exercită un stres suplimentar asupra funcției renale deja solicitate de hipertensiune. Hidratarea crescută (min. 2 L/zi) și evitarea alimentelor bogate în purine sunt obligatorii.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Arhitectura intervenției + scor + alimente -->
+        <div class="art-card">
+            <h3>5. Arhitectura intervenției — obiective strategice și protocol alimentar</h3>
+            <p>Inversarea indicatorilor patologici necesită o disciplină riguroasă și un protocol structurat pentru a forța organismul să utilizeze grăsimea stocată drept combustibil, protejând în același timp integritatea organelor interne.</p>
+
+            <div class="highlight-box" style="margin:0.75rem 0 1rem 0;">
+                <p style="margin:0; font-size:0.92rem;"><strong>Obiectiv strategic:</strong> Reducerea cu <strong>14 kg a masei grase</strong> pentru a atinge ținta de 54 kg greutate corporală — cu monitorizarea strictă a menținerii masei musculare la <strong>40,2 kg (control: 0 kg pierdere permisă)</strong>.</p>
+            </div>
+
+            <!-- Tabel alimente -->
+            <div style="overflow-x:auto; margin-bottom:1rem;">
+                <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+                    <thead>
+                        <tr style="background:var(--color-navy); color:white;">
+                            <th style="padding:0.6rem 0.85rem; text-align:left; font-family:'Montserrat',sans-serif; border-radius:6px 0 0 0;">🚫 Alimente de exclus</th>
+                            <th style="padding:0.6rem 0.85rem; text-align:left; font-weight:700;">✅ Alimente recomandate</th>
+                            <th style="padding:0.6rem 0.85rem; text-align:left; font-weight:700; border-radius:0 6px 0 0;">Raționalul clinic</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background:white;">
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:#e53e3e; font-weight:600;">Alcool, prăjeli, grăsimi saturate, uleiuri în exces</td>
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:#2d8a4e; font-weight:600;">Ciuperci negre, ciuperci, legume proaspete</td>
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Protecție hepatică și reglarea activă a trigliceridelor și colesterolului din sânge.</td>
+                        </tr>
+                        <tr style="background:var(--color-brand-light);">
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:#e53e3e; font-weight:600;">Zahăr, dulciuri, băuturi îndulcite, exces de carbohidrați</td>
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:#2d8a4e; font-weight:600;">Porumb, zarzavaturi, fructe proaspete</td>
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Controlul hiperinsulinemiei — prevenirea transformării glucozei în noi depozite de grăsime.</td>
+                        </tr>
+                        <tr style="background:white;">
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:#e53e3e; font-weight:600;">Sare și alimente procesate/foarte sărate</td>
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:#2d8a4e; font-weight:600;">Hidratare crescută (apă), mese la ore fixe</td>
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Reducerea tensiunii arteriale și susținerea lipolizei prin mediu hidric optim.</td>
+                        </tr>
+                        <tr style="background:var(--color-brand-light);">
+                            <td style="padding:0.6rem 0.85rem; color:#e53e3e; font-weight:600;">Condimente iuți, carne de oaie, creveți, anghilă</td>
+                            <td style="padding:0.6rem 0.85rem; color:#2d8a4e; font-weight:600;">Alimente ușoare, gătite dietetic, la abur</td>
+                            <td style="padding:0.6rem 0.85rem; color:var(--color-text-medium);">Protecția mucoaselor și a funcției renale în contextul acidului uric crescut și al steatozei.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Scor formă corp + concluzie -->
+            <div style="display:flex; flex-wrap:wrap; gap:1rem; align-items:stretch; margin-top:0.5rem;">
+                <!-- Gauge scor -->
+                <div style="flex:0 0 auto; background:var(--color-brand-light); border-radius:var(--radius-card); border:1px solid var(--color-border); padding:1rem 1.25rem; text-align:center; min-width:160px;">
+                    <p style="font-family:'Montserrat',sans-serif; font-size:0.75rem; font-weight:700; color:var(--color-navy); text-transform:uppercase; letter-spacing:0.07em; margin:0 0 0.5rem 0;">Scor formă corp</p>
+                    <svg viewBox="0 0 120 70" xmlns="http://www.w3.org/2000/svg" style="width:120px; display:block; margin:0 auto;">
+                        <!-- Arc fundal -->
+                        <path d="M15,60 A50,50 0 0,1 105,60" fill="none" stroke="#e5e7eb" stroke-width="12" stroke-linecap="round"/>
+                        <!-- Arc roșu (sub 70) — 62,4/100 × 180° -->
+                        <path d="M15,60 A50,50 0 0,1 105,60" fill="none" stroke="#f3f4f6" stroke-width="12" stroke-linecap="round"/>
+                        <!-- Arc colorat — 62,4% din 180° = 112,3° -->
+                        <path d="M15,60 A50,50 0 0,1 79,16" fill="none" stroke="#e53e3e" stroke-width="12" stroke-linecap="round"/>
+                        <!-- Linie prag 70 -->
+                        <line x1="91" y1="21" x2="97" y2="15" stroke="#2d8a4e" stroke-width="1.5" stroke-dasharray="2,1"/>
+                        <text x="99" y="14" font-size="7.5" fill="#2d8a4e" font-family="Inter,sans-serif">70</text>
+                        <!-- Valoare -->
+                        <text x="60" y="52" text-anchor="middle" font-size="20" fill="#e53e3e" font-weight="bold" font-family="Montserrat,sans-serif">62,4</text>
+                        <text x="60" y="64" text-anchor="middle" font-size="8" fill="#6b7280" font-family="Inter,sans-serif">din 100</text>
+                    </svg>
+                    <p style="font-size:0.78rem; color:#e53e3e; font-weight:700; margin:0.3rem 0 0 0;">Sub pragul de acceptabilitate (70)</p>
+                </div>
+                <!-- Concluzie -->
+                <div style="flex:1; min-width:200px;">
+                    <div class="quote-box">
+                        <p class="quote-text" style="font-style:normal; font-size:0.9rem; line-height:1.7; margin:0;">
+                            Scorul actual de <strong>62,4</strong> reflectă un sistem aflat sub presiune inflamatorie și adipoasă semnificativă. Totuși, prin aderența strictă la protocolul de eliminare a celor <strong>14 kg de grăsime</strong>, există un potențial cert de normalizare a indicatorilor hepato-cardiovasculari și de restabilire a homeostaziei metabolice.<br><br>
+                            Toți indicatorii identificați sunt <strong>reversibili</strong> prin control ponderal strict și eliminarea selectivă a masei grase — cu condiția protejării integrale a celor 40,2 kg de masă musculară.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- ══════════════════════════════════════
@@ -1338,7 +1773,31 @@
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
         btn.classList.add('active');
+        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
     }
+
+    // ── Săgeți navigare tab bar ───────────────────────────────────────────
+    (function() {
+        const bar   = document.getElementById('tabBar');
+        const wrap  = document.getElementById('tabBarWrap');
+        const left  = document.getElementById('tabArrowLeft');
+        const right = document.getElementById('tabArrowRight');
+        if (!bar || !wrap || !left || !right) return;
+        const STEP = 180;
+        function updateArrows() {
+            const atStart = bar.scrollLeft <= 4;
+            const atEnd   = bar.scrollLeft >= bar.scrollWidth - bar.clientWidth - 4;
+            left.classList.toggle('hidden', atStart);
+            right.classList.toggle('hidden', atEnd);
+            wrap.classList.toggle('at-start', atStart);
+            wrap.classList.toggle('at-end',   atEnd);
+        }
+        left.addEventListener('click',  () => bar.scrollBy({ left: -STEP, behavior: 'smooth' }));
+        right.addEventListener('click', () => bar.scrollBy({ left:  STEP, behavior: 'smooth' }));
+        bar.addEventListener('scroll', updateArrows, { passive: true });
+        requestAnimationFrame(updateArrows);
+        window.addEventListener('resize', updateArrows);
+    })();
 
     // ── Plan nutrițional 30 zile ──
     const proteinsMeat = [
