@@ -12,21 +12,72 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* ── Stiluri locale minime pentru tab-uri și componente specifice ── */
-        .tab-bar {
+  /* ── Stiluri locale minime pentru tab-uri și componente specifice ── */
+		.chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 1.5rem auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        .tab-bar-wrap {
+            position: relative;
             background: white;
             border: 1px solid var(--color-border);
             border-radius: var(--radius-card);
             box-shadow: var(--shadow-card);
             margin-bottom: 1.5rem;
-            overflow-x: auto;
-            scrollbar-width: none;
         }
-        .tab-bar::-webkit-scrollbar { display: none; }
+        .tab-bar-wrap::before,
+        .tab-bar-wrap::after {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 48px;
+            pointer-events: none;
+            z-index: 2;
+            transition: opacity 0.25s;
+        }
+        .tab-bar-wrap::before {
+            left: 0;
+            background: linear-gradient(to right, rgba(255,255,255,0.95) 0%, transparent 100%);
+            border-radius: var(--radius-card) 0 0 var(--radius-card);
+        }
+        .tab-bar-wrap::after {
+            right: 0;
+            background: linear-gradient(to left, rgba(255,255,255,0.95) 0%, transparent 100%);
+            border-radius: 0 var(--radius-card) var(--radius-card) 0;
+        }
+        .tab-bar-wrap.at-start::before { opacity: 0; }
+        .tab-bar-wrap.at-end::after    { opacity: 0; }
+
+        .tab-bar {
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-brand-medium) #e5e7eb;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .tab-bar::-webkit-scrollbar { height: 4px; }
+        .tab-bar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 0 0 var(--radius-card) var(--radius-card);
+        }
+        .tab-bar::-webkit-scrollbar-thumb {
+            background: var(--color-brand-medium);
+            border-radius: 4px;
+        }
+        .tab-bar::-webkit-scrollbar-thumb:hover { background: var(--color-navy); }
+
         .tab-nav {
             display: flex;
             min-width: max-content;
+            padding: 0 4px;
         }
         .tab-btn {
             padding: 0.9rem 1.25rem;
@@ -42,17 +93,75 @@
             background: none;
             transition: all 0.2s;
             white-space: nowrap;
+            position: relative;
+            z-index: 1;
         }
-        .tab-btn:hover { color: var(--color-navy); }
+        .tab-btn:hover { color: var(--color-navy); background: var(--color-brand-light); }
         .tab-btn.active {
             color: var(--color-navy);
             border-bottom-color: var(--color-navy);
             background: var(--color-brand-light);
         }
+        .tab-arrow {
+            position: absolute;
+            top: 50%; transform: translateY(-50%);
+            z-index: 3;
+            width: 28px; height: 28px;
+            background: white;
+            border: 1px solid var(--color-border);
+            border-radius: 50%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-navy);
+            font-size: 0.95rem;
+            line-height: 1;
+            transition: all 0.18s;
+            user-select: none;
+        }
+        .tab-arrow:hover {
+            background: var(--color-navy);
+            color: white;
+            border-color: var(--color-navy);
+            box-shadow: 0 3px 8px rgba(27,42,74,0.25);
+        }
+        .tab-arrow.arrow-left  { left: 6px; }
+        .tab-arrow.arrow-right { right: 6px; }
+        .tab-arrow.hidden { opacity: 0; pointer-events: none; }
+
+
+        /* ── Responsive — ecrane mici ── */
+        .bio-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .bio-table { min-width: 500px; border-collapse: collapse; }
+        @media (max-width: 768px) {
+            .container-main { padding: 0 0.5rem; }
+            .hero-card { padding: 1.5rem 1rem; }
+            .hero-title { font-size: 1.4rem; }
+            .tab-btn { padding: 0.7rem 0.85rem; font-size: 0.7rem; letter-spacing: 0.03em; }
+            .art-card { padding: 0.9rem 0.85rem; }
+            .section-anchor-header h2 { font-size: 0.95rem; }
+            .method-grid { grid-template-columns: 1fr !important; gap: 0.5rem; }
+            .stat-grid { grid-template-columns: 1fr !important; gap: 0.6rem; }
+            .dual-grid { grid-template-columns: 1fr !important; gap: 0.6rem; }
+            .tcm-block-header { font-size: 0.82rem; padding: 0.6rem 0.85rem; }
+            .card-inner-gray { padding: 0.6rem 0.75rem; }
+            .note-box { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
+            .bio-table { font-size: 0.78rem; }
+            .bio-table th, .bio-table td { padding: 0.4rem 0.45rem !important; }
+        }
+        @media (max-width: 480px) {
+            .hero-title { font-size: 1.2rem; }
+            .tab-btn { padding: 0.6rem 0.7rem; font-size: 0.65rem; }
+            .art-card { padding: 0.75rem 0.7rem; }
+            .bio-table { font-size: 0.72rem; min-width: 400px; }
+            .bio-table th, .bio-table td { padding: 0.3rem 0.35rem !important; }
+            .card-inner-gray { padding: 0.5rem 0.6rem; }
+        }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* ── art-card — card articol standard (ca în analizemedicale) ── */
         .art-card {
             background: white;
             border-radius: var(--radius-card);
@@ -95,7 +204,6 @@
         }
         .art-card strong { color: var(--color-navy); }
 
-        /* ── section-anchor-header ── */
         .section-anchor-header {
             display: flex;
             align-items: center;
@@ -114,7 +222,6 @@
             margin: 0;
         }
 
-        /* ── Hero overlay pentru caseta client ── */
         .hero-client-overlay {
             position: absolute;
             top: 70%;
@@ -163,7 +270,6 @@
             .hero-client-overlay .meta { justify-content: center; }
         }
 
-        /* ── Scale indicator ── */
         .scale-wrap { display: inline-flex; gap: 2px; align-items: center; }
         .scale-box {
             width: 13px; height: 13px;
@@ -175,7 +281,6 @@
         .s-minus { background: var(--color-gold); }
         .s-null { background: var(--color-border); }
 
-        /* ── Stat grid 2 col ── */
         .stat-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -203,7 +308,6 @@
         }
         .stat-item p { font-size: 0.82rem; color: var(--color-text-light); margin: 0; line-height: 1.5; }
 
-        /* ── Protocol supliment block ── */
         .suppl-item {
             border-left: 4px solid var(--color-brand-medium);
             background: var(--color-brand-light);
@@ -235,7 +339,6 @@
         .suppl-item li { font-size: 0.85rem; color: var(--color-text-medium); margin-bottom: 0.3rem; line-height: 1.6; }
         .suppl-item strong { color: var(--color-navy); }
 
-        /* ── Note box ── */
         .note-box {
             background: #fff8e1;
             border: 1px solid var(--color-gold);
@@ -246,7 +349,6 @@
             margin: 0.5rem 0;
         }
 
-        /* ── TCM specific ── */
         .tcm-block {
             background: white;
             border-radius: var(--radius-card);
@@ -284,7 +386,6 @@
         .tcm-sub p { font-size: 0.86rem; color: var(--color-text-medium); margin: 0 0 0.4rem 0; line-height: 1.6; }
         .tcm-sub strong { color: var(--color-navy); }
 
-        /* ── Meal plan ── */
         .meal-block {
             border-left: 4px solid var(--color-brand-medium);
             background: var(--color-brand-light);
@@ -335,7 +436,7 @@
     <div class="hero-card" style="position:relative; display:flex; align-items:center; justify-content:center; min-height:130px; padding:2rem 1rem;">
         <div class="hero-content" style="text-align:center;">
             <h1 class="hero-title" style="font-size:clamp(1.6rem,4vw,2.4rem);">Manual de arhitectură biologică</h1>
-            <p class="hero-subtitle">Programul integrat C.E.L.O.S. · Parteneriat strategic NUTRISIB</p>
+            <p class="hero-subtitle">Programul integrat <strong>C.E.L.O.S.</strong> · Parteneriat strategic NUTRISIB</p>
         </div>
         <div class="hero-client-overlay">
             <p class="name">Carmen Bucurenci</p>
@@ -347,16 +448,20 @@
     </div>
 
     <!-- ══ TAB BAR ══ -->
-    <div class="tab-bar">
-        <nav class="tab-nav">
-            <button class="tab-btn active" onclick="openTab('analiza',this)">Analiza de sistem</button>
-            <button class="tab-btn" onclick="openTab('filozofie',this)">Paradigma &amp; mecanisme</button>
-            <button class="tab-btn" onclick="openTab('celos6',this)">Arhitectura C.E.L.O.S.</button>
-            <button class="tab-btn" onclick="openTab('suplimente',this)">Protocol nutraceutic</button>
-            <button class="tab-btn" onclick="openTab('tcm',this)">Analiză TCM</button>
-            <button class="tab-btn" onclick="openTab('planmese',this)">Plan nutrițional</button>
-            <button class="tab-btn" onclick="openTab('biomarkeri',this)">Biomarkeri &amp; monitorizare</button>
-        </nav>
+    <div class="tab-bar-wrap" id="tabBarWrap">
+        <button class="tab-arrow arrow-left hidden" id="tabArrowLeft" aria-label="Tab-uri precedente">&#8249;</button>
+        <button class="tab-arrow arrow-right" id="tabArrowRight" aria-label="Tab-uri următoare">&#8250;</button>
+        <div class="tab-bar" id="tabBar">
+            <nav class="tab-nav">
+                <button class="tab-btn active" onclick="openTab('analiza',this)">1. Analiza de sistem</button>
+                <button class="tab-btn" onclick="openTab('filozofie',this)">2. Paradigmă &amp; mecanisme</button>
+                <button class="tab-btn" onclick="openTab('celos6',this)">3. Arhitectura <strong>C.E.L.O.S.</strong></button>
+                <button class="tab-btn" onclick="openTab('suplimente',this)">4. Protocol nutraceutic</button>
+                <button class="tab-btn" onclick="openTab('tcm',this)">5. Analiză TCM</button>
+                <button class="tab-btn" onclick="openTab('planmese',this)">6. Plan nutrițional</button>
+                <button class="tab-btn" onclick="openTab('biomarkeri',this)">7. Biomarkeri &amp; monitorizare</button>
+            </nav>
+        </div>
     </div>
 
     <!-- ══════════════════════════════════════
@@ -446,6 +551,361 @@
             </div>
             <p style="font-size:0.82rem; color:var(--color-text-light); margin:0;">→ Analiză completă a meridianelor în tab-ul 5.</p>
         </div>
+
+        <!-- ══ CARD 2 — RAPORT DE EVALUARE CLINICĂ ══ -->
+        <div class="section-anchor-header" style="border-left-color:#e53e3e; margin-top:0.5rem;">
+            <h2>Raport de evaluare clinică — sinteză metabolică și compoziție corporală</h2>
+        </div>
+
+        <!-- 1. Profil antropometric -->
+        <div class="art-card">
+            <h3>1. Profilul antropometric și evaluarea statutului ponderal</h3>
+            <p>În medicina metabolică, stabilirea precisă a profilului antropometric nu reprezintă o simplă formalitate statistică, ci fundamentul pe care construim predicția riscului de morbiditate. Identificarea corectă a gradului de deviere de la parametrii ideali ne permite să înțelegem presiunea mecanică și biochimică la care este supus organismul — oferind punctul de plecare esențial în inversarea proceselor patologice cronice.</p>
+
+            <!-- Tabel antropometric -->
+            <div style="overflow-x:auto; margin:1rem 0;">
+                <table style="width:100%; border-collapse:collapse; font-size:0.87rem;">
+                    <thead>
+                        <tr style="background:var(--color-navy); color:white;">
+                            <th style="padding:0.6rem 0.9rem; text-align:left; font-family:'Montserrat',sans-serif; border-radius:6px 0 0 0;">Parametru</th>
+                            <th style="padding:0.6rem 0.9rem; text-align:center; font-weight:700;">Valoare măsurată</th>
+                            <th style="padding:0.6rem 0.9rem; text-align:left; font-weight:700; border-radius:0 6px 0 0;">Interpretare clinică</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background:white;">
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); font-weight:600; color:var(--color-navy);">Greutate / Înălțime</td>
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); text-align:center; font-weight:700; color:var(--color-brand-medium);">68,4 kg / 160 cm</td>
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Indicatori primari pentru calculul indicilor de risc sistemic.</td>
+                        </tr>
+                        <tr style="background:var(--color-brand-light);">
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); font-weight:600; color:var(--color-navy);">Indice de masă corporală (IMC)</td>
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); text-align:center; font-weight:700; color:#ed8936;">26,7 kg/m²</td>
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Indică supraponderabilitate cu tendință spre obezitate.</td>
+                        </tr>
+                        <tr style="background:white;">
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); font-weight:600; color:var(--color-navy);">Gradul de obezitate (ODB)</td>
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); text-align:center; font-weight:700; color:#e53e3e;">126%</td>
+                            <td style="padding:0.6rem 0.9rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Depășire cu 26% a pragului fiziologic optim.</td>
+                        </tr>
+                        <tr style="background:var(--color-brand-light);">
+                            <td style="padding:0.6rem 0.9rem; font-weight:600; color:var(--color-navy);">Constituție fizică</td>
+                            <td style="padding:0.6rem 0.9rem; text-align:center; font-weight:700; color:#e53e3e;">„2-Obez"</td>
+                            <td style="padding:0.6rem 0.9rem; color:var(--color-text-medium);">Dezechilibru confirmat între țesutul adipos și cel slab (muscular).</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Grafic IMC — gauge SVG -->
+            <div style="margin:1.25rem 0 0.5rem; text-align:center;">
+                <p style="font-family:'Montserrat',sans-serif; font-size:0.82rem; font-weight:700; color:var(--color-navy); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.6rem;">Scala IMC — poziționarea Carmenului</p>
+                <svg viewBox="0 0 480 90" xmlns="http://www.w3.org/2000/svg" style="max-width:480px; width:100%; display:block; margin:0 auto;">
+                    <!-- Segmente IMC -->
+                    <rect x="10"  y="28" width="80" height="22" rx="4" fill="#3E92CC" opacity="0.85"/>
+                    <rect x="92"  y="28" width="90" height="22" rx="4" fill="#2D8A4E" opacity="0.85"/>
+                    <rect x="184" y="28" width="80" height="22" rx="4" fill="#ed8936" opacity="0.85"/>
+                    <rect x="266" y="28" width="80" height="22" rx="4" fill="#e53e3e" opacity="0.85"/>
+                    <rect x="348" y="28" width="122" height="22" rx="4" fill="#9b2226" opacity="0.85"/>
+                    <!-- Etichete categorii -->
+                    <text x="50"  y="24" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Subponderal</text>
+                    <text x="137" y="24" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Normal</text>
+                    <text x="224" y="24" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Supraponderal</text>
+                    <text x="306" y="24" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Obezitate I</text>
+                    <text x="409" y="24" text-anchor="middle" font-size="9" fill="#374151" font-family="Inter,sans-serif">Obezitate II–III</text>
+                    <!-- Valori limită -->
+                    <text x="10"  y="62" font-size="8.5" fill="#6b7280" font-family="Inter,sans-serif">16</text>
+                    <text x="88"  y="62" font-size="8.5" fill="#6b7280" font-family="Inter,sans-serif">18,5</text>
+                    <text x="178" y="62" font-size="8.5" fill="#6b7280" font-family="Inter,sans-serif">25</text>
+                    <text x="261" y="62" font-size="8.5" fill="#6b7280" font-family="Inter,sans-serif">30</text>
+                    <text x="343" y="62" font-size="8.5" fill="#6b7280" font-family="Inter,sans-serif">35</text>
+                    <!-- Indicator Carmen IMC 26,7 — în zona supraponderal, aprox x=202 -->
+                    <polygon points="202,28 196,16 208,16" fill="#1B2A4A"/>
+                    <text x="202" y="13" text-anchor="middle" font-size="9" fill="#1B2A4A" font-weight="bold" font-family="Montserrat,sans-serif">26,7</text>
+                    <text x="202" y="80" text-anchor="middle" font-size="8.5" fill="#e53e3e" font-weight="bold" font-family="Inter,sans-serif">Carmen — supraponderal →obezitate</text>
+                </svg>
+            </div>
+
+            <div class="note-box" style="margin-top:0.75rem;">
+                ⚠️ Clasificarea <strong>„2-Obez"</strong> la 57 de ani este un indicator critic. Schimbările hormonale specifice post-menopauzei accelerează redistribuirea adipoasă și reducerea densității osoase. Această stare nu este o cifră antropometrică — reflectă un efort compensatoriu constant al întregului motor metabolic intern.
+            </div>
+        </div>
+
+        <!-- 2. Dinamica metabolică -->
+        <div class="art-card">
+            <h3>2. Dinamica metabolică și homeostazia hidrică</h3>
+            <p>Rata metabolică de bază (BMR) și statusul de hidratare sunt pilonii vitalității celulare. Orice dezechilibru în acest sector compromite capacitatea organismului de a oxida eficient substraturile energetice și blochează lipoliza — procesul de mobilizare a grăsimilor stocate.</p>
+
+            <!-- Grid 2×2 indicatori -->
+            <div class="method-grid" style="margin:1rem 0;">
+                <div class="card-inner-gray" style="border-left:4px solid #e53e3e;">
+                    <p class="card-icon">🔥</p>
+                    <p class="card-inner-title">Vârstă metabolică: 59 ani</p>
+                    <p class="card-inner-text">Organismul funcționează la un nivel de uzură cu <strong>2 ani peste vârsta reală</strong> — încetinirea proceselor regenerative este deja instalată.</p>
+                </div>
+                <div class="card-inner-gray" style="border-left:4px solid #ed8936;">
+                    <p class="card-icon">💧</p>
+                    <p class="card-inner-title">Hidratare: 42,9% (29,4 kg)</p>
+                    <p class="card-inner-text">Sub pragul optim feminin de 45–60%. Deficitul hidric este o <strong>barieră majoră în calea lipolizei</strong> — arderea grăsimilor necesită un mediu apos optim.</p>
+                </div>
+                <div class="card-inner-gray" style="border-left:4px solid var(--color-gold);">
+                    <p class="card-icon">⚡</p>
+                    <p class="card-inner-title">BMR: 1.287 kcal/zi</p>
+                    <p class="card-inner-text">Metabolism de repaus scăzut. Orice surplus caloric este stocat rapid ca țesut adipos. Protejarea masei musculare existente este <strong>obligatorie</strong>.</p>
+                </div>
+                <div class="card-inner-gray" style="border-left:4px solid var(--color-brand-medium);">
+                    <p class="card-icon">🔄</p>
+                    <p class="card-inner-title">Distribuția fluidelor</p>
+                    <p class="card-inner-text">Raport intracelular/extracelular (16,2 L / 8,3 L) sugerează o eficiență redusă în transportul nutrienților la nivel celular.</p>
+                </div>
+            </div>
+
+            <!-- Grafic hidratare vs țintă -->
+            <div style="margin:1rem 0 0.5rem;">
+                <p style="font-family:'Montserrat',sans-serif; font-size:0.82rem; font-weight:700; color:var(--color-navy); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.75rem;">Compoziția corporală — distribuție actuală</p>
+                <svg viewBox="0 0 460 130" xmlns="http://www.w3.org/2000/svg" style="max-width:460px; width:100%; display:block; margin:0 auto;">
+                    <!-- Etichetă stânga -->
+                    <text x="8" y="38" font-size="9" fill="#374151" font-family="Inter,sans-serif" font-weight="600">Masă grasă</text>
+                    <text x="8" y="68" font-size="9" fill="#374151" font-family="Inter,sans-serif" font-weight="600">Masă musculară</text>
+                    <text x="8" y="98" font-size="9" fill="#374151" font-family="Inter,sans-serif" font-weight="600">Apă corporală</text>
+                    <!-- Bare fundal -->
+                    <rect x="110" y="24" width="280" height="18" rx="4" fill="#f3f4f6"/>
+                    <rect x="110" y="54" width="280" height="18" rx="4" fill="#f3f4f6"/>
+                    <rect x="110" y="84" width="280" height="18" rx="4" fill="#f3f4f6"/>
+                    <!-- Bare valori (din 68,4 kg total) -->
+                    <!-- Masă grasă: 26,1 kg / 68,4 = 38,2% → 280×0,382=107 -->
+                    <rect x="110" y="24" width="107" height="18" rx="4" fill="#e53e3e" opacity="0.85"/>
+                    <!-- Masă musculară: 40,2 kg / 68,4 = 58,8% → 280×0,588=165 -->
+                    <rect x="110" y="54" width="165" height="18" rx="4" fill="#2D8A4E" opacity="0.85"/>
+                    <!-- Apă: 29,4 kg / 68,4 = 43% → 280×0,43=120, optim 52% → 146 -->
+                    <rect x="110" y="84" width="120" height="18" rx="4" fill="#3E92CC" opacity="0.85"/>
+                    <!-- Linie optim apă -->
+                    <line x1="256" y1="80" x2="256" y2="106" stroke="#C5A021" stroke-width="1.5" stroke-dasharray="3,2"/>
+                    <text x="258" y="79" font-size="8" fill="#C5A021" font-family="Inter,sans-serif">optim 52%</text>
+                    <!-- Valori -->
+                    <text x="222" y="37" font-size="9" fill="white" font-weight="bold" font-family="Inter,sans-serif">26,1 kg (38,2%)</text>
+                    <text x="222" y="67" font-size="9" fill="white" font-weight="bold" font-family="Inter,sans-serif">40,2 kg (58,8%)</text>
+                    <text x="222" y="97" font-size="9" fill="white" font-weight="bold" font-family="Inter,sans-serif">29,4 kg (42,9%)</text>
+                    <!-- Legendă -->
+                    <rect x="110" y="116" width="10" height="10" rx="2" fill="#e53e3e" opacity="0.85"/>
+                    <text x="124" y="125" font-size="8.5" fill="#374151" font-family="Inter,sans-serif">Masă grasă — țintă reducere: −14 kg</text>
+                    <rect x="280" y="116" width="10" height="10" rx="2" fill="#3E92CC" opacity="0.85"/>
+                    <text x="294" y="125" font-size="8.5" fill="#374151" font-family="Inter,sans-serif">Apă — deficit față de optim</text>
+                </svg>
+            </div>
+        </div>
+
+        <!-- 3. Compoziție corporală și risc visceral -->
+        <div class="art-card">
+            <h3>3. Analiza compartimentală — distribuția adipoasă și masa musculară</h3>
+            <p>Din perspectivă clinică, calitatea compoziției corporale — raportul grăsime/mușchi — este mult mai relevantă pentru sănătatea pe termen lung decât greutatea brută. Excesul de grăsime viscerală funcționează ca un <strong>organ endocrin pro-inflamator</strong>. Conservarea masei musculare actuale este vitală: aceasta reprezintă singurul „consumator" activ de energie capabil să susțină arderea grăsimilor.</p>
+
+            <!-- Grafic corp — siluetă simplificată cu distribuție grăsime -->
+            <div style="display:flex; flex-wrap:wrap; gap:1.5rem; align-items:flex-start; margin:1rem 0;">
+
+                <!-- SVG siluetă + distribuție -->
+                <div style="flex:0 0 auto; text-align:center;">
+                    <p style="font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; color:var(--color-navy); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.5rem;">Distribuția adipoasă</p>
+                    <svg viewBox="0 0 160 300" xmlns="http://www.w3.org/2000/svg" style="width:130px; display:block; margin:0 auto;">
+                        <!-- Corp simplificat -->
+                        <!-- Cap -->
+                        <circle cx="80" cy="28" r="22" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+                        <!-- Gât -->
+                        <rect x="72" y="48" width="16" height="12" rx="3" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+                        <!-- Trunchi — zona abdominală evidențiată roșu (viscerală) -->
+                        <ellipse cx="80" cy="120" rx="40" ry="52" fill="#fee2e2" stroke="#e53e3e" stroke-width="2"/>
+                        <text x="80" y="110" text-anchor="middle" font-size="8" fill="#9b2226" font-family="Inter,sans-serif" font-weight="700">Grăsime</text>
+                        <text x="80" y="122" text-anchor="middle" font-size="8" fill="#9b2226" font-family="Inter,sans-serif" font-weight="700">viscerală</text>
+                        <text x="80" y="134" text-anchor="middle" font-size="9" fill="#9b2226" font-family="Inter,sans-serif" font-weight="800">Nivel 8</text>
+                        <!-- Brațe -->
+                        <ellipse cx="34" cy="120" rx="12" ry="38" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+                        <ellipse cx="126" cy="120" rx="12" ry="38" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+                        <!-- Șolduri + WHR indicator -->
+                        <ellipse cx="80" cy="195" rx="36" ry="28" fill="#fef3c7" stroke="#C5A021" stroke-width="2"/>
+                        <text x="80" y="196" text-anchor="middle" font-size="7.5" fill="#78450a" font-family="Inter,sans-serif" font-weight="700">WHR 0,95</text>
+                        <text x="80" y="207" text-anchor="middle" font-size="7" fill="#78450a" font-family="Inter,sans-serif">↑ prag 0,85</text>
+                        <!-- Picioare -->
+                        <rect x="56" y="222" width="22" height="58" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+                        <rect x="82" y="222" width="22" height="58" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+                    </svg>
+                </div>
+
+                <!-- Indicatori tabel -->
+                <div style="flex:1; min-width:200px;">
+                    <div class="suppl-item" style="border-left-color:#e53e3e; margin-bottom:0.75rem;">
+                        <h4 style="color:#e53e3e;">🔴 Masă grasă totală: 38,2% — 26,1 kg</h4>
+                        <p>Valoare care confirmă diagnosticul de obezitate. <strong>Obiectiv strategic: reducere de −14 kg</strong> pentru a atinge ținta de 54 kg grăsime.</p>
+                    </div>
+                    <div class="suppl-item" style="border-left-color:#e53e3e; margin-bottom:0.75rem;">
+                        <h4 style="color:#e53e3e;">🔴 Grăsime viscerală: nivelul 8</h4>
+                        <p>La limita superioară a zonei acceptabile (1–9 = acceptabil; 10+ = risc). Tendință de acumulare periculoasă în jurul organelor interne — efect pro-inflamator direct.</p>
+                    </div>
+                    <div class="suppl-item" style="border-left-color:#C5A021; margin-bottom:0.75rem;">
+                        <h4 style="color:#78450a;">⚠️ Raport talie–șold (WHR): 0,95</h4>
+                        <p>Depășește critic pragul feminin de 0,85. Confirmă o distribuție <strong>androidă (abdominală)</strong> a grăsimii — factorul de risc cardiovascular cel mai puternic predictor.</p>
+                    </div>
+                    <div class="suppl-item" style="border-left-color:#2d8a4e;">
+                        <h4 style="color:#2d8a4e;">✅ Masă musculară: 40,2 kg — de conservat integral</h4>
+                        <p>Obiectiv de control muscular: <strong>0 kg pierdere permisă</strong>. Pierderea masei musculare ar prăbuși BMR-ul și ar face imposibilă menținerea pe termen lung.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Riscuri clinice -->
+        <div class="art-card">
+            <h3>4. Sinteza riscurilor clinice — axa hepato-cardiovasculară și glicemică</h3>
+            <p>Metabolismul lipidic, integritatea hepatică și funcția cardiovasculară sunt interdependente. O anomalie într-un sector declanșează un efect de domino: grăsimile neprocesate se acumulează în ficat (steatoză), circulă în exces în sânge (dislipidemie) și se depun pe pereții arteriali (ateroscleroză), reducând elasticitatea coronariană.</p>
+
+            <!-- Grafic „efect de domino" — flux orizontal SVG -->
+            <div style="margin:1rem 0; overflow-x:auto;">
+                <svg viewBox="0 0 520 80" xmlns="http://www.w3.org/2000/svg" style="max-width:520px; width:100%; display:block; margin:0 auto;">
+                    <!-- Noduri domino -->
+                    <rect x="5"   y="15" width="88" height="48" rx="8" fill="#fee2e2" stroke="#e53e3e" stroke-width="1.5"/>
+                    <text x="49"  y="36" text-anchor="middle" font-size="8.5" fill="#9b2226" font-weight="bold" font-family="Inter,sans-serif">Hipertriglice-</text>
+                    <text x="49"  y="48" text-anchor="middle" font-size="8.5" fill="#9b2226" font-weight="bold" font-family="Inter,sans-serif">ridemie 5,639</text>
+                    <text x="49"  y="59" text-anchor="middle" font-size="7.5" fill="#e53e3e" font-family="Inter,sans-serif">risc acut CV</text>
+                    <!-- Săgeată -->
+                    <path d="M95 39 L106 39" stroke="#9b2226" stroke-width="2" marker-end="url(#arr)"/>
+                    <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#9b2226"/></marker></defs>
+
+                    <rect x="108" y="15" width="88" height="48" rx="8" fill="#fef3c7" stroke="#C5A021" stroke-width="1.5"/>
+                    <text x="152" y="36" text-anchor="middle" font-size="8.5" fill="#78450a" font-weight="bold" font-family="Inter,sans-serif">Steatoză</text>
+                    <text x="152" y="48" text-anchor="middle" font-size="8.5" fill="#78450a" font-weight="bold" font-family="Inter,sans-serif">hepatică</text>
+                    <text x="152" y="59" text-anchor="middle" font-size="7.5" fill="#C5A021" font-family="Inter,sans-serif">index 0,602</text>
+                    <path d="M198 39 L209 39" stroke="#9b2226" stroke-width="2" marker-end="url(#arr)"/>
+
+                    <rect x="211" y="15" width="88" height="48" rx="8" fill="#fee2e2" stroke="#e53e3e" stroke-width="1.5"/>
+                    <text x="255" y="36" text-anchor="middle" font-size="8.5" fill="#9b2226" font-weight="bold" font-family="Inter,sans-serif">Hiperinsu-</text>
+                    <text x="255" y="48" text-anchor="middle" font-size="8.5" fill="#9b2226" font-weight="bold" font-family="Inter,sans-serif">linemie</text>
+                    <text x="255" y="59" text-anchor="middle" font-size="7.5" fill="#e53e3e" font-family="Inter,sans-serif">coef. 0,398</text>
+                    <path d="M301 39 L312 39" stroke="#9b2226" stroke-width="2" marker-end="url(#arr)"/>
+
+                    <rect x="314" y="15" width="88" height="48" rx="8" fill="#fef3c7" stroke="#C5A021" stroke-width="1.5"/>
+                    <text x="358" y="36" text-anchor="middle" font-size="8.5" fill="#78450a" font-weight="bold" font-family="Inter,sans-serif">Risc renal</text>
+                    <text x="358" y="48" text-anchor="middle" font-size="8.5" fill="#78450a" font-weight="bold" font-family="Inter,sans-serif">cronic</text>
+                    <text x="358" y="59" text-anchor="middle" font-size="7.5" fill="#C5A021" font-family="Inter,sans-serif">acid uric ↑</text>
+                    <path d="M404 39 L415 39" stroke="#9b2226" stroke-width="2" marker-end="url(#arr)"/>
+
+                    <rect x="417" y="15" width="96" height="48" rx="8" fill="#fce7f3" stroke="#7c3aed" stroke-width="1.5"/>
+                    <text x="465" y="36" text-anchor="middle" font-size="8.5" fill="#4c1d95" font-weight="bold" font-family="Inter,sans-serif">Ateroscleroză</text>
+                    <text x="465" y="48" text-anchor="middle" font-size="8.5" fill="#4c1d95" font-weight="bold" font-family="Inter,sans-serif">+ AIT risc</text>
+                    <text x="465" y="59" text-anchor="middle" font-size="7.5" fill="#7c3aed" font-family="Inter,sans-serif">↑ recidivă</text>
+                </svg>
+            </div>
+
+            <!-- Ierarhia riscurilor -->
+            <p style="font-family:'Montserrat',sans-serif; font-size:0.82rem; font-weight:700; color:var(--color-navy); text-transform:uppercase; letter-spacing:0.06em; margin:1rem 0 0.6rem 0;">Ierarhia alertelor clinice</p>
+
+            <div style="display:flex; flex-direction:column; gap:0.6rem;">
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; background:#fff1f2; border-left:4px solid #e53e3e; border-radius:0 8px 8px 0; padding:0.75rem 1rem;">
+                    <span style="font-family:'Montserrat',sans-serif; font-size:1.1rem; font-weight:900; color:#e53e3e; flex-shrink:0;">1</span>
+                    <div>
+                        <p style="font-weight:700; color:var(--color-navy); margin:0 0 0.2rem 0; font-size:0.9rem;">Urgență metabolică și vasculară — trigliceride 5,639</p>
+                        <p style="font-size:0.84rem; color:var(--color-text-medium); margin:0;">Cel mai critic risc: predispune la eveniment cardiovascular acut sau pancreatită severă. Coeficientul de metabolizare lipidică de 0,907 confirmă incapacitatea organismului de a procesa aceste grăsimi.</p>
+                    </div>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; background:#fff8e1; border-left:4px solid #C5A021; border-radius:0 8px 8px 0; padding:0.75rem 1rem;">
+                    <span style="font-family:'Montserrat',sans-serif; font-size:1.1rem; font-weight:900; color:#C5A021; flex-shrink:0;">2</span>
+                    <div>
+                        <p style="font-weight:700; color:var(--color-navy); margin:0 0 0.2rem 0; font-size:0.9rem;">Steatoză hepatică confirmată — index 0,602</p>
+                        <p style="font-size:0.84rem; color:var(--color-text-medium); margin:0;">Infiltrare adipoasă a parenchimului hepatic, consecință directă a obezității. Ficatul supraîncărcat nu poate metaboliza eficient nici suplimentele din protocol fără suport hepatoprotector (Liver Support).</p>
+                    </div>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; background:#fff1f2; border-left:4px solid #e53e3e; border-radius:0 8px 8px 0; padding:0.75rem 1rem;">
+                    <span style="font-family:'Montserrat',sans-serif; font-size:1.1rem; font-weight:900; color:#e53e3e; flex-shrink:0;">3</span>
+                    <div>
+                        <p style="font-weight:700; color:var(--color-navy); margin:0 0 0.2rem 0; font-size:0.9rem;">Blocaj hormonal prin hiperinsulinemie — coeficient 0,398</p>
+                        <p style="font-size:0.84rem; color:var(--color-text-medium); margin:0;">Secreție excesivă de insulină creează un cerc vicios: insulina crescută blochează mobilizarea grăsimilor stocate și favorizează depunerea de noi rezerve. Cromul din ProBalance adresează direct rezistența la insulină.</p>
+                    </div>
+                </div>
+                <div style="display:flex; align-items:flex-start; gap:0.75rem; background:#eaf2f8; border-left:4px solid var(--color-brand-medium); border-radius:0 8px 8px 0; padding:0.75rem 1rem;">
+                    <span style="font-family:'Montserrat',sans-serif; font-size:1.1rem; font-weight:900; color:var(--color-brand-medium); flex-shrink:0;">4</span>
+                    <div>
+                        <p style="font-weight:700; color:var(--color-navy); margin:0 0 0.2rem 0; font-size:0.9rem;">Risc renal cronic — acid uric crescut</p>
+                        <p style="font-size:0.84rem; color:var(--color-text-medium); margin:0;">Nivelul crescut de acid uric exercită un stres suplimentar asupra funcției renale deja solicitate de hipertensiune. Hidratarea crescută (min. 2 L/zi) și evitarea alimentelor bogate în purine sunt obligatorii.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Arhitectura intervenției + scor + alimente -->
+        <div class="art-card">
+            <h3>5. Arhitectura intervenției — obiective strategice și protocol alimentar</h3>
+            <p>Inversarea indicatorilor patologici necesită o disciplină riguroasă și un protocol structurat pentru a forța organismul să utilizeze grăsimea stocată drept combustibil, protejând în același timp integritatea organelor interne.</p>
+
+            <div class="highlight-box" style="margin:0.75rem 0 1rem 0;">
+                <p style="margin:0; font-size:0.92rem;"><strong>Obiectiv strategic:</strong> Reducerea cu <strong>14 kg a masei grase</strong> pentru a atinge ținta de 54 kg greutate corporală — cu monitorizarea strictă a menținerii masei musculare la <strong>40,2 kg (control: 0 kg pierdere permisă)</strong>.</p>
+            </div>
+
+            <!-- Tabel alimente -->
+            <div style="overflow-x:auto; margin-bottom:1rem;">
+                <table style="width:100%; border-collapse:collapse; font-size:0.85rem;">
+                    <thead>
+                        <tr style="background:var(--color-navy); color:white;">
+                            <th style="padding:0.6rem 0.85rem; text-align:left; font-family:'Montserrat',sans-serif; border-radius:6px 0 0 0;">🚫 Alimente de exclus</th>
+                            <th style="padding:0.6rem 0.85rem; text-align:left; font-weight:700;">✅ Alimente recomandate</th>
+                            <th style="padding:0.6rem 0.85rem; text-align:left; font-weight:700; border-radius:0 6px 0 0;">Raționalul clinic</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background:white;">
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:#e53e3e; font-weight:600;">Alcool, prăjeli, grăsimi saturate, uleiuri în exces</td>
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:#2d8a4e; font-weight:600;">Ciuperci negre, ciuperci, legume proaspete</td>
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Protecție hepatică și reglarea activă a trigliceridelor și colesterolului din sânge.</td>
+                        </tr>
+                        <tr style="background:var(--color-brand-light);">
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:#e53e3e; font-weight:600;">Zahăr, dulciuri, băuturi îndulcite, exces de carbohidrați</td>
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:#2d8a4e; font-weight:600;">Porumb, zarzavaturi, fructe proaspete</td>
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Controlul hiperinsulinemiei — prevenirea transformării glucozei în noi depozite de grăsime.</td>
+                        </tr>
+                        <tr style="background:white;">
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:#e53e3e; font-weight:600;">Sare și alimente procesate/foarte sărate</td>
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:#2d8a4e; font-weight:600;">Hidratare crescută (apă), mese la ore fixe</td>
+                            <td style="padding:0.6rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Reducerea tensiunii arteriale și susținerea lipolizei prin mediu hidric optim.</td>
+                        </tr>
+                        <tr style="background:var(--color-brand-light);">
+                            <td style="padding:0.6rem 0.85rem; color:#e53e3e; font-weight:600;">Condimente iuți, carne de oaie, creveți, anghilă</td>
+                            <td style="padding:0.6rem 0.85rem; color:#2d8a4e; font-weight:600;">Alimente ușoare, gătite dietetic, la abur</td>
+                            <td style="padding:0.6rem 0.85rem; color:var(--color-text-medium);">Protecția mucoaselor și a funcției renale în contextul acidului uric crescut și al steatozei.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Scor formă corp + concluzie -->
+            <div style="display:flex; flex-wrap:wrap; gap:1rem; align-items:stretch; margin-top:0.5rem;">
+                <!-- Gauge scor -->
+                <div style="flex:0 0 auto; background:var(--color-brand-light); border-radius:var(--radius-card); border:1px solid var(--color-border); padding:1rem 1.25rem; text-align:center; min-width:160px;">
+                    <p style="font-family:'Montserrat',sans-serif; font-size:0.75rem; font-weight:700; color:var(--color-navy); text-transform:uppercase; letter-spacing:0.07em; margin:0 0 0.5rem 0;">Scor formă corp</p>
+                    <svg viewBox="0 0 120 70" xmlns="http://www.w3.org/2000/svg" style="width:120px; display:block; margin:0 auto;">
+                        <!-- Arc fundal -->
+                        <path d="M15,60 A50,50 0 0,1 105,60" fill="none" stroke="#e5e7eb" stroke-width="12" stroke-linecap="round"/>
+                        <!-- Arc roșu (sub 70) — 62,4/100 × 180° -->
+                        <path d="M15,60 A50,50 0 0,1 105,60" fill="none" stroke="#f3f4f6" stroke-width="12" stroke-linecap="round"/>
+                        <!-- Arc colorat — 62,4% din 180° = 112,3° -->
+                        <path d="M15,60 A50,50 0 0,1 79,16" fill="none" stroke="#e53e3e" stroke-width="12" stroke-linecap="round"/>
+                        <!-- Linie prag 70 -->
+                        <line x1="91" y1="21" x2="97" y2="15" stroke="#2d8a4e" stroke-width="1.5" stroke-dasharray="2,1"/>
+                        <text x="99" y="14" font-size="7.5" fill="#2d8a4e" font-family="Inter,sans-serif">70</text>
+                        <!-- Valoare -->
+                        <text x="60" y="52" text-anchor="middle" font-size="20" fill="#e53e3e" font-weight="bold" font-family="Montserrat,sans-serif">62,4</text>
+                        <text x="60" y="64" text-anchor="middle" font-size="8" fill="#6b7280" font-family="Inter,sans-serif">din 100</text>
+                    </svg>
+                    <p style="font-size:0.78rem; color:#e53e3e; font-weight:700; margin:0.3rem 0 0 0;">Sub pragul de acceptabilitate (70)</p>
+                </div>
+                <!-- Concluzie -->
+                <div style="flex:1; min-width:200px;">
+                    <div class="quote-box">
+                        <p class="quote-text" style="font-style:normal; font-size:0.9rem; line-height:1.7; margin:0;">
+                            Scorul actual de <strong>62,4</strong> reflectă un sistem aflat sub presiune inflamatorie și adipoasă semnificativă. Totuși, prin aderența strictă la protocolul de eliminare a celor <strong>14 kg de grăsime</strong>, există un potențial cert de normalizare a indicatorilor hepato-cardiovasculari și de restabilire a homeostaziei metabolice.<br><br>
+                            Toți indicatorii identificați sunt <strong>reversibili</strong> prin control ponderal strict și eliminarea selectivă a masei grase — cu condiția protejării integrale a celor 40,2 kg de masă musculară.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- ══════════════════════════════════════
@@ -458,31 +918,119 @@
         </div>
 
         <div class="art-card">
-            <h3>Paradigma Medicina 3.0</h3>
+            <h3>Paradigma medicina 3.0</h3>
             <p><strong>Dragă Carmen,</strong></p>
             <p>Ai ajuns în acest punct pentru că ești o persoană orientată spre rezultate și eficiență. În viața profesională ești un executiv, rezolvi probleme complexe, dar când vine vorba de biologia ta, te confrunți cu un „zgomot informațional" copleșitor. Ai încercat diete. Ai un „cimitir de flacoane" în bucătărie. Te simți epuizată, iar lățimea de bandă mentală îți este consumată de decizii nutriționale care generează doar frustrare și efect yo-yo.</p>
 
             <h4>Eroarea fundamentală a dietelor clasice</h4>
-            <p>Dietele clasice (Medicina 2.0) tratează corpul uman ca pe o problemă de matematică simplă: „mănâncă mai puțin, mișcă-te mai mult". Această abordare este o eroare gravă de sistem. Ea ignoră biochimia, hormonii și, cel mai important, <strong>mecanismele de uzură</strong>. Când recurgi la voință pentru a te abține, îți consumi energia cognitivă. Fricțiunea devine prea mare, iar sistemul cedează.</p>
+            <p>Dietele clasice (medicina 2.0) tratează corpul uman ca pe o problemă de matematică simplă: „mănâncă mai puțin, mișcă-te mai mult". Această abordare este o eroare gravă de sistem. Ea ignoră biochimia, hormonii și, cel mai important, <strong>mecanismele de uzură</strong>. Când recurgi la voință pentru a te abține, îți consumi energia cognitivă. Fricțiunea devine prea mare, iar sistemul cedează.</p>
 
             <h4>Reinginerie metabolică — nu o dietă</h4>
-            <p>Noi nu facem o dietă. Noi facem <strong>reinginerie metabolică</strong>. Conform Medicinei 3.0, nu așteptăm ca boala să se instaleze iremediabil. Accidentul tău ischemic a fost un „warning log" — o eroare de sistem care arată că infrastructura (vasele de sânge) este rigidă și casantă. Medicina clasică ți-a dat Aspirină și Atorvastatină — excelente ca „patch" de siguranță. Dar medicamentele nu îți vor reconstrui elasticitatea venelor și nu îți vor remineraliza oasele.</p>
+            <p>Noi nu facem o dietă. Noi facem <strong>reinginerie metabolică</strong>. Conform medicinei 3.0, nu așteptăm ca boala să se instaleze iremediabil. Accidentul tău ischemic a fost un „warning log" — o eroare de sistem care arată că infrastructura (vasele de sânge) este rigidă și casantă. Medicina clasică ți-a dat aspirină și atorvastatină — excelente ca „patch" de siguranță. Dar medicamentele nu îți vor reconstrui elasticitatea venelor și nu îți vor remineraliza oasele.</p>
 
             <div class="highlight-box">
                 <p style="font-style:normal; margin:0;"><strong>Mecanismul demineralizării:</strong> Hiperglicemia cronică transformă sângele într-un mediu acid. Pentru a nu muri din cauza acidozei, corpul extrage minerale alcaline (calciu, magneziu) din oase și le aruncă în sânge pentru a-i neutraliza pH-ul. A trata osteoporoza doar bând lapte este inutil — trebuie oprit incendiul metabolic care cauzează „furtul" de minerale.</p>
             </div>
 
-            <p>Programul C.E.L.O.S. (Calibrare. Energie. Longevitate. Optimizare Sistemică) instalează o rutină „low-friction". Prin preluarea controlului micului dejun cu o matrice proteică lichidă și suplimentarea țintită, corpul primește materiile prime pentru a reconstrui capilarele și a debloca lățimea de bandă cognitivă.</p>
+            <p>Programul <strong>C.E.L.O.S.</strong> (calibrare, energie, longevitate, optimizare sistemică) instalează o rutină „low-friction". Prin preluarea controlului micului dejun cu o matrice proteică lichidă și suplimentarea țintită, corpul primește materiile prime pentru a reconstrui capilarele și a debloca lățimea de bandă cognitivă.</p>
         </div>
-    </div>
 
+        <section id="perspectiva" class="content-section">
+            <div class="section-anchor-header" style="border-left-color:var(--color-navy)">
+                <h2>Mâncarea este emoție, soluțiile noastre sunt instrumente</h2>
+            </div>
+            
+            <div class="art-card">
+                <p><strong>"Vreau să mănânc mâncare adevărată, nu pot concepe să trăiesc pe termen lung consumând prafuri." </strong>Este probabil cea mai sinceră, naturală și corectă reacție pe care o poți avea. Mâncarea înseamnă tradiție, familie și bucurie. Nimeni nu ar trebui să trăiască exclusiv din shake-uri.</p>
+                <p>Nevoia fundamentală nu este doar să slăbești, ci să înțelegi „de ce”-ul din spatele stării tale actuale. Cauți claritate, energie, longevitate și îți dorești să redevii CEO-ul propriei tale ființe. Simți că a sosit momentul să treci de la a „repara” la a „reconstrui”, iar asta presupune o arhitectură interioară nouă, bazată pe știință, logică și eficiență.</p>
+                <p>Problema apare atunci când ritmul vieții moderne te forțează să iei decizii alimentare proaste. Principalul inamic al unui program de sănătate nu este lipsa de voință, ci <strong>fricțiunea</strong> – timpul de pregătire și oboseala decizională. Când ești la birou, stresat, o masă rapidă înseamnă adesea covrigi sau mâncare procesată. Aici intervin soluțiile funcționale: nu ca să înlocuiască prânzul tău delicios de duminică, ci ca să te salveze într-o seară târzie când ești prea obosit să mai gătești inteligent.</p>
+            </div>
+
+            <div class="art-card">
+                <h3>De ce eșuează planurile alimentare obișnuite?</h3>
+                <p>Majoritatea oamenilor abandonează dietele clasice din cauza complexității pregătirii meselor și a epuizării mentale.</p>
+                <div class="chart-container">
+                    <canvas id="dietFailureChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="stiinta" class="content-section">
+            <div class="section-anchor-header" style="border-left-color:#2d8a4e">
+                <h2>Medicina 3.0: adevărul despre "prafuri"</h2>
+            </div>
+            
+            <div class="art-card">
+                <p>În medicina 1.0 și 2.0 tratam bolile după ce apăreau. Medicina 3.0 pune accent pe prevenție, pe prelungirea perioadei de vitalitate și pe calitatea vieții. Aici, nutriția nu mai este o ghicitoare, ci o știință a preciziei.</p>
+                
+                <h4>Nutriție concentrată prin liofilizare</h4>
+                <p>Să clarificăm un mit: ceea ce adesea numim peiorativ "praf" este, în realitate, o capodoperă a tehnologiei alimentare. Pudra nu este ceva chimic. Este mâncare reală din care s-a extras apa printr-un proces blând numit liofilizare, păstrând absolut toate vitaminele și mineralele intacte. Gândește-te la ea ca la hrana cosmonauților: pură, densă și extrem de eficientă.</p>
+                
+                <h4>Problema bugetului caloric</h4>
+                <p>Când corpul tău are nevoie să slăbească sau să iasă din starea de inflamație, necesită doze uriașe de nutrienți, dar cu un buget caloric foarte restrâns. Să obții 25g de proteine de înaltă calitate strict din alimente clasice, fără să adaugi grăsimi sau carbohidrați nedoriți în ecuație, este extrem de dificil pe fugă. Substituentul de masă îți oferă precizie farmaceutică fără surprize ascunse.</p>
+            </div>
+
+            <div class="art-card">
+                <h3>Densitatea nutrițională: o privire obiectivă</h3>
+                <p>Iată o comparație clară între aportul nutrițional pentru o gustare de aproximativ 250 de calorii luată în grabă și un shake funcțional formulat clinic.</p>
+                <div class="chart-container">
+                    <canvas id="nutritionComparisonChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="arhitectura" class="content-section">
+            <div class="section-anchor-header" style="border-left-color:#e53e3e">
+                <h2>Arhitectura zilei tale (modelul <strong>C.E.L.O.S.</strong>)</h2>
+            </div>
+
+            <div class="art-card">
+                <p>Iată cum arată în practică promisiunea că nu vei renunța la mâncare. Acest program combină inteligent plăcerea gustului cu precizia științifică a suplimentării moderne, oferind o hartă logică și personalizată a teritoriului tău interior.</p>
+                
+                <h4>Dimineața (07:00 - 09:00): startul strategic</h4>
+                <p>Obiectivul este oprirea catabolismului nocturn și stabilizarea glicemiei. Dacă ești în grabă, un shake funcțional (gata în 2 minute) este ideal. Dacă ai timp, o omletă bogată cu legume proaspete este soluția clasică.</p>
+
+                <h4>La birou (11:00 / 16:00): scutul anti-fricțiune</h4>
+                <p>Aici scade glicemia, apare stresul, și patiseria devine irezistibilă. Intervenția rapidă printr-o supă caldă instant sau un baton proteic premium previne deciziile alimentare luate pe fond de oboseală.</p>
+
+                <h4>Prânzul (12:30 - 14:30): masa ancoră</h4>
+                <p>Acesta este momentul de bucurie a gustului, de digestie clasică și de ancorare. Aici aplicăm regula de aur: dieta ta va fi compusă din 40% carbohidrați complecși (legume colorate), 30% proteine (carne curată, pește, ouă) și 30% grăsimi sănătoase. Este mâncare reală care îți hrănește corpul și îți aduce satisfacție psihologică.</p>
+
+                <h4>Seara (19:00 - 20:00): descărcarea digestivă</h4>
+                <p>Seara, metabolismul încetinește. Înlocuirea cinei grele cu un shake sau o supă funcțională oferă toți nutrienții esențiali, punând zero greutate pe stomac și permițând corpului să se vindece noaptea pentru un somn profund și reparator.</p>
+            </div>
+        </section>
+
+        <section id="siguranta" class="content-section">
+            <div class="section-anchor-header" style="border-left-color:#3E92CC">
+                <h2>Siguranță la nivel clinic, nu doar de supermarket</h2>
+            </div>
+
+            <div class="art-card">
+                <p>Adesea considerăm că tot ce este la raionul de fructe și legume este 100% sigur și superior „suplimentelor”. Realitatea din secolul 21 este mult mai complexă. Produsele pe care le integrăm în arhitectura noastră trec prin standarde de puritate la care mâncarea obișnuită rareori ajunge.</p>
+                
+                <ul>
+                    <li><strong>Standarde clinice și omologare legislativă:</strong> Nu sunt simple "pudre pentru sportivi", ci substituenți de masă medicalizați, aprobați legislativ să ofere întregul spectru de macro și micronutrienți vitali.</li>
+                    <li><strong>Fără metale grele:</strong> Spre deosebire de o roșie sau o bucată de pui a căror trasabilitate se oprește la raft, aceste formule trec prin teste riguroase de puritate pentru a garanta absența toxinelor, a pesticidelor și a metalelor grele.</li>
+                    <li><strong>Biodisponibilitate maximă:</strong> Nutrienții din formulele premium liofilizate sunt concepuți pentru a se absorbi cu o rată mult superioară direct la nivel celular, fără a genera inflamație la nivelul tractului intestinal.</li>
+                </ul>
+
+                <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid var(--color-border);">
+                
+                <h3 style="text-align: center; border: none;">Păstrăm bucuria, eliminăm haosul</h3>
+                <p style="text-align: center; margin-top: 1rem;">Alegând să folosești instrumentele nutriției funcționale în momentele critice ale zilei, de fapt îți cumperi dreptul de a te bucura cu adevărat, fără vinovăție și fără consecințe metabolice, de o masă excepțională la prânz. Este timpul să nu mai fii blocat și să investești în tine.</p>
+            </div>
+        </section>
+
+
+    </div>
     <!-- ══════════════════════════════════════
-         TAB 3 — CELE 6 LUNI C.E.L.O.S.
+         TAB 3 — CELE 6 LUNI <strong>C.E.L.O.S.</strong>
     ══════════════════════════════════════ -->
     <div id="celos6" class="tab-content">
 
         <div class="section-anchor-header" style="border-left-color:#2d8a4e">
-            <h2>Arhitectura programului C.E.L.O.S. — 24 de săptămâni</h2>
+            <h2>Arhitectura programului <strong>C.E.L.O.S.</strong> — 24 de săptămâni</h2>
         </div>
 
         <div class="art-card">
@@ -522,7 +1070,7 @@
         <div class="art-card" style="border-left:4px solid #7c3aed;">
             <h3 style="border-bottom-color:#ede9fe;">Etapa 6 — Autonomie și fine-tuning</h3>
             <p style="font-size:0.8rem; font-weight:700; color:var(--color-text-light); margin-bottom:0.75rem;">Focus: CEO al propriei biologii</p>
-            <p>Sistemul C.E.L.O.S. devine a doua natură. Nu mai este nevoie de voință, ci doar de monitorizare. Calibrăm suplimentele de întreținere. Poți naviga prin evenimente sociale, călătorii și perioade de stres menținând integritatea biologică dobândită.</p>
+            <p>Sistemul <strong>C.E.L.O.S.</strong> devine a doua natură. Nu mai este nevoie de voință, ci doar de monitorizare. Calibrăm suplimentele de întreținere. Poți naviga prin evenimente sociale, călătorii și perioade de stres menținând integritatea biologică dobândită.</p>
         </div>
     </div>
 
@@ -917,19 +1465,16 @@
          TAB 6 — PLAN NUTRIȚIONAL 30 ZILE
     ══════════════════════════════════════ -->
     <div id="planmese" class="tab-content">
-
         <div class="section-anchor-header" style="border-left-color:#2d8a4e">
             <h2>Matricea Nutrițională — 30 Zile</h2>
         </div>
-
         <div class="art-card">
-            <p>Target: <strong>~1150–1200 kcal | 40% C | 30% P | 30% G</strong> · Micul dejun este stabil și ne-negociabil (fricțiune zero). La prânz alegi zilnic o opțiune din două. Gustările includ protocolul BetaHeart pentru colesterol.</p>
+            <p>Target: <strong>~1000–1150 kcal | 40% C | 30% P | 30% G</strong> (adaptat pentru BMR de 1.579 kcal). Micul dejun este stabil și ne-negociabil. <strong>FOCUS CLINIC:</strong> Calciu și minerale pentru osteoporoză (sardine, susan, tofu, lactate slabe), IG scăzut pentru diabet și suport hepatic (fără prăjeli, fără alcool, digestie ușoară). Nu sări peste mese și respectă intervalele orare.</p>
             <div style="display:flex; align-items:center; gap:1rem; margin-top:1rem; flex-wrap:wrap;">
                 <label for="daySelector" style="font-family:'Montserrat',sans-serif; font-size:0.82rem; font-weight:700; color:var(--color-navy); text-transform:uppercase; letter-spacing:0.06em;">Selectează ziua:</label>
                 <select id="daySelector" style="border:1px solid var(--color-border); border-radius:8px; padding:0.45rem 0.85rem; font-family:'Inter',sans-serif; font-weight:600; color:var(--color-navy); font-size:0.9rem; background:var(--color-brand-light);"></select>
             </div>
         </div>
-
         <div id="mealDisplayContainer"></div>
     </div>
 
@@ -943,13 +1488,25 @@
         </div>
 
         <div class="art-card">
-            <p>Reconstrucția biologică fără măsurare este navigație fără busolă. Setul de analize de mai jos este ales specific pentru profilul tău — cardiovascular, metabolic, osos, hepatic și inflamator. Fiecare biomarker are un rol precis în evaluarea progresului protocolului C.E.L.O.S.</p>
-            <div class="quote-box">
-                <p class="quote-text" style="font-style:normal; font-size:0.88rem; line-height:1.75;">
-                    📅 <strong>Ritm de monitorizare recomandat:</strong> Analize de <strong>bază la start</strong> (înainte de protocol) · Reevaluare la <strong>Luna 3</strong> (markeri rapizi) · Reevaluare completă la <strong>Luna 6</strong> (evaluare finală de program).<br>
-                    <span style="color:var(--color-text-light); font-size:0.82rem;">Fiecare analiză trebuie efectuată la același laborator pentru comparabilitate maximă a rezultatelor.</span>
-                </p>
-            </div>
+			<p>Reconstrucția biologică fără măsurare este navigație fără busolă. Setul de analize este adaptat specific pentru profilul Florin — cardiovascular, hepato-renal, glicemic, osos și toxicologic. Unii markeri necesită monitoring lunar dată fiind severitatea tabloului clinic.</p>
+			<div class="quote-box">
+				<p class="quote-text" style="font-style:normal; font-size:0.9rem; line-height:1.5;">
+					📅 <strong style="color:var(--color-navy);">Ritm de monitorizare recomandat:</strong> Analize de <strong style="color:var(--color-navy);">bază la start</strong> (înainte de protocol) · Reevaluare la <strong style="color:var(--color-navy);">Luna 3</strong> (markeri rapizi) · Reevaluare completă la <strong style="color:var(--color-navy);">Luna 6</strong> (evaluare finală de program) · Fiecare analiză trebuie efectuată <strong style="color:var(--color-navy);">la același laborator</strong> pentru comparabilitate maximă a rezultatelor.
+				</p>
+			</div>
+
+			<div style="margin-top:0.85rem; padding:0.75rem 1rem; background:var(--color-brand-light); border-radius:8px; border:1px solid var(--color-border); display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+				<p style="margin:0; font-size:0.9 rem; flex:1; min-width:200px; line-height:1.5;">
+					🔬 <strong style="color:var(--color-navy);">Cum să te pregătești pentru analize?</strong><br>
+					<span style="font-size:0.9rsem;">Află ce înseamnă fiecare biomarker, cum să te pregătești corect înainte de recoltare și cum să interpretezi rezultatele —  găsești informații în ghidul nostru complet de analize medicale.</span>
+				</p>
+				<a href="https://nutrisib.club/blog/analizemedicale.html" target="_blank" rel="noopener"
+				   style="display:inline-block; background:var(--color-navy); color:white; font-family:'Montserrat',sans-serif; font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; padding:0.55rem 1.1rem; border-radius:8px; text-decoration:none; white-space:nowrap; transition:background 0.2s;"
+				   onmouseover="this.style.background='var(--color-brand-medium)'"
+				   onmouseout="this.style.background='var(--color-navy)'">
+					Ghid analize →
+				</a>
+			</div>		
         </div>
 
         <!-- ── A. CARDIOVASCULAR & LIPIDIC ── -->
@@ -960,58 +1517,58 @@
         <div class="art-card">
             <p>Aceștia sunt markerii de risc cardiovascular direct relevanți pentru istoricul tău de accident ischemic minor, hipertensiune și dislipidemie.</p>
 
-            <div style="overflow-x:auto;">
-                <table style="width:100%; border-collapse:collapse; font-size:0.86rem; margin-top:0.75rem;">
+            <div class="bio-table-wrap">
+                <table class="bio-table" style="width:100%; border-collapse:collapse;">
                     <thead>
                         <tr style="background:var(--color-navy); color:white;">
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-family:'Montserrat',sans-serif; font-weight:700; border-radius:6px 0 0 0;">Biomarker</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700;">Valoare țintă optimală</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700;">De ce contează în protocolul tău</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700; border-radius:0 6px 0 0;">Când se ameliorează</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-family:'Montserrat',sans-serif; font-weight:700; border-radius:6px 0 0 0; width:17%;">Biomarker</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700; width:15%;">Valoare țintă optimală</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700;">De ce contează în protocolul tău</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700; border-radius:0 6px 0 0; width:11%;">Când se ameliorează</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr style="background:white;">
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); font-weight:700; color:var(--color-navy);">Colesterol total</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border);">&lt; 180 mg/dL <span style="color:#2d8a4e; font-weight:700;">(optim)</span></td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Marker global al riscului cardiovascular. Atorvastatina îl controlează, BetaHeart + Omega 3 atacă mecanismele subiacente.</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-brand-medium);">Luna 2–3</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); font-weight:700; color:var(--color-navy);">Colesterol total</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border);">&lt; 180 mg/dL <span style="color:#2d8a4e; font-weight:700;">(optim)</span></td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Marker global al riscului cardiovascular. Atorvastatina îl controlează, BetaHeart + Omega 3 atacă mecanismele subiacente.</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); color:var(--color-brand-medium);">Luna 2–3</td>
                         </tr>
                         <tr style="background:var(--color-brand-light);">
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); font-weight:700; color:var(--color-navy);">LDL-Colesterol</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border);">&lt; 70 mg/dL <span style="color:#e53e3e; font-weight:700;">(post-ischemie)</span></td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">LDL oxidat formează plăcile aterosclerotice. Ținta sub 70 este obligatorie după un eveniment ischemic. BetaHeart îl reduce prin captarea acizilor biliari.</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-brand-medium);">Luna 2–3</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); font-weight:700; color:var(--color-navy);">LDL-Colesterol</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border);">&lt; 70 mg/dL <span style="color:#e53e3e; font-weight:700;">(post-ischemie)</span></td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">LDL oxidat formează plăcile aterosclerotice. Ținta sub 70 este obligatorie după un eveniment ischemic. BetaHeart îl reduce prin captarea acizilor biliari.</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); color:var(--color-brand-medium);">Luna 2–3</td>
                         </tr>
                         <tr style="background:white;">
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); font-weight:700; color:var(--color-navy);">HDL-Colesterol</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border);">&gt; 60 mg/dL <span style="color:#2d8a4e; font-weight:700;">(protectiv)</span></td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">„Colesterolul bun" — transportă colesterolul de pe pereții arteriali spre ficat. Omega 3 și mișcarea moderată îl cresc.</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-brand-medium);">Luna 3–4</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); font-weight:700; color:var(--color-navy);">HDL-Colesterol</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border);">&gt; 60 mg/dL <span style="color:#2d8a4e; font-weight:700;">(protectiv)</span></td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">„Colesterolul bun" — transportă colesterolul de pe pereții arteriali spre ficat. Omega 3 și mișcarea moderată îl cresc.</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); color:var(--color-brand-medium);">Luna 3–4</td>
                         </tr>
                         <tr style="background:var(--color-brand-light);">
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); font-weight:700; color:var(--color-navy);">Trigliceride</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border);">&lt; 150 mg/dL</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Marker direct al excesului glucidic. Scad rapid odată cu înlocuirea micului dejun și reducerea zahărului. Responziv la protocolul Herbalife.</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-brand-medium);">Luna 1–2</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); font-weight:700; color:var(--color-navy);">Trigliceride</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border);">&lt; 150 mg/dL</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Marker direct al excesului glucidic. Scad rapid odată cu înlocuirea micului dejun și reducerea zahărului. Responziv la protocolul Herbalife.</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); color:var(--color-brand-medium);">Luna 1–2</td>
                         </tr>
                         <tr style="background:white;">
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); font-weight:700; color:var(--color-navy);">Raport LDL/HDL</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border);">&lt; 2.5 <span style="color:#2d8a4e; font-weight:700;">(optim)</span></td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Un predictor mai bun al riscului cardiovascular decât colesterolul total singur. Calculat din valorile de mai sus.</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-brand-medium);">Luna 3</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); font-weight:700; color:var(--color-navy);">Raport LDL/HDL</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border);">&lt; 2.5 <span style="color:#2d8a4e; font-weight:700;">(optim)</span></td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Un predictor mai bun al riscului cardiovascular decât colesterolul total singur. Calculat din valorile de mai sus.</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); color:var(--color-brand-medium);">Luna 3</td>
                         </tr>
                         <tr style="background:var(--color-brand-light);">
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); font-weight:700; color:var(--color-navy);">Homocisteina serică</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border);">&lt; 10 µmol/L</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Aminoacid toxic pentru endoteliu — factor de risc independent pentru accident vascular și demență. Creșterea sa indică deficit de B6, B12, folat. Liver Support (B12 din Chlorella) o reduce.</td>
-                            <td style="padding:0.65rem 0.85rem; border-bottom:1px solid var(--color-border); color:var(--color-brand-medium);">Luna 3–4</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); font-weight:700; color:var(--color-navy);">Homocisteina serică</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border);">&lt; 10 µmol/L</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); color:var(--color-text-medium);">Aminoacid toxic pentru endoteliu — factor de risc independent pentru accident vascular și demență. Creșterea sa indică deficit de B6, B12, folat. Liver Support (B12 din Chlorella) o reduce.</td>
+                            <td style="padding:0.5rem 0.65rem; border-bottom:1px solid var(--color-border); color:var(--color-brand-medium);">Luna 3–4</td>
                         </tr>
                         <tr style="background:white;">
-                            <td style="padding:0.65rem 0.85rem; font-weight:700; color:var(--color-navy);">hs-CRP <span style="font-weight:400; font-size:0.8rem;">(proteina C reactivă înaltă sensibilitate)</span></td>
-                            <td style="padding:0.65rem 0.85rem;">&lt; 1.0 mg/L <span style="color:#2d8a4e; font-weight:700;">(risc scăzut)</span></td>
-                            <td style="padding:0.65rem 0.85rem; color:var(--color-text-medium);">Cel mai sensibil marker de inflamație sistemică vasculară. Predictiv pentru infarct și AVC. Omega 3 + reducerea glucidelor rapide îl normalizează.</td>
-                            <td style="padding:0.65rem 0.85rem; color:var(--color-brand-medium);">Luna 2–3</td>
+                            <td style="padding:0.5rem 0.65rem; font-weight:700; color:var(--color-navy);">hs-CRP <span style="font-weight:400; font-size:0.8rem;">(proteina C reactivă înaltă sensibilitate)</span></td>
+                            <td style="padding:0.5rem 0.65rem;">&lt; 1.0 mg/L <span style="color:#2d8a4e; font-weight:700;">(risc scăzut)</span></td>
+                            <td style="padding:0.5rem 0.65rem; color:var(--color-text-medium);">Cel mai sensibil marker de inflamație sistemică vasculară. Predictiv pentru infarct și AVC. Omega 3 + reducerea glucidelor rapide îl normalizează.</td>
+                            <td style="padding:0.5rem 0.65rem; color:var(--color-brand-medium);">Luna 2–3</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1026,14 +1583,14 @@
         <div class="art-card">
             <p>Controlul glicemic este fundația întregului protocol — hiperglicemia cronică este mecanismul primar al demineralizării, vâscozității și inflamației vasculare identificate în profilul tău.</p>
 
-            <div style="overflow-x:auto;">
-                <table style="width:100%; border-collapse:collapse; font-size:0.86rem; margin-top:0.75rem;">
+            <div class="bio-table-wrap">
+                <table class="bio-table" style="width:100%; border-collapse:collapse;">
                     <thead>
                         <tr style="background:var(--color-navy); color:white;">
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-family:'Montserrat',sans-serif; font-weight:700; border-radius:6px 0 0 0;">Biomarker</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700;">Valoare țintă optimală</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700;">De ce contează în protocolul tău</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700; border-radius:0 6px 0 0;">Când se ameliorează</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-family:'Montserrat',sans-serif; font-weight:700; border-radius:6px 0 0 0; width:20%;">Biomarker</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700; width:17%;">Valoare țintă optimală</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700;">De ce contează în protocolul tău</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700; border-radius:0 6px 0 0; width:12%;">Când se ameliorează</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1080,14 +1637,14 @@
         <div class="art-card">
             <p>Demineralizarea osoasă și inflamația sistemică sunt corelate direct în profilul tău — mediul acid generat de hiperglicemie este sursa ambelor. Acești markeri confirmă dacă ProBalance și Omega 3 și-au atins ținta.</p>
 
-            <div style="overflow-x:auto;">
-                <table style="width:100%; border-collapse:collapse; font-size:0.86rem; margin-top:0.75rem;">
+            <div class="bio-table-wrap">
+                <table class="bio-table" style="width:100%; border-collapse:collapse;">
                     <thead>
                         <tr style="background:var(--color-navy); color:white;">
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-family:'Montserrat',sans-serif; font-weight:700; border-radius:6px 0 0 0;">Biomarker</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700;">Valoare țintă optimală</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700;">De ce contează în protocolul tău</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700; border-radius:0 6px 0 0;">Când se ameliorează</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-family:'Montserrat',sans-serif; font-weight:700; border-radius:6px 0 0 0; width:20%;">Biomarker</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700; width:17%;">Valoare țintă optimală</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700;">De ce contează în protocolul tău</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700; border-radius:0 6px 0 0; width:12%;">Când se ameliorează</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1140,14 +1697,14 @@
         <div class="art-card">
             <p>Ficatul și rinichii sunt organele de detoxifiere ale protocolului. Fără un ficat funcțional, niciun supliment nu se metabolizează eficient. Liver Support și Aloe Sivera acționează direct pe acești markeri.</p>
 
-            <div style="overflow-x:auto;">
-                <table style="width:100%; border-collapse:collapse; font-size:0.86rem; margin-top:0.75rem;">
+            <div class="bio-table-wrap">
+                <table class="bio-table" style="width:100%; border-collapse:collapse;">
                     <thead>
                         <tr style="background:var(--color-navy); color:white;">
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-family:'Montserrat',sans-serif; font-weight:700; border-radius:6px 0 0 0;">Biomarker</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700;">Valoare țintă optimală</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700;">De ce contează în protocolul tău</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700; border-radius:0 6px 0 0;">Când se ameliorează</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-family:'Montserrat',sans-serif; font-weight:700; border-radius:6px 0 0 0; width:20%;">Biomarker</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700; width:17%;">Valoare țintă optimală</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700;">De ce contează în protocolul tău</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700; border-radius:0 6px 0 0; width:12%;">Când se ameliorează</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1200,14 +1757,14 @@
         <div class="art-card">
             <p>La 57 de ani, în context post-menopauzal, hormonii modulează direct metabolismul, greutatea, starea osoasă și riscul cardiovascular. Aceste analize explică rezistența la slăbire și variațiile de energie.</p>
 
-            <div style="overflow-x:auto;">
-                <table style="width:100%; border-collapse:collapse; font-size:0.86rem; margin-top:0.75rem;">
+            <div class="bio-table-wrap">
+                <table class="bio-table" style="width:100%; border-collapse:collapse;">
                     <thead>
                         <tr style="background:var(--color-navy); color:white;">
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-family:'Montserrat',sans-serif; font-weight:700; border-radius:6px 0 0 0;">Biomarker</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700;">Valoare țintă optimală</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700;">De ce contează în protocolul tău</th>
-                            <th style="padding:0.65rem 0.85rem; text-align:left; font-weight:700; border-radius:0 6px 0 0;">Când se ameliorează</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-family:'Montserrat',sans-serif; font-weight:700; border-radius:6px 0 0 0; width:20%;">Biomarker</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700; width:17%;">Valoare țintă optimală</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700;">De ce contează în protocolul tău</th>
+                            <th style="padding:0.5rem 0.65rem; text-align:left; font-weight:700; border-radius:0 6px 0 0; width:12%;">Când se ameliorează</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1252,8 +1809,8 @@
         </div>
 
         <div class="art-card">
-            <div style="overflow-x:auto;">
-                <table style="width:100%; border-collapse:collapse; font-size:0.86rem; margin-top:0;">
+            <div class="bio-table-wrap">
+                <table class="bio-table" style="width:100%; border-collapse:collapse;">
                     <thead>
                         <tr style="background:var(--color-navy); color:white;">
                             <th style="padding:0.65rem 0.85rem; text-align:left; font-family:'Montserrat',sans-serif; font-weight:700; border-radius:6px 0 0 0;">Biomarker</th>
@@ -1298,31 +1855,27 @@
         </div>
 
         <div class="art-card">
-            <div class="method-grid">
-                <div class="card-inner-gray" style="border-left:4px solid #e53e3e;">
-                    <p class="card-icon">🔴</p>
-                    <p class="card-inner-title">Start — Analize de bază</p>
-                    <p class="card-inner-text">Profil lipidic complet · Glicemie + HbA1c + Insulina + HOMA-IR · ALT/AST/GGT · Creatinina + eGFR · Vitamina D3 · TSH + FT4/FT3 · Cortizol · Hemoleucogramă completă · hs-CRP · Homocisteina · Feritina · Magneziu · Estradiol + DHEA-S.</p>
+            <div class="method-grid" style="gap:0.5rem;">
+                <div class="card-inner-gray" style="border-left:4px solid #e53e3e; padding:0.6rem 0.75rem;">
+                    <p class="card-inner-title" style="color:#e53e3e; margin:0 0 0.25rem 0; font-size:0.82rem;">🔴 START — Analize de bază</p>
+                    <p class="card-inner-text" style="margin:0; font-size:0.79rem; line-height:1.5;">Profil lipidic complet · Glicemie + HbA1c + Insulina + HOMA-IR · ALT/AST/GGT · Creatinina + eGFR · Vitamina D3 · TSH + FT4/FT3 · Cortizol · Hemoleucogramă completă · hs-CRP · Homocisteina · Feritina · Magneziu · Estradiol + DHEA-S.</p>
                 </div>
-                <div class="card-inner-gray" style="border-left:4px solid var(--color-gold);">
-                    <p class="card-icon">🟡</p>
-                    <p class="card-inner-title">Luna 3 — Reevaluare rapidă</p>
-                    <p class="card-inner-text">Glicemie + HbA1c · Profil lipidic complet · ALT/AST/GGT · hs-CRP · VSH · Magneziu seric · Feritina · Hemoleucogramă. <em style="font-size:0.82rem; color:var(--color-text-light);">Aceștia sunt markerii care răspund cel mai rapid la protocol.</em></p>
+                <div class="card-inner-gray" style="border-left:4px solid var(--color-gold); padding:0.6rem 0.75rem;">
+                    <p class="card-inner-title" style="color:#C5A021; margin:0 0 0.25rem 0; font-size:0.82rem;">🟡 LUNA 3 — Reevaluare rapidă</p>
+                    <p class="card-inner-text" style="margin:0; font-size:0.79rem; line-height:1.5;">Glicemie + HbA1c · Profil lipidic complet · ALT/AST/GGT · hs-CRP · VSH · Magneziu seric · Feritina · Hemoleucogramă. <em style="color:var(--color-text-light);">Aceștia sunt markerii care răspund cel mai rapid la protocol.</em></p>
                 </div>
-                <div class="card-inner-gray" style="border-left:4px solid #2d8a4e;">
-                    <p class="card-icon">🟢</p>
-                    <p class="card-inner-title">Luna 6 — Evaluare completă</p>
-                    <p class="card-inner-text">Repetarea tuturor analizelor de start. Compararea valorilor inițiale vs. finale — dovada obiectivă a reconstrucției biologice. Calibrarea suplimentelor de întreținere pe baza noilor valori.</p>
+                <div class="card-inner-gray" style="border-left:4px solid #2d8a4e; padding:0.6rem 0.75rem;">
+                    <p class="card-inner-title" style="color:#2d8a4e; margin:0 0 0.25rem 0; font-size:0.82rem;">🟢 LUNA 6 — Evaluare completă</p>
+                    <p class="card-inner-text" style="margin:0; font-size:0.79rem; line-height:1.5;">Repetarea tuturor analizelor de start. Compararea valorilor inițiale vs. finale — dovada obiectivă a reconstrucției biologice. Calibrarea suplimentelor de întreținere pe baza noilor valori.</p>
                 </div>
-                <div class="card-inner-gray" style="border-left:4px solid var(--color-brand-medium);">
-                    <p class="card-icon">🔵</p>
-                    <p class="card-inner-title">Monitorizare lunară continuă</p>
-                    <p class="card-inner-text">Tensiune arterială (acasă, dimineața) · Greutate corporală + circumferință abdominală · Glicemie à jeun (glucometru personal) · Calitatea somnului și nivelul de energie (scală 1–10).</p>
+                <div class="card-inner-gray" style="border-left:4px solid var(--color-brand-medium); padding:0.6rem 0.75rem;">
+                    <p class="card-inner-title" style="color:var(--color-brand-medium); margin:0 0 0.25rem 0; font-size:0.82rem;">🔵 LUNAR — Monitorizare continuă</p>
+                    <p class="card-inner-text" style="margin:0; font-size:0.79rem; line-height:1.5;">Tensiune arterială (acasă, dimineața) · Greutate corporală + circumferință abdominală · Glicemie à jeun (glucometru personal) · Calitatea somnului și nivelul de energie (scală 1–10).</p>
                 </div>
-            </div>
+            </div> 
 
             <div class="note-box" style="margin-top:1rem;">
-                ⚠️ <strong>Important:</strong> Toate valorile „optimale" din acest document sunt valori funcționale din perspectiva Medicinei 3.0 și pot diferi de intervalele de referință standard ale laboratorului. Interpretarea clinică rămâne apanajul exclusiv al medicului curant. Protocolul C.E.L.O.S. este complementar, nu înlocuiește tratamentul prescris.
+                ⚠️ <strong>Important:</strong> Toate valorile „optimale" din acest document sunt valori funcționale din perspectiva Medicinei 3.0 și pot diferi de intervalele de referință standard ale laboratorului. Interpretarea clinică rămâne apanajul exclusiv al medicului curant. Protocolul <strong>C.E.L.O.S.</strong> este <strong>complementar</strong>, nu înlocuiește tratamentul prescris.
             </div>
         </div>
 
@@ -1338,114 +1891,425 @@
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
         btn.classList.add('active');
+        btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+        
+        if (tabId === 'filozofie') {
+            // TRUCUL AICI: Întârziem desenarea cu 50 de milisecunde (setTimeout)
+            // Asta îi dă timp browserului să "deschidă" efectiv tab-ul și să îi seteze dimensiunile,
+            // astfel încât Chart.js să nu încerce să deseneze graficul într-un spațiu invizibil.
+            setTimeout(function() {
+                renderCharts();
+            }, 50);
+        }
+    }
+    // ── Săgeți navigare tab bar ───────────────────────────────────────────
+    (function() {
+        const bar   = document.getElementById('tabBar');
+        const wrap  = document.getElementById('tabBarWrap');
+        const left  = document.getElementById('tabArrowLeft');
+        const right = document.getElementById('tabArrowRight');
+        if (!bar || !wrap || !left || !right) return;
+        const STEP = 180;
+        function updateArrows() {
+            const atStart = bar.scrollLeft <= 4;
+            const atEnd   = bar.scrollLeft >= bar.scrollWidth - bar.clientWidth - 4;
+            left.classList.toggle('hidden', atStart);
+            right.classList.toggle('hidden', atEnd);
+            wrap.classList.toggle('at-start', atStart);
+            wrap.classList.toggle('at-end',   atEnd);
+        }
+        left.addEventListener('click',  () => bar.scrollBy({ left: -STEP, behavior: 'smooth' }));
+        right.addEventListener('click', () => bar.scrollBy({ left:  STEP, behavior: 'smooth' }));
+        bar.addEventListener('scroll', updateArrows, { passive: true });
+        requestAnimationFrame(updateArrows);
+        window.addEventListener('resize', updateArrows);
+    })();
+
+    // ════════════════════════════════════════════════════════════════
+    // PLAN NUTRIȚIONAL CARMEN — adaptat pentru:
+    // - BMR 1.579 kcal → target ~1050-1150 kcal/zi (deficit pentru slăbire 25,8 kg grasime)
+    // - Macros: 40% C | 30% P | 30% G
+    // - Osteoporoză (Aport maxim de calciu: sardine, broccoli, tofu, susan, lactate slabe)
+    // - Steatoză hepatică / Glicemie (Fără prăjeli, IG scăzut, grăsimi bune)
+    // ════════════════════════════════════════════════════════════════
+
+    // ── PRÂNZ A — Carne / Pește (370–430 kcal) — 20 variante ──
+    const lunchMeat = [
+        { text: "Păstrăv la cuptor (150g) cu broccoli la abur (200g) și 1 linguriță ulei de măsline presat la rece.", kcal: 380, c: 14, p: 38, g: 16 },
+        { text: "Sardine proaspete sau în suc propriu (120g) cu salată de varză albă, morcov ras și zeamă de lămâie.", kcal: 375, c: 12, p: 32, g: 18 },
+        { text: "Piept de curcan la grătar (130g) cu piure de conopidă (150g) și salată de spanac proaspăt.", kcal: 395, c: 16, p: 40, g: 14 },
+        { text: "Somon la cuptor (120g) cu sparanghel la abur (150g) și dressing de iaurt 2% cu mărar.", kcal: 410, c: 10, p: 35, g: 22 },
+        { text: "Ficat de pui la tigaie fără ulei (120g) cu orez integral (40g uscat) și murături.", kcal: 390, c: 35, p: 32, g: 11 },
+        { text: "Pulpă de pui dezosată (fără piele) la cuptor (130g) cu fasole verde păstăi (200g), usturoi și roșii.", kcal: 385, c: 18, p: 34, g: 15 },
+        { text: "Mușchiuleț de porc slab (120g) cu salată asortată (roșii, castraveți, ardei) și 1 feliuță pâine integrală.", kcal: 415, c: 22, p: 36, g: 16 },
+        { text: "Salată cu ton în suc propriu (100g), ou fiert (1), porumb (2 linguri) și mix de frunze verzi.", kcal: 370, c: 16, p: 34, g: 14 },
+        { text: "Cod file la cuptor cu lămâie (150g) cu mămăliguță (80g gata făcută) și mujdei slab.", kcal: 375, c: 25, p: 32, g: 12 },
+        { text: "Pui tikka marinat în iaurt (150g) cu salată de castraveți, mentă și orez basmati (30g uscat).", kcal: 405, c: 30, p: 40, g: 11 },
+        { text: "Vită macră sote (100g) cu ardei gras, morcov și ciuperci (200g) cu sos soia light.", kcal: 420, c: 22, p: 34, g: 18 },
+        { text: "Piept de curcan (130g) cu tocană de ciuperci și praz, plus 1 feliuță pâine secară.", kcal: 400, c: 32, p: 38, g: 10 },
+        { text: "Doradă la grătar (150g) cu dovlecei și vinete la tigaie grill (200g) pulverizate cu ulei.", kcal: 385, c: 14, p: 35, g: 16 },
+        { text: "Chiftele de pui la cuptor (120g) cu sos de roșii și zucchini spiralat (tăiței de dovlecel).", kcal: 375, c: 18, p: 32, g: 15 },
+        { text: "Salău la abur (150g) cu quinoa (40g uscat) amestecată cu pătrunjel și lămâie.", kcal: 395, c: 30, p: 35, g: 12 },
+        { text: "Omletă din 2 ouă întregi + 1 albuș cu ciuperci, spanac și 1 feliuță pâine graham.", kcal: 380, c: 22, p: 26, g: 18 },
+        { text: "Friptură de pui (130g) pe pat de rucola cu roșii cherry și parmezan ras (1 lingură - calciu extra).", kcal: 415, c: 10, p: 40, g: 18 },
+        { text: "Crap la cuptor pe pat de legume (ceapă, roșii, ardei) (150g pește).", kcal: 390, c: 18, p: 32, g: 16 },
+        { text: "Supă de pui cu legume și carne tăiată cubulețe (porție mare 400ml), o felie pâine secară.", kcal: 370, c: 28, p: 28, g: 12 },
+        { text: "Frigărui din piept de curcan și legume (150g carne) cu sos tzatziki (iaurt grecesc 2%).", kcal: 385, c: 14, p: 42, g: 12 }
+    ];
+
+    // ── PRÂNZ B — Post / Vegan (310–450 kcal) — 20 variante ──
+    const lunchVegan = [
+        { text: "Linte verde fiartă (200g) cu morcovi, țelină și o felie de pâine integrală.", kcal: 410, c: 65, p: 22, g: 6 },
+        { text: "Tofu ferm fortificat cu calciu (120g) sote cu broccoli (200g), sos soia și semințe susan (1 lg).", kcal: 390, c: 20, p: 28, g: 22 },
+        { text: "Mâncare de mazăre verde cu morcovi (200g) și mămăliguță moale (80g).", kcal: 350, c: 58, p: 14, g: 4 },
+        { text: "Năut la cuptor cu boia (150g) amestecat în salată verde cu roșii, dressing lămâie/ulei (1 lgt).", kcal: 420, c: 55, p: 18, g: 14 },
+        { text: "Ciuperci pleurotus la grătar (200g) cu piure de cartof dulce (100g).", kcal: 310, c: 45, p: 12, g: 6 },
+        { text: "Fasole albă bătută/frecată (fără ulei încins) (150g) cu salată de varză murată, 1 felie pâine secară.", kcal: 430, c: 68, p: 18, g: 8 },
+        { text: "Curry de legume (conopidă, morcov, spanac) cu lapte de cocos light (50ml) și orez integral (40g).", kcal: 380, c: 55, p: 10, g: 12 },
+        { text: "Chiftele din soia și linte la cuptor (120g) cu salată de crudități (țelină, morcov, măr).", kcal: 395, c: 45, p: 24, g: 14 },
+        { text: "Quinoa (50g uscat) fiartă amestecată cu roșii uscate, măsline (5 buc) și rucola abundentă.", kcal: 440, c: 58, p: 14, g: 18 },
+        { text: "Supă densă de roșii cu crutoane integrale (30g) și 1 lingură de semințe de cânepă decorticate.", kcal: 360, c: 48, p: 15, g: 12 },
+        { text: "Edamame fierte (150g) cu ardei gras tăiat bastonașe și humus (50g).", kcal: 390, c: 35, p: 24, g: 18 },
+        { text: "Tocăniță de ciuperci champignon (200g) cu mămăliguță (100g) și usturoi verde.", kcal: 340, c: 50, p: 12, g: 8 },
+        { text: "Ardei umpluți cu ciuperci și orez integral (2 bucăți medii).", kcal: 410, c: 75, p: 12, g: 6 },
+        { text: "Falafel la cuptor (4-5 buc) cu salată tabbouleh (pătrunjel mult, bulgur puțin, lămâie).", kcal: 430, c: 52, p: 16, g: 18 },
+        { text: "Sote de spanac (200g) cu orez basmati (40g uscat) și semințe de pin/nuci (10g).", kcal: 395, c: 55, p: 12, g: 16 },
+        { text: "Lipie integrală umplută cu fasole roșie (100g), porumb (2 lg) și guacamole (avocado 30g).", kcal: 450, c: 62, p: 16, g: 15 },
+        { text: "Paste din făină de linte (50g uscat) cu sos pesto vegan (busuioc, nuci, ulei măsline).", kcal: 420, c: 45, p: 20, g: 18 },
+        { text: "Ghiveci de legume de sezon la cuptor (250g) cu o felie pâine cu semințe.", kcal: 340, c: 52, p: 10, g: 10 },
+        { text: "Salată mediteraneană cu brânză tofu (100g), castraveți, roșii, măsline, oregano.", kcal: 360, c: 18, p: 18, g: 24 },
+        { text: "Supă cremă de linte roșie (300ml) presărată cu semințe de dovleac (1 lg).", kcal: 380, c: 48, p: 20, g: 12 }
+    ];
+
+    // ── CINĂ A — Proteină animală (190–290 kcal) — 20 variante ──
+    const dinnerMeat = [
+        { text: "Iaurt grecesc 2% (150g) cu semințe de chia (1 lg) și afine (50g).", kcal: 210, c: 18, p: 16, g: 8 },
+        { text: "Brânză cottage (perle de brânză) light (150g) cu castraveți proaspeți și mărar.", kcal: 195, c: 8, p: 24, g: 5 },
+        { text: "Salată de ton în suc propriu (80g) cu rucola, roșii și zeamă de lămâie.", kcal: 190, c: 6, p: 20, g: 8 },
+        { text: "O felie de pâine Wasa cu pastă de brânză slabă (50g) și somon afumat (30g).", kcal: 230, c: 14, p: 18, g: 10 },
+        { text: "Supă clară de pui cu tăiței de dovlecel (zoodles) (300ml).", kcal: 195, c: 10, p: 22, g: 6 },
+        { text: "Piept de curcan feliat rece (80g) cu salată verde amplă și roșii cherry.", kcal: 205, c: 6, p: 26, g: 7 },
+        { text: "2 albușuri de ou + 1 gălbenuș, omletă la abur cu baby spanac.", kcal: 210, c: 3, p: 18, g: 12 },
+        { text: "Sardine în suc propriu/sos automat (80g) pe o felie de pâine graham cu castravete.", kcal: 260, c: 16, p: 20, g: 12 },
+        { text: "Macrou la cuptor (80g) cu salată de varză roșie frecată cu lămâie.", kcal: 280, c: 8, p: 18, g: 18 },
+        { text: "Kefir 1.5% (200ml) cu o lingură rasă de tărâțe de ovăz.", kcal: 190, c: 18, p: 10, g: 5 },
+        { text: "Brânză telemea de vacă desărată (50g) cu 1 roșie mare și busuioc proaspăt.", kcal: 220, c: 8, p: 12, g: 14 },
+        { text: "Jumătate de avocado umplut cu 50g brânză de vaci slabă.", kcal: 250, c: 10, p: 12, g: 18 },
+        { text: "Creveți la tigaie (100g) cu usturoi, pătrunjel și zeamă de lămâie.", kcal: 190, c: 4, p: 22, g: 8 },
+        { text: "Pui la grătar tăiat fâșii (80g) pe pat de salată iceberg.", kcal: 200, c: 4, p: 24, g: 8 },
+        { text: "Pește alb fiert (100g) cu zeamă de lămâie și ierburi de Provence.", kcal: 190, c: 2, p: 22, g: 10 },
+        { text: "Urdă slabă (100g) amestecată cu mărar, ceapă verde și ardei gras tocat.", kcal: 210, c: 10, p: 18, g: 10 },
+        { text: "Rulouri din șuncă de curcan slabă (4 felii) umplute cu brânză de vaci și mărar.", kcal: 230, c: 8, p: 28, g: 9 },
+        { text: "Supă de roșii ușoară (fără paste) cu 1 ou poșat (300ml).", kcal: 215, c: 16, p: 12, g: 10 },
+        { text: "Mozzarella light (jumatate bilă - 60g) cu roșii și oregano (Caprese light).", kcal: 240, c: 8, p: 16, g: 14 },
+        { text: "2 ouă fierte moi cu câteva ridichi și o mână de spanac proaspăt.", kcal: 220, c: 4, p: 14, g: 12 }
+    ];
+
+    // ── CINĂ B — Vegan / Post (170–280 kcal) — 20 variante ──
+    const dinnerVegan = [
+        { text: "Supă cremă de broccoli cu o linguriță de semințe de susan (300ml).", kcal: 190, c: 20, p: 8, g: 10 },
+        { text: "Humus (50g) cu bastonașe de morcov și castravete (200g legume).", kcal: 220, c: 25, p: 6, g: 10 },
+        { text: "Tofu mătăsos (silken tofu) (100g) cu sos de soia și ceapă verde, servit rece.", kcal: 180, c: 6, p: 12, g: 10 },
+        { text: "Smoothie: lapte migdale neîndulcit (200ml) + pudră proteică vegană (1/2 măsură) + spanac.", kcal: 175, c: 10, p: 15, g: 6 },
+        { text: "Salată de roșii cu castraveți, ceapă verde și 10 măsline kalamata.", kcal: 180, c: 15, p: 3, g: 12 },
+        { text: "Guacamole (din 1/2 avocado mic) servit cu ardei gras tăiat fâșii.", kcal: 210, c: 14, p: 3, g: 16 },
+        { text: "Edamame fierte (100g) stropite cu zeamă de lămâie.", kcal: 190, c: 12, p: 12, g: 6 },
+        { text: "Supă cremă de dovleac (250ml) presărată cu semințe de dovleac (1 lgt).", kcal: 200, c: 24, p: 5, g: 8 },
+        { text: "Salată de crudități (morcov, sfeclă, țelină rase) cu dressing de iaurt de soia.", kcal: 185, c: 26, p: 4, g: 6 },
+        { text: "Rondele de orez expandat (2 buc) cu pastă de măsline (tapenade - 2 lgt).", kcal: 195, c: 22, p: 3, g: 10 },
+        { text: "Ciuperci champignon umplute cu codițele lor și usturoi, coapte la cuptor (150g).", kcal: 170, c: 15, p: 8, g: 5 },
+        { text: "Salată de fasole verde fiartă (150g) cu lămâie, usturoi și 1 lgt ulei măsline.", kcal: 190, c: 16, p: 4, g: 12 },
+        { text: "Iaurt de cocos simplu neîndulcit (150g) cu extract de vanilie și 5 migdale zdrobite.", kcal: 230, c: 14, p: 4, g: 16 },
+        { text: "Budincă de chia: 1 lg semințe chia + 150ml lapte vegetal + scorțișoară.", kcal: 210, c: 18, p: 6, g: 12 },
+        { text: "Supă clară de legume rădăcinoase (fără cartofi) (300ml).", kcal: 170, c: 28, p: 4, g: 4 },
+        { text: "Sote de spanac (150g) cu puțin usturoi și 1 feliuță pâine crocantă (crispbread).", kcal: 195, c: 24, p: 8, g: 6 },
+        { text: "Zoodles (tăiței de zucchini) (150g) cu sos de roșii proaspăt și busuioc.", kcal: 175, c: 22, p: 6, g: 5 },
+        { text: "1 măr copt cu scorțișoară și 3 nuci românești zdrobite.", kcal: 240, c: 30, p: 4, g: 12 },
+        { text: "Bărcuțe de andive umplute cu pate de linte roșie (50g).", kcal: 185, c: 24, p: 8, g: 6 },
+        { text: "Salată de varză albă și roșie (200g) frecată cu zeamă de lămâie și mărar.", kcal: 170, c: 18, p: 4, g: 6 }
+    ];
+
+    // ════════════════════════════════════════════════════════════════
+    // Algoritm Fisher-Yates shuffle + secvențe independente
+    // ════════════════════════════════════════════════════════════════
+    function shuffle(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+    
+    function buildSequence(arr, count) {
+        const result = [];
+        let pool = shuffle(arr);
+        let used = 0;
+        while (result.length < count) {
+            if (used >= pool.length) {
+                const last = result[result.length - 1];
+                do { pool = shuffle(arr); } while (pool[0] === last);
+                used = 0;
+            }
+            result.push(pool[used++]);
+        }
+        return result;
     }
 
-    // ── Plan nutrițional 30 zile ──
-    const proteinsMeat = [
-        "Piept de curcan la grătar (150g)","Somon la cuptor (130g)","Mușchiuleț de porc slab (120g)",
-        "Păstrăv la grătar (150g)","Carne de vită macră sote (120g)","Piept de pui la abur (150g)",
-        "Ficat de pui la tigaie (130g)","Cod file la cuptor (150g)","Pulpă pui dezosată fără piele (130g)","Sardine proaspete la grătar (120g)"
-    ];
-    const proteinsVegan = [
-        "Linte verde scăzută (150g)","Năut sote cu usturoi (150g)","Tofu afumat la grătar (100g)",
-        "Mâncare de mazăre verde (200g)","Fasole neagră picantă (150g)","Ciuperci pleurotus la grătar (200g)",
-        "Edamame și quinoa (150g)","Chifteluțe din soia la cuptor (120g)","Supă deasă de linte roșie (300ml)","Humus (120g)"
-    ];
-    const sides = [
-        "broccoli la abur (200g)","fasole verde sote (200g)","piure de conopidă (150g)","salată de varză albă",
-        "sparanghel la grătar (150g)","zucchini spiralat cu roșii (200g)","salată crudități (morcov, țelină)",
-        "spanac opărit cu usturoi (150g)","orez integral fiert (40g uscat)","cartof dulce la cuptor (100g)"
-    ];
-    const dinners = [
-        "Salată de ton (120g ton în suc propriu) cu mix frunze și lămâie.",
-        "Supă cremă de legume verzi (fără cartof) + 1 lingură semințe de dovleac.",
-        "Omletă din 2 albușuri și 1 ou întreg cu baby spanac.",
-        "Brânză perle light (Cottage 150g) cu ardei gras.",
-        "Iaurt grecesc 2% (150g) cu o mână de afine.",
-        "Jumătate de avocado umplut cu roșii cubulețe și ceapă roșie.",
-        "Salată grecească mică (50g feta light, roșii, castraveți, ierburi).",
-        "Piept de curcan feliat rece (80g) pe pat de rucola.",
-        "Păstrăv afumat (80g) cu salată de castraveți și mărar.",
-        "Supă clară de pui cu rădăcinoase (porție normală)."
-    ];
+    const seq_lunchMeat   = buildSequence(lunchMeat,   30);
+    const seq_lunchVegan  = buildSequence(lunchVegan,  30);
+    const seq_dinnerMeat  = buildSequence(dinnerMeat,  30);
+    const seq_dinnerVegan = buildSequence(dinnerVegan, 30);
 
     const mealData = [];
-    for (let i = 1; i <= 30; i++) {
-        const m = (i-1) % proteinsMeat.length;
-        const v = (i-1) % proteinsVegan.length;
-        const s = (i*2) % sides.length;
-        const d = (i+3) % dinners.length;
+    
+    // Baza calorică și de macronutrienți pentru Carmen
+    // Micul dejun (Shake): ~240 kcal
+    // Gustări (Măr/Afine + BetaHeart + Migdale + Sivera): ~190 kcal total
+    const breakfast = { kcal: 240, c: 22, p: 26, g: 5 };
+    const snacks    = { kcal: 190, c: 24, p: 6, g: 8 };
+
+    for (let i = 0; i < 30; i++) {
+        const lm = seq_lunchMeat[i];
+        const lv = seq_lunchVegan[i];
+        const dm = seq_dinnerMeat[i];
+        const dv = seq_dinnerVegan[i];
+        
         mealData.push({
-            day: i,
-            lunchMeat: `${proteinsMeat[m]} + ${sides[s]} + 1 linguriță ulei măsline extravirgin.`,
-            lunchVegan: `${proteinsVegan[v]} + ${sides[(s+1)%sides.length]} + 1 linguriță ulei măsline.`,
-            dinner: dinners[d]
+            day: i + 1, lunchMeat: lm, lunchVegan: lv, dinnerMeat: dm, dinnerVegan: dv,
+            macroAA: { kcal: breakfast.kcal+snacks.kcal+lm.kcal+dm.kcal, c: breakfast.c+snacks.c+lm.c+dm.c, p: breakfast.p+snacks.p+lm.p+dm.p, g: breakfast.g+snacks.g+lm.g+dm.g },
+            macroAB: { kcal: breakfast.kcal+snacks.kcal+lm.kcal+dv.kcal, c: breakfast.c+snacks.c+lm.c+dv.c, p: breakfast.p+snacks.p+lm.p+dv.p, g: breakfast.g+snacks.g+lm.g+dv.g },
+            macroBA: { kcal: breakfast.kcal+snacks.kcal+lv.kcal+dm.kcal, c: breakfast.c+snacks.c+lv.c+dm.c, p: breakfast.p+snacks.p+lv.p+dm.p, g: breakfast.g+snacks.g+lv.g+dm.g },
+            macroBB: { kcal: breakfast.kcal+snacks.kcal+lv.kcal+dv.kcal, c: breakfast.c+snacks.c+lv.c+dv.c, p: breakfast.p+snacks.p+lv.p+dv.p, g: breakfast.g+snacks.g+lv.g+dv.g }
         });
     }
 
     const daySelector = document.getElementById('daySelector');
-    mealData.forEach(d => {
-        const o = document.createElement('option');
-        o.value = d.day; o.textContent = `Ziua ${d.day}`;
-        daySelector.appendChild(o);
-    });
+    if(daySelector) {
+        mealData.forEach(d => {
+            const o = document.createElement('option');
+            o.value = d.day; o.textContent = `Ziua ${d.day}`;
+            daySelector.appendChild(o);
+        });
+    }
+
+    function macroBar(macro) {
+        const total = macro.c + macro.p + macro.g;
+        const pc = Math.round(macro.c / total * 100);
+        const pp = Math.round(macro.p / total * 100);
+        const pg = 100 - pc - pp;
+        return `<div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+            <span style="font-size:0.8rem;color:rgba(255,255,255,0.7);font-family:'Inter',sans-serif;white-space:nowrap;">~${macro.kcal} kcal</span>
+            <div style="flex:1;min-width:120px;height:8px;border-radius:4px;overflow:hidden;display:flex;background:#374151;">
+                <div style="width:${pc}%;background:#3E92CC;" title="Carbohidrați ${pc}%"></div>
+                <div style="width:${pp}%;background:#2D8A4E;" title="Proteine ${pp}%"></div>
+                <div style="width:${pg}%;background:#C5A021;" title="Grăsimi ${pg}%"></div>
+            </div>
+            <span style="font-size:0.75rem;color:#3E92CC;font-family:'Inter',sans-serif;">C:${pc}%</span>
+            <span style="font-size:0.75rem;color:#4ade80;font-family:'Inter',sans-serif;">P:${pp}%</span>
+            <span style="font-size:0.75rem;color:#C5A021;font-family:'Inter',sans-serif;">G:${pg}%</span>
+        </div>`;
+    }
 
     function displayDay(n) {
         const d = mealData.find(x => x.day == n);
         if (!d) return;
-        document.getElementById('mealDisplayContainer').innerHTML = `
-            <div class="art-card" style="border-top:3px solid var(--color-brand-medium);">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
-                    <h3 style="margin:0;border:none;padding:0;">Meniul Zilei ${d.day}</h3>
-                    <span style="font-size:0.75rem;background:var(--color-brand-light);color:var(--color-brand-medium);padding:0.25rem 0.75rem;border-radius:99px;font-weight:700;font-family:'Inter',sans-serif;">Faza de Reconstrucție</span>
-                </div>
+        const containerId = 'mealDisplayContainer';
+        const container = document.getElementById(containerId);
+        if(!container) return;
 
-                <div class="meal-block" style="border-left-color:var(--color-gold);">
-                    <h4>☀️ Mic Dejun — Ora 08:00</h4>
-                    <p>Shake Herbalife: <strong>2 linguri Formula 1 + 2 linguri PDM</strong> în 300 ml apă.<br>
-                    <em style="font-size:0.82rem;color:var(--color-text-light);">Colostrum se ia pe stomacul gol cu 20 min înainte.</em></p>
-                </div>
-
-                <div class="meal-block" style="border-left-color:#2d6a4f;">
-                    <h4>💚 Gustarea 11:00 — Protocol Colesterol</h4>
-                    <p><strong>1 lingură BetaHeart + 1 lingură PDM + 1 porție Aloe Sivera</strong> în 200 ml apă.</p>
-                </div>
-
-                <div class="meal-block" style="border-left-color:#2d8a4e;">
-                    <h4>🍽️ Prânz — Ora 13:00–14:00</h4>
-                    <div class="dual-grid">
-                        <div class="dual-option">
-                            <span class="dual-badge" style="background:#dcfce7;color:#14532d;">Opțiunea A — Carne/Pește</span>
-                            <p style="font-size:0.88rem;color:var(--color-text-medium);margin:0;">${d.lunchMeat}</p>
+        const stateKey = `carmen_day${n}_`;
+        let lunchChoice  = sessionStorage.getItem(stateKey + 'lunch')  || 'A';
+        let dinnerChoice = sessionStorage.getItem(stateKey + 'dinner') || 'A';
+        
+        function render() {
+            const macroKey = 'macro' + lunchChoice + dinnerChoice;
+            const macro = d[macroKey];
+            const lText  = lunchChoice  === 'A' ? d.lunchMeat.text  : d.lunchVegan.text;
+            const dText  = dinnerChoice === 'A' ? d.dinnerMeat.text : d.dinnerVegan.text;
+            
+            container.innerHTML = `
+                <div class="art-card" style="border-top:3px solid var(--color-brand-medium);">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:0.5rem;">
+                        <h3 style="margin:0;border:none;padding:0;">Meniul Zilei ${d.day}</h3>
+                        <span style="font-size:0.75rem;background:#fee2e2;color:#9b2226;padding:0.25rem 0.75rem;border-radius:99px;font-weight:700;font-family:'Inter',sans-serif;">⚠️ Zero zahăr · Zero alcool · Atenție la oase!</span>
+                    </div>
+                    
+                    <div class="meal-block" style="border-left-color:var(--color-gold);">
+                        <h4>☀️ Mic Dejun — Ora 08:00 — OBLIGATORIU</h4>
+                        <p>Shake Herbalife: <strong>2 linguri Formula 1 + 2 linguri PDM</strong> în 400 ml apă.<br>
+                        <em style="font-size:0.82rem;color:var(--color-text-light);">Asigură proteina necesară reconstrucției de colagen.</em></p>
+                    </div>
+                    
+                    <div class="meal-block" style="border-left-color:#2d6a4f;">
+                        <h4>🍎 Gustarea 1 — Ora 11:00</h4>
+                        <p>1 măr verde mic sau un pumn mic de afine proaspete + <strong>1 porție Aloe Sivera</strong> în apă.</p>
+                    </div>
+                    
+                    <div class="meal-block" style="border-left-color:#2d8a4e;">
+                        <h4>🍽️ Prânz — Ora 13:00–14:00</h4>
+                        <div class="dual-grid">
+                            <div class="dual-option" id="lunch-A-${d.day}" style="cursor:pointer;border:2px solid ${lunchChoice==='A'?'#2d8a4e':'var(--color-border)'};" onclick="setChoice(${d.day},'lunch','A')">
+                                <span class="dual-badge" style="background:${lunchChoice==='A'?'#dcfce7':'#f3f4f6'};color:${lunchChoice==='A'?'#14532d':'#6b7280'};">${lunchChoice==='A'?'✓ ':''}Opțiunea A — Carne/Pește · ${d.lunchMeat.kcal} kcal</span>
+                                <p style="font-size:0.88rem;color:var(--color-text-medium);margin:0.4rem 0 0 0;">${d.lunchMeat.text}</p>
+                            </div>
+                            <div class="dual-option" id="lunch-B-${d.day}" style="cursor:pointer;border:2px solid ${lunchChoice==='B'?'#2d8a4e':'var(--color-border)'};" onclick="setChoice(${d.day},'lunch','B')">
+                                <span class="dual-badge" style="background:${lunchChoice==='B'?'#dcfce7':'#f3f4f6'};color:${lunchChoice==='B'?'#14532d':'#6b7280'};">${lunchChoice==='B'?'✓ ':''}Opțiunea B — Post/Vegan · ${d.lunchVegan.kcal} kcal</span>
+                                <p style="font-size:0.88rem;color:var(--color-text-medium);margin:0.4rem 0 0 0;">${d.lunchVegan.text}</p>
+                            </div>
                         </div>
-                        <div class="dual-option">
-                            <span class="dual-badge" style="background:#f0fdf4;color:#166534;">Opțiunea B — Post/Vegan</span>
-                            <p style="font-size:0.88rem;color:var(--color-text-medium);margin:0;">${d.lunchVegan}</p>
+                    </div>
+                    
+                    <div class="meal-block" style="border-left-color:#2d6a4f;">
+                        <h4>💚 Gustarea 2 — Ora 16:00</h4>
+                        <p><strong>1 lingură BetaHeart</strong> în 250 ml apă + 10 migdale crude + <strong>1 porție Aloe Sivera</strong>.<br>
+                        <em style="font-size:0.82rem;color:var(--color-text-light);">Pentru curățarea vaselor de sânge de colesterol.</em></p>
+                    </div>
+                    
+                    <div class="meal-block" style="border-left-color:var(--color-brand-medium);">
+                        <h4>🌙 Cină — Ora 18:30–19:30</h4>
+                        <div class="dual-grid">
+                            <div class="dual-option" id="dinner-A-${d.day}" style="cursor:pointer;border:2px solid ${dinnerChoice==='A'?'var(--color-brand-medium)':'var(--color-border)'};" onclick="setChoice(${d.day},'dinner','A')">
+                                <span class="dual-badge" style="background:${dinnerChoice==='A'?'#eaf2f8':'#f3f4f6'};color:${dinnerChoice==='A'?'#1B2A4A':'#6b7280'};">${dinnerChoice==='A'?'✓ ':''}Opțiunea A — Proteină animală · ${d.dinnerMeat.kcal} kcal</span>
+                                <p style="font-size:0.88rem;color:var(--color-text-medium);margin:0.4rem 0 0 0;">${d.dinnerMeat.text}</p>
+                            </div>
+                            <div class="dual-option" id="dinner-B-${d.day}" style="cursor:pointer;border:2px solid ${dinnerChoice==='B'?'var(--color-brand-medium)':'var(--color-border)'};" onclick="setChoice(${d.day},'dinner','B')">
+                                <span class="dual-badge" style="background:${dinnerChoice==='B'?'#eaf2f8':'#f3f4f6'};color:${dinnerChoice==='B'?'#1B2A4A':'#6b7280'};">${dinnerChoice==='B'?'✓ ':''}Opțiunea B — Vegan/Post · ${d.dinnerVegan.kcal} kcal</span>
+                                <p style="font-size:0.88rem;color:var(--color-text-medium);margin:0.4rem 0 0 0;">${d.dinnerVegan.text}</p>
+                            </div>
+                        </div>
+                        <em style="font-size:0.82rem;color:var(--color-text-light);display:block;margin-top:0.5rem;">Oprire digestie la 20:00. PRO12+ și Colagen Elixir se iau înainte de culcare. <strong>Hidratare: minim 2,5 L apă pe parcursul zilei!</strong></em>
+                    </div>
+                    
+                    <div style="background:var(--color-navy);border-radius:8px;padding:0.75rem 1rem;margin-top:0.5rem;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;flex-wrap:wrap;gap:0.3rem;">
+                            <span style="font-family:'Inter',sans-serif;font-size:0.8rem;color:rgba(255,255,255,0.7);">Macro zilnic calculat (include toate mesele și gustările bifate)</span>
+                            <span style="font-size:0.72rem;color:rgba(255,255,255,0.5);">☝️ Click pe opțiuni pentru actualizare</span>
+                        </div>
+                        ${macroBar(macro)}
+                        <div style="display:flex;gap:1.5rem;margin-top:0.5rem;flex-wrap:wrap;">
+                            <span style="font-size:0.78rem;color:#3E92CC;font-family:'Inter',sans-serif;">Carbohidrați: <strong>${macro.c}g</strong></span>
+                            <span style="font-size:0.78rem;color:#4ade80;font-family:'Inter',sans-serif;">Proteine: <strong>${macro.p}g</strong></span>
+                            <span style="font-size:0.78rem;color:#C5A021;font-family:'Inter',sans-serif;">Grăsimi: <strong>${macro.g}g</strong></span>
                         </div>
                     </div>
                 </div>
-
-                <div class="meal-block" style="border-left-color:#2d6a4f;">
-                    <h4>💚 Gustarea 15:30–16:00 — Protocol Colesterol</h4>
-                    <p><strong>1 lingură BetaHeart + 1 lingură PDM + 1 porție Aloe Sivera</strong> în 200 ml apă.</p>
-                </div>
-
-                <div class="meal-block" style="border-left-color:var(--color-brand-medium);">
-                    <h4>🌙 Cină — Ora 18:30–19:30</h4>
-                    <p>${d.dinner}<br>
-                    <em style="font-size:0.82rem;color:var(--color-text-light);">Oprirea digestiei la 20:00 permite regenerarea vasculară nocturnă. PRO12+ se ia înainte de culcare.</em></p>
-                </div>
-
-                <div style="background:var(--color-navy);border-radius:8px;padding:0.65rem 1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;margin-top:0.5rem;">
-                    <span style="font-family:'Inter',sans-serif;font-size:0.8rem;color:rgba(255,255,255,0.7);">Calcul macro estimat:</span>
-                    <span style="font-family:'Inter',sans-serif;font-size:0.88rem;font-weight:700;color:#4ade80;">~1180 kcal · 40% C · 30% P · 30% G</span>
-                </div>
-            </div>
-        `;
+            `;
+        }
+        
+        window.setChoice = function(day, meal, choice) {
+            if (meal === 'lunch')  { lunchChoice  = choice; sessionStorage.setItem(stateKey + 'lunch',  choice); }
+            if (meal === 'dinner') { dinnerChoice = choice; sessionStorage.setItem(stateKey + 'dinner', choice); }
+            render();
+        };
+        
+        render();
     }
 
-    daySelector.addEventListener('change', e => displayDay(parseInt(e.target.value)));
-    displayDay(1);
+    if(daySelector) {
+        daySelector.addEventListener('change', e => displayDay(parseInt(e.target.value)));
+        displayDay(1);
+    }
+	    // Configurare comună pentru grafice
+    const chartOptionsBase = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: {
+                    font: { family: 'Inter', size: 12 }
+                }
+            }
+        }
+    };
+
+ // Variabile globale pentru a verifica daca graficele au fost desenate
+    let chartsRendered = false;
+
+    function renderCharts() {
+        if (chartsRendered) return; // Evită desenarea repetată
+
+        const ctxDietEl = document.getElementById('dietFailureChart');
+        const ctxNutriEl = document.getElementById('nutritionComparisonChart');
+        
+        // Verifică dacă elementele există înainte de a desena
+        if (!ctxDietEl || !ctxNutriEl) return;
+
+        const ctxDiet = ctxDietEl.getContext('2d');
+        const ctxNutri = ctxNutriEl.getContext('2d');
+
+        new Chart(ctxDiet, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    'Lipsa timpului de preparare', 
+                    'Oboseala decizională (seara)', 
+                    'Mediul toxic (ispite la birou)', 
+                    'Poftele emoționale / Foamea'
+                ],
+                datasets: [{
+                    data: [40, 30, 15, 15],
+                    backgroundColor: ['#0f766e', '#2dd4bf', '#f97316', '#3b82f6'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                ...chartOptionsBase,
+                cutout: '65%',
+                plugins: {
+                    ...chartOptionsBase.plugins,
+                    legend: {
+                        position: window.innerWidth < 768 ? 'bottom' : 'right'
+                    }
+                }
+            }
+        });
+
+        new Chart(ctxNutri, {
+            type: 'bar',
+            data: {
+                labels: ['Sandwich / Patiserie', 'Shake Funcțional'],
+                datasets: [
+                    {
+                        label: 'Proteine esențiale (g)',
+                        data: [6, 24],
+                        backgroundColor: '#0ea5e9',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Zaharuri simple (g)',
+                        data: [35, 3],
+                        backgroundColor: '#f97316',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Vitamine/Minerale (%)',
+                        data: [10, 100],
+                        backgroundColor: '#14b8a6',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                ...chartOptionsBase,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: '#f1f5f9', drawBorder: false },
+                        ticks: { font: { family: 'Inter' } }
+                    },
+                    x: {
+                        grid: { display: false, drawBorder: false },
+                        ticks: { font: { family: 'Inter', weight: '600' } }
+                    }
+                }
+            }
+        });
+        
+        chartsRendered = true; // Marchează că au fost desenate
+    }
 </script>
 
 <script>
