@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echilibrul perfect: mâncare adevărată și tehnologie nutrițională · Nutrisib</title>
+    <meta name="description" content="Adevărul despre nutriția funcțională. Cum să obții claritate, energie și longevitate folosind instrumente inteligente, fără a renunța la bucuria mâncării adevărate.">
+    <meta name="author" content="dr.ing. Radu Pascu">
+    <meta property="og:title" content="Echilibrul perfect: mâncare adevărată și tehnologie nutrițională">
+    <meta property="og:description" content="Află cum să integrezi inteligent nutriția funcțională pentru a trece de la a repara la a reconstrui.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://nutrisib.club/blog/nutritie-functionala.html">
+    <meta property="og:image" content="https://nutrisib.club/imagini/nutritie_functionala.jpg">
+    <meta property="og:locale" content="ro_RO">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* ── Layout charturilor duale ── */
+        .charts-duo {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin: 1.25rem 0 .5rem;
+        }
+        .charts-duo .chart-block {
+            flex: 1;
+            min-width: 240px;
+        }
+        .charts-duo .chart-block h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: .78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            color: var(--color-navy);
+            margin: 0 0 .6rem 0;
+            border: none;
+            padding: 0;
+        }
+        .chart-canvas-wrap {
+            position: relative;
+            width: 100%;
+            height: 240px;
+        }
+        .copyright-tag {
+            font-size: .72rem;
+            color: var(--color-text-light);
+            text-align: center;
+            margin-top: .4rem;
+            font-style: italic;
+        }
+
+        /* ── Tabel medicina 3.0 ── */
+        .medicina-layout {
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin: 1rem 0 1.25rem;
+        }
+        .medicina-layout .med-img {
+            flex: 0 0 auto;
+            width: min(28%, 200px);
+        }
+        .medicina-layout .med-img img {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 14px rgba(0,0,0,.15);
+            display: block;
+        }
+        .medicina-layout .med-img figcaption {
+            font-size: .72rem;
+            color: var(--color-text-light);
+            font-style: italic;
+            margin: .4rem 0 0;
+            text-align: center;
+            line-height: 1.4;
+        }
+        .medicina-layout .med-table {
+            flex: 1;
+            min-width: 260px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .medicina-layout .med-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .78rem;
+        }
+        .medicina-layout .med-table th {
+            padding: .4rem .6rem;
+            text-align: left;
+            font-weight: 700;
+            background: var(--color-navy);
+            color: white;
+        }
+        .medicina-layout .med-table th:first-child { border-radius: 6px 0 0 0; }
+        .medicina-layout .med-table th:last-child  { border-radius: 0 6px 0 0; }
+        .medicina-layout .med-table td {
+            padding: .38rem .5rem;
+            border-bottom: 1px solid var(--color-border);
+            line-height: 1.45;
+        }
+        .medicina-layout .med-table tr:last-child td { border-bottom: none; }
+        .medicina-layout .med-table tr:nth-child(even) { background: var(--color-brand-light, #eaf2f8); }
+        .medicina-layout .med-table td:first-child { font-weight: 700; color: var(--color-navy); }
+        .medicina-layout .med-table td:last-child { color: #78350f; font-weight: 600; }
+        .medicina-layout .med-table td:not(:first-child):not(:last-child) { color: var(--color-text-medium); }
+
+        /* ── Piloni Medicina 3.0 ── */
+        .piloni-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: .75rem;
+            margin: 1rem 0;
+        }
+        .pilon-card {
+            background: white;
+            border-radius: 8px;
+            padding: .85rem 1rem;
+            border-left: 4px solid var(--color-border);
+        }
+        .pilon-card .pilon-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: .76rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            margin: 0 0 .35rem;
+        }
+        .pilon-card p {
+            font-size: .84rem;
+            color: var(--color-text-medium);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* ── Highlight box ── */
+        .highlight-box {
+            background: linear-gradient(to right, rgba(197,160,33,.1), rgba(197,160,33,.03));
+            border-left: 4px solid var(--color-gold, #C5A021);
+            border-radius: 0 8px 8px 0;
+            padding: .75rem 1rem;
+            margin-top: .75rem;
+        }
+        .highlight-box p {
+            font-size: .86rem;
+            color: var(--color-text-medium);
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* ── Cronologie zi ── */
+        .timeline {
+            margin: 1rem 0 0;
+            border-left: 3px solid var(--color-brand-light, #eaf2f8);
+            padding-left: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        .timeline-item {}
+        .timeline-item .t-time {
+            font-family: 'Montserrat', sans-serif;
+            font-size: .75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .07em;
+            color: var(--color-brand-medium);
+            margin: 0 0 .2rem;
+        }
+        .timeline-item .t-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: .88rem;
+            font-weight: 700;
+            color: var(--color-navy);
+            margin: 0 0 .35rem;
+        }
+        .timeline-item p {
+            font-size: .88rem;
+            color: var(--color-text-medium);
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        /* ── Lista siguranță ── */
+        .safety-list {
+            list-style: none;
+            padding: 0;
+            margin: .75rem 0 0;
+            display: flex;
+            flex-direction: column;
+            gap: .75rem;
+        }
+        .safety-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: .75rem;
+            font-size: .88rem;
+            color: var(--color-text-medium);
+            line-height: 1.65;
+        }
+        .safety-list li::before {
+            content: "✓";
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--color-brand-light, #eaf2f8);
+            color: var(--color-brand-medium);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: .8rem;
+            margin-top: .1rem;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .container-main { padding: 0 .5rem; }
+            .hero-card { padding: 1.5rem 1rem; border-radius: 8px; }
+            .hero-title { font-size: 1.5rem; }
+            .hero-subtitle { font-size: .9rem; }
+            .art-card { padding: .9rem .85rem; }
+            .section-anchor-header h2 { font-size: 1rem; }
+            .charts-duo { flex-direction: column; gap: 1.25rem; }
+            .charts-duo .chart-block { min-width: 0; width: 100%; }
+            .chart-canvas-wrap { height: 200px; }
+            .medicina-layout { flex-direction: column; gap: 1rem; }
+            .medicina-layout .med-img { width: 100%; max-width: 280px; margin: 0 auto; }
+            .medicina-layout .med-table { width: 100%; min-width: 0; }
+            .medicina-layout .med-table table { font-size: .72rem; min-width: 420px; }
+            .piloni-grid { grid-template-columns: 1fr; gap: .6rem; }
+            .timeline { padding-left: 1rem; gap: 1rem; }
+            .timeline-item .t-time { font-size: .7rem; }
+            .timeline-item .t-title { font-size: .84rem; }
+            .timeline-item p { font-size: .84rem; }
+            .safety-list li { font-size: .84rem; }
+            .highlight-box { padding: .65rem .85rem; }
+            .highlight-box p { font-size: .82rem; }
+            .cta-card { padding: 1.5rem 1rem; }
+            .cta-card h3 { font-size: 1.35rem; }
+            .cta-card p { font-size: .95rem; }
+        }
+        @media (max-width: 480px) {
+            .hero-title { font-size: 1.25rem; }
+            .hero-subtitle { font-size: .83rem; }
+            .art-card { padding: .75rem .7rem; }
+            .piloni-grid { grid-template-columns: 1fr; }
+            .pilon-card { padding: .7rem .85rem; }
+            .pilon-card p { font-size: .8rem; }
+            .medicina-layout .med-table table { font-size: .68rem; min-width: 380px; }
+            .chart-canvas-wrap { height: 180px; }
+            .timeline { padding-left: .85rem; }
+            .btn-pearl { padding: .65rem 1.25rem; font-size: .85rem; }
+            .safety-list li { font-size: .8rem; gap: .6rem; }
+            .safety-list li::before { width: 1.3rem; height: 1.3rem; font-size: .72rem; }
+        }
+    </style>
+</head>
+<body id="top">
+<div class="container-main">
+
+    <header class="nav-bar">
+        <a href="../index.html" class="nav-brand">
+            <img src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="Sigla Nutrisib" class="logo-image" onerror="this.style.display='none'">
+        </a>
+        <div class="nav-links">
+            <a href="../index.html">Acasă</a>
+            <a href="../index.html#povestea">Povestea</a>
+            <a href="../index.html#metoda">Metoda</a>
+            <a href="../blog/index.html" class="active">Blog</a>
+            <a href="../contact.html">Contact</a>
+        </div>
+        <button class="mobile-menu-btn" onclick="const nav=document.querySelector('.nav-links');nav.style.display=(nav.style.display==='flex'?'none':'flex')">☰</button>
+    </header>
+
+    <div class="hero-card">
+        <div class="hero-content">
+            <h1 class="hero-title">Instrumente, nu restricții</h1>
+            <p class="hero-subtitle">Adevărul despre nutriția funcțională și cum să redevii CEO-ul propriei ființe</p>
+        </div>
+    </div>
+
+    <div class="blog-filter-bar" style="position:sticky;top:0;z-index:100;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch">
+        <div class="blog-filter-tabs" style="flex-wrap:nowrap;min-width:max-content">
+            <a href="#perspectiva" class="blog-filter-tab active" style="color:var(--color-navy);text-decoration:none">Perspectiva</a>
+            <a href="#stiinta"     class="blog-filter-tab"        style="color:#2d8a4e;text-decoration:none">Medicina 3.0</a>
+            <a href="#arhitectura" class="blog-filter-tab"        style="color:#e53e3e;text-decoration:none">Arhitectura</a>
+            <a href="#siguranta"   class="blog-filter-tab"        style="color:#3E92CC;text-decoration:none">Siguranța clinică</a>
+        </div>
+    </div>
+
+    <div style="padding:0 0 1rem">
+
+        <!-- ═════════ PERSPECTIVA ═════════ -->
+        <section id="perspectiva" class="content-section">
+            <div class="section-anchor-header" style="border-left-color:var(--color-navy)">
+                <h2>Mâncarea este emoție, soluțiile noastre sunt instrumente</h2>
+                <a href="#top" class="back-top">↑ Sus</a>
+            </div>
+
+            <div class="art-card">
+                <p>„Vreau să mănânc mâncare adevărată, nu pot concepe să trăiesc pe termen lung consumând prafuri." Este probabil cea mai sinceră, naturală și corectă reacție pe care o poți avea. Mâncarea înseamnă tradiție, familie și bucurie. Nimeni nu ar trebui să trăiască exclusiv din shake-uri.</p>
+                <p>Nevoia fundamentală nu este doar să slăbești, ci să înțelegi „de ce"-ul din spatele stării tale actuale. Cauți claritate, energie, longevitate și îți dorești să redevii CEO-ul propriei tale ființe. Simți că a sosit momentul să treci de la a „repara" la a „reconstrui" — iar asta presupune o arhitectură interioară nouă, bazată pe știință, logică și eficiență.</p>
+                <p>Problema apare atunci când ritmul vieții moderne te forțează să iei decizii alimentare proaste. Principalul inamic al unui program de sănătate nu este lipsa de voință, ci <strong>fricțiunea</strong> — timpul de pregătire și oboseala decizională. Când ești la birou, stresat, o masă rapidă înseamnă adesea covrigi sau mâncare procesată. Aici intervin soluțiile funcționale: nu ca să înlocuiască prânzul tău delicios de duminică, ci ca să te salveze într-o seară târzie când ești prea obosit să mai gătești inteligent.</p>
+            </div>
+
+            <!-- Card dublu chart -->
+            <div class="art-card">
+                <h3>De ce eșuează planurile alimentare și ce oferă alternativa funcțională</h3>
+                <p>Două perspective complementare: factorii care sabotează dietele clasice și diferența reală de densitate nutrițională față de o gustare improvizată de birou.</p>
+
+                <div class="charts-duo">
+                    <div class="chart-block">
+                        <h4>Cauzele abandunului dietetic</h4>
+                        <div class="chart-canvas-wrap">
+                            <canvas id="dietFailureChart"></canvas>
+                        </div>
+                        <p class="copyright-tag">© dr.ing. Radu Pascu — 2025</p>
+                    </div>
+                    <div class="chart-block">
+                        <h4>Densitate nutrițională: 250 calorii comparate</h4>
+                        <div class="chart-canvas-wrap">
+                            <canvas id="nutritionComparisonChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═════════ MEDICINA 3.0 ═════════ -->
+        <section id="stiinta" class="content-section">
+            <div class="section-anchor-header" style="border-left-color:#2d8a4e">
+                <h2>Medicina 3.0: adevărul despre prafuri</h2>
+                <a href="#top" class="back-top">↑ Sus</a>
+            </div>
+
+            <div class="art-card">
+                <p>În medicina 1.0 și 2.0 tratam bolile după ce apăreau. Medicina 3.0 pune accent pe prevenție, pe prelungirea perioadei de vitalitate și pe calitatea vieții. Aici, nutriția nu mai este o ghicitoare, ci o știință a preciziei.</p>
+
+                <h4>Nutriție concentrată prin liofilizare</h4>
+                <p>Să clarificăm un mit: ceea ce adesea numim peiorativ „praf" este, în realitate, o capodoperă a tehnologiei alimentare. Pudra nu este ceva chimic — este mâncare reală din care s-a extras apa printr-un proces blând numit liofilizare, păstrând absolut toate vitaminele și mineralele intacte. Gândește-te la ea ca la hrana cosmonauților: pură, densă și extrem de eficientă.</p>
+
+                <h4>Problema bugetului caloric</h4>
+                <p>Când corpul tău are nevoie să slăbească sau să iasă din starea de inflamație, necesită doze uriașe de nutrienți, dar cu un buget caloric foarte restrâns. Să obții 25g de proteine de înaltă calitate strict din alimente clasice, fără să adaugi grăsimi sau carbohidrați nedoriți, este extrem de dificil pe fugă. Substituentul de masă oferă precizie farmaceutică fără surprize ascunse.</p>
+            </div>
+
+            <div class="art-card" style="border-top:3px solid var(--color-gold,#C5A021);">
+                <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap;">
+                    <span style="font-size:1.5rem">🔬</span>
+                    <div>
+                        <h3 style="margin:0;border:none;padding:0;font-size:1rem;">Medicina 3.0 — de ce biomarkerii sunt fundamentali</h3>
+                        <p style="margin:0;font-size:.78rem;color:var(--color-text-light);font-style:italic;">Paradigma care tratează <em>pacientul</em>, nu boala</p>
+                    </div>
+                </div>
+
+                <div class="medicina-layout">
+                    <figure class="med-img">
+                        <img src="https://mcsorengo.ch/wp-content/uploads/2025/10/Prestazioni-medicina-interna_gestione-patologie-croniche.jpg"
+                             onerror="this.onerror=null;this.src='https://placehold.co/400x500/1B2A4A/C5A021?text=Medicina+3.0';"
+                             alt="Medicina 3.0 — paradigma preventivă personalizată"/>
+                        <figcaption>Medicina 3.0 — evaluare holistică, tratament personalizat</figcaption>
+                    </figure>
+                    <div class="med-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:20%">Dimensiune</th>
+                                    <th style="width:25%">🏥 Med. 1.0</th>
+                                    <th style="width:25%">💊 Med. 2.0</th>
+                                    <th style="width:30%">🔬 Med. 3.0</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Abordare</td>
+                                    <td>Empirică, pe simptome observabile</td>
+                                    <td>Protocol standard pe diagnostic de boală</td>
+                                    <td>Protocol personalizat per pacient, nu per boală</td>
+                                </tr>
+                                <tr>
+                                    <td>Timing intervenție</td>
+                                    <td>Când simptomele devin evidente</td>
+                                    <td>Când diagnosticul este confirmat</td>
+                                    <td>Înainte de boală — prevenție activă pe date obiective</td>
+                                </tr>
+                                <tr>
+                                    <td>Instrumentul central</td>
+                                    <td>Examen clinic vizual</td>
+                                    <td>Analize standard + ghiduri de tratament</td>
+                                    <td>Biomarkeri extinși + date longitudinale + context de viață</td>
+                                </tr>
+                                <tr>
+                                    <td>Valori de referință</td>
+                                    <td>Nu există sistematizate</td>
+                                    <td>„Normal" = intervalul populației generale</td>
+                                    <td>„Optim" = intervalul funcțional al acestui pacient</td>
+                                </tr>
+                                <tr>
+                                    <td>Tratamentul</td>
+                                    <td>Remedii empirice, plante</td>
+                                    <td>Protocol universal: <em>aceeași boală = același medicament</em></td>
+                                    <td>Personalizat: <em>același diagnostic, tratamente diferite per pacient</em></td>
+                                </tr>
+                                <tr>
+                                    <td>Rolul pacientului</td>
+                                    <td>Pasiv — urmează indicațiile</td>
+                                    <td>Semi-activ — se conformează protocolului</td>
+                                    <td>Activ — CEO al propriei biologii, decizii informate</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="piloni-grid">
+                    <div class="pilon-card" style="border-left-color:#e53e3e;">
+                        <p class="pilon-label" style="color:#e53e3e;">01 · Detectare precoce</p>
+                        <p>Biomarkerii identifică disfuncțiile <strong>cu ani înainte</strong> ca simptomele să apară. Medicina 3.0 intervine în faza reversibilă, nu după ce organele sunt lezate.</p>
+                    </div>
+                    <div class="pilon-card" style="border-left-color:var(--color-gold,#C5A021);">
+                        <p class="pilon-label" style="color:var(--color-gold,#C5A021);">02 · Evaluare holistică</p>
+                        <p>Niciun biomarker nu există în izolare. Un LDL crescut interpretat fără HDL, trigliceride, inflamație (hs-CRP) și context metabolic nu spune nimic relevant.</p>
+                    </div>
+                    <div class="pilon-card" style="border-left-color:#7c3aed;">
+                        <p class="pilon-label" style="color:#7c3aed;">03 · Terapie personalizată</p>
+                        <p>Două persoane cu același diagnostic pot necesita intervenții complet diferite. Medicina 3.0 adresează <em>persoana din spatele diagnosticului</em>, nu diagnosticul.</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <p><strong style="color:var(--color-navy);">De ce contează acest ghid pentru tine:</strong> Valorile din paginile următoare sunt instrumente de navigare biologică, nu simple cifre. Înțelegând ce măsoară fiecare parametru, poți purta o conversație informată cu medicul tău și poți lua decizii active despre propria sănătate — esența Medicinei 3.0.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═════════ ARHITECTURA ═════════ -->
+        <section id="arhitectura" class="content-section">
+            <div class="section-anchor-header" style="border-left-color:#e53e3e">
+                <h2>Arhitectura zilei tale (modelul CELOS)</h2>
+                <a href="#top" class="back-top">↑ Sus</a>
+            </div>
+
+            <div class="art-card">
+                <p>Iată cum arată în practică promisiunea că nu vei renunța la mâncare. Acest program combină inteligent plăcerea gustului cu precizia științifică a suplimentării moderne, oferind o hartă logică și personalizată a teritoriului tău interior.</p>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <p class="t-time">07:00 — 09:00</p>
+                        <p class="t-title">Startul strategic</p>
+                        <p>Obiectivul este oprirea catabolismului nocturn și stabilizarea glicemiei. Dacă ești în grabă, un shake funcțional (gata în 2 minute) este ideal. Dacă ai timp, o omletă bogată cu legume proaspete este soluția clasică.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <p class="t-time">11:00 / 16:00</p>
+                        <p class="t-title">Scutul anti-fricțiune (la birou)</p>
+                        <p>Aici scade glicemia, apare stresul, și patiseria devine irezistibilă. Intervenția rapidă printr-o supă caldă instant sau un baton proteic premium previne deciziile alimentare luate pe fond de oboseală.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <p class="t-time">12:30 — 14:30</p>
+                        <p class="t-title">Masa ancoră</p>
+                        <p>Acesta este momentul de bucurie a gustului, de digestie clasică și de ancorare. Regula de aur: <strong>40% carbohidrați complecși</strong> (legume colorate), <strong>30% proteine</strong> (carne curată, pește, ouă) și <strong>30% grăsimi sănătoase</strong>. Mâncare reală care hrănește corpul și aduce satisfacție psihologică.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <p class="t-time">19:00 — 20:00</p>
+                        <p class="t-title">Descărcarea digestivă</p>
+                        <p>Seara, metabolismul încetinește. Înlocuirea cinei grele cu un shake sau o supă funcțională oferă toți nutrienții esențiali, punând zero greutate pe stomac și permițând corpului să se vindece noaptea pentru un somn profund și reparator.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═════════ SIGURANȚA ═════════ -->
+        <section id="siguranta" class="content-section">
+            <div class="section-anchor-header" style="border-left-color:#3E92CC">
+                <h2>Siguranță la nivel clinic, nu doar de supermarket</h2>
+                <a href="#top" class="back-top">↑ Sus</a>
+            </div>
+
+            <div class="art-card">
+                <p>Adesea considerăm că tot ce este la raionul de fructe și legume este 100% sigur și superior „suplimentelor". Realitatea din secolul 21 este mult mai complexă. Produsele pe care le integrăm în arhitectura noastră trec prin standarde de puritate la care mâncarea obișnuită rareori ajunge.</p>
+
+                <ul class="safety-list">
+                    <li><strong>Standarde clinice și omologare legislativă:</strong> Nu sunt simple „pudre pentru sportivi", ci substituenți de masă medicalizați, aprobați legislativ să ofere întregul spectru de macro și micronutrienți vitali.</li>
+                    <li><strong>Fără metale grele:</strong> Spre deosebire de o roșie sau o bucată de pui a căror trasabilitate se oprește la raft, aceste formule trec prin teste riguroase de puritate pentru a garanta absența toxinelor, a pesticidelor și a metalelor grele.</li>
+                    <li><strong>Biodisponibilitate maximă:</strong> Nutrienții din formulele premium liofilizate sunt concepuți pentru a se absorbi cu o rată superioară direct la nivel celular, fără a genera inflamație la nivelul tractului intestinal.</li>
+                </ul>
+            </div>
+
+            <div class="art-card" style="text-align:center;">
+                <h3 style="border:none;">Păstrăm bucuria, eliminăm haosul</h3>
+                <p style="max-width:600px;margin:.75rem auto 0;">Alegând să folosești instrumentele nutriției funcționale în momentele critice ale zilei, îți cumperi dreptul de a te bucura cu adevărat — fără vinovăție și fără consecințe metabolice — de o masă excepțională la prânz. Este timpul să investești în tine.</p>
+            </div>
+        </section>
+
+        <!-- ═════════ CTA ═════════ -->
+        <section id="contact" class="cta-card">
+            <h3>Ești pregătit să redevii CEO-ul propriei ființe?</h3>
+            <p>Trecerea de la a „repara" la a „reconstrui" începe cu o hartă clară și un partener de încredere cu care să rezonezi. Programează o discuție de explorare gratuită cu un expert Nutrisib pentru a vedea cum putem integra instrumentele medicinei 3.0 în arhitectura vieții tale.</p>
+            <a href="https://tinyurl.com/ProgramareServicii" class="btn-pearl">Programează acum un audit de sistem!</a>
+        </section>
+
+    </div>
+
+    <div id="footer-placeholder"></div>
+</div>
+
+<script>
+    // Navigare sticky
+    var anchors = ['perspectiva', 'stiinta', 'arhitectura', 'siguranta'];
+    window.addEventListener('scroll', function() {
+        var cur = anchors[0];
+        anchors.forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el && window.scrollY >= el.offsetTop - 90) cur = id;
+        });
+        document.querySelectorAll('.blog-filter-tab').forEach(function(a) {
+            a.classList.toggle('active', a.getAttribute('href') === '#' + cur);
+        });
+    }, {passive: true});
+
+    // Chartjs common options
+    const baseOpts = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { labels: { font: { family: 'Inter', size: 11 } } }
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // Chart 1: cauze abandon
+        new Chart(document.getElementById('dietFailureChart').getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    'Lipsa timpului de preparare',
+                    'Oboseala decizională (seara)',
+                    'Mediul toxic (ispite la birou)',
+                    'Poftele emoționale / Foamea'
+                ],
+                datasets: [{
+                    data: [40, 30, 15, 15],
+                    backgroundColor: ['#0f766e', '#2dd4bf', '#f97316', '#3b82f6'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                ...baseOpts,
+                cutout: '62%',
+                plugins: {
+                    ...baseOpts.plugins,
+                    legend: { position: 'bottom', labels: { font: { family: 'Inter', size: 10 }, boxWidth: 12, padding: 8 } }
+                }
+            }
+        });
+
+        // Chart 2: densitate nutrițională
+        new Chart(document.getElementById('nutritionComparisonChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Sandwich / Patiserie', 'Shake Funcțional'],
+                datasets: [
+                    { label: 'Proteine esențiale (g)', data: [6, 24],  backgroundColor: '#0ea5e9', borderRadius: 4 },
+                    { label: 'Zaharuri simple (g)',    data: [35, 3],  backgroundColor: '#f97316', borderRadius: 4 },
+                    { label: 'Vitamine/Minerale (%)',  data: [10, 100], backgroundColor: '#14b8a6', borderRadius: 4 }
+                ]
+            },
+            options: {
+                ...baseOpts,
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { family: 'Inter', size: 10 } } },
+                    x: { grid: { display: false },                      ticks: { font: { family: 'Inter', size: 10, weight: '600' } } }
+                },
+                plugins: {
+                    ...baseOpts.plugins,
+                    legend: { position: 'bottom', labels: { font: { family: 'Inter', size: 10 }, boxWidth: 12, padding: 8 } }
+                }
+            }
+        });
+    });
+</script>
+
+<script>fetch('https://nutrisib.club/footer.html').then(function(r){return r.text()}).then(function(d){var c=document.getElementById('footer-placeholder');if(c)c.innerHTML=d;}).catch(function(e){console.error(e)});</script>
+<script src="https://nutrisib.club/script_protect.js" defer></script>
+
+</body>
+</html>
