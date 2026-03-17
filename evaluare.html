@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <title>Calibrarea sistemului biologic | Evaluare C.E.L.O.S. - NutriSib</title>
     <meta name="description" content="Treceți de la presupuneri la date concrete. La NutriSib, folosim metoda C.E.L.O.S. pentru a crea harta completă a performanței dumneavoastră prin analiză structurală (BIA) și informațională (biorezonanță).">
@@ -19,146 +20,745 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="celos.css">
 
+    <style>
+        /* ─────────────────────────────────────────────
+           STILURI INTERNE (Evaluare CELOS)
+           ───────────────────────────────────────────── */
+        
+        body { padding: 0 !important; margin: 0 !important; }
+        .page-wrapper { width: 100%; max-width: 100%; overflow-x: hidden; }
+
+        .container-xl {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* ── NAVBAR ── */
+        .navbar-wrap {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(248,250,252,0.96);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            box-shadow: 0 1px 12px rgba(0,0,0,0.07);
+            transition: box-shadow 0.3s;
+        }
+        .navbar-wrap.scrolled { box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+        .navbar-inner {
+            max-width: 1320px; margin: 0 auto;
+            padding: 0.7rem 2rem;
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+        }
+        .nav-brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+        .nav-brand-name { font-size: 1rem; font-weight: 800; color: var(--color-navy); }
+        .nav-brand-tagline { font-size: 0.6rem; color: var(--color-brand-medium); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+        
+        .nav-links { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+        .nav-links a {
+            text-decoration: none; color: var(--color-text-medium);
+            font-weight: 500; font-size: 0.87rem; padding: 0.4rem 0.8rem;
+            border-radius: 6px; transition: all 0.2s; white-space: nowrap;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--color-navy); background: var(--color-brand-light); font-weight: 700;
+        }
+        
+        /* ── HERO ── */
+        .hero-full {
+            background: linear-gradient(160deg, #061220 0%, #0A2463 45%, #1B3A6B 100%);
+            position: relative; overflow: hidden; padding: 5rem 2rem 4.5rem;
+        }
+        .hero-full::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 55% 60% at 75% 40%, rgba(62,146,204,0.18) 0%, transparent 65%),
+                        radial-gradient(ellipse 35% 50% at 5% 85%, rgba(197,160,33,0.10) 0%, transparent 55%);
+            pointer-events: none;
+        }
+        .hero-full::after {
+            content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+            height: 70px; background: var(--color-pearl);
+            clip-path: ellipse(55% 100% at 50% 100%);
+        }
+        .hero-inner {
+            max-width: 1320px; margin: 0 auto;
+            position: relative; z-index: 2;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+        }
+        .hero-eyebrow {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(62,146,204,0.15); border: 1px solid rgba(62,146,204,0.3);
+            border-radius: 50px; padding: 0.3rem 0.9rem;
+            font-size: 0.72rem; font-weight: 700; color: var(--color-brand-medium);
+            text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 1.25rem;
+        }
+        .hero-title-xl {
+            font-family: 'Montserrat', sans-serif; font-size: 3.5rem; font-weight: 900;
+            color: #ffffff; line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 0.75rem;
+            text-transform: uppercase;
+        }
+        .hero-sub {
+            font-family: 'Lora', serif; font-style: italic;
+            font-size: 1.3rem; color: rgba(255,255,255,0.85); line-height: 1.65; margin: 0 0 1rem;
+            max-width: 850px;
+        }
+
+        /* ── SECȚIUNI & TEXT ── */
+        .section-fw { padding: 4.5rem 0; }
+        .section-fw-alt { background: var(--color-brand-light); }
+        .section-hdr { text-align: center; margin-bottom: 3rem; }
+        .section-eyebrow {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: var(--color-brand-light); color: var(--color-navy);
+            border: 1px solid #c3d4e8; border-radius: 50px;
+            padding: 0.28rem 0.9rem; font-size: 0.7rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem;
+        }
+        .section-eyebrow.gold { background: rgba(197,160,33,0.12); color: #8a6e12; border-color: rgba(197,160,33,0.3); }
+        .section-title-xl {
+            font-family: 'Montserrat', sans-serif; font-size: 2rem; font-weight: 800;
+            color: var(--color-navy); letter-spacing: -0.02em; line-height: 1.2; margin: 0 0 0.75rem;
+        }
+        .section-title-xl.white { color: white; }
+        .section-desc-xl {
+            font-size: 1rem; color: var(--color-text-light); line-height: 1.75; max-width: 800px; margin: 0 auto;
+        }
+        .title-rule {
+            width: 52px; height: 4px; background: linear-gradient(90deg, var(--color-navy), var(--color-brand-medium));
+            border-radius: 4px; margin: 0.75rem auto 0;
+        }
+        .title-rule.gold { background: linear-gradient(90deg, var(--color-gold), #e6c254); }
+
+        .prose-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-card);
+            border-top: 4px solid var(--color-brand-medium);
+        }
+        .prose-container p {
+            font-size: 1.05rem;
+            color: var(--color-text-medium);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        .prose-container strong { color: var(--color-navy); font-weight: 700; }
+
+        /* ── GRID PROTOCOL (Cu Splash Images Unsplash) ── */
+        .supl-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-top: 3rem; }
+        .supl-card {
+            background: white; border-radius: var(--radius-card); box-shadow: var(--shadow-card);
+            overflow: hidden; transition: all 0.3s;
+            display: flex; flex-direction: column;
+        }
+        .supl-card:hover { transform: translateY(-4px); box-shadow: 0 14px 35px rgba(0,0,0,0.12); }
+        
+        .supl-card-img-wrapper {
+            width: 100%;
+            height: 180px; 
+            overflow: hidden;
+            border-bottom: 3px solid rgba(197,160,33,0.3); 
+        }
+        .supl-card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .supl-card-head {
+            padding: 1.25rem 1.5rem;
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .supl-card-head.c { background: linear-gradient(90deg, #0A2463, #1a3a7a); }
+        .supl-card-head.e { background: linear-gradient(90deg, #0A2463, #0d4a6b); }
+        .supl-card-head.l { background: linear-gradient(90deg, #0A2463, #1a4a5a); }
+        .supl-card-head.os { background: linear-gradient(90deg, #0A2463, #1a3a6b); }
+        .supl-badge-xl {
+            width: 44px; height: 44px; flex-shrink: 0;
+            background: rgba(197,160,33,0.2); border: 2px solid rgba(197,160,33,0.4);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-family: 'Montserrat', sans-serif; font-size: 1.15rem; font-weight: 900;
+            color: var(--color-gold);
+        }
+        .supl-card-head-text .law-name { font-family: 'Montserrat', sans-serif; font-size: 1.05rem; font-weight: 800; color: white; }
+        .supl-card-head-text .law-scope { font-size: 0.75rem; font-weight: 600; color: var(--color-brand-medium); margin-top: 0.15rem; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .supl-card-body { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+        .supl-card-body p { font-size: 0.95rem; color: var(--color-text-medium); line-height: 1.6; margin-bottom: 1.5rem; } 
+        
+        /* Butoane interne card */
+        .supl-card-actions { margin-top: auto; display: flex; justify-content: flex-start; }
+        .btn-outline-navy {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            background: transparent; color: var(--color-navy) !important;
+            border: 2px solid var(--color-navy); border-radius: 8px; padding: 0.55rem 1.15rem; 
+            font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.85rem; 
+            cursor: pointer; text-decoration: none; transition: all 0.2s;
+            text-align: center;
+        }
+        .btn-outline-navy:hover { background: var(--color-navy); color: white !important; }
+
+        /* ── PRICING BOX PREMIUM Ajustat ── */
+        .section-fw#pricing { padding: 2.5rem 0 1.5rem 0; }
+        
+        .pricing-premium {
+            background: white;
+            border: 2px solid var(--color-navy);
+            border-radius: var(--radius-card);
+            padding: 1.75rem 2.2rem; 
+            text-align: left;
+            box-shadow: 0 14px 35px rgba(0,0,0,0.08);
+            max-width: 650px;
+            margin: 1rem auto 0 auto; 
+            position: relative;
+            overflow: hidden;
+        }
+        .pricing-premium::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+            background: linear-gradient(90deg, var(--color-navy), var(--color-brand-medium));
+        }
+        .pricing-premium h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.35rem; font-weight: 800; color: var(--color-navy);
+            text-align: center; margin-bottom: 1.25rem;
+        }
+        .lista-oferta {
+            list-style: none; padding: 0; margin: 0 0 1.5rem 0; 
+        }
+        .lista-oferta li {
+            position: relative; padding-left: 1.8rem; margin-bottom: 0.75rem; 
+            font-size: 0.95rem; color: var(--color-text-medium); line-height: 1.5;
+        }
+        .lista-oferta li::before {
+            content: "✓"; position: absolute; left: 0; color: var(--color-gold);
+            font-weight: 800; font-size: 1.1rem;
+        }
+        .pricing-premium .price-old {
+            font-size: 1.1rem; color: #9ca3af; text-decoration: line-through;
+            text-decoration-color: #ef4444; text-align: center; margin-bottom: 0.15rem;
+        }
+        .pricing-premium .price-new {
+            font-family: 'Montserrat', sans-serif; font-size: 3rem; font-weight: 900;
+            color: var(--color-navy); line-height: 1; text-align: center;
+        }
+
+        /* ── CTA SECTION ── */
+        .cta-section {
+            padding: 1.5rem 0 3.5rem 0; 
+            text-align: center; 
+            position: relative; 
+            overflow: hidden; 
+            background: transparent;
+        }
+        .cta-card-full {
+            background: linear-gradient(160deg, #061220 0%, #0A2463 60%, #1B3A6B 100%);
+            border-radius: var(--radius-card); 
+            padding: 2rem; 
+            width: 100%; 
+            box-sizing: border-box;
+            box-shadow: var(--shadow-card); 
+            text-align: center; 
+            position: relative; 
+            overflow: hidden;
+        }
+        .btn-gold-xl {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            background: var(--color-gold); color: var(--color-navy) !important;
+            border: none; border-radius: 8px; padding: 0.85rem 2.2rem;
+            font-family: 'Inter', sans-serif; font-weight: 800; font-size: 0.95rem;
+            cursor: pointer; text-decoration: none;
+            box-shadow: 0 4px 0 #8a6e12, 0 6px 16px rgba(197,160,33,0.25);
+            transition: all 0.15s; text-align: center;
+        }
+        .btn-gold-xl:hover { transform: translateY(-1px); box-shadow: 0 5px 0 #8a6e12, 0 10px 24px rgba(197,160,33,0.3); }
+        
+        .btn-outline-white {
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+            background: transparent; color: white !important;
+            border: 2px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 0.85rem 2.2rem;
+            font-family: 'Inter', sans-serif; font-weight: 600; font-size: 0.95rem;
+            cursor: pointer; text-decoration: none; transition: all 0.2s; text-align: center;
+        }
+        .btn-outline-white:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.65); }
+
+        .cta-buttons-wrap {
+            display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; 
+        }
+
+        /* ── SCROLL REVEAL ── */
+        .sr { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .sr.visible { opacity: 1; transform: translateY(0); }
+        .sr-d1 { transition-delay: 0.08s; }
+        .sr-d2 { transition-delay: 0.16s; }
+        .sr-d3 { transition-delay: 0.24s; }
+        .sr-d4 { transition-delay: 0.32s; }
+
+        /* ── LEGAL BAR & MODALS ── */
+        .legal-bar { background: #1a1f2e; border-top: 1px solid #374151; padding: 0.75rem 2rem; text-align: center; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 9000; align-items: center; justify-content: center; padding: 1rem; }
+        .modal-overlay.active { display: flex; }
+        .modal-container { background: white; border-radius: 16px; max-width: 800px; width: 100%; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 25px 80px rgba(0,0,0,0.35); overflow: hidden; }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border); background: var(--color-bg-white); }
+        .modal-title { font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 800; color: var(--color-navy); margin: 0; }
+        .modal-logo { height: 32px; margin-right: 0.75rem; }
+        .modal-close-x { background: none; border: none; color: #9ca3af; font-size: 2rem; cursor: pointer; line-height: 1; padding: 0; transition: color 0.2s; }
+        .modal-close-x:hover { color: var(--color-navy); }
+        .modal-body { padding: 1.5rem; overflow-y: auto; flex: 1; }
+        .modal-footer-bar { padding: 1rem 1.5rem; border-top: 1px solid var(--color-border); text-align: right; background: #f9fafb; }
+        .btn-modal-close { background: var(--color-navy); color: white; border: none; border-radius: 8px; padding: 0.65rem 1.5rem; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: background 0.2s; }
+        .btn-modal-close:hover { background: #243a62; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            .hero-title-xl { font-size: 2.5rem; }
+            .section-title-xl { font-size: 1.65rem; }
+            .supl-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+        }
+        @media (max-width: 768px) {
+            .hero-full { padding: 3rem 1.25rem 3.5rem; }
+            .container-xl { padding: 0 1.25rem; }
+            .section-fw { padding: 3rem 0; }
+            .cta-card-full { padding: 1.5rem 1rem; }
+            .cta-buttons-wrap { flex-direction: column; }
+            .cta-buttons-wrap a { width: 100%; }
+            .pricing-premium { padding: 1.5rem; }
+        }
+    </style>
 </head>
 <body>
 
-    <div class="container-main">
-        <header class="nav-bar">
+<div class="page-wrapper">
+
+    <header class="navbar-wrap" id="siteHeader">
+        <nav class="navbar-inner">
             <a href="https://nutrisib.club/index.html" class="nav-brand">
                 <img src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="Logo Nutrisib" class="logo-image" onerror="this.style.display='none'">
+                <div class="nav-brand-text hidden-mobile">
+                    <span class="nav-brand-name">NutriSib</span>
+                    <span class="nav-brand-tagline">Arhitectură biologică</span>
+                </div>
             </a>
-            <div class="nav-links">
+
+            <button class="mobile-menu-btn" id="mobileBtn">☰</button>
+
+            <div class="nav-links" id="navMenu">
                 <a href="https://nutrisib.club/index.html">Acasă</a>
                 <a href="https://nutrisib.club/index.html#povestea">Povestea</a>
                 <a href="https://nutrisib.club/index.html#metoda">Metoda</a>
                 <a href="https://nutrisib.club/blog/index.html">Blog</a>
                 <a href="https://nutrisib.club/contact.html">Contact</a>
             </div>
-            <button class="mobile-menu-btn" onclick="const nav = document.querySelector('.nav-links'); nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex'">☰</button>
-        </header>
+        </nav>
+    </header>
 
-        <main>
-            <section class="hero-card">
-                <h1 class="hero-title">Calibrarea sistemului biologic personal</h1>
-                <p class="hero-text">Nu ghicim, extragem date. O evaluare inginerească low-friction pentru a-ți recupera energia, performanța și lățimea de bandă mentală.</p>
-            </section>
+    <main>
+        <section class="hero-full">
+            <div class="hero-inner">
+                <div class="hero-eyebrow">
+                    📊 <span>Audit de sistem</span> &nbsp;·&nbsp; Date concrete
+                </div>
+                <h1 class="hero-title-xl sr sr-d1">Calibrarea sistemului biologic personal</h1>
+                <p class="hero-sub sr sr-d2">Nu ghicim, extragem date. O evaluare inginerească low-friction pentru a-ți recupera energia, performanța și lățimea de bandă mentală.</p>
+            </div>
+        </section>
 
-            <section class="content-card">
-                
-                <div id="introducere">
-                    
-                    <h3>Punctul zero al Metodei C.E.L.O.S.: De la "zgomot" la "claritate strategică"</h3>
+        <section id="introducere" class="section-fw">
+            <div class="container-xl">
+                <div class="section-hdr sr">
+                    <div class="section-eyebrow">🔍 Claritate</div>
+                    <h2 class="section-title-xl">Punctul zero al metodei C.E.L.O.S.: de la "zgomot" la "claritate strategică"</h2>
+                    <div class="title-rule"></div>
+                </div>
+
+                <div class="prose-container sr sr-d1">
                     <p>Pentru Exploratorul Conștient, obișnuit să optimizeze fluxuri de lucru și să ia decizii bazate pe KPI-uri clare, starea de stagnare biologică și "ceață mentală" reprezintă o eroare critică de sistem. Ați consumat resurse și lățime de bandă mentală pe strategii bazate exclusiv pe voință (diete clasice) care au generat fricțiune și au eșuat. Scepticismul de a investi într-un alt "plan generic" este răspunsul perfect logic al unei minți analitice.</p>
                     <p><strong>La NUTRISIB, schimbăm complet paradigma.</strong> Nu începem cu restricții arbitrare, ci implementăm faza primară a <strong>Sistemului C.E.L.O.S.</strong> (Calibrare. Energie. Longevitate. Optimizare Sistemică). Considerați această evaluare nu o vizită la nutriționist, ci o sesiune riguroasă de <em>Data Acquisition</em> – punctul zero esențial pentru recalibrarea arhitecturii dumneavoastră biologice. Nu căutăm vinovați, ci identificăm datele corupte și variabilele dezechilibrate. Această hartă este fundamentul pe care vom rula noul sistem de operare.</p>
                     <p><strong>De ce procedăm astfel?</strong> Pentru că, exact ca în orice proces de inginerie avansată, nu poți optimiza ceea ce nu poți măsura obiectiv.</p>
-                    
-                    <h3 style="margin-top: 2.5rem; text-align: center; border-bottom: none;">Protocolul de Audit C.E.L.O.S.: Cum decodăm sistemul?</h3>
-                    
-                    <div class="method-grid">
-                        
-                        <div class="method-card">
-                            <div class="method-header">
-                                <div class="method-number">C</div>
-                                <h3 class="method-title">1. Calibrare</h3>
-                            </div>
-                            <div class="method-content">
-                                <h4 style="color: var(--color-brand-medium); font-size: 0.9rem; letter-spacing: 1px;">VARIABILELE DE INTRARE</h4>
-                                <p class="card-inner-text">Nu tratăm simptome izolate. Printr-o anamneză riguroasă, calculăm <strong>sarcina alostatică</strong> (uzura cumulată) a sistemului și definim indicatorii de succes (KPI) pentru claritate și energie.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="protocol" class="section-fw section-fw-alt">
+            <div class="container-xl">
+                <div class="section-hdr sr">
+                    <div class="section-eyebrow gold">⚙️ Metodologie</div>
+                    <h2 class="section-title-xl">Protocolul de audit C.E.L.O.S.: cum decodăm sistemul?</h2>
+                    <div class="title-rule gold"></div>
+                </div>
+
+                <div class="supl-grid">
+                    <div class="supl-card sr sr-d1">
+                        <div class="supl-card-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=800&auto=format&fit=crop" alt="Calibrare și analiză de date" class="supl-card-img">
+                        </div>
+                        <div class="supl-card-head c">
+                            <div class="supl-badge-xl">1</div>
+                            <div class="supl-card-head-text">
+                                <div class="law-name">Calibrare</div>
+                                <div class="law-scope">Variabilele de intrare</div>
                             </div>
                         </div>
-
-                        <div class="method-card">
-                            <div class="method-header">
-                                <div class="method-number">E</div>
-                                <h3 class="method-title">2. Energie & Structură</h3>
-                            </div>
-                            <div class="method-content">
-                                <h4 style="color: var(--color-brand-medium); font-size: 0.9rem; letter-spacing: 1px;">HARDWARE-UL BIOLOGIC</h4>
-                                <p class="card-inner-text">Utilizăm bioimpedanța profesională pentru a scana "șasiul". Măsurăm calitatea motorului metabolic (masa musculară), nivelul de hidratare și grăsimea viscerală (riscul inflamator). Trecem de la "kilograme" la eficiență energetică.</p>
-                                <a href="https://nutrisib.club/eval_bia.html" class="btn-card">Detalii Analiză BIA</a>
-                            </div>
+                        <div class="supl-card-body">
+                            <p>Nu tratăm simptome izolate. Printr-o anamneză riguroasă, calculăm <strong>sarcina alostatică</strong> (uzura cumulată) a sistemului și definim indicatorii de succes (KPI) pentru claritate și energie.</p>
                         </div>
-
-                        <div class="method-card">
-                            <div class="method-header">
-                                <div class="method-number">L</div>
-                                <h3 class="method-title">3. Longevitate & Date</h3>
-                            </div>
-                            <div class="method-content">
-                                <h4 style="color: var(--color-brand-medium); font-size: 0.9rem; letter-spacing: 1px;">SOFTWARE-UL INTERN</h4>
-                                <p class="card-inner-text">Scanarea rețelei informaționale prin biorezonanță. Identificăm <strong>entropia</strong> (gradul de dezordine celulară), blocajele de semnalizare și deficitele ascunse înainte ca acestea să genereze un declin de sistem.</p>
-                                <a href="https://nutrisib.club/eval_bio.html" class="btn-card">Detalii Analiză BIO</a>
-                            </div>
-                        </div>
-
-                        <div class="method-card">
-                            <div class="method-header">
-                                <div class="method-number">OS</div>
-                                <h3 class="method-title">4. Optimizare Sistemică</h3>
-                            </div>
-                            <div class="method-content">
-                                <h4 style="color: var(--color-brand-medium); font-size: 0.9rem; letter-spacing: 1px;">ARHITECTURA SOLUȚIEI</h4>
-                                <p class="card-inner-text">Datele brute sunt inutile fără context. Transpunem cifrele într-un <strong>Dashboard Biologic</strong> inteligibil. Vei înțelege "de ce"-ul din spatele stării tale și vei primi prima versiune a noului tău Sistem de Operare metabolic.</p>
-                            </div>
-                        </div>
-
                     </div>
-                    <h3 style="margin-top: 3rem;">Investiția în date: Un schimb de valoare asumat</h3>
-                    <p style="text-align: center;">Pentru un <strong>Explorator Conștient</strong>, nu privim acest audit ca pe un "cost", ci ca pe cea mai importantă investiție de calibrare pe care o puteți face: investiția în date precise despre propria biologie, menită să stopeze definitiv risipa de resurse decizionale.</p>
-                    
-                    <div class="pricing-box">
-                        <h3>Audit complet de sistem complet (~90 minute)</h3>
-                        <ul class="lista-oferta">
-                            <li>Sesiune strategică de anamneză și calibrare a obiectivelor.</li>
-                            <li>Scanare structurală completă (Bioimpedanță).</li>
-                            <li>Scanare energetică și funcțională (Biorezonanță).</li>
-                            <li>Dashboard biologic consolidat cu KPIs.</li>
-                            <li>Interpretarea datelor și corelarea mecanismelor cauză-efect.</li>
-                            <li>Arhitectură personalizată (nutriție low-friction & stil de viață).</li>
-                            <li>Arhitectură precisă de suplimentare (doar dacă datele o cer).</li>
-                            <li><strong>Sistemul de Operare C.E.L.O.S.</strong> (arhitectura pe 4-6 luni).</li>
-                        </ul>
-                        <div class="price-old">490 lei</div>
-                        <div class="price-new">294 lei</div>
+
+                    <div class="supl-card sr sr-d2">
+                        <div class="supl-card-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=800&auto=format&fit=crop" alt="Analiză bioimpedanță și structură medicală" class="supl-card-img">
+                        </div>
+                        <div class="supl-card-head e">
+                            <div class="supl-badge-xl">2</div>
+                            <div class="supl-card-head-text">
+                                <div class="law-name">Energie & structură</div>
+                                <div class="law-scope">Hardware-ul biologic</div>
+                            </div>
+                        </div>
+                        <div class="supl-card-body">
+                            <p>Utilizăm bioimpedanța profesională pentru a scana "șasiul". Măsurăm calitatea motorului metabolic (masa musculară), nivelul de hidratare și grăsimea viscerală (riscul inflamator). Trecem de la "kilograme" la eficiență energetică.</p>
+                            <div class="supl-card-actions">
+                                <a href="https://nutrisib.club/eval_bia.html" class="btn-outline-navy">Detalii analiză BIA</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="supl-card sr sr-d3">
+                        <div class="supl-card-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=800&auto=format&fit=crop" alt="Biorezonanță și semnalizare celulară" class="supl-card-img">
+                        </div>
+                        <div class="supl-card-head l">
+                            <div class="supl-badge-xl">3</div>
+                            <div class="supl-card-head-text">
+                                <div class="law-name">Longevitate & date</div>
+                                <div class="law-scope">Software-ul intern</div>
+                            </div>
+                        </div>
+                        <div class="supl-card-body">
+                            <p>Scanarea rețelei informaționale prin biorezonanță. Identificăm <strong>entropia</strong> (gradul de dezordine celulară), blocajele de semnalizare și deficitele ascunse înainte ca acestea să genereze un declin de sistem.</p>
+                            <div class="supl-card-actions">
+                                <a href="https://nutrisib.club/eval_bio.html" class="btn-outline-navy">Detalii analiză BIO</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="supl-card sr sr-d4">
+                        <div class="supl-card-img-wrapper">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop" alt="Dashboard de optimizare sistemică" class="supl-card-img">
+                        </div>
+                        <div class="supl-card-head os">
+                            <div class="supl-badge-xl">OS</div>
+                            <div class="supl-card-head-text">
+                                <div class="law-name">Optimizare sistemică</div>
+                                <div class="law-scope">Arhitectura soluției</div>
+                            </div>
+                        </div>
+                        <div class="supl-card-body">
+                            <p>Datele brute sunt inutile fără context. Transpunem cifrele într-un <strong>Dashboard Biologic</strong> inteligibil. Vei înțelege "de ce"-ul din spatele stării tale și vei primi prima versiune a noului tău Sistem de Operare metabolic.</p>
+                        </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="cta-card">
-                <h3>Sunteți gata să treceți de la presupuneri la certitudini?</h3>
-                <p>Informația decodată corect este fundamentul oricărei arhitecturi de succes. Odată ce dețineți harta completă și clară a propriului sistem, deciziile alimentare devin logice și complet automate.</p>
-                <div class="buttons-container">
-                    <a href="https://tinyurl.com/ProgramareServicii" class="btn-pearl" target="_blank">
-                        Programează o sesiune de audit strategic
-                    </a>
-                    <a href="https://t.me/+JoASPEPw5d45NTZk" class="btn-pearl" target="_blank">
-                        Intră în comunitatea Exploratorilor Conștienți
-                    </a>
+        <section id="pricing" class="section-fw">
+            <div class="container-xl">
+                <div class="section-hdr sr" style="margin-bottom: 1.5rem;">
+                    <div class="section-eyebrow">💎 Valoare</div>
+                    <h2 class="section-title-xl">Investiția în date: un schimb de valoare asumat</h2>
+                    <div class="title-rule"></div>
+                    <p class="section-desc-xl" style="margin-top:0.75rem;">
+                        Pentru un <strong>Explorator Conștient</strong>, nu privim acest audit ca pe un "cost", ci ca pe cea mai importantă investiție de calibrare pe care o puteți face: investiția în date precise despre propria biologie, menită să stopeze definitiv risipa de resurse decizionale.
+                    </p>
                 </div>
-            </section>
 
-        </main>
+                <div class="pricing-premium sr sr-d1">
+                    <h3>Audit de sistem complet (~90 minute)</h3>
+                    <ul class="lista-oferta">
+                        <li>Sesiune strategică de anamneză și calibrare a obiectivelor.</li>
+                        <li>Scanare structurală completă (Bioimpedanță).</li>
+                        <li>Scanare energetică și funcțională (Biorezonanță).</li>
+                        <li>Dashboard biologic consolidat cu KPIs.</li>
+                        <li>Interpretarea datelor și corelarea mecanismelor cauză-efect.</li>
+                        <li>Arhitectură personalizată (nutriție low-friction & stil de viață).</li>
+                        <li>Arhitectură precisă de suplimentare (doar dacă datele o cer).</li>
+                        <li><strong>Sistemul de Operare C.E.L.O.S.</strong> (arhitectura pe 4-6 luni).</li>
+                    </ul>
+                    <div class="price-old">490 lei</div>
+                    <div class="price-new">294 lei</div>
+                </div>
+            </div>
+        </section>
 
-        <div id="footer-placeholder"></div>
+        <section id="contact" class="cta-section">
+            <div class="container-xl sr">
+                <div class="cta-card-full">
+                    <div class="section-hdr" style="margin-bottom: 0.75rem;">
+                        <div class="section-eyebrow light" style="display:inline-flex; margin-bottom:0.5rem;">⚡ Decizie</div>
+                        <h2 class="section-title-xl white" style="margin-bottom: 0.5rem;">Sunteți gata să treceți de la presupuneri la certitudini?</h2>
+                        <div class="title-rule" style="background:linear-gradient(90deg,var(--color-gold),#e6c254); margin:0.5rem auto;"></div>
+                        <p class="section-desc-xl white" style="margin-top:0.5rem; line-height: 1.6;">
+                            Informația decodată corect este fundamentul oricărei arhitecturi de succes. Odată ce dețineți harta completă și clară a propriului sistem, deciziile alimentare devin logice și complet automate.
+                        </p>
+                    </div>
+                    <div class="cta-buttons-wrap sr sr-d2">
+                        <a href="https://tinyurl.com/ProgramareServicii" target="_blank" class="btn-gold-xl">
+                            Programează o sesiune de audit strategic
+                        </a>
+                        <a href="https://t.me/+JoASPEPw5d45NTZk" target="_blank" class="btn-outline-white">
+                            Intră în comunitatea Exploratorilor Conștienți
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
+    </main>
+
+    <div id="footer-placeholder"></div>
+    
+    <div class="legal-bar">
+        <button id="openPrivacyLink" class="legal-btn">Politică de confidențialitate</button>
+        <span style="color:#374151;">|</span>
+        <button id="openDisclaimerLink" class="legal-btn">Exonerare de răspundere</button>
     </div>
 
-    <script>
-        // Încărcare Footer (Fetch) exact ca în index
-        fetch('https://nutrisib.club/footer.html')
-        .then(response => response.text())
-        .then(data => {
-            const container = document.getElementById('footer-placeholder');
-            if (container) container.innerHTML = data;
-        })
-        .catch(error => console.error('Eroare încărcare footer:', error));
+</div>
 
-        // Încărcare Script Protecție
-        fetch('https://nutrisib.club/script_protect.js')
+<div id="privacyModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <div style="display: flex; align-items: center;">
+                <img src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="Sigla Nutrisib" class="modal-logo" onerror="this.style.display='none'">
+                <h2 class="modal-title">Politică de confidențialitate</h2>
+            </div>
+            <button id="closeModalButton" class="modal-close-x">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div style="padding-right: 0.5rem;">
+                <p style="color: #6b7280; font-size: 0.85rem; margin-bottom: 1rem;">Ultima actualizare: 9 August 2025</p>
+                <p>Bine ați venit la NutriSib. Ne angajăm să protejăm confidențialitatea datelor dumneavoastră personale. Această politică explică ce informații colectăm, cum le folosim și care sunt drepturile dumneavoastră.</p>
+                
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-navy); margin: 1.5rem 0 0.5rem;">1. Operatorul de date</h3>
+                <p>Operatorul datelor dumneavoastră cu caracter personal este NUTRISIB, reprezentat de dr. ing. Radu Pascu, cu sediul în Sibiu, România.</p>
+                
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-navy); margin: 1.5rem 0 0.5rem;">2. Ce date colectăm?</h3>
+                <ul style="padding-left: 1.5rem; margin-bottom: 1.25rem; list-style-type: disc;">
+                    <li style="margin-bottom: 0.4rem;"><strong>Date furnizate direct:</strong> Nume, prenume, adresă de e-mail, număr de telefon, pe care le furnizați prin formularele de contact sau la programarea unei discuții.</li>
+                    <li style="margin-bottom: 0.4rem;"><strong>Date de sănătate:</strong> Informații despre starea de sănătate, greutate, obiective și alte date relevante pe care le furnizați în timpul evaluărilor. Acestea sunt considerate date sensibile și sunt tratate cu maximă confidențialitate.</li>
+                    <li style="margin-bottom: 0.4rem;"><strong>Date de navigare (Cookies):</strong> Informații despre modul în care utilizați site-ul nostru, pentru a îmbunătăți experiența.</li>
+                </ul>
+                
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-navy); margin: 1.5rem 0 0.5rem;">3. Cum folosim datele?</h3>
+                <ul style="padding-left: 1.5rem; margin-bottom: 1.25rem; list-style-type: disc;">
+                    <li style="margin-bottom: 0.4rem;">Pentru a vă furniza serviciile solicitate (evaluări, planuri nutriționale, coaching).</li>
+                    <li style="margin-bottom: 0.4rem;">Pentru a comunica cu dumneavoastră cu privire la programări și la progresul dumneavoastră.</li>
+                    <li style="margin-bottom: 0.4rem;">Pentru a vă trimite informații și materiale educaționale, dacă v-ați abonat la newsletter.</li>
+                    <li style="margin-bottom: 0.4rem;">Pentru a îmbunătăți site-ul și serviciile noastre.</li>
+                </ul>
+                
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-navy); margin: 2rem 0 0.5rem;">5. Drepturile dumneavoastră (GDPR)</h3>
+                <p>Conform Regulamentului (UE) 2016/679, aveți următoarele drepturi:</p>
+                <ul style="padding-left: 1.5rem; margin-bottom: 1.25rem; list-style-type: disc;">
+                    <li style="margin-bottom: 0.4rem;"><strong>Dreptul la informare și acces:</strong> Puteți solicita o copie a datelor pe care le deținem despre dumneavoastră.</li>
+                    <li style="margin-bottom: 0.4rem;"><strong>Dreptul la rectificare:</strong> Puteți solicita corectarea datelor incorecte sau incomplete.</li>
+                    <li style="margin-bottom: 0.4rem;"><strong>Dreptul la ștergere ("dreptul de a fi uitat"):</strong> Puteți solicita ștergerea datelor dumneavoastră, în anumite condiții.</li>
+                    <li style="margin-bottom: 0.4rem;"><strong>Dreptul la restricționarea prelucrării.</strong></li>
+                    <li style="margin-bottom: 0.4rem;"><strong>Dreptul la portabilitatea datelor.</strong></li>
+                    <li style="margin-bottom: 0.4rem;"><strong>Dreptul la opoziție.</strong></li>
+                </ul>
+                <p>Pentru a vă exercita aceste drepturi, vă rugăm să ne contactați la adresa de e-mail nutrisib.club@gmail.com.</p>
+                
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-navy); margin: 2rem 0 0.5rem;">6. Securitatea datelor</h3>
+                <p>Ne angajăm să asigurăm securitatea datelor dumneavoastră. Am implementat măsuri tehnice și organizatorice adecvate pentru a preveni accesul neautorizat, utilizarea sau divulgarea acestora.</p>
+            </div>
+        </div>
+        <div class="modal-footer-bar">
+            <button id="closeModalFooterButton" class="btn-modal-close">Închide</button>
+        </div>
+    </div>
+</div>
+
+<div id="disclaimerModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <div style="display:flex; align-items:center;">
+                <img src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="Sigla Nutrisib" class="modal-logo" onerror="this.style.display='none'">
+                <h2 class="modal-title">Exonerare de răspundere</h2>
+            </div>
+            <button id="closeDiscX" class="modal-close-x">&times;</button>
+        </div>
+        <div class="modal-body" style="padding: 0;">
+            <div class="infographic-container">
+                <section class="infographic-section" style="padding: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                        <div style="flex-shrink: 0; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background-color: var(--color-brand-light);">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--color-navy)" style="width: 24px; height: 24px;"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>
+                        </div>
+                        <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-navy); margin: 0;">Preambul</h2>
+                    </div>
+                    <p style="color: var(--color-text-medium); font-size: 0.95rem; line-height: 1.6; margin: 0;">Acest material și toate comunicările asociate (website, rețele sociale, email, materiale tipărite) sunt prezentate în calitate de distribuitor independent autorizat pentru produsele și brandurile comercializate. Activitatea mea este independentă și autonomă. Nu sunt angajat și nu reprezint legal companiile ale căror produse le comercializez și nu am nicio altă calitate în cadrul acestor companii.</p>
+                </section>
+
+                <section class="infographic-section" style="padding: 1.5rem; border-top: 1px solid var(--color-border);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                        <div style="flex-shrink: 0; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background-color: var(--color-brand-light);">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--color-navy)" style="width: 24px; height: 24px;"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
+                        </div>
+                        <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-navy); margin: 0;">Clauza 1: Scopul produselor</h2>
+                    </div>
+                    <p style="color: var(--color-text-medium); font-size: 0.95rem; line-height: 1.6; margin: 0;">Produsele comercializate prin intermediul clubului <strong>NUTRISIB</strong> sunt <strong>suplimente alimentare</strong>, așa cum sunt definite de legislația în vigoare din România și Uniunea Europeană. Scopul acestora este de a completa și a susține un regim alimentar normal și un stil de viață sănătos și activ. Aceste produse <strong>nu înlocuiesc și nu trebuie să înlocuiască o dietă variată, echilibrată și un stil de viață sănătos</strong>.</p>
+                </section>
+
+                <section class="infographic-section" style="padding: 1.5rem; border-top: 1px solid var(--color-border);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                        <div style="flex-shrink: 0; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background-color: var(--color-brand-light);">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--color-navy)" style="width: 24px; height: 24px;"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126z" /></svg>
+                        </div>
+                        <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-navy); margin: 0;">Clauza 2: Mențiuni medicale</h2>
+                    </div>
+                    <div style="border-left: 4px solid #ef4444; border-right: 4px solid #ef4444; padding: 1rem; background-color: #fef2f2; border-radius: 8px; margin: 1rem 0; font-size: 0.95rem; font-weight: 600; color: #b91c1c; text-align: center;">
+                        <strong>INFORMAȚIE DE MAXIMĂ IMPORTANȚĂ:</strong> Aceste produse <strong>nu sunt medicamente</strong> și nu sunt destinate pentru a <strong>diagnostica, trata, vindeca sau preveni</strong> vreo boală sau afecțiune medicală.
+                    </div>
+                    <p style="color: var(--color-text-medium); font-size: 0.95rem; line-height: 1.6; margin: 0;">Orice afirmație, sugestie sau interpretare care ar putea indicate un efect terapeutic, curativ sau medical este strict interzisă, contravine politicilor companiilor producătoare și legislației în vigoare, și nu reflectă scopul real al acestor produse. Nu se atribuie acestor produse proprietăți de prevenire, tratare sau vindecare a unei boli umane. Persoanele care suferă de boli sau afecțiuni cronice vor respecta cu prioritate indicațiile medicului curant referitoare la utilizarea suplimentelor alimentare, a înlocuitorilor de masă sau a produselor dermacosmetice.</p>
+                </section>
+
+                <section class="infographic-section" style="padding: 1.5rem; border-top: 1px solid var(--color-border);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                        <div style="flex-shrink: 0; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background-color: var(--color-brand-light);">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--color-navy)" style="width: 24px; height: 24px;"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+                        </div>
+                        <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-navy); margin: 0;">Clauza 3: Consultarea medicală</h2>
+                    </div>
+                    <p style="color: var(--color-text-medium); font-size: 0.95rem; line-height: 1.6; margin: 0;">Înainte de a consuma orice supliment alimentar sau de a începe un nou program de control al greutății, de nutriție sau de fitness, <strong>consultați întotdeauna medicul dumneavoastră</strong> sau un alt specialist calificat în domeniul sănătății. Acest pas este esențial, în special dacă sunteți însărcinată, alăptați, aveți afecțiuni medicale preexistente, sunteți sub supraveghere medicală sau urmați un tratament medicamentos. Informațiile oferite de mine au un caracter general și informativ și <strong>nu înlocuiesc sfatul medical profesionist</strong>, diagnosticul sau tratamentul prescris de un medic.</p>
+                </section>
+
+                <section class="infographic-section" style="padding: 1.5rem; border-top: 1px solid var(--color-border);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                        <div style="flex-shrink: 0; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background-color: var(--color-brand-light);">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--color-navy)" style="width: 24px; height: 24px;"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A9.06 9.06 0 016 18.719m12 0c.212.016.42.028.63.037.207.009.41.014.614.014a3 3 0 00.418-5.963m-13.084-2.818A11.961 11.961 0 0112 3c2.17 0 4.207.576 5.963 1.584A9.06 9.06 0 0118 6.281m-12 0c-.212-.016-.42-.028-.63-.037a3 3 0 00-4.18 5.963m13.084 2.818c-.207-.009-.41-.014-.614-.014a3 3 0 00-2.828 0M12 3v9m0 9v-9" /></svg>
+                        </div>
+                        <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-navy); margin: 0;">Clauza 4: Rezultate individuale</h2>
+                    </div>
+                    <p style="color: var(--color-text-medium); font-size: 0.95rem; line-height: 1.6; margin: 0;">Mărturiile, recenziile și exemplele de rezultate prezentate, indiferent de sursa lor (inclusiv cele publicate de companiile producătoare), reprezintă <strong>experiențe individuale</strong> și <strong>nu constituie o promisiune, o garanție sau o indicație</strong> a obținerii unor rezultate similare. Rezultatele variază semnificativ de la o persoană la alta și depind de o multitudine de factori, inclusiv, dar fără a se limita la: metabolismul individual, starea generală de sănătate, genetica, dieta urmată, nivelul de activitate fizică și respectarea riguroasă a instrucțiunilor.</p>
+                </section>
+
+                <section class="infographic-section" style="padding: 1.5rem; border-top: 1px solid var(--color-border);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                        <div style="flex-shrink: 0; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background-color: var(--color-brand-light);">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--color-navy)" style="width: 24px; height: 24px;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        </div>
+                        <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-navy); margin: 0;">Clauza 5: Aderența la etichetă</h2>
+                    </div>
+                    <p style="color: var(--color-text-medium); font-size: 0.95rem; line-height: 1.6; margin: 0;">Utilizați produsele exclusiv în conformitate cu instrucțiunile, avertismentele, precauțiile și dozele recomandate, așa cum sunt specificate pe eticheta fiecărui produs. Este responsabilitatea dumneavoastră să citiți cu atenție eticheta înainte de utilizare. <strong>Nu modificați și nu depășiți niciodată doza zilnică recomandată.</strong> Orice utilizare neconformă cu instrucțiunilor de pe etichetă se face pe propria răspundere.</p>
+                </section>
+
+                <section class="infographic-section" style="padding: 1.5rem; border-top: 1px solid var(--color-border);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                        <div style="flex-shrink: 0; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background-color: var(--color-brand-light);">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--color-navy)" style="width: 24px; height: 24px;"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h12A2.25 2.25 0 0020.25 14.25V3M18 14.25L12 10.5l-3 3-3.75-3.75" /></svg>
+                        </div>
+                        <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-navy); margin: 0;">Clauza 6: Controlul greutății</h2>
+                    </div>
+                    <p style="color: var(--color-text-medium); font-size: 0.95rem; line-height: 1.6; margin: 0;">Toate afirmațiile privind controlul greutății se referă la un program care include, printre altele, o dietă echilibrată, mișcare fizică regulată, un aport zilnic de lichide corespunzător, suplimente nutritive când este cazul și odihnă adecvată. Rezultatele individuale pot varia.</p>
+                </section>
+
+                <section class="infographic-section" style="padding: 1.5rem; border-top: 1px solid var(--color-border);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                        <div style="flex-shrink: 0; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; background-color: var(--color-brand-light);">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="var(--color-navy)" style="width: 24px; height: 24px;"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 13.036h.008v.008H12v-.008z" /></svg>
+                        </div>
+                        <h2 style="font-size: 1.2rem; font-weight: 700; color: var(--color-navy); margin: 0;">Clauza 7: Garanții și statut</h2>
+                    </div>
+                    <p style="color: var(--color-text-medium); font-size: 0.95rem; line-height: 1.6; margin: 0;">Toate suplimentele alimentare comercializate sunt notificate la autoritățile competente din România, conform legislației în vigoare. Companiile producătoare ale suplimentelor alimentare, înlocuitorilor de masă și a produselor dermatocosmetice comercializate în cadrul clubului nostru oferă propriile garanții de satisfacție și politici de returnare a produselor și garantează calitatea acestora, certificând că sunt fabricate la cele mai înalte standarde. Această garanție nu se aplică în cazul produselor distruse intenționat sau folosite incorect.</p>
+                </section>
+                
+                <div style="text-align: center; padding: 1rem 1.5rem; background-color: var(--color-bg-white); border-top: 1px solid var(--color-border); font-size: 0.8rem; color: var(--color-text-medium);">
+                    Copyrights: dr.ing. Radu Pascu - 2025
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer-bar">
+            <button id="closeDiscBtn" class="btn-modal-close">Închide</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* ── Mobile menu ── */
+    const mobileBtn = document.getElementById('mobileBtn');
+    const navMenu   = document.getElementById('navMenu');
+    if(mobileBtn && navMenu) {
+        mobileBtn.addEventListener('click', () => {
+            const open = navMenu.style.display === 'flex';
+            navMenu.style.display = open ? 'none' : 'flex';
+        });
+        navMenu.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+                if(window.innerWidth <= 768) {
+                    navMenu.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    /* ── Navbar scroll shadow ── */
+    const header = document.getElementById('siteHeader');
+    window.addEventListener('scroll', () => {
+        if(header) {
+            header.classList.toggle('scrolled', window.scrollY > 30);
+        }
+    });
+
+    /* ── Smooth scroll ── */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        });
+    });
+
+    /* ── Scroll reveal ── */
+    const ro = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); ro.unobserve(e.target); } });
+    }, { threshold: 0.07 });
+    document.querySelectorAll('.sr').forEach(el => ro.observe(el));
+
+    /* ── Modale ── */
+    function toggleModal(id, show) {
+        const m = document.getElementById(id);
+        if (m) { 
+            m.classList.toggle('active', show); 
+            document.body.style.overflow = show ? 'hidden' : ''; 
+        }
+    }
+    
+    document.getElementById('openPrivacyLink')?.addEventListener('click', e => { e.preventDefault(); toggleModal('privacyModal', true); });
+    document.getElementById('openDisclaimerLink')?.addEventListener('click', e => { e.preventDefault(); toggleModal('disclaimerModal', true); });
+    
+    ['closeModalButton','closeModalFooterButton'].forEach(id => document.getElementById(id)?.addEventListener('click', () => toggleModal('privacyModal', false)));
+    ['closeDiscX','closeDiscBtn'].forEach(id => document.getElementById(id)?.addEventListener('click', () => toggleModal('disclaimerModal', false)));
+    
+    window.addEventListener('click', e => {
+        if (e.target.classList.contains('modal-overlay')) { toggleModal('privacyModal', false); toggleModal('disclaimerModal', false); }
+    });
+
+    /* ── Footer ── */
+    fetch('https://nutrisib.club/footer.html')
+        .then(r => r.text())
+        .then(d => { const c = document.getElementById('footer-placeholder'); if (c) c.innerHTML = d; })
+        .catch(e => console.error('Eroare încărcare footer:', e));
+
+    /* ── Securitate ── */
+    fetch('https://nutrisib.club/script_protect.js')
         .then(response => response.text())
         .then(data => {
             const script = document.createElement('script');
@@ -166,7 +766,7 @@
             document.body.appendChild(script);
         })
         .catch(error => console.error('Eroare script protecție:', error));
-    </script>
+</script>
 
 </body>
 </html>
