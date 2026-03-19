@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Script premium de cabinet — comunicarea diagnosticului de SSD</title>
+    <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .ref-inline {
+            font-size: 0.75em;
+            vertical-align: super;
+            color: var(--color-brand-medium);
+            font-weight: 700;
+        }
+
+        /* Card citat clinic */
+        .citat {
+            border-radius: 0 10px 10px 0;
+            padding: 1.1rem 1.4rem;
+            margin: 1rem 0;
+            line-height: 1.7;
+            font-style: italic;
+            font-size: 1rem;
+        }
+        .citat.principal {
+            background: #eff6ff;
+            border-left: 5px solid var(--color-brand-medium);
+            color: var(--color-navy);
+        }
+        .citat.defensiv {
+            background: #fff7ed;
+            border-left: 5px solid #f97316;
+            color: #7c2d12;
+        }
+        .citat.pozitiv {
+            background: #f0fdf4;
+            border-left: 5px solid #22c55e;
+            color: #14532d;
+        }
+        .citat.premium {
+            background: var(--color-navy);
+            border-left: 5px solid var(--color-gold);
+            color: var(--color-pearl);
+            font-style: italic;
+        }
+        .citat-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.5rem;
+            display: block;
+            opacity: 0.7;
+        }
+
+        /* Versiune scurtă / box */
+        .versiune-box {
+            border: 2px dashed var(--color-navy);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.25rem 0;
+            background: var(--color-pearl);
+        }
+        .versiune-box .vb-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--color-navy);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+        .versiune-box p {
+            font-style: italic;
+            color: var(--color-navy);
+            font-size: 0.97rem;
+            line-height: 1.65;
+            margin: 0;
+        }
+
+        /* Notă clinică */
+        .nota-clinica {
+            background: #fef9ec;
+            border-left: 4px solid var(--color-gold);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0;
+            font-size: 0.93rem;
+            color: #5a4200;
+        }
+        .nota-clinica strong { color: #7a5a00; }
+
+        /* Cercul vicios vizual */
+        .mecanism-viz {
+            background: var(--color-pearl);
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            margin: 1rem 0;
+        }
+        .mecanism-viz ol {
+            margin: 0;
+            padding-left: 1.5rem;
+            counter-reset: mc;
+            list-style: none;
+        }
+        .mecanism-viz ol li {
+            counter-increment: mc;
+            position: relative;
+            padding: 0.5rem 0 0.5rem 0.5rem;
+            font-size: 0.93rem;
+            color: var(--color-text-medium);
+            border-bottom: 1px dashed var(--color-border);
+            line-height: 1.5;
+        }
+        .mecanism-viz ol li:last-child { border-bottom: none; }
+        .mecanism-viz ol li::before {
+            content: counter(mc);
+            background: var(--color-brand-medium);
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 800;
+            font-family: 'Montserrat', sans-serif;
+            margin-right: 0.6rem;
+            flex-shrink: 0;
+            vertical-align: middle;
+        }
+
+        /* Context scenariu */
+        .context-tip {
+            background: #f8fafc;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.88rem;
+            color: var(--color-text-light);
+        }
+        .context-tip strong { color: var(--color-navy); }
+    </style>
+</head>
+<body>
+<div class="container-main">
+
+    <!-- NAV -->
+    <nav class="nav-bar">
+        <a href="/" class="nav-brand">
+            <span>NutriSib</span>
+        </a>
+        <button class="mobile-menu-btn" onclick="this.closest('.nav-bar').querySelector('.nav-links').classList.toggle('show')" aria-label="Meniu">☰</button>
+        <div class="nav-links">
+            <a href="/">Acasă</a>
+            <a href="/blog" class="active">Blog</a>
+            <a href="/servicii">Servicii</a>
+            <a href="/contact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- BACK LINK -->
+    <div style="margin-bottom:1rem;">
+        <a href="somatizarea.html" style="font-size:0.85rem; color:var(--color-brand-medium); font-weight:700; text-decoration:none;">
+            ← Înapoi la articolul principal
+        </a>
+    </div>
+
+    <!-- HERO -->
+    <div class="blog-hero">
+        <h1>Capitol 7 — Script de cabinet</h1>
+        <p>Comunicarea clinică premium: formulări calibrate pentru prezentarea diagnosticului de SSD, explicarea mecanismului și tranziția spre tratament</p>
+    </div>
+
+    <div class="nota-clinica">
+        🗣️ Scripturile de mai jos sunt formulate pentru cabinet premium. Tonul combină <strong>validarea autentică</strong>, <strong>claritatea clinică</strong> și <strong>autoritatea profesională</strong>, fără a umili sau minimiza. Pot fi adaptate la stilul personal al terapeutului. <span class="ref-inline">[1, 2]</span>
+    </div>
+
+    <!-- JUMP BAR -->
+    <div class="jump-bar">
+        <a href="#formulare-principala">Formularea principală</a>
+        <a href="#explicatie-eleganta">Explicația elegantă</a>
+        <a href="#cercul">Explicarea cercului</a>
+        <a href="#pozitionare">Pozitionare fermă</a>
+        <a href="#reactii-defensive">Reacții defensive</a>
+        <a href="#tranzitie">Tranziție spre tratament</a>
+        <a href="#versiuni-sintetice">Versiuni sintetice</a>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         FORMULAREA PRINCIPALĂ
+    ══════════════════════════════════════════════ -->
+    <div class="art-card" id="formulare-principala">
+        <div class="section-anchor-header">
+            <h2>7.1 Formularea principală</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+
+        <p>Comunicarea diagnosticului de SSD este un moment critic terapeutic. Un script bine calibrat stabilește cadrul de lucru și reduce rezistența, deschizând calea pentru alianța terapeutică. <span class="ref-inline">[1, 2]</span></p>
+
+        <div class="citat principal">
+            <span class="citat-label">Deschidere — validare fără minimalizare</span>
+            „Aș vrea să formulăm foarte clar ce observ, fără dramatizare și fără minimalizare. Din ce îmi descrii, nu am impresia că inventezi simptomele și nici că le produci voluntar. Impresia mea este că organismul tău reacționează într-un mod excesiv de intens la anumite contexte de presiune, în special la cele în care există miză, evaluare sau posibilitatea de eșec." <span class="ref-inline">[2, 1]</span>
+        </div>
+
+        <div class="citat principal">
+            <span class="citat-label">Continuare — mecanismul, nu eticheta</span>
+            „Cu alte cuvinte, ceea ce trăiești este real, dar mecanismul prin care apare și se amplifică nu pare să fie doar unul medical clasic. Pare mai degrabă un tipar în care stresul psihic, tensiunea interioară și nevoia de control se traduc foarte rapid în simptom fizic." <span class="ref-inline">[1]</span>
+        </div>
+
+        <div class="citat principal">
+            <span class="citat-label">Definirea termenului — fără stigmă</span>
+            „Acest lucru intră în zona a ceea ce numim tulburare cu simptome somatice. Termenul nu înseamnă că «nu ai nimic». Înseamnă că simptomul este real, dar este însoțit de un nivel disproporționat de alarmă, preocupare și blocaj funcțional." <span class="ref-inline">[2, 1]</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         EXPLICAȚIA ELEGANTĂ
+    ══════════════════════════════════════════════ -->
+    <div class="art-card" id="explicatie-eleganta">
+        <div class="section-anchor-header">
+            <h2>7.2 Explicația elegantă a mecanismului</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+
+        <p>Formulările de mai jos oferă o explicație accesibilă, fără jargon excesiv, care poate fi înțeleasă și de pacienți fără pregătire psihologică.</p>
+
+        <div class="citat principal">
+            <span class="citat-label">Sistemul nervos — nu slăbiciune, ci tipar învățat</span>
+            „Ce este important să înțelegi este că nu discutăm despre imaginație, slăbiciune sau prefăcătorie. Discutăm despre un sistem nervos care a învățat să reacționeze prea puternic în anumite situații și despre un corp care exprimă ceea ce, în acel moment, psihicul nu mai poate regla suficient de bine." <span class="ref-inline">[1]</span>
+        </div>
+
+        <div class="citat principal">
+            <span class="citat-label">Profilul tipic — normalizare fără banalizare</span>
+            „La persoane tinere, inteligente, aparent bine controlate și foarte preocupate de imagine, performanță sau impresia lăsată celorlalți, acest tip de reacție nu este rar. Exteriorul poate părea foarte bine pus la punct, în timp ce interiorul funcționează sub o presiune mult mai mare decât lasă să se vadă." <span class="ref-inline">[3, 1]</span>
+        </div>
+
+        <div class="citat principal">
+            <span class="citat-label">Confirmarea cercului — simplu și exact</span>
+            „Când presiunea crește, corpul nu mai rămâne neutru. El intră în alertă, produce simptome reale, iar acele simptome ajung apoi să confirme frica inițială. De aici începe cercul." <span class="ref-inline">[1]</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         EXPLICAREA CERCULUI VICIOS
+    ══════════════════════════════════════════════ -->
+    <div class="art-card" id="cercul">
+        <div class="section-anchor-header">
+            <h2>7.3 Explicarea cercului vicios</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+
+        <p>Această formulare poate fi însoțită de o schiță sau de vizualizarea cercului vicios pe care pacientul o poate lua acasă:</p>
+
+        <div class="citat principal">
+            <span class="citat-label">Cercul vicios — descriere pas cu pas</span>
+            „De regulă, mecanismul arată așa: apare o situație cu miză mare; organismul intră în tensiune; apar simptomele; simptomele sunt interpretate ca semn că nu mai poți face față; apare retragerea sau amânarea; iar apoi vine o ușurare imediată. Tocmai această ușurare fixează problema, pentru că organismul învață că evitarea este soluția." <span class="ref-inline">[1]</span>
+        </div>
+
+        <div class="mecanism-viz">
+            <ol>
+                <li>Situație cu miză mare (examen, evaluare, prezentare)</li>
+                <li>Tensionare → simptome somatice (greață, cefalee, palpitații)</li>
+                <li>Interpretare catastrofică: „Nu mai fac față"</li>
+                <li>Retragere / amânare</li>
+                <li>Ușurare imediată → evitarea se consolidează ca soluție</li>
+                <li>La următoarea situație similară, pragul de activare scade și mai mult</li>
+            </ol>
+        </div>
+
+        <div class="citat principal">
+            <span class="citat-label">Demistificarea îmbolnăvirii anticipatorii</span>
+            „Asta explică de ce uneori cineva poate fi foarte rău exact înainte de examen și semnificativ mai bine imediat ce presiunea scade. Nu este un teatru. Este un mecanism autentic de activare și dezactivare a alarmei interne." <span class="ref-inline">[4, 1]</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         POZIȚIONARE FERMĂ
+    ══════════════════════════════════════════════ -->
+    <div class="art-card" id="pozitionare">
+        <div class="section-anchor-header">
+            <h2>7.4 Poziționarea fermă</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+
+        <p>Această secțiune este utilă atunci când pacientul a primit anterior mesaje contradictorii (fie „nu ai nimic", fie „ai ceva grav") sau când există tendința de a rămâne în ambiguitate diagnostică:</p>
+
+        <div class="citat principal">
+            <span class="citat-label">Claritate diagnostică — fără ambiguitate</span>
+            „Spun toate acestea direct, pentru că mi se pare important să nu rămânem într-o zonă confuză. Nu cred că te ajută nici varianta «nu ai nimic», nici varianta «ai ceva grav și misterios». Mai corect este să înțelegem că ai un tipar clar de reacție minte-corp, care îți afectează funcționarea și care trebuie tratat serios." <span class="ref-inline">[1]</span>
+        </div>
+
+        <div class="citat principal">
+            <span class="citat-label">Cercul steril al investigațiilor</span>
+            „Când acest tipar nu este înțeles corect, pacientul intră adesea într-un cerc steril: se sperie de simptom, caută doar explicații organice, evită situațiile grele și, fără să vrea, își consolidează exact mecanismul care îl blochează." <span class="ref-inline">[5, 1]</span>
+        </div>
+
+        <div class="citat pozitiv">
+            <span class="citat-label">Abordarea matură</span>
+            „Eu prefer o abordare mai matură și mai eficientă: validăm realitatea simptomului, înțelegem funcția lui și lucrăm pe mecanismul care îl produce." <span class="ref-inline">[1]</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         GESTIONAREA REACȚIILOR DEFENSIVE
+    ══════════════════════════════════════════════ -->
+    <div class="art-card" id="reactii-defensive">
+        <div class="section-anchor-header">
+            <h2>7.5 Gestionarea reacțiilor defensive</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+
+        <p>Pacienții cu SSD reacționează deseori defensiv la orice formulare care ar putea fi interpretată ca „e în capul tău". Scripturile de mai jos anticipează și dezarmează această rezistență.</p>
+
+        <div class="context-tip">
+            <strong>Context:</strong> pacientul spune „Dar eu chiar m-am simțit rău!" sau „Crezi că inventez?"
+        </div>
+
+        <div class="citat defensiv">
+            <span class="citat-label">Răspuns la reacția defensivă — dezarmare imediată</span>
+            „Dacă prima ta reacție este să te gândești că îți spun că «totul este în capul tău», te opresc imediat: nu asta spun. Spun că ceea ce trăiești este real, dar este modelat puternic de felul în care sistemul tău nervos procesează stresul, presiunea și anticiparea eșecului." <span class="ref-inline">[2, 1]</span>
+        </div>
+
+        <div class="context-tip">
+            <strong>Context:</strong> pacientul insistă că simptomele sunt organice și că psihologia nu are legătură
+        </div>
+
+        <div class="citat defensiv">
+            <span class="citat-label">Validarea experienței — menținerea cadrului</span>
+            „Dacă îmi spui că «te-ai simțit realmente rău», sunt de acord. Tocmai acesta este punctul esențial: în somatizare, pacientul chiar se simte rău. Întrebarea nu este dacă simptomul a existat, ci de ce apare în acel pattern și de ce ajunge să conducă deciziile importante din viață." <span class="ref-inline">[1]</span>
+        </div>
+
+        <div class="context-tip">
+            <strong>Context:</strong> pacientul se teme că diagnosticul îl face să pară „slab" sau „nebun"
+        </div>
+
+        <div class="citat defensiv">
+            <span class="citat-label">Reformularea diagnosticului — forță, nu slăbiciune</span>
+            „Dacă te temi că acest diagnostic te pune într-o lumină defavorabilă, aș reformula foarte simplu: nu este o etichetă de slăbiciune, ci o explicație clinică utilă pentru un mecanism tratabil." <span class="ref-inline">[1]</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         TRANZIȚIA SPRE TRATAMENT
+    ══════════════════════════════════════════════ -->
+    <div class="art-card" id="tranzitie">
+        <div class="section-anchor-header">
+            <h2>7.6 Tranziția spre tratament</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+
+        <p>Tranziția spre tratament se face după consolidarea înțelegerii mecanismului. Formulările de mai jos orientează pacientul spre angajament terapeutic fără a crea presiune suplimentară:</p>
+
+        <div class="citat pozitiv">
+            <span class="citat-label">Vestea bună — situația este tratabilă</span>
+            „Din punctul meu de vedere, vestea bună este că această situație se poate ameliora semnificativ. Dar nu prin negare, nu prin cosmetizarea problemei și nici prin încercarea de a controla fiecare simptom. Se ameliorează atunci când înțelegi exact cercul în care ai intrat și începi să schimbi felul în care răspunzi la el." <span class="ref-inline">[6, 1]</span>
+        </div>
+
+        <div class="citat pozitiv">
+            <span class="citat-label">Demersul serios — componentele tratamentului</span>
+            „Asta presupune un demers serios: claritate diagnostică, igienă de stil de viață, reglare a stresului, lucru psihoterapeutic bine orientat și o schimbare treptată a relației tale cu disconfortul și cu evaluarea." <span class="ref-inline">[1]</span>
+        </div>
+
+        <div class="citat pozitiv">
+            <span class="citat-label">Scopul redefinit — funcționare, nu absența simptomului</span>
+            „Scopul nu este să devii o persoană care nu mai simte nimic. Scopul este să devii o persoană care nu mai este guvernată de simptome atunci când viața îi cere maturitate, prezență și performanță." <span class="ref-inline">[1]</span>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         VERSIUNI SINTETICE
+    ══════════════════════════════════════════════ -->
+    <div class="art-card" id="versiuni-sintetice">
+        <div class="section-anchor-header">
+            <h2>7.7 Versiuni sintetice</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+
+        <p>Aceste versiuni comprimate sunt utile când timpul este limitat, ca rezumat al ședinței sau ca mesaj de recapitulare la final.</p>
+
+        <div class="versiune-box">
+            <span class="vb-label">Versiune scurtă — cabinet standard</span>
+            <p>„Observ la tine un tipar real în care presiunea psihică se transformă rapid în simptom fizic. Nu înseamnă că inventezi ceva și nici că «nu ai nimic»; înseamnă că sistemul tău nervos reacționează disproporționat și ajunge să-ți blocheze funcționarea exact în momentele importante. Aceasta este o problemă clinică serioasă, tratabilă, iar soluția nu este nici dramatizarea, nici negarea, ci o intervenție corectă și bine condusă." <span class="ref-inline">[2, 1]</span></p>
+        </div>
+
+        <div class="citat premium">
+            <span class="citat-label" style="color:var(--color-gold);">Versiune rafinată — cabinet premium / public cu educație înaltă</span>
+            „Aș formula situația ta astfel: corpul tău a devenit purtătorul unei tensiuni pe care psihicul tău nu o mai poate metaboliza elegant în anumite contexte de performanță. Simptomele sunt autentice, însă logica lor este una de alarmă, nu neapărat de leziune. Din acest motiv, avem nevoie de o abordare fină, serioasă și foarte bine calibrată, nu de explicații simpliste." <span class="ref-inline">[1]</span>
+        </div>
+
+        <div class="versiune-box">
+            <span class="vb-label">Închidere de ședință — sinteză elegantă</span>
+            <p>„Dacă ar fi să rezum foarte elegant și foarte exact: nu cred că problema ta este lipsa de valoare, ci un mod dezadaptativ în care corpul tău a învățat să gestioneze presiunea. Este un mecanism sofisticat, dar tratabil. Iar rolul nostru nu este să te judecăm pentru el, ci să-l înțelegem corect și să-l modificăm profesionist." <span class="ref-inline">[2, 1]</span></p>
+        </div>
+
+        <div class="nota-clinica">
+            📋 <strong>Notă pentru practician:</strong> aceste formulări funcționează cel mai bine după ce a fost deja parcursă o evaluare clinică adecvată. Introducerea lor prematură, fără alianță terapeutică sau fără excluderea patologiei medicale, poate crește rezistența. Adaptați tonul și nivelul de detaliu la stilul dumneavoastră și la profilul specific al pacientului.
+        </div>
+
+        <div style="margin-top:2rem; text-align:center;">
+            <a href="somatizarea.html" class="btn">← Înapoi la articolul principal</a>
+            &nbsp;&nbsp;
+            <a href="chestionar-clinic.html" class="btn-pearl btn">← Capitol 6: Evaluare clinică</a>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', () => navLinks.classList.toggle('show'));
+    }
+});
+const sectIds3 = ['formulare-principala','explicatie-eleganta','cercul','pozitionare','reactii-defensive','tranzitie','versiuni-sintetice'];
+window.addEventListener('scroll', () => {
+    let current = '';
+    sectIds3.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 100) current = id;
+    });
+    document.querySelectorAll('.jump-bar a').forEach(a => {
+        const href = a.getAttribute('href');
+        a.style.background = (href === '#' + current) ? 'var(--color-navy)' : '';
+        a.style.color = (href === '#' + current) ? 'white' : '';
+        a.style.borderColor = (href === '#' + current) ? 'var(--color-navy)' : '';
+    });
+}, { passive: true });
+</script>
+<script>fetch('https://nutrisib.club/footer.html').then(r=>r.text()).then(data=>{const c=document.getElementById('footer-placeholder');if(c)c.innerHTML=data;}).catch(()=>{});</script>
+<script src="https://nutrisib.club/script_protect.js" defer></script>
+</body>
+</html>
