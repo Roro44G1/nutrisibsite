@@ -1,416 +1,267 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calciu</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
-        :root {
-            --primary-color: #3498db; /* O nuanță de albastru-deschis */
-            --primary-color-dark: #2980b9;
-            --secondary-color: #2c3e50;
-            --background-color: #f4f6f7;
-            --text-color: #34495e;
-            --card-background: #ffffff;
-            --light-gray-background: #f8f9fa;
-            --border-color: #e0e0e0;
-            --accent-green: #27ae60;
-            --accent-red: #e74c3c;
-            --base-font-family: 'Roboto', sans-serif;
-            --border-radius-large: 15px;
-            --border-radius-small: 10px;
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
-            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        body {
-            font-family: var(--base-font-family);
-            line-height: 1.7;
-            margin: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
-        }
-
-        .infographic-container {
-            max-width: 950px;
-            width: 100%;
-            background: var(--card-background);
-            border-radius: var(--border-radius-large);
-            box-shadow: var(--shadow-medium);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .infographic-header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px 10px;
-            text-align: center;
-            font-size: 2.5em;
-            font-weight: 700;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-            position: relative;
-        }
-
-        .section {
-            padding: 25px 45px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .section:last-child {
-            border-bottom: none;
-        }
-
-        .section-title {
-            font-size: 1.9em;
-            color: var(--secondary-color);
-            margin-top: 0;
-            margin-bottom: 25px;
-            font-weight: 600;
-            border-bottom: 3px solid var(--primary-color-dark);
-            padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        .section-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            width: 100%;
-        }
-        
-        .subsection {
-            flex: 1;
-            min-width: 300px;
-            background-color: var(--light-gray-background);
-            border-radius: var(--border-radius-small);
-            padding: 25px;
-            box-shadow: var(--shadow-light);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-left: 5px solid transparent;
-        }
-
-        .subsection:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            border-left-color: var(--primary-color);
-        }
-
-        .subsection-title {
-            font-size: 1.4em;
-            color: var(--primary-color);
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .subsection p,.subsection ul,.subsection ol {
-            font-size: 0.98em;
-            margin-bottom: 12px;
-        }
-
-        .subsection ul,.subsection ol {
-            padding-left: 20px;
-        }
-
-        .subsection li {
-            margin-bottom: 10px;
-        }
-
-        .subsection b,.subsection strong {
-            color: var(--secondary-color);
-        }
-
-        .note {
-            font-size: 0.9em;
-            color: #6c757d;
-            margin-top: 25px;
-            padding: 15px 20px;
-            background-color: #ebf5fb;
-            border-left: 4px solid var(--primary-color);
-            width: 100%;
-            box-sizing: border-box;
-            border-radius: 5px;
-        }
-        
-        .warning-note {
-            background-color: #f9ebea;
-            border-left-color: var(--accent-red);
-        }
-        
-        .holistic-note {
-            background-color: #e8f8f5;
-            border-left-color: var(--accent-green);
-       }
-
-        .icon {
-            font-size: 1.5em;
-            margin-right: 12px;
-            color: var(--primary-color-dark);
-            vertical-align: middle;
-        }
-        
-        .subsection-icon {
-             font-size: 1.5em;
-             margin-right: 10px;
-             color: var(--primary-color);
-        }
-        
-        .icon-small {
-            font-size: 1.5em;
-            margin-right: 8px;
-            color: var(--primary-color);
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .footer-container {
-            padding: 30px 45px;
-            background-color: var(--secondary-color);
-            color: #bdc3c7;
-        }
-        
-        .references h4 {
-            color: white;
-            border-bottom: 1px solid #7f8c8d;
-            padding-bottom: 5px;
-        }
-        
-        .references ul {
-            list-style-type: none;
-            padding-left: 0;
-            font-size: 0.8em;
-        }
-        
-        .references li {
-            margin-bottom: 5px;
-        }
-
-        .footer-copyright {
-            text-align: center;
-            padding: 20px 0;
-            font-size: 0.9em;
-            color: #6c757d;
-            background-color: var(--light-gray-background);
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 0.9em;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-            color: var(--secondary-color);
-            font-weight: 600;
-        }
-
-        tr:nth-child(even) {
-            background-color: var(--light-gray-background);
-        }
-
-        @media (max-width: 768px) {
-            .section { padding: 25px 20px; }
-            .section-content {
-                flex-direction: column;
-            }
-            .subsection {
-                min-width: unset;
-            }
-            .infographic-header {
-                font-size: 2em;
-            }
-            .section-title {
-                font-size: 1.6em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calciul | Enciclopedia Micronutrienților | NUTRISIB</title>
+  <meta name="description" content="Calciul - capitol complet din enciclopedia micronutrienților NUTRISIB, cu abordare nutrițională, funcțională și holistică.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@400;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+  <link rel="stylesheet" href="https://nutrisib.club/micronutrienti.css">
 </head>
-<body>
-    <main class="infographic-container">
-        <header class="infographic-header">
-            Calciu
-        </header>
+<body class="micronutrient-page">
+  <div class="container-main micronutrient-shell">
+    <div class="micronutrient-topbar screen-only">
+      <a class="btn-white" href="https://nutrisib.club/index.html">Înapoi la enciclopedie</a>
+      <div class="micronutrient-actions">
+        <a class="btn-outline" href="#continut-integral">Sari la conținut</a>
+        <button class="btn" type="button" onclick="window.print()">Generează PDF / Printează</button>
+      </div>
+    </div>
 
-        <section class="section">
-            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
-            <div class="section-content">
-                <div class="subsection" style="flex: 2;">
-                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul principal în organism</h3>
-                     <p><b>Calciul (Ca)</b> este cel mai abundent mineral din corpul uman. Peste 99% se găsește în oase și dinți, dar acel 1% rămas în circulație este absolut vital pentru funcțiile zilnice.</p>
-                     <ul>
-                         <li><b>Sănătatea oaselor și a dinților:</b> Este componenta structurală principală a oaselor și dinților, conferindu-le rezistență. Organismul menține un echilibru constant, redepozitând și extrăgând calciu din oase, care acționează ca un rezervor.</li>
-                         <li><b>Contracția musculară:</b> Este indispensabil pentru contracția tuturor mușchilor, inclusiv a inimii. Fără calciu, mișcarea nu ar fi posibilă.</li>
-                         <li><b>Transmiterea impulsurilor nervoase:</b> Joacă un rol cheie în eliberarea neurotransmițătorilor, asigurând comunicarea între celulele nervoase.</li>
-                         <li><b>Coagularea sângelui:</b> Este un factor esențial în cascada de reacții care duce la formarea cheagurilor de sânge pentru a opri sângerările.</li>
-                         <li><b>Funcția celulară și hormonală:</b> Acționează ca un mesager secundar în interiorul celulelor și este un cofactor pentru numeroase enzime.</li>
-                     </ul>
-                </div>
-                 <div class="subsection" style="flex: 1.5;">
-                    <h3 class="subsection-title"><span class="subsection-icon">🥛</span>Surse alimentare</h3>
-                    <p>Corpul nu poate produce calciu, deci trebuie obținut din dietă. Absorbția sa este dependentă de vitamina D.</p>
-                     <ul>
-                        <li><b>Produse lactate:</b> Lapte, iaurt, kefir și brânzeturi (în special cele maturate, precum parmezanul).</li>
-                        <li><b>Pește cu oase comestibile:</b> Sardine și somon la conservă.</li>
-                        <li><b>Legume verzi:</b> Kale (varză creață), broccoli, varză chinezească (Bok Choy). Spanacul conține calciu, dar și oxalați care îi reduc absorbția.</li>
-                        <li><b>Leguminoase:</b> Năut, fasole albă.</li>
-                        <li><b>Nuci și semințe:</b> Semințe de susan (tahini), semințe de chia, migdale.</li>
-                        <li><b>Produse fortificate:</b> Lapte vegetal, tofu (preparat cu săruri de calciu), sucuri.</li>
-                     </ul>
-                </div>
-            </div>
-        </section>
+    <section class="micronutrient-hero">
+      <span class="hero-kicker">Enciclopedia Micronutrienților</span>
+      <h1>Calciul</h1>
+      <p>Mineralul structural fundamental al organismului, esențial pentru arhitectura osoasă, contracția musculară, transmiterea nervoasă, coagulare și coerența metabolică generală.</p>
+    </section>
 
-        <section class="section">
-             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit (Hipocalcemie) și Exces (Hipercalcemie)</h2>
-             <div class="section-content">
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Simptome cauzate de deficit</h3>
-                    <p>Deficitul cronic duce la <strong>osteoporoză</strong> (oase fragile). Deficitul acut (hipocalcemia) este o urgență medicală.</p>
-                    <ul>
-                        <li><b>Simptome cronice:</b> Osteopenie și osteoporoză, risc crescut de fracturi.</li>
-                        <li><b>Simptome acute:</b>
-                            <ul>
-                                <li>Crampe musculare, spasme și tetanie (contracții involuntare).</li>
-                                <li>Amorțeală și furnicături în jurul gurii sau la degete.</li>
-                                <li>Confuzie, pierderi de memorie.</li>
-                                <li>Aritmii cardiace.</li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Simptome cauzate de exces</h3>
-                    <p>Excesul de calciu în sânge (hipercalcemia) este de obicei cauzat de o afecțiune medicală (ex: hiperparatiroidism), nu de aportul alimentar. Suplimentarea excesivă poate contribui.</p>
-                     <ul>
-                        <li><b>Probleme renale:</b> Risc crescut de pietre la rinichi, sete excesivă și urinare frecventă.</li>
-                        <li><b>Probleme gastrointestinale:</b> Constipație, greață, dureri abdominale.</li>
-                        <li><b>Probleme osoase:</b> Dureri osoase, slăbiciune musculară.</li>
-                        <li><b>Probleme neurologice:</b> Letargie, oboseală, depresie.</li>
-                        <li><b>Calcificarea vaselor de sânge</b> și a țesuturilor moi.</li>
-                    </ul>
-                </div>
-             </div>
-        </section>
-        
-        <section class="section">
-            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
-            <div class="section-content">
-                <div class="subsection">
-                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">🤝</span>Sinergii esențiale: "Paradoxul Calciului"</h3>
-                    <p>Calciul nu funcționează singur. Pentru a fi utilizat corect, are nevoie de parteneri:</p>
-                    <ul>
-                        <li><b>Vitamina D3:</b> Asigură absorbția calciului din intestin în sânge.</li>
-                        <li><b>Vitamina K2:</b> "Dirijează" calciul din sânge către oase și dinți, prevenind depunerea lui în artere.</li>
-                        <li><b>Magneziu:</b> Ajută la reglarea nivelurilor de calciu și vitamina D și relaxează mușchii, contrabalansând acțiunea de contracție a calciului.</li>
-                    </ul>
-                    <p><strong>"Paradoxul Calciului"</strong> se referă la situația în care suplimentarea cu calciu, în absența co-factorilor (în special K2), poate crește riscul de calcificare arterială și boli cardiovasculare, chiar dacă oasele rămân fragile.</p>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
-                    <p><b>În MTC</b>, calciul este legat de <b>Esența (Jing) a Rinichilor</b>, care guvernează oasele și măduva. Oase puternice reflectă un Jing robust. De asemenea, prin rolul său în funcția inimii, susține <b>Inima</b>, lăcașul minții (Shen).</p>
-                    <p><b>În Ayurveda</b>, calciul este fundamental pentru <b>Asthi Dhatu</b> (țesutul osos). Un deficit poate agrava <b>Vata dosha</b>, ducând la uscăciune, fragilitate și anxietate. Excesul poate agrava <b>Kapha dosha</b>, ducând la rigiditate și calcificări.</p>
-                </div>
-            </div>
-        </section>
+    <nav class="micronutrient-jumpbar screen-only" aria-label="Navigare internă">
+      <a href="#identitate">Identitate</a>
+      <a href="#farmacocinetica">Farmacocinetică</a>
+      <a href="#roluri">Roluri</a>
+      <a href="#surse">Surse</a>
+      <a href="#suplimentarea">Suplimentarea</a>
+      <a href="#interactiuni">Interacțiuni</a>
+      <a href="#populatii">Populații</a>
+      <a href="#relevanta">Relevanță</a>
+      <a href="#sinteza">Sinteză</a>
+    </nav>
 
-        <section class="section">
-            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
-            <p>Din perspectivă holistică, calciul este esențial pentru <b>structură, stabilitate și sentimentul de siguranță</b>. Rezonează cu "scheletul" nostru emoțional și cu capacitatea de a ne simți susținuți și siguri pe noi înșine.</p>
-            <div class="section-content">
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="icon-small">💔</span>Deficit</h3>
-                    <p>Un deficit de calciu poate fi legat de:</p>
-                    <ol>
-                        <li><b>Lipsa de suport emoțional:</b> Un sentiment profund de a nu fi susținut, de a te simți singur în fața dificultăților.<br><i>Manifestare fizică: Fragilitate osoasă.</i></li>
-                        <li><b>Nesiguranță și instabilitate:</b> Teama de viitor, sentimentul de a nu avea o bază solidă în viață.<br><i>Manifestare fizică: Crampe musculare, spasme.</i></li>
-                        <li><b>Dificultatea de a-ți stabili limite:</b> O lipsă de structură emoțională.</li>
-                    </ol>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
-                    <p>Obiectivele pe care le susține calciul pot fi atinse prin:</p>
-                    <ul>
-                        <li><b>Lucrul cu stima de sine</b> și consolidarea valorii personale.</li>
-                        <li><b>Terapii</b> care explorează relațiile familiale și sentimentul de apartenență.</li>
-                        <li><b>Practici de "împământare"</b> (mers desculț, meditație de vizualizare a rădăcinilor).</li>
-                        <li><b>Dezvoltarea unei rețele de suport</b> și învățarea de a cere ajutor.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+    <article class="micronutrient-article" id="continut-integral">
+      <div class="micronutrient-content">
+        <h2>Mineralul structural fundamental al organismului, esențial pentru arhitectura osoasă, contracția musculară, transmiterea nervoasă, coagulare și coerența metabolică generală</h2>
 
-        <section class="section">
-            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
-            <div class="section-content">
-                <div class="subsection">
-                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Doze zilnice recomandate</h3>
-                     <p>Necesarul de calciu variază în funcție de vârstă și sex.</p>
-                     <table>
-                         <thead>
-                             <tr>
-                                 <th>Grup de populație</th>
-                                 <th>DZR (mg/zi)</th>
-                                 <th>Limită superioară (UL)</th>
-                             </tr>
-                         </thead>
-                         <tbody>
-                             <tr>
-                                 <td>Adulți (19-50 ani)</td>
-                                 <td>1.000</td>
-                                 <td>2.500</td>
-                             </tr>
-                             <tr>
-                                 <td>Femei (51+ ani)</td>
-                                 <td>1.200</td>
-                                 <td>2.000</td>
-                             </tr>
-                              <tr>
-                                 <td>Bărbați (51-70 ani)</td>
-                                 <td>1.000</td>
-                                 <td>2.000</td>
-                             </tr>
-                             <tr>
-                                 <td>Bărbați (71+ ani)</td>
-                                 <td>1.200</td>
-                                 <td>2.000</td>
-                             </tr>
-                         </tbody>
-                     </table>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
-                    <p>Suplimentarea cu calciu trebuie făcută informat și echilibrat.</p>
-                    <div class="note warning-note">
-                        <p><b>Recomandare:</b> Este de preferat să obțineți calciul din surse alimentare. Dacă suplimentarea este necesară, asigurați-vă că aveți un aport adecvat de <strong>Vitamina D3, Vitamina K2 și Magneziu</strong> pentru a garanta utilizarea corectă a calciului. Discutați cu medicul înainte de a lua doze mari de calciu, în special dacă aveți afecțiuni renale sau cardiovasculare.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <div class="footer-copyright">
-            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
-            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        <p>Calciul este cel mai abundent mineral din corpul uman și unul dintre cele mai studiate elemente nutritive din istoria științelor medicale. Peste 99% din cantitatea totală se găsește în oase și dinți, unde conferă rezistență mecanică și integritate structurală. Cu toate acestea, acel sub-procent rămas în circulație, în lichidul extracelular și în interiorul celulelor, îndeplinește funcții biologice de o importanță critică: contracția musculară, transmiterea impulsurilor nervoase, coagularea sângelui, semnalizarea celulară și reglajul enzimatic.</p>
+
+        <p>Într-o abordare strict biochimică, calciul este simultan un element structural și un mesager funcțional. Organismul depune un efort fiziologic considerabil pentru a menține calcemia într-un interval foarte îngust, mobilizând rezervele osoase, reglând absorbția intestinală și modulând excreția renală. Acest echilibru este orchestrat de parathormon, calcitonină și forma activă a vitaminei D, într-un sistem de reglaj fin care ilustrează cât de mult investește biologia umană în homeostazia acestui mineral.</p>
+
+        <p>Relevanța calciului depășește cu mult ideea simplificată de „mineral pentru oase". El participă la procese fundamentale care condiționează mișcarea, gândirea, comunicarea celulară și integritatea vasculară. Din acest motiv, calciul merită analizat nu doar ca element singular, ci în contextul întregii rețele metabolice din care face parte: vitamina D, vitamina K2, magneziul, fosforul, statusul hormonal, inflamația de fond, alimentația și stilul de viață. Într-o enciclopedie a micronutrienților orientată către înțelegerea relațiilor, calciul ocupă un loc central tocmai prin multiplele sale intersecții cu alte sisteme biologice.</p>
+
+        <h2 id="identitate">Identitatea biologică a calciului</h2>
+
+        <p>Calciul este un macromineral esențial, ceea ce înseamnă că organismul are nevoie de el în cantități relativ mari comparativ cu oligoelementele. Corpul unui adult conține aproximativ 1.000–1.200 grame de calciu, distribuite predominant în matricea osoasă sub formă de hidroxiapatită, un complex cristal de calciu și fosfor care conferă osului rigiditate și rezistență mecanică.</p>
+
+        <p>Calciul circulant, deși reprezintă o fracțiune minoră din totalul corporal, este menținut într-un interval extrem de strict, în jur de 8,5–10,5 mg/dL în ser. Această precizie nu este întâmplătoare: variațiile calcemiei în afara intervalului fiziologic pot produce consecințe grave, de la crampe musculare și tetanie în hipocalcemie, până la aritmii cardiace și calcificări patologice în hipercalcemie. Organismul dispune de mecanisme hormonale sofisticate care prioritizează menținerea calcemiei chiar în detrimentul densității osoase, ceea ce explică de ce deficitul cronic de calciu se manifestă mai întâi la nivelul osului, nu al sângelui.</p>
+
+        <p>Spre deosebire de oligoelementele fără doză zilnică recomandată oficială, calciul beneficiază de repere nutriționale clare. Aceste valori variază în funcție de vârstă, sex și context fiziologic, dar reflectă un consens științific solid privind necesitatea unui aport adecvat. În consecință, calciul nu este un micronutrient despre care se poate discuta în termeni de „poate că e necesar", ci un element cu rol structural și funcțional cert, a cărui gestionare inteligentă influențează profund sănătatea pe termen lung.</p>
+
+        <h2 id="farmacocinetica">Farmacocinetică și metabolism</h2>
+
+        <p>Absorbția calciului are loc predominant în intestinul subțire, în special în duoden și jejunul proximal, printr-un mecanism activ dependent de vitamina D și unul pasiv, paracelular, care devine relevant la aporturile mai mari. Eficiența absorbției variază considerabil, situându-se în medie între 25% și 35% din calciul ingerat, dar poate crește semnificativ în perioade de necesitate crescută precum creșterea, sarcina și lactația, sau poate scădea odată cu înaintarea în vârstă.</p>
+
+        <p>După absorbție, calciul circulă în sânge sub trei forme: legat de proteine (în principal albumină), complexat cu anioni și ionizat liber. Forma ionizată este cea biologic activă și este cea reglată cu precizie de axul parathormon–calcitriol–calcitonină. Paratiroidele detectează orice variație a calciului ionizat și răspund prin secreția de parathormon, care stimulează resorbția osoasă, crește reabsorbția renală și activează vitamina D pentru a intensifica absorbția intestinală.</p>
+
+        <p>Eliminarea calciului se face prin urină, fecale și, într-o măsură mai mică, prin transpirație. Excreția urinară este influențată de aportul de sodiu, proteine, cafeină și de statusul vitaminei D. Un aspect clinic relevant este faptul că un aport crescut de sodiu poate crește pierderile urinare de calciu, ceea ce subliniază încă o dată importanța evaluării calciului nu izolat, ci în contextul întregului profil alimentar și metabolic.</p>
+
+        <p>Osul funcționează simultan ca depozit structural și ca rezervor metabolic. Remodelarea osoasă este un proces continuu în care osteoclastele resorbesc os vechi, iar osteoblastele depun os nou. Acest echilibru dinamic permite organismului să mențină integritatea scheletică și, în același timp, să răspundă nevoilor sistemice de calciu. Atunci când aportul alimentar este insuficient pe perioade lungi, remodelarea se dezechilibrează în favoarea resorbției, ceea ce duce progresiv la pierderea densității osoase.</p>
+
+        <h2 id="roluri">Roluri fiziologice majore</h2>
+
+        <h3>Sănătatea oaselor și a dinților</h3>
+        <p>Rolul structural al calciului în os este poate cel mai cunoscut, dar merită înțeles în profunzime. Osul nu este o structură inertă, ci un țesut viu, activ metabolic, care se reînnoiește continuu. Calciul, împreună cu fosforul, formează matricea minerală care conferă osului duritate și rezistență la compresie, în timp ce colagenul furnizează flexibilitate și rezistență la tracțiune. Această combinație face ca osul să fie simultan puternic și elastic.</p>
+
+        <p>Masa osoasă atinge un vârf în jurul vârstei de 25–30 de ani, după care începe un declin gradual. Calitatea și cantitatea calciului acumulat până la acest vârf influențează semnificativ riscul de osteoporoză la vârste mai avansate. Din acest motiv, aportul adecvat de calciu nu este relevant doar la maturitate, ci pe întregul parcurs al vieții, începând cu copilăria și adolescența.</p>
+
+        <h3>Contracția musculară</h3>
+        <p>Calciul este indispensabil pentru contracția tuturor tipurilor de mușchi, inclusiv mușchiul cardiac. La nivel celular, ionii de calciu sunt eliberați din reticulul sarcoplasmatic și se leagă de troponină, declanșând interacțiunea actină-miozină care produce contracția. Fără calciu, mișcarea nu ar fi posibilă. Magneziul acționează complementar, facilitând relaxarea musculară după contracție, ceea ce ilustrează echilibrul fin dintre aceste două minerale.</p>
+
+        <h3>Transmiterea impulsurilor nervoase</h3>
+        <p>Calciul joacă un rol esențial în eliberarea neurotransmițătorilor la nivelul sinapselor. Când un impuls nervos ajunge la terminalul axonal, canalele de calciu voltaj-dependente se deschid, permițând influxul de ioni de calciu care declanșează fuziunea veziculelor sinaptice cu membrana și eliberarea neurotransmițătorilor. Această funcție face din calciu un element central al comunicării nervoase, cu implicații directe asupra cogniției, coordonării și reactivității organismului.</p>
+
+        <h3>Coagularea sângelui</h3>
+        <p>Calciul este un cofactor esențial în cascada coagulării, participând la mai multe etape ale procesului care duce la formarea cheagului de fibrină. Fără calciu, capacitatea organismului de a opri sângerările ar fi compromisă. Acest rol, deși mai puțin discutat în nutriția generală, subliniază importanța sistemică a calciului dincolo de oase și mușchi.</p>
+
+        <h3>Semnalizarea celulară</h3>
+        <p>Calciul funcționează ca un mesager secundar esențial în interiorul celulelor, mediind răspunsuri la hormoni, factori de creștere și semnale extracelulare. Variațiile concentrației de calciu intracelular reglează procese precum secreția hormonală, expresia genică, proliferarea celulară și apoptoza. Această funcție de semnalizare face din calciu unul dintre cele mai versatile instrumente de comunicare biologică din organism.</p>
+
+        <h2 id="surse">Surse alimentare de calciu</h2>
+
+        <p>Organismul nu poate produce calciu endogen, ceea ce face aportul alimentar absolut necesar. Sursele de calciu sunt variate, dar biodisponibilitatea diferă semnificativ în funcție de matricea alimentară, de prezența factorilor care favorizează sau inhibă absorbția și de contextul digestiv al persoanei. Nu cantitatea brută din aliment este relevantă, ci cantitatea efectiv absorbită și utilizabilă.</p>
+
+        <p>Factorii care îmbunătățesc absorbția calciului includ vitamina D, lactoza, anumite aminoacizi și un mediu gastric acid adecvat. Factorii care o reduc includ oxalații (prezenți în spanac, rubarbă, sfeclă), fitații (din cereale integrale și leguminoase neprelucrate), excesul de fibre și aportul insuficient de vitamina D. Aceste interacțiuni subliniază faptul că sursa de calciu nu poate fi evaluată izolat de restul dietei.</p>
+
+        <h3>Produse lactate</h3>
+        <p>Laptele, iaurtul, kefirul și brânzeturile reprezintă surse tradiționale de calciu cu biodisponibilitate bună, în jur de 30–35%. Brânzeturile maturate, precum parmezanul, au o concentrație deosebit de ridicată. Produsele lactate fermentate aduc și beneficiul probioticelor, care pot susține indirect absorbția minerală prin menținerea sănătății intestinale.</p>
+
+        <h3>Pește cu oase comestibile</h3>
+        <p>Sardinele și somonul din conservă, consumate cu tot cu oasele moi, sunt surse excelente de calciu. Acestea oferă simultan acizi grași omega-3 și vitamina D, ceea ce le conferă un profil nutrițional sinergic favorabil sănătății osoase.</p>
+
+        <h3>Legume verzi și crucifere</h3>
+        <p>Varza kale, broccoli, varza chinezească și alte crucifere oferă calciu cu o biodisponibilitate surprinzător de bună, uneori superioară celei din lapte. Spanacul, deși conține calciu în cantitate apreciabilă, are un conținut ridicat de oxalați care reduc semnificativ absorbția, ceea ce îl face o sursă mai puțin eficientă decât sugerează cifrele brute.</p>
+
+        <h3>Leguminoase</h3>
+        <p>Năutul, fasolea albă și alte leguminoase contribuie la aportul de calciu, alături de fibre, proteine vegetale, magneziu și potasiu. Înmuierea și gătirea lor reduce conținutul de fitați, îmbunătățind biodisponibilitatea mineralelor.</p>
+
+        <h3>Nuci, semințe și derivate</h3>
+        <p>Semințele de susan și tahini, semințele de chia și migdalele sunt surse concentrate de calciu. Aceste alimente aduc și grăsimi benefice, fibre și micronutrienți complementari, integrându-se natural într-un model alimentar dens nutrițional.</p>
+
+        <h3>Produse fortificate</h3>
+        <p>Laptele vegetal fortificat, tofu-ul preparat cu săruri de calciu și anumite sucuri fortificate pot contribui semnificativ la aportul zilnic, în special la persoanele care nu consumă produse lactate. Calitatea fortificării variază între produse, iar verificarea etichetei este importantă.</p>
+
+        <h2>Exemple orientative de surse alimentare</h2>
+        <p>Pentru claritate practică, următoarele valori pot fi folosite ca repere orientative ale aportului de calciu per porție:</p>
+        <table>
+          <thead>
+            <tr><th>Aliment</th><th>Porție orientativă</th><th>Calciu aproximativ</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Parmezan</td><td>30 g</td><td>330 mg</td></tr>
+            <tr><td>Iaurt natural</td><td>200 g</td><td>300 mg</td></tr>
+            <tr><td>Lapte (integral sau degresat)</td><td>250 ml</td><td>300 mg</td></tr>
+            <tr><td>Sardine la conservă (cu oase)</td><td>100 g</td><td>380 mg</td></tr>
+            <tr><td>Tofu fortificat cu calciu</td><td>100 g</td><td>350 mg</td></tr>
+            <tr><td>Kale (varză creață) gătit</td><td>100 g</td><td>150 mg</td></tr>
+            <tr><td>Broccoli gătit</td><td>100 g</td><td>47 mg</td></tr>
+            <tr><td>Semințe de susan</td><td>30 g</td><td>280 mg</td></tr>
+            <tr><td>Semințe de chia</td><td>30 g</td><td>190 mg</td></tr>
+            <tr><td>Migdale</td><td>30 g</td><td>75 mg</td></tr>
+            <tr><td>Fasole albă gătită</td><td>100 g</td><td>65 mg</td></tr>
+            <tr><td>Năut gătit</td><td>100 g</td><td>49 mg</td></tr>
+            <tr><td>Lapte de soia fortificat</td><td>250 ml</td><td>300 mg</td></tr>
+          </tbody>
+        </table>
+        <p>Aceste valori au caracter orientativ și pot varia în funcție de origine, procesare, marcă și metodă de preparare.</p>
+
+        <h2>Model alimentar favorabil unui aport bun de calciu</h2>
+        <p>Un aport bun de calciu este favorizat nu de concentrarea pe un singur aliment, ci de un model alimentar diversificat care include regulat surse variate: produse lactate sau alternative fortificate, legume verzi, leguminoase, nuci, semințe și pește cu oase comestibile. Combinarea acestor surse cu un aport adecvat de vitamina D, un consum moderat de sodiu și cafea, și evitarea dependenței exclusive de alimente bogate în oxalați creează contextul cel mai favorabil pentru absorbția și utilizarea eficientă a calciului.</p>
+
+        <p>Calitatea aportului de calciu reflectă adesea calitatea generală a dietei. Alimentația monotonă, ultraprocesată sau exclusiv bazată pe suplimente nu poate reproduce complexitatea nutrițională a unui model alimentar coerent și diversificat.</p>
+
+        <h2 id="suplimentarea">Suplimentarea cu calciu</h2>
+
+        <h3>Context de utilizare</h3>
+        <p>Suplimentarea cu calciu poate fi justificată în situații specifice, dar nu trebuie abordată automat sau ca primă linie de intervenție. Prioritatea rămâne optimizarea aportului alimentar, iar suplimentarea devine relevantă atunci când dieta nu reușește să asigure necesarul, fie din cauza restricțiilor alimentare, intoleranțelor, patologiilor digestive sau a unor necesități crescute pe care alimentația singură nu le poate acoperi.</p>
+
+        <p>Un aspect esențial al suplimentării cu calciu este faptul că ea nu funcționează eficient în izolare. Fără un aport adecvat de vitamina D pentru absorbție, de vitamina K2 pentru direcționarea calciului către os și de magneziu pentru reglajul fin al întregului sistem, suplimentarea cu calciu poate deveni nu doar ineficientă, ci potențial riscantă. Acest principiu este cunoscut în literatura funcțională drept „paradoxul calciului": suplimentarea izolată poate crește riscul de calcificare vasculară fără a îmbunătăți semnificativ densitatea osoasă.</p>
+
+        <h3>Forme de suplimente</h3>
+        <p>Cele mai utilizate forme de calciu în suplimente sunt carbonatul de calciu și citratul de calciu. Carbonatul de calciu conține cea mai mare proporție de calciu elemental (aproximativ 40%) și necesită un mediu gastric acid pentru absorbție optimă, ceea ce îl face mai potrivit pentru administrarea în timpul meselor. Citratul de calciu are o proporție mai mică de calciu elemental (aproximativ 21%), dar se absoarbe independent de aciditatea gastrică, fiind preferat la persoanele cu hipoclorhidrie, la vârstnici sau la cei care iau inhibitori de pompă protonică.</p>
+
+        <p>Alte forme includ lactatul de calciu, gluconatul de calciu și hidroxiapatita microcristalină. Alegerea practică depinde de toleranța individuală, contextul digestiv și coerența cu restul protocolului nutrițional.</p>
+
+        <h3>Siguranță și limite</h3>
+        <p>Dozele zilnice recomandate și limitele superioare tolerabile pentru calciu sunt bine stabilite și variază în funcție de vârstă și sex. Pentru adulții între 19 și 50 de ani, doza zilnică recomandată este de 1.000 mg, iar pentru femeile peste 51 de ani și bărbații peste 71 de ani, crește la 1.200 mg pe zi. Limita superioară tolerabilă este de 2.500 mg pe zi pentru adulții până la 50 de ani și de 2.000 mg pe zi pentru cei peste 51 de ani, din totalul cumulat din alimentație și suplimente.</p>
+
+        <div class="micronutrient-callout">
+          <p>Suplimentarea cu calciu trebuie abordată responsabil și individualizat. Dozele unice de supliment nu trebuie să depășească 500 mg, deoarece absorbția scade semnificativ la cantități mai mari administrate simultan. Fracționarea dozei pe parcursul zilei optimizează atât absorbția, cât și toleranța digestivă.</p>
         </div>
-    </main>
+
+        <p>La doze excesive sau în absența cofactorilor necesari, suplimentarea cu calciu poate fi asociată cu risc crescut de pietre la rinichi, constipație, disconfort gastrointestinal și, conform unor studii observaționale, cu un posibil risc cardiovascular crescut prin calcificarea vasculară. Aceste riscuri subliniază importanța contextualizării suplimentării într-o abordare integrată, nu izolată.</p>
+
+        <h2 id="interactiuni">Interacțiuni relevante</h2>
+
+        <p>Calciul nu funcționează singur. Aceasta este poate cea mai importantă lecție nutrițională legată de acest mineral. Eficiența sa, atât în alimentație cât și în suplimentare, depinde fundamental de relația cu alți nutrienți și de contextul metabolic general.</p>
+
+        <h3>Calciu și vitamina D</h3>
+        <p>Vitamina D este cofactorul esențial al absorbției calciului. Fără un status adecvat al vitaminei D, organismul nu poate absorbi eficient calciul din alimente, indiferent de cantitatea ingerată. Această relație este bidirecțională: vitamina D stimulează absorbția intestinală și reabsorbția renală a calciului, iar calciul, la rândul său, face parte din sistemul care reglează activarea vitaminei D. Orice discuție despre aportul de calciu care omite vitamina D este incompletă.</p>
+
+        <h3>Calciu și vitamina K2</h3>
+        <p>Vitamina K2 activează proteinele dependente de vitamina K, în special osteocalcina (care direcționează calciul către os) și proteina matriceală Gla (care previne depunerea calciului în pereții arteriali). Această funcție de „dirijare" a calciului este esențială pentru a înțelege de ce suplimentarea cu calciu fără K2 poate fi contraproductivă. Combinația calciu–D3–K2 reprezintă, din perspectivă funcțională, un pachet inseparabil pentru sănătatea osoasă și cardiovasculară.</p>
+
+        <h3>Calciu și magneziu</h3>
+        <p>Magneziul și calciul au o relație de complementaritate funcțională profundă. Magneziul participă la activarea vitaminei D, la reglarea parathormonului și la relaxarea musculară, contrabalansând efectul contractil al calciului. Un dezechilibru în favoarea calciului și în detrimentul magneziului poate contribui la crampe, rigiditate musculară, hipertensiune și calcificări. Din perspectivă nutrițională, raportul calciu-magneziu din dietă merită atenție cel puțin la fel de mare ca valoarea absolută a fiecăruia.</p>
+
+        <h3>Calciu și fosfor</h3>
+        <p>Fosforul este partenerul structural al calciului în hidroxiapatită. Un raport calciu-fosfor echilibrat susține mineralizarea osoasă, în timp ce un exces de fosfor, frecvent în dietele bogate în alimente ultraprocesate și băuturi carbogazoase, poate perturba metabolismul calciului și poate stimula resorbția osoasă.</p>
+
+        <h3>Interacțiuni cu alte substanțe</h3>
+        <p>Calciul poate interfera cu absorbția fierului, zincului și a anumitor medicamente precum antibioticele din clasa tetraciclinelor, levotiroxina și bisfosfonații. Din acest motiv, administrarea suplimentelor de calciu trebuie distanțată în timp de aceste substanțe. Excesul de sodiu, cafeină și proteine animale poate crește pierderile urinare de calciu, ceea ce face relevant contextul alimentar general.</p>
+
+        <h2 id="populatii">Populații de interes</h2>
+
+        <h3>Femei în postmenopauză</h3>
+        <p>Postmenopauza reprezintă una dintre perioadele de risc crescut pentru pierderea osoasă accelerată, datorită scăderii estrogenilor care protejează densitatea osoasă. Aportul adecvat de calciu, alături de vitamina D, K2, magneziu, activitate fizică cu impact și optimizarea statusului hormonal, devine o prioritate în strategia de prevenție a osteoporozei. Suplimentarea poate fi justificată, dar trebuie integrată într-o abordare mai amplă.</p>
+
+        <h3>Copii și adolescenți</h3>
+        <p>Perioada de creștere și dezvoltare osoasă este critică pentru acumularea capitalului osos. Copiii și adolescenții au necesități crescute de calciu, iar atingerea unui vârf de masă osoasă optim la maturitate depinde semnificativ de aportul din acești ani. Alimentația diversificată, activitatea fizică și expunerea adecvată la soare sunt elementele de bază ale acestei investiții pe termen lung.</p>
+
+        <h3>Femeile gravide și care alăptează</h3>
+        <p>Sarcina și lactația implică un transfer semnificativ de calciu către făt și sugar. Deși organismul matern activează mecanisme compensatorii de creștere a absorbției, aportul alimentar adecvat rămâne esențial pentru a proteja atât sănătatea mamei, cât și dezvoltarea copilului.</p>
+
+        <h3>Vârstnici</h3>
+        <p>La persoanele în vârstă, absorbția intestinală a calciului scade, statusul vitaminei D este frecvent suboptimal, aciditatea gastrică se reduce, iar riscul de osteoporoză și fracturi crește. În plus, monotonia alimentară, polimedicația și reducerea activității fizice agravează riscul de deficit funcțional. Evaluarea aportului de calciu la vârstnici trebuie să includă și evaluarea cofactorilor și a contextului metabolic general.</p>
+
+        <h3>Persoane cu intoleranță la lactoză sau diete restrictive</h3>
+        <p>Persoanele care evită produsele lactate, fie din cauza intoleranței la lactoză, alergiei la proteina laptelui sau a alegerilor etice, trebuie să acorde atenție sporită surselor alternative de calciu. Produsele fortificate, legumele verzi, semințele și leguminoasele pot asigura un aport adecvat, dar necesită planificare conștientă și, uneori, suplimentare contextuală.</p>
+
+        <h2>Deficit, insuficiență și exces</h2>
+
+        <p>Deficitul cronic de calciu nu se manifestă rapid prin simptome evidente, deoarece organismul menține calcemia normală mobilizând rezervele osoase. Această strategie de supraviețuire pe termen scurt devine o vulnerabilitate pe termen lung: osul se demineralizează silențios, ducând progresiv la osteopenie și osteoporoză, cu risc crescut de fracturi la impact minimal.</p>
+
+        <p>Hipocalcemia acută, deși mai rară, este o condiție serioasă care se poate manifesta prin crampe musculare, spasme, parestezii periferice și periorale, confuzie, pierderi de memorie și, în cazuri severe, aritmii cardiace. Aceasta poate apărea în contextul hipoparatiroidismului, deficitului sever de vitamina D, insuficienței renale sau al unor intervenții chirurgicale.</p>
+
+        <p>Hipercalcemia, excesul de calciu în sânge, este de obicei cauzată de afecțiuni medicale precum hiperparatiroidismul primar sau anumite malignități, și mai rar de suplimentarea excesivă. Simptomele pot include sete excesivă, urinare frecventă, constipație, greață, dureri osoase, slăbiciune musculară, letargie și, pe termen lung, calcificarea vaselor de sânge și a țesuturilor moi, pietre renale și deteriorare renală.</p>
+
+        <h2 id="relevanta">Relevanță clinică și nutrițională</h2>
+
+        <p>Calciul este unul dintre primii micronutrienți evaluați în orice protocol nutrițional orientat către sănătatea osoasă, dar relevanța sa se extinde mult dincolo de os. Metabolismul calciului este un indicator al calității generale a dietei, al statusului vitaminei D, al funcției digestive și al echilibrului hormonal. Deficitul funcțional de calciu coexistă frecvent cu deficite de vitamina D, magneziu și vitamina K2, iar abordarea izolată a unuia singur dintre aceste elemente rareori produce rezultate optime.</p>
+
+        <p>Valoarea practică a calciului într-un protocol nutrițional rezidă în integrarea sa corectă cu cofactorii necesari și în evaluarea contextului biologic individual. O abordare care se limitează la prescrierea unei pastile de calciu, fără a verifica statusul vitaminei D, fără a evalua aportul de magneziu și K2, fără a analiza calitatea digestivă și fără a integra activitatea fizică, ratează esența metabolismului calcic.</p>
+
+        <h2>Perspectivă funcțională și holistică</h2>
+
+        <div class="micronutrient-note-holistic">
+          <h3>Cadru interpretativ</h3>
+          <p>Din perspectivă funcțională, calciul poate fi descris ca mineralul structurii și al stabilității. El se află la intersecția dintre schelet, mușchi, nervi, vase de sânge și semnalizare celulară. Impresionează nu doar prin cantitatea sa în organism, ci prin diversitatea funcțiilor pe care le susține și prin complexitatea rețelei de cofactori de care depinde.</p>
+        </div>
+
+        <p>Într-o lectură holistică responsabilă, calciul poate fi asociat cu tema suportului și a fundamentului. La nivel biologic, el conferă soliditate structurii osoase, fermitate contracției musculare și precizie comunicării nervoase. Această fundație fizică poate fi pusă în paralel cu nevoia de stabilitate, siguranță și susținere pe care fiecare organism o exprimă la multiple niveluri. În medicina tradițională chineză, calciul este legat de esența rinichilor, care guvernează oasele și măduva. În Ayurveda, el este fundamental pentru Asthi Dhatu, țesutul osos, iar deficitul său poate agrava Vata dosha, asociată cu uscăciunea, fragilitatea și anxietatea. O astfel de perspectivă nu înlocuiește datele științifice, ci oferă un cadru interpretativ mai amplu pentru înțelegerea relației dintre structură, funcție și echilibru intern.</p>
+
+        <h2 id="sinteza">Sinteză</h2>
+
+        <p>Calciul este cel mai abundent mineral din organism și unul dintre cele mai esențiale elemente nutritive, cu roluri fundamentale în structura osoasă, contracția musculară, transmiterea nervoasă, coagulare și semnalizarea celulară. Principalele surse alimentare includ produsele lactate, peștele cu oase comestibile, legumele verzi, leguminoasele, nucile și semințele. Eficiența sa depinde critic de vitamina D, vitamina K2, magneziu și de contextul metabolic general. Suplimentarea poate fi utilă în situații specifice, dar trebuie integrată responsabil într-o strategie nutrițională mai amplă, bazată pe diversitate alimentară, cofactori adecvați și evaluare individualizată a terenului biologic.</p>
+      </div>
+    </article>
+
+    <div id="footer-placeholder"></div>
+    <div id="script-placeholder"></div>
+  </div>
+
+  <script>
+    (function injectFooterAndScripts() {
+      const footerPlaceholder = document.getElementById('footer-placeholder');
+      const scriptPlaceholder = document.getElementById('script-placeholder');
+      const year = new Date().getFullYear();
+
+      if (footerPlaceholder) {
+        footerPlaceholder.innerHTML = `
+          <footer>
+            <p>© ${year} NUTRISIB. Toate drepturile rezervate.</p>
+          </footer>
+          <div class="legal-footer-box">
+            <button class="legal-btn" type="button" onclick="window.print()">Printează / Salvează PDF</button>
+          </div>
+        `;
+      }
+
+      if (scriptPlaceholder) {
+        const smoothScript = document.createElement('script');
+        smoothScript.textContent = `
+          document.addEventListener('click', function (event) {
+            const target = event.target.closest('a[href^="#"]');
+            if (!target) return;
+            const id = target.getAttribute('href');
+            const el = document.querySelector(id);
+            if (!el) return;
+            event.preventDefault();
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        `;
+        scriptPlaceholder.appendChild(smoothScript);
+      }
+    })();
+  </script>
 </body>
 </html>
