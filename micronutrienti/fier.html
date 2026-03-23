@@ -1,400 +1,281 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fier</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
-        :root {
-            --primary-color: #c0392b; /* O nuanță de roșu-carmin */
-            --primary-color-dark: #a93226;
-            --secondary-color: #2c3e50;
-            --background-color: #f4f6f7;
-            --text-color: #34495e;
-            --card-background: #ffffff;
-            --light-gray-background: #f8f9fa;
-            --border-color: #e0e0e0;
-            --accent-blue: #3498db;
-            --accent-green: #27ae60;
-            --base-font-family: 'Roboto', sans-serif;
-            --border-radius-large: 15px;
-            --border-radius-small: 10px;
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
-            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        body {
-            font-family: var(--base-font-family);
-            line-height: 1.7;
-            margin: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
-        }
-
-        .infographic-container {
-            max-width: 950px;
-            width: 100%;
-            background: var(--card-background);
-            border-radius: var(--border-radius-large);
-            box-shadow: var(--shadow-medium);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .infographic-header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px 10px;
-            text-align: center;
-            font-size: 2.5em;
-            font-weight: 700;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-            position: relative;
-        }
-
-        .section {
-            padding: 25px 45px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .section:last-child {
-            border-bottom: none;
-        }
-
-        .section-title {
-            font-size: 1.9em;
-            color: var(--secondary-color);
-            margin-top: 0;
-            margin-bottom: 25px;
-            font-weight: 600;
-            border-bottom: 3px solid var(--primary-color-dark);
-            padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        .section-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            width: 100%;
-        }
-        
-        .subsection {
-            flex: 1;
-            min-width: 300px;
-            background-color: var(--light-gray-background);
-            border-radius: var(--border-radius-small);
-            padding: 25px;
-            box-shadow: var(--shadow-light);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-left: 5px solid transparent;
-        }
-
-        .subsection:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            border-left-color: var(--primary-color);
-        }
-
-        .subsection-title {
-            font-size: 1.4em;
-            color: var(--primary-color);
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .subsection p,.subsection ul,.subsection ol {
-            font-size: 0.98em;
-            margin-bottom: 12px;
-        }
-
-        .subsection ul,.subsection ol {
-            padding-left: 20px;
-        }
-
-        .subsection li {
-            margin-bottom: 10px;
-        }
-
-        .subsection b,.subsection strong {
-            color: var(--secondary-color);
-        }
-
-        .note {
-            font-size: 0.9em;
-            color: #6c757d;
-            margin-top: 25px;
-            padding: 15px 20px;
-            background-color: #f9ebea;
-            border-left: 4px solid var(--primary-color);
-            width: 100%;
-            box-sizing: border-box;
-            border-radius: 5px;
-        }
-        
-        .warning-note {
-            background-color: #f9ebea;
-            border-left-color: var(--primary-color-dark);
-        }
-        
-        .holistic-note {
-            background-color: #e8f8f5;
-            border-left-color: var(--accent-green);
-       }
-
-        .icon {
-            font-size: 1.5em;
-            margin-right: 12px;
-            color: var(--primary-color-dark);
-            vertical-align: middle;
-        }
-        
-        .subsection-icon {
-             font-size: 1.5em;
-             margin-right: 10px;
-             color: var(--primary-color);
-        }
-        
-        .icon-small {
-            font-size: 1.5em;
-            margin-right: 8px;
-            color: var(--primary-color);
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .footer-copyright {
-            text-align: center;
-            padding: 20px 0;
-            font-size: 0.9em;
-            color: #6c757d;
-            background-color: var(--light-gray-background);
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 0.9em;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-            color: var(--secondary-color);
-            font-weight: 600;
-        }
-
-        tr:nth-child(even) {
-            background-color: var(--light-gray-background);
-        }
-
-        @media (max-width: 768px) {
-            .section { padding: 25px 20px; }
-            .section-content {
-                flex-direction: column;
-            }
-            .subsection {
-                min-width: unset;
-            }
-            .infographic-header {
-                font-size: 2em;
-            }
-            .section-title {
-                font-size: 1.6em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fier | Enciclopedia Micronutrienților | NUTRISIB</title>
+  <meta name="description" content="Fierul - capitol complet din enciclopedia micronutrienților NUTRISIB, cu abordare nutrițională, funcțională și holistică.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@400;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+  <link rel="stylesheet" href="https://nutrisib.club/micronutrienti.css">
 </head>
-<body>
-    <main class="infographic-container">
-        <header class="infographic-header">
-            Fier
-        </header>
+<body class="micronutrient-page">
+  <div class="container-main micronutrient-shell">
+    <div class="micronutrient-topbar screen-only">
+      <a class="btn-white" href="https://nutrisib.club/micronutrienti/index.html">Enciclopedia micronutrienților</a>
+      <div class="micronutrient-actions">
+        <a class="btn-outline" href="#continut-integral">Sari la conținut</a>
+        <button class="btn" type="button" onclick="window.print()">Generează PDF / Printează</button>
+      </div>
+    </div>
 
-        <section class="section">
-            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
-            <div class="section-content">
-                <div class="subsection" style="flex: 2;">
-                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul principal în organism</h3>
-                     <p><b>Fierul (Fe)</b> este un mineral esențial pentru viață, crucial pentru transportul oxigenului și producția de energie.</p>
-                     <ul>
-                         <li><b>Transportul oxigenului:</b> Este componenta centrală a <strong>hemoglobinei</strong> (în globulele roșii) și a <strong>mioglobinei</strong> (în mușchi), proteinele care leagă și transportă oxigenul către toate celulele corpului.</li>
-                         <li><b>Producția de energie:</b> Este esențial pentru funcționarea lanțului de transport de electroni din mitocondrii, procesul final de producere a energiei (ATP).</li>
-                         <li><b>Sinteza ADN-ului:</b> Joacă un rol important în sinteza materialului genetic.</li>
-                         <li><b>Funcția imunitară:</b> Este esențial pentru dezvoltarea și funcționarea celulelor imunitare.</li>
-                         <li><b>Funcția cognitivă:</b> Este crucial pentru dezvoltarea normală a creierului și sinteza neurotransmițătorilor.</li>
-                         <li><b>Sănătatea pielii, părului și unghiilor:</b> Contribuie la oxigenarea și nutriția corespunzătoare a acestor țesuturi.</li>
-                     </ul>
-                </div>
-                 <div class="subsection" style="flex: 1.5;">
-                    <h3 class="subsection-title"><span class="subsection-icon">🥩</span>Forme și surse alimentare</h3>
-                    <p>Există două tipuri de fier în alimente, cu rate de absorbție foarte diferite:</p>
-                    <p><b>1. Fier hemic (absorbție 15-35%):</b></p>
-                     <ul>
-                        <li><b>Surse:</b> Se găsește exclusiv în produse de origine animală: carne roșie, ficat, fructe de mare (stridii), carne de pasăre, pește.</li>
-                     </ul>
-                     <p><b>2. Fier non-hemic (absorbție 2-20%):</b></p>
-                     <ul>
-                        <li><b>Surse:</b> Se găsește în plante: leguminoase (linte, năut), spanac, semințe de dovleac, quinoa, tofu, ciocolată neagră.</li>
-                        <li>Absorbția sa este <strong>puternic influențată</strong> de alți factori din dietă.</li>
-                     </ul>
-                </div>
-            </div>
-        </section>
+    <section class="micronutrient-hero">
+      <span class="hero-kicker">Enciclopedia Micronutrienților</span>
+      <h1>Fierul</h1>
+      <p>Mineral esențial pentru transportul oxigenului, producția de energie mitocondrială, sinteza ADN-ului, funcția imunitară și dezvoltarea cognitivă.</p>
+    </section>
 
-        <section class="section">
-             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit (Anemie) și Exces (Hemocromatoză)</h2>
-             <div class="section-content">
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Simptome cauzate de deficit</h3>
-                    <p>Deficiența de fier este cea mai comună carență nutrițională la nivel global, ducând la <strong>anemie feriprivă</strong>.</p>
-                    <ul>
-                        <li><b>Oboseală extremă și slăbiciune.</b></li>
-                        <li><b>Paloare</b> (a pielii, gingiilor, interiorului pleoapelor).</li>
-                        <li><b>Dificultăți de respirație</b> la efort.</li>
-                        <li><b>Amețeli, dureri de cap.</b></li>
-                        <li><b>Mâini și picioare reci.</b></li>
-                        <li><b>Unghii fragile, concave (koilonychia).</b></li>
-                        <li><b>Căderea părului.</b></li>
-                        <li><b>Pofte neobișnuite</b> (pica) pentru gheață, pământ sau amidon.</li>
-                    </ul>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Exces și toxicitate</h3>
-                    <p>Organismul nu are un mecanism eficient de a elimina excesul de fier, deci acumularea acestuia este periculoasă. Excesul este de obicei cauzat de o afecțiune genetică (<strong>hemocromatoză</strong>) sau de suplimentare necontrolată.</p>
-                     <ul>
-                        <li>Fierul nelegat acționează ca un <strong>pro-oxidant</strong> puternic, generând radicali liberi și daune celulare.</li>
-                        <li><b>Afectare hepatică:</b> Acumularea în ficat poate duce la ciroză și cancer hepatic.</li>
-                        <li><b>Probleme cardiace:</b> Depunerea în inimă poate cauza insuficiență cardiacă și aritmii.</li>
-                        <li><b>Diabet:</b> Afectarea pancreasului poate duce la diabet.</li>
-                        <li><b>Dureri articulare.</b></li>
-                    </ul>
-                </div>
-             </div>
-        </section>
-        
-        <section class="section">
-            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
-            <div class="section-content">
-                <div class="subsection">
-                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">🤝</span>Sinergii și antagonisme</h3>
-                    <p><b>Sinergii (cresc absorbția/utilizarea):</b></p>
-                    <ul>
-                        <li><b>Vitamina C:</b> Cel mai puternic promotor al absorbției fierului non-hemic.</li>
-                        <li><b>Vitamina A:</b> Ajută la mobilizarea fierului din depozite.</li>
-                        <li><b>Cuprul:</b> Esențial pentru transportul fierului în organism.</li>
-                    </ul>
-                     <p><b>Antagonisme (blochează absorbția):</b></p>
-                     <ul>
-                        <li><b>Calciul:</b> Suplimentele de calciu și lactatele pot reduce absorbția fierului.</li>
-                        <li><b>Fitații:</b> Din cereale integrale, nuci și leguminoase.</li>
-                        <li><b>Polifenolii (taninurile):</b> Din cafea, ceai și vin roșu.</li>
-                    </ul>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
-                    <p><b>În MTC</b>, fierul este fundamental pentru calitatea <b>Sângelui (Xue)</b>. O deficiență de fier este o manifestare a "Deficienței de Sânge", care poate fi cauzată de o slăbiciune a <b>Splinei</b> (producție) sau a <b>Ficatului</b> (stocare).</p>
-                    <p><b>În Ayurveda</b>, fierul este esențial pentru <b>Rakta Dhatu</b> (țesutul sanguin) și susține <b>Pitta dosha</b>. Deficitul (Pandu Roga) duce la o slăbire a <b>Agni</b> (focul metabolic) și a vitalității generale (<b>Ojas</b>).</p>
-                </div>
-            </div>
-        </section>
+    <nav class="micronutrient-jumpbar screen-only" aria-label="Navigare internă">
+      <a href="#identitate">Identitate</a>
+      <a href="#farmacocinetica">Farmacocinetică</a>
+      <a href="#roluri">Roluri</a>
+      <a href="#surse">Surse</a>
+      <a href="#suplimentarea">Suplimentarea</a>
+      <a href="#interactiuni">Interacțiuni</a>
+      <a href="#populatii">Populații</a>
+      <a href="#relevanta">Relevanță</a>
+      <a href="#sinteza">Sinteză</a>
+    </nav>
 
-        <section class="section">
-            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
-            <p>Din perspectivă holistică, fierul este asociat cu <b>vitalitatea, forța, voința și capacitatea de a acționa</b>. Sângele, prin care fierul transportă oxigenul, este văzut simbolic ca forța vieții și entuziasmul.</p>
-            <div class="section-content">
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="icon-small">💔</span>Deficit</h3>
-                    <p>Un deficit de fier poate fi legat de:</p>
-                    <ol>
-                        <li><b>Lipsa de entuziasm și bucurie de viață:</b> O apatie profundă, un sentiment că "viața este prea grea".<br><i>Manifestare fizică: Oboseală cronică.</i></li>
-                        <li><b>Lipsa de voință sau de curaj:</b> Teamă de confruntare, dificultatea de a-ți stabili limite sau de a-ți afirma propria putere.</li>
-                        <li><b>Tristețe profundă, melancolie, pierderea speranței.</b></li>
-                    </ol>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
-                    <p>Obiectivele pe care le susține fierul pot fi atinse prin:</p>
-                    <ul>
-                        <li><b>Practici care încurajează bucuria și entuziasmul</b> (hobby-uri, artă, muzică).</li>
-                        <li><b>Exerciții fizice ușoare, mers în natură</b> pentru "împământare".</li>
-                        <li><b>Terapii</b> care ajută la eliberarea tristeții sau a traumelor emoționale.</li>
-                        <li><b>Afirmații pozitive</b> despre forță, energie și curaj.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+    <article class="micronutrient-article" id="continut-integral">
+      <div class="micronutrient-content">
+        <h2>Mineral esențial pentru transportul oxigenului, producția de energie mitocondrială, sinteza ADN-ului, funcția imunitară și dezvoltarea cognitivă</h2>
 
-        <section class="section">
-            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
-            <div class="section-content">
-                <div class="subsection">
-                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Doze recomandate</h3>
-                     <p>Necesarul de fier variază semnificativ, în special la femei.</p>
-                     <table>
-                         <thead>
-                             <tr>
-                                 <th>Grup de populație</th>
-                                 <th>DZR (mg/zi)</th>
-                                 <th>Limită superioară (UL)</th>
-                             </tr>
-                         </thead>
-                         <tbody>
-                             <tr>
-                                 <td>Bărbați (19+ ani)</td>
-                                 <td>8</td>
-                                 <td>45</td>
-                             </tr>
-                             <tr>
-                                 <td>Femei (19-50 ani)</td>
-                                 <td>18</td>
-                                 <td>45</td>
-                             </tr>
-                              <tr>
-                                 <td>Femei (51+ ani)</td>
-                                 <td>8</td>
-                                 <td>45</td>
-                             </tr>
-                             <tr>
-                                 <td>Femei însărcinate</td>
-                                 <td>27</td>
-                                 <td>45</td>
-                             </tr>
-                         </tbody>
-                     </table>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
-                    <p>Suplimentarea cu fier trebuie făcută doar atunci când este necesar.</p>
-                    <div class="note warning-note">
-                        <p><b>Avertisment critic:</b> Fierul este un pro-oxidant puternic. <strong>Nu luați niciodată suplimente cu fier fără a avea un diagnostic confirmat de anemie feriprivă</strong> (pe baza analizelor de sânge: feritină, sideremie). Suplimentarea inutilă poate duce la supraîncărcare cu fier, o condiție toxică ce poate afecta ficatul și inima. Fierul este una dintre principalele cauze de otrăvire accidentală la copii.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <div class="footer-copyright">
-            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
-            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        <p>Fierul este cel mai abundent mineral de tranziție din corpul uman și, totodată, cel mai frecvent implicat în deficiențe nutriționale la nivel global. Organizația Mondială a Sănătății estimează că anemia feriprivă afectează peste 1,6 miliarde de oameni — o amploare care plasează deficiența de fier printre cele mai prevalente probleme de sănătate publică ale lumii. Și totuși, fierul este și unul dintre micronutrienții cei mai periculoși în exces: un pro-oxidant puternic, a cărui acumulare necontrolată produce leziuni tisulare severe.</p>
+
+        <p>Această dualitate — indispensabil în cantitate adecvată, toxic în exces — definește modul în care fierul trebuie înțeles și gestionat. Spre deosebire de mulți micronutrienți eliminați eficient renal, fierul nu are o cale de excreție activă: homeostazia sa se realizează aproape exclusiv prin reglarea absorbției intestinale. Aceasta face ca contextul alimentar, statusul inflamator și factorii genetici să joace un rol decisiv în echilibrul fierului pe termen lung.</p>
+
+        <p>O a doua particularitate fundamentală este că fierul alimentar există în două forme cu comportament biologic complet diferit: fierul hemic, din produsele animale, absorbit eficient și relativ independent de contextul alimentar, și fierul non-hemic, din surse vegetale, cu absorbție variabilă și puternic influențată de alți factori din masă. Înțelegerea acestei diferențe este esențială pentru orice strategie nutrițională orientată spre optimizarea statusului de fier.</p>
+
+        <h2 id="identitate">Identitatea biologică a fierului</h2>
+
+        <p>Fierul este un element chimic cu simbol Fe, prezent în organism în cantitate totală de aproximativ 3–5 g la un adult sănătos. Cea mai mare parte — circa 65–70% — se află incorporată în hemoglobina din eritrocite. Restul este distribuit în mioglobina musculară (~10%), în enzime și proteine funcționale (~5%) și în depozite sub formă de feritină și hemosiderină, în principal în ficat, splină și măduvă osoasă.</p>
+
+        <p>Fierul există în organism în două stări de oxidare biologic relevante: forma feroasă (Fe2+) și forma ferică (Fe3+). Tranziția între aceste stări — mediată enzimatic — stă la baza funcțiilor sale biologice esențiale și, totodată, a potențialului său pro-oxidant. Fierul liber, nelegat de proteine specifice, poate participa la reacția Fenton, generând radicali hidroxil extrem de reactivi care lezează lipidele membranare, proteinele și ADN-ul.</p>
+
+        <p>Repere nutriționale oficiale: doza zilnică recomandată (RDA) variază semnificativ în funcție de sex și stadiul fiziologic — 8 mg/zi pentru bărbați adulți și femei postmenopauză, 18 mg/zi pentru femei de vârstă fertilă și 27 mg/zi în sarcină. Limita superioară tolerabilă (UL) este stabilită la 45 mg/zi pentru adulți. Veganii și vegetarienii au nevoi estimate la 1,8 ori mai mari față de non-vegetarieni, din cauza biodisponibilității mai scăzute a fierului non-hemic.</p>
+
+        <h2 id="farmacocinetica">Farmacocinetică și metabolism</h2>
+
+        <p>Absorbția fierului se realizează predominant în duoden și jejunul proximal, printr-un mecanism activ și reglat cu precizie. Fierul hemic este preluat direct de enterocite printr-un transportor dedicat (HCP1) și absorbit cu o eficiență de 15–35%, relativ constant și puțin influențat de alți factori alimentari. Fierul non-hemic, în schimb, trebuie mai întâi redus de la forma ferică (Fe3+) la forma feroasă (Fe2+) de către feroreductaza duodenală (Dcytb), după care este transportat în enterocit prin DMT1 — același transportor folosit și de zinc, mangan și cupru.</p>
+
+        <p>Reglarea absorbției intestinale se face prin hepcidina, un peptid hormonal sintetizat în ficat. Hepcidina blochează exportul fierului din enterocite și macrofage prin internalizarea feroportinei — principalul exportor celular de fier. Când depozitele sunt pline sau există inflamație, hepcidina crește și blochează absorbția. Când depozitele sunt scăzute sau există hipoxie, hepcidina scade și absorbția este stimulată. Această axă hepcidină-feroportină este mecanismul central al homeostaziei fierului și punctul de disfuncție în anemia inflamatorie cronică.</p>
+
+        <p>Odată absorbit, fierul este transportat în plasmă legat de transferină — proteina specifică de transport — către măduvă pentru eritropoieză, ficat pentru stocare sau alte țesuturi pentru funcții enzimatice. Feritina serică reflectă fidel depozitele corporale de fier și reprezintă cel mai sensibil marker al statusului de fier, anterior apariției anemiei manifeste. Eliminarea fierului este minimă și pasivă — prin descuamarea celulelor intestinale și cutanate, transpirație și menstruație — ceea ce explică de ce excesul nu poate fi remediat rapid.</p>
+
+        <h2 id="roluri">Roluri fiziologice majore</h2>
+
+        <h3>Transportul oxigenului — hemoglobina și mioglobina</h3>
+        <p>Acesta este rolul central și cel mai bine cunoscut al fierului. Hemoglobina, proteina din eritrocite, conține câte un atom de fier în fiecare dintre cele patru grupe hem, capabil să lege reversibil oxigenul în plămâni și să îl elibereze în țesuturi. Fără fier funcțional în hemoglobină, celulele sunt private de oxigen, indiferent cât de eficient respiră plămânii.</p>
+
+        <p>Mioglobina, proteina musculară structurată similar, stochează oxigenul în mușchi și îl furnizează rapid în momentul contracției intense. Deficiența de mioglobină contribuie la slăbiciunea musculară și intoleranța la efort caracteristice anemiei feriprive, dincolo de efectul central al hemoglobinei scăzute.</p>
+
+        <h3>Producția de energie mitocondrială</h3>
+        <p>Fierul este o componentă structurală indispensabilă a complexelor I, II și III ale lanțului de transport de electroni mitocondrial, sub formă de centre fier-sulf și citocromi. Aceste complexe realizează transferul de electroni care generează gradientul de protoni utilizat de ATP-sintaza pentru a produce ATP — moneda energetică universală a celulei. O deficiență de fier compromite direct eficiența producției de energie la nivel mitocondrial, independent de efectul asupra hemoglobinei.</p>
+
+        <h3>Sinteza ADN-ului</h3>
+        <p>Fierul este cofactorul ribonucleotid reductazei, enzima care catalizează conversia ribonucleotidelor în dezoxiribonucleotide — pasul limitant în sinteza ADN-ului. Aceasta explică de ce celulele cu rată mare de diviziune — eritrocitele din măduvă, celulele imunitare, celulele mucoasei intestinale — sunt primele afectate de deficiența de fier și de ce anemia feriprivă apare înainte de alte manifestări clinice.</p>
+
+        <h3>Funcția imunitară</h3>
+        <p>Fierul este esențial pentru proliferarea și maturarea limfocitelor T și a altor celule imunitare. Paradoxal, atât deficiența cât și excesul de fier compromit imunitatea: deficiența reduce capacitatea de proliferare limfocitară, în timp ce excesul furnizează un substrat de creștere pentru bacterii și fungi patogeni, care competiționează activ cu organismul pentru fierul disponibil. Hepcidina crescută în infecții — prin care organismul sechestrează fierul — este de fapt un mecanism de apărare anti-infecțioasă.</p>
+
+        <h3>Funcția cognitivă și dezvoltarea neurologică</h3>
+        <p>Fierul participă la sinteza mielinei și a neurotransmițătorilor dopaminergici și serotoninergici. Deficiența în perioadele critice de dezvoltare — fetal, neonatal și în primii ani de viață — poate produce deficite cognitive și comportamentale ireversibile, chiar și după corectarea anemiei. La adulți, deficiența suboptimală de fier (fără anemie manifestă) se asociază cu oboseală mentală, dificultăți de concentrare și performanță cognitivă redusă.</p>
+
+        <h3>Sănătatea pielii, părului și unghiilor</h3>
+        <p>Oxigenarea insuficientă a foliculilor piloși, a matricei unghiale și a tegumentului — consecutivă deficienței de fier — produce manifestări caracteristice: paloare, căderea difuză a părului, unghii fragile cu striații longitudinale sau, în deficiența severă, koilonychie (unghii concave, „în lingură").</p>
+
+        <h2 id="surse">Surse alimentare de fier</h2>
+
+        <p>Fierul alimentar există în două forme cu biodisponibilitate fundamental diferită, ceea ce face ca simpla contabilizare a cantității de fier dintr-un aliment să fie insuficientă fără a lua în considerare forma și contextul alimentar.</p>
+
+        <h3>Fier hemic — surse animale (absorbție 15–35%)</h3>
+        <p>Fierul hemic se găsește exclusiv în produsele de origine animală, incorporat în hemoglobina și mioglobina din mușchi și organe. Absorbția sa este eficientă, relativ constantă și puțin influențată de alți factori alimentari. Ficatul de vită și stridiile reprezintă sursele cu cel mai ridicat conținut. Carnea roșie, în special cea de vită și miel, este principala sursă practică pentru marea majoritate a populației. Carnea de pasăre și peștele contribuie cu cantități moderate.</p>
+
+        <h3>Fier non-hemic — surse vegetale (absorbție 2–20%)</h3>
+        <p>Fierul non-hemic este prezent atât în alimentele vegetale, cât și în cantități mici în produsele animale. Absorbția sa este variabilă și puternic modulată de factorii alimentari coprezenți în masă. Lintea și năutul sunt surse remarcabile în alimentația vegetariană. Spanacul, deși frecvent menționat, are o biodisponibilitate redusă din cauza oxalaților care cheleazează fierul. Semințele de dovleac, quinoa, tofu și ciocolata neagră completează paleta surselor vegetale relevante.</p>
+
+        <h2>Exemple orientative de surse alimentare</h2>
+        <p>Valorile de mai jos reflectă conținutul total de fier per porție; biodisponibilitatea reală variază semnificativ în funcție de formă (hemic/non-hemic) și de contextul alimentar.</p>
+        <table>
+          <thead>
+            <tr><th>Aliment</th><th>Porție orientativă</th><th>Fier aproximativ</th><th>Formă</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Ficat de vită (gătit)</td><td>85 g</td><td>~5,0 mg</td><td>Hemic</td></tr>
+            <tr><td>Stridii (gătite)</td><td>85 g</td><td>~8,0 mg</td><td>Hemic</td></tr>
+            <tr><td>Carne de vită (gătită)</td><td>85 g</td><td>~2,1 mg</td><td>Hemic</td></tr>
+            <tr><td>Carne de miel (gătită)</td><td>85 g</td><td>~1,7 mg</td><td>Hemic</td></tr>
+            <tr><td>Sardine (conservă)</td><td>85 g</td><td>~2,5 mg</td><td>Hemic</td></tr>
+            <tr><td>Linte (gătită)</td><td>1/2 cană</td><td>~3,3 mg</td><td>Non-hemic</td></tr>
+            <tr><td>Năut (gătit)</td><td>1/2 cană</td><td>~2,4 mg</td><td>Non-hemic</td></tr>
+            <tr><td>Fasole neagră (gătită)</td><td>1/2 cană</td><td>~1,8 mg</td><td>Non-hemic</td></tr>
+            <tr><td>Tofu (ferm)</td><td>1/2 cană</td><td>~3,4 mg</td><td>Non-hemic</td></tr>
+            <tr><td>Semințe de dovleac</td><td>28 g</td><td>~2,5 mg</td><td>Non-hemic</td></tr>
+            <tr><td>Quinoa (gătită)</td><td>1/2 cană</td><td>~1,4 mg</td><td>Non-hemic</td></tr>
+            <tr><td>Spanac (gătit)</td><td>1/2 cană</td><td>~3,2 mg</td><td>Non-hemic</td></tr>
+            <tr><td>Ciocolată neagră (70–85%)</td><td>28 g</td><td>~3,4 mg</td><td>Non-hemic</td></tr>
+          </tbody>
+        </table>
+        <p>Aceste valori au caracter orientativ. Biodisponibilitatea fierului non-hemic poate fi crescută semnificativ prin consumul concomitent de vitamina C și redusă de fitați, taninuri sau calciu.</p>
+
+        <h2>Model alimentar favorabil unui aport bun de fier</h2>
+        <p>Un aport adecvat de fier este susținut de un model alimentar care combină surse hemic și non-hemic, optimizând totodată factorii care influențează absorbția. Consumul de carne sau organe de câteva ori pe săptămână asigură un aport hemic eficient. Leguminoasele, semințele și legumele cu frunze verzi completează aportul non-hemic, iar asocierea lor cu surse de vitamina C maximizează absorbția. Separarea temporală a meselor bogate în fier față de ceai, cafea și suplimentele de calciu reduce interferențele majore.</p>
+
+        <h2 id="suplimentarea">Suplimentarea cu fier</h2>
+
+        <h3>Context de utilizare</h3>
+        <p>Suplimentarea cu fier este indicată exclusiv în prezența unui deficit documentat prin analize de laborator — feritină scăzută, saturația transferinei redusă, hemoglobină sub valorile de referință — sau în contexte cu risc crescut monitorizat medical, precum sarcina sau recuperarea postoperatorie după pierderi sanguine semnificative. Suplimentarea empirică, fără diagnostic de laborator, nu este justificată și prezintă riscuri reale.</p>
+
+        <p>Fierul este un pro-oxidant puternic: în exces față de capacitatea de legare a transferinei și feritinei, fierul liber participă la reacția Fenton, generând radicali hidroxil care lezează lipidele membranare, proteinele și ADN-ul. Acumularea cronică produce leziuni hepatice, cardiace și pancreatice — tabloul hemocromatozei.</p>
+
+        <h3>Forme de suplimente</h3>
+        <p>Sărurile de fier feros (Fe2+) sunt cele mai utilizate: sulfatul feros este cel mai ieftin și mai studiat, dar produce frecvent efecte gastrointestinale (greață, constipație, dureri abdominale). Gluconatul feros și fumaratul feros au toleranță ceva mai bună. Formele chelatate — fier bisglicinат, fier proteinsuccinilat — prezintă absorbție bună și toleranță gastrointestinală superioară, dar sunt mai costisitoare. Fierul liposomal reprezintă o inovație mai recentă cu biodisponibilitate îmbunătățită și efecte adverse reduse.</p>
+
+        <p>Suplimentele se administrează de obicei pe stomacul gol pentru absorbție maximă, sau cu o sursă de vitamina C. Administrarea în zile alternate (față de zilnic) s-a dovedit în unele studii mai eficientă, deoarece hepcidina indusă de o doză zilnică reduce absorbția dozei următoare.</p>
+
+        <h3>Siguranță și limite</h3>
+        <p>Limita superioară tolerabilă (UL) este de 45 mg/zi pentru adulți. Supradozajul acut de fier la copii este una dintre principalele cauze de otrăvire accidentală și urgență medicală pediatrică. La adulți, suplimentarea cronică nejustificată crește stresul oxidativ și riscul de patologie hepatică, cardiovasculară și metabolică.</p>
+
+        <div class="micronutrient-callout">
+          <p>Nu luați niciodată suplimente cu fier fără un diagnostic confirmat de deficiență prin analize de laborator (feritină serică, saturația transferinei, hemoglobină). Suplimentarea inutilă poate produce supraîncărcare cu fier, o condiție toxică dificil de reversat. Persoanele cu hemocromatoză genetică trebuie să evite suplimentele de fier și să limiteze alimentele bogate în fier hemic, sub strictă supraveghere medicală.</p>
         </div>
-    </main>
+
+        <h2 id="interactiuni">Interacțiuni relevante</h2>
+
+        <p>Fierul are unele dintre cele mai numeroase și mai bine documentate interacțiuni nutriționale, atât pozitive, cât și negative. Înțelegerea lor este esențială pentru optimizarea aportului alimentar și pentru evitarea interferențelor în suplimentare.</p>
+
+        <h3>Fier și vitamina C — sinergia cea mai importantă</h3>
+        <p>Vitamina C (acidul ascorbic) este cel mai puternic potențator al absorbției fierului non-hemic. Reduce ionul feric (Fe3+) la forma feroasă (Fe2+), mai ușor absorbită, și formează complexe solubile care previn precipitarea fierului la pH-ul intestinal. Consumul a 75–100 mg de vitamina C concomitent cu o sursă de fier non-hemic poate crește absorbția de 2–4 ori. Această sinergii este fundamentală în alimentația vegetariană și vegană.</p>
+
+        <h3>Fier și calciu — antagonism practic</h3>
+        <p>Calciul reduce absorbția atât a fierului hemic cât și a celui non-hemic, prin mecanisme care nu sunt complet elucidate, dar care implică competiția la nivel de exportor intestinal. Suplimentele de calciu și lactatele consumate simultan cu surse de fier pot reduce semnificativ absorbția. Separarea temporală a acestora — fier dimineața, calciu seara — este o strategie practică recomandată în caz de suplimentare concomitentă.</p>
+
+        <h3>Fier și fitați</h3>
+        <p>Fitații din cereale integrale, leguminoase, nuci și semințe cheleazează fierul non-hemic și reduc absorbția sa. Înmuierea, germinarea și fermentarea reduc conținutul de fitați și îmbunătățesc biodisponibilitatea fierului. Consumul de vitamina C contracarează parțial efectul fitaților.</p>
+
+        <h3>Fier și taninuri (polifenoli)</h3>
+        <p>Taninurile din ceai, cafea și vin roșu formează complexe insolubile cu fierul non-hemic, reducând semnificativ absorbția sa. Consumul de ceai sau cafea la masă poate reduce absorbția fierului non-hemic cu 60–90%. Evitarea ceaiului și a cafelei cu mese bogate în fier de origine vegetală este o recomandare practică importantă, mai ales în populațiile cu risc de deficiență.</p>
+
+        <h3>Fier și cupru — sinergie funcțională</h3>
+        <p>Cuprul, prin ceruloplasmin, este esențial pentru mobilizarea fierului din depozite și pentru transportul său eficient în plasmă. Un deficit de cupru produce o anemie funcțional feriprivă, rezistentă la suplimentarea cu fier. Această interacțiune este clinică relevantă în deficiența indusă de excesul de zinc (care deprimă cuprul) sau în sindroamele de malabsorbție.</p>
+
+        <h3>Fier și vitamina A</h3>
+        <p>Vitamina A îmbunătățește mobilizarea fierului din depozite și susține eritropoieza. Deficiența concomitentă de vitamina A și fier — frecventă în populațiile cu malnutriție multiplă — produce o anemie mai severă și mai greu de corectat decât fiecare deficit izolat.</p>
+
+        <h3>Fier și zinc</h3>
+        <p>Fierul și zincul competiționează pentru transportorul intestinal DMT1. Dozele mari de fier din suplimente pot reduce absorbția zincului și invers. Această interacțiune este relevantă mai ales în contextul suplimentării cu doze mari, nu al aportului alimentar obișnuit.</p>
+
+        <h3>Fier și medicamente</h3>
+        <p>Fierul reduce absorbția levotiroxinei, tetraciclinelor, fluorochinolonelor și levodopei prin formare de complexe insolubile. Administrarea suplimentelor de fier trebuie separată de aceste medicamente cu cel puțin 2–4 ore.</p>
+
+        <h2 id="populatii">Populații de interes</h2>
+
+        <h3>Femei de vârstă fertilă</h3>
+        <p>Pierderile menstruale plasează femeile de vârstă fertilă în categoria cu cel mai ridicat risc de deficiență de fier din populația generală. Necesarul crescut — 18 mg/zi față de 8 mg/zi la bărbați — este greu de atins fără o atenție deliberată la sursele alimentare. Femeile cu menstruații abundente sau cu alimentație predominant vegetală prezintă risc și mai ridicat.</p>
+
+        <h3>Femei însărcinate</h3>
+        <p>Sarcina crește necesarul de fier la 27 mg/zi, pentru a susține expansiunea volumului sanguin matern, formarea placentei și eritropoieza fetală. Deficiența de fier în sarcină se asociază cu naștere prematură, greutate mică la naștere și deficit cognitiv neonatal. Suplimentarea profilactică este recomandată de ghidurile internaționale în absența unui aport alimentar demonstrat adecvat.</p>
+
+        <h3>Sugari și copii mici</h3>
+        <p>Sugarii născuți la termen au rezerve de fier pentru primele 4–6 luni de viață. Laptele matern conține fier în cantitate mică dar cu biodisponibilitate excelentă (50%). Introducerea alimentației complementare bogate în fier la 6 luni este esențială. Sugarii prematuri și cei din mame cu deficit de fier au rezerve mai mici și necesită atenție specială. Deficiența de fier în primii ani de viață produce deficite neuro-cognitive cu consecințe pe termen lung.</p>
+
+        <h3>Vegetarieni și vegani</h3>
+        <p>Necesarul de fier este estimat la 1,8 ori mai mare pentru persoanele care exclud carnea, din cauza biodisponibilității inferioare a fierului non-hemic. Strategiile de optimizare a absorbției — asociere cu vitamina C, fermentare, înmuiere, evitarea ceaiului la masă — devin esențiale. Monitorizarea periodică a feritinei serice este recomandată.</p>
+
+        <h3>Sportivi de anduranță</h3>
+        <p>Sportivii de anduranță, în special alergătorii, prezintă pierderi crescute de fier prin transpirație, hemoliza mecanică a eritrocitelor la impact plantar și microhemoragii gastrointestinale. Necesarul crescut, combinat cu o dietă uneori suboptimală, plasează sportivii de anduranță la risc de deficiență funcțională de fier — o stare în care feritina este scăzută dar hemoglobina este încă normală, care reduce performanța fără a produce anemie manifestă.</p>
+
+        <h3>Vârstnici</h3>
+        <p>Absorbția fierului poate scădea cu vârsta din cauza aclorhidriei și a afecțiunilor gastrointestinale. Totuși, vârstnicii prezintă și risc crescut de exces de fier — necesarul scade după menopauză, iar suplimentarea nejustificată poate produce acumulare. Evaluarea individualizată a statusului de fier, nu suplimentarea de rutină, este abordarea corectă.</p>
+
+        <h3>Persoane cu hemocromatoză genetică</h3>
+        <p>Hemocromatoza ereditară, cauzată de mutații ale genei HFE, produce o absorbție intestinală excesivă de fier, cu acumulare progresivă în ficat, pancreas, inimă și articulații. Tratamentul standard este flebotomia terapeutică periodică. Persoanele cu această afecțiune trebuie să evite suplimentele de fier, vitamina C în doze mari (care crește absorbția fierului) și consumul excesiv de alcool (care potențează leziunile hepatice).</p>
+
+        <h2>Aport insuficient, deficit funcțional și exces</h2>
+
+        <p>Deficiența de fier progresează în trei stadii: epuizarea depozitelor (feritina scăzută, fără modificarea hemoglobinei), deficiența funcțională (saturația transferinei scăzută, eritropoieza afectată, simptome funcționale prezente) și anemia feriprivă manifestă (hemoglobina scăzută, eritrocite microcitare hipocrome). Simptomele caracteristice includ oboseală extremă și slăbiciune musculară, paloare tegumentară și mucoasă, dispnee la efort, amețeli și cefalee, extremități reci, koilonychie, căderea difuză a părului și pica — pofta aberantă de gheață, pământ sau amidon.</p>
+
+        <p>Excesul de fier produce, invers, un tablou de supraîncărcare oxidativă cu leziuni organice progresive: ciroză hepatică, insuficiență cardiacă, diabet zaharat prin afectarea pancreasului, artropatii și, în hemocromatoza avansată, bronzarea caracteristică a tegumentului. Inelul de acumulare hepatică, cardiac și pancreatic definește triunghiul clasic al hemocromatozei simptomatice.</p>
+
+        <h2 id="relevanta">Relevanță clinică și nutrițională</h2>
+
+        <p>Fierul este micronutrientul cu cel mai mare impact de sănătate publică la nivel global, prin prevalența enormă a deficienței sale, dar și prin riscurile reale ale excesului. Această dualitate îl face obiectul unor recomandări nutriționale care necesită nuanță: suplimentarea de rutină fără diagnostic de laborator nu este justificată, dar ignorarea statusului de fier la populațiile cu risc — femei tinere, gravide, vegetariene, sportivi de anduranță — poate lăsa neadresate deficiențe cu consecințe funcționale și cognitive semnificative.</p>
+
+        <p>Evaluarea corectă a statusului de fier necesită mai mult decât determinarea hemoglobinei: feritina serică, saturația transferinei și, în contexte de inflamație, receptorul solubil al transferinei oferă o imagine mai completă. Abordarea funcțională a fierului înseamnă optimizarea absorbției prin alegeri alimentare inteligente, identificarea și corectarea cauzelor deficienței (nu doar a deficienței în sine) și monitorizarea atentă a răspunsului la intervenție.</p>
+
+        <h2>Perspectivă funcțională și holistică</h2>
+
+        <div class="micronutrient-note-holistic">
+          <h3>Cadru interpretativ</h3>
+          <p>Din perspectivă funcțională, fierul poate fi descris ca mineralul vitalității și al forței de acțiune. Prin transportul oxigenului și producția de energie, susține capacitatea fundamentală a corpului de a se mișca, de a gândi și de a acționa. Deficiența sa produce nu doar anemie, ci o epuizare a forței vitale la cel mai profund nivel celular.</p>
+        </div>
+
+        <p>În medicina tradițională chineză, fierul este fundamental pentru calitatea Sângelui (Xue) — vehiculul prin care Qi-ul circulă și hrănește toate țesuturile. Deficiența de fier este înțeleasă ca o manifestare a „Deficienței de Sânge", cu rădăcini posibile în slăbiciunea Splinei (producție insuficientă) sau a Ficatului (stocare și distribuție deficitară). Simptomele psihoemotionale asociate — apatie, melancolie, lipsa entuziasmului, teama de confruntare — sunt privite ca expresia deficitului de vitalitate la nivel energetic profund. În Ayurveda, fierul susține Rakta Dhatu (țesutul sanguin) și Pitta dosha, iar deficiența (Pandu Roga) slăbește Agni (focul metabolic) și Ojas (vitalitatea esenţială), producând paloare, oboseală și o pierdere generalizată a luminozității interioare. Aceste perspective nu substituie evaluarea biochimică, dar adaugă un cadru interpretativ valoros pentru înțelegerea legăturii dintre statusul de fier și starea de bine globală — fizică, emoțională și mentală.</p>
+
+        <h2 id="sinteza">Sinteză</h2>
+
+        <p>Fierul este mineralul esențial cu cel mai mare impact de sănătate publică la nivel global — cel mai frecvent implicat în deficiențe nutriționale și, totodată, periculos în exces. Funcțiile sale centrale — transportul oxigenului prin hemoglobină și mioglobină, producția de ATP mitocondrial, sinteza ADN-ului, funcția imunitară și dezvoltarea cognitivă — îl plasează în categoria micronutrienților absolut indispensabili. Fierul alimentar există în două forme cu biodisponibilitate radical diferită: hemic (15–35%, exclusiv animal) și non-hemic (2–20%, moderat de contextul alimentar). Vitamina C este cel mai eficient potențator al absorbției fierului non-hemic, iar taninurile, fitații și calciul reprezintă principalii inhibitori. Suplimentarea este indicată exclusiv în deficiență documentată prin feritina serică și saturația transferinei — nu empiric — datorită riscului real de supraîncărcare oxidativă. Populațiile cu risc crescut includ femeile de vârstă fertilă, gravidele, vegetarienii, sportivii de anduranță, copiii mici și persoanele cu sindroame de malabsorbție.</p>
+      </div>
+    </article>
+
+    <div id="footer-placeholder"></div>
+    <div id="script-placeholder"></div>
+  </div>
+
+  <script>
+        fetch('https://nutrisib.club/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Eroare încărcare footer:', error));
+
+        fetch('https://nutrisib.club/script_protect.js')
+            .then(response => response.text())
+            .then(data => {
+                const script = document.createElement('script');
+                script.textContent = data;
+                document.body.appendChild(script);
+            })
+            .catch(error => console.error('Eroare încărcare script protecție:', error));
+
+    (function injectFooterAndScripts() {
+      const footerPlaceholder = document.getElementById('footer-placeholder');
+      const scriptPlaceholder = document.getElementById('script-placeholder');
+      const year = new Date().getFullYear();
+
+      if (footerPlaceholder) {
+        footerPlaceholder.innerHTML = `
+          <footer>
+            <p>© ${year} NUTRISIB. Toate drepturile rezervate.</p>
+          </footer>
+          <div class="legal-footer-box">
+            <button class="legal-btn" type="button" onclick="window.print()">
+              Printează / Salvează PDF
+            </button>
+          </div>
+        `;
+      }
+
+      if (scriptPlaceholder) {
+        const smoothScript = document.createElement('script');
+        smoothScript.textContent = `
+          document.addEventListener('click', function (event) {
+            const target = event.target.closest('a[href^="#"]');
+            if (!target) return;
+            const id = target.getAttribute('href');
+            const el = document.querySelector(id);
+            if (!el) return;
+            event.preventDefault();
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        `;
+        scriptPlaceholder.appendChild(smoothScript);
+      }
+    })();
+  </script>
 </body>
 </html>

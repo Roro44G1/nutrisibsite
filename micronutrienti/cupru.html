@@ -1,380 +1,282 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cupru</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
-        :root {
-            --primary-color: #3498db; /* O nuanță de albastru */
-            --primary-color-dark: #2980b9;
-            --secondary-color: #2c3e50;
-            --background-color: #f4f6f7;
-            --text-color: #34495e;
-            --card-background: #ffffff;
-            --light-gray-background: #f8f9fa;
-            --border-color: #e0e0e0;
-            --accent-green: #27ae60;
-            --accent-red: #e74c3c;
-            --base-font-family: 'Roboto', sans-serif;
-            --border-radius-large: 15px;
-            --border-radius-small: 10px;
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
-            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        body {
-            font-family: var(--base-font-family);
-            line-height: 1.7;
-            margin: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
-        }
-
-        .infographic-container {
-            max-width: 950px;
-            width: 100%;
-            background: var(--card-background);
-            border-radius: var(--border-radius-large);
-            box-shadow: var(--shadow-medium);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .infographic-header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px 10px;
-            text-align: center;
-            font-size: 2.5em;
-            font-weight: 700;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-            position: relative;
-        }
-
-        .section {
-            padding: 25px 45px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .section:last-child {
-            border-bottom: none;
-        }
-
-        .section-title {
-            font-size: 1.9em;
-            color: var(--secondary-color);
-            margin-top: 0;
-            margin-bottom: 25px;
-            font-weight: 600;
-            border-bottom: 3px solid var(--primary-color-dark);
-            padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        .section-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            width: 100%;
-        }
-        
-        .subsection {
-            flex: 1;
-            min-width: 300px;
-            background-color: var(--light-gray-background);
-            border-radius: var(--border-radius-small);
-            padding: 25px;
-            box-shadow: var(--shadow-light);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-left: 5px solid transparent;
-        }
-
-        .subsection:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            border-left-color: var(--primary-color);
-        }
-
-        .subsection-title {
-            font-size: 1.4em;
-            color: var(--primary-color);
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .subsection p,.subsection ul,.subsection ol {
-            font-size: 0.98em;
-            margin-bottom: 12px;
-        }
-
-        .subsection ul,.subsection ol {
-            padding-left: 20px;
-        }
-
-        .subsection li {
-            margin-bottom: 10px;
-        }
-
-        .subsection b,.subsection strong {
-            color: var(--secondary-color);
-        }
-
-        .note {
-            font-size: 0.9em;
-            color: #6c757d;
-            margin-top: 25px;
-            padding: 15px 20px;
-            background-color: #ebf5fb;
-            border-left: 4px solid var(--primary-color);
-            width: 100%;
-            box-sizing: border-box;
-            border-radius: 5px;
-        }
-        
-        .warning-note {
-            background-color: #f9ebea;
-            border-left-color: var(--accent-red);
-        }
-        
-        .holistic-note {
-            background-color: #e8f8f5;
-            border-left-color: var(--accent-green);
-       }
-
-        .icon {
-            font-size: 1.5em;
-            margin-right: 12px;
-            color: var(--primary-color-dark);
-            vertical-align: middle;
-        }
-        
-        .subsection-icon {
-             font-size: 1.5em;
-             margin-right: 10px;
-             color: var(--primary-color);
-        }
-        
-        .icon-small {
-            font-size: 1.5em;
-            margin-right: 8px;
-            color: var(--primary-color);
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .footer-copyright {
-            text-align: center;
-            padding: 20px 0;
-            font-size: 0.9em;
-            color: #6c757d;
-            background-color: var(--light-gray-background);
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 0.9em;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-            color: var(--secondary-color);
-            font-weight: 600;
-        }
-
-        tr:nth-child(even) {
-            background-color: var(--light-gray-background);
-        }
-
-        @media (max-width: 768px) {
-            .section { padding: 25px 20px; }
-            .section-content {
-                flex-direction: column;
-            }
-            .subsection {
-                min-width: unset;
-            }
-            .infographic-header {
-                font-size: 2em;
-            }
-            .section-title {
-                font-size: 1.6em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cupru | Enciclopedia Micronutrienților | NUTRISIB</title>
+  <meta name="description" content="Cuprul - capitol complet din enciclopedia micronutrienților NUTRISIB, cu abordare nutrițională, funcțională și holistică.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@400;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+  <link rel="stylesheet" href="https://nutrisib.club/micronutrienti.css">
 </head>
-<body>
-    <main class="infographic-container">
-        <header class="infographic-header">
-            Cupru
-        </header>
+<body class="micronutrient-page">
+  <div class="container-main micronutrient-shell">
+    <div class="micronutrient-topbar screen-only">
+      <a class="btn-white" href="https://nutrisib.club/micronutrienti/index.html">Enciclopedia micronutrienților</a>
+      <div class="micronutrient-actions">
+        <a class="btn-outline" href="#continut-integral">Sari la conținut</a>
+        <button class="btn" type="button" onclick="window.print()">Generează PDF / Printează</button>
+      </div>
+    </div>
 
-        <section class="section">
-            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
-            <div class="section-content">
-                <div class="subsection" style="flex: 2;">
-                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul principal în organism</h3>
-                     <p><b>Cuprul (Cu)</b> este un oligoelement esențial care acționează ca un cofactor crucial pentru numeroase enzime (cuproenzime), fiind indispensabil pentru sănătate.</p>
-                     <ul>
-                         <li><b>Metabolismul fierului și formarea sângelui:</b> Este vital pentru absorbția și utilizarea fierului. Enzimele cu cupru, precum ceruloplasmina, sunt necesare pentru a mobiliza fierul din depozite și a-l încorpora în hemoglobină.</li>
-                         <li><b>Sănătatea țesuturilor conjunctive:</b> Este esențial pentru enzima lizil oxidaza, care este necesară pentru "întrețeserea" fibrelor de <strong>colagen și elastină</strong>, conferind rezistență și elasticitate oaselor, pielii și vaselor de sânge.</li>
-                         <li><b>Funcția nervoasă și cerebrală:</b> Contribuie la sinteza neurotransmițătorilor (ex: norepinefrina) și la menținerea tecii de mielină care protejează nervii.</li>
-                         <li><b>Producția de energie:</b> Este o componentă a enzimei citocrom c oxidaza, un pas final și esențial în lanțul de transport de electroni pentru producerea de ATP în mitocondrii.</li>
-                         <li><b>Funcția antioxidantă:</b> Face parte din enzima superoxid dismutaza (SOD), care protejează celulele de stresul oxidativ.</li>
-                         <li><b>Pigmentarea pielii și a părului:</b> Este necesar pentru producția de melanină.</li>
-                     </ul>
-                </div>
-                 <div class="subsection" style="flex: 1.5;">
-                    <h3 class="subsection-title"><span class="subsection-icon">🍫</span>Surse alimentare</h3>
-                    <p>Cuprul se găsește într-o varietate de alimente, în special în organe și fructe de mare.</p>
-                     <ul>
-                        <li><b>Organe:</b> Ficat de vită (cea mai bogată sursă).</li>
-                        <li><b>Fructe de mare:</b> Stridii, crab, homar.</li>
-                        <li><b>Nuci și semințe:</b> Caju, semințe de floarea-soarelui, susan.</li>
-                        <li><b>Leguminoase:</b> Linte, năut.</li>
-                        <li><b>Ciocolată neagră.</b></li>
-                        <li><b>Ciuperci</b> (în special Shiitake).</li>
-                        <li><b>Cereale integrale.</b></li>
-                     </ul>
-                </div>
-            </div>
-        </section>
+    <section class="micronutrient-hero">
+      <span class="hero-kicker">Enciclopedia Micronutrienților</span>
+      <h1>Cuprul</h1>
+      <p>Oligoelement esențial cu rol central în metabolismul fierului, sinteza colagenului și elastinei, funcția nervoasă, producția de energie și apărarea antioxidantă.</p>
+    </section>
 
-        <section class="section">
-             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit și Exces</h2>
-             <div class="section-content">
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Simptome cauzate de deficit</h3>
-                    <p>Deficiența de cupru este rară, dar poate fi indusă de un consum excesiv de zinc din suplimente, de anumite afecțiuni genetice (boala Menkes) sau de intervenții chirurgicale bariatrice.</p>
-                    <ul>
-                        <li><b>Anemie:</b> Similară cu anemia feriprivă, deoarece fierul nu poate fi utilizat corect.</li>
-                        <li><b>Probleme osoase:</b> Osteoporoză și risc crescut de fracturi.</li>
-                        <li><b>Probleme neurologice:</b> Mielopatie (afectarea măduvei spinării), neuropatie periferică, slăbiciune musculară și probleme de coordonare.</li>
-                        <li><b>Depigmentarea părului și a pielii.</b></li>
-                        <li><b>Imunitate slăbită (neutropenie).</b></li>
-                    </ul>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Exces și toxicitate</h3>
-                    <p>Excesul de cupru din dietă este rar. Toxicitatea apare de obicei în contextul unor boli genetice (boala Wilson), contaminării apei sau suplimentării neadecvate.</p>
-                     <ul>
-                        <li><b>Probleme gastrointestinale:</b> Greață, vărsături, dureri abdominale, diaree.</li>
-                        <li><b>Afectare hepatică:</b> Acumularea de cupru în ficat poate duce la leziuni hepatice severe și ciroză.</li>
-                        <li><b>Simptome neurologice și psihiatrice:</b> Iritabilitate, depresie, tremor, dificultăți de vorbire.</li>
-                        <li><b>Inelul Kayser-Fleischer:</b> Un inel maroniu-verzui în jurul corneei, specific bolii Wilson.</li>
-                    </ul>
-                </div>
-             </div>
-        </section>
-        
-        <section class="section">
-            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
-            <div class="section-content">
-                <div class="subsection">
-                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">⚖️</span>Echilibrul Cupru-Zinc</h3>
-                    <p>Cuprul și zincul concurează pentru absorbție în intestin. Un aport ridicat de zinc pe termen lung (din suplimente) poate duce la o deficiență de cupru, și invers. Menținerea unui <strong>raport echilibrat</strong> între aceste două minerale este crucială pentru sănătate. Dezechilibrul (în special excesul de cupru nelegat de ceruloplasmină) este asociat în medicina funcțională cu anxietate, iritabilitate și probleme de concentrare.</p>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
-                    <p><b>În MTC</b>, cuprul este legat de <b>Sângele (Xue) Ficatului</b> și de <b>Esența (Jing) a Rinichilor</b>. Rolul său în formarea sângelui și în sănătatea țesuturilor conjunctive (tendoane, ligamente) susține funcția Ficatului. Prin implicarea sa în funcția nervoasă, susține Jing-ul Rinichilor, care guvernează creierul și măduva.</p>
-                    <p><b>În Ayurveda</b>, cuprul are o natură <b>Pitta</b> (fierbinte, ascuțită). Susține <b>Rakta Dhatu</b> (sângele) și <b>Majja Dhatu</b> (țesutul nervos). Un exces poate agrava Pitta, ducând la inflamație și iritabilitate.</p>
-                </div>
-            </div>
-        </section>
+    <nav class="micronutrient-jumpbar screen-only" aria-label="Navigare internă">
+      <a href="#identitate">Identitate</a>
+      <a href="#farmacocinetica">Farmacocinetică</a>
+      <a href="#roluri">Roluri</a>
+      <a href="#surse">Surse</a>
+      <a href="#suplimentarea">Suplimentarea</a>
+      <a href="#interactiuni">Interacțiuni</a>
+      <a href="#populatii">Populații</a>
+      <a href="#relevanta">Relevanță</a>
+      <a href="#sinteza">Sinteză</a>
+    </nav>
 
-        <section class="section">
-            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
-            <p>Din perspectivă holistică, cuprul este asociat cu <b>fluiditatea, adaptabilitatea, expresia creativă și echilibrul emoțional</b>. Prin rolul său în sinteza colagenului și elastinei, rezonează cu elasticitatea noastră, atât fizică, cât și mentală.</p>
-            <div class="section-content">
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="icon-small">💔</span>Deficit</h3>
-                    <p>Un deficit de cupru poate fi legat de:</p>
-                    <ol>
-                        <li><b>Lipsa de fluiditate și rigiditate emoțională:</b> Dificultatea de a te adapta la schimbări, o tendință de a fi rigid în gândire.<br><i>Manifestare fizică: Probleme ale țesuturilor conjunctive.</i></li>
-                        <li><b>Dificultăți în exprimarea creativă:</b> O blocare a expresiei artistice, un sentiment că "nu ai voie să strălucești".<br><i>Manifestare fizică: Depigmentarea părului.</i></li>
-                        <li><b>Anxietate și iritabilitate.</b></li>
-                    </ol>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
-                    <p>Obiectivele pe care le susține cuprul pot fi atinse prin:</p>
-                    <ul>
-                        <li><b>Practici care încurajează fluiditatea și mișcarea</b> (dans, tai chi, yoga fluidă).</li>
-                        <li><b>Exerciții de exprimare creativă</b> (pictură, muzică, scris liber).</li>
-                        <li><b>Meditații</b> pentru a cultiva acceptarea schimbării și a elibera rigiditatea mentală.</li>
-                        <li><b>Timp petrecut în natură</b> pentru a te reconecta cu ritmurile naturale.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+    <article class="micronutrient-article" id="continut-integral">
+      <div class="micronutrient-content">
+        <h2>Oligoelement esențial cu rol central în metabolismul fierului, sinteza colagenului și elastinei, funcția nervoasă, producția de energie și apărarea antioxidantă</h2>
 
-        <section class="section">
-            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
-            <div class="section-content">
-                <div class="subsection">
-                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Doze recomandate</h3>
-                     <p>Necesarul de cupru este relativ mic, dar esențial.</p>
-                     <table>
-                         <thead>
-                             <tr>
-                                 <th>Grup de populație</th>
-                                 <th>DZR (mcg/zi)</th>
-                                 <th>Limită superioară (UL)</th>
-                             </tr>
-                         </thead>
-                         <tbody>
-                             <tr>
-                                 <td>Adulți (19+ ani)</td>
-                                 <td>900</td>
-                                 <td>10.000 (10 mg)</td>
-                             </tr>
-                             <tr>
-                                 <td>Femei însărcinate</td>
-                                 <td>1.000</td>
-                                 <td>10.000 (10 mg)</td>
-                             </tr>
-                             <tr>
-                                 <td>Femei care alăptează</td>
-                                 <td>1.300</td>
-                                 <td>10.000 (10 mg)</td>
-                             </tr>
-                         </tbody>
-                     </table>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
-                    <p>Echilibrul dintre cupru și zinc este fundamental.</p>
-                    <div class="note warning-note">
-                        <p><b>Avertisment critic:</b> Suplimentarea pe termen lung cu doze mari de <strong>zinc (peste 40-50 mg/zi) poate induce o deficiență de cupru</strong>. Invers, un exces de cupru poate afecta nivelul de zinc. Nu luați suplimente cu doze mari de cupru sau zinc în mod izolat fără a monitoriza și celălalt mineral și fără recomandarea unui specialist. Persoanele cu boala Wilson trebuie să evite complet suplimentele cu cupru.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <div class="footer-copyright">
-            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
-            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        <p>Cuprul este un oligoelement esențial cu o prezență funcțională remarcabil de largă în biologia umană. Spre deosebire de mulți micronutrienți care acționează predominant într-un singur sistem, cuprul este un cofactor indispensabil pentru numeroase enzime — numite cuproenzime — care participă la procese fundamentale: de la formarea sângelui și sinteza țesuturilor conjunctive, până la producția de energie mitocondrială, funcția nervoasă și apărarea antioxidantă.</p>
+
+        <p>Această versatilitate funcțională face din cupru un element de interes major în nutriția clinică și funcțională. Deficiența sa, deși mai rară decât a altor micronutrienți, poate genera tablouri clinice complexe, care mimează adesea alte patologii — de la anemia feriprivă la mielopatia spinală. La celălalt pol, excesul de cupru, mai ales în contextul bolii Wilson sau al dezechilibrului cu zincul, poate produce leziuni hepatice și neurologice severe.</p>
+
+        <p>Dintr-o perspectivă mai largă, cuprul ilustrează principiul că micronutrienții nu funcționează izolat, ci în rețele de relații. Relația sa cu fierul, zincul, vitamina C și ceruloplasmin definește contextul în care trebuie evaluat și gestionat, atât alimentar, cât și în suplimentare.</p>
+
+        <h2 id="identitate">Identitatea biologică a cuprului</h2>
+
+        <p>Cuprul este un element chimic cu simbol Cu, prezent în organism în cantități mici — între 75 și 150 mg la un adult sănătos — dar cu o importanță biologică mult mai mare decât sugerează această cantitate. Este distribuit în special în ficat, creier, rinichi, inimă și mușchi scheletici, unde participă activ ca parte constitutivă a cuproenzimelor.</p>
+
+        <p>Spre deosebire de crom sau bor, cuprul beneficiază de repere nutriționale bine stabilite. Doza zilnică recomandată (RDA) pentru adulți este de 900 mcg/zi, cu valori crescute în sarcină (1.000 mcg/zi) și alăptare (1.300 mcg/zi). A fost stabilită și o limită superioară tolerabilă (UL) de 10.000 mcg (10 mg)/zi pentru adulți, reflectând faptul că excesul poate genera toxicitate hepatică și neurologică semnificativă.</p>
+
+        <p>Forma principală din organism este cuprul divalent (Cu2+), care participă la reacții enzimatice de oxido-reducere. Ceruloplasmin, o proteină de transport sintetizată în ficat, transportă aproximativ 70% din cuprul plasmatic și este esențială pentru mobilizarea fierului din depozite. Nivelul de ceruloplasmină este utilizat clinic ca marker al statusului de cupru.</p>
+
+        <h2 id="farmacocinetica">Farmacocinetică și metabolism</h2>
+
+        <p>Absorbția cuprului alimentar are loc predominant în intestinul subțire proximal, printr-un mecanism activ mediat de transportori specifici, în special CTR1. Biodisponibilitatea variază între 25 și 60%, în funcție de forma chimică a cuprului, de matricea alimentară și de interacțiunile cu alți nutrienți. Aportul ridicat de zinc, vitamina C în doze mari sau fitații pot reduce absorbția cuprului.</p>
+
+        <p>Odată absorbit, cuprul este transportat la ficat legat de albumină și histidină. Ficatul este organul central în homeostazia cuprului: preia cuprul din circulație portal, îl incorporează în cuproenzime sau în ceruloplasmină și reglează excreția biliară — principala cale de eliminare. Această cale biliară explică de ce bolile hepatice și obstrucțiile biliare pot perturba semnificativ metabolismul cuprului.</p>
+
+        <p>Eliminarea urinară a cuprului este redusă în condiții normale, ceea ce înseamnă că ficatul și excreția biliară poartă responsabilitatea principală a reglajului homeostatic. Această particularitate are implicații clinice importante: la persoanele cu boala Wilson — o afecțiune genetică care blochează excreția biliară a cuprului — acumularea progresivă în ficat, creier și cornee produce leziuni severe chiar și fără un aport alimentar excesiv.</p>
+
+        <h2 id="roluri">Roluri fiziologice majore</h2>
+
+        <h3>Metabolismul fierului și formarea sângelui</h3>
+        <p>Acesta este poate cel mai important și mai specific rol al cuprului în organism. Ceruloplasmin, principala cuproenzimă plasmatică, funcționează ca feroxidază — convertind fierul feros (Fe2+) în forma ferică (Fe3+) necesară pentru încorporarea în transferină și transportul către măduvă pentru sinteza hemoglobinei. Fără cupru funcțional, fierul rămâne blocat în depozite și nu poate fi utilizat eficient, generând o anemie feriprivă funcțională chiar și în prezența unor rezerve de fier aparent normale.</p>
+
+        <p>Această relație explică de ce deficiența de cupru poate mima clinic o anemie feriprivă rezistentă la suplimentarea cu fier — un diagnostic diferențial important care este adesea trecut cu vederea în practica clinică curentă.</p>
+
+        <h3>Sinteza colagenului și elastinei</h3>
+        <p>Cuprul este cofactorul indispensabil al lizil oxidazei, enzima care catalizează încrucișarea covalentă a fibrelor de colagen și elastină. Această reticulare conferă rezistență mecanică, elasticitate și integritate structurală oaselor, pielii, tendoanelor, ligamentelor, pereților vasculari și valvelor cardiace. Fără un aport adecvat de cupru, sinteza de colagen funcțional este compromisă, cu consecințe care includ fragilitate osoasă, vulnerabilitate vasculară și laxitate articulară.</p>
+
+        <p>Această funcție plasează cuprul în centrul discuției despre sănătatea articulară, aging cutanat și integritatea cardiovasculară — domenii de mare interes în nutriția funcțională și în medicina longevității.</p>
+
+        <h3>Producția de energie mitocondrială</h3>
+        <p>Cuprul este o componentă structurală esențială a citocrom c oxidazei, ultima enzimă din lanțul de transport de electroni mitocondrial. Această enzimă catalizează pasul final al respirației celulare aerobe, transferând electronii pe oxigen și contribuind la generarea gradientului de protoni necesar pentru sinteza ATP. Un deficit de cupru afectează direct eficiența producției de energie la nivel celular, cu manifestări clinice de oboseală, slăbiciune musculară și intoleranță la efort.</p>
+
+        <h3>Funcția antioxidantă</h3>
+        <p>Cuprul intră în structura superoxid dismutazei citoplasmatice (Cu/Zn-SOD), una dintre cele mai importante enzime antioxidante ale organismului. SOD catalizează dismutarea radicalilor superoxid în peroxid de hidrogen, reducând astfel stresul oxidativ intracelular. Această funcție leagă cuprul direct de procesele de îmbătrânire celulară, inflamație cronică și protecție față de leziunile oxidative.</p>
+
+        <h3>Funcția nervoasă și sinteza neurotransmițătorilor</h3>
+        <p>Cuprul participă la sinteza norepinefrinei din dopamină, prin intermediul dopamin β-hidroxilazei. Contribuie și la menținerea tecii de mielină care protejează fibrele nervoase, ceea ce explică apariția simptomelor neurologice — mielopatie, neuropatie periferică, ataxie — în deficiența severă de cupru. Această legătură neurologică face din cupru un micronutrient relevant și în discuțiile despre funcția cognitivă, starea de spirit și reziliența sistemului nervos.</p>
+
+        <h3>Pigmentarea și imunitatea</h3>
+        <p>Cuprul este necesar pentru activitatea tirozinazei, enzima implicată în sinteza melaninei — pigmentul responsabil pentru culoarea pielii, părului și irisului. Deficiența se poate manifesta prin depigmentare precoce a părului. De asemenea, cuprul susține funcția neutrofilelor și a macrofagelor, contribuind la rezistența imunitară față de infecții bacteriene. Neutropenia este una dintre manifestările clinice documentate ale deficienței severe.</p>
+
+        <h2 id="surse">Surse alimentare de cupru</h2>
+
+        <p>Cuprul este distribuit relativ larg în alimente, dar conținuturile variază considerabil. Sursele cele mai bogate sunt, în general, alimentele de origine animală — în special organele — și anumite categorii de fructe de mare, nuci și ciuperci. Procesarea industrială poate reduce conținutul de cupru din cereale, deoarece tărâțele și germenii, care sunt îndepărtați în rafinare, conțin cea mai mare parte din acest mineral.</p>
+
+        <h3>Organe — ficatul de vită</h3>
+        <p>Ficatul de vită este de departe cea mai concentrată sursă alimentară de cupru disponibilă, furnizând de câteva ori doza zilnică recomandată într-o singură porție. Dincolo de cupru, ficatul este remarcabil prin densitatea sa nutrițională excepțională: vitamina A preformată, vitamina B12, fier, zinc, folat și CoQ10. Consumul moderat și periodic — o porție pe săptămână — este recunoscut ca o strategie valoroasă în nutriția densă.</p>
+
+        <h3>Fructe de mare</h3>
+        <p>Stridiile sunt, după ficat, sursa cu cel mai ridicat conținut de cupru per porție, depășind uneori semnificativ doza zilnică recomandată. Crabul și homarul aduc cantități relevante, integrând totodată zinc, iod și acizi grași omega-3. Fructele de mare reprezintă o matrice alimentară excepțional de densă în micronutrienți esențiali pentru funcția tiroidiană, neurologică și cardiovasculară.</p>
+
+        <h3>Nuci și semințe</h3>
+        <p>Caju este una dintre cele mai bune surse vegetale de cupru. Semințele de floarea-soarelui, susanul, semințele de dovleac și nucile în general aduc cantități utile. Pe lângă cupru, aceste alimente furnizează magneziu, zinc, vitamina E și acizi grași benefici, ceea ce le face componente valoroase ale unui model alimentar antiinflamator.</p>
+
+        <h3>Ciocolata neagră și cacao</h3>
+        <p>Ciocolata neagră cu un conținut ridicat de cacao (peste 70%) este o sursă surprinzătoare și valoroasă de cupru. O porție de 30 g poate furniza aproximativ 30–40% din doza zilnică recomandată, alături de magneziu, fier și flavonoide antioxidante. Contextul consumului modererat de ciocolată neagră capătă astfel o dimensiune nutrițională concretă, dincolo de simpla plăcere senzorială.</p>
+
+        <h3>Ciuperci</h3>
+        <p>Ciupercile, în special varietățile Shiitake, sunt surse relevante de cupru în alimentația vegetariană. Shiitake aduce totodată betaglucani cu efect imunomodulator, vitamina D2 (în variantele expuse la lumina solară) și eritadenine cu potențial hipocolesterolemiant, ceea ce le face o categorie alimentară cu densitate funcțională ridicată.</p>
+
+        <h3>Leguminoase și cereale integrale</h3>
+        <p>Lintea, năutul, fasolea neagră și cerealele integrale contribuie la aportul de cupru în cadrul dietelor predominant vegetale. Conținuturile sunt mai moderate comparativ cu sursele animale, iar prezența fitaților poate reduce parțial biodisponibilitatea. Înmuierea sau fermentarea leguminoaselor îmbunătățește absorbția micronutrienților.</p>
+
+        <h2>Exemple orientative de surse alimentare</h2>
+        <p>Valorile de mai jos au caracter orientativ și pot varia în funcție de origine, procesare și metoda de preparare culinară.</p>
+        <table>
+          <thead>
+            <tr><th>Aliment</th><th>Porție orientativă</th><th>Cupru aproximativ</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Ficat de vită (gătit)</td><td>85 g</td><td>~14.000 mcg (14 mg)</td></tr>
+            <tr><td>Stridii (gătite)</td><td>85 g</td><td>~4.500 mcg</td></tr>
+            <tr><td>Crab (gătit)</td><td>85 g</td><td>~1.000 mcg</td></tr>
+            <tr><td>Caju (crud)</td><td>28 g (1 mână)</td><td>~622 mcg</td></tr>
+            <tr><td>Semințe de floarea-soarelui</td><td>28 g</td><td>~519 mcg</td></tr>
+            <tr><td>Ciocolată neagră (70–85%)</td><td>28 g</td><td>~501 mcg</td></tr>
+            <tr><td>Ciuperci Shiitake (gătite)</td><td>1/2 cană</td><td>~650 mcg</td></tr>
+            <tr><td>Semințe de susan</td><td>28 g</td><td>~730 mcg</td></tr>
+            <tr><td>Linte (gătită)</td><td>1/2 cană</td><td>~250 mcg</td></tr>
+            <tr><td>Năut (gătit)</td><td>1/2 cană</td><td>~290 mcg</td></tr>
+            <tr><td>Arahide</td><td>28 g</td><td>~185 mcg</td></tr>
+            <tr><td>Cereale integrale (ovăz)</td><td>1/2 cană gătit</td><td>~170 mcg</td></tr>
+          </tbody>
+        </table>
+        <p>Aceste valori au caracter orientativ și pot varia în funcție de origine, sezon, procesare și metoda de gătire.</p>
+
+        <h2>Model alimentar favorabil unui aport bun de cupru</h2>
+        <p>Un aport adecvat de cupru este asigurat natural de o dietă variată, care include periodic organe (ficat o dată pe săptămână), fructe de mare, nuci și semințe, ciuperci și leguminoase. Dietele exclusiv din alimente ultra-procesate sau cele extrem de restrictive riscă un aport suboptimal. De asemenea, suplimentarea pe termen lung cu doze mari de zinc — fără monitorizarea concomitentă a cuprului — reprezintă un factor de risc pentru deficiența indusă de cupru, independent de calitatea dietei.</p>
+
+        <h2 id="suplimentarea">Suplimentarea cu cupru</h2>
+
+        <h3>Context de utilizare</h3>
+        <p>Suplimentarea izolată cu cupru este rar indicată și trebuie abordată cu prudență. Contextele în care poate fi relevantă includ: deficiența documentată prin analize (ceruloplasmină scăzută, cupru seric scăzut, anemie refractară la fier), utilizarea pe termen lung a dozelor mari de zinc (peste 40 mg/zi), sindroame de malabsorbție sau intervenții bariatrice și situații clinice în care necesarul este crescut, monitorizat medical.</p>
+
+        <p>Suplimentarea empirică, fără evaluarea statusului, este descurajată. Cuprul are o fereastră terapeutică relativ îngustă: atât deficiența cât și excesul produc efecte adverse semnificative, iar simptomele celor două pot fi uneori confundate fără date de laborator.</p>
+
+        <h3>Forme de suplimente</h3>
+        <p>Cuprul este disponibil în mai multe forme: cupru gluconat, cupru sulfat, cupru citrat și cupru bisglicinat (chelat). Formele chelatate, precum bisglicinat, tind să aibă o biodisponibilitate mai bună și o toleranță gastrointestinală superioară. Cuprul sulfat, deși mai ieftin, poate produce disconfort digestiv la unele persoane.</p>
+
+        <p>Dozele uzuale în suplimentare se situează în intervalul 1–3 mg/zi, mult sub limita superioară tolerabilă de 10 mg/zi. Suplimentarea cu doze mai mari necesită supraveghere medicală și monitorizare a parametrilor hepatici.</p>
+
+        <h3>Siguranță și limite</h3>
+        <p>Limita superioară tolerabilă (UL) pentru cupru este de 10 mg/zi la adulți. Depășirea cronică a acestei limite poate produce greață, vărsături, dureri abdominale și, pe termen lung, leziuni hepatice. Persoanele cu boala Wilson — o afecțiune genetică de acumulare a cuprului — trebuie să evite complet suplimentele cu cupru și să urmeze un regim dietetic și farmacologic strict sub supraveghere medicală.</p>
+
+        <div class="micronutrient-callout">
+          <p>Suplimentarea pe termen lung cu zinc în doze de peste 40–50 mg/zi poate induce o deficiență de cupru, chiar și la un aport alimentar normal de cupru. Inversul este valabil: excesul de cupru poate reduce absorbția zincului. La persoanele care iau suplimente mari de zinc, monitorizarea periodică a cuprului seric și a ceruloplasmei este prudentă și recomandată.</p>
         </div>
-    </main>
+
+        <h2 id="interactiuni">Interacțiuni relevante</h2>
+
+        <p>Cuprul este poate micronutrientul cu cele mai semnificative interacțiuni bidirecționale cu alți nutrienți, ceea ce face ca evaluarea sa să nu poată fi realizată în mod corect fără a lua în considerare contextul mineral mai larg.</p>
+
+        <h3>Cupru și zinc — relația cea mai importantă</h3>
+        <p>Cuprul și zincul concurează pentru același transportor intestinal (DMT1) și pentru legarea de metalotionenă în enterocite. Un aport ridicat de zinc stimulează sinteza de metalotioneină, care captează cuprul și îl împiedică să treacă în circulație, reducând astfel absorbția sa. Această interacțiune este bine documentată clinic: suplimentarea cronică cu zinc la doze terapeutice (40–150 mg/zi) poate induce o deficiență severă de cupru, cu tablou neurologic și hematologic. Raportul optimal zinc/cupru în dietă este estimat la aproximativ 8–10:1.</p>
+
+        <h3>Cupru și fier</h3>
+        <p>Relația cupru-fier este de sinergie funcțională. Ceruloplasminul, cuproenzima plasmatică majoră, este indispensabil pentru mobilizarea fierului din depozite și pentru transportul său eficient. Un deficit de cupru va produce un tablou de anemie funcțională feriprivă, rezistentă la suplimentarea cu fier — un scenariu clinic important de recunoscut.</p>
+
+        <h3>Cupru și vitamina C</h3>
+        <p>Vitamina C în doze mari (peste 1.500 mg/zi) poate reduce absorbția cuprului și poate interfera cu activitatea sa enzimatică prin efecte de reducere a cuprului divalent. Această interacțiune este relevantă mai ales în contextul megadozelor de vitamina C utilizate în anumite protocoale de suplimentare.</p>
+
+        <h3>Cupru și molibden</h3>
+        <p>Molibdenul formează complexe cu sulful și cuprul (thiomolibdați) care reduc biodisponibilitatea cuprului. Această interacțiune este mai relevantă în contexte cu aport excesiv de molibden din suplimente decât din alimentație obișnuită.</p>
+
+        <h3>Cupru și fitați</h3>
+        <p>Fitații din cereale integrale și leguminoase pot reduce absorbția cuprului prin chelare. Înmuierea, germinarea sau fermentarea acestor alimente reduce conținutul de fitați și îmbunătățește biodisponibilitatea mineralelor, inclusiv a cuprului.</p>
+
+        <h2 id="populatii">Populații de interes</h2>
+
+        <h3>Persoane care suplimentează cu doze mari de zinc</h3>
+        <p>Aceasta este cea mai frecventă cauză iatrogeniă de deficiență de cupru în practica modernă. Persoanele care iau zinc în doze terapeutice pentru imunitate, acnee, sau alte indicații trebuie să monitorizeze periodic statusul cuprului și să ia în considerare suplimentarea concomitentă cu cupru sau, cel puțin, optimizarea aportului alimentar.</p>
+
+        <h3>Persoane cu intervenții bariatrice</h3>
+        <p>Bypass-ul gastric și alte proceduri bariatrice reduc semnificativ suprafața de absorbție intestinală, cu risc crescut de deficiențe multiple, inclusiv cupru. Monitorizarea regulată a micronutrienților și suplimentarea profilactică sunt componente standard ale îngrijirii postoperatorii bariatrice.</p>
+
+        <h3>Persoane cu sindroame de malabsorbție</h3>
+        <p>Boala celiacă netratată, boala Crohn, enteritele cronice și alte afecțiuni inflamatorii intestinale pot compromite absorbția cuprului. Deficiența neurologică (mielopatie) secundară malabsorbției de cupru este o complicație rară dar gravă, care poate fi ireversibilă dacă diagnosticul întârzie.</p>
+
+        <h3>Persoane cu boala Wilson</h3>
+        <p>Boala Wilson este o afecțiune autozomal recesivă cauzată de mutații ale genei ATP7B, care codifică o pompă de export a cuprului din hepatocite. Rezultatul este acumularea progresivă de cupru în ficat, creier și cornee. Tratamentul necesită agenți chelatori (D-penicilamină, trientine) sau săruri de zinc și o dietă cu restricție strictă de alimente bogate în cupru.</p>
+
+        <h3>Vârstnici</h3>
+        <p>La persoanele în vârstă, absorbția cuprului poate fi redusă din cauza aclorhidriei sau a utilizării cronice de medicamente care modifică pH-ul gastric. Monotonia alimentară și excluderea surselor bogate (organe, fructe de mare) din dietă cresc riscul unui aport suboptimal. Semnele neurologice subtile ale deficienței pot fi confundate cu alte afecțiuni frecvente la vârstnici.</p>
+
+        <h3>Femei însărcinate și care alăptează</h3>
+        <p>Necesarul de cupru crește în sarcină (1.000 mcg/zi) și mai ales în alăptare (1.300 mcg/zi), pentru a susține dezvoltarea fetală și neonatală. Cuprul este esențial pentru mielinizarea sistemului nervos fetal și pentru integritatea vasculară. Aportul alimentar adecvat din surse integrale acoperă de regulă aceste nevoi crescute.</p>
+
+        <h2>Aport insuficient, deficit funcțional și exces</h2>
+
+        <p>Deficiența clinică de cupru este mai rară decât deficiența funcțională subclinică. Tabloul clinic clasic al deficienței severe include: anemie microcitară sau normocitară refractară la fier, neutropenie cu risc crescut de infecții, mielopatie spinală cu slăbiciune progresivă a membrelor inferioare și probleme de coordonare, neuropatie periferică, depigmentarea prematură a părului și osteoporoză cu fracturi prin fragilitate osoasă.</p>
+
+        <p>Excesul de cupru, mai ales în contextul bolii Wilson sau al contaminării apei din instalații de cupru vechi, produce simptome gastrointestinale acute și, pe termen lung, ciroză hepatică și manifestări neuropsihiatrice — tremor, disartrie, modificări de personalitate, depresie și iritabilitate — alături de inelul Kayser-Fleischer, un inel maroniu-verzui vizibil la examinarea corneei cu lampa cu fantă.</p>
+
+        <h2 id="relevanta">Relevanță clinică și nutrițională</h2>
+
+        <p>Cuprul ocupă un loc distinct în nutriția clinică prin amploarea sistemelor biologice pe care le susține — de la hematopoieză la mielinizare, de la sinteza de colagen la producția de energie mitocondrială. Această diversitate funcțională înseamnă că deficiența sa poate să se prezinte clinic în moduri variate și nespecifice, care necesită un indice de suspiciune diagnostic adecvat.</p>
+
+        <p>În contextul medicinei funcționale și al nutriției de precizie, cuprul este relevant mai ales prin relația sa cu zincul — o relație ce trebuie gestionată cu atenție în orice protocol care include suplimentarea cu zinc la doze mari. Evaluarea concomitentă a ambelor minerale, prin ceruloplasmină, cupru seric și zinc seric, oferă o imagine mai corectă a echilibrului mineral decât analiza fiecăruia izolat.</p>
+
+        <h2>Perspectivă funcțională și holistică</h2>
+
+        <div class="micronutrient-note-holistic">
+          <h3>Cadru interpretativ</h3>
+          <p>Din perspectivă funcțională, cuprul poate fi descris ca mineralul fluidității și al adaptabilității structurale. Prin sinteza colagenului și elastinei, susține elasticitatea fizică a corpului; prin funcția nervoasă și sinteza de neurotransmițători, contribuie la flexibilitatea și adaptabilitatea sistemului nervos; prin producția de energie mitocondrială, susține vitalitatea celulară la nivel fundamental.</p>
+        </div>
+
+        <p>Dintr-o lectură mai amplă, cuprul rezonează cu tema fluidității, creativității și expresiei. În medicina tradițională chineză, este asociat cu Sângele (Xue) Ficatului și cu Esența (Jing) Rinichilor — sisteme care guvernează vitalitatea profundă, flexibilitatea tendoanelor și claritatea mentală. În Ayurveda, are o natură Pitta — asociat cu transformarea, metabolismul și energia — susținând Rakta Dhatu (sângele) și Majja Dhatu (țesutul nervos). Excesul agravează Pitta, producând inflamație, iritabilitate și exces de „căldură" metabolică. Aceste perspective nu substituie datele biochimice, ci adaugă un strat interpretativ util pentru înțelegerea relației dintre echilibrul mineral și starea de bine globală.</p>
+
+        <h2 id="sinteza">Sinteză</h2>
+
+        <p>Cuprul este un oligoelement esențial cu funcții biologice fundamentale și largi: metabolizarea fierului prin ceruloplasmină, sinteza colagenului și elastinei prin lizil oxidază, producția de energie mitocondrială prin citocrom c oxidază, apărarea antioxidantă prin Cu/Zn-SOD și funcția nervoasă prin sinteza de neurotransmițători și menținerea mielinei. Principalele surse alimentare sunt ficatul, fructele de mare, nucile și semințele, ciocolata neagră și ciupercile. Doza zilnică recomandată este de 900 mcg/zi pentru adulți, cu limită superioară tolerabilă de 10 mg/zi. Relația sa cu zincul este critică: suplimentarea cu doze mari de zinc poate induce deficiență de cupru, iar monitorizarea concomitentă a ambelor minerale este esențială în orice protocol care implică doze terapeutice de zinc. Boala Wilson reprezintă contextul clinic în care acumularea patologică de cupru necesită intervenție medicală specializată.</p>
+      </div>
+    </article>
+
+    <div id="footer-placeholder"></div>
+    <div id="script-placeholder"></div>
+  </div>
+
+  <script>
+        fetch('https://nutrisib.club/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Eroare încărcare footer:', error));
+
+        fetch('https://nutrisib.club/script_protect.js')
+            .then(response => response.text())
+            .then(data => {
+                const script = document.createElement('script');
+                script.textContent = data;
+                document.body.appendChild(script);
+            })
+            .catch(error => console.error('Eroare încărcare script protecție:', error));
+
+    (function injectFooterAndScripts() {
+      const footerPlaceholder = document.getElementById('footer-placeholder');
+      const scriptPlaceholder = document.getElementById('script-placeholder');
+      const year = new Date().getFullYear();
+
+      if (footerPlaceholder) {
+        footerPlaceholder.innerHTML = `
+          <footer>
+            <p>© ${year} NUTRISIB. Toate drepturile rezervate.</p>
+          </footer>
+          <div class="legal-footer-box">
+            <button class="legal-btn" type="button" onclick="window.print()">
+              Printează / Salvează PDF
+            </button>
+          </div>
+        `;
+      }
+
+      if (scriptPlaceholder) {
+        const smoothScript = document.createElement('script');
+        smoothScript.textContent = `
+          document.addEventListener('click', function (event) {
+            const target = event.target.closest('a[href^="#"]');
+            if (!target) return;
+            const id = target.getAttribute('href');
+            const el = document.querySelector(id);
+            if (!el) return;
+            event.preventDefault();
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        `;
+        scriptPlaceholder.appendChild(smoothScript);
+      }
+    })();
+  </script>
 </body>
 </html>

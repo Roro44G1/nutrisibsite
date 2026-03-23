@@ -1,257 +1,508 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doze Recomandate - Vitamine</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doze Recomandate Vitamine | Enciclopedia Micronutrienților | NUTRISIB</title>
+  <meta name="description" content="Ghid complet al dozelor recomandate pentru vitamine — DZR, AI și limite superioare (UL) pentru adulți, conform ghidurilor IOM/NIH. Include vitaminele liposolubile, hidrosolubile și compușii cvasi-vitaminici.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@400;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+  <link rel="stylesheet" href="https://nutrisib.club/micronutrienti.css">
+  <style>
+    /* ── Container extins ── */
+    .container-main.micronutrient-shell { max-width: 1600px; }
 
-        :root {
-            --color-header-bg: #2c3e50; /* Gri închis pentru antet */
-            --color-table-header-bg: #7f8c8d; /* Gri mai deschis pentru capul de tabel */
-            --color-secondary: #2c3e50;
-            --color-background: #f4f7f6;
-            --color-text: #333;
-            --color-card-bg: #ffffff;
-            --color-border: #e0e0e0;
-            --color-link: #3498db;
-        }
+    /* ── Tabel doze ── */
+    .doze-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-brand-medium) #e5e7eb;
+      border-radius: var(--radius-card);
+      margin: 1.25rem 0;
+    }
+    .doze-table-wrap::-webkit-scrollbar { height: 4px; }
+    .doze-table-wrap::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+    .doze-table-wrap::-webkit-scrollbar-thumb { background: var(--color-brand-medium); border-radius: 4px; }
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            line-height: 1.7;
-            margin: 0;
-            background-color: var(--color-background);
-            color: var(--color-text);
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
-        }
-        .container {
-            max-width: 1200px;
-            width: 100%;
-            background: var(--color-card-bg);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        .header {
-            background: var(--color-header-bg);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            font-weight: 700;
-        }
-        .header p {
-            margin: 10px 0 0;
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-        .content {
-            padding: 30px 40px;
-        }
-        .table-container {
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 0.95em;
-        }
-        th, td {
-            border: 1px solid var(--color-border);
-            padding: 12px 15px;
-            text-align: left;
-            vertical-align: middle;
-        }
-        th {
-            background-color: var(--color-table-header-bg);
-            color: white;
-            font-weight: 700;
-        }
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-        td:first-child a {
-            font-weight: bold;
-            color: var(--color-link);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        td:first-child a:hover {
-            color: #2980b9;
-        }
-        .note {
-            font-size: 0.85em;
-            color: #777;
-            margin-top: 20px;
-        }
-        .footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 20px;
-            color: #777;
-            font-size: 0.9em;
-            background-color: #f8f9fa;
-        }
-        
-        @media (max-width: 768px) {
-            .content {
-                padding: 20px 15px;
-            }
-            .header h1 {
-                font-size: 2em;
-            }
-        }
-    </style>
+    .doze-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+      min-width: 600px;
+    }
+    .doze-table thead tr {
+      background: var(--color-navy);
+      color: white;
+    }
+    .doze-table th {
+      padding: .3rem .7rem;
+      text-align: left;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      white-space: nowrap;
+    }
+    .doze-table th:first-child { border-radius: 8px 0 0 0; }
+    .doze-table th:last-child  { border-radius: 0 8px 0 0; }
+    .doze-table td {
+      padding: .22rem .7rem;
+      border-bottom: 1px solid var(--color-border);
+      vertical-align: middle;
+      line-height: 1.35;
+      color: var(--color-text-medium);
+    }
+    .doze-table tr:last-child td { border-bottom: none; }
+    .doze-table tr:nth-child(even) { background: var(--color-brand-light, #eaf2f8); }
+    .doze-table tr:hover { background: rgba(62,146,204,.06); }
+
+    /* Link mineral */
+    .doze-table td:first-child {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .doze-table td:first-child a {
+      color: var(--color-navy);
+      text-decoration: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .82rem;
+      font-weight: 700;
+      transition: color .2s;
+    }
+    .doze-table td:first-child a:hover { color: var(--color-brand-medium); }
+
+    /* Valori */
+    .val-ok   { color: var(--color-navy); font-weight: 600; }
+    .val-none { color: var(--color-text-light); font-style: italic; font-size: .82rem; }
+    .val-warn { color: #92400e; font-weight: 600; }
+    .val-note { color: #6b21a8; font-weight: 600; }
+
+    /* Separatoare secțiuni */
+    .tip-section-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      padding: .4rem .85rem;
+      color: white !important;
+    }
+    .tip-section-lipo   { background: #7c2d12; color: white !important; }
+    .tip-section-hidro  { background: #0c4a6e; color: white !important; }
+    .tip-section-cvasi  { background: #4c1d95; color: white !important; }
+
+    /* Legendă */
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: .75rem;
+      margin: 1.25rem 0;
+    }
+    .legend-item {
+      background: white;
+      border-radius: 8px;
+      border: 1px solid var(--color-border);
+      padding: .75rem 1rem;
+    }
+    .legend-item .leg-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--color-navy);
+      display: block;
+      margin-bottom: .25rem;
+    }
+    .legend-item p {
+      font-size: .82rem;
+      color: var(--color-text-medium);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .doze-table { font-size: .84rem; }
+    }
+    @media (max-width: 768px) {
+      .container-main { padding: 0 .5rem; }
+      .doze-table { font-size: .78rem; min-width: 480px; }
+      .doze-table th { font-size: .65rem; padding: .25rem .5rem; white-space: normal; }
+      .doze-table td { padding: .18rem .5rem; line-height: 1.3; }
+      .doze-table-wrap::before {
+        content: '← scroll →';
+        display: block;
+        text-align: center;
+        font-size: .68rem;
+        color: var(--color-text-light);
+        padding: .2rem 0 .4rem;
+        font-family: 'Montserrat', sans-serif;
+        letter-spacing: .05em;
+      }
+      .legend-grid { grid-template-columns: 1fr; gap: .5rem; }
+      .legend-item { padding: .6rem .85rem; }
+      .micronutrient-hero { padding: 1.5rem 1rem; }
+      .micronutrient-jumpbar { overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; display: block; }
+      .tip-section-label { font-size: .62rem; padding: .35rem .65rem; }
+    }
+    @media (max-width: 480px) {
+      .doze-table { font-size: .72rem; min-width: 400px; }
+      .doze-table th { font-size: .6rem; padding: .2rem .4rem; }
+      .doze-table td { padding: .15rem .4rem; font-size: .72rem; }
+      .val-ok, .val-none, .val-warn, .val-note { font-size: .7rem; }
+      .micronutrient-hero h1 { font-size: 1.4rem; }
+      .micronutrient-hero p  { font-size: .85rem; }
+    }
+    @media (max-width: 360px) {
+      .doze-table { min-width: 340px; font-size: .68rem; }
+      .doze-table th { font-size: .57rem; padding: .18rem .35rem; }
+      .doze-table td { padding: .12rem .35rem; }
+    }
+  </style>
 </head>
-<body>
+<body class="micronutrient-page">
+  <div class="container-main micronutrient-shell">
 
-    <div class="container">
-        <header class="header">
-            <h1>Ghid Doze Recomandate - Vitamine</h1>
-            <p>Aport Adecvat (AI), Doze Zilnice Recomandate (DZR) și Limite Superioare (UL) pentru adulți.</p>
-        </header>
-
-        <div class="content">
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Vitamină / Compus</th>
-                            <th>Surse alimentare principale</th>
-                            <th>Aport Adecvat (AI) / Doză Recomandată (DZR)</th>
-                            <th>Limită Superioară (UL)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="vitamina_A.html">Vitamina A</a></td>
-                            <td>Ficat, lactate, ouă, morcovi, cartofi dulci</td>
-                            <td>DZR: 700-900 mcg RAE</td>
-                            <td>3.000 mcg</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vitamina_B1.html">Vitamina B1 (Tiamina)</a></td>
-                            <td>Cereale integrale, carne de porc, leguminoase</td>
-                            <td>DZR: 1.1-1.2 mg</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vitamina_B2.html">Vitamina B2 (Riboflavina)</a></td>
-                            <td>Lactate, ouă, ficat, legume verzi</td>
-                            <td>DZR: 1.1-1.3 mg</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vitamina_B3.html">Vitamina B3 (Niacina)</a></td>
-                            <td>Carne de pui, ton, alune, cereale integrale</td>
-                            <td>DZR: 14-16 mg NE</td>
-                            <td>35 mg</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vitamina_B5.html">Vitamina B5 (Acid Pantotenic)</a></td>
-                            <td>Ficat, ciuperci, avocado, semințe de floarea-soarelui</td>
-                            <td>AI: 5 mg</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vitamina_B6.html">Vitamina B6 (Piridoxină)</a></td>
-                            <td>Năut, ficat, ton, somon, cartofi, banane</td>
-                            <td>DZR: 1.3-1.7 mg</td>
-                            <td>100 mg</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vitamina_B7.html">Vitamina B7 (Biotina)</a></td>
-                            <td>Ficat, ouă, somon, nuci, semințe</td>
-                            <td>AI: 30 mcg</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vitamina_B9.html">Vitamina B9 (Folat)</a></td>
-                            <td>Legume verzi (spanac), linte, fasole, avocado</td>
-                            <td>DZR: 400 mcg DFE</td>
-                            <td>1.000 mcg (din surse sintetice)</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vitamina_B12.html">Vitamina B12 (Cobalamina)</a></td>
-                            <td>Ficat, scoici, carne roșie, pește, lactate</td>
-                            <td>DZR: 2.4 mcg</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                         <tr>
-                            <td><a href="vitamina_B15.html">"Vitamina B15"</a></td>
-                            <td>Drojdie de bere, orez brun, semințe de dovleac</td>
-                            <td>Nu este stabilit</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vitamina_C.html">Vitamina C</a></td>
-                            <td>Ardei gras, citrice, kiwi, broccoli, căpșuni</td>
-                            <td>DZR: 75-90 mg</td>
-                            <td>2.000 mg</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vitamina_D.html">Vitamina D</a></td>
-                            <td>Expunere la soare, pește gras, ulei de ficat de cod</td>
-                            <td>DZR: 15-20 mcg (600-800 IU)</td>
-                            <td>100 mcg (4.000 IU)</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vitamina_E.html">Vitamina E</a></td>
-                            <td>Semințe de floarea-soarelui, migdale, ulei de germeni de grâu</td>
-                            <td>DZR: 15 mg</td>
-                            <td>1.000 mg</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vitamina_F.html">"Vitamina F" (Acizi Grași)</a></td>
-                            <td>Pește gras, semințe de in, nuci, uleiuri vegetale</td>
-                            <td>AI: 1.1-1.6 g (Omega-3); 12-17 g (Omega-6)</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                         <tr>
-                            <td><a href="vitamina_K.html">Vitamina K</a></td>
-                            <td>Kale, spanac, broccoli (K1); Natto, brânzeturi (K2)</td>
-                            <td>AI: 90-120 mcg</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vitamina_P.html">"Vitamina P" (Bioflavonoide)</a></td>
-                            <td>Citrice, fructe de pădure, ceapă, ceai verde</td>
-                            <td>Nu este stabilit</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                        <tr>
-                            <td><a href="colina.html">Colina</a></td>
-                            <td>Gălbenuș de ou, ficat, soia, carne de vită</td>
-                            <td>AI: 425-550 mg</td>
-                            <td>3.500 mg</td>
-                        </tr>
-                        <tr>
-                            <td><a href="inozitol.html">Inozitol</a></td>
-                            <td>Pepene galben, citrice, fasole, cereale integrale</td>
-                            <td>Nu este stabilit</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <p class="note">
-                <strong>Notă:</strong> Valorile prezentate sunt pentru adulți și se bazează pe ghidurile dietetice de referință (Dietary Reference Intakes - DRI) emise de Institute of Medicine (IOM), SUA. Acestea pot varia ușor în funcție de alte organizații de sănătate. Consultați întotdeauna un specialist pentru recomandări personalizate.
-            </p>
-        </div>
-
-        <footer class="footer">
-            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
-        </footer>
+    <div class="micronutrient-topbar screen-only">
+      <a class="btn-white" href="https://nutrisib.club/micronutrienti/index.html">Enciclopedia micronutrienților</a>
+      <div class="micronutrient-actions">
+        <a class="btn-outline" href="#tabel">Sari la tabel</a>
+        <button class="btn" type="button" onclick="window.print()">Generează PDF / Printează</button>
+      </div>
     </div>
 
+    <section class="micronutrient-hero">
+      <span class="hero-kicker">Enciclopedia Micronutrienților</span>
+      <h1>Doze recomandate — Vitamine</h1>
+      <p>Aport Adecvat (AI), Doze Zilnice Recomandate (DZR) și Limite Superioare Tolerabile (UL) pentru adulți, conform ghidurilor DRI emise de Institute of Medicine (IOM) / National Academies of Sciences, SUA.</p>
+    </section>
+
+    <nav class="micronutrient-jumpbar screen-only" aria-label="Navigare internă">
+      <a href="#despre">Despre DRI</a>
+      <a href="#tabel">Tabel complet</a>
+      <a href="#liposolubile">Liposolubile</a>
+      <a href="#hidrosolubile">Hidrosolubile</a>
+      <a href="#cvasi">Cvasi-vitamine</a>
+      <a href="#note">Note</a>
+    </nav>
+
+    <article class="micronutrient-article" id="continut-integral">
+      <div class="micronutrient-content">
+
+        <h2 id="despre">Cum se citesc valorile DRI</h2>
+
+        <p>Sistemul Dietary Reference Intakes (DRI) reprezintă cadrul nutrițional de referință utilizat în America de Nord și larg adoptat internațional. Nu este o singură valoare, ci un set de repere cu semnificații distincte, esențiale pentru interpretarea corectă a tabelului de mai jos.</p>
+
+        <div class="legend-grid">
+          <div class="legend-item">
+            <span class="leg-label">DZR — Doза Zilnică Recomandată</span>
+            <p>Echivalentul RDA (Recommended Dietary Allowance). Acoperă necesarul a 97–98% din populația sănătoasă. Este valoarea de referință principală pentru planificarea dietei individuale.</p>
+          </div>
+          <div class="legend-item">
+            <span class="leg-label">AI — Aport Adecvat</span>
+            <p>Echivalentul Adequate Intake. Utilizat când datele sunt insuficiente pentru a stabili un RDA. Reprezintă un nivel estimat ca adecvat pe baza observațiilor populaționale.</p>
+          </div>
+          <div class="legend-item">
+            <span class="leg-label">UL — Limita Superioară Tolerabilă</span>
+            <p>Echivalentul Tolerable Upper Intake Level. Nivelul maxim zilnic de aport din toate sursele (alimente + suplimente) care nu produce efecte adverse la adulții sănătoși. Depășirea cronică prezintă risc real de toxicitate.</p>
+          </div>
+          <div class="legend-item">
+            <span class="leg-label">RAE, NE, DFE — unități specifice</span>
+            <p><strong>RAE</strong> = Retinol Activity Equivalents (vitamina A). <strong>NE</strong> = Niacin Equivalents (B3). <strong>DFE</strong> = Dietary Folate Equivalents (B9) — folatul sintetic din suplimente are biodisponibilitate de 1,7× față de cel alimentar.</p>
+          </div>
+        </div>
+
+        <div class="micronutrient-callout">
+          <p><strong>Important:</strong> Valorile prezentate se referă la <strong>adulți sănătoși (19–50 ani)</strong>, cu specificații acolo unde necesarul diferă semnificativ pe sexe sau după vârstă. Sarcina și alăptarea modifică substanțial necesarul pentru majoritatea vitaminelor. UL se aplică aportului cumulat din alimentație, apă și suplimente. Absența unui UL nu înseamnă că o vitamină este sigură în orice doză — înseamnă că datele disponibile nu permit calcularea unui prag de toxicitate, nu că nu există.</p>
+        </div>
+
+
+        <!-- ══ INTRO MED 3.0 ══ -->
+        <div style="display:flex;align-items:flex-start;gap:1rem;padding:1rem 1.25rem;background:linear-gradient(135deg,rgba(197,160,33,.07),rgba(27,42,74,.04));border-left:4px solid var(--color-gold,#C5A021);border-radius:0 var(--radius-card) var(--radius-card) 0;margin:1.25rem 0;">
+          <span style="font-size:1.5rem;flex-shrink:0;line-height:1;">🔬</span>
+          <div>
+            <p style="margin:0 0 .35rem;font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--color-navy);">Medicina 3.0 — dincolo de dozele standard</p>
+            <p style="margin:0 0 .5rem;font-size:.88rem;color:var(--color-text-medium);line-height:1.65;">Valorile DRI din acest tabel definesc pragul pentru prevenirea deficienței clinice, nu intervalul optim pentru vitalitate și longevitate. Medicina 3.0 evaluează micronutrienții individual, prin biomarkeri specifici, calibrând intervenția pe terenul biologic al fiecărui pacient — nu pe mediana populațională.</p>
+            <a href="minvitmed30.html" style="display:inline-flex;align-items:center;gap:.4rem;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--color-navy);text-decoration:none;border-bottom:2px solid var(--color-gold,#C5A021);padding-bottom:.1rem;transition:color .2s;" onmouseover="this.style.color='var(--color-brand-medium)'" onmouseout="this.style.color='var(--color-navy)'">Citește: Abordarea micronutrienților în Medicina 3.0 →</a>
+          </div>
+        </div>
+
+        <!-- ══ TABEL ══ -->
+        <h2 id="tabel">Tabel complet — Vitamine și compuși cvasi-vitaminici</h2>
+        <p>Vitaminele sunt grupate în trei categorii: <strong>liposolubile</strong> (A, D, E, K — solubile în grăsimi, stocabile în organism, cu risc real de toxicitate în exces), <strong>hidrosolubile</strong> (C și complexul B — eliminate renal, cu risc de toxicitate mai redus dar nu inexistent) și <strong>compuși cvasi-vitaminici</strong> (substanțe numite popular „vitamine" dar nerecunoscute ca atare de forurile științifice internaționale).</p>
+
+        <!-- ══ LIPOSOLUBILE ══ -->
+        <div class="doze-table-wrap" id="liposolubile">
+          <table class="doze-table">
+            <thead>
+              <tr>
+                <th>Vitamină / Compus</th>
+                <th>Surse alimentare principale</th>
+                <th>DZR / AI — Bărbați adulți</th>
+                <th>DZR / AI — Femei adulte</th>
+                <th>UL (toate sursele)</th>
+                <th>Observații clinice</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6" class="tip-section-label tip-section-lipo">🟠 Vitamine liposolubile — stocabile în țesut adipos și ficat</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_A.html">Vitamina A</a></td>
+                <td>Ficat de vită, ulei de ficat de cod, ouă, lactate (vitamina A preformată); morcovi, cartofi dulci, spanac, ardei roșu (betacaroten — provitamina A)</td>
+                <td class="val-ok">DZR: 900 mcg RAE/zi</td>
+                <td class="val-ok">DZR: 700 mcg RAE/zi</td>
+                <td class="val-warn">3.000 mcg RAE/zi<br><em style="font-size:.78rem;font-weight:400;">(doar vitamina A preformată)</em></td>
+                <td>UL se aplică exclusiv vitaminei A preformate (retinol), nu betacarotenului alimentar. Hipervitaminoza A din suplimente produce hepatotoxicitate și teratogenitate. Betacarotenul în exces produce doar carotenodermie (colorație galben-portocalie inofensivă), cu excepția fumătorilor (risc oncologic documentat).</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_D.html">Vitamina D</a></td>
+                <td>Sinteză cutanată (UVB ☀️ — sursa principală); pește gras (somon, macrou, sardine, ton), ulei de ficat de cod, gălbenuș de ou, alimente fortificate</td>
+                <td class="val-ok">DZR: 15 mcg/zi (600 IU)<br><em style="font-size:.78rem;font-weight:400;">&gt;70 ani: 20 mcg (800 IU)</em></td>
+                <td class="val-ok">DZR: 15 mcg/zi (600 IU)<br><em style="font-size:.78rem;font-weight:400;">&gt;70 ani: 20 mcg (800 IU)</em></td>
+                <td class="val-warn">100 mcg/zi (4.000 IU)</td>
+                <td>Deficiența este pandemică la latitudini temperate. Medicina funcțională operează cu ținte mai înalte (40–60 ng/mL seric), față de „suficiența" clasică (&gt;20 ng/mL). D3 (colecalciferol) este superior D2 (ergocalciferol) în creșterea nivelului seric. Toxicitatea (hipercalcemie) apare practic doar la doze &gt;250 mcg/zi pe termen lung.</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_E.html">Vitamina E</a></td>
+                <td>Ulei de germeni de grâu, migdale, semințe de floarea-soarelui, alune de pădure, ulei de arahide, spanac, broccoli</td>
+                <td class="val-ok">DZR: 15 mg/zi<br><em style="font-size:.78rem;font-weight:400;">(alfa-tocoferol)</em></td>
+                <td class="val-ok">DZR: 15 mg/zi<br><em style="font-size:.78rem;font-weight:400;">(alfa-tocoferol)</em></td>
+                <td class="val-warn">1.000 mg/zi<br><em style="font-size:.78rem;font-weight:400;">(alfa-tocoferol sintetic)</em></td>
+                <td>Forma naturală (d-alfa-tocoferol, RRR) este de ~1,36× mai biodisponibilă decât forma sintetică (dl-alfa-tocoferol, all-rac). Doza mare din suplimente poate inhiba agregarea plachetară și potența anticoagulantele. UL se referă la forma suplimentară, nu la aportul alimentar.</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_K.html">Vitamina K</a></td>
+                <td><strong>K1 (Phylloquinonă):</strong> Kale, spanac, broccoli, varză, ulei de soia<br><strong>K2 (Menachinone):</strong> Natto (MK-7, sursă excepțională), brânzeturi fermentate, ficat, gălbenuș de ou (MK-4)</td>
+                <td class="val-ok">AI: 120 mcg/zi</td>
+                <td class="val-ok">AI: 90 mcg/zi</td>
+                <td class="val-none">Nestabilit</td>
+                <td>K1 și K2 sunt forme distincte cu funcții parțial diferite: K1 prioritar în coagulare hepatică, K2 (MK-7) prioritar în calcificarea vasculară și metabolismul osos (osteocalcin). Absența UL nu indică siguranță în orice doză — date insuficiente. Antagonizează warfarina: pacienții anticoagulați trebuie să mențină un aport consistent, nu eliminat.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ══ HIDROSOLUBILE ══ -->
+        <div class="doze-table-wrap" id="hidrosolubile">
+          <table class="doze-table">
+            <thead>
+              <tr>
+                <th>Vitamină / Compus</th>
+                <th>Surse alimentare principale</th>
+                <th>DZR / AI — Bărbați adulți</th>
+                <th>DZR / AI — Femei adulte</th>
+                <th>UL (toate sursele)</th>
+                <th>Observații clinice</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6" class="tip-section-label tip-section-hidro">🔵 Vitamine hidrosolubile — complexul B și vitamina C</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_C.html">Vitamina C</a></td>
+                <td>Ardei gras roșu/galben, kiwi, căpșuni, citrice, broccoli, kale, guava</td>
+                <td class="val-ok">DZR: 90 mg/zi<br><em style="font-size:.78rem;font-weight:400;">Fumători: +35 mg</em></td>
+                <td class="val-ok">DZR: 75 mg/zi<br><em style="font-size:.78rem;font-weight:400;">Fumători: +35 mg</em></td>
+                <td class="val-warn">2.000 mg/zi</td>
+                <td>Potențatorul cel mai eficient al absorbției fierului non-hemic. Fumătorii au necesar crescut (stresul oxidativ al fumului consumă ascorbat). Doze &gt;2g/zi pot produce diaree osmotică și risc crescut de oxalat urinar (litiază renală) la persoane predispuse.</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_B1.html">B1 — Tiamina</a></td>
+                <td>Cereale integrale, carne de porc, leguminoase (linte, fasole), drojdie de bere, nuci de macadamia</td>
+                <td class="val-ok">DZR: 1,2 mg/zi</td>
+                <td class="val-ok">DZR: 1,1 mg/zi</td>
+                <td class="val-none">Nestabilit</td>
+                <td>Deficiența severă produce beriberi (neuropatie periferică, insuficiență cardiacă) și encefalopatia Wernicke-Korsakoff (la alcoolici). Alcoolul și cafeaua în exces depletează tiamina. Absorbția redusă de antiacide și diuretice de ansă.</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_B2.html">B2 — Riboflavina</a></td>
+                <td>Ficat de vită, lapte și lactate, ouă, migdale, ciuperci, quinoa, carnea de vită slabă</td>
+                <td class="val-ok">DZR: 1,3 mg/zi</td>
+                <td class="val-ok">DZR: 1,1 mg/zi</td>
+                <td class="val-none">Nestabilit</td>
+                <td>Sensibilă la lumină — lactatele în ambalaje transparente pierd până la 70% din riboflavină. Cofactor esențial pentru metabolismul energetic (FMN, FAD). Interacțiune cu unele antidepresive și antimalarice care inhibă absorbția.</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_B3.html">B3 — Niacina</a></td>
+                <td>Carne de pui și curcan, ton, somon, arahide, ficat, drojdie de bere, ciuperci</td>
+                <td class="val-ok">DZR: 16 mg NE/zi</td>
+                <td class="val-ok">DZR: 14 mg NE/zi</td>
+                <td class="val-warn">35 mg/zi<br><em style="font-size:.78rem;font-weight:400;">(niacin preformat)</em></td>
+                <td>UL se referă la niacina preformată din suplimente (acidul nicotinic și nicotinamida), nu la NE din alimente. Dozele farmacologice de acid nicotinic (1–3 g/zi) reduc LDL și cresc HDL, dar produc flush (vasodilatație cutanată), toxicitate hepatică și hiperglicemie. Nicotinamida nu produce flush dar are UL similar.</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_B5.html">B5 — Acid Pantotenic</a></td>
+                <td>Ficat de vită, ciuperci Shiitake, avocado, semințe de floarea-soarelui, somon, ouă, linte</td>
+                <td class="val-ok">AI: 5 mg/zi</td>
+                <td class="val-ok">AI: 5 mg/zi</td>
+                <td class="val-none">Nestabilit</td>
+                <td>Componentă esențială a coenzimei A — implicată în sinteza acizilor grași, metabolismul carbohidraților și producția de hormoni steroizi. Deficiența izolată este extrem de rară datorită prezenței sale largi în alimente. Utilizat topic în dermatologie (dexpantenol).</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_B6.html">B6 — Piridoxina</a></td>
+                <td>Năut, ficat, ton, somon, cartofi copți cu coajă, banane, carne de pui</td>
+                <td class="val-ok">DZR: 1,3 mg/zi (19–50 ani)<br>1,7 mg/zi (&gt;50 ani)</td>
+                <td class="val-ok">DZR: 1,3 mg/zi (19–50 ani)<br>1,5 mg/zi (&gt;50 ani)</td>
+                <td class="val-warn">100 mg/zi</td>
+                <td>Singura vitamină hidrosolubilă cu neuropatie documentată la supradozaj cronic (doze &gt;200–500 mg/zi). Necesarul crește la vârstnici și la persoanele care iau izoniazidă, penicilamină sau contraceptive orale. Cofactor în &gt;100 reacții enzimatice, inclusiv sinteza serotoninei și dopaminei.</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_B7.html">B7 — Biotina</a></td>
+                <td>Ficat de vită (sursă excepțională), gălbenuș de ou gătit, somon, avocado, nuci, drojdie de bere</td>
+                <td class="val-ok">AI: 30 mcg/zi</td>
+                <td class="val-ok">AI: 30 mcg/zi</td>
+                <td class="val-none">Nestabilit</td>
+                <td>Albușul de ou crud conține avidina — proteină care leagă biotina și blochează absorbția sa. Gătirea denaturează avidina. Deficiența poate fi indusă de consumul regulat de albușuri crude. Interferează cu testele de laborator imunologice (troponine, TSH, hormoni) la doze mari din suplimente — <strong>de anunțat laboratorul</strong>.</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_B9.html">B9 — Folatul</a></td>
+                <td>Spanac, sparanghel, ficat de vită, avocado, linte, fasole neagră, broccoli, suc de portocale</td>
+                <td class="val-ok">DZR: 400 mcg DFE/zi</td>
+                <td class="val-ok">DZR: 400 mcg DFE/zi<br><em style="font-size:.78rem;font-weight:400;">Sarcină: 600 mcg DFE</em></td>
+                <td class="val-warn">1.000 mcg/zi<br><em style="font-size:.78rem;font-weight:400;">(doar acid folic sintetic)</em></td>
+                <td>UL se aplică exclusiv acidului folic sintetic (din suplimente și alimente fortificate), nu folatului natural din alimente. Doze mari de acid folic pot masca deficiența de B12 (periculos neurologic la vârstnici). Esențial periconceptual pentru prevenirea defectelor de tub neural — 400–800 mcg/zi cu 3 luni înainte de concepție.</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_B12.html">B12 — Cobalamina</a></td>
+                <td>Ficat de vită (sursă excepțională), scoici, stridii, carne roșie, somon, ton, lactate, ouă</td>
+                <td class="val-ok">DZR: 2,4 mcg/zi</td>
+                <td class="val-ok">DZR: 2,4 mcg/zi<br><em style="font-size:.78rem;font-weight:400;">Sarcină: 2,6 mcg; Alăptare: 2,8 mcg</em></td>
+                <td class="val-none">Nestabilit</td>
+                <td>Singura vitamină absentă complet din regnul vegetal — veganii necesită suplimentare obligatorie. Absorbția necesită factorul intrinsec gastric: deficiența prin malabsorbție (gastrită atrofică, metformin, IPP cronice) este mai frecventă decât cea alimentară. Deficiența produce anemie megaloblastică și neuropatie ireversibilă. Depozitele hepatice acoperă 2–5 ani.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ══ CVASI-VITAMINE ══ -->
+        <div class="doze-table-wrap" id="cvasi">
+          <table class="doze-table">
+            <thead>
+              <tr>
+                <th>Vitamină / Compus</th>
+                <th>Surse alimentare principale</th>
+                <th>DZR / AI — Bărbați adulți</th>
+                <th>DZR / AI — Femei adulte</th>
+                <th>UL (toate sursele)</th>
+                <th>Observații clinice</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6" class="tip-section-label tip-section-cvasi">🟣 Compuși cvasi-vitaminici — numiți popular „vitamine", nerecunoscuți oficial ca atare</td>
+              </tr>
+              <tr>
+                <td><a href="colina.html">Colina</a></td>
+                <td>Gălbenuș de ou (sursă excelentă), ficat de vită, soia și produse din soia, carne de vită, somon, broccoli</td>
+                <td class="val-ok">AI: 550 mg/zi</td>
+                <td class="val-ok">AI: 425 mg/zi<br><em style="font-size:.78rem;font-weight:400;">Sarcină: 450 mg; Alăptare: 550 mg</em></td>
+                <td class="val-warn">3.500 mg/zi</td>
+                <td>Recunoscută oficial ca nutrient esențial de IOM din 1998, dar fără statut formal de „vitamină". Precursorul lecitinei și aceticolinei. Esențială pentru integritatea membranelor celulare, funcția hepatică și dezvoltarea creierului fetal. Deficiența produce steatohepatită non-alcoolică (NASH). Peste 90% din populație nu atinge AI.</td>
+              </tr>
+              <tr>
+                <td><a href="inozitol.html">Inozitol</a></td>
+                <td>Pepene galben, grapefruit, fasole, cereale integrale, nuci, citrice</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td>Compus din familia vitaminei B (uneori numit B8), nerecunoscut ca vitamină esențială. Studiat în doze farmacologice (2–18 g/zi) pentru sindromul ovarelor polichistice (PCOS), anxietate și sindromul metabolic. Sintetizat endogen în cantități semnificative din glucoză.</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_F.html">„Vitamina F" — Acizi grași esențiali</a></td>
+                <td><strong>Omega-3 (ALA):</strong> Semințe și ulei de in, nuci, semințe de chia<br><strong>Omega-3 (EPA/DHA):</strong> Pește gras (somon, macrou, sardine, hering), alge marine<br><strong>Omega-6 (LA):</strong> Uleiuri vegetale (floarea-soarelui, porumb, soia)</td>
+                <td class="val-ok">AI Omega-3 (ALA): 1,6 g/zi<br>AI Omega-6 (LA): 17 g/zi</td>
+                <td class="val-ok">AI Omega-3 (ALA): 1,1 g/zi<br>AI Omega-6 (LA): 12 g/zi</td>
+                <td class="val-none">Nestabilit<br><em style="font-size:.78rem;font-weight:400;">(EPA+DHA &gt;3g/zi: risc hemoragic)</em></td>
+                <td>Termenul „vitamina F" este depășit și imprecis. ALA (acid alfa-linolenic) este esențial, dar conversia sa în EPA/DHA este ineficientă (&lt;5–10%). Sursele marine de EPA/DHA sunt superioare. Raportul Omega-6:Omega-3 din dieta modernă (~15–20:1) depășește mult optimul funcțional (~4:1), promovând inflamația sistemică.</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_B15.html">„Vitamina B15" — Acid pangamic</a></td>
+                <td>Drojdie de bere, orez brun, semințe de dovleac, ficat</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td><strong>Nu este vitamină.</strong> Acidul pangamic nu îndeplinește criteriile de esențialitate pentru om. Nu există DRI stabilit. Compoziția suplimentelor comercializate ca „B15" variază imprevizibil. FDA (SUA) nu recunoaște termenul. Utilizat în medicina sportivă sovietică fără dovezi clinice robuste.</td>
+              </tr>
+              <tr>
+                <td><a href="vitamina_P.html">„Vitamina P" — Bioflavonoide</a></td>
+                <td>Citrice (flavanone), fructe de pădure (antocianine), ceapă (quercetină), ceai verde (catechine), cacao, vin roșu</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td><strong>Nu este vitamină.</strong> Bioflavonoidele (polifenolii) sunt compuși bioactivi cu activitate antioxidantă, antiinflamatorie și modulatoare vasculară documentată, dar fără statut de vitamină sau DRI stabilit. Sinergizează cu vitamina C. Peste 8.000 de structuri identificate; relevanța individuală variază semnificativ.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ══ NOTE ══ -->
+        <h2 id="note">Note metodologice și precizări</h2>
+
+        <h3>Despre acuratețea valorilor</h3>
+        <p>Valorile din acest tabel sunt conforme cu ediția actuală a Dietary Reference Intakes (DRI), publicată de National Academies of Sciences, Engineering and Medicine (fostul Institute of Medicine), SUA. Acestea reprezintă standardul internațional de referință cel mai larg adoptat, deși unele organizații europene (EFSA) sau naționale pot utiliza valori ușor diferite, bazate pe metodologii proprii de calcul al necesarului.</p>
+
+        <h3>Variabilitate individuală și contexte speciale</h3>
+        <p>Valorile DRI sunt calculate pentru populația generală sănătoasă. Factorii individuali care pot modifica semnificativ necesarul includ: sarcina și alăptarea, vârsta înaintată (absorbție redusă, sinteză cutanată scăzută pentru vitamina D), fumatul (vitamina C), consumul cronic de alcool (B1, B6, B9, B12), medicamentele cu interacțiuni nutriționale (metformin depletează B12; IPP depletează B12; antiepileptice depletează B9; statine depletează CoQ10; warfarina interacționează cu vitamina K), sindroamele de malabsorbție și chirurgia bariatrică.</p>
+
+        <h3>Despre UL și siguranța suplimentării</h3>
+        <p>Absența unui UL nu conferă siguranță la orice doză — reflectă doar lipsa datelor necesare pentru calcularea unui prag. Vitaminele liposolubile (A, D, E, K) se acumulează în organism și prezintă risc real de toxicitate la supradozaj cronic, în special vitamina A preformată și vitamina D. Dintre vitaminele hidrosolubile, vitamina B6 este singura cu neuropatie periferică documentată la doze mari cronice.</p>
+
+        <div class="micronutrient-note-holistic">
+          <h3>Perspectivă funcțională</h3>
+          <p>Valorile DRI reprezintă praguri pentru prevenirea deficienței clinice, nu neapărat niveluri optime pentru performanță, longevitate sau reziliență biologică. Medicina funcțională și cea de precizie operează adesea cu „intervale funcționale optime" calibrate individual — de exemplu, pentru vitamina D (40–60 ng/mL seric față de &gt;20 ng/mL „suficient" oficial), vitamina B12 (optimul funcțional &gt;400–500 pg/mL față de minimul de laborator &gt;200 pg/mL) sau folat eritrocitar. Evaluarea individuală prin biomarkeri specifici oferă o imagine mai precisă decât simpla conformare la DZR.</p>
+        </div>
+
+      </div>
+    </article>
+
+    <div id="footer-placeholder"></div>
+    <div id="script-placeholder"></div>
+  </div>
+
+  <script>
+    fetch('https://nutrisib.club/footer.html')
+      .then(r => r.text())
+      .then(d => { const c = document.getElementById('footer-placeholder'); if(c) c.innerHTML = d; })
+      .catch(e => console.error(e));
+
+    fetch('https://nutrisib.club/script_protect.js')
+      .then(r => r.text())
+      .then(d => { const s = document.createElement('script'); s.textContent = d; document.body.appendChild(s); })
+      .catch(e => console.error(e));
+
+    (function() {
+      const fp = document.getElementById('footer-placeholder');
+      const sp = document.getElementById('script-placeholder');
+      const yr = new Date().getFullYear();
+      if (fp) {
+        fp.innerHTML = `
+          <footer><p>© ${yr} NUTRISIB. Toate drepturile rezervate.</p></footer>
+          <div class="legal-footer-box">
+            <button class="legal-btn" type="button" onclick="window.print()">Printează / Salvează PDF</button>
+          </div>`;
+      }
+      if (sp) {
+        const sc = document.createElement('script');
+        sc.textContent = `
+          document.addEventListener('click', function(e) {
+            const t = e.target.closest('a[href^="#"]');
+            if (!t) return;
+            const el = document.querySelector(t.getAttribute('href'));
+            if (!el) return;
+            e.preventDefault();
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });`;
+        sp.appendChild(sc);
+      }
+    })();
+  </script>
 </body>
 </html>

@@ -14,7 +14,7 @@
 <body class="micronutrient-page">
   <div class="container-main micronutrient-shell">
     <div class="micronutrient-topbar screen-only">
-      <a class="btn-white" href="https://nutrisib.club/blog/index.html">Înapoi la enciclopedie</a>
+      <a class="btn-white" href="https://nutrisib.club/micronutrienti/index.html">Enciclopedia micronutrienților</a>
       <div class="micronutrient-actions">
         <a class="btn-outline" href="#continut-integral">Sari la conținut</a>
         <button class="btn" type="button" onclick="window.print()">Generează PDF / Printează</button>
@@ -212,11 +212,26 @@
       </div>
     </article>
 
-    <div id="footer-placeholder"></div>
+	<div id="footer-placeholder"></div>
     <div id="script-placeholder"></div>
   </div>
 
   <script>
+        fetch('https://nutrisib.club/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Eroare încărcare footer:', error));
+
+        fetch('https://nutrisib.club/script_protect.js')
+            .then(response => response.text())
+            .then(data => {
+                const script = document.createElement('script');
+                script.textContent = data;
+                document.body.appendChild(script);
+            })
+            .catch(error => console.error('Eroare încărcare script protecție:', error));
     (function injectFooterAndScripts() {
       const footerPlaceholder = document.getElementById('footer-placeholder');
       const scriptPlaceholder = document.getElementById('script-placeholder');
@@ -228,7 +243,9 @@
             <p>© ${year} NUTRISIB. Toate drepturile rezervate.</p>
           </footer>
           <div class="legal-footer-box">
-            <button class="legal-btn" type="button" onclick="window.print()">Printează / Salvează PDF</button>
+            <button class="legal-btn" type="button" onclick="window.print()">
+              Printează / Salvează PDF
+            </button>
           </div>
         `;
       }

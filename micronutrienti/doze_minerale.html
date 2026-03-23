@@ -1,257 +1,571 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doze Recomandate - Minerale</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doze Recomandate Minerale | Enciclopedia Micronutrienților | NUTRISIB</title>
+  <meta name="description" content="Ghid complet al dozelor recomandate pentru minerale și oligoelemente — DZR, AI și limite superioare (UL) pentru adulți, conform ghidurilor IOM/NIH.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@400;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+  <link rel="stylesheet" href="https://nutrisib.club/micronutrienti.css">
+  <style>
+    /* ── Tabel doze — stiluri locale ── */
+    /* Container extins pentru tabel lat */
+    .container-main.micronutrient-shell { max-width: 1600px; }
 
-        :root {
-            --color-header-bg: #2c3e50; /* Gri închis pentru antet */
-            --color-table-header-bg: #6c7a7b; /* Gri mai deschis pentru capul de tabel */
-            --color-secondary: #2c3e50;
-            --color-background: #f4f7f6;
-            --color-text: #333;
-            --color-card-bg: #ffffff;
-            --color-border: #e0e0e0;
-            --color-link: #3498db;
-        }
+    .doze-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-brand-medium) #e5e7eb;
+      border-radius: var(--radius-card);
+      margin: 1.25rem 0;
+    }
+    .doze-table-wrap::-webkit-scrollbar { height: 4px; }
+    .doze-table-wrap::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+    .doze-table-wrap::-webkit-scrollbar-thumb { background: var(--color-brand-medium); border-radius: 4px; }
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            line-height: 1.7;
-            margin: 0;
-            background-color: var(--color-background);
-            color: var(--color-text);
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
-        }
-        .container {
-            max-width: 1200px; /* Am mărit lățimea pentru noua coloană */
-            width: 100%;
-            background: var(--color-card-bg);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        .header {
-            background: var(--color-header-bg);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            font-weight: 700;
-        }
-        .header p {
-            margin: 10px 0 0;
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-        .content {
-            padding: 30px 40px;
-        }
-        .table-container {
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 0.95em;
-        }
-        th, td {
-            border: 1px solid var(--color-border);
-            padding: 12px 15px;
-            text-align: left;
-            vertical-align: middle;
-        }
-        th {
-            background-color: var(--color-table-header-bg);
-            color: white;
-            font-weight: 700;
-        }
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-        td:first-child a {
-            font-weight: bold;
-            color: var(--color-link);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        td:first-child a:hover {
-            color: #2980b9;
-        }
-        .note {
-            font-size: 0.85em;
-            color: #777;
-            margin-top: 20px;
-        }
-        .footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 20px;
-            color: #777;
-            font-size: 0.9em;
-            background-color: #f8f9fa;
-        }
-        
-        @media (max-width: 768px) {
-            .content {
-                padding: 20px 15px;
-            }
-            .header h1 {
-                font-size: 2em;
-            }
-        }
-    </style>
+    .doze-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      min-width: 600px;
+    }
+    .doze-table thead tr {
+      background: var(--color-navy);
+      color: white;
+    }
+    .doze-table th {
+      padding: .3rem .7rem;
+      text-align: left;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      white-space: nowrap;
+    }
+    .doze-table th:first-child { border-radius: 8px 0 0 0; }
+    .doze-table th:last-child  { border-radius: 0 8px 0 0; }
+    .doze-table td {
+      padding: .22rem .7rem;
+      border-bottom: 1px solid var(--color-border);
+      vertical-align: middle;
+      line-height: 1.35;
+      color: var(--color-text-medium);
+    }
+    .doze-table tr:last-child td { border-bottom: none; }
+    .doze-table tr:nth-child(even) { background: var(--color-brand-light, #eaf2f8); }
+    .doze-table tr:hover { background: rgba(62,146,204,.06); }
+
+    /* Coloana mineral — link stilizat */
+    .doze-table td:first-child {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .doze-table td:first-child a {
+      color: var(--color-navy);
+      text-decoration: none;
+      font-family: 'Montserrat', sans-serif;
+      font-size: .82rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      transition: color .2s;
+    }
+    .doze-table td:first-child a:hover { color: var(--color-brand-medium); }
+
+
+    /* Badge tip mineral */
+    .tip-badge {
+      display: inline-block;
+      font-size: .62rem;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      padding: .1rem .4rem;
+      border-radius: 4px;
+      margin-left: .35rem;
+      vertical-align: middle;
+    }
+    .tip-macro  { background: #e0f2fe; color: #0c4a6e; }
+    .tip-oligo  { background: #f0fdf4; color: #14532d; }
+    .tip-ultra  { background: #faf5ff; color: #4c1d95; }
+    .tip-electr { background: #fff7ed; color: #7c2d12; }
+
+    /* Celule valori */
+    .val-ok    { color: var(--color-navy); font-weight: 600; }
+    .val-none  { color: var(--color-text-light); font-style: italic; font-size: .82rem; }
+    .val-warn  { color: #92400e; font-weight: 600; }
+
+    /* Legendă */
+    .legend-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: .75rem;
+      margin: 1.25rem 0;
+    }
+    .legend-item {
+      background: white;
+      border-radius: 8px;
+      border: 1px solid var(--color-border);
+      padding: .75rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .2rem;
+    }
+    .legend-item .leg-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--color-navy);
+    }
+    .legend-item p {
+      font-size: .82rem;
+      color: var(--color-text-medium);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Secțiune tip minerale */
+    .tip-section-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: .7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      padding: .4rem .85rem;
+      color: white !important;
+    }
+    .tip-section-macro  { background: #0c4a6e; color: white !important; }
+    .tip-section-oligo  { background: #14532d; color: white !important; }
+    .tip-section-ultra  { background: #4c1d95; color: white !important; }
+    .tip-section-electr { background: #7c2d12; color: white !important; }
+
+    /* Note */
+    .note-asterisk {
+      font-size: .78rem;
+      color: var(--color-text-light);
+      line-height: 1.6;
+      margin: .25rem 0 0;
+    }
+
+    /* ── Responsive complet ── */
+    @media (max-width: 1024px) {
+      /* Pe tabletă reducem ultima coloană (observații) */
+      .doze-table { font-size: .84rem; }
+    }
+
+    @media (max-width: 768px) {
+      .container-main { padding: 0 .5rem; }
+      /* Tabel: scroll orizontal, mai compact */
+      .doze-table { font-size: .78rem; min-width: 480px; }
+      .doze-table th { font-size: .65rem; padding: .25rem .5rem; white-space: normal; }
+      .doze-table td { padding: .18rem .5rem; line-height: 1.3; }
+      /* Indicator scroll vizibil pe touch */
+      .doze-table-wrap::before {
+        content: '← scroll →';
+        display: block;
+        text-align: center;
+        font-size: .68rem;
+        color: var(--color-text-light);
+        padding: .2rem 0 .4rem;
+        font-family: 'Montserrat', sans-serif;
+        letter-spacing: .05em;
+      }
+      /* Legendă */
+      .legend-grid { grid-template-columns: 1fr; gap: .5rem; }
+      .legend-item { padding: .6rem .85rem; }
+      /* Hero */
+      .micronutrient-hero { padding: 1.5rem 1rem; }
+      /* Jumpbar */
+      .micronutrient-jumpbar { overflow-x: auto; -webkit-overflow-scrolling: touch;
+        white-space: nowrap; display: block; }
+      /* Separatoare */
+      .tip-section-label { font-size: .62rem; padding: .35rem .65rem; }
+    }
+
+    @media (max-width: 480px) {
+      .doze-table { font-size: .72rem; min-width: 400px; }
+      .doze-table th { font-size: .6rem; padding: .2rem .4rem; }
+      .doze-table td { padding: .15rem .4rem; font-size: .72rem; }
+      /* Observații vizibile — coloana Tip eliminată, spațiu suficient */
+      /* Val-ok / val-none / val-warn */
+      .val-ok, .val-none, .val-warn { font-size: .7rem; }
+      .micronutrient-hero h1 { font-size: 1.4rem; }
+      .micronutrient-hero p  { font-size: .85rem; }
+    }
+
+    @media (max-width: 360px) {
+      .doze-table { min-width: 340px; font-size: .68rem; }
+      .doze-table th { font-size: .57rem; padding: .18rem .35rem; }
+      .doze-table td { padding: .12rem .35rem; }
+    }
+  </style>
 </head>
-<body>
+<body class="micronutrient-page">
+  <div class="container-main micronutrient-shell">
 
-    <div class="container">
-        <header class="header">
-            <h1>Ghid Doze Recomandate - Minerale</h1>
-            <p>Aport Adecvat (AI), Doze Zilnice Recomandate (DZR) și Limite Superioare (UL) pentru adulți.</p>
-        </header>
-
-        <div class="content">
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Mineral</th>
-                            <th>Surse alimentare principale</th>
-                            <th>Aport Adecvat (AI) / Doză Recomandată (DZR)</th>
-                            <th>Limită Superioară (UL)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><a href="bor.html">Bor</a></td>
-                            <td>Prune, stafide, migdale, avocado</td>
-                            <td>Nu este stabilit</td>
-                            <td>20 mg/zi</td>
-                        </tr>
-                        <tr>
-                            <td><a href="calciu.html">Calciu</a></td>
-                            <td>Lactate, sardine, tofu, legume verzi (kale)</td>
-                            <td>1.000 - 1.200 mg/zi</td>
-                            <td>2.500 mg/zi</td>
-                        </tr>
-                        <tr>
-                            <td><a href="cobalt.html">Cobalt</a></td>
-                            <td>Ficat, carne, pește, lactate (ca parte a B12)</td>
-                            <td>Nu este stabilit</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                        <tr>
-                            <td><a href="crom.html">Crom</a></td>
-                            <td>Broccoli, cereale integrale, struguri</td>
-                            <td>AI: 25-35 mcg/zi</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                        <tr>
-                            <td><a href="cupru.html">Cupru</a></td>
-                            <td>Ficat, stridii, nuci, semințe, ciocolată neagră</td>
-                            <td>DZR: 900 mcg/zi</td>
-                            <td>10.000 mcg/zi (10 mg)</td>
-                        </tr>
-                        <tr>
-                            <td><a href="fier.html">Fier</a></td>
-                            <td>Carne roșie, ficat, spanac, linte, fasole</td>
-                            <td>DZR: 8 mg (bărbați), 18 mg (femei, 19-50 ani)</td>
-                            <td>45 mg/zi</td>
-                        </tr>
-                        <tr>
-                            <td><a href="fosfor.html">Fosfor</a></td>
-                            <td>Lactate, carne, pește, nuci, leguminoase</td>
-                            <td>DZR: 700 mg/zi</td>
-                            <td>4.000 mg/zi</td>
-                        </tr>
-                        <tr>
-                            <td><a href="iod.html">Iod</a></td>
-                            <td>Pește marin, alge, lactate, sare iodată</td>
-                            <td>DZR: 150 mcg/zi</td>
-                            <td>1.100 mcg/zi</td>
-                        </tr>
-                        <tr>
-                            <td><a href="magneziu.html">Magneziu</a></td>
-                            <td>Legume verzi, nuci, semințe, avocado</td>
-                            <td>DZR: 400-420 mg (bărbați), 310-320 mg (femei)</td>
-                            <td>350 mg/zi (din suplimente)</td>
-                        </tr>
-                        <tr>
-                            <td><a href="mangan.html">Mangan</a></td>
-                            <td>Cereale integrale, nuci, ananas, ceai</td>
-                            <td>AI: 2.3 mg (bărbați), 1.8 mg (femei)</td>
-                            <td>11 mg/zi</td>
-                        </tr>
-                        <tr>
-                            <td><a href="nichel.html">Nichel</a></td>
-                            <td>Nuci, semințe, leguminoase, ciocolată</td>
-                            <td>Nu este stabilit</td>
-                            <td>1.000 mcg/zi (1 mg)</td>
-                        </tr>
-                        <tr>
-                            <td><a href="potasiu.html">Potasiu</a></td>
-                            <td>Banane, cartofi, spanac, avocado, fasole</td>
-                            <td>AI: 3.400 mg (bărbați), 2.600 mg (femei)</td>
-                            <td>Nu este stabilit (din alimente)</td>
-                        </tr>
-                        <tr>
-                            <td><a href="seleniu.html">Seleniu</a></td>
-                            <td>Nuci de Brazilia, fructe de mare, carne, ouă</td>
-                            <td>DZR: 55 mcg/zi</td>
-                            <td>400 mcg/zi</td>
-                        </tr>
-                        <tr>
-                            <td><a href="siliciu.html">Siliciu</a></td>
-                            <td>Banane, fasole verde, orez brun, ovăz</td>
-                            <td>Nu este stabilit</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                        <tr>
-                            <td><a href="staniu.html">Staniu</a></td>
-                            <td>Alimente conservate, cereale, legume</td>
-                            <td>Nu este stabilit</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                        <tr>
-                            <td><a href="strontiu.html">Stronțiu</a></td>
-                            <td>Fructe de mare, cereale integrale, legume</td>
-                            <td>Nu este stabilit</td>
-                            <td>Nu este stabilit</td>
-                        </tr>
-                        <tr>
-                            <td><a href="vanadiu.html">Vanadiu</a></td>
-                            <td>Ciuperci, crustacee, piper negru</td>
-                            <td>Nu este stabilit</td>
-                            <td>1.800 mcg/zi (1.8 mg)</td>
-                        </tr>
-                        <tr>
-                            <td><a href="zinc.html">Zinc</a></td>
-                            <td>Stridii, carne roșie, semințe de dovleac</td>
-                            <td>DZR: 11 mg (bărbați), 8 mg (femei)</td>
-                            <td>40 mg/zi</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <p class="note">
-                <strong>Notă:</strong> Valorile prezentate sunt pentru adulți și se bazează pe ghidurile dietetice de referință (Dietary Reference Intakes - DRI) emise de Institute of Medicine (IOM), SUA. Acestea pot varia ușor în funcție de alte organizații de sănătate. Consultați întotdeauna un specialist pentru recomandări personalizate.
-            </p>
-        </div>
-
-        <footer class="footer">
-            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
-        </footer>
+    <div class="micronutrient-topbar screen-only">
+      <a class="btn-white" href="https://nutrisib.club/micronutrienti/index.html">Enciclopedia micronutrienților</a>
+      <div class="micronutrient-actions">
+        <a class="btn-outline" href="#tabel">Sari la tabel</a>
+        <button class="btn" type="button" onclick="window.print()">Generează PDF / Printează</button>
+      </div>
     </div>
 
+    <section class="micronutrient-hero">
+      <span class="hero-kicker">Enciclopedia Micronutrienților</span>
+      <h1>Doze recomandate — Minerale</h1>
+      <p>Aport Adecvat (AI), Doze Zilnice Recomandate (DZR) și Limite Superioare Tolerabile (UL) pentru adulți, conform ghidurilor DRI emise de Institute of Medicine (IOM) / National Academies of Sciences, SUA.</p>
+    </section>
+
+    <nav class="micronutrient-jumpbar screen-only" aria-label="Navigare internă">
+      <a href="#despre">Despre DRI</a>
+      <a href="#tabel">Tabel complet</a>
+      <a href="#macrominerale">Macrominerale</a>
+      <a href="#oligoelemente">Oligoelemente</a>
+      <a href="#ultramicro">Ultramicro</a>
+      <a href="#electroliti">Electroliți</a>
+      <a href="#note">Note</a>
+    </nav>
+
+    <article class="micronutrient-article" id="continut-integral">
+      <div class="micronutrient-content">
+
+        <!-- ══ DESPRE DRI ══ -->
+        <h2 id="despre">Cum se citesc valorile DRI</h2>
+
+        <p>Sistemul Dietary Reference Intakes (DRI) reprezintă cadrul nutrițional de referință utilizat în America de Nord și larg adoptat internațional. Nu este o singură valoare, ci un set de repere cu semnificații distincte, pe care orice utilizator al acestui tabel trebuie să le înțeleagă pentru a le aplica corect.</p>
+
+        <div class="legend-grid" id="legenda">
+          <div class="legend-item">
+            <span class="leg-label">DZR — Doза Zilnică Recomandată</span>
+            <p>Echivalentul RDA (Recommended Dietary Allowance). Acoperă necesarul a 97–98% din populația sănătoasă. Este valoarea de referință principală pentru planificarea dietei individuale.</p>
+          </div>
+          <div class="legend-item">
+            <span class="leg-label">AI — Aport Adecvat</span>
+            <p>Echivalentul Adequate Intake. Utilizat când datele sunt insuficiente pentru a stabili un RDA. Reprezintă un nivel estimat ca adecvat pe baza observațiilor populaționale.</p>
+          </div>
+          <div class="legend-item">
+            <span class="leg-label">UL — Limita Superioară Tolerabilă</span>
+            <p>Echivalentul Tolerable Upper Intake Level. Nivelul maxim zilnic de aport (din toate sursele) care nu produce efecte adverse la adulții sănătoși. Depășirea cronică prezintă risc de toxicitate.</p>
+          </div>
+          <div class="legend-item">
+            <span class="leg-label">Nestablit / Nerecunoscut</span>
+            <p>Fie datele sunt insuficiente pentru a stabili o valoare, fie mineralul nu este recunoscut oficial ca nutrient esențial pentru om. Absența unui reper nu înseamnă lipsa relevanței biologice.</p>
+          </div>
+        </div>
+
+        <div class="micronutrient-callout">
+          <p><strong>Important:</strong> Valorile prezentate se referă la <strong>adulți sănătoși (19–50 ani)</strong>, cu specificații acolo unde necesarul diferă semnificativ pe sexe sau după vârstă. Sarcina și alăptarea modifică substanțial necesarul pentru majoritatea mineralelor. UL-ul se aplică aportului cumulat din alimentație, apă și suplimente — nu exclusiv din suplimente, cu excepția magneziului (unde UL vizează doar suplimentele).</p>
+        </div>
+
+
+        <!-- ══ INTRO MED 3.0 ══ -->
+        <div style="display:flex;align-items:flex-start;gap:1rem;padding:1rem 1.25rem;background:linear-gradient(135deg,rgba(197,160,33,.07),rgba(27,42,74,.04));border-left:4px solid var(--color-gold,#C5A021);border-radius:0 var(--radius-card) var(--radius-card) 0;margin:1.25rem 0;">
+          <span style="font-size:1.5rem;flex-shrink:0;line-height:1;">🔬</span>
+          <div>
+            <p style="margin:0 0 .35rem;font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--color-navy);">Medicina 3.0 — dincolo de dozele standard</p>
+            <p style="margin:0 0 .5rem;font-size:.88rem;color:var(--color-text-medium);line-height:1.65;">Valorile DRI din acest tabel definesc pragul pentru prevenirea deficienței clinice, nu intervalul optim pentru vitalitate și longevitate. Medicina 3.0 evaluează micronutrienții individual, prin biomarkeri specifici, calibrând intervenția pe terenul biologic al fiecărui pacient — nu pe mediana populațională.</p>
+            <a href="minvitmed30.html" style="display:inline-flex;align-items:center;gap:.4rem;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--color-navy);text-decoration:none;border-bottom:2px solid var(--color-gold,#C5A021);padding-bottom:.1rem;transition:color .2s;" onmouseover="this.style.color='var(--color-brand-medium)'" onmouseout="this.style.color='var(--color-navy)'">Citește: Abordarea micronutrienților în Medicina 3.0 →</a>
+          </div>
+        </div>
+
+        <!-- ══ TABEL COMPLET ══ -->
+        <h2 id="tabel">Tabel complet — Minerale și oligoelemente</h2>
+        <p>Mineralele sunt grupate în patru categorii: <strong>macrominerale</strong> (necesare în cantități de sute de mg/zi), <strong>oligoelemente esențiale</strong> (mg sau mcg/zi, cu rol biologic dovedit), <strong>ultramicroelemente</strong> (posibil benefice, date insuficiente pentru DRI) și <strong>electroliți</strong> (minerale cu rol primar în echilibrul hidro-electrolitic).</p>
+
+        <div class="doze-table-wrap" id="macrominerale">
+          <!-- ── MACROMINERALE ── -->
+          <table class="doze-table">
+            <thead>
+              <tr>
+                <th>Mineral</th>
+                <th>Surse alimentare principale</th>
+                <th>DZR / AI Bărbați</th>
+                <th>DZR / AI Femei</th>
+                <th>UL (toate sursele)</th>
+                <th>Observații clinice</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- SEPARATOR -->
+              <tr>
+                <td colspan="7" class="tip-section-label tip-section-macro">🪨 Macrominerale — necesare &gt;100 mg/zi</td>
+              </tr>
+              <tr>
+                <td><a href="calciu.html">Calciu</a></td>
+                <td>Lactate, sardine cu oase, tofu, kale, broccoli, migdale</td>
+                <td class="val-ok">DZR: 1.000 mg/zi (19–70 ani)<br>1.200 mg/zi (&gt;70 ani)</td>
+                <td class="val-ok">DZR: 1.000 mg/zi (19–50 ani)<br>1.200 mg/zi (&gt;50 ani)</td>
+                <td class="val-warn">2.500 mg/zi (19–50 ani)<br>2.000 mg/zi (&gt;50 ani)</td>
+                <td>UL scade după 50 de ani. Excesul din suplimente crește riscul de litiază renală și poate afecta absorbția fierului și zincului.</td>
+              </tr>
+              <tr>
+                <td><a href="fosfor.html">Fosfor</a></td>
+                <td>Lactate, carne, pește, ouă, leguminoase, nuci, cereale integrale</td>
+                <td class="val-ok">DZR: 700 mg/zi</td>
+                <td class="val-ok">DZR: 700 mg/zi</td>
+                <td class="val-warn">4.000 mg/zi (19–70 ani)<br>3.000 mg/zi (&gt;70 ani)</td>
+                <td>Dietele moderne furnizează adesea 1.200–1.500 mg/zi. Excesul perturbă raportul Ca:P și poate afecta metabolismul osos.</td>
+              </tr>
+              <tr>
+                <td><a href="magneziu.html">Magneziu</a></td>
+                <td>Semințe de dovleac, nuci, spanac, leguminoase, avocado, ciocolată neagră</td>
+                <td class="val-ok">DZR: 400 mg/zi (19–30 ani)<br>420 mg/zi (&gt;30 ani)</td>
+                <td class="val-ok">DZR: 310 mg/zi (19–30 ani)<br>320 mg/zi (&gt;30 ani)</td>
+                <td class="val-warn">350 mg/zi — <em>exclusiv din suplimente</em></td>
+                <td>UL se aplică <strong>doar aportului din suplimente</strong>, nu din alimentație. Deficiența subclinică este frecventă (&gt;50% din populație). Laxativ osmotic în exces.</td>
+              </tr>
+
+              <!-- SEPARATOR -->
+              <tr>
+              </tbody></table></div>
+
+        <div class="doze-table-wrap" id="electroliti"><table class="doze-table"><thead><tr><th>Mineral</th><th>Surse alimentare principale</th><th>DZR / AI Bărbați</th><th>DZR / AI Femei</th><th>UL (toate sursele)</th><th>Observații clinice</th></tr></thead><tbody>
+                <td colspan="7" class="tip-section-label tip-section-electr">⚡ Electroliți — minerale cu rol primar hidro-electrolitic</td>
+              </tr>
+              <tr>
+                <td><a href="sodiu.html">Sodiu</a></td>
+                <td>Sare de masă, alimente procesate, conserve, brânzeturi</td>
+                <td class="val-ok">AI: 1.500 mg/zi (19–50 ani)<br>1.300 mg/zi (51–70 ani)</td>
+                <td class="val-ok">AI: 1.500 mg/zi (19–50 ani)<br>1.300 mg/zi (51–70 ani)</td>
+                <td class="val-warn">2.300 mg/zi</td>
+                <td>Media aportului real în România: 3.500–5.000 mg/zi. Excesul cronic crește tensiunea arterială și riscul cardiovascular. OMS recomandă &lt;2.000 mg/zi.</td>
+              </tr>
+              <tr>
+                <td><a href="potasiu.html">Potasiu</a></td>
+                <td>Banane, cartofi copți, avocado, spanac, fasole albă, roșii, suc de portocale</td>
+                <td class="val-ok">AI: 3.400 mg/zi</td>
+                <td class="val-ok">AI: 2.600 mg/zi</td>
+                <td class="val-none">Nestabilit din alimente*</td>
+                <td>*UL se aplică doar suplimentelor la persoane cu funcție renală compromisă. Raportul sodiu:potasiu este mai relevant decât valorile izolate.</td>
+              </tr>
+              <tr>
+                <td><a href="clor.html">Clor</a></td>
+                <td>Sare de masă (NaCl), alge marine, măsline, roșii</td>
+                <td class="val-ok">AI: 2.300 mg/zi (19–50 ani)</td>
+                <td class="val-ok">AI: 2.300 mg/zi (19–50 ani)</td>
+                <td class="val-warn">3.600 mg/zi</td>
+                <td>Aportul urmează sodiul din sare. Rolul primar: echilibru acido-bazic și sinteza acidului clorhidric gastric.</td>
+              </tr>
+
+              <!-- SEPARATOR -->
+              <tr>
+              </tbody></table></div>
+
+        <div class="doze-table-wrap" id="oligoelemente"><table class="doze-table"><thead><tr><th>Mineral</th><th>Surse alimentare principale</th><th>DZR / AI Bărbați</th><th>DZR / AI Femei</th><th>UL (toate sursele)</th><th>Observații clinice</th></tr></thead><tbody>
+                <td colspan="7" class="tip-section-label tip-section-oligo">🔬 Oligoelemente esențiale — necesare în mg sau mcg/zi</td>
+              </tr>
+              <tr>
+                <td><a href="fier.html">Fier</a></td>
+                <td>Ficat, carne roșie, stridii (fier hemic); linte, spanac, tofu, semințe de dovleac (fier non-hemic)</td>
+                <td class="val-ok">DZR: 8 mg/zi</td>
+                <td class="val-ok">DZR: 18 mg/zi (19–50 ani)<br>8 mg/zi (&gt;50 ani)</td>
+                <td class="val-warn">45 mg/zi</td>
+                <td>Deficiența este cea mai frecventă carență nutrițională la nivel global. Fierul hemic (animal) se absoarbe de 3–5× mai eficient decât cel non-hemic. Pro-oxidant în exces.</td>
+              </tr>
+              <tr>
+                <td><a href="zinc.html">Zinc</a></td>
+                <td>Stridii, carne roșie, ficat, semințe de dovleac, nuci caju, leguminoase</td>
+                <td class="val-ok">DZR: 11 mg/zi</td>
+                <td class="val-ok">DZR: 8 mg/zi</td>
+                <td class="val-warn">40 mg/zi</td>
+                <td>Doze &gt;40–50 mg/zi pe termen lung induc deficiență de cupru. Vegetarienii necesită cu 50% mai mult datorită fitaților.</td>
+              </tr>
+              <tr>
+                <td><a href="cupru.html">Cupru</a></td>
+                <td>Ficat de vită, stridii, nuci caju, semințe de susan, ciocolată neagră, ciuperci Shiitake</td>
+                <td class="val-ok">DZR: 900 mcg/zi</td>
+                <td class="val-ok">DZR: 900 mcg/zi</td>
+                <td class="val-warn">10.000 mcg/zi (10 mg)</td>
+                <td>Indispensabil pentru metabolismul fierului (ceruloplasmin), sinteza colagenului (lizil oxidaza) și protecția antioxidantă (Cu/Zn-SOD).</td>
+              </tr>
+              <tr>
+                <td><a href="iod.html">Iod</a></td>
+                <td>Alge marine, pește oceanic, sare iodată, lactate, ouă</td>
+                <td class="val-ok">DZR: 150 mcg/zi</td>
+                <td class="val-ok">DZR: 150 mcg/zi</td>
+                <td class="val-warn">1.100 mcg/zi</td>
+                <td>Esențial exclusiv pentru sinteza hormonilor tiroidieni. Sarcina: 220 mcg/zi; alăptare: 290 mcg/zi. Deficiența: gușă, hipotiroidism, cretinism.</td>
+              </tr>
+              <tr>
+                <td><a href="seleniu.html">Seleniu</a></td>
+                <td>Nuci de Brazilia (1–2 nuci/zi acoperă necesarul), fructe de mare, carne, ouă, cereale integrale</td>
+                <td class="val-ok">DZR: 55 mcg/zi</td>
+                <td class="val-ok">DZR: 55 mcg/zi</td>
+                <td class="val-warn">400 mcg/zi</td>
+                <td>Fereastra terapeutică este îngustă. 1–2 nuci de Brazilia/zi = ~70–90 mcg. Suplimentarea excesivă produce selenoză (căderea unghiilor, alopecie, neurotoxicitate).</td>
+              </tr>
+              <tr>
+                <td><a href="mangan.html">Mangan</a></td>
+                <td>Cereale integrale, nuci pecan, ananas, fasole, ceai negru, spanac</td>
+                <td class="val-ok">AI: 2,3 mg/zi</td>
+                <td class="val-ok">AI: 1,8 mg/zi</td>
+                <td class="val-warn">11 mg/zi</td>
+                <td>Cofactor al Mn-SOD (antioxidantă mitocondrială), arginazei și piruvat carboxilazei. Toxicitate neurologică (manganom) la expunere ocupațională, nu din alimentație.</td>
+              </tr>
+              <tr>
+                <td><a href="fluor.html">Fluor</a></td>
+                <td>Apă fluorurată, ceai, pește oceanic, alge marine</td>
+                <td class="val-ok">AI: 4 mg/zi</td>
+                <td class="val-ok">AI: 3 mg/zi</td>
+                <td class="val-warn">10 mg/zi</td>
+                <td>Rolul principal: prevenirea cariei dentare și mineralizarea osoasă. Excesul produce fluoroză dentară (pete alb-brune) și, la doze foarte mari, fluoroză scheletală.</td>
+              </tr>
+              <tr>
+                <td><a href="molibden.html">Molibden</a></td>
+                <td>Leguminoase (fasole, linte, mazăre), cereale integrale, nuci, ficat</td>
+                <td class="val-ok">DZR: 45 mcg/zi</td>
+                <td class="val-ok">DZR: 45 mcg/zi</td>
+                <td class="val-warn">2.000 mcg/zi (2 mg)</td>
+                <td>Cofactor al sulfitoxidazei, xantin oxidazei și aldehid oxidazei. Deficiența este extrem de rară. Interacționează cu cuprul (antagonism la doze mari).</td>
+              </tr>
+              <tr>
+                <td><a href="crom.html">Crom</a></td>
+                <td>Drojdie de bere, ficat, broccoli, carne, cereale integrale, piper negru</td>
+                <td class="val-ok">AI: 35 mcg/zi</td>
+                <td class="val-ok">AI: 25 mcg/zi</td>
+                <td class="val-none">Nestabilit (Cr³⁺)</td>
+                <td>Potențează acțiunea insulinei prin cromodulină. Zaharurile simple cresc excreția urinară de crom. UL nestabilit pentru Cr³⁺ alimentar; Cr⁶⁺ industrial este carcinogen.</td>
+              </tr>
+              <tr>
+                <td><a href="cobalt.html">Cobalt</a></td>
+                <td>Ficat, carne, pește, lactate, ouă — exclusiv ca parte a vitaminei B12</td>
+                <td class="val-ok">Indirect: DZR B12 = 2,4 mcg/zi</td>
+                <td class="val-ok">Indirect: DZR B12 = 2,4 mcg/zi</td>
+                <td class="val-none">Nestabilit</td>
+                <td>Nu există un DRI pentru cobalt elemental. Necesarul este acoperit prin aportul de vitamina B12 (cobalamină). Cobaltul anorganic nu are utilizare nutrițională.</td>
+              </tr>
+
+              <!-- SEPARATOR -->
+              <tr>
+              </tbody></table></div>
+
+        <div class="doze-table-wrap" id="ultramicro"><table class="doze-table"><thead><tr><th>Mineral</th><th>Surse alimentare principale</th><th>DZR / AI Bărbați</th><th>DZR / AI Femei</th><th>UL (toate sursele)</th><th>Observații clinice</th></tr></thead><tbody>
+                <td colspan="7" class="tip-section-label tip-section-ultra">🔭 Ultramicroelemente — posibil benefice, date insuficiente pentru DRI</td>
+              </tr>
+              <tr>
+                <td><a href="bor.html">Bor</a></td>
+                <td>Prune uscate, stafide, avocado, fasole, arahide, nuci, broccoli, mere</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-warn">20 mg/zi</td>
+                <td>Influențează metabolismul Ca, Mg, vitamina D și hormonii steroizi. Nu este recunoscut oficial ca nutrient esențial, dar are relevanță funcțională documentată.</td>
+              </tr>
+              <tr>
+                <td><a href="siliciu.html">Siliciu</a></td>
+                <td>Cereale integrale (ovăz, orz), fasole verde, banane, orez brun, apă minerală</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td>Date preliminare sugerează rol în sinteza colagenului, sănătatea osoasă și integritatea tegumentară. Aportul mediu prin dietă: 20–50 mg/zi.</td>
+              </tr>
+              <tr>
+                <td><a href="vanadiu.html">Vanadiu</a></td>
+                <td>Ciuperci, crustacee, piper negru, pătrunjel, mărar, cereale integrale</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-warn">1.800 mcg/zi (1,8 mg)</td>
+                <td>Studiat pentru efecte insulinomimetice. Nu este recunoscut ca nutrient esențial. Aportul alimentar tipic: 10–60 mcg/zi — mult sub UL.</td>
+              </tr>
+              <tr>
+                <td><a href="nichel.html">Nichel</a></td>
+                <td>Ciocolată neagră, nuci, leguminoase, ovăz, semințe de floarea-soarelui</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-warn">1.000 mcg/zi (1 mg)</td>
+                <td>Esențialitatea pentru om nu este demonstrată. UL stabilit datorită potențialului alergenic (dermatita de contact la nichel este frecventă).</td>
+              </tr>
+              <tr>
+                <td><a href="staniu.html">Staniu</a></td>
+                <td>Alimente conservate în cutii de tablă, unele cereale procesate</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td>Nu este recunoscut ca nutrient esențial pentru om. Aportul provine în principal din contaminarea alimentelor conservate. Esențialitatea demonstrată doar la animale.</td>
+              </tr>
+              <tr>
+                <td><a href="strontiu.html">Stronțiu</a></td>
+                <td>Fructe de mare, cereale integrale, legume rădăcinoase, apă minerală</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td class="val-none">Nestabilit</td>
+                <td>Analog structural al calciului. Ranelatul de stronțiu a fost medicament pentru osteoporoză, retras în UE din cauza riscurilor cardiovasculare. Stronțiul alimentar nu prezintă același risc.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ══ NOTE ══ -->
+        <h2 id="note">Note metodologice și precizări</h2>
+
+        <h3>Despre acuratețea valorilor</h3>
+        <p>Valorile din acest tabel sunt conforme cu ediția actuală a Dietary Reference Intakes (DRI), publicată de National Academies of Sciences, Engineering and Medicine (fostul Institute of Medicine), SUA. Acestea reprezintă standardul internațional de referință cel mai larg adoptat, deși unele organizații europene (EFSA) sau naționale pot utiliza valori ușor diferite, bazate pe metodologii proprii de calcul al necesarului.</p>
+
+        <h3>Variabilitate individuală și contexte speciale</h3>
+        <p>Valorile DRI sunt calculate pentru populația generală sănătoasă și nu iau în considerare variabilele individuale relevante clinic: statusul inflamator, sarcina și alăptarea, afecțiunile cronice, medicamentele cu interacțiuni nutriționale, tipul de dietă (vegetariană, vegană, ketogenică), variabilele genetice de absorbție sau metabolismul alterat prin intervenții chirurgicale (bariatrice, rezecții intestinale). În aceste contexte, necesarul real poate depăși semnificativ DZR-ul standard.</p>
+
+        <h3>Despre UL și siguranța suplimentării</h3>
+        <p>UL nu este o doză terapeutică recomandată, ci un prag de siguranță. Depășirea cronică a UL din aportul cumulat (alimentație + apă + suplimente) crește riscul de efecte adverse. Excepție notabilă: magneziul, al cărui UL de 350 mg/zi se aplică <em>exclusiv suplimentelor</em> — nu există UL pentru magneziul alimentar, deoarece excesul se elimină renal eficient.</p>
+
+        <div class="micronutrient-note-holistic">
+          <h3>Perspectivă funcțională</h3>
+          <p>Valorile DRI reprezintă praguri pentru prevenirea deficienței clinice, nu neapărat niveluri optime pentru performanță și longevitate. Medicina funcțională și cea de precizie operează adesea cu „intervale funcționale optime" — mai largi decât simpla evitare a deficienței — calibrate individual pe baza biomarkerilor, nu exclusiv pe normele populaționale. Această pagină oferă cadrul de referință de bază; interpretarea individualizată necesită evaluare clinică și de laborator.</p>
+        </div>
+
+      </div>
+    </article>
+
+    <div id="footer-placeholder"></div>
+    <div id="script-placeholder"></div>
+  </div>
+
+  <script>
+    fetch('https://nutrisib.club/footer.html')
+      .then(r => r.text())
+      .then(d => { const c = document.getElementById('footer-placeholder'); if(c) c.innerHTML = d; })
+      .catch(e => console.error(e));
+
+    fetch('https://nutrisib.club/script_protect.js')
+      .then(r => r.text())
+      .then(d => { const s = document.createElement('script'); s.textContent = d; document.body.appendChild(s); })
+      .catch(e => console.error(e));
+
+    (function() {
+      const fp = document.getElementById('footer-placeholder');
+      const sp = document.getElementById('script-placeholder');
+      const yr = new Date().getFullYear();
+      if (fp) {
+        fp.innerHTML = `
+          <footer>
+            <p>© ${yr} NUTRISIB. Toate drepturile rezervate.</p>
+          </footer>
+          <div class="legal-footer-box">
+            <button class="legal-btn" type="button" onclick="window.print()">Printează / Salvează PDF</button>
+          </div>`;
+      }
+      if (sp) {
+        const sc = document.createElement('script');
+        sc.textContent = `
+          document.addEventListener('click', function(e) {
+            const t = e.target.closest('a[href^="#"]');
+            if (!t) return;
+            const el = document.querySelector(t.getAttribute('href'));
+            if (!el) return;
+            e.preventDefault();
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });`;
+        sp.appendChild(sc);
+      }
+    })();
+  </script>
 </body>
 </html>

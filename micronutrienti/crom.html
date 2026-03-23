@@ -1,405 +1,290 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crom</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
-        :root {
-            --primary-color: #95a5a6; /* O nuanță de gri-metalic */
-            --primary-color-dark: #7f8c8d;
-            --secondary-color: #2c3e50;
-            --background-color: #f4f6f7;
-            --text-color: #34495e;
-            --card-background: #ffffff;
-            --light-gray-background: #f8f9fa;
-            --border-color: #e0e0e0;
-            --accent-blue: #3498db;
-            --accent-green: #27ae60;
-            --accent-red: #e74c3c;
-            --base-font-family: 'Roboto', sans-serif;
-            --border-radius-large: 15px;
-            --border-radius-small: 10px;
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
-            --shadow-medium: 0 12px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        body {
-            font-family: var(--base-font-family);
-            line-height: 1.7;
-            margin: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
-        }
-
-        .infographic-container {
-            max-width: 950px;
-            width: 100%;
-            background: var(--card-background);
-            border-radius: var(--border-radius-large);
-            box-shadow: var(--shadow-medium);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .infographic-header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 10px 10px;
-            text-align: center;
-            font-size: 2.5em;
-            font-weight: 700;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-            position: relative;
-        }
-
-        .section {
-            padding: 25px 45px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .section:last-child {
-            border-bottom: none;
-        }
-
-        .section-title {
-            font-size: 1.9em;
-            color: var(--secondary-color);
-            margin-top: 0;
-            margin-bottom: 25px;
-            font-weight: 600;
-            border-bottom: 3px solid var(--primary-color-dark);
-            padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        .section-content {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            width: 100%;
-        }
-        
-        .subsection {
-            flex: 1;
-            min-width: 300px;
-            background-color: var(--light-gray-background);
-            border-radius: var(--border-radius-small);
-            padding: 25px;
-            box-shadow: var(--shadow-light);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-left: 5px solid transparent;
-        }
-
-        .subsection:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-            border-left-color: var(--primary-color);
-        }
-
-        .subsection-title {
-            font-size: 1.4em;
-            color: var(--primary-color);
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .subsection p,.subsection ul,.subsection ol {
-            font-size: 0.98em;
-            margin-bottom: 12px;
-        }
-
-        .subsection ul,.subsection ol {
-            padding-left: 20px;
-        }
-
-        .subsection li {
-            margin-bottom: 10px;
-        }
-
-        .subsection b,.subsection strong {
-            color: var(--secondary-color);
-        }
-
-        .note {
-            font-size: 0.9em;
-            color: #6c757d;
-            margin-top: 25px;
-            padding: 15px 20px;
-            background-color: #f4f6f7;
-            border-left: 4px solid var(--primary-color);
-            width: 100%;
-            box-sizing: border-box;
-            border-radius: 5px;
-        }
-        
-        .warning-note {
-            background-color: #f9ebea;
-            border-left-color: var(--accent-red);
-        }
-        
-        .holistic-note {
-            background-color: #e8f8f5;
-            border-left-color: var(--accent-green);
-       }
-
-        .icon {
-            font-size: 1.5em;
-            margin-right: 12px;
-            color: var(--primary-color-dark);
-            vertical-align: middle;
-        }
-        
-        .subsection-icon {
-             font-size: 1.5em;
-             margin-right: 10px;
-             color: var(--primary-color);
-        }
-        
-        .icon-small {
-            font-size: 1.5em;
-            margin-right: 8px;
-            color: var(--primary-color);
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .footer-container {
-            padding: 30px 45px;
-            background-color: var(--secondary-color);
-            color: #bdc3c7;
-        }
-        
-        .references h4 {
-            color: white;
-            border-bottom: 1px solid #7f8c8d;
-            padding-bottom: 5px;
-        }
-        
-        .references ul {
-            list-style-type: none;
-            padding-left: 0;
-            font-size: 0.8em;
-        }
-        
-        .references li {
-            margin-bottom: 5px;
-        }
-
-        .footer-copyright {
-            text-align: center;
-            padding: 20px 0;
-            font-size: 0.9em;
-            color: #6c757d;
-            background-color: var(--light-gray-background);
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 0.9em;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-            color: var(--secondary-color);
-            font-weight: 600;
-        }
-
-        tr:nth-child(even) {
-            background-color: var(--light-gray-background);
-        }
-
-        @media (max-width: 768px) {
-            .section { padding: 25px 20px; }
-            .section-content {
-                flex-direction: column;
-            }
-            .subsection {
-                min-width: unset;
-            }
-            .infographic-header {
-                font-size: 2em;
-            }
-            .section-title {
-                font-size: 1.6em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crom | Enciclopedia Micronutrienților | NUTRISIB</title>
+  <meta name="description" content="Cromul - capitol complet din enciclopedia micronutrienților NUTRISIB, cu abordare nutrițională, funcțională și holistică.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@400;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+  <link rel="stylesheet" href="https://nutrisib.club/micronutrienti.css">
 </head>
-<body>
-    <main class="infographic-container">
-        <header class="infographic-header">
-            Crom
-        </header>
+<body class="micronutrient-page">
+  <div class="container-main micronutrient-shell">
+    <div class="micronutrient-topbar screen-only">
+      <a class="btn-white" href="https://nutrisib.club/micronutrienti/index.html">Enciclopedia micronutrienților</a>
+      <div class="micronutrient-actions">
+        <a class="btn-outline" href="#continut-integral">Sari la conținut</a>
+        <button class="btn" type="button" onclick="window.print()">Generează PDF / Printează</button>
+      </div>
+    </div>
 
-        <section class="section">
-            <h2 class="section-title"><span class="icon">🔬</span>1. Perspectiva fizică și biochimică</h2>
-            <div class="section-content">
-                <div class="subsection" style="flex: 2;">
-                    <h3 class="subsection-title"><span class="subsection-icon">⚙️</span>Rolul principal în organism</h3>
-                     <p><b>Cromul (Cr)</b> este un oligoelement esențial, recunoscut în principal pentru rolul său în metabolismul macronutrienților. Forma biologic activă este <strong>cromul trivalent (Cr3+)</strong>.</p>
-                     <ul>
-                         <li><b>Potențarea acțiunii insulinei:</b> Acesta este rolul său cel mai important. Cromul se leagă de o moleculă numită cromodulină, care la rândul ei amplifică semnalizarea de la receptorii de insulină. Acest mecanism îmbunătățește sensibilitatea celulară la insulină, facilitând transportul glucozei din sânge în celule.</li>
-                         <li><b>Metabolismul macronutrienților:</b> Prin influența sa asupra insulinei, cromul este implicat în metabolismul carbohidraților, lipidelor și proteinelor.</li>
-                         <li><b>Sănătatea cardiovasculară:</b> Studiile sugerează că un aport adecvat poate contribui la menținerea unui profil lipidic sănătos, influențând nivelurile de colesterol și trigliceride.</li>
-                     </ul>
-                </div>
-                 <div class="subsection" style="flex: 1.5;">
-                    <h3 class="subsection-title"><span class="subsection-icon">🥦</span>Surse alimentare</h3>
-                    <p>Cromul este prezent în diverse alimente, dar conținutul poate varia în funcție de sol și procesare. Alimentele rafinate tind să aibă un conținut mai scăzut.</p>
-                     <ul>
-                        <li><b>Drojdie de bere:</b> O sursă excelentă.</li>
-                        <li><b>Carne:</b> Carne de vită, ficat, carne de pasăre.</li>
-                        <li><b>Cereale integrale.</b></li>
-                        <li><b>Legume:</b> Broccoli, fasole verde.</li>
-                        <li><b>Fructe:</b> Struguri (suc), mere, banane.</li>
-                        <li><b>Condimente:</b> Piper negru.</li>
-                     </ul>
-                </div>
-            </div>
-        </section>
+    <section class="micronutrient-hero">
+      <span class="hero-kicker">Enciclopedia Micronutrienților</span>
+      <h1>Cromul</h1>
+      <p>Oligoelement esențial cu rol central în potențarea acțiunii insulinei, metabolismul macronutrienților, echilibrul glicemic și sănătatea cardiovasculară.</p>
+    </section>
 
-        <section class="section">
-             <h2 class="section-title"><span class="icon">⚠️</span>2. Deficit și Siguranță</h2>
-             <div class="section-content">
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="subsection-icon">📉</span>Simptome cauzate de deficit</h3>
-                    <p>Deficiența severă de crom este rară, dar aportul sub-optim este comun, în special la persoanele cu diete bogate în alimente procesate.</p>
-                    <ul>
-                        <li><b>Intoleranță la glucoză:</b> Niveluri crescute de zahăr în sânge și rezistență la insulină, similare cu diabetul de tip 2.</li>
-                        <li><b>Niveluri crescute de colesterol și trigliceride.</b></li>
-                        <li><b>Poftă crescută de dulciuri și carbohidrați.</b></li>
-                        <li><b>Oboseală și energie scăzută.</b></li>
-                        <li><b>Neuropatie:</b> Afectarea nervilor, ducând la amorțeală și furnicături (observată în cazuri severe).</li>
-                    </ul>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="subsection-icon">📈</span>Exces și siguranță</h3>
-                    <p>Toxicitatea cromului depinde fundamental de forma sa chimică.</p>
-                    <ul>
-                        <li><b>Cromul trivalent (Cr3+):</b> Forma găsită în alimente și suplimente, are o toxicitate foarte scăzută și este slab absorbită. Nu există dovezi de toxicitate din aportul alimentar.</li>
-                        <li><b>Cromul hexavalent (Cr6+):</b> O formă industrială toxică, un poluant de mediu și un carcinogen cunoscut la inhalare. <strong>Nu se găsește în alimente sau suplimente.</strong></li>
-                    </ul>
-                </div>
-             </div>
-        </section>
-        
-        <section class="section">
-            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">🌿</span>3. Perspective holistice și funcționale</h2>
-            <div class="section-content">
-                <div class="subsection">
-                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">🤝</span>Sinergii și antagonisme</h3>
-                    <p><b>Sinergii (lucrează împreună cu):</b></p>
-                    <ul>
-                        <li><b>Vitaminele B (în special B3):</b> Susțin metabolismul energetic.</li>
-                        <li><b>Aminoacizii:</b> Pot îmbunătăți absorbția cromului.</li>
-                    </ul>
-                     <p><b>Antagonisme (competiție sau blocaj):</b></p>
-                     <ul>
-                        <li><b>Zaharurile simple:</b> Consumul ridicat de zahăr crește excreția urinară de crom, epuizând rezervele organismului.</li>
-                        <li><b>Fierul:</b> Dozele mari de fier pot concura cu cromul pentru absorbție.</li>
-                    </ul>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title" style="color: var(--accent-green);"><span class="subsection-icon" style="color: var(--accent-green);">☯️</span>Perspective tradiționale</h3>
-                    <p><b>În MTC</b>, cromul este legat de funcția <b>Splinei</b>, organul responsabil pentru transformarea alimentelor în Qi și Sânge și pentru gestionarea "dulcelui". O deficiență de crom reflectă o slăbiciune a Qi-ului Splinei, ducând la pofte de dulce și la acumularea de "umezeală" (corespondentul energetic al grăsimii corporale).</p>
-                    <p><b>În Ayurveda</b>, cromul ajută la echilibrarea <b>Kapha dosha</b>, care, în exces, poate duce la creștere în greutate, letargie și probleme cu glicemia. Susține <b>Agni</b> (focul metabolic).</p>
-                </div>
-            </div>
-        </section>
+    <nav class="micronutrient-jumpbar screen-only" aria-label="Navigare internă">
+      <a href="#identitate">Identitate</a>
+      <a href="#farmacocinetica">Farmacocinetică</a>
+      <a href="#roluri">Roluri</a>
+      <a href="#surse">Surse</a>
+      <a href="#suplimentarea">Suplimentarea</a>
+      <a href="#interactiuni">Interacțiuni</a>
+      <a href="#populatii">Populații</a>
+      <a href="#relevanta">Relevanță</a>
+      <a href="#sinteza">Sinteză</a>
+    </nav>
 
-        <section class="section">
-            <h2 class="section-title" style="border-bottom-color: var(--accent-green);"><span class="icon" style="color: var(--accent-green);">❤️‍🩹</span>4. Perspective psiho-somatice și calea spre echilibru</h2>
-            <p>Din perspectivă holistică, cromul este asociat cu <b>echilibrul, armonia metabolică și capacitatea de a "procesa" și a integra "dulceața" vieții</b>. Rezonează cu "balanța" noastră interioară și cu abilitatea de a menține o stare de vitalitate stabilă.</p>
-            <div class="section-content">
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="icon-small">💔</span>Deficit</h3>
-                    <p>Un deficit de crom poate fi legat de:</p>
-                    <ol>
-                        <li><b>Dezechilibre emoționale și instabilitate:</b> Fluctuații de dispoziție, iritabilitate, dificultăți în a menține calmul, similar cu fluctuațiile glicemiei.</li>
-                        <li><b>Lipsa de "dulceață" în viață:</b> Un sentiment de lipsă de bucurie, apatie, senzația că viața este "amară".</li>
-                        <li><b>Epuizare energetică:</b> Un sentiment de oboseală profundă, ca și cum "motorul" interior ar funcționa ineficient.</li>
-                    </ol>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="icon-small">🧘‍♀️</span>Calea spre echilibru</h3>
-                    <p>Obiectivele pe care le susține cromul pot fi atinse prin:</p>
-                    <ul>
-                        <li><b>Practici de echilibrare și armonizare:</b> Meditație centrată pe echilibrul interior.</li>
-                        <li><b>Restabilirea "dulceții" vieții:</b> Implicarea în activități care aduc bucurie, plăcere și entuziasm.</li>
-                        <li><b>Gestionarea stresului:</b> Tehnici de mindfulness și respirație profundă pentru a reduce agitația mentală.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+    <article class="micronutrient-article" id="continut-integral">
+      <div class="micronutrient-content">
+        <h2>Oligoelement esențial cu rol central în potențarea acțiunii insulinei, metabolismul macronutrienților, echilibrul glicemic și sănătatea cardiovasculară</h2>
 
-        <section class="section">
-            <h2 class="section-title"><span class="icon">📜</span>5. Recomandări și siguranță</h2>
-            <div class="section-content">
-                <div class="subsection">
-                     <h3 class="subsection-title"><span class="subsection-icon">📋</span>Aport adecvat (AI)</h3>
-                     <p>Deoarece necesarul exact este greu de determinat, s-a stabilit un Aport Adecvat (AI).</p>
-                     <table>
-                         <thead>
-                             <tr>
-                                 <th>Grup de populație</th>
-                                 <th>AI (mcg/zi)</th>
-                             </tr>
-                         </thead>
-                         <tbody>
-                             <tr>
-                                 <td>Bărbați (19-50 ani)</td>
-                                 <td>35</td>
-                             </tr>
-                             <tr>
-                                 <td>Femei (19-50 ani)</td>
-                                 <td>25</td>
-                             </tr>
-                             <tr>
-                                 <td>Femei însărcinate</td>
-                                 <td>30</td>
-                             </tr>
-                             <tr>
-                                 <td>Femei care alăptează</td>
-                                 <td>45</td>
-                             </tr>
-                         </tbody>
-                     </table>
-                </div>
-                <div class="subsection">
-                    <h3 class="subsection-title"><span class="subsection-icon">🚨</span>Avertisment de siguranță</h3>
-                    <p>Cromul trivalent (Cr3+) din alimente și suplimente este considerat foarte sigur.</p>
-                    <div class="note holistic-note">
-                        <p><b>Recomandare:</b> Nu a fost stabilită o limită superioară tolerabilă (UL) pentru cromul trivalent din cauza siguranței sale ridicate. Totuși, suplimentarea trebuie discutată cu un medic, în special de către persoanele cu afecțiuni renale sau hepatice. Cea mai bună abordare este o dietă bogată în alimente integrale și reducerea consumului de zaharuri rafinate.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <div class="footer-copyright">
-            <p>Copyright &copy; 2025 dr.ing. Radu Pascu</p>
-            <p style="font-size: 0.8em; color: #95a5a6;">Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist. Consultați întotdeauna medicul pentru probleme de sănătate.</p>
+        <p>Cromul este un oligoelement esențial, prezent în cantități mici în organism, dar cu un impact metabolic semnificativ. Forma biologic activă este cromul trivalent (Cr3+), care participă la reglarea mecanismelor fundamentale prin care organismul procesează glucoza, lipidele și proteinele. Rolul său central este amplificarea semnalizării insulinice, ceea ce îl face deosebit de relevant în contextul epidemiei globale de rezistență la insulină și diabet zaharat de tip 2.</p>
+
+        <p>Spre deosebire de unii micronutrienți cu efecte directe și bine documentate, cromul acționează mai ales ca un potențator de sistem: nu produce insulină, nu metabolizează direct glucoza, dar îmbunătățește condițiile în care aceste procese se desfășoară eficient. Această natură relațională îl plasează în categoria micronutrienților de reglaj fin, a căror relevanță este mai bine înțeleasă în contextul întregului teren metabolic decât izolat.</p>
+
+        <p>Relevanța cromului devine mai vizibilă în dietele moderne, bogate în alimente rafinate și zaharuri simple, care nu doar că furnizează puțin crom, dar accelerează și eliminarea sa urinară. Astfel, cromul poate deveni un element de interes în evaluarea calității generale a alimentației și a statusului metabolic al persoanei.</p>
+
+        <h2 id="identitate">Identitatea biologică a cromului</h2>
+
+        <p>Cromul este un element chimic natural prezent în sol și alimente, cu o importanță biologică dată de forma sa trivalentă (Cr3+). Aceasta este singura formă relevantă din perspectivă nutrițională, distinctă complet de cromul hexavalent (Cr6+), o formă industrială toxică și carcinogenă care nu se găsește în alimente sau suplimente alimentare.</p>
+
+        <p>Spre deosebire de bor, cromul beneficiază de un reper oficial: un Aport Adecvat (AI) stabilit de autoritățile nutriționale, care variază în funcție de vârstă, sex și starea fiziologică. Pentru adulții între 19 și 50 de ani, AI-ul este de 35 mcg/zi pentru bărbați și 25 mcg/zi pentru femei. Femeile însărcinate necesită 30 mcg/zi, iar cele care alăptează 45 mcg/zi.</p>
+
+        <p>Nu a fost stabilită o limită superioară tolerabilă (UL) pentru cromul trivalent din alimente și suplimente, datorită siguranței sale ridicate. Această caracteristică îl diferențiază de mulți alți micronutrienți și subliniază profilul său favorabil de siguranță în utilizarea practică.</p>
+
+        <h2 id="farmacocinetica">Farmacocinetică și metabolism</h2>
+
+        <p>Absorbția cromului alimentar are loc în intestinul subțire, dar biodisponibilitatea sa este relativ scăzută comparativ cu alți micronutrienți, estimată în general la 0,4–2,5% din aportul total. Aceasta variază în funcție de forma chimică a cromului, de matricea alimentară și de alți factori nutriționali prezenți simultan în masă.</p>
+
+        <p>Un aspect farmacocinetică relevant este că absorbția cromului poate fi îmbunătățită de prezența vitaminei C și a anumitor aminoacizi, în timp ce calciul în doze mari poate reduce absorbția. De asemenea, consumul ridicat de zaharuri simple crește semnificativ excreția urinară de crom, accelerând epuizarea rezervelor disponibile ale organismului.</p>
+
+        <p>Odată absorbit, cromul se leagă de o proteină specifică numită cromodulină, care mediază principalele sale efecte biologice. Eliminarea se face predominant renal, cu o componentă biliară mai redusă. Această cale de eliminare este importantă clinic la persoanele cu funcție renală compromisă, care necesită precauție în suplimentarea cu crom.</p>
+
+        <p>Nu există un depozit major de crom în organism, analog feritinei pentru fier. Cromul participă mai degrabă la fluxuri dinamice, ceea ce înseamnă că aportul alimentar consistent este mai important decât acumularea sau stocarea.</p>
+
+        <h2 id="roluri">Roluri fiziologice majore</h2>
+
+        <h3>Potențarea acțiunii insulinei și sensibilitatea la glucoză</h3>
+        <p>Acesta este rolul central și cel mai bine documentat al cromului. Cromul se leagă de cromodulină, o proteină oligopeptidică care amplifică semnalizarea de la receptorii de insulină de pe suprafața celulelor. Prin acest mecanism, cromul îmbunătățește sensibilitatea celulară la insulină și facilitează transportul glucozei din sânge în interiorul celulelor, unde poate fi utilizată pentru producerea de energie.</p>
+
+        <p>Această funcție este deosebit de importantă în contextul rezistenței la insulină, o disfuncție metabolică din ce în ce mai frecventă, asociată cu sindromul metabolic, diabetul zaharat de tip 2, obezitatea și bolile cardiovasculare. Aportul adecvat de crom susține condițiile biochimice în care insulina poate acționa eficient, contribuind la menținerea glicemiei în limite funcționale.</p>
+
+        <p>Cercetările clinice sugerează că suplimentarea cu crom poate ameliora parametrii glicemici la persoanele cu rezistență la insulină sau diabet zaharat de tip 2, deși efectele variază în funcție de statusul inițial al individului și de calitatea generală a dietei.</p>
+
+        <h3>Metabolismul macronutrienților</h3>
+        <p>Prin influența sa asupra insulinei, cromul participă indirect la metabolismul carbohidraților, lipidelor și proteinelor. Insulina este un hormon anabolic cu efecte largi asupra utilizării și stocării tuturor macronutrienților, astfel că orice factor care îi ameliorează funcționarea va influența și eficiența metabolismului energetic global.</p>
+
+        <p>În particular, cromul pare să influențeze favorabil metabolismul lipidic, contribuind la menținerea unui profil lipidic mai echilibrat. Studiile au observat efecte pozitive asupra nivelurilor de colesterol total, LDL și trigliceride, mai ales în contexte de rezistență la insulină sau diabet, unde dislipidemiile sunt frecvente.</p>
+
+        <h3>Sănătatea cardiovasculară</h3>
+        <p>Prin intermediul efectelor sale asupra glicemiei și profilului lipidic, cromul contribuie indirect la reducerea unor factori de risc cardiovascular. Hiperglicemia cronică și dislipidemiile sunt factori majori în progresia aterosclerozei și a bolilor coronariene, astfel că ameliorarea acestor parametri are implicații directe pentru sănătatea vasculară.</p>
+
+        <p>Această relație nu trebuie prezentată ca un efect direct sau spectaculos, ci ca o contribuție la un teren metabolic mai favorabil, în cadrul unei abordări integrative care include alimentație adecvată, activitate fizică și managementul stresului.</p>
+
+        <h3>Reducerea poftei de dulciuri și a comportamentului alimentar</h3>
+        <p>Un aspect mai puțin discutat, dar cu relevanță practică, este că un aport adecvat de crom poate contribui la reducerea poftei de dulciuri și de carbohidrați rafinați. Mecanismul probabil implică stabilizarea glicemiei și ameliorarea eficienței insulinice, ceea ce reduce fluctuațiile glicemice care stau la baza apariției poftelor intense de alimente dulci sau procesate.</p>
+
+        <h2 id="surse">Surse alimentare de crom</h2>
+
+        <p>Cromul este distribuit relativ larg în alimente, dar conținutul poate varia considerabil în funcție de compoziția solului, de metodele de procesare și de pregătirea culinară. Alimentele rafinate tind să conțină mai puțin crom decât variantele lor integrale, deoarece procesarea elimină o parte din conținutul de micronutrienți.</p>
+
+        <p>Un aspect important este că zaharurile simple nu doar că sunt sărace în crom, dar cresc și excreția sa urinară, creând un dublu dezavantaj metabolic. Prin contrast, alimentele integrale bogate în crom susțin atât aportul, cât și eficiența utilizării sale în organism.</p>
+
+        <h3>Drojdia de bere</h3>
+        <p>Drojdia de bere este considerată una dintre cele mai bogate surse alimentare de crom biodisponibil. Pe lângă crom, furnizează și vitamine din grupul B, aminoacizi și alți factori care susțin metabolismul energetic și nervos. Este o sursă valoroasă mai ales pentru persoanele care urmează diete vegetariene sau cu consum redus de carne.</p>
+
+        <h3>Carne și organe</h3>
+        <p>Carnea de vită, ficatul, carnea de pasăre și alte produse de origine animală sunt surse relevante de crom. Ficatul, în particular, este considerat o sursă concentrată de micronutrienți esențiali, inclusiv crom, fier și vitamine liposolubile.</p>
+
+        <h3>Cereale integrale</h3>
+        <p>Cerealele integrale — ovăz, grâu integral, orz, secară — furnizează crom într-o matrice complexă de fibre, vitamine și minerale. Această combinație este avantajoasă metabolic, deoarece fibra contribuie la stabilizarea glicemiei, completând astfel efectul cromului asupra sensibilității la insulină.</p>
+
+        <h3>Legume</h3>
+        <p>Broccoli este menționat frecvent ca una dintre legumele cu conținut mai bun de crom. Fasolea verde, spanacul și alte legume pot contribui de asemenea la aportul zilnic, în cadrul unei diete variate și bogate în vegetale integrale.</p>
+
+        <h3>Fructe</h3>
+        <p>Strugurii, sucul de struguri, merele și bananele sunt surse uzuale de crom. Fructele integrale aduc și fibre, antioxidanți și alți fitonutrienți care susțin contextul metabolic general, spre deosebire de sucurile industriale, care sunt mai puțin recomandate.</p>
+
+        <h3>Condimente</h3>
+        <p>Piperul negru este menționat ca o sursă surprinzătoare de crom, utilizat în cantități mici dar consistente în alimentația zilnică. Condimentele integrale pot contribui la aportul de micronutrienți chiar și în porții reduse.</p>
+
+        <h2>Exemple orientative de surse alimentare</h2>
+        <p>Valorile de mai jos au caracter orientativ și pot varia în funcție de origine, sezon, procesare și compoziția solului.</p>
+        <table>
+          <thead>
+            <tr><th>Aliment</th><th>Porție orientativă</th><th>Crom aproximativ</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Drojdie de bere</td><td>2 linguri</td><td>~3,3 mcg</td></tr>
+            <tr><td>Carne de vită (gătită)</td><td>85 g</td><td>~2,0 mcg</td></tr>
+            <tr><td>Ficat de vită</td><td>85 g</td><td>~3,5 mcg</td></tr>
+            <tr><td>Curcan (gătit)</td><td>85 g</td><td>~1,7 mcg</td></tr>
+            <tr><td>Pâine integrală</td><td>2 felii</td><td>~3,6 mcg</td></tr>
+            <tr><td>Broccoli gătit</td><td>1/2 cană</td><td>~11,0 mcg</td></tr>
+            <tr><td>Fasole verde</td><td>1/2 cană</td><td>~1,1 mcg</td></tr>
+            <tr><td>Suc de struguri</td><td>1 cană</td><td>~0,4 mcg</td></tr>
+            <tr><td>Măr</td><td>1 fruct mediu</td><td>~1,4 mcg</td></tr>
+            <tr><td>Banană</td><td>1 fruct mediu</td><td>~1,0 mcg</td></tr>
+            <tr><td>Piper negru</td><td>1 linguriță</td><td>~0,5 mcg</td></tr>
+          </tbody>
+        </table>
+        <p>Aceste valori au caracter orientativ și pot varia în funcție de origine, sezon, procesare și compoziția solului.</p>
+
+        <h2>Model alimentar favorabil unui aport bun de crom</h2>
+        <p>Un aport adecvat de crom este susținut de o dietă variată, bogată în alimente integrale — cereale integrale, legume, fructe, drojdie de bere, carne slabă și organe — și săracă în zaharuri rafinate și produse ultraprocesate. Reducerea consumului de zahăr adăugat este importantă nu doar pentru că alimentele dulci sunt sărace în crom, ci și pentru că zaharurile simple accelerează eliminarea urinară a cromului deja prezent în organism.</p>
+
+        <p>Acest model coincide cu o alimentație antiinflamatoare, densă în micronutrienți și favorabilă echilibrului glicemic pe termen lung. Din această perspectivă, cromul poate fi privit și ca un indicator indirect al calității dietei: un aport sistematic scăzut reflectă adesea o alimentație dominată de produse rafinate și procesate.</p>
+
+        <h2 id="suplimentarea">Suplimentarea cu crom</h2>
+
+        <h3>Context de utilizare</h3>
+        <p>Suplimentarea cu crom poate fi relevantă în anumite contexte clinice și funcționale, dar nu trebuie abordată ca o soluție universală sau de primă linie. Contextele în care este cel mai adesea luată în considerare includ: rezistența la insulină documentată sau prediabetul, gestionarea greutății corporale în contextul unui teren metabolic disfuncțional, pofta intensă și persistentă de dulciuri cu fluctuații glicemice evidente și alimentația săracă în surse integrale de crom.</p>
+
+        <p>Ca în cazul oricărui micronutrient de reglaj, valoarea suplimentării este mai mare când baza nutrițională este solidă. Dacă dieta rămâne bogată în zaharuri rafinate și produse ultraprocesate, suplimentul adaugă puțin la un sistem metabolic deja supraîncărcat.</p>
+
+        <h3>Forme de suplimente</h3>
+        <p>Cromul este disponibil în mai multe forme chimice, cu biodisponibilitate și utilizare clinică diferite. Cele mai frecvente sunt crom picolinat, crom nicotinat (polinicotinat), crom clorură și crom histidinat. Cromul picolinat este cel mai studiat și mai frecvent utilizat în cercetări clinice, datorită absorbției sale relativ mai bune comparativ cu forma clorură.</p>
+
+        <p>Nu există în prezent dovezi suficiente pentru a afirma că o singură formă este universal superioară în toate contextele. Alegerea practică depinde de formularea produsului, de contextul clinic și de coerența protocolului nutrițional mai larg.</p>
+
+        <h3>Siguranță și limite</h3>
+        <p>Cromul trivalent este considerat foarte sigur în dozele uzuale de suplimentare, care se situează în general între 200 și 1.000 mcg pe zi în contextele clinice studiate. Nu a fost stabilită o limită superioară tolerabilă oficială, ceea ce reflectă profilul favorabil de siguranță al acestei forme chimice.</p>
+
+        <div class="micronutrient-callout">
+          <p>Deși cromul trivalent are siguranță ridicată, suplimentarea la doze mari pe termen îndelungat ar trebui discutată cu un medic, în special în prezența bolilor renale sau hepatice. Persoanele cu diabet zaharat tratate medicamentos trebuie să consulte medicul înainte de suplimentare, deoarece cromul poate potența efectul medicamentelor hipoglicemiante.</p>
         </div>
-    </main>
+
+        <p>Este esențial să nu se confunde cromul trivalent din suplimente cu cromul hexavalent, o formă industrială toxică, carcinogenă la inhalare, care nu are nicio legătură cu nutriția sau suplimentarea alimentară.</p>
+
+        <h2 id="interactiuni">Interacțiuni relevante</h2>
+
+        <p>Cromul are o serie de interacțiuni relevante cu alți nutrienți, medicamente și factori de stil de viață, care trebuie luate în considerare atât în evaluarea aportului alimentar, cât și în contextualizarea suplimentării.</p>
+
+        <h3>Crom și vitamina C</h3>
+        <p>Vitamina C pare să îmbunătățească absorbția cromului la nivel intestinal. Consumul de alimente bogate în vitamina C alături de surse de crom poate optimiza biodisponibilitatea acestuia, ceea ce susține ideea că matricea alimentară integrală este superioară suplimentării izolate.</p>
+
+        <h3>Crom și vitaminele B</h3>
+        <p>Vitaminele din grupul B, în special B3 (niacina), susțin metabolismul energetic și pot acționa sinergic cu cromul în contextul reglajului glicemic și al metabolismului macronutrienților. Drojdia de bere, o sursă importantă de crom, furnizează concomitent și vitamine B, ceea ce o face o opțiune alimentară cu multiple beneficii sinergice.</p>
+
+        <h3>Crom și zaharuri simple</h3>
+        <p>Acesta este unul dintre cele mai importante antagonisme practice. Consumul ridicat de zaharuri simple crește semnificativ excreția urinară de crom, epuizând rezervele disponibile ale organismului. Această relație explică parțial de ce dietele moderne, bogate în zahăr și produse rafinate, pot conduce la un statut suboptimal de crom, chiar în absența unui deficit alimentar evident.</p>
+
+        <h3>Crom și fier</h3>
+        <p>Dozele mari de fier pot intra în competiție cu cromul pentru transportorii intestinali de absorbție. Această interacțiune este mai relevantă în contextul suplimentării cu doze mari de fier, nu al aportului alimentar obișnuit.</p>
+
+        <h3>Crom și medicamente hipoglicemiante</h3>
+        <p>Persoanele care urmează tratament cu metformin, insulină sau alte medicamente hipoglicemiante trebuie să fie atente la suplimentarea cu crom, deoarece acesta poate potența efectul acestor medicamente. Monitorizarea glicemiei este recomandată în astfel de situații, sub îndrumarea medicului curant.</p>
+
+        <h3>Crom și calciu</h3>
+        <p>Dozele mari de calciu pot reduce absorbția cromului. Această interacțiune este relevantă mai ales în contextul suplimentării simultane cu doze mari de calciu și crom, nu al aportului alimentar obișnuit.</p>
+
+        <h2 id="populatii">Populații de interes</h2>
+
+        <h3>Persoane cu rezistență la insulină și prediabet</h3>
+        <p>Aceasta este populația în care cromul a fost cel mai bine studiat și pentru care există cel mai solid argument funcțional. Ameliorarea sensibilității la insulină poate fi relevantă în gestionarea glicemiei și în reducerea riscului de progresie către diabetul zaharat de tip 2, mai ales în combinație cu schimbări de stil de viață.</p>
+
+        <h3>Persoane cu diabet zaharat de tip 2</h3>
+        <p>Studiile clinice au arătat efecte pozitive ale suplimentării cu crom asupra parametrilor glicemici la persoanele cu diabet zaharat de tip 2. Totuși, această suplimentare trebuie integrată cu prudență în protocolul terapeutic și sub supraveghere medicală, din cauza interacțiunilor cu medicamentele hipoglicemiante.</p>
+
+        <h3>Persoane cu diete bogate în zaharuri rafinate</h3>
+        <p>Dietele dominate de alimente procesate, zaharuri simple și produse rafinate sunt sărace în crom și, în plus, accelerează eliminarea sa urinară. Persoanele cu astfel de obiceiuri alimentare pot beneficia de o evaluare a statusului de crom și de îmbunătățirea calității dietei ca primă intervenție.</p>
+
+        <h3>Sportivi și persoane active</h3>
+        <p>Activitatea fizică intensă poate crește excreția urinară de crom și poate modifica necesarul acestuia. La sportivi, cromul prezintă interes în contextul metabolismului energetic eficient, al compoziției corporale și al recuperării post-efort, deși datele de cercetare rămân mixte în acest domeniu.</p>
+
+        <h3>Vârstnici</h3>
+        <p>La persoanele în vârstă, rezistența la insulină și alterarea metabolismului glucozei sunt mai frecvente, iar monotonia alimentară poate reduce aportul de micronutrienți esențiali, inclusiv crom. Evaluarea densității nutriționale globale a dietei rămâne punctul de pornire cel mai logic.</p>
+
+        <h3>Femei însărcinate și care alăptează</h3>
+        <p>Necesarul de crom crește în sarcină (30 mcg/zi) și mai ales în alăptare (45 mcg/zi). Atingerea acestor valori prin alimentație variată și integrală este posibilă în condiții normale, dar trebuie monitorizată în contextul evaluării nutriționale prenatale.</p>
+
+        <h2>Aport insuficient, deficit funcțional și exces</h2>
+
+        <p>Deficiența severă de crom este rară în condițiile unei diete normale, dar aportul suboptimal este mult mai frecvent și poate genera disfuncții metabolice subtile, fără a produce un tablou clinic clasic de deficit. Principalele consecințe funcționale ale unui aport cronic insuficient includ: intoleranță la glucoză și rezistență la insulină, alterarea profilului lipidic cu creșterea colesterolului și trigliceridelor, poftă crescută de dulciuri și carbohidrați rafinați, oboseală și eficiență energetică redusă și, în cazuri severe, neuropatie periferică.</p>
+
+        <p>Excesul de crom trivalent din alimente și suplimente este rar documentat ca problemă clinică, datorită biodisponibilității sale relativ scăzute și eliminării renale eficiente. Spre deosebire de deficit, excesul nu are un tablou clinic bine definit la dozele uzuale de suplimentare. Această asimetrie justifică prudența mai mare față de deficit decât față de exces în utilizarea practică.</p>
+
+        <h2 id="relevanta">Relevanță clinică și nutrițională</h2>
+
+        <p>Cromul ocupă un loc specific în nutriția funcțională prin mecanismul său de acțiune la intersecția dintre insulină, glucoză și metabolism energetic. Nu este un micronutrient de primă linie în orice protocol, dar devine deosebit de relevant în contextele metabolice în care sensibilitatea la insulină este compromisă sau la risc.</p>
+
+        <p>Valoarea sa practică rezidă în faptul că susține condițiile biochimice în care insulina poate funcționa eficient, contribuind la un teren metabolic mai ordonat. În acest sens, cromul este mai bine înțeles ca parte a unei arhitecturi metabolice coerente — alături de magneziu, zinc, vitamina D și vitaminele B — decât ca intervenție singulară.</p>
+
+        <h2>Perspectivă funcțională și holistică</h2>
+
+        <div class="micronutrient-note-holistic">
+          <h3>Cadru interpretativ</h3>
+          <p>Din perspectivă funcțională, cromul poate fi descris ca un mineral al echilibrului metabolic. El se află la intersecția dintre glucoză, insulină, energie și compoziție corporală. Nu produce efecte spectaculoase singur, dar poate ameliora semnificativ eficiența cu care organismul gestionează cel mai important combustibil al său: glucoza.</p>
+        </div>
+
+        <p>Dintr-o lectură mai amplă, cromul reflectă tema echilibrului și a armoniei metabolice: capacitatea corpului de a procesa și integra eficient ceea ce primește din alimentație. Această idee are ecouri atât în medicina tradițională chineză, unde deficiența de crom este asociată cu slăbiciunea Qi-ului Splinei și cu dificultatea de a transforma nutrienții în energie, cât și în Ayurveda, unde susținerea metabolismului (Agni) și echilibrarea Kapha dosha sunt principii centrale ale sănătății digestive și metabolice. Aceste perspective nu înlocuiesc datele biochimice, ci oferă un cadru interpretativ complementar pentru înțelegerea relației dintre hrănire, transformare și vitalitate.</p>
+
+        <h2 id="sinteza">Sinteză</h2>
+
+        <p>Cromul este un oligoelement esențial cu rol central în potențarea acțiunii insulinei și în metabolismul macronutrienților. Principalele sale efecte fiziologice vizează îmbunătățirea sensibilității la insulină, reglarea glicemiei, echilibrarea profilului lipidic și susținerea eficienței metabolice generale. Sursele alimentare principale includ drojdia de bere, carnea și organele, cerealele integrale, broccoli și alte legume integrale. Suplimentarea poate fi relevantă în contextele de rezistență la insulină sau diabet zaharat de tip 2, dar trebuie integrată responsabil, cu atenție la interacțiunile cu medicamentele hipoglicemiante. Cromul trivalent prezintă un profil ridicat de siguranță, fără limită superioară tolerabilă stabilită oficial, ceea ce îl face unul dintre micronutrienții cu cea mai favorabilă relație risc-beneficiu în utilizarea clinică și funcțională.</p>
+      </div>
+    </article>
+
+    <div id="footer-placeholder"></div>
+    <div id="script-placeholder"></div>
+  </div>
+
+  <script>
+        fetch('https://nutrisib.club/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Eroare încărcare footer:', error));
+
+        fetch('https://nutrisib.club/script_protect.js')
+            .then(response => response.text())
+            .then(data => {
+                const script = document.createElement('script');
+                script.textContent = data;
+                document.body.appendChild(script);
+            })
+            .catch(error => console.error('Eroare încărcare script protecție:', error));
+
+    (function injectFooterAndScripts() {
+      const footerPlaceholder = document.getElementById('footer-placeholder');
+      const scriptPlaceholder = document.getElementById('script-placeholder');
+      const year = new Date().getFullYear();
+
+      if (footerPlaceholder) {
+        footerPlaceholder.innerHTML = `
+          <footer>
+            <p>© ${year} NUTRISIB. Toate drepturile rezervate.</p>
+          </footer>
+          <div class="legal-footer-box">
+            <button class="legal-btn" type="button" onclick="window.print()">
+              Printează / Salvează PDF
+            </button>
+          </div>
+        `;
+      }
+
+      if (scriptPlaceholder) {
+        const smoothScript = document.createElement('script');
+        smoothScript.textContent = `
+          document.addEventListener('click', function (event) {
+            const target = event.target.closest('a[href^="#"]');
+            if (!target) return;
+            const id = target.getAttribute('href');
+            const el = document.querySelector(id);
+            if (!el) return;
+            event.preventDefault();
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        `;
+        scriptPlaceholder.appendChild(smoothScript);
+      }
+    })();
+  </script>
 </body>
 </html>
