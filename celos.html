@@ -703,6 +703,108 @@
         .section-title-xl { font-size: 1.35rem; }
         .cook-grid { grid-template-columns: 1fr; }
     }
+	/* ── Paradigm compare wrapper ── */
+	.paradigm-compare {
+		display: grid;
+		grid-template-columns: 1fr 48px 1fr;
+		gap: 1rem;
+		align-items: center;
+	}
+
+	/* ── VS badge — default: cerc vertical (desktop) ── */
+	.paradigm-vs {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-family: 'Montserrat', sans-serif;
+		font-size: 1.1rem;
+		font-weight: 900;
+		color: var(--color-gold);
+		background: var(--color-navy);
+		border-radius: 50%;
+		width: 44px;
+		height: 44px;
+		margin: auto;
+		box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+		flex-shrink: 0;
+		/* Centrat în coloana de 48px */
+		justify-self: center;
+	}
+
+	/* ══════════════════════════════════════════════
+	   MOBIL — sub 768px
+	   Stivuire verticală: problem → VS orizontal → solution
+	   ══════════════════════════════════════════════ */
+	@media (max-width: 768px) {
+
+		/* Grila trece la o singură coloană */
+		.paradigm-compare {
+			grid-template-columns: 1fr;
+			gap: 0;
+		}
+
+		/* Cardurile ocupă lățimea completă */
+		.paradigm-card {
+			padding: 1.35rem 1.1rem;
+		}
+
+		/* VS devine separator orizontal */
+		.paradigm-vs {
+			/* Resetăm cercul */
+			width: auto;
+			height: auto;
+			border-radius: 0;
+			background: transparent;
+			box-shadow: none;
+			margin: 0;
+			padding: 0.75rem 0;
+			justify-self: stretch;
+
+			/* Linie cu text VS la mijloc */
+			display: flex;
+			align-items: center;
+			gap: 0.85rem;
+			font-size: 0.72rem;
+			font-weight: 900;
+			letter-spacing: 0.15em;
+			color: var(--color-gold);
+		}
+
+		/* Liniile orizontale de o parte și alta a textului VS */
+		.paradigm-vs::before,
+		.paradigm-vs::after {
+			content: '';
+			flex: 1;
+			height: 2px;
+			background: linear-gradient(to right, var(--color-border), var(--color-navy));
+			border-radius: 2px;
+		}
+		.paradigm-vs::after {
+			background: linear-gradient(to left, var(--color-border), var(--color-navy));
+		}
+
+		/* Card problem — bordura de jos în loc de sus (vizual mai clar în stivă) */
+		.paradigm-card.problem  { border-top: 4px solid #ef4444;  border-radius: var(--radius-card) var(--radius-card) 0 0; }
+		.paradigm-card.solution { border-top: 4px solid var(--color-brand-medium); border-radius: 0 0 var(--radius-card) var(--radius-card); }
+
+		/* Dezactivăm hover-ul transform pe touch */
+		.paradigm-card:hover { transform: none; }
+
+		/* Font mai compact pentru textul din carduri */
+		.paradigm-card h3 { font-size: 1rem; margin-bottom: 0.65rem; }
+		.paradigm-card p  { font-size: 0.85rem; line-height: 1.65; margin-bottom: 0.55rem; }
+		.paradigm-label   { font-size: 0.65rem; margin-bottom: 0.75rem; }
+	}
+
+	/* ══════════════════════════════════════════════
+	   TELEFON MIC — sub 480px
+	   ══════════════════════════════════════════════ */
+	@media (max-width: 480px) {
+		.paradigm-card       { padding: 1.1rem 0.9rem; }
+		.paradigm-card h3    { font-size: 0.95rem; }
+		.paradigm-card p     { font-size: 0.82rem; }
+	}
+	
     </style>
 </head>
 <body>
@@ -889,7 +991,7 @@
             </p>
         </div>
 
-        <div style="display:grid; grid-template-columns: 1fr 48px 1fr; gap:1rem; align-items:center;" class="sr">
+        <div class="paradigm-compare sr">
             <div class="paradigm-card problem">
                 <span class="paradigm-label red">❌ Abordarea convențională</span>
                 <h3>Dieta ca „patch" de sistem</h3>
