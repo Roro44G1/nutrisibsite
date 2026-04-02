@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infografic: Principiul N=1 — De la știința de masă la biohacking personal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;
+  --teal:#0A7EA4;--teal2:#13A0CC;--teal3:#E1F5EE;
+  --gold:#C8920A;--gold2:#E8AE1A;--gold3:#FEF8E8;
+  --green:#1A6B3C;--green2:#EAF4EE;
+  --red:#B83030;--red2:#FDEAEA;
+  --orange:#C85A0A;--orange2:#FEF2E8;
+  --purple:#5B3FA6;--purple2:#F0EBF8;
+  --g1:#FAF7F2;--g2:#F2EDE4;--g3:#DDD6CC;--g4:#9A9088;--g5:#5A5248;
+  --white:#fff;
+}
+html{font-size:16px}
+body{font-family:'Inter',sans-serif;background:#F5F2EC;color:#1E1810;line-height:1.6;-webkit-font-smoothing:antialiased}
+.infographic{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 3rem}
+
+/* HEADER */
+.header{text-align:center;padding:2.5rem 2rem;background:var(--navy);border-radius:16px;margin-bottom:2rem;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 30% 50%,rgba(91,63,166,.25),transparent 65%)}
+.header-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:600;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem;position:relative}
+.header-tag::before,.header-tag::after{content:'';width:24px;height:1px;background:var(--gold2)}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.4rem);font-weight:900;color:#fff;line-height:1.15;position:relative;margin-bottom:.75rem}
+.header h1 em{font-style:italic;color:var(--gold2)}
+.header-sub{font-size:.92rem;color:rgba(255,255,255,.6);position:relative;max-width:680px;margin:0 auto}
+.header-stats{display:flex;justify-content:center;gap:2.5rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);position:relative;flex-wrap:wrap}
+.hstat-n{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--gold2);line-height:1}
+.hstat-l{font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem}
+
+.section-label{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem;display:block}
+
+/* MAIN GRID */
+.main-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+@media(max-width:700px){.main-grid{grid-template-columns:1fr}}
+
+.card{background:var(--white);border-radius:14px;padding:1.5rem;border:1px solid var(--g3)}
+
+/* VARIABILITATE */
+.variab-intro{font-size:.84rem;color:var(--g5);line-height:1.6;margin-bottom:1rem;padding:.85rem 1rem;background:var(--g1);border-radius:8px;border-left:3px solid var(--teal)}
+.variab-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.variab-item{border-radius:10px;padding:1rem;border:1px solid;text-align:center;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.variab-item:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.08)}
+.variab-item.v1{background:#EAF6FB;border-color:#9FE1CB}
+.variab-item.v2{background:var(--gold3);border-color:#FAC775}
+.variab-item.v3{background:var(--green2);border-color:#C0DD97}
+.variab-item.v4{background:var(--orange2);border-color:#F5C4B3}
+.variab-icon{font-size:1.6rem;margin-bottom:.35rem;display:block}
+.variab-title{font-size:.82rem;font-weight:700;margin-bottom:.2rem}
+.v1 .variab-title{color:var(--teal)}
+.v2 .variab-title{color:var(--gold)}
+.v3 .variab-title{color:var(--green)}
+.v4 .variab-title{color:var(--orange)}
+.variab-desc{font-size:.74rem;line-height:1.45;color:var(--g5)}
+.variab-detail{max-height:0;overflow:hidden;transition:max-height .35s ease,opacity .3s;opacity:0;font-size:.74rem;line-height:1.5;margin-top:0;text-align:left;color:var(--g5)}
+.variab-item.open .variab-detail{max-height:200px;opacity:1;margin-top:.5rem}
+
+/* N=1 vs N=10000 */
+.n-compare{display:grid;grid-template-columns:1fr 40px 1fr;gap:.75rem;align-items:center;margin:1rem 0}
+@media(max-width:500px){.n-compare{grid-template-columns:1fr;gap:.5rem}}
+.n-card{border-radius:10px;padding:1rem;text-align:center;border:1px solid}
+.n-card.mass{background:var(--g1);border-color:var(--g3)}
+.n-card.personal{background:#EAF6FB;border-color:var(--teal);border-top:3px solid var(--teal)}
+.n-icon{font-size:1.8rem;margin-bottom:.35rem;display:block}
+.n-title{font-size:.9rem;font-weight:700;margin-bottom:.25rem}
+.mass .n-title{color:var(--g5)}
+.personal .n-title{color:var(--teal)}
+.n-desc{font-size:.76rem;color:var(--g5);line-height:1.5}
+.vs-c{width:34px;height:34px;border-radius:50%;background:var(--g3);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--g5);margin:0 auto;flex-shrink:0}
+@media(max-width:500px){.vs-c{display:none}}
+
+/* IERARHIA */
+.pyramid{display:flex;flex-direction:column;gap:.5rem;margin:1rem 0}
+.pyr-level{border-radius:8px;padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;cursor:pointer;transition:transform .2s,opacity .2s;border:1px solid transparent}
+.pyr-level:hover{transform:translateX(4px)}
+.pyr-level.pyr-1{background:#EAF6FB;border-color:#9FE1CB;margin-left:0}
+.pyr-level.pyr-2{background:var(--gold3);border-color:#FAC775;margin-left:1rem}
+.pyr-level.pyr-3{background:var(--orange2);border-color:#F5C4B3;margin-left:2rem}
+.pyr-level.pyr-4{background:var(--red2);border-color:#F7C1C1;margin-left:3rem}
+.pyr-stars{font-size:.8rem;letter-spacing:1px;flex-shrink:0}
+.pyr-name{font-size:.82rem;font-weight:700}
+.pyr-1 .pyr-name{color:var(--teal)}
+.pyr-2 .pyr-name{color:var(--gold)}
+.pyr-3 .pyr-name{color:var(--orange)}
+.pyr-4 .pyr-name{color:var(--red)}
+.pyr-desc{font-size:.74rem;color:var(--g5);line-height:1.45}
+.pyr-badge{margin-left:auto;font-size:.65rem;font-weight:700;padding:.15rem .55rem;border-radius:99px;flex-shrink:0;white-space:nowrap}
+.pyr-1 .pyr-badge{background:#EAF6FB;color:var(--teal);border:1px solid var(--teal2)}
+.pyr-2 .pyr-badge{background:var(--gold3);color:var(--gold);border:1px solid var(--gold2)}
+.pyr-3 .pyr-badge{background:var(--orange2);color:var(--orange);border:1px solid #F5C4B3}
+.pyr-4 .pyr-badge{background:var(--red2);color:var(--red);border:1px solid #F7C1C1}
+
+/* 5 ELEMENTE */
+.elemente-section{margin-bottom:1.5rem}
+.elemente-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.85rem;margin-top:1rem}
+@media(max-width:700px){.elemente-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:400px){.elemente-grid{grid-template-columns:repeat(2,1fr)}}
+
+.elem-card{border-radius:12px;padding:1.1rem .85rem;text-align:center;border:1px solid;transition:transform .2s,box-shadow .2s;cursor:pointer;position:relative}
+.elem-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.elem-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin:0 auto .6rem;flex-shrink:0}
+.elem-card:nth-child(1){background:#EAF6FB;border-color:#9FE1CB}
+.elem-card:nth-child(2){background:var(--orange2);border-color:#F5C4B3}
+.elem-card:nth-child(3){background:var(--gold3);border-color:#FAC775}
+.elem-card:nth-child(4){background:var(--green2);border-color:#C0DD97}
+.elem-card:nth-child(5){background:var(--purple2);border-color:#CECBF6}
+.elem-card:nth-child(1) .elem-num{background:var(--teal);color:#fff}
+.elem-card:nth-child(2) .elem-num{background:var(--orange);color:#fff}
+.elem-card:nth-child(3) .elem-num{background:var(--gold);color:#fff}
+.elem-card:nth-child(4) .elem-num{background:var(--green);color:#fff}
+.elem-card:nth-child(5) .elem-num{background:var(--purple);color:#fff}
+.elem-title{font-size:.8rem;font-weight:700;margin-bottom:.25rem;line-height:1.3}
+.elem-card:nth-child(1) .elem-title{color:var(--teal)}
+.elem-card:nth-child(2) .elem-title{color:var(--orange)}
+.elem-card:nth-child(3) .elem-title{color:var(--gold)}
+.elem-card:nth-child(4) .elem-title{color:var(--green)}
+.elem-card:nth-child(5) .elem-title{color:var(--purple)}
+.elem-desc{font-size:.72rem;line-height:1.45;color:var(--g5)}
+.elem-detail{max-height:0;overflow:hidden;transition:max-height .35s,opacity .3s;opacity:0;font-size:.72rem;line-height:1.5;margin-top:0;color:var(--g5)}
+.elem-card.open .elem-detail{max-height:200px;opacity:1;margin-top:.5rem}
+.elem-gresit{font-size:.68rem;color:var(--red);background:var(--red2);border-radius:4px;padding:.2rem .45rem;margin-top:.35rem;display:inline-block}
+
+/* GRESEALA FRECVENTA tag */
+.greseala{font-style:italic;color:var(--red)}
+
+/* PROTOCOALE EXEMPLE */
+.proto-section{background:var(--navy);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem}
+.proto-title{font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem}
+.proto-sub{font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1.25rem}
+.proto-tabs{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+.proto-tab{font-size:.78rem;font-weight:600;padding:.35rem .85rem;border-radius:99px;cursor:pointer;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);transition:all .2s;background:transparent}
+.proto-tab.active{background:var(--teal);border-color:var(--teal);color:#fff}
+.proto-tab:hover:not(.active){background:rgba(255,255,255,.08)}
+.proto-content{display:none}
+.proto-content.active{display:block}
+.proto-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:550px){.proto-grid{grid-template-columns:1fr}}
+.proto-card{background:rgba(255,255,255,.07);border-radius:10px;padding:1.1rem;border:1px solid rgba(255,255,255,.1)}
+.proto-card-label{font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.65rem;display:flex;align-items:center;gap:.4rem}
+.proto-card.before .proto-card-label{color:var(--orange)}
+.proto-card.after  .proto-card-label{color:#5DCAA5}
+.proto-detail{font-size:.8rem;color:rgba(255,255,255,.75);line-height:1.6}
+.proto-hipoteza{font-size:.82rem;color:rgba(255,255,255,.85);background:rgba(255,255,255,.06);border-radius:8px;padding:.75rem 1rem;margin-bottom:1rem;border-left:3px solid var(--gold2);line-height:1.6}
+.proto-metric{display:inline-block;background:rgba(10,126,164,.3);color:var(--teal2);font-size:.75rem;font-weight:600;padding:.25rem .65rem;border-radius:99px;margin-top:.65rem;border:1px solid rgba(10,126,164,.4)}
+
+/* BIAS */
+.bias-section{margin-bottom:1.5rem}
+.bias-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
+@media(max-width:600px){.bias-grid{grid-template-columns:1fr}}
+.bias-card{border-radius:12px;padding:1.25rem;border:1px solid}
+.bias-card.pericol{background:var(--red2);border-color:#F7C1C1}
+.bias-card.solutie{background:var(--green2);border-color:#C0DD97}
+.bias-card-title{font-size:.85rem;font-weight:700;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+.pericol .bias-card-title{color:var(--red)}
+.solutie .bias-card-title{color:var(--green)}
+.bias-items{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.bias-items li{font-size:.8rem;line-height:1.55;padding-left:1.25rem;position:relative;color:var(--g5)}
+.bias-items li::before{position:absolute;left:0;top:.05em;font-size:.78rem}
+.pericol .bias-items li::before{content:'✗';color:var(--red)}
+.solutie .bias-items li::before{content:'✓';color:var(--green)}
+
+/* REGULA DE AUR */
+.regula-sectie{background:var(--g2);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;border:1px solid var(--g3)}
+.regula-box{background:#fff;border-radius:10px;padding:1rem 1.15rem;border:1px solid var(--g3);margin-top:.75rem;border-left:4px solid var(--teal)}
+.regula-box p{font-size:.84rem;color:var(--g5);line-height:1.65}
+.regula-box strong{color:var(--navy)}
+
+/* KPI */
+.kpi-section{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:14px;padding:2rem;margin-bottom:1.5rem;border-left:5px solid var(--gold)}
+.kpi-tag{font-family:monospace;font-size:.68rem;font-weight:600;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.75rem;display:block}
+.kpi-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:.6rem;font-weight:700}
+.kpi-desc{font-size:.84rem;color:rgba(255,255,255,.6);line-height:1.65;margin-bottom:1.25rem}
+.ipoteza-template{background:rgba(255,255,255,.06);border-radius:10px;padding:1rem 1.25rem;border:1px solid rgba(255,255,255,.1);font-size:.85rem;color:rgba(255,255,255,.85);line-height:1.7}
+.ipoteza-template strong{color:var(--gold2)}
+
+.footer-info{text-align:center;padding:1rem;font-size:.75rem;color:var(--g4)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fi{opacity:0;animation:fadeUp .55s ease forwards}
+.fi1{animation-delay:.05s}.fi2{animation-delay:.15s}.fi3{animation-delay:.25s}
+</style>
+</head>
+<body>
+<div class="infographic">
+
+  <!-- HEADER -->
+  <div class="header fi fi1">
+    <div class="header-tag">Biohacking 3.0 · Modul 1 · Lecția 1.2</div>
+    <h1>Principiul N=1: De la <em>știința de masă</em><br>la biohacking personal</h1>
+    <p class="header-sub">De ce media statistică nu ești tu — și cum construiești propriul experiment biologic valid, cu date reale, nu cu impresii</p>
+    <div class="header-stats">
+      <div><div class="hstat-n">75–80%</div><div class="hstat-l">Variabilitate biologică ne-genetică</div></div>
+      <div><div class="hstat-n">5</div><div class="hstat-l">Elemente obligatorii N=1</div></div>
+      <div><div class="hstat-n">21 zile</div><div class="hstat-l">Durată minimă experiment valid</div></div>
+      <div><div class="hstat-n">3,5×</div><div class="hstat-l">Risc mai mare studii finanțate de producător</div></div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID: variabilitate + ierarhia -->
+  <div class="main-grid fi fi2">
+
+    <!-- Variabilitate -->
+    <div class="card">
+      <span class="section-label">De ce media statistică nu ești tu</span>
+      <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.5rem">Variabilitatea biologică inter-individuală</div>
+      <div class="variab-intro">
+        <strong>Studiul Zeevi et al. (2015, Cell):</strong> același sandviș cu unt de arahide a produs spike-uri glicemice radical diferite la 800 de participanți. Predictorul principal: microbiomul intestinal și genetica individuală — nu compoziția mesei.
+      </div>
+      <div class="variab-grid">
+        <div class="variab-item v1" onclick="toggleVariab(this)">
+          <span class="variab-icon">🧬</span>
+          <div class="variab-title">Genetică (SNP-uri)</div>
+          <div class="variab-desc">CYP1A2, TCF7L2, VDR, APOE</div>
+          <div class="variab-detail">Polimorfismele genetice afectează metabolismul cofeinei, sensibilitatea la insulină, vitamina D și răspunsul la grăsimi saturate. Purtătorii APOE4 metabolizează grăsimile saturate complet diferit față de APOE2.</div>
+        </div>
+        <div class="variab-item v2" onclick="toggleVariab(this)">
+          <span class="variab-icon">🦠</span>
+          <div class="variab-title">Microbiom</div>
+          <div class="variab-desc">Mai variabil decât amprenta digitală</div>
+          <div class="variab-detail">Compoziția microbiomului determină răspunsul glicemic, inflamator și digestiv la alimente. 90% din serotonină este produsă intestinal. Același probiotic poate funcționa la o persoană și fără efect la alta.</div>
+        </div>
+        <div class="variab-item v3" onclick="toggleVariab(this)">
+          <span class="variab-icon">🔄</span>
+          <div class="variab-title">Epigenetică</div>
+          <div class="variab-desc">Istoria de viață modifică expresia genică</div>
+          <div class="variab-detail">Stresul cronic, toxinele, privarea de somn și alimentația modifică expresia genică fără a schimba ADN-ul. Doi gemeni identici pot avea profiluri metabolice semnificativ diferite la 50 de ani.</div>
+        </div>
+        <div class="variab-item v4" onclick="toggleVariab(this)">
+          <span class="variab-icon">🌙</span>
+          <div class="variab-title">Cronotip</div>
+          <div class="variab-desc">Genele PER, CRY, CLOCK</div>
+          <div class="variab-detail">Cronotipul genetic determină dacă ești matinal sau nocturn. Același supliment administrat dimineața față de seara poate avea efecte diferite sau chiar opuse în funcție de faza circadiană personală.</div>
+        </div>
+      </div>
+
+      <!-- N compare -->
+      <div style="font-size:.82rem;font-weight:700;color:var(--navy);margin:.75rem 0 .4rem">N=10.000 vs. N=1</div>
+      <div class="n-compare">
+        <div class="n-card mass">
+          <span class="n-icon">👥</span>
+          <div class="n-title">N=10.000</div>
+          <div class="n-desc">Putere statistică ridicată. Detectează efecte reale la nivel populațional. Nu spune nimic despre tine specific.</div>
+        </div>
+        <div class="vs-c">VS</div>
+        <div class="n-card personal">
+          <span class="n-icon">🎯</span>
+          <div class="n-title">N=1 — tu</div>
+          <div class="n-desc">Validitate internă personală supremă. Datele tale răspund la întrebări despre tine — independent de media populațională.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ierarhia evidentei -->
+    <div class="card">
+      <span class="section-label">Ierarhia evidenței științifice</span>
+      <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.4rem">Compararea puterii cauzale</div>
+      <div style="font-size:.8rem;color:var(--g4);margin-bottom:1rem">Nu toate studiile sunt egale. Citești critic înainte de a schimba un obicei.</div>
+      <div class="pyramid">
+        <div class="pyr-level pyr-1">
+          <div>
+            <div class="pyr-name">RCT (trial randomizat controlat)</div>
+            <div class="pyr-desc">Standard de aur. Permite concluzii cauzale. Randomizare elimină biasul.</div>
+          </div>
+          <div class="pyr-stars">⭐⭐⭐⭐⭐</div>
+          <span class="pyr-badge">Cauzalitate</span>
+        </div>
+        <div class="pyr-level pyr-2">
+          <div>
+            <div class="pyr-name">Meta-analiză / revizuire sistematică</div>
+            <div class="pyr-desc">Agregă multiple studii. Putere statistică ridicată. Pierde contextul individual.</div>
+          </div>
+          <div class="pyr-stars">⭐⭐⭐⭐</div>
+          <span class="pyr-badge">Populație</span>
+        </div>
+        <div class="pyr-level pyr-3">
+          <div>
+            <div class="pyr-name">Studiu de cohortă observațional</div>
+            <div class="pyr-desc">Corelație, nu cauzalitate. Variabile confundante. Generează ipoteze.</div>
+          </div>
+          <div class="pyr-stars">⭐⭐⭐</div>
+          <span class="pyr-badge">Corelație</span>
+        </div>
+        <div class="pyr-level pyr-4">
+          <div>
+            <div class="pyr-name">Experiment N=1 personal</div>
+            <div class="pyr-desc">Validitate internă personală supremă. Nu generalizabil populațional.</div>
+          </div>
+          <div class="pyr-stars">⭐</div>
+          <span class="pyr-badge">Personal</span>
+        </div>
+      </div>
+
+      <!-- Cum citesti un studiu -->
+      <div style="margin-top:1.25rem;padding:1rem;background:var(--g1);border-radius:10px;border:1px solid var(--g3)">
+        <div style="font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:.6rem">Cum citești un studiu în 5 minute</div>
+        <div style="display:flex;flex-direction:column;gap:.4rem">
+          <div style="display:flex;gap:.65rem;align-items:baseline"><span style="font-family:monospace;font-size:.7rem;color:var(--teal);font-weight:700;flex-shrink:0">01</span><span style="font-size:.78rem;color:var(--g5)"><strong>Cine a finanțat?</strong> — studiile finanțate de producător: risc 3,5× (Lundh et al., Cochrane 2017)</span></div>
+          <div style="display:flex;gap:.65rem;align-items:baseline"><span style="font-family:monospace;font-size:.7rem;color:var(--teal);font-weight:700;flex-shrink:0">02</span><span style="font-size:.78rem;color:var(--g5)"><strong>N este mare?</strong> — sub 100 participanți = pilot, nu decizie</span></div>
+          <div style="display:flex;gap:.65rem;align-items:baseline"><span style="font-family:monospace;font-size:.7rem;color:var(--teal);font-weight:700;flex-shrink:0">03</span><span style="font-size:.78rem;color:var(--g5)"><strong>RCT sau observațional?</strong> — observațional = ipoteză, nu dovadă</span></div>
+          <div style="display:flex;gap:.65rem;align-items:baseline"><span style="font-family:monospace;font-size:.7rem;color:var(--teal);font-weight:700;flex-shrink:0">04</span><span style="font-size:.78rem;color:var(--g5)"><strong>Effect size, nu p&lt;0,05</strong> — caută absolute risk reduction sau NNT</span></div>
+          <div style="display:flex;gap:.65rem;align-items:baseline"><span style="font-family:monospace;font-size:.7rem;color:var(--teal);font-weight:700;flex-shrink:0">05</span><span style="font-size:.78rem;color:var(--g5)"><strong>Pe cine s-a făcut?</strong> — populația studiată seamănă cu tine?</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CELE 5 ELEMENTE -->
+  <div class="elemente-section fi fi2">
+    <span class="section-label">Arhitectura unui experiment N=1 valid</span>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
+      <div style="font-size:1rem;font-weight:700;color:var(--navy)">Cele 5 elemente obligatorii</div>
+      <div style="font-size:.78rem;color:var(--g5)">Fără toate 5 nu ai experiment — ai o impresie. <em>Apasă pe fiecare pentru greșeala frecventă.</em></div>
+    </div>
+    <div class="elemente-grid">
+      <div class="elem-card" onclick="toggleElem(this)">
+        <div class="elem-num">1</div>
+        <div class="elem-title">Ipoteză clară</div>
+        <div class="elem-desc">„Dacă [intervenție], atunci [outcome] va [crește/scădea] în [N] zile."</div>
+        <div class="elem-detail">
+          <div class="elem-gresit">✗ Greșit: „Vreau să văd dacă dorm mai bine"</div>
+          <div style="margin-top:.35rem">✓ Corect: „Dacă elimin cafeina după 14:00, scorul de somn va crește cu min. 1 punct în 21 de zile."</div>
+        </div>
+      </div>
+      <div class="elem-card" onclick="toggleElem(this)">
+        <div class="elem-num">2</div>
+        <div class="elem-title">O singură variabilă</div>
+        <div class="elem-desc">Modifici un singur element la un moment dat.</div>
+        <div class="elem-detail">
+          <div class="elem-gresit">✗ Greșit: schimbi alimentația + suplimentele + ora de culcare simultan</div>
+          <div style="margin-top:.35rem">Nu poți ști ce a produs efectul dacă modifici mai multe variabile odată.</div>
+        </div>
+      </div>
+      <div class="elem-card" onclick="toggleElem(this)">
+        <div class="elem-num">3</div>
+        <div class="elem-title">Minim 21 zile</div>
+        <div class="elem-desc">Microbiom: 10–14 zile; magneziu/somn: 14–21 zile.</div>
+        <div class="elem-detail">
+          <div class="elem-gresit">✗ Greșit: concluzii după 3–5 zile</div>
+          <div style="margin-top:.35rem">Zgomotul biologic zilnic normal depășește efectul intervenției. Ai nevoie de timp pentru semnal clar.</div>
+        </div>
+      </div>
+      <div class="elem-card" onclick="toggleElem(this)">
+        <div class="elem-num">4</div>
+        <div class="elem-title">Metrici pre/post</div>
+        <div class="elem-desc">Cifră înregistrată înainte (baseline) și după (outcome).</div>
+        <div class="elem-detail">
+          <div class="elem-gresit">✗ Greșit: „Mi-am dat seama că dorm mai bine" fără date</div>
+          <div style="margin-top:.35rem">Fără baseline nu ai comparație. Este memorie selectivă, nu măsurare obiectivă.</div>
+        </div>
+      </div>
+      <div class="elem-card" onclick="toggleElem(this)">
+        <div class="elem-num">5</div>
+        <div class="elem-title">Jurnal zilnic</div>
+        <div class="elem-desc">Notezi intervenția, metrica și variabilele confundante.</div>
+        <div class="elem-detail">
+          <div class="elem-gresit">✗ Greșit: nu notezi stresul sau alcoolul din ziua respectivă</div>
+          <div style="margin-top:.35rem">O zi proastă din cauza stresului apare ca „eșec al intervenției" fără jurnal de variabile confundante.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROTOCOALE EXEMPLE -->
+  <div class="proto-section fi fi3">
+    <span class="section-label" style="color:var(--gold2)">Exemple de experimente gata de aplicat</span>
+    <div class="proto-title">Protocoale practice N=1</div>
+    <div class="proto-sub">Alege unul și completează formularul de ipoteză din materialele lecției</div>
+    <div class="proto-tabs">
+      <div class="proto-tab active" onclick="switchProto(this,'p1')">Cafeina și somnul</div>
+      <div class="proto-tab" onclick="switchProto(this,'p2')">Proteina la micul dejun</div>
+      <div class="proto-tab" onclick="switchProto(this,'p3')">Lumina matinală și HRV</div>
+    </div>
+    <div id="p1" class="proto-content active">
+      <div class="proto-hipoteza">„Dacă elimin cafeina după ora <strong>14:00</strong>, scorul meu de somn va crește cu minimum <strong>1 punct</strong> în <strong>21 de zile</strong>."</div>
+      <div class="proto-grid">
+        <div class="proto-card before">
+          <div class="proto-card-label">⬡ Înainte</div>
+          <div class="proto-detail">Consum normal de cofeină fără restricție de orar. Scor somn mediu înregistrat în Jurnalul de Biohacking timp de 7 zile = <strong>baseline</strong>.</div>
+        </div>
+        <div class="proto-card after">
+          <div class="proto-card-label">⬡ Intervenție (21 zile)</div>
+          <div class="proto-detail">Zero cofeină după 14:00 (cafea, ceai negru, energizante). Notezi zilnic: scor somn 1–10, ora de culcare, alcool (da/nu), stres (1–10).</div>
+        </div>
+      </div>
+      <span class="proto-metric">Metrică: scor somn 1–10 · media S1 vs. S3</span>
+    </div>
+    <div id="p2" class="proto-content">
+      <div class="proto-hipoteza">„Dacă adaug minimum <strong>20g proteină</strong> la micul dejun, energia la ora 11 va crește cu minimum <strong>1 punct</strong> în <strong>14 zile</strong>."</div>
+      <div class="proto-grid">
+        <div class="proto-card before">
+          <div class="proto-card-label">⬡ Înainte</div>
+          <div class="proto-detail">Micul dejun actual fără proteină adăugată. Scor energie la ora 11 (1–10) înregistrat 7 zile = <strong>baseline</strong>.</div>
+        </div>
+        <div class="proto-card after">
+          <div class="proto-card-label">⬡ Intervenție (14 zile)</div>
+          <div class="proto-detail">Micul dejun include minimum 20g proteină (ouă, iaurt grecesc, shake proteic). Notezi zilnic: scor energie 11:00, tipul micului dejun.</div>
+        </div>
+      </div>
+      <span class="proto-metric">Metrică: scor energie la 11:00 (1–10) · media S1 vs. S2</span>
+    </div>
+    <div id="p3" class="proto-content">
+      <div class="proto-hipoteza">„Dacă mă expun la <strong>lumina naturală 10 min</strong> după trezire, HRV matinal va crește cu minimum <strong>5%</strong> în <strong>21 de zile</strong>."</div>
+      <div class="proto-grid">
+        <div class="proto-card before">
+          <div class="proto-card-label">⬡ Înainte</div>
+          <div class="proto-detail">HRV matinal măsurat cu Elite HRV sau Welltory timp de 7 zile, fără expunere deliberată la lumina naturală = <strong>baseline</strong>.</div>
+        </div>
+        <div class="proto-card after">
+          <div class="proto-card-label">⬡ Intervenție (21 zile)</div>
+          <div class="proto-detail">10 minute în exterior sau la fereastră în primele 30 de minute după trezire. Notezi: HRV, ora de trezire, calitatea somnului precedent.</div>
+        </div>
+      </div>
+      <span class="proto-metric">Metrică: HRV matinal (ms) · media pre vs. post intervenție</span>
+    </div>
+  </div>
+
+  <!-- BIAS DE CONFIRMARE -->
+  <div class="bias-section fi fi3">
+    <span class="section-label">Capcana cognitivă principală</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Biasul de confirmare — principalul inamic al N=1</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Tendința de a observa și reține informațiile care confirmă ceea ce credem deja</div>
+    <div class="bias-grid">
+      <div class="bias-card pericol">
+        <div class="bias-card-title">✗ Cum apare biasul</div>
+        <ul class="bias-items">
+          <li>Dacă crezi că un supliment funcționează, interpretezi orice zi bună ca dovadă</li>
+          <li>Alegi „zilele bune" ca dovadă, ignori zilele proaste</li>
+          <li>Faci concluzii retrospective din memorie (inexactă)</li>
+          <li>Nu înregistrezi variabilele confundante externe</li>
+          <li>Durată insuficientă — zgomotul zilnic mimează „efectul"</li>
+        </ul>
+      </div>
+      <div class="bias-card solutie">
+        <div class="bias-card-title">✓ Contramasuri obligatorii</div>
+        <ul class="bias-items">
+          <li>Înregistrezi datele zilnic, <strong>înainte</strong> de a le interpreta</li>
+          <li>Calculezi media întregii perioade — nu selectezi zile</li>
+          <li>Notezi și zilele proaste cu cauze externe identificate</li>
+          <li>Folosești scală numerică zilnică, nu impresii subiective</li>
+          <li>Minimum 21 de zile — suficient pentru semnal real</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGULA DE AUR -->
+  <div class="regula-sectie fi fi3">
+    <span class="section-label">Principiul de integrare</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">N=1 nu înlocuiește medicina — o completează</div>
+    <div class="regula-box">
+      <p><strong>N=1 personal oferă:</strong> date despre răspunsul tău individual, identificarea variabilelor care contează pentru tine, autonomie și educație biologică.</p>
+    </div>
+    <div class="regula-box" style="margin-top:.75rem;border-left-color:var(--gold)">
+      <p><strong>Când N=1 nu este potrivit:</strong> simptome care necesită diagnostic medical, decizii farmacologice, condiții cu risc acut (HTA necontrolată, diabet instabil), simptome neurologice sau psihiatrice acute.</p>
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-section fi fi3">
+    <span class="kpi-tag">⬡ Acțiunea săptămânii</span>
+    <div class="kpi-title">Proiectează primul tău experiment N=1</div>
+    <div class="kpi-desc">Alege unul din cele 3 protocoale model — sau propune-l pe al tău respectând structura de mai jos. Ai deja baseline-ul din fișa de auto-evaluare de la lecția 1.1.</div>
+    <div class="ipoteza-template">
+      <strong>1.</strong> Ipoteza: „Dacă _______, atunci _______ va _______ în __ zile."<br>
+      <strong>2.</strong> Variabila independentă (ce modifici): _______<br>
+      <strong>3.</strong> Variabila dependentă (ce măsori): _______<br>
+      <strong>4.</strong> Instrumentul de măsurare și metrica: _______<br>
+      <strong>5.</strong> Durata (minimum 21 zile recomandat): __ zile, start: _______
+    </div>
+  </div>
+
+  <div class="footer-info">
+    <strong>Biohacking 3.0 · Modul 1 · Lecția 1.2</strong> · dr.ing. Radu Pascu · NUTRISIB Sibiu · 2025<br>
+    Surse: Zeevi et al. (2015) Cell; Lillie et al. (2011) BMJ; Sackett (2000); Lundh et al. (2017) Cochrane
+  </div>
+</div>
+
+<script>
+function toggleVariab(el){
+  const isOpen=el.classList.contains('open');
+  document.querySelectorAll('.variab-item').forEach(v=>v.classList.remove('open'));
+  if(!isOpen)el.classList.add('open');
+}
+function toggleElem(el){
+  const isOpen=el.classList.contains('open');
+  document.querySelectorAll('.elem-card').forEach(e=>e.classList.remove('open'));
+  if(!isOpen)el.classList.add('open');
+}
+function switchProto(tab,id){
+  document.querySelectorAll('.proto-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.proto-content').forEach(c=>c.classList.remove('active'));
+  tab.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+</script>
+</body>
+</html>
