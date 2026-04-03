@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infografic: Jurnalul de biohacking — Self-tracking complet</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;
+  --teal:#0A7EA4;--teal2:#13A0CC;
+  --gold:#C8920A;--gold2:#E8AE1A;--gold3:#FEF8E8;
+  --green:#1A6B3C;--green2:#EAF4EE;
+  --red:#B83030;--red2:#FDEAEA;
+  --orange:#C85A0A;--orange2:#FEF2E8;
+  --purple:#5B3FA6;--purple2:#F0EBF8;
+  --g1:#FAF7F2;--g2:#F2EDE4;--g3:#DDD6CC;--g4:#9A9088;--g5:#5A5248;
+  --white:#fff;
+}
+html{font-size:16px}
+body{font-family:'Inter',sans-serif;background:#F5F2EC;color:#1E1810;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 3rem}
+
+/* HEADER */
+.header{text-align:center;padding:2.5rem 2rem;background:var(--navy);border-radius:16px;margin-bottom:2rem;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 70% 35%,rgba(10,126,164,.28),transparent 65%)}
+.header-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:600;color:var(--teal2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem;position:relative}
+.header-tag::before,.header-tag::after{content:'';width:24px;height:1px;background:var(--teal2)}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.4rem);font-weight:900;color:#fff;line-height:1.15;position:relative;margin-bottom:.75rem}
+.header h1 em{font-style:italic;color:var(--teal2)}
+.header-sub{font-size:.92rem;color:rgba(255,255,255,.6);position:relative;max-width:680px;margin:0 auto}
+.header-stats{display:flex;justify-content:center;gap:2.5rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);position:relative;flex-wrap:wrap}
+.hstat-n{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--teal2);line-height:1}
+.hstat-l{font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem}
+.section-label{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem;display:block}
+
+/* CÂMPURI JURNAL — 8 carduri interactive */
+.campuri-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:1rem 0 1.5rem}
+@media(max-width:750px){.campuri-grid{grid-template-columns:repeat(2,1fr)}}
+.camp-card{border-radius:12px;padding:1.1rem 1rem;border:1px solid;cursor:pointer;transition:transform .22s,box-shadow .22s;position:relative;overflow:hidden}
+.camp-card:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(0,0,0,.1)}
+.camp-card.obligatoriu{border-top:4px solid}
+.cc1{background:#E8F4F8;border-color:#9FE1CB}.cc1.obligatoriu{border-top-color:var(--teal)}
+.cc2{background:var(--gold3);border-color:#FAC775}.cc2.obligatoriu{border-top-color:var(--gold)}
+.cc3{background:var(--orange2);border-color:#F5C4B3}.cc3.obligatoriu{border-top-color:var(--orange)}
+.cc4{background:var(--red2);border-color:#F7C1C1}.cc4.obligatoriu{border-top-color:var(--red)}
+.cc5{background:var(--green2);border-color:#C0DD97}.cc5.obligatoriu{border-top-color:var(--green)}
+.cc6{background:var(--purple2);border-color:#CECBF6}.cc6.obligatoriu{border-top-color:var(--purple)}
+.cc7{background:#E8F4F8;border-color:#B5D4F4}.cc7.obligatoriu{border-top-color:var(--teal2)}
+.cc8{background:var(--g2);border-color:var(--g3)}.cc8.obligatoriu{border-top-color:var(--g4)}
+.camp-num{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;margin-bottom:.3rem;display:block}
+.cc1 .camp-num{color:var(--teal)}.cc2 .camp-num{color:var(--gold)}.cc3 .camp-num{color:var(--orange)}
+.cc4 .camp-num{color:var(--red)}.cc5 .camp-num{color:var(--green)}.cc6 .camp-num{color:var(--purple)}
+.cc7 .camp-num{color:var(--teal2)}.cc8 .camp-num{color:var(--g5)}
+.camp-title{font-size:.84rem;font-weight:700;margin-bottom:.25rem;line-height:1.3}
+.cc1 .camp-title{color:var(--teal)}.cc2 .camp-title{color:var(--gold)}.cc3 .camp-title{color:var(--orange)}
+.cc4 .camp-title{color:var(--red)}.cc5 .camp-title{color:var(--green)}.cc6 .camp-title{color:var(--purple)}
+.cc7 .camp-title{color:var(--teal2)}.cc8 .camp-title{color:var(--g5)}
+.camp-format{font-family:monospace;font-size:.68rem;color:var(--g4);margin-bottom:.35rem}
+.camp-moment{font-size:.73rem;color:var(--g5);line-height:1.4}
+.camp-detail{max-height:0;overflow:hidden;transition:max-height .35s,opacity .3s;opacity:0;font-size:.75rem;color:var(--g5);line-height:1.5;margin-top:0}
+.camp-card.open .camp-detail{max-height:150px;opacity:1;margin-top:.5rem}
+.camp-hint{font-size:.65rem;color:var(--g4);margin-top:.35rem}
+
+/* JURNAL DEMO — exemplu saptamana */
+.demo-section{background:var(--navy);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.demo-title{font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem}
+.demo-sub{font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1.25rem}
+.demo-week{display:grid;grid-template-columns:repeat(7,1fr);gap:.5rem;margin-bottom:1rem}
+@media(max-width:650px){.demo-week{grid-template-columns:repeat(4,1fr)}}
+.day-card{background:rgba(255,255,255,.07);border-radius:8px;padding:.65rem .5rem;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:all .2s}
+.day-card:hover{background:rgba(255,255,255,.12)}
+.day-card.active{background:rgba(10,126,164,.3);border-color:var(--teal2)}
+.day-name{font-size:.65rem;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:.25rem}
+.day-sleep{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:.1rem}
+.day-energy{font-size:.7rem;color:rgba(255,255,255,.6)}
+.s-low{color:#F09595}.s-mid{color:var(--gold2)}.s-high{color:#5DCAA5}
+.day-detail{background:rgba(255,255,255,.06);border-radius:10px;padding:1rem 1.15rem;border:1px solid rgba(255,255,255,.1);font-size:.8rem;color:rgba(255,255,255,.8);line-height:1.65;display:none}
+.day-detail.active{display:block}
+
+/* BASELINE vs INTERVENTIE chart */
+.chart-section{margin-bottom:1.5rem}
+.chart-card{background:var(--white);border-radius:14px;padding:1.5rem;border:1px solid var(--g3)}
+
+/* BIASURI COGNITIVE */
+.biasuri-section{margin-bottom:1.5rem}
+.biasuri-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+@media(max-width:580px){.biasuri-grid{grid-template-columns:1fr}}
+.bias{border-radius:10px;padding:1.1rem;border:1px solid;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.bias.b1{background:#E8F4F8;border-color:#9FE1CB}.bias.b2{background:var(--orange2);border-color:#F5C4B3}
+.bias.b3{background:var(--purple2);border-color:#CECBF6}.bias.b4{background:var(--green2);border-color:#C0DD97}
+.bias-title{font-size:.87rem;font-weight:700;margin-bottom:.3rem}
+.b1 .bias-title{color:var(--teal)}.b2 .bias-title{color:var(--orange)}.b3 .bias-title{color:var(--purple)}.b4 .bias-title{color:var(--green)}
+.bias-body{font-size:.77rem;color:var(--g5);line-height:1.5}
+
+/* TRACKING UTIL vs OBSESIV */
+.compare-section{margin-bottom:1.5rem}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1rem 0}
+@media(max-width:580px){.compare-grid{grid-template-columns:1fr}}
+.cmp-card{border-radius:14px;padding:1.25rem;border:1px solid}
+.cmp-card.util{background:var(--green2);border-color:#C0DD97;border-top:4px solid var(--green)}
+.cmp-card.obsesiv{background:var(--red2);border-color:#F7C1C1;border-top:4px solid var(--red)}
+.cmp-title{font-size:.9rem;font-weight:700;margin-bottom:.75rem;display:flex;align-items:center;gap:.45rem}
+.util .cmp-title{color:var(--green)}.obsesiv .cmp-title{color:var(--red)}
+.cmp-items{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.cmp-items li{font-size:.79rem;line-height:1.5;padding-left:1.15rem;position:relative;color:var(--g5)}
+.cmp-items li::before{position:absolute;left:0;font-size:.75rem;top:.07em}
+.util .cmp-items li::before{content:'✓';color:var(--green)}.obsesiv .cmp-items li::before{content:'✗';color:var(--red)}
+
+/* REVIEW 5 PASI */
+.review-section{background:var(--g1);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;border:1px solid var(--g3)}
+.review-steps{display:flex;flex-direction:column;gap:.75rem;margin:1rem 0}
+.rstep{display:grid;grid-template-columns:52px 1fr;gap:1rem;background:var(--white);border-radius:10px;padding:.9rem 1.1rem;border:1px solid var(--g3);box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.rnum{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;flex-shrink:0}
+.rstep:nth-child(1) .rnum{background:#E8F4F8;color:var(--teal)}.rstep:nth-child(2) .rnum{background:var(--orange2);color:var(--orange)}
+.rstep:nth-child(3) .rnum{background:var(--green2);color:var(--green)}.rstep:nth-child(4) .rnum{background:var(--purple2);color:var(--purple)}
+.rstep:nth-child(5) .rnum{background:var(--gold3);color:var(--gold)}
+.rtitle{font-size:.9rem;font-weight:700;margin-bottom:.2rem}
+.rstep:nth-child(1) .rtitle{color:var(--teal)}.rstep:nth-child(2) .rtitle{color:var(--orange)}
+.rstep:nth-child(3) .rtitle{color:var(--green)}.rstep:nth-child(4) .rtitle{color:var(--purple)}.rstep:nth-child(5) .rtitle{color:var(--gold)}
+.rbody{font-size:.8rem;color:var(--g5);line-height:1.55}
+.rtime{font-family:monospace;font-size:.68rem;color:var(--g4);margin-bottom:.25rem}
+
+/* KPI */
+.kpi-section{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:14px;padding:2rem;margin-bottom:1.5rem;border-left:5px solid var(--teal)}
+.kpi-tag{font-family:monospace;font-size:.68rem;font-weight:600;color:var(--teal2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.75rem;display:block}
+.kpi-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:.6rem;font-weight:700}
+.kpi-items{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.kpi-items li{font-size:.88rem;color:rgba(255,255,255,.85);display:flex;gap:.65rem;align-items:baseline;line-height:1.5}
+.kpi-arrow{font-size:.75rem;color:var(--teal2);flex-shrink:0}
+
+.footer-info{text-align:center;padding:1rem;font-size:.75rem;color:var(--g4)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fi0{opacity:0;animation:fadeUp .55s ease forwards}.fi1{animation-delay:.05s}.fi2{animation-delay:.15s}.fi3{animation-delay:.25s}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header fi0 fi1">
+    <div class="header-tag">Biohacking 3.0 · Modul 2 · Lecția 2.1</div>
+    <h1>Jurnalul de <em>biohacking</em></h1>
+    <p class="header-sub">De la intuiție la date. 8 câmpuri. 14 zile de baseline. 15 minute de review săptămânal. Instrumentul central al oricărui protocol.</p>
+    <div class="header-stats">
+      <div><div class="hstat-n">8</div><div class="hstat-l">Câmpuri obligatorii</div></div>
+      <div><div class="hstat-n">14 zile</div><div class="hstat-l">Durata optimă baseline</div></div>
+      <div><div class="hstat-n">15 min</div><div class="hstat-l">Review săptămânal</div></div>
+      <div><div class="hstat-n">6</div><div class="hstat-l">Greșeli frecvente de evitat</div></div>
+    </div>
+  </div>
+
+  <!-- DE CE DATE -->
+  <div class="biasuri-section fi0 fi1">
+    <span class="section-label">De ce datele înlocuiesc intuiția</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">4 biasuri cognitive care sabotează auto-evaluarea</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Fără jurnal, toate concluziile despre propria biologie sunt sistematic inexacte.</div>
+    <div class="biasuri-grid">
+      <div class="bias b1"><div class="bias-title">Memoria selectivă</div><div class="bias-body">Ne amintim zilele bune mai ușor. Efectul de vârf-final (Kahneman): ne amintim apogeul și finalul, nu media. Pacient cu „somn bun" → scor mediu 4,2/10 pe 14 zile.</div></div>
+      <div class="bias b2"><div class="bias-title">Efectul de recență</div><div class="bias-body">Starea de azi influențează evaluarea întregii săptămâni. O zi bună de vineri → „în general merge bine". O zi proastă de luni → toată săptămâna pare proastă.</div></div>
+      <div class="bias b3"><div class="bias-title">Biasul de confirmare</div><div class="bias-body">Dacă credem că un supliment funcționează, interpretăm orice zi bună ca dovadă. Ignorăm sau justificăm zilele proaste cu alte cauze.</div></div>
+      <div class="bias b4"><div class="bias-title">Hawthorne Effect</div><div class="bias-body">Conștientizarea că suntem monitorizați modifică comportamentul. Jurnalul consistent calibrează acest efect — după 14 zile, comportamentul revine la natural.</div></div>
+    </div>
+  </div>
+
+  <!-- CAMPURILE JURNALULUI -->
+  <div class="fi0 fi2">
+    <span class="section-label">Structura completă</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Cele 8 câmpuri obligatorii</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Constanța bate completitudinea. <em>Apasă pe fiecare câmp pentru detalii.</em></div>
+    <div class="campuri-grid">
+      <div class="camp-card cc1 obligatoriu" onclick="toggleCamp(this)">
+        <span class="camp-num">01</span>
+        <div class="camp-title">Data și ora</div>
+        <div class="camp-format">ZZ/LL/AAAA · HH:MM</div>
+        <div class="camp-moment">Dimineața, la trezire</div>
+        <div class="camp-detail">Fixată aceeași oră zilnic — o alarmă în telefon elimină uitarea. Marchează momentul înregistrării, nu al evenimentului.</div>
+        <div class="camp-hint">↓ click pentru detalii</div>
+      </div>
+      <div class="camp-card cc2 obligatoriu" onclick="toggleCamp(this)">
+        <span class="camp-num">02</span>
+        <div class="camp-title">Scor somn (1–10)</div>
+        <div class="camp-format">Număr întreg</div>
+        <div class="camp-moment">Imediat la trezire — înainte de cafea</div>
+        <div class="camp-detail">Cafeina modifică percepția energetică în 15 minute. Scorul trebuie înregistrat înainte de orice stimulant. Reflectă calitatea percepută a somnului, nu durata.</div>
+        <div class="camp-hint">↓ click pentru detalii</div>
+      </div>
+      <div class="camp-card cc3 obligatoriu" onclick="toggleCamp(this)">
+        <span class="camp-num">03</span>
+        <div class="camp-title">Energie la ora 11</div>
+        <div class="camp-format">Număr întreg (1–10)</div>
+        <div class="camp-moment">La ora 11:00 fix · Alarmă recomandată</div>
+        <div class="camp-detail">Ora 11 este fereastra metabolică relevantă — suficient de departe de trezire și de masa de prânz. Alarmă de telefon elimină uitarea.</div>
+        <div class="camp-hint">↓ click pentru detalii</div>
+      </div>
+      <div class="camp-card cc4 obligatoriu" onclick="toggleCamp(this)">
+        <span class="camp-num">04</span>
+        <div class="camp-title">Stres perceput</div>
+        <div class="camp-format">Număr întreg (1–10)</div>
+        <div class="camp-moment">Seara, retrospectiv</div>
+        <div class="camp-detail">Media percepției zilei, nu momentul de vârf. Înregistrat seara pentru a include întreg contextul zilei. Cel mai predictiv câmp pentru calitatea somnului nocturn.</div>
+        <div class="camp-hint">↓ click pentru detalii</div>
+      </div>
+      <div class="camp-card cc5 obligatoriu" onclick="toggleCamp(this)">
+        <span class="camp-num">05</span>
+        <div class="camp-title">Intervenția aplicată</div>
+        <div class="camp-format">Da/Nu + Detalii</div>
+        <div class="camp-moment">Dimineața sau seara</div>
+        <div class="camp-detail">Notezi: a fost aplicată intervenția? La ce oră? Ce doză? Ce formă? Fără această precizie, câmpul 7 (metrica) nu poate fi interpretat corect.</div>
+        <div class="camp-hint">↓ click pentru detalii</div>
+      </div>
+      <div class="camp-card cc6 obligatoriu" onclick="toggleCamp(this)">
+        <span class="camp-num">06</span>
+        <div class="camp-title">Variabile confundante</div>
+        <div class="camp-format">Simboluri / Text scurt</div>
+        <div class="camp-moment">Seara — cel mai important câmp</div>
+        <div class="camp-detail">Alcool (da/nu), exercițiu intens (da/nu), boală, eveniment stresant major. Fără câmpul 6, orice concluzie poate fi invalidată de un factor extern neînregistrat.</div>
+        <div class="camp-hint">↓ click pentru detalii</div>
+      </div>
+      <div class="camp-card cc7 obligatoriu" onclick="toggleCamp(this)">
+        <span class="camp-num">07</span>
+        <div class="camp-title">Metrica N=1 activă</div>
+        <div class="camp-format">Număr sau Da/Nu</div>
+        <div class="camp-moment">La momentul relevant</div>
+        <div class="camp-detail">Specifică per protocol activ. Dacă experimentezi cu magneziul pentru somn — câmpul 7 este același scor de somn din câmpul 2, dar urmărit ca metrică primară a experimentului.</div>
+        <div class="camp-hint">↓ click pentru detalii</div>
+      </div>
+      <div class="camp-card cc8 obligatoriu" onclick="toggleCamp(this)">
+        <span class="camp-num">08</span>
+        <div class="camp-title">Note libere</div>
+        <div class="camp-format">Text · Max. 2 rânduri</div>
+        <div class="camp-moment">Seara</div>
+        <div class="camp-detail">Observații relevante care nu se pot încadra în câmpurile 1–7. Corelații intuitive, simptome noi, modificări notabile. Maximum 2 rânduri — nu un jurnal narativ.</div>
+        <div class="camp-hint">↓ click pentru detalii</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEMO SAPTAMANA -->
+  <div class="demo-section fi0 fi2">
+    <span class="section-label" style="color:rgba(255,255,255,.5)">Jurnal demonstrativ interactiv</span>
+    <div class="demo-title">O săptămână completată — pattern-uri emergente</div>
+    <div class="demo-sub">Apasă pe fiecare zi pentru detaliile zilei. Observă corelațiile vizibile.</div>
+    <div class="demo-week">
+      <div class="day-card active" onclick="showDay(this,'dl')"><div class="day-name">Lun</div><div class="day-sleep s-mid">6/10</div><div class="day-energy">E: 6</div></div>
+      <div class="day-card" onclick="showDay(this,'dm')"><div class="day-name">Mar</div><div class="day-sleep s-high">8/10</div><div class="day-energy">E: 8</div></div>
+      <div class="day-card" onclick="showDay(this,'dm2')"><div class="day-name">Mie</div><div class="day-sleep s-low">4/10</div><div class="day-energy">E: 5</div></div>
+      <div class="day-card" onclick="showDay(this,'dj')"><div class="day-name">Joi</div><div class="day-sleep s-mid">7/10</div><div class="day-energy">E: 7</div></div>
+      <div class="day-card" onclick="showDay(this,'dv')"><div class="day-name">Vin</div><div class="day-sleep s-high">7/10</div><div class="day-energy">E: 8</div></div>
+      <div class="day-card" onclick="showDay(this,'ds')"><div class="day-name">Sâm</div><div class="day-sleep s-high">8/10</div><div class="day-energy">E: 9</div></div>
+      <div class="day-card" onclick="showDay(this,'dd')"><div class="day-name">Dum</div><div class="day-sleep s-mid">7/10</div><div class="day-energy">E: 7</div></div>
+    </div>
+    <div id="dl" class="day-detail active">🗓 <b>Luni</b> · Somn: 6 · Energie 11h: 6 · Stres: 6 · Mg glicinat ✓ · <span style="color:#F09595">Confundante: weekend cu orar neregulat, ora culcare 01:30</span> · Note: social jet lag → scor mai mic tipic luni.</div>
+    <div id="dm" class="day-detail">🗓 <b>Marți</b> · Somn: 8 · Energie 11h: 8 · Stres: 4 · Mg glicinat ✓ · Confundante: exercițiu Zona 2 dimineața 45 min · Note: <span style="color:#5DCAA5">corelație pozitivă exercițiu matinal → energie mai bună</span>.</div>
+    <div id="dm2" class="day-detail">🗓 <b>Miercuri</b> · Somn: 4 · Energie 11h: 5 · Stres: 8 · Mg glicinat ✓ · <span style="color:#F09595">Confundante: 2 pahare vin marți seara, ședință dificilă</span> · Note: alcoolul și stresul combinate → cel mai slab somn al săptămânii.</div>
+    <div id="dj" class="day-detail">🗓 <b>Joi</b> · Somn: 7 · Energie 11h: 7 · Stres: 5 · Mg glicinat ✓ · Confundante: fără · Note: revenire normală după miercuri.</div>
+    <div id="dv" class="day-detail">🗓 <b>Vineri</b> · Somn: 7 · Energie 11h: 8 · Stres: 4 · Mg glicinat ✓ · Confundante: exercițiu Zona 2 dimineața · Note: <span style="color:#5DCAA5">pattern confirmat: exercițiu matinal → energie la 11 cu 1–2 puncte mai mare</span>.</div>
+    <div id="ds" class="day-detail">🗓 <b>Sâmbătă</b> · Somn: 8 · Energie 11h: 9 · Stres: 2 · Mg glicinat ✓ · Confundante: fără presiune · Note: ziua cea mai bună — stres minim + fără alcool + exercițiu vineri.</div>
+    <div id="dd" class="day-detail">🗓 <b>Duminică</b> · Somn: 7 · Energie 11h: 7 · Stres: 3 · Mg glicinat ✓ · Review: <b>Media somn: 6,7 · Media energie: 7,1 · Media stres: 4,6</b> · Concluzie acționabilă: adaug exercițiu matinal miercuri pentru a evita ziua slabă.</div>
+  </div>
+
+  <!-- CHART BASELINE vs INTERVENTIE -->
+  <div class="chart-section fi0 fi2">
+    <span class="section-label">Puterea baseline-ului</span>
+    <div class="chart-card">
+      <div style="font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Scorul de somn: baseline vs. intervenție (exemplu magneziu 21 zile)</div>
+      <div style="font-size:.8rem;color:var(--g4);margin-bottom:1rem">Fără baseline (săptămânile 1–2), delta nu poate fi calculat. Delta în exemplu: +1,8 puncte față de medie baseline.</div>
+      <div style="position:relative;height:220px"><canvas id="bsChart"></canvas></div>
+      <div style="display:flex;gap:1.5rem;margin-top:.75rem;font-size:.75rem;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:.4rem"><span style="width:18px;height:3px;background:var(--g4);border-radius:2px;display:inline-block;opacity:.5"></span>Baseline (fără intervenție)</span>
+        <span style="display:flex;align-items:center;gap:.4rem"><span style="width:18px;height:3px;background:var(--teal);border-radius:2px;display:inline-block"></span>Intervenție activă (Mg glicinat 400mg)</span>
+        <span style="display:flex;align-items:center;gap:.4rem"><span style="width:18px;height:3px;background:var(--gold);border-radius:2px;display:inline-block;border-style:dashed"></span>Media baseline (referință)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRACKING UTIL VS OBSESIV -->
+  <div class="compare-section fi0 fi3">
+    <span class="section-label">Distincția critică</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.85rem">Tracking util vs. tracking obsesiv</div>
+    <div class="compare-grid">
+      <div class="cmp-card util">
+        <div class="cmp-title">✓ Tracking util</div>
+        <ul class="cmp-items">
+          <li>1–2 verificări wearable per zi</li>
+          <li>Scor „prost" = informație → notezi confundante</li>
+          <li>Mănânci bazat pe foame și program</li>
+          <li>Datele sunt instrumente, nu identitate</li>
+          <li>Scopul: înțelegerea sistemului</li>
+          <li>Jurnalul servește bunăstarea</li>
+        </ul>
+      </div>
+      <div class="cmp-card obsesiv">
+        <div class="cmp-title">✗ Tracking obsesiv</div>
+        <ul class="cmp-items">
+          <li>20+ verificări wearable pe zi</li>
+          <li>Scor „prost" → anxietate și vină</li>
+          <li>Incapacitatea de a mânca fără înregistrare</li>
+          <li>Scorurile determină starea emoțională</li>
+          <li>Scopul: controlul compulsiv al parametrilor</li>
+          <li>Bunăstarea servește jurnalul</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEW 15 MIN -->
+  <div class="review-section fi0 fi3">
+    <span class="section-label">Duminică seara · 15 minute</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Review-ul săptămânal structurat</div>
+    <div style="font-size:.8rem;color:var(--g5);margin-bottom:.85rem">Cei 5 pași care transformă datele brute în decizii acționabile.</div>
+    <div class="review-steps">
+      <div class="rstep"><div class="rnum">1</div><div><div class="rtime">3 min</div><div class="rtitle">Media săptămânii</div><div class="rbody">Media aritmetică per câmp numeric. Un rând de sinteză săptămânală în jurnal.</div></div></div>
+      <div class="rstep"><div class="rnum">2</div><div><div class="rtime">3 min</div><div class="rtitle">Delta față de săptămâna trecută</div><div class="rbody">Compari media curentă cu media precedentă. Delta cumulat pe 4 săptămâni = efectul real al intervenției.</div></div></div>
+      <div class="rstep"><div class="rnum">3</div><div><div class="rtime">3 min</div><div class="rtitle">Ziua cea mai bună vs. cea mai slabă</div><div class="rbody">Ce le-a diferențiat? Câmpul 6 (confundante) oferă de obicei răspunsul. Pattern-urile emergente sunt mai valoroase decât metrica principală.</div></div></div>
+      <div class="rstep"><div class="rnum">4</div><div><div class="rtime">3 min</div><div class="rtitle">Validarea variabilelor confundante</div><div class="rbody">Există confundante care explică variația? Dacă da — delta săptămânii este mai puțin relevantă pentru concluzia N=1.</div></div></div>
+      <div class="rstep"><div class="rnum">5</div><div><div class="rtime">3 min</div><div class="rtitle">O decizie acționabilă</div><div class="rbody">Nu un eseu — o singură decizie concretă. Ex: „Adaug exercițiu matinal miercuri" sau „Elimin cafeina după 14:00 weekend."</div></div></div>
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-section fi0 fi3">
+    <span class="kpi-tag">⬡ KPI lecția 2.1 — Baseline personal</span>
+    <div class="kpi-title">14 zile de baseline — punctul zero al programului</div>
+    <ul class="kpi-items">
+      <li><span class="kpi-arrow">→</span>Alegi formatul jurnalului (print A5, Excel sau Notion)</li>
+      <li><span class="kpi-arrow">→</span>Completezi câmpurile 1–7 în primele 3 zile după această lecție</li>
+      <li><span class="kpi-arrow">→</span>La finalul zilei 7 efectuezi primul review săptămânal de 15 minute</li>
+      <li><span class="kpi-arrow">→</span>La finalul zilei 14 calculezi baseline-ul personal complet</li>
+      <li><span class="kpi-arrow">→</span>Identifici câmpul cu scorul minim față de 10 — prioritatea de intervenție</li>
+    </ul>
+  </div>
+
+  <div class="footer-info">
+    <strong>Biohacking 3.0 · Modul 2 · Lecția 2.1</strong> · dr.ing. Radu Pascu · NUTRISIB Sibiu · 2025<br>
+    Surse: Attia (2023) Outlive; Kahneman (2011) Thinking Fast and Slow; Lillie (2011) BMJ; Walker (2017) Why We Sleep
+  </div>
+</div>
+
+<script>
+function toggleCamp(el){
+  const open=el.classList.contains('open');
+  document.querySelectorAll('.camp-card').forEach(c=>c.classList.remove('open'));
+  if(!open)el.classList.add('open');
+}
+
+function showDay(card, id){
+  document.querySelectorAll('.day-card').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.day-detail').forEach(d=>d.classList.remove('active'));
+  card.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+// Chart baseline vs interventie
+const days=Array.from({length:35},(_,i)=>`Z${i+1}`);
+const baseline=Array.from({length:14},()=>+(4.5+Math.random()*2.5).toFixed(1));
+const intervention=Array.from({length:21},(_,i)=>+(5.5+i*0.08+Math.random()*1.5).toFixed(1));
+const allData=[...baseline,...intervention];
+const baselineMean=baseline.reduce((a,b)=>a+b,0)/baseline.length;
+
+new Chart(document.getElementById('bsChart'),{
+  type:'line',
+  data:{
+    labels:days,
+    datasets:[
+      {label:'Scor somn',data:allData,borderColor:['#9A9088'].concat(Array(14).fill('#9A9088')).concat(Array(21).fill('#0A7EA4')),backgroundColor:'transparent',
+       segment:{borderColor:ctx=>ctx.p0DataIndex<14?'#9A9088':'#0A7EA4'},
+       borderWidth:2.5,tension:.35,pointRadius:3,pointHoverRadius:5,fill:false},
+      {label:'Media baseline',data:Array(35).fill(baselineMean),borderColor:'#C8920A',borderWidth:1.5,borderDash:[5,5],pointRadius:0,fill:false},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{title:v=>'Ziua '+v[0].label.replace('Z',''),label:v=>v.dataset.label+': '+v.parsed.y}}
+    },
+    scales:{
+      x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:10},color:'#9A9088',maxTicksLimit:10}},
+      y:{min:1,max:10,grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:10},color:'#9A9088'},
+         title:{display:true,text:'Scor somn (1–10)',font:{size:10},color:'#9A9088'}}
+    },
+    annotation:{
+      annotations:{baseline:{type:'box',xMin:0,xMax:14,backgroundColor:'rgba(154,144,136,.05)',borderWidth:0}}
+    }
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M2 · L2.2 — HRV și wearables | Biohacking 3.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#1a1410}::-webkit-scrollbar-thumb{background:#0A7EA4;border-radius:3px}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;--teal:#0A7EA4;--teal2:#13A0CC;
+  --gold:#C8920A;--gold2:#E8AE1A;--cream:#FAF7F2;--warm:#F2EDE4;
+  --white:#FFFFFF;--g1:#F0EBE3;--g2:#DDD6CC;--g3:#9A9088;--g4:#5A5248;
+  --dark:#1E1810;--green:#1A6B3C;--red:#B83030;--orange:#C85A0A;--purple:#5B3FA6;
+  --serif:'DM Serif Display',serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+  --r:10px;--sh1:0 2px 16px rgba(15,30,60,.08);--sh2:0 6px 32px rgba(15,30,60,.14);--tr:all .22s cubic-bezier(.4,0,.2,1)
+}
+body{font-family:var(--sans);background:var(--cream);color:var(--dark);line-height:1.7;-webkit-font-smoothing:antialiased}
+.lesson-wrap{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+@media(max-width:900px){.lesson-wrap{grid-template-columns:1fr}}
+.sidebar{background:var(--navy);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;scrollbar-width:none}
+.sidebar::-webkit-scrollbar{display:none}
+@media(max-width:900px){.sidebar{position:relative;height:auto}}
+.sb-brand{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand-logo{font-family:var(--mono);font-size:.72rem;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;display:block;margin-bottom:.35rem}
+.brand-course{font-size:.78rem;color:rgba(255,255,255,.45);line-height:1.4}
+.sb-nav{padding:.75rem 0;flex:1}
+.nav-lbl{font-family:var(--mono);font-size:.62rem;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;padding:.9rem 1.25rem .35rem}
+.nav-l{display:flex;align-items:center;gap:.65rem;padding:.55rem 1.25rem;text-decoration:none;transition:var(--tr);border-left:2px solid transparent}
+.nav-l:hover{background:rgba(255,255,255,.05)}
+.nav-l.active{background:rgba(10,126,164,.18);border-left-color:var(--teal2)}
+.nav-l.done .nav-l-num::after{content:' ✓';color:var(--green)}
+.nav-l-num{font-family:var(--mono);font-size:.65rem;color:var(--teal2);min-width:24px}
+.nav-l-title{font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.35}
+.nav-l.active .nav-l-title{color:var(--white)}
+.sb-prog{padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.08)}
+.prog-lbl{font-family:var(--mono);font-size:.62rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
+.prog-bar{height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;width:23.3%;background:linear-gradient(90deg,var(--teal),var(--gold2));border-radius:2px;transition:width .6s ease}
+.prog-txt{font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.35);margin-top:.4rem}
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{background:var(--white);border-bottom:1px solid var(--g1);padding:.75rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:50;box-shadow:var(--sh1);flex-wrap:wrap}
+.topbar-bc{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--g3)}
+.topbar-bc a{color:var(--teal);text-decoration:none}
+.topbar-bc span{color:var(--g2)}
+.topbar-meta{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
+.meta-chip{display:flex;align-items:center;gap:.35rem;font-family:var(--mono);font-size:.7rem;color:var(--g4)}
+.meta-chip svg{width:13px;height:13px}
+.btn-done{background:var(--teal);color:var(--white);font-family:var(--sans);font-size:.8rem;font-weight:600;padding:.45rem 1.1rem;border-radius:6px;border:none;cursor:pointer;transition:var(--tr);white-space:nowrap}
+.btn-done:hover{background:var(--teal2)}.btn-done.done{background:var(--green)}
+.read-meta{display:flex;align-items:center;gap:1.5rem;padding:.75rem 2rem;background:var(--warm);border-bottom:1px solid var(--g1);font-family:var(--mono);font-size:.7rem;color:var(--g3);flex-wrap:wrap}
+.read-meta a{color:var(--teal);text-decoration:none}
+.hero{background:var(--navy);
+  background-image:radial-gradient(ellipse 60% 55% at 80% 35%,rgba(10,126,164,.3) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 45% at 5% 75%,rgba(91,63,166,.15) 0%,transparent 55%);
+  padding:3rem 2rem 2.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.015) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.015) 40px)}
+.hero-inner{max-width:820px;position:relative;animation:fadeUp .6s ease both}
+.hero-ey{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.68rem;color:var(--teal2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}
+.hero-ey::before{content:'';width:20px;height:1px;background:var(--teal2)}
+.hero h1{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.4rem);color:var(--white);line-height:1.2;margin-bottom:.75rem;font-weight:400}
+.hero h1 em{font-style:italic;color:var(--teal2)}
+.hero-desc{font-size:.95rem;color:rgba(255,255,255,.6);max-width:580px;line-height:1.65;margin-bottom:1.5rem}
+.hero-tags{display:flex;gap:.65rem;flex-wrap:wrap}
+.hero-tag{font-family:var(--mono);font-size:.67rem;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.15);padding:.2rem .65rem;border-radius:99px}
+.hero-tag.hl{color:var(--teal2);border-color:rgba(13,156,200,.4)}
+.vid-sec{padding:2rem;background:var(--white);border-bottom:1px solid var(--g1)}
+.vid-wrap{background:var(--navy);border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;max-height:480px;display:flex;align-items:center;justify-content:center}
+.vid-ph{display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center;padding:2rem}
+.play-btn{width:72px;height:72px;border-radius:50%;background:rgba(10,126,164,.3);border:2px solid rgba(10,126,164,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--tr)}
+.play-btn:hover{background:rgba(10,126,164,.55);transform:scale(1.08)}
+.play-btn svg{width:28px;height:28px;fill:white;margin-left:4px}
+.vid-ph p{font-size:.85rem;color:rgba(255,255,255,.5)}.vp-hint{font-family:var(--mono);font-size:.68rem;color:var(--teal2)}
+.vid-wrap iframe,.vid-wrap video{width:100%;height:100%;border:none}
+.obj-box{background:var(--white);border:1px solid var(--g1);border-radius:var(--r);padding:1.5rem;margin-bottom:2.5rem;box-shadow:var(--sh1)}
+.obj-hdr{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+.obj-hdr svg{width:16px;height:16px;color:var(--teal);flex-shrink:0}
+.obj-lbl{font-family:var(--mono);font-size:.68rem;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.obj-list{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.obj-list li{display:flex;align-items:flex-start;gap:.75rem;font-size:.9rem;color:var(--dark);line-height:1.55}
+.obj-ck{width:18px;height:18px;border-radius:50%;background:var(--teal);color:white;font-size:.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem}
+.eyebrow{font-family:var(--mono);font-size:.67rem;color:var(--teal);letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:.4rem}
+.s-h2{font-family:var(--serif);font-size:1.65rem;color:var(--navy);font-weight:400;line-height:1.25;margin-bottom:.75rem}
+.s-h3{font-family:var(--serif);font-size:1.15rem;color:var(--navy);font-weight:400;line-height:1.3;margin-bottom:.5rem;margin-top:1.5rem}
+.p{font-size:.94rem;color:var(--g4);line-height:1.75;margin-bottom:.75rem}
+.p strong{color:var(--dark)}.p em{color:var(--navy);font-style:italic}
+.div{height:1px;background:linear-gradient(90deg,var(--teal),transparent);margin:2.5rem 0;opacity:.35}
+.callout{border-radius:var(--r);padding:1.25rem 1.5rem;margin:1.25rem 0;border-left:4px solid}
+.callout.teal{background:#EAF6FB;border-color:var(--teal)}.callout.gold{background:#FEF8E8;border-color:var(--gold)}
+.callout.green{background:#EAF4EE;border-color:var(--green)}.callout.red{background:#FDEAEA;border-color:var(--red)}
+.callout.orange{background:#FEF2E8;border-color:var(--orange)}.callout.navy{background:var(--navy);border-color:var(--gold)}
+.callout-lbl{font-family:var(--mono);font-size:.65rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.callout.teal .callout-lbl{color:var(--teal)}.callout.gold .callout-lbl{color:var(--gold)}
+.callout.green .callout-lbl{color:var(--green)}.callout.red .callout-lbl{color:var(--red)}
+.callout.orange .callout-lbl{color:var(--orange)}.callout.navy .callout-lbl{color:var(--gold2)}
+.callout p{font-size:.9rem;line-height:1.65;margin-bottom:.35rem}.callout p:last-child{margin-bottom:0}
+.callout.navy p{color:rgba(255,255,255,.75)}.callout strong{color:var(--dark)}.callout.navy strong{color:#fff}
+.body{padding:2.5rem 2rem 4rem;max-width:860px}
+/* HRV GAUGE INTERACTIV */
+.hrv-gauge-wrap{background:var(--navy);border-radius:var(--r);padding:1.5rem;margin:1.25rem 0;display:flex;flex-direction:column;align-items:center}
+.hrv-gauge-title{font-family:var(--mono);font-size:.72rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+.hrv-slider-wrap{width:100%;max-width:500px;margin-bottom:1.25rem}
+.hrv-slider-wrap input{width:100%}
+.hrv-display{display:flex;flex-direction:column;align-items:center;gap:.35rem}
+.hrv-value{font-family:var(--serif);font-size:3rem;font-weight:700;line-height:1;transition:color .3s}
+.hrv-label{font-size:.85rem;font-weight:600;transition:color .3s}
+.hrv-action{font-size:.8rem;color:rgba(255,255,255,.55);text-align:center;max-width:400px;line-height:1.5;margin-top:.5rem}
+.hrv-zones{display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap;justify-content:center}
+.hrv-zone{font-size:.7rem;font-weight:600;padding:.25rem .75rem;border-radius:99px;cursor:pointer;transition:var(--tr)}
+/* WEARABLES TABLE */
+.tbl-wrap{overflow-x:auto;margin:1.25rem 0;border-radius:var(--r);box-shadow:var(--sh1)}
+.dtbl{width:100%;border-collapse:collapse;font-size:.875rem}
+.dtbl th{background:var(--navy);color:var(--white);font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.75rem 1rem;text-align:left}
+.dtbl td{padding:.75rem 1rem;border-bottom:1px solid var(--g1);color:var(--dark);vertical-align:top;line-height:1.55}
+.dtbl tr:last-child td{border-bottom:none}.dtbl tr:nth-child(even) td{background:var(--warm)}
+.dtbl .lbl{font-weight:700;color:var(--navy)}.dtbl .prec{font-family:var(--mono);font-size:.78rem;color:var(--green)}
+/* FACTORI */
+.factori-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.25rem 0}
+@media(max-width:600px){.factori-grid{grid-template-columns:1fr}}
+.factor-card{border-radius:var(--r);padding:1.1rem;border:1px solid;box-shadow:var(--sh1)}
+.factor-card.red{background:#FDEAEA;border-color:#F7C1C1;border-left:4px solid var(--red)}
+.factor-card.green{background:#EAF4EE;border-color:#C0DD97;border-left:4px solid var(--green)}
+.factor-title{font-size:.87rem;font-weight:700;margin-bottom:.3rem}
+.factor-card.red .factor-title{color:var(--red)}.factor-card.green .factor-title{color:var(--green)}
+.factor-body{font-size:.8rem;color:var(--g4);line-height:1.55}
+.factor-body strong{color:var(--dark)}
+/* ALCOOL BARS */
+.alcool-bars{display:flex;flex-direction:column;gap:.75rem;margin:1.25rem 0}
+.alcool-row{background:var(--white);border-radius:var(--r);padding:.85rem 1.1rem;border:1px solid var(--g2);box-shadow:var(--sh1)}
+.alcool-label{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.5rem}
+.alcool-label span:first-child{color:var(--dark);font-weight:600}
+.alcool-label span:last-child{font-family:var(--mono);font-size:.75rem;color:var(--red);font-weight:700}
+.alcool-track{height:12px;background:var(--g2);border-radius:6px;overflow:hidden}
+.alcool-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--orange),var(--red));width:0;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+/* RESPIRATIE */
+.resp-section{background:var(--navy);border-radius:var(--r);padding:1.5rem;margin:1.25rem 0}
+.resp-title{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.25rem}
+.resp-sub{font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1.1rem}
+.resp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:580px){.resp-grid{grid-template-columns:1fr}}
+.resp-card{background:rgba(255,255,255,.07);border-radius:8px;padding:1rem;border:1px solid rgba(255,255,255,.1)}
+.resp-name{font-size:.87rem;font-weight:700;color:var(--teal2);margin-bottom:.3rem}
+.resp-pattern{font-family:var(--mono);font-size:.72rem;color:var(--gold2);margin-bottom:.35rem}
+.resp-body{font-size:.78rem;color:rgba(255,255,255,.65);line-height:1.5}
+/* PROTOCOL */
+.protocol-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.25rem 0}
+@media(max-width:580px){.protocol-grid{grid-template-columns:1fr}}
+.proto-phase{border-radius:var(--r);padding:1.25rem;border:1px solid}
+.proto-phase.p1{background:#EAF6FB;border-color:#9FE1CB;border-top:4px solid var(--teal)}
+.proto-phase.p2{background:#EAF4EE;border-color:#C0DD97;border-top:4px solid var(--green)}
+.proto-phase-lbl{font-family:var(--mono);font-size:.68rem;color:var(--g3);margin-bottom:.4rem}
+.proto-phase.p1 .proto-phase-lbl{color:var(--teal)}.proto-phase.p2 .proto-phase-lbl{color:var(--green)}
+.proto-phase-title{font-size:.9rem;font-weight:700;margin-bottom:.65rem}
+.p1 .proto-phase-title{color:var(--teal)}.p2 .proto-phase-title{color:var(--green)}
+.proto-steps{list-style:none;display:flex;flex-direction:column;gap:.45rem}
+.proto-steps li{font-size:.82rem;color:var(--g4);line-height:1.5;padding-left:1.2rem;position:relative}
+.proto-steps li::before{content:'→';position:absolute;left:0;color:var(--teal);font-size:.78rem;top:.07em}
+.p2 .proto-steps li::before{color:var(--green)}
+.proto-steps li strong{color:var(--dark)}
+/* KPI BOX */
+.kpi-box{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:var(--r);padding:2rem;margin-top:2rem;border-left:5px solid var(--teal)}
+.kpi-lbl{font-family:var(--mono);font-size:.72rem;color:var(--teal2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}
+.kpi-box h3{font-family:var(--serif);font-size:1.3rem;color:var(--white);font-weight:400;margin-bottom:.75rem}
+.kpi-box .p-w{font-size:.88rem;color:rgba(255,255,255,.6);line-height:1.65;margin-bottom:1rem}
+.kpi-steps{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.kpi-steps li{font-size:.88rem;color:rgba(255,255,255,.85);display:flex;gap:.65rem;align-items:baseline;line-height:1.5}
+.kpi-n{font-family:var(--mono);font-size:.75rem;color:var(--teal2);flex-shrink:0;min-width:1.5rem}
+.bib-sec{background:var(--warm);border-top:1px solid var(--g1);padding:2rem}
+.bib-list{list-style:none;display:flex;flex-direction:column}
+.bib-list li{font-size:.8rem;color:var(--g4);line-height:1.6;padding:.5rem .75rem;border-bottom:1px solid var(--g1);display:grid;grid-template-columns:1.8rem 1fr;gap:.5rem;align-items:baseline}
+.bib-n{font-family:var(--mono);font-size:.68rem;color:var(--teal);font-weight:500}.bib-list li em{font-style:italic;color:var(--dark)}
+.lesson-nav{padding:1.5rem 2rem;background:var(--white);border-top:1px solid var(--g1);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.nav-btn{display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;color:var(--navy);text-decoration:none;padding:.65rem 1.25rem;border-radius:var(--r);border:1px solid var(--g2);transition:var(--tr);background:var(--white)}
+.nav-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--warm)}
+.nav-btn.primary{background:var(--teal);color:var(--white);border-color:var(--teal)}.nav-btn.primary:hover{background:var(--teal2)}
+.nav-btn svg{width:16px;height:16px}.nav-btn-lbl{font-size:.7rem;font-weight:400;color:var(--g3);display:block;margin-bottom:.1rem}.nav-btn.primary .nav-btn-lbl{color:rgba(255,255,255,.6)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.sidebar{display:none}.sidebar.open{display:flex;position:fixed;inset:0;z-index:200}}
+@media(min-width:901px){.mob-btn{display:none}}
+.mob-btn{background:none;border:1px solid var(--g2);padding:.4rem .8rem;border-radius:6px;cursor:pointer;font-family:var(--sans);font-size:.8rem;color:var(--navy);display:flex;align-items:center;gap:.4rem}
+</style>
+</head>
+<body>
+<div class="lesson-wrap">
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <a href="../index.html" class="brand-logo">NUTRISIB / BH3.0</a>
+      <div class="brand-course">Biohacking 3.0<br>Ingineria sistemului tău biologic</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="nav-lbl">Modul 1 — Mindset 3.0</div>
+      <a href="m1-l11.html" class="nav-l done"><span class="nav-l-num">1.1–1.5</span><span class="nav-l-title">Modul 1 — completat ✓</span></a>
+      <div class="nav-lbl" style="margin-top:.5rem">Modul 2 — Măsurare</div>
+      <a href="m2-l21.html" class="nav-l done"><span class="nav-l-num">2.1</span><span class="nav-l-title">Jurnalul de biohacking</span></a>
+      <a href="m2-l22.html" class="nav-l active"><span class="nav-l-num">2.2</span><span class="nav-l-title">HRV și wearables</span></a>
+      <a href="m2-l23.html" class="nav-l"><span class="nav-l-num">2.3</span><span class="nav-l-title">Markeri de laborator</span></a>
+      <a href="m2-l24.html" class="nav-l"><span class="nav-l-num">2.4</span><span class="nav-l-title">Interpretarea datelor</span></a>
+      <a href="m2-l25.html" class="nav-l"><span class="nav-l-num">2.5</span><span class="nav-l-title">Sistemul personal de tracking</span></a>
+      <div class="nav-lbl" style="margin-top:.5rem">Modulele 3–6</div>
+      <a href="#" class="nav-l" style="opacity:.25;pointer-events:none"><span class="nav-l-num">3–6</span><span class="nav-l-title">Se deblochează progresiv</span></a>
+    </nav>
+    <div class="sb-prog">
+      <div class="prog-lbl">Progres curs</div>
+      <div class="prog-bar"><div class="prog-fill" id="pFill"></div></div>
+      <div class="prog-txt" id="pTxt">7 / 30 lecții completate</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-bc">
+        <button class="mob-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰ Meniu</button>
+        <a href="../index.html">Biohacking 3.0</a><span>›</span><a href="#">Modul 2</a><span>›</span>
+        <span style="color:var(--dark);font-weight:500">Lecția 2.2</span>
+      </div>
+      <div class="topbar-meta">
+        <span class="meta-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>22 min</span>
+        <span class="meta-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>PDF inclus</span>
+        <button class="btn-done" id="doneBtn" onclick="markDone()">✓ Marchează completă</button>
+      </div>
+    </div>
+    <div class="read-meta">
+      <span>📖 ~14 min citire</span><span>🎬 ~22 min video</span>
+      <span>📥 <a href="BH30_M2_L22_Material_Curs.pdf">PDF curs</a></span>
+      <span>📄 <a href="BH30_M2_L22_Script_Video.pdf">Script video</a></span>
+    </div>
+
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-ey">Modul 2 · Lecția 2.2 · Măsurare fără obsesie</div>
+        <h1>HRV și <em>wearables</em></h1>
+        <p class="hero-desc">Variabilitatea frecvenței cardiace — cel mai valoros biomarker accesibil. Cum interpretezi datele corect: trending personal, nu valori absolute.</p>
+        <div class="hero-tags">
+          <span class="hero-tag hl">HRV rMSSD</span>
+          <span class="hero-tag">Trending personal</span>
+          <span class="hero-tag">Respirație diafragmatică</span>
+          <span class="hero-tag">Limitele wearables</span>
+          <span class="hero-tag">Protocol 30 zile</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="vid-sec">
+      <div class="vid-wrap" id="vWrap">
+        <div class="vid-ph">
+          <div class="play-btn" onclick="loadVid()"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+          <p>Lecția 2.2 — HRV și wearables</p>
+          <span class="vp-hint">Adaugă data-video-src="URL" pe #vWrap</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="body">
+      <div class="obj-box">
+        <div class="obj-hdr">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span class="obj-lbl">Obiective de învățare</span>
+        </div>
+        <ul class="obj-list">
+          <li><span class="obj-ck">✓</span>Explici ce este HRV și de ce este cel mai valoros biomarker accesibil</li>
+          <li><span class="obj-ck">✓</span>Interpretezi corect HRV-ul personal — trending personal, nu valori absolute</li>
+          <li><span class="obj-ck">✓</span>Cunoști limitele și erorile comune ale dispozitivelor wearable</li>
+          <li><span class="obj-ck">✓</span>Alegi wearable-ul potrivit obiectivului tău și bugetului</li>
+          <li><span class="obj-ck">✓</span>Integrezi datele HRV în jurnalul de biohacking fără a deveni obsesiv</li>
+          <li><span class="obj-ck">✓</span>Recunoști când HRV scăzut este semnal de acțiune vs. zgomot biologic</li>
+        </ul>
+      </div>
+
+      <!-- S1 Ce este HRV -->
+      <span class="eyebrow">Secțiunea 1</span>
+      <h2 class="s-h2">Ce este HRV și de ce contează</h2>
+      <p class="p">O inimă sănătoasă nu bate regulat — bate <em>variabil</em>. Intervalele dintre bătăi variază: 950 ms, 1.050 ms, 980 ms, 1.020 ms. Această variație este HRV-ul — și conține informații biologice critice.</p>
+
+      <div class="callout teal">
+        <div class="callout-lbl">⬡ Definiție și metrică</div>
+        <p><strong>rMSSD</strong> (root mean square of successive differences) — metrica standard. Exprimată în milisecunde. <strong>HRV ridicat</strong> = sistem nervos autonom flexibil, dominanță parasimpatică. <strong>HRV scăzut</strong> = SNA rigid sau suprasolicitat, dominanță simpatică cronică.</p>
+      </div>
+
+      <p class="p">HRV integrează informații din multiple sisteme biologice simultan: stres acut/cronic, calitatea somnului, recuperarea după exercițiu, statusul inflamator, statusul nutrițional. Shaffer & Ginsberg (2017): HRV este predictor puternic al sănătății cardiovasculare și mortalității de toate cauzele.</p>
+
+      <!-- Calculator HRV interactiv -->
+      <div class="hrv-gauge-wrap">
+        <div class="hrv-gauge-title">Calculator interpretare HRV personal</div>
+        <div style="display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;width:100%;max-width:500px;margin-bottom:1rem">
+          <div style="flex:1">
+            <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:.35rem;font-family:var(--mono)">Media ta personală (ms)</div>
+            <input type="range" min="15" max="100" value="50" id="meanSlider" style="width:100%" oninput="updateHRV()">
+            <div style="display:flex;justify-content:space-between;font-size:.65rem;color:rgba(255,255,255,.35);margin-top:.15rem"><span>15 ms</span><span id="meanVal" style="color:var(--gold2);font-weight:600">50 ms</span><span>100 ms</span></div>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:.35rem;font-family:var(--mono)">Valoarea de azi (ms)</div>
+            <input type="range" min="10" max="120" value="45" id="todaySlider" style="width:100%" oninput="updateHRV()">
+            <div style="display:flex;justify-content:space-between;font-size:.65rem;color:rgba(255,255,255,.35);margin-top:.15rem"><span>10 ms</span><span id="todayVal" style="color:var(--teal2);font-weight:600">45 ms</span><span>120 ms</span></div>
+          </div>
+        </div>
+        <div class="hrv-display">
+          <div class="hrv-value" id="hrvPct">90%</div>
+          <div class="hrv-label" id="hrvLabel" style="color:var(--teal2)">Zona normală</div>
+          <div class="hrv-action" id="hrvAction">Continuă planul de antrenament și protocolul curent.</div>
+        </div>
+        <div class="hrv-zones" style="margin-top:1rem">
+          <span style="font-size:.7rem;padding:.2rem .65rem;border-radius:99px;background:rgba(26,107,60,.3);color:#5DCAA5">&gt;110% — excelent</span>
+          <span style="font-size:.7rem;padding:.2rem .65rem;border-radius:99px;background:rgba(10,126,164,.3);color:var(--teal2)">90–110% — normal</span>
+          <span style="font-size:.7rem;padding:.2rem .65rem;border-radius:99px;background:rgba(200,146,10,.3);color:var(--gold2)">75–90% — atenție</span>
+          <span style="font-size:.7rem;padding:.2rem .65rem;border-radius:99px;background:rgba(184,48,48,.3);color:#F09595">&lt;75% — repaus</span>
+        </div>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S2 Instrumente -->
+      <span class="eyebrow">Secțiunea 2</span>
+      <h2 class="s-h2">Instrumente de măsurare — ghid de alegere</h2>
+      <p class="p">Regula C.E.L.O.S.: <strong>o măsurare consistentă cu o metodă simplă bate măsurări inconsistente cu metoda perfectă.</strong> Nu compara date între platforme diferite.</p>
+
+      <div class="tbl-wrap">
+        <table class="dtbl">
+          <thead><tr><th>Dispozitiv</th><th>Metodă</th><th>Precizie</th><th>Cost</th><th>Recomandat pentru</th></tr></thead>
+          <tbody>
+            <tr><td class="lbl">Centura Polar H10</td><td>ECG 1-derivație</td><td class="prec">95–98%</td><td>~100 USD</td><td>Precizie maximă, sportivi, N=1 riguros</td></tr>
+            <tr><td class="lbl">Oura Ring Gen 3+</td><td>PPG fotonic</td><td class="prec">85–92%</td><td>349 USD + abon.</td><td>Tracking nocturn, somn, discreție</td></tr>
+            <tr><td class="lbl">Garmin Fenix/Forerunner</td><td>PPG + GPS</td><td class="prec">80–90%</td><td>500–900 USD</td><td>Atleți, integrare antrenament GPS</td></tr>
+            <tr><td class="lbl">Whoop 4.0</td><td>PPG + algoritm recuperare</td><td class="prec">88–93%</td><td>30 USD/lună</td><td>Periodizare antrenament, coaching auto</td></tr>
+            <tr><td class="lbl">Apple Watch Series 9+</td><td>PPG + ECG manual</td><td class="prec">78–88%</td><td>400 USD</td><td>Ecosistem Apple, utilizare generală</td></tr>
+            <tr><td class="lbl">Aplicație telefon (HRV4Training)</td><td>Camera / senzor lumină</td><td class="prec">75–85%</td><td>0–15 USD/lună</td><td>Start fără hardware, buget limitat</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout orange">
+        <div class="callout-lbl">⚠ Limitele comune</div>
+        <p><strong>Artefacte de mișcare</strong> în somn → valori false. <strong>Algoritmi diferiți</strong> între platforme → nu compara. <strong>Precizie scăzută</strong> la FC &gt;160 BPM (PPG). <strong>Calibrare automată</strong> poate ascunde trending-ul real — exportă datele brute (rMSSD ms).</p>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S3 Factori -->
+      <span class="eyebrow">Secțiunea 3</span>
+      <h2 class="s-h2">Ce influențează HRV — factori acuți vs. cronici</h2>
+
+      <!-- Alcool bars -->
+      <h3 class="s-h3">Alcoolul — cel mai documentat supresor acut</h3>
+      <p class="p">Altini & Plews (2021) — 4.046 de nopți analizate cu Oura Ring. Efectul este sistematic și reproducibil.</p>
+
+      <div class="alcool-bars" id="alcoolBars">
+        <div class="alcool-row">
+          <div class="alcool-label"><span>1 băutură standard seara</span><span>−10 ms · −15%</span></div>
+          <div class="alcool-track"><div class="alcool-fill" data-w="15"></div></div>
+        </div>
+        <div class="alcool-row">
+          <div class="alcool-label"><span>2–3 băuturi</span><span>−17 ms · −25%</span></div>
+          <div class="alcool-track"><div class="alcool-fill" data-w="25"></div></div>
+        </div>
+        <div class="alcool-row">
+          <div class="alcool-label"><span>4+ băuturi</span><span>−22 ms · −35%</span></div>
+          <div class="alcool-track"><div class="alcool-fill" data-w="35"></div></div>
+        </div>
+      </div>
+
+      <div class="factori-grid">
+        <div class="factor-card red">
+          <div class="factor-title">Factori care scad HRV acut (24–72h)</div>
+          <div class="factor-body">Alcool · Somn insuficient (&lt;6h) · Exercițiu intens (HIIT, competiție) · Boală acută (răceală, gripă) · Stres acut major · Alimentație excesivă seara · Jet lag</div>
+        </div>
+        <div class="factor-card green">
+          <div class="factor-title">Factori care cresc HRV cronic (8–12 săpt.)</div>
+          <div class="factor-body"><strong>Zona 2</strong> (150+ min/săpt.) → +10–25% · <strong>Somn de calitate</strong> (ritm regulat) · <strong>Respirație diafragmatică</strong> zilnică · <strong>Ashwagandha + Mg</strong> (pilonul S C.E.L.O.S.) · <strong>Abstinența</strong> de la alcool → +10–20% în 30–60 zile</div>
+        </div>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S4 Respiratie -->
+      <span class="eyebrow">Secțiunea 4</span>
+      <h2 class="s-h2">Respirația diafragmatică și HRV</h2>
+      <p class="p">Intervenție acută cu efect măsurabil în minute. Sincronizează undele respiratorii cu variabilitatea cardiacă — aritmia sinusală respiratorie.</p>
+
+      <div class="resp-section">
+        <div class="resp-title">4 tehnici dovedite cu efect pe HRV</div>
+        <div class="resp-sub">Toate produc activare vagală directă, cu mecanisme ușor diferite</div>
+        <div class="resp-grid">
+          <div class="resp-card">
+            <div class="resp-name">Respirația rezonantă</div>
+            <div class="resp-pattern">↑ 5,5 sec → ↓ 5,5 sec · 5,5 resp/min</div>
+            <div class="resp-body">5–20 minute. Creștere HRV de 20–40% față de repaus în sesiune. Efect cumulat cronic cu practică zilnică. Lehrer & Gevirtz (2014).</div>
+          </div>
+          <div class="resp-card">
+            <div class="resp-name">Respirația 4-7-8</div>
+            <div class="resp-pattern">↑ 4 sec · retenție 7 sec · ↓ 8 sec</div>
+            <div class="resp-body">Activare vagală puternică. Recomandat pre-somn sau în momentele de stres acut. Expirul lung = stimulare parasimpatică.</div>
+          </div>
+          <div class="resp-card">
+            <div class="resp-name">Box breathing (4-4-4-4)</div>
+            <div class="resp-pattern">↑ 4 · pauza 4 · ↓ 4 · pauza 4 sec</div>
+            <div class="resp-body">Echilibrare rapidă simpatic/parasimpatic. Utilizat de Navy SEALs în condiții de stres extrem. Efect imediat și reproductibil.</div>
+          </div>
+          <div class="resp-card">
+            <div class="resp-name">NSDR / Yoga Nidra</div>
+            <div class="resp-pattern">10–20 min relaxare ghidată</div>
+            <div class="resp-body">Efecte comparabile cu somnul de 1h pe biomarkeri de stres. Restaurează capacitatea cognitivă și crește dopamina (Huberman, Stanford).</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S5 Obsesia -->
+      <span class="eyebrow">Secțiunea 5</span>
+      <h2 class="s-h2">Granița subțire dintre tracking și obsesie</h2>
+
+      <div class="callout red">
+        <div class="callout-lbl">⚠ Semnale de alarmă specifice HRV/wearable</div>
+        <p>Verifici wearable-ul de &gt;3 ori pe zi · Anulezi activități planificate exclusiv pe baza scorului, fără a consulta cum te simți · Anxietate sau vinovăție la un scor scăzut · Vrei să „trucezi" scorul · Scorul determină starea emoțională a zilei.</p>
+        <p style="margin-top:.5rem"><strong>Principiul fundamental:</strong> datele confirmă sau infirmă percepția — nu o înlocuiesc. Dacă te simți bine dar HRV-ul e scăzut → identifici cauza acută din câmpul 6 al jurnalului. Cauza identificată → continui. Fără cauză → repaus ușor.</p>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S6 Protocol -->
+      <span class="eyebrow">Secțiunea 6</span>
+      <h2 class="s-h2">Protocol practic — primele 30 de zile cu HRV</h2>
+
+      <div class="protocol-grid">
+        <div class="proto-phase p1">
+          <div class="proto-phase-lbl">Zilele 1–14 · Baseline HRV</div>
+          <div class="proto-phase-title">Acumulezi date, nu interpretezi</div>
+          <ul class="proto-steps">
+            <li>Dimineața, imediat la trezire, înainte de cafea</li>
+            <li>5 minute culcat în repaus complet</li>
+            <li>Notezi valoarea <strong>rMSSD în ms</strong> în jurnal</li>
+            <li>Nu interpreta zilnic — acumulezi</li>
+            <li>La ziua 14: calculezi <strong>media personală</strong></li>
+          </ul>
+        </div>
+        <div class="proto-phase p2">
+          <div class="proto-phase-lbl">Zilele 15–30 · Tracking activ</div>
+          <div class="proto-phase-title">Trending față de media ta</div>
+          <ul class="proto-steps">
+            <li>Compari fiecare zi cu media personală</li>
+            <li>Calculezi % față de medie</li>
+            <li>Corelezi cu <strong>câmpul 6</strong> din jurnal</li>
+            <li>Acționezi la <strong>tendințe 3+ zile</strong>, nu la valori punctuale</li>
+            <li>Verifici aplicația <strong>o singură dată</strong> pe zi — dimineața</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- KPI -->
+      <div class="kpi-box">
+        <div class="kpi-lbl">⬡ KPI lecția 2.2</div>
+        <h3>Baseline HRV personal — 14 zile</h3>
+        <p class="p-w">La finalul celor 14 zile vei cunoaște prima ta referință HRV personală și primul pattern corelat cu câmpul 6 din jurnal.</p>
+        <ul class="kpi-steps">
+          <li><span class="kpi-n">→</span>Alegi instrumentul de măsurare (centura Polar, Oura, Garmin sau aplicație telefon)</li>
+          <li><span class="kpi-n">→</span>Măsori HRV dimineața pentru 14 zile consecutive — protocolul de baseline</li>
+          <li><span class="kpi-n">→</span>Notezi valoarea rMSSD (ms) în câmpul opțional din jurnal</li>
+          <li><span class="kpi-n">→</span>La ziua 14 calculezi media personală și identifici primul pattern corelat</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bib-sec">
+      <span class="eyebrow" style="margin-bottom:.6rem">Bibliografie — lecția 2.2</span>
+      <ul class="bib-list">
+        <li><span class="bib-n">[1]</span><span>Shaffer, F. & Ginsberg, J.P. (2017). An Overview of Heart Rate Variability Metrics and Norms. <em>Front Public Health</em>, 5, 258.</span></li>
+        <li><span class="bib-n">[2]</span><span>Altini, M. & Plews, D. (2021). What is behind changes in resting HRV? <em>Sensors</em>, 21(22), 7544.</span></li>
+        <li><span class="bib-n">[3]</span><span>Malik, M., et al. (2018). Heart rate variability. Standards of measurement. <em>Eur Heart J</em>, 12(9).</span></li>
+        <li><span class="bib-n">[4]</span><span>Walker, M. (2017). <em>Why We Sleep.</em> Scribner.</span></li>
+        <li><span class="bib-n">[5]</span><span>Lehrer, P.M. & Gevirtz, R. (2014). Heart rate variability biofeedback. <em>Front Psychol</em>, 5, 756.</span></li>
+        <li><span class="bib-n">[6]</span><span>Task Force of ESC & NASPE (1996). Heart Rate Variability: Standards. <em>Circulation</em>, 93(5).</span></li>
+      </ul>
+    </div>
+
+    <div class="lesson-nav">
+      <a href="m2-l21.html" class="nav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        <div><span class="nav-btn-lbl">Lecția anterioară</span>2.1 — Jurnalul de biohacking</div>
+      </a>
+      <div style="text-align:center;font-family:var(--mono);font-size:.68rem;color:var(--g3)">Lecția 2 din 5 · Modul 2</div>
+      <a href="m2-l23.html" class="nav-btn primary">
+        <div style="text-align:right"><span class="nav-btn-lbl">Lecția următoare</span>2.3 — Markeri de laborator</div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+function updateHRV(){
+  const mean=parseInt(document.getElementById('meanSlider').value);
+  const today=parseInt(document.getElementById('todaySlider').value);
+  document.getElementById('meanVal').textContent=mean+' ms';
+  document.getElementById('todayVal').textContent=today+' ms';
+  const pct=Math.round((today/mean)*100);
+  document.getElementById('hrvPct').textContent=pct+'%';
+  const v=document.getElementById('hrvValue');
+  let color,label,action;
+  if(pct>110){color='#5DCAA5';label='Recuperare excelentă';action='Poți crește intensitatea antrenamentului. Ceva funcționează bine — verifică ce a fost diferit în ultimele 48h.';}
+  else if(pct>=90){color='var(--teal2)';label='Zona normală';action='Continuă planul de antrenament și protocolul curent. Totul este în ordine.';}
+  else if(pct>=75){color='var(--gold2)';label='Atenție — verifică jurnalul';action='Verifică câmpul 6 din jurnal. Cauza acută identificată → continuă cu intensitate redusă. Fără cauză → activitate ușoară.';}
+  else{color='#F09595';label='Semnal de alarmă — repaus';action='Repaus obligatoriu. Dacă HRV-ul rămâne <75% timp de 3+ zile fără cauza identificată → consultul medical.';}
+  document.getElementById('hrvPct').style.color=color;
+  document.getElementById('hrvLabel').style.color=color;
+  document.getElementById('hrvLabel').textContent=label;
+  document.getElementById('hrvAction').textContent=action;
+}
+updateHRV();
+
+// Animate alcool bars
+const aIO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.alcool-fill').forEach(b=>{b.style.width=b.dataset.w+'%';});
+      aIO.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+aIO.observe(document.getElementById('alcoolBars'));
+
+function markDone(){
+  const b=document.getElementById('doneBtn');const d=b.classList.toggle('done');
+  b.textContent=d?'✓ Completat':'✓ Marchează completă';
+  localStorage.setItem('bh30_m2_l22_done',d?'1':'0');
+  if(d){document.getElementById('pFill').style.width='30%';document.getElementById('pTxt').textContent='8 / 30 lecții completate';}
+}
+window.addEventListener('DOMContentLoaded',()=>{
+  if(localStorage.getItem('bh30_m2_l22_done')==='1'){const b=document.getElementById('doneBtn');b.classList.add('done');b.textContent='✓ Completat';}
+});
+function loadVid(){
+  const w=document.getElementById('vWrap'),src=w.dataset.videoSrc;
+  if(src){if(src.includes('youtube')||src.includes('youtu.be')){const id=src.split('v=')[1]||src.split('/').pop();w.innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" allow="autoplay;fullscreen" allowfullscreen style="width:100%;height:100%;border:none"></iframe>`;}
+  else if(src.includes('vimeo')){const id=src.split('/').pop();w.innerHTML=`<iframe src="https://player.vimeo.com/video/${id}?autoplay=1" allow="autoplay;fullscreen" allowfullscreen style="width:100%;height:100%;border:none"></iframe>`;}
+  else{w.innerHTML=`<video controls autoplay style="width:100%;height:100%"><source src="${src}" type="video/mp4"></video>`;}}
+  else{const h=w.querySelector('.vp-hint');if(h){h.style.color='var(--teal2)';setTimeout(()=>h.style.color='',1200);}}
+}
+</script>
+</body>
+</html>

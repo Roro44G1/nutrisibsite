@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infografic: Arhitectura experimentului personal sigur</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;
+  --teal:#0A7EA4;--teal2:#13A0CC;--teal3:#E1F5EE;
+  --gold:#C8920A;--gold2:#E8AE1A;--gold3:#FEF8E8;
+  --green:#1A6B3C;--green2:#EAF4EE;
+  --red:#B83030;--red2:#FDEAEA;
+  --orange:#C85A0A;--orange2:#FEF2E8;
+  --purple:#5B3FA6;--purple2:#F0EBF8;
+  --g1:#FAF7F2;--g2:#F2EDE4;--g3:#DDD6CC;--g4:#9A9088;--g5:#5A5248;
+  --white:#fff;
+}
+html{font-size:16px}
+body{font-family:'Inter',sans-serif;background:#F5F2EC;color:#1E1810;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 3rem}
+
+.header{text-align:center;padding:2.5rem 2rem;background:var(--navy);border-radius:16px;margin-bottom:2rem;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(26,107,60,.2),transparent 65%)}
+.header-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:600;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem;position:relative}
+.header-tag::before,.header-tag::after{content:'';width:24px;height:1px;background:var(--gold2)}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.4rem);font-weight:900;color:#fff;line-height:1.15;position:relative;margin-bottom:.75rem}
+.header h1 em{font-style:italic;color:#5DCAA5}
+.header-sub{font-size:.92rem;color:rgba(255,255,255,.6);position:relative;max-width:680px;margin:0 auto}
+.header-stats{display:flex;justify-content:center;gap:2.5rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);position:relative;flex-wrap:wrap}
+.hstat-n{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--gold2);line-height:1}
+.hstat-l{font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem}
+.section-label{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem;display:block}
+
+/* MATRICEA DE RISC — 3 coloane */
+.matrice-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;margin:1rem 0 1.5rem}
+@media(max-width:700px){.matrice-grid{grid-template-columns:1fr}}
+
+.zona{border-radius:14px;padding:1.5rem;border:1px solid;position:relative;overflow:hidden;transition:transform .22s,box-shadow .22s}
+.zona:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.1)}
+.zona.verde{background:var(--green2);border-color:#C0DD97;border-top:5px solid var(--green)}
+.zona.galben{background:var(--gold3);border-color:#FAC775;border-top:5px solid var(--gold)}
+.zona.rosu{background:var(--red2);border-color:#F7C1C1;border-top:5px solid var(--red)}
+.zona-badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:700;padding:.25rem .75rem;border-radius:99px;margin-bottom:.75rem}
+.verde .zona-badge{background:var(--green);color:#fff}
+.galben .zona-badge{background:var(--gold);color:#fff}
+.rosu .zona-badge{background:var(--red);color:#fff}
+.zona-title{font-size:1rem;font-weight:700;margin-bottom:.5rem;line-height:1.3}
+.verde .zona-title{color:var(--green)}
+.galben .zona-title{color:var(--gold)}
+.rosu .zona-title{color:var(--red)}
+.zona-action{font-size:.8rem;font-weight:600;padding:.35rem .75rem;border-radius:6px;margin-bottom:.75rem;display:inline-block}
+.verde .zona-action{background:var(--green2);color:var(--green);border:1px solid var(--green)}
+.galben .zona-action{background:var(--gold3);color:var(--gold);border:1px solid var(--gold2)}
+.rosu .zona-action{background:var(--red2);color:var(--red);border:1px solid #F7C1C1}
+.zona-items{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.zona-items li{font-size:.8rem;line-height:1.5;padding-left:1.2rem;position:relative;color:var(--g5)}
+.zona-items li::before{position:absolute;left:0;font-size:.75rem;top:.05em}
+.verde .zona-items li::before{content:'✓';color:var(--green)}
+.galben .zona-items li::before{content:'!';color:var(--gold);font-weight:700}
+.rosu .zona-items li::before{content:'✗';color:var(--red)}
+
+/* RED FLAGS */
+.rf-section{background:var(--red);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.rf-title{font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:.35rem}
+.rf-sub{font-size:.82rem;color:rgba(255,255,255,.6);margin-bottom:1.25rem}
+.rf-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+@media(max-width:580px){.rf-grid{grid-template-columns:1fr}}
+.rf-item{background:rgba(255,255,255,.1);border-radius:10px;padding:.85rem 1rem;border:1px solid rgba(255,255,255,.15);display:flex;align-items:flex-start;gap:.75rem}
+.rf-icon{font-size:1.2rem;flex-shrink:0;margin-top:.1rem}
+.rf-text{font-size:.82rem;color:rgba(255,255,255,.88);line-height:1.55}
+.rf-regula{background:rgba(255,255,255,.15);border-radius:10px;padding:1rem 1.25rem;margin-top:1rem;text-align:center;font-size:.9rem;font-weight:700;color:#fff;border:2px solid rgba(255,255,255,.3)}
+
+/* 6 ETAPE — timeline verticala */
+.etape-section{margin-bottom:1.5rem}
+.etape-timeline{position:relative;padding-left:48px;display:flex;flex-direction:column;gap:0;margin:1rem 0}
+.etape-timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:2px;background:var(--g3);border-radius:1px}
+.etapa-item{position:relative;margin-bottom:1rem}
+.etapa-item:last-child{margin-bottom:0}
+.etapa-dot{position:absolute;left:-38px;top:.85rem;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;border:2px solid;flex-shrink:0;background:#fff}
+.etapa-item:nth-child(1) .etapa-dot{border-color:var(--teal);color:var(--teal)}
+.etapa-item:nth-child(2) .etapa-dot{border-color:var(--orange);color:var(--orange)}
+.etapa-item:nth-child(3) .etapa-dot{border-color:var(--green);color:var(--green)}
+.etapa-item:nth-child(4) .etapa-dot{border-color:var(--teal);color:var(--teal)}
+.etapa-item:nth-child(5) .etapa-dot{border-color:var(--gold);color:var(--gold)}
+.etapa-item:nth-child(6) .etapa-dot{border-color:var(--purple);color:var(--purple)}
+.etapa-card{background:var(--white);border-radius:10px;padding:1rem 1.15rem;border:1px solid var(--g3);cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s}
+.etapa-card:hover{transform:translateX(3px);box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.etapa-item:nth-child(1) .etapa-card:hover,.etapa-item:nth-child(1) .etapa-card.open{border-color:var(--teal)}
+.etapa-item:nth-child(2) .etapa-card:hover,.etapa-item:nth-child(2) .etapa-card.open{border-color:var(--orange)}
+.etapa-item:nth-child(3) .etapa-card:hover,.etapa-item:nth-child(3) .etapa-card.open{border-color:var(--green)}
+.etapa-item:nth-child(4) .etapa-card:hover,.etapa-item:nth-child(4) .etapa-card.open{border-color:var(--teal)}
+.etapa-item:nth-child(5) .etapa-card:hover,.etapa-item:nth-child(5) .etapa-card.open{border-color:var(--gold)}
+.etapa-item:nth-child(6) .etapa-card:hover,.etapa-item:nth-child(6) .etapa-card.open{border-color:var(--purple)}
+.etapa-hdr{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem}
+.etapa-name{font-size:.92rem;font-weight:700}
+.etapa-item:nth-child(1) .etapa-name{color:var(--teal)}
+.etapa-item:nth-child(2) .etapa-name{color:var(--orange)}
+.etapa-item:nth-child(3) .etapa-name{color:var(--green)}
+.etapa-item:nth-child(4) .etapa-name{color:var(--teal)}
+.etapa-item:nth-child(5) .etapa-name{color:var(--gold)}
+.etapa-item:nth-child(6) .etapa-name{color:var(--purple)}
+.etapa-dur{font-family:monospace;font-size:.68rem;color:var(--g4);white-space:nowrap}
+.etapa-body{max-height:0;overflow:hidden;transition:max-height .35s,opacity .3s;opacity:0;font-size:.82rem;color:var(--g5);line-height:1.6;margin-top:0}
+.etapa-card.open .etapa-body{max-height:200px;opacity:1;margin-top:.6rem}
+.etapa-hint{font-size:.67rem;color:var(--g4);margin-top:.2rem}
+
+/* SCREENING 5 INTREBARI */
+.screening-section{margin-bottom:1.5rem}
+.sq-grid{display:flex;flex-direction:column;gap:.75rem;margin:1rem 0}
+.sq{border-radius:10px;padding:1rem 1.15rem;border:1px solid;display:flex;gap:.85rem;align-items:flex-start;cursor:pointer;transition:transform .2s}
+.sq:hover{transform:translateX(4px)}
+.sq.r{background:var(--red2);border-color:#F7C1C1;border-left:4px solid var(--red)}
+.sq.o{background:var(--orange2);border-color:#F5C4B3;border-left:4px solid var(--orange)}
+.sq.p{background:var(--purple2);border-color:#CECBF6;border-left:4px solid var(--purple)}
+.sq-n{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0}
+.r .sq-n{background:var(--red);color:#fff}
+.o .sq-n{background:var(--orange);color:#fff}
+.p .sq-n{background:var(--purple);color:#fff}
+.sq-q{font-size:.88rem;font-weight:700;margin-bottom:.2rem}
+.r .sq-q{color:var(--red)}.o .sq-q{color:var(--orange)}.p .sq-q{color:var(--purple)}
+.sq-a{font-size:.78rem;color:var(--g5);line-height:1.5}
+.sq-action{font-size:.72rem;font-weight:700;margin-top:.35rem;padding:.15rem .55rem;border-radius:99px;display:inline-block}
+.r .sq-action{background:var(--red2);color:var(--red);border:1px solid #F7C1C1}
+.o .sq-action{background:var(--orange2);color:var(--orange);border:1px solid #F5C4B3}
+.p .sq-action{background:var(--purple2);color:var(--purple);border:1px solid #CECBF6}
+
+/* JURNAL */
+.jurnal-section{background:var(--navy);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.jurnal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1rem}
+@media(max-width:700px){.jurnal-grid{grid-template-columns:repeat(2,1fr)}}
+.j-card{background:rgba(255,255,255,.07);border-radius:10px;padding:.9rem .85rem;border:1px solid rgba(255,255,255,.1);text-align:center}
+.j-icon{font-size:1.4rem;margin-bottom:.35rem;display:block}
+.j-title{font-size:.8rem;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:.2rem}
+.j-detail{font-size:.72rem;color:rgba(255,255,255,.5);line-height:1.45}
+
+/* SUPL TABLE */
+.supl-section{margin-bottom:1.5rem}
+.supl-rows{display:flex;flex-direction:column;gap:.75rem;margin:1rem 0}
+.supl-row{background:var(--white);border-radius:10px;padding:1rem 1.15rem;border:1px solid var(--g3);display:grid;grid-template-columns:150px 1fr auto;gap:1rem;align-items:start;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+@media(max-width:600px){.supl-row{grid-template-columns:1fr}}
+.supl-name{font-size:.9rem;font-weight:700;color:var(--navy)}
+.supl-form{font-size:.75rem;color:var(--teal);line-height:1.4}
+.supl-info{font-size:.79rem;color:var(--g5);line-height:1.55}
+.supl-info strong{color:var(--dark)}
+.supl-timing-badge{font-family:monospace;font-size:.7rem;color:var(--g4);background:var(--g2);padding:.2rem .55rem;border-radius:4px;white-space:nowrap;align-self:start}
+
+/* KPI FINAL */
+.kpi-section{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:14px;padding:2rem;margin-bottom:1.5rem;border-left:5px solid var(--gold)}
+.kpi-tag{font-family:monospace;font-size:.68rem;font-weight:600;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.75rem;display:block}
+.kpi-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:.6rem;font-weight:700}
+.kpi-desc{font-size:.84rem;color:rgba(255,255,255,.6);line-height:1.65;margin-bottom:1.25rem}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.checklist li{display:flex;align-items:baseline;gap:.75rem;font-size:.88rem;color:rgba(255,255,255,.85);line-height:1.5}
+.ck{font-size:.75rem;flex-shrink:0}
+.ck.done{color:#5DCAA5}.ck.next{color:var(--gold2)}
+
+.footer-info{text-align:center;padding:1rem;font-size:.75rem;color:var(--g4)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fi{opacity:0;animation:fadeUp .55s ease forwards}
+.fi1{animation-delay:.05s}.fi2{animation-delay:.15s}.fi3{animation-delay:.25s}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header fi fi1">
+    <div class="header-tag">Biohacking 3.0 · Modul 1 · Lecția 1.4</div>
+    <h1>Arhitectura experimentului <em>personal sigur</em></h1>
+    <p class="header-sub">Primum non nocere — mai întâi, nu face rău. Matricea de risc, red flags-urile biologice și cele 6 etape ale unui protocol complet.</p>
+    <div class="header-stats">
+      <div><div class="hstat-n">3 zone</div><div class="hstat-l">Matricea de risc verde / galben / roșu</div></div>
+      <div><div class="hstat-n">6 etape</div><div class="hstat-l">Protocol complet de biohacking sigur</div></div>
+      <div><div class="hstat-n">5 întrebări</div><div class="hstat-l">Screening obligatoriu înainte de orice protocol</div></div>
+      <div><div class="hstat-n">7 red flags</div><div class="hstat-l">Semnale de stop imediat non-negociabile</div></div>
+    </div>
+  </div>
+
+  <!-- MATRICEA DE RISC -->
+  <div class="fi fi2">
+    <span class="section-label">Primul instrument — verificarea obligatorie</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Matricea de risc a intervenției</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Verifici orice protocol nou față de această matrice. Dacă nu ești sigur — zona galbenă automat.</div>
+    <div class="matrice-grid">
+      <div class="zona verde">
+        <span class="zona-badge">✓ Zona verde</span>
+        <div class="zona-title">Poți experimenta direct cu structura N=1</div>
+        <span class="zona-action">Safe to self-experiment</span>
+        <ul class="zona-items">
+          <li>Modificări alimentare graduale</li>
+          <li>Optimizarea somnului (orar, temperatură, lumina)</li>
+          <li>Exercițiu moderat — Zona 2, mobilitate, yoga</li>
+          <li>Suplimente standard la doze fiziologice (Mg, Vit D, Zn)</li>
+          <li>Tehnici de management al stresului</li>
+          <li>Lumina naturală matinală · Hidratare</li>
+        </ul>
+      </div>
+      <div class="zona galben">
+        <span class="zona-badge">! Zona galbenă</span>
+        <div class="zona-title">Evaluare medicală prealabilă obligatorie</div>
+        <span class="zona-action">Consult medical înainte</span>
+        <ul class="zona-items">
+          <li>Suplimentare la doze farmacologice (Vit D &gt;5.000 UI/zi)</li>
+          <li>Restricție calorică semnificativă (&lt;1.500 kcal/zi)</li>
+          <li>Post intermitent extins (&gt;24 ore)</li>
+          <li>HIIT intens fără evaluare cardiacă</li>
+          <li>Saună sau crioterapie extreme</li>
+        </ul>
+      </div>
+      <div class="zona rosu">
+        <span class="zona-badge">✗ Zona roșie</span>
+        <div class="zona-title">Exclusiv sub supervizare medicală</div>
+        <span class="zona-action">Nu auto-experimentezi</span>
+        <ul class="zona-items">
+          <li>Modificări farmacologice (hormoni, peptide, medicamente)</li>
+          <li>Protocoale de detoxifiere agresive</li>
+          <li>Restricție proteică severă cu boli renale</li>
+          <li>Orice intervenție cu diagnostic activ neechilibrat</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- RED FLAGS -->
+  <div class="rf-section fi fi2">
+    <span class="section-label" style="color:rgba(255,255,255,.5)">Non-negociabil</span>
+    <div class="rf-title">Red flags — semnale de stop imediat</div>
+    <div class="rf-sub">Oprești orice protocol și consulți medicul dacă apare oricare din acestea</div>
+    <div class="rf-grid">
+      <div class="rf-item"><span class="rf-icon">💔</span><div class="rf-text">Durere toracică sau palpitații neobișnuite</div></div>
+      <div class="rf-item"><span class="rf-icon">😵</span><div class="rf-text">Amețeală severă sau pierderea echilibrului</div></div>
+      <div class="rf-item"><span class="rf-icon">👁</span><div class="rf-text">Modificări bruște ale vederii sau auzului</div></div>
+      <div class="rf-item"><span class="rf-icon">🧠</span><div class="rf-text">Simptome neurologice: amorțeală, slăbiciune focală, confuzie</div></div>
+      <div class="rf-item"><span class="rf-icon">⚖️</span><div class="rf-text">Scădere/creștere bruscă în greutate (&gt;5 kg în 2 săptămâni)</div></div>
+      <div class="rf-item"><span class="rf-icon">🌀</span><div class="rf-text">Modificări semnificative ale dispoziției sau comportamentului</div></div>
+      <div class="rf-item"><span class="rf-icon">⚠️</span><div class="rf-text">Orice simptom nou persistent după &gt;3 zile de la start</div></div>
+      <div class="rf-item"><span class="rf-icon">🩺</span><div class="rf-text">Îndoiala despre orice simptom nou — nu continua, consultă</div></div>
+    </div>
+    <div class="rf-regula">Regula de aur: îndoiala = stop și consultă. Niciun experiment nu valorează mai mult decât sănătatea ta imediată.</div>
+  </div>
+
+  <!-- CELE 6 ETAPE -->
+  <div class="etape-section fi fi2">
+    <span class="section-label">Structura obligatorie</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Cele 6 etape ale unui protocol complet</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Ordinea este non-negociabilă. Nu poți sări niciuna. <em>Apasă pe fiecare etapă pentru detalii.</em></div>
+    <div class="etape-timeline">
+      <div class="etapa-item">
+        <div class="etapa-dot">1</div>
+        <div class="etapa-card" onclick="toggleEtapa(this)">
+          <div class="etapa-hdr"><span class="etapa-name">Screening inițial</span><span class="etapa-dur">1 zi</span></div>
+          <div class="etapa-hint">↓ click pentru detalii</div>
+          <div class="etapa-body">Evaluarea stării de sănătate actuale. Răspuns la cele 5 întrebări de screening. Identificarea contraindicațiilor și verificarea interacțiunilor cu medicamentele actuale. Dacă răspunzi DA la oricare întrebare — consultul medical precedă biohacking-ul.</div>
+        </div>
+      </div>
+      <div class="etapa-item">
+        <div class="etapa-dot">2</div>
+        <div class="etapa-card" onclick="toggleEtapa(this)">
+          <div class="etapa-hdr"><span class="etapa-name">Definirea ipotezei</span><span class="etapa-dur">1 zi · Formularul N=1</span></div>
+          <div class="etapa-hint">↓ click pentru detalii</div>
+          <div class="etapa-body">Formularea în format standard: „Dacă [intervenție din zona verde], atunci [outcome măsurabil] va [crește/scădea] în [N] zile." Verificarea că intervenția se află în zona verde. Definirea planului de stop (red flags). Identificarea metricii măsurabile.</div>
+        </div>
+      </div>
+      <div class="etapa-item">
+        <div class="etapa-dot">3</div>
+        <div class="etapa-card" onclick="toggleEtapa(this)">
+          <div class="etapa-hdr"><span class="etapa-name">Stabilirea baseline-ului</span><span class="etapa-dur">7–14 zile</span></div>
+          <div class="etapa-hint">↓ click pentru detalii</div>
+          <div class="etapa-body">Minim 7 zile de înregistrare a metricii principale fără intervenție. Condiții cât mai stabile și reprezentative. Notarea variabilelor confundante în jurnal. Fără baseline nu ai comparație. Fără comparație nu ai experiment — ai o impresie.</div>
+        </div>
+      </div>
+      <div class="etapa-item">
+        <div class="etapa-dot">4</div>
+        <div class="etapa-card" onclick="toggleEtapa(this)">
+          <div class="etapa-hdr"><span class="etapa-name">Implementarea</span><span class="etapa-dur">minimum 21 zile</span></div>
+          <div class="etapa-hint">↓ click pentru detalii</div>
+          <div class="etapa-body">Intervenția singulară, zilnic, în aceleași condiții. Jurnalul zilnic non-negociabil: intervenție (da/nu), metrică, variabile confundante. Monitorizare continuă a red flags-urilor. O singură variabilă modificată — dacă introduci altceva, înregistrezi și notezi.</div>
+        </div>
+      </div>
+      <div class="etapa-item">
+        <div class="etapa-dot">5</div>
+        <div class="etapa-card" onclick="toggleEtapa(this)">
+          <div class="etapa-hdr"><span class="etapa-name">Măsurarea outcome-ului</span><span class="etapa-dur">min. 7 zile post-intervenție</span></div>
+          <div class="etapa-hint">↓ click pentru detalii</div>
+          <div class="etapa-body">Înregistrezi aceeași metrică ca în baseline, în aceleași condiții. Calculezi media perioadei de intervenție — nu alegi zilele bune. Notezi variabilele confundante care ar putea invalida comparația. Media totală, nu impresii selective.</div>
+        </div>
+      </div>
+      <div class="etapa-item">
+        <div class="etapa-dot">6</div>
+        <div class="etapa-card" onclick="toggleEtapa(this)">
+          <div class="etapa-hdr"><span class="etapa-name">Analiza și concluzia</span><span class="etapa-dur">1 zi · Delta = intervenție − baseline</span></div>
+          <div class="etapa-hint">↓ click pentru detalii</div>
+          <div class="etapa-body">Dacă delta &gt; pragul ipotezei: intervenția are efect pentru tine, în contextul tău actual. Dacă delta ≈ 0 sau negativ: nu înseamnă că nu funcționează în general — înseamnă că nu funcționează pentru tine acum. Și aceasta este o informație valoroasă, nu un eșec.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREENING 5 INTREBARI -->
+  <div class="screening-section fi fi3">
+    <span class="section-label">Etapa 1 — detalii</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Cele 5 întrebări de screening inițial</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">DA la oricare = consultul medical precedă biohacking-ul.</div>
+    <div class="sq-grid">
+      <div class="sq r">
+        <div class="sq-n">1</div>
+        <div><div class="sq-q">Am un diagnostic medical activ?</div>
+        <div class="sq-a">HTA, diabet, boli cardiovasculare, autoimune sau orice patologie activă. Consultul medical definește ce poți experimenta și în ce condiții.</div>
+        <span class="sq-action">→ Consult medical obligatoriu</span></div>
+      </div>
+      <div class="sq o">
+        <div class="sq-n">2</div>
+        <div><div class="sq-q">Iau medicamente prescrise?</div>
+        <div class="sq-a">Vitamina K2 + anticoagulante; St. John's Wort + antidepresive; zinc doze mari + antibiotice. Verifică interacțiunile cu farmacistul sau medicul prescriptor.</div>
+        <span class="sq-action">→ Verificare interacțiuni</span></div>
+      </div>
+      <div class="sq r">
+        <div class="sq-n">3</div>
+        <div><div class="sq-q">Am simptome neexplicate în ultimele 3 luni?</div>
+        <div class="sq-a">Durere cronică, oboseală inexplicabilă, modificări ale tranzitului. Diagnosticul prealabil este prioritar față de optimizare — nu masca simptome cu suplimente.</div>
+        <span class="sq-action">→ Diagnostic prealabil</span></div>
+      </div>
+      <div class="sq o">
+        <div class="sq-n">4</div>
+        <div><div class="sq-q">Sunt în sarcină sau alăptez?</div>
+        <div class="sq-a">Restricții semnificative pentru suplimente, post intermitent și antrenament intens. Consultanța medicală specializată este obligatorie pentru orice protocol.</div>
+        <span class="sq-action">→ Consultanță specializată</span></div>
+      </div>
+      <div class="sq p">
+        <div class="sq-n">5</div>
+        <div><div class="sq-q">Am istoric de tulburări alimentare?</div>
+        <div class="sq-a">Protocoalele cu restricție calorică sau monitorizarea intensivă a greutății necesită supervizare psihologică în paralel. Nu restricți caloric fără suport specializat.</div>
+        <span class="sq-action">→ Supervizare psihologică</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JURNALUL DE BIOHACKING -->
+  <div class="jurnal-section fi fi3">
+    <span class="section-label" style="color:var(--gold2)">Instrumentul central</span>
+    <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem">Jurnalul de biohacking — câmpuri obligatorii</div>
+    <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1rem">Zilnic, la aceeași oră. Fără jurnal = fără experiment. Template complet în Modulul 2.</div>
+    <div class="jurnal-grid">
+      <div class="j-card"><span class="j-icon">📅</span><div class="j-title">Data și ora</div><div class="j-detail">Zilnic, la aceeași oră — preferabil dimineața după trezire</div></div>
+      <div class="j-card"><span class="j-icon">📊</span><div class="j-title">Metrica principală</div><div class="j-detail">Valoarea numerică a outcome-ului experimentului tău</div></div>
+      <div class="j-card"><span class="j-icon">😴</span><div class="j-title">Scor somn (1–10)</div><div class="j-detail">Cât de odihnit te trezești — înregistrat imediat la trezire</div></div>
+      <div class="j-card"><span class="j-icon">⚡</span><div class="j-title">Energie la ora 11</div><div class="j-detail">Nivelul de energie în prima parte a zilei (1–10)</div></div>
+      <div class="j-card"><span class="j-icon">🌿</span><div class="j-title">Stres perceput</div><div class="j-detail">Nivelul mediu zilnic — retrospectiv seara (1–10)</div></div>
+      <div class="j-card"><span class="j-icon">✅</span><div class="j-title">Intervenția</div><div class="j-detail">Da/Nu + detalii: doză, oră, formă, condițiile aplicării</div></div>
+      <div class="j-card"><span class="j-icon">🔀</span><div class="j-title">Confundante</div><div class="j-detail">Alcool, exercițiu, stres acut, medicamente noi (da/nu)</div></div>
+      <div class="j-card"><span class="j-icon">📝</span><div class="j-title">Note libere</div><div class="j-detail">Maximum 2 rânduri de observații relevante</div></div>
+    </div>
+  </div>
+
+  <!-- SUPLIMENTE -->
+  <div class="supl-section fi fi3">
+    <span class="section-label">Principii de siguranță — suplimentare</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">5 suplimente din zona verde cu profil de siguranță documentat</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Forma chimică contează mai mult decât doza. Timing-ul cronobiologic este la fel de important ca substanța.</div>
+    <div class="supl-rows">
+      <div class="supl-row">
+        <div><div class="supl-name">Magneziu</div><div class="supl-form">Glicinat/bisglicinat (absorb. 50–80%) vs. oxid (4–5%)</div></div>
+        <div class="supl-info">300–400 mg seara, 30–60 min înainte de culcare. Profil de siguranță excelent. Somn + relaxare musculară + sensibilitate la insulină.</div>
+        <div class="supl-timing-badge">Seara · 21+ zile</div>
+      </div>
+      <div class="supl-row">
+        <div><div class="supl-name">Vitamina D3 + K2</div><div class="supl-form">D3 + K2 (mk-7) obligatoriu împreună</div></div>
+        <div class="supl-info">2.000–4.000 UI D3 dimineața cu grăsimi. K2 asigură distribuția calciului. <strong>Atenție:</strong> K2 + anticoagulante = consult medical.</div>
+        <div class="supl-timing-badge">Dimineața · Continuu</div>
+      </div>
+      <div class="supl-row">
+        <div><div class="supl-name">Zinc</div><div class="supl-form">Bisglicinat sau picolinat (biodisponibil. superioară față de sulfat)</div></div>
+        <div class="supl-info">15–25 mg cu masă (nu pe stomacul gol — greață). Nu depăși 40 mg/zi pe termen lung. Imunitate + testosteron + vindecare.</div>
+        <div class="supl-timing-badge">Cu masă · 8 săptămâni</div>
+      </div>
+      <div class="supl-row">
+        <div><div class="supl-name">Omega-3 (EPA/DHA)</div><div class="supl-form">Min. 1.000 mg EPA+DHA per capsulă (nu „ulei de pește" generic)</div></div>
+        <div class="supl-info">Cu masa principală (reduce refluxul). Efect anti-inflamator, TG reduse, sănătate cardiovasculară. <strong>Atenție:</strong> anticoagulante la doze mari.</div>
+        <div class="supl-timing-badge">Cu masă · Continuu</div>
+      </div>
+      <div class="supl-row">
+        <div><div class="supl-name">Ashwagandha</div><div class="supl-form">KSM-66 sau Sensoril — extracte standardizate cu studii</div></div>
+        <div class="supl-info">300–600 mg seara sau dimineața. Adaptogen pentru managementul cortizolului. <strong>Atenție:</strong> hipotiroidism — aviz medical. Ciclu de 8–12 săptămâni.</div>
+        <div class="supl-timing-badge">Seara · 8–12 săptămâni</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI FINAL -->
+  <div class="kpi-section fi fi3">
+    <span class="kpi-tag">⬡ KPI finalizare — Modul 1</span>
+    <div class="kpi-title">Ești echipat pentru primul protocol sigur</div>
+    <div class="kpi-desc">Modul 1 complet. Toate instrumentele fondatoare sunt în loc. Lecția 1.5 urmează cu sistemul C.E.L.O.S. — pilonul de suplimentare NUTRISIB.</div>
+    <ul class="checklist">
+      <li><span class="ck done">✓</span>Fișa de auto-evaluare inițială (L1.1) — baseline subiectiv 5 domenii</li>
+      <li><span class="ck done">✓</span>Formularul de ipoteză N=1 (L1.2) — primul experiment definit</li>
+      <li><span class="ck done">✓</span>Scorecard-ul funcțional (L1.3) — baseline obiectiv 5 teste</li>
+      <li><span class="ck next">→</span>Formularul de screening inițial (L1.4) — protocol verificat în zona verde</li>
+      <li><span class="ck next">◎</span>Sistemul C.E.L.O.S. (L1.5) — protocolul de suplimentare personalizat NUTRISIB</li>
+    </ul>
+  </div>
+
+  <div class="footer-info">
+    <strong>Biohacking 3.0 · Modul 1 · Lecția 1.4</strong> · dr.ing. Radu Pascu · NUTRISIB Sibiu · 2025<br>
+    Surse: Attia (2023) Outlive; Lillie (2011) BMJ; Vickers (2019) J Clin Epidemiol; Walker (2017) Why We Sleep
+  </div>
+</div>
+
+<script>
+function toggleEtapa(el){
+  const open=el.classList.contains('open');
+  document.querySelectorAll('.etapa-card').forEach(e=>e.classList.remove('open'));
+  if(!open)el.classList.add('open');
+}
+</script>
+</body>
+</html>

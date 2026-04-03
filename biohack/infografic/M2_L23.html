@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infografic: Markeri de laborator — Normal vs. Optim funcțional</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;
+  --teal:#0A7EA4;--teal2:#13A0CC;
+  --gold:#C8920A;--gold2:#E8AE1A;--gold3:#FEF8E8;
+  --green:#1A6B3C;--green2:#EAF4EE;
+  --red:#B83030;--red2:#FDEAEA;
+  --orange:#C85A0A;--orange2:#FEF2E8;
+  --purple:#5B3FA6;--purple2:#F0EBF8;
+  --g1:#FAF7F2;--g2:#F2EDE4;--g3:#DDD6CC;--g4:#9A9088;--g5:#5A5248;
+  --white:#fff;
+}
+html{font-size:16px}
+body{font-family:'Inter',sans-serif;background:#F5F2EC;color:#1E1810;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 3rem}
+.header{text-align:center;padding:2.5rem 2rem;background:var(--navy);border-radius:16px;margin-bottom:2rem;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 60% 40%,rgba(26,107,60,.22),transparent 60%)}
+.header-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:600;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem;position:relative}
+.header-tag::before,.header-tag::after{content:'';width:24px;height:1px;background:var(--gold2)}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.4rem);font-weight:900;color:#fff;line-height:1.15;position:relative;margin-bottom:.75rem}
+.header h1 em{font-style:italic;color:var(--gold2)}
+.header-sub{font-size:.9rem;color:rgba(255,255,255,.6);position:relative;max-width:680px;margin:0 auto}
+.header-stats{display:flex;justify-content:center;gap:2.5rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);position:relative;flex-wrap:wrap}
+.hstat-n{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--gold2);line-height:1}
+.hstat-l{font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem}
+.section-label{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem;display:block}
+
+/* GAUGE COMPARATOR interactiv */
+.gauge-section{background:var(--white);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem;border:1px solid var(--g3);box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.gauge-title{font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem}
+.gauge-sub{font-size:.8rem;color:var(--g4);margin-bottom:1.25rem}
+.gauge-selector{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.25rem}
+.g-btn{font-size:.78rem;font-weight:600;padding:.35rem .85rem;border-radius:99px;cursor:pointer;border:1px solid var(--g3);background:var(--white);color:var(--g5);transition:all .2s}
+.g-btn:hover{border-color:var(--teal);color:var(--teal)}
+.g-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.gauge-visual{margin-top:.75rem}
+.gauge-bar-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--g5);margin-bottom:.3rem}
+.gauge-bar-label strong{color:var(--navy)}
+.gauge-track{position:relative;height:24px;border-radius:12px;overflow:visible;margin-bottom:1rem}
+.gauge-zone-low{position:absolute;top:0;left:0;height:100%;background:var(--red2);border-radius:12px 0 0 12px;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--red);font-weight:600}
+.gauge-zone-ok{position:absolute;top:0;height:100%;background:var(--gold3);display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--gold);font-weight:600}
+.gauge-zone-opt{position:absolute;top:0;height:100%;background:var(--green2);display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--green);font-weight:600}
+.gauge-zone-high{position:absolute;top:0;right:0;height:100%;background:var(--orange2);border-radius:0 12px 12px 0;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--orange);font-weight:600}
+.gauge-pin{position:absolute;top:-6px;transform:translateX(-50%);z-index:10;cursor:pointer}
+.gauge-pin::before{content:'▼';font-size:.9rem;color:var(--navy)}
+.gauge-pin-label{position:absolute;top:-22px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:.7rem;font-weight:700;color:var(--navy);background:var(--white);padding:.1rem .4rem;border-radius:4px;border:1px solid var(--g3)}
+.gauge-axis{display:flex;justify-content:space-between;font-size:.65rem;color:var(--g4);font-family:monospace;margin-top:.2rem}
+.gauge-result{padding:.75rem 1rem;border-radius:8px;margin-top:.5rem;font-size:.84rem;line-height:1.6}
+.g-res-low{background:var(--red2);color:var(--red)}
+.g-res-ok{background:var(--gold3);color:var(--g5)}
+.g-res-opt{background:var(--green2);color:var(--green)}
+.g-res-high{background:var(--orange2);color:var(--orange)}
+
+/* COMPARATIE NORMAL vs OPTIM */
+.comparatie-section{margin-bottom:1.5rem}
+.comp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}
+@media(max-width:700px){.comp-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.comp-grid{grid-template-columns:1fr}}
+.comp-card{border-radius:12px;padding:1.1rem;border:1px solid;cursor:pointer;transition:transform .2s,box-shadow .2s;position:relative}
+.comp-card:hover{transform:translateY(-2px);box-shadow:0 5px 18px rgba(0,0,0,.09)}
+.comp-marker{font-size:.85rem;font-weight:700;color:var(--navy);margin-bottom:.5rem}
+.comp-row{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;padding:.2rem 0}
+.comp-lbl{color:var(--g4)}
+.comp-lab{color:var(--red);font-family:monospace;font-weight:600}
+.comp-opt{color:var(--green);font-family:monospace;font-weight:600}
+.comp-arrow{text-align:center;font-size:.9rem;padding:.2rem 0;color:var(--g3)}
+.comp-impact{font-size:.72rem;color:var(--g5);margin-top:.5rem;line-height:1.45;font-style:italic}
+
+/* HOMA-IR CALCULATOR */
+.homa-section{background:var(--navy2);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.homa-title{font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem}
+.homa-sub{font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1.25rem}
+.homa-inputs{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem}
+@media(max-width:500px){.homa-inputs{grid-template-columns:1fr}}
+.homa-field{display:flex;flex-direction:column;gap:.35rem}
+.homa-field label{font-size:.72rem;color:rgba(255,255,255,.6);font-family:monospace;text-transform:uppercase;letter-spacing:.1em}
+.homa-field input{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.65rem .85rem;font-size:.95rem;color:#fff;font-family:monospace;font-weight:600;outline:none;transition:border-color .2s}
+.homa-field input:focus{border-color:var(--teal2)}
+.homa-result{border-radius:10px;padding:1.1rem 1.25rem;text-align:center}
+.homa-num{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;line-height:1}
+.homa-interpretation{font-size:.84rem;margin-top:.35rem;font-weight:600}
+.homa-action{font-size:.78rem;margin-top:.4rem;opacity:.85}
+
+/* CHART "normal vs optim" radar */
+.radar-section{margin-bottom:1.5rem}
+.radar-card{background:var(--white);border-radius:14px;padding:1.5rem;border:1px solid var(--g3)}
+
+/* CITIRE 6 PASI */
+.pasi-section{margin-bottom:1.5rem}
+.pasi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}
+@media(max-width:650px){.pasi-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:400px){.pasi-grid{grid-template-columns:1fr}}
+.pas-card{border-radius:12px;padding:1.1rem;border:1px solid;box-shadow:0 2px 8px rgba(0,0,0,.05);cursor:default}
+.pas-card:nth-child(1){background:#E8F4F8;border-color:#9FE1CB;border-top:3px solid var(--teal)}
+.pas-card:nth-child(2){background:var(--orange2);border-color:#F5C4B3;border-top:3px solid var(--orange)}
+.pas-card:nth-child(3){background:var(--red2);border-color:#F7C1C1;border-top:3px solid var(--red)}
+.pas-card:nth-child(4){background:var(--purple2);border-color:#CECBF6;border-top:3px solid var(--purple)}
+.pas-card:nth-child(5){background:var(--gold3);border-color:#FAC775;border-top:3px solid var(--gold)}
+.pas-card:nth-child(6){background:var(--green2);border-color:#C0DD97;border-top:3px solid var(--green)}
+.pas-num-badge{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:.3rem;display:block}
+.pas-card:nth-child(1) .pas-num-badge{color:var(--teal)}.pas-card:nth-child(2) .pas-num-badge{color:var(--orange)}
+.pas-card:nth-child(3) .pas-num-badge{color:var(--red)}.pas-card:nth-child(4) .pas-num-badge{color:var(--purple)}
+.pas-card:nth-child(5) .pas-num-badge{color:var(--gold)}.pas-card:nth-child(6) .pas-num-badge{color:var(--green)}
+.pas-title{font-size:.84rem;font-weight:700;margin-bottom:.25rem}
+.pas-card:nth-child(1) .pas-title{color:var(--teal)}.pas-card:nth-child(2) .pas-title{color:var(--orange)}
+.pas-card:nth-child(3) .pas-title{color:var(--red)}.pas-card:nth-child(4) .pas-title{color:var(--purple)}
+.pas-card:nth-child(5) .pas-title{color:var(--gold)}.pas-card:nth-child(6) .pas-title{color:var(--green)}
+.pas-body{font-size:.74rem;color:var(--g5);line-height:1.5}
+
+/* PANEL CELOS */
+.celos-section{background:var(--navy);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.celos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem}
+@media(max-width:700px){.celos-grid{grid-template-columns:1fr 1fr}}
+.cl-card{background:rgba(255,255,255,.07);border-radius:10px;padding:.9rem 1rem;border:1px solid rgba(255,255,255,.1)}
+.cl-pilon{font-size:.82rem;font-weight:700;margin-bottom:.4rem}
+.cl-pilon.ct{color:var(--teal2)}.cl-pilon.ce{color:var(--gold2)}.cl-pilon.cl{color:#5DCAA5}
+.cl-pilon.co{color:var(--red)}.cl-pilon.cs{color:var(--purple2)}.cl-pilon.cf{color:var(--g3)}
+.cl-items{font-size:.74rem;color:rgba(255,255,255,.6);line-height:1.6}
+
+/* KPI */
+.kpi-section{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:14px;padding:2rem;margin-bottom:1.5rem;border-left:5px solid var(--green)}
+.kpi-tag{font-family:monospace;font-size:.68rem;font-weight:600;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.75rem;display:block}
+.kpi-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:.6rem}
+.kpi-items{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.kpi-items li{font-size:.88rem;color:rgba(255,255,255,.85);display:flex;gap:.65rem;align-items:baseline;line-height:1.5}
+.kpi-arrow{font-size:.75rem;color:var(--gold2);flex-shrink:0}
+
+.footer-info{text-align:center;padding:1rem;font-size:.75rem;color:var(--g4)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fi0{opacity:0;animation:fadeUp .55s ease forwards}.fi1{animation-delay:.05s}.fi2{animation-delay:.15s}.fi3{animation-delay:.25s}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header fi0 fi1">
+    <div class="header-tag">Biohacking 3.0 · Modul 2 · Lecția 2.3</div>
+    <h1>Markeri de laborator<br><em>Normal ≠ Optim funcțional</em></h1>
+    <p class="header-sub">Intervalele de referință sunt statistice, nu clinice. Optimizezi la valorile asociate cu funcția maximă — nu la media populației generale.</p>
+    <div class="header-stats">
+      <div><div class="hstat-n">5</div><div class="hstat-l">Markeri metabolici esențiali</div></div>
+      <div><div class="hstat-n">HOMA-IR</div><div class="hstat-l">Calculator interactiv inclus</div></div>
+      <div><div class="hstat-n">6 pași</div><div class="hstat-l">Protocol citire buletin</div></div>
+      <div><div class="hstat-n">90 zile</div><div class="hstat-l">Frecvența optimă reevaluare</div></div>
+    </div>
+  </div>
+
+  <!-- GAUGE COMPARATOR interactiv -->
+  <div class="gauge-section fi0 fi2">
+    <span class="section-label">Instrumentul de comparare interactiv</span>
+    <div class="gauge-title">Normal vs. optim funcțional — vizualizare pe scală</div>
+    <div class="gauge-sub">Selectează un marker și deplasează indicatorul pentru a vedea interpretarea C.E.L.O.S.</div>
+    <div class="gauge-selector" id="gaugeSelector">
+      <button class="g-btn active" onclick="setGauge(this,'vd',20,100,'ng/mL',50,70,'< 20 deficit sever','20–50 insuficient','50–70 optim C.E.L.O.S.','> 150 toxicitate')">Vitamina D</button>
+      <button class="g-btn" onclick="setGauge(this,'gl',60,130,'mg/dL',70,85,'< 70 hipoglicemie','85–100 precauție','70–85 optim C.E.L.O.S.','> 100 prediabet')">Glicemie</button>
+      <button class="g-btn" onclick="setGauge(this,'fe',5,200,'ng/mL',50,100,'< 12 deficit sever','12–50 suboptim','50–100 optim C.E.L.O.S.','> 200 risc suprasarcină')">Feritina</button>
+      <button class="g-btn" onclick="setGauge(this,'crp',0,5,'mg/L',0,1,'0 = normal','1–5 laborator normal','< 1 optim C.E.L.O.S.','> 5 inflamație semnificativă')">CRP hs</button>
+      <button class="g-btn" onclick="setGauge(this,'hcys',4,20,'µmol/L',4,8,'< 4 rar','8–15 laborator normal','< 8 optim C.E.L.O.S.','> 15 risc crescut')">Homocisteina</button>
+      <button class="g-btn" onclick="setGauge(this,'tsh',0.4,4,'mIU/L',1,2,'< 0.4 hipertiroidism','2–4 laborator normal','1–2 optim C.E.L.O.S.','> 4 hipotiroidism')">TSH</button>
+    </div>
+    <div id="gaugeDisplay"></div>
+  </div>
+
+  <!-- COMPARATIE NORMAL vs OPTIM -->
+  <div class="comparatie-section fi0 fi2">
+    <span class="section-label">Tabloul comparativ</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">6 markeri — decalajul normal vs. optim funcțional</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Coloana roșie = valorile validate de laborator ca „normale". Coloana verde = valorile asociate cu funcția maximă.</div>
+    <div class="comp-grid">
+      <div class="comp-card" style="background:#E8F4F8;border-color:#9FE1CB">
+        <div class="comp-marker">Vitamina D</div>
+        <div class="comp-row"><span class="comp-lbl">Normal lab:</span><span class="comp-lab">≥ 20 ng/mL</span></div>
+        <div class="comp-arrow">↓</div>
+        <div class="comp-row"><span class="comp-lbl">Optim C.E.L.O.S.:</span><span class="comp-opt">50–70 ng/mL</span></div>
+        <div class="comp-impact">La 20 ng/mL: risc crescut infecții, sarcopenie, osteoporoză</div>
+      </div>
+      <div class="comp-card" style="background:var(--orange2);border-color:#F5C4B3">
+        <div class="comp-marker">Feritina (femei)</div>
+        <div class="comp-row"><span class="comp-lbl">Normal lab:</span><span class="comp-lab">≥ 12 ng/mL</span></div>
+        <div class="comp-arrow">↓</div>
+        <div class="comp-row"><span class="comp-lbl">Optim C.E.L.O.S.:</span><span class="comp-opt">50–100 ng/mL</span></div>
+        <div class="comp-impact">La 20 ng/mL: oboseală cronică și căderea părului fără diagnostic</div>
+      </div>
+      <div class="comp-card" style="background:var(--green2);border-color:#C0DD97">
+        <div class="comp-marker">Glicemia a jeun</div>
+        <div class="comp-row"><span class="comp-lbl">Normal lab:</span><span class="comp-lab">&lt; 100 mg/dL</span></div>
+        <div class="comp-arrow">↓</div>
+        <div class="comp-row"><span class="comp-lbl">Optim C.E.L.O.S.:</span><span class="comp-opt">70–85 mg/dL</span></div>
+        <div class="comp-impact">La 95 mg/dL: insulina compensatorie crescută, rezistență la insulină precoce</div>
+      </div>
+      <div class="comp-card" style="background:var(--purple2);border-color:#CECBF6">
+        <div class="comp-marker">TSH tiroidian</div>
+        <div class="comp-row"><span class="comp-lbl">Normal lab:</span><span class="comp-lab">0,4–4,0 mIU/L</span></div>
+        <div class="comp-arrow">↓</div>
+        <div class="comp-row"><span class="comp-lbl">Optim C.E.L.O.S.:</span><span class="comp-opt">1,0–2,0 mIU/L</span></div>
+        <div class="comp-impact">La TSH 3,5: oboseală, frig cronic, creștere ponderală — cu „analize bune"</div>
+      </div>
+      <div class="comp-card" style="background:var(--red2);border-color:#F7C1C1">
+        <div class="comp-marker">CRP hs</div>
+        <div class="comp-row"><span class="comp-lbl">Normal lab:</span><span class="comp-lab">&lt; 5 mg/L</span></div>
+        <div class="comp-arrow">↓</div>
+        <div class="comp-row"><span class="comp-lbl">Optim C.E.L.O.S.:</span><span class="comp-opt">&lt; 1 mg/L</span></div>
+        <div class="comp-impact">La 3 mg/L: inflamație cronică de grad scăzut — risc CV, metabolic, cancer</div>
+      </div>
+      <div class="comp-card" style="background:var(--gold3);border-color:#FAC775">
+        <div class="comp-marker">Vitamina B12</div>
+        <div class="comp-row"><span class="comp-lbl">Normal lab:</span><span class="comp-lab">&gt; 200 pg/mL</span></div>
+        <div class="comp-arrow">↓</div>
+        <div class="comp-row"><span class="comp-lbl">Optim C.E.L.O.S.:</span><span class="comp-opt">&gt; 500 pg/mL</span></div>
+        <div class="comp-impact">La 250 pg/mL: neuropatie periferică și deficit cognitiv subclinic posibil</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOMA-IR CALCULATOR -->
+  <div class="homa-section fi0 fi2">
+    <span class="section-label" style="color:rgba(255,255,255,.5)">Calculator interactiv</span>
+    <div class="homa-title">Calculator HOMA-IR personal</div>
+    <div class="homa-sub">Formula: (Glicemie mg/dL × Insulina mIU/L) ÷ 405 · Introdu valorile tale din analize</div>
+    <div class="homa-inputs">
+      <div class="homa-field">
+        <label>Glicemie a jeun (mg/dL)</label>
+        <input type="number" id="glicInput" value="90" min="60" max="200" oninput="calcHOMA()">
+      </div>
+      <div class="homa-field">
+        <label>Insulina bazală (mIU/L)</label>
+        <input type="number" id="insulinInput" value="7" min="1" max="50" step="0.1" oninput="calcHOMA()">
+      </div>
+    </div>
+    <div id="homaResult" class="homa-result"></div>
+  </div>
+
+  <!-- CHART Radar markeri -->
+  <div class="radar-section fi0 fi3">
+    <span class="section-label">Profilul metabolic — exemplu comparativ</span>
+    <div class="radar-card">
+      <div style="font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Metabolic sănătos vs. rezistență la insulină incipientă</div>
+      <div style="font-size:.8rem;color:var(--g4);margin-bottom:1rem">Ambii sunt „normali" de laborator. Valorile optime funcționale revelă diferența reală.</div>
+      <div style="position:relative;height:260px"><canvas id="radarChart"></canvas></div>
+      <div style="display:flex;gap:1.5rem;margin-top:.75rem;font-size:.75rem;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:.4rem"><span style="width:14px;height:3px;background:var(--green);border-radius:2px;display:inline-block"></span>Profil optim C.E.L.O.S.</span>
+        <span style="display:flex;align-items:center;gap:.4rem"><span style="width:14px;height:3px;background:var(--orange);border-radius:2px;display:inline-block"></span>Profil „normal de laborator" cu RI incipientă</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 PASI CITIRE -->
+  <div class="pasi-section fi0 fi3">
+    <span class="section-label">Protocolul de citire</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Cum citești buletinul fără anxietate — 6 pași</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">În ordine. Fiecare pas filtrează interpretarea spre acțiune, nu spre panică.</div>
+    <div class="pasi-grid">
+      <div class="pas-card"><span class="pas-num-badge">1</span><div class="pas-title">Intervalul de referință</div><div class="pas-body">Verifici grosier dacă ești în interval. Valori mult în afară → atenție medicală imediată.</div></div>
+      <div class="pas-card"><span class="pas-num-badge">2</span><div class="pas-title">Valorile optime C.E.L.O.S.</div><div class="pas-body">Compari cu tabelul optim, nu cu intervalul lab. Marchezi markerii sub optim = prioritățile.</div></div>
+      <div class="pas-card"><span class="pas-num-badge">3</span><div class="pas-title">Nu te panichezie</div><div class="pas-body">Un marker alterat = informație, nu urgență. Cauze identificabile: suplimentare, diet, stres.</div></div>
+      <div class="pas-card"><span class="pas-num-badge">4</span><div class="pas-title">Corelezi cu jurnalul</div><div class="pas-body">Simptomele din câmpul 8 se potrivesc cu markerii alterați? Coerența ghidează prioritizarea.</div></div>
+      <div class="pas-card"><span class="pas-num-badge">5</span><div class="pas-title">Context, nu izolat</div><div class="pas-body">LDL crescut + ApoB normal + TG normale + HDL crescut = risc real scăzut. Tabloul complet.</div></div>
+      <div class="pas-card"><span class="pas-num-badge">6</span><div class="pas-title">Discuți cu medicul</div><div class="pas-body">Valori semnificativ alterate → evaluare medicală. Sub optim funcțional → protocol C.E.L.O.S.</div></div>
+    </div>
+  </div>
+
+  <!-- PANELUL CELOS -->
+  <div class="celos-section fi0 fi3">
+    <span class="section-label" style="color:rgba(255,255,255,.5)">Ce analizezi</span>
+    <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem">Panelul complet C.E.L.O.S. — markerii per pilon</div>
+    <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1rem">Prioritizezi în funcție de simptomele din jurnalul de biohacking, nu le testezi pe toate simultan.</div>
+    <div class="celos-grid">
+      <div class="cl-card"><div class="cl-pilon ct">C — Celular</div><div class="cl-items">Vitamina D (25-OH-D3) · Magneziu eritrocitar · CoQ10 plasmatic (opț.)</div></div>
+      <div class="cl-card"><div class="cl-pilon ce">E — Energetic</div><div class="cl-items">Feritina + saturația transferinei · B12 total + activă · TSH+FT3+FT4 · Cortizol matinal</div></div>
+      <div class="cl-card"><div class="cl-pilon cl">L — Longevitate</div><div class="cl-items">HbA1c · Insulina bazală · HOMA-IR · ApoB · Lp(a) · TG/HDL ratio</div></div>
+      <div class="cl-card"><div class="cl-pilon co">O — Oxidativ</div><div class="cl-items">CRP hs · Homocisteina · GGT · 8-OHdG (opț. avansat)</div></div>
+      <div class="cl-card"><div class="cl-pilon cs">S — Sistemul nervos</div><div class="cl-items">Magneziu eritrocitar · DHEA-S · Omega-3 Index · Cortizol salivar (curba diurnă)</div></div>
+      <div class="cl-card"><div class="cl-pilon cf">Ficat/Rinichi</div><div class="cl-items">ALT · AST · GGT · Creatinina · eGFR</div></div>
+    </div>
+    <div style="margin-top:1rem;background:rgba(255,255,255,.07);border-radius:8px;padding:.85rem 1.1rem;border:1px solid rgba(255,255,255,.1);font-size:.82rem;color:rgba(255,255,255,.7)">
+      Frecvența optimă: panel complet inițial → reevaluare la <strong style="color:var(--gold2)">90 zile</strong> după intervenție → panel complet la 6 luni → anual.
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-section fi0 fi3">
+    <span class="kpi-tag">⬡ KPI lecția 2.3</span>
+    <div class="kpi-title">Panel de laborator — primul pas concret</div>
+    <ul class="kpi-items">
+      <li><span class="kpi-arrow">→</span>Completezi lista de markeri și identifici pe care nu i-ai testat niciodată</li>
+      <li><span class="kpi-arrow">→</span>Consulți medicul de familie pentru panel de bază (glicemie, insulina, HbA1c, profil lipidic, vitamina D, feritina, TSH)</li>
+      <li><span class="kpi-arrow">→</span>La primirea rezultatelor aplici protocolul de citire în 6 pași</li>
+      <li><span class="kpi-arrow">→</span>Corelezi markerii sub optim funcțional cu câmpul 8 din jurnalul de biohacking</li>
+    </ul>
+  </div>
+
+  <div class="footer-info">
+    <strong>Biohacking 3.0 · Modul 2 · Lecția 2.3</strong> · dr.ing. Radu Pascu · NUTRISIB Sibiu · 2025<br>
+    Surse: Attia (2023) Outlive; Holick (2007) NEJM; Bhatt (2019) NEJM; Grundy (2019) Circulation; Płudowski (2022) Nutrients
+  </div>
+</div>
+
+<script>
+// ─── GAUGE COMPARATOR ─────────────────────────────────────────────
+const gaugeState={
+  min:20,max:100,unit:'ng/mL',optLow:50,optHigh:70,
+  zoneTexts:['< 20 deficit sever','20–50 insuficient','50–70 optim','> 150 toxicitate'],
+  value:35
+};
+
+function setGauge(btn,id,min,max,unit,optLow,optHigh,...zones){
+  document.querySelectorAll('.g-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  Object.assign(gaugeState,{min,max,unit,optLow,optHigh,zoneTexts:zones});
+  gaugeState.value=min+(max-min)*0.45;
+  renderGauge();
+}
+
+function renderGauge(){
+  const {min,max,unit,optLow,optHigh,zoneTexts,value}=gaugeState;
+  const total=max-min;
+  const pLow=(optLow-min)/total*100;
+  const pOk=(optHigh-optLow)/total*100;
+  const pHigh=(max-optHigh)/total*100;
+  const pVal=(value-min)/total*100;
+
+  let resClass='g-res-ok',resText='';
+  if(value<min+(optLow-min)*0.5){resClass='g-res-low';resText=zoneTexts[0];}
+  else if(value<optLow){resClass='g-res-ok';resText=zoneTexts[1];}
+  else if(value<=optHigh){resClass='g-res-opt';resText=zoneTexts[2];}
+  else{resClass='g-res-high';resText=zoneTexts[3];}
+
+  document.getElementById('gaugeDisplay').innerHTML=`
+    <div class="gauge-visual">
+      <div class="gauge-bar-label"><span>Valoarea ta: <strong>${value.toFixed(1)} ${unit}</strong></span><span>Draggable</span></div>
+      <div class="gauge-track" id="gTrack" style="cursor:pointer">
+        <div class="gauge-zone-low" style="width:${pLow}%">${pLow>8?zoneTexts[0].split(' ')[0]+'..':''}</div>
+        <div class="gauge-zone-ok" style="left:${pLow}%;width:${pOk}%">${pOk>10?'normal lab':''}</div>
+        <div class="gauge-zone-opt" style="left:${pLow+pOk/2}%;width:${pOk/2}%" id="gOpt"></div>
+        <div class="gauge-zone-high" style="width:${pHigh}%">${pHigh>8?'ridicat':''}</div>
+        <div class="gauge-pin" style="left:${Math.max(2,Math.min(98,pVal))}%" id="gPin">
+          <div class="gauge-pin-label">${value.toFixed(1)}</div>
+        </div>
+      </div>
+      <div class="gauge-axis"><span>${min}</span><span>${min+total*0.25|0}</span><span>${min+total*0.5|0}</span><span>${min+total*0.75|0}</span><span>${max}</span></div>
+      <div class="gauge-result ${resClass}">${resText}</div>
+    </div>`;
+
+  const track=document.getElementById('gTrack');
+  let dragging=false;
+  function setFromEvent(e){
+    const rect=track.getBoundingClientRect();
+    const x=(e.touches?e.touches[0].clientX:e.clientX)-rect.left;
+    const pct=Math.max(0,Math.min(1,x/rect.width));
+    gaugeState.value=gaugeState.min+(gaugeState.max-gaugeState.min)*pct;
+    renderGauge();
+  }
+  track.addEventListener('mousedown',e=>{dragging=true;setFromEvent(e);});
+  track.addEventListener('touchstart',e=>{dragging=true;setFromEvent(e);},{passive:true});
+  document.addEventListener('mousemove',e=>{if(dragging)setFromEvent(e);});
+  document.addEventListener('touchmove',e=>{if(dragging)setFromEvent(e);},{passive:true});
+  document.addEventListener('mouseup',()=>dragging=false);
+  document.addEventListener('touchend',()=>dragging=false);
+}
+renderGauge();
+
+// ─── HOMA-IR CALCULATOR ───────────────────────────────────────────
+function calcHOMA(){
+  const g=parseFloat(document.getElementById('glicInput').value)||0;
+  const i=parseFloat(document.getElementById('insulinInput').value)||0;
+  const homa=(g*i/405);
+  let cls,label,action;
+  if(homa<1.0){cls='homa-result g-res-opt';label='HOMA-IR excelent';action='Sensibilitate la insulina optimă. Continuă protocolul actual.';}
+  else if(homa<1.5){cls='homa-result g-res-opt';label='HOMA-IR optim C.E.L.O.S.';action='Sensibilitate la insulina bună. Menținere prin exercițiu și dietă.';}
+  else if(homa<2.5){cls='homa-result g-res-ok';label='HOMA-IR — atenție';action='Rezistență la insulina incipientă. Reduce zaharuri simple, adaugă Zona 2, Omega-3.';}
+  else if(homa<3.5){cls='homa-result';label='HOMA-IR crescut';action='Rezistență la insulina prezentă. Protocol C.E.L.O.S. pilonul L + consultul medical recomandat.';cls+=' g-res-high';}
+  else{cls='homa-result g-res-low';label='HOMA-IR semnificativ crescut';action='Rezistență la insulina semnificativă. Consultul medical obligatoriu.';}
+  document.getElementById('homaResult').className=cls;
+  document.getElementById('homaResult').innerHTML=
+    `<div class="homa-num">${homa.toFixed(2)}</div>
+     <div class="homa-interpretation">${label}</div>
+     <div class="homa-action">${action}</div>`;
+}
+calcHOMA();
+
+// ─── RADAR CHART ──────────────────────────────────────────────────
+new Chart(document.getElementById('radarChart'),{
+  type:'radar',
+  data:{
+    labels:['Glicemie','Insulina','HbA1c','TG/HDL','HOMA-IR','CRP hs'],
+    datasets:[
+      {label:'Profil optim C.E.L.O.S.',data:[95,95,90,90,90,90],
+       borderColor:'#1A6B3C',backgroundColor:'rgba(26,107,60,.12)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#1A6B3C'},
+      {label:'Profil „normal" cu RI incipientă',data:[80,55,78,62,55,65],
+       borderColor:'#C85A0A',backgroundColor:'rgba(200,90,10,.1)',borderWidth:2,pointRadius:4,pointBackgroundColor:'#C85A0A'},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:v=>v.dataset.label+': '+v.parsed.r+'%'}}
+    },
+    scales:{r:{beginAtZero:true,min:0,max:100,
+      ticks:{stepSize:20,font:{size:10},color:'#9A9088',backdropColor:'transparent'},
+      grid:{color:'rgba(0,0,0,.06)'},angleLines:{color:'rgba(0,0,0,.06)'},
+      pointLabels:{font:{size:11},color:'#5A5248'}}}
+  }
+});
+</script>
+</body>
+</html>
