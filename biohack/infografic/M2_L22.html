@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infografic: HRV și wearables — Măsurare sau obsesie?</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;
+  --teal:#0A7EA4;--teal2:#13A0CC;
+  --gold:#C8920A;--gold2:#E8AE1A;--gold3:#FEF8E8;
+  --green:#1A6B3C;--green2:#EAF4EE;
+  --red:#B83030;--red2:#FDEAEA;
+  --orange:#C85A0A;--orange2:#FEF2E8;
+  --purple:#5B3FA6;--purple2:#F0EBF8;
+  --g1:#FAF7F2;--g2:#F2EDE4;--g3:#DDD6CC;--g4:#9A9088;--g5:#5A5248;
+  --white:#fff;
+}
+html{font-size:16px}
+body{font-family:'Inter',sans-serif;background:#F5F2EC;color:#1E1810;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 3rem}
+
+/* HEADER */
+.header{text-align:center;padding:2.5rem 2rem;background:var(--navy);border-radius:16px;margin-bottom:2rem;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 70% 40%,rgba(10,126,164,.3),transparent 65%),radial-gradient(ellipse 40% 40% at 10% 80%,rgba(91,63,166,.15),transparent 55%)}
+.header-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:600;color:var(--teal2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem;position:relative}
+.header-tag::before,.header-tag::after{content:'';width:24px;height:1px;background:var(--teal2)}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.4rem);font-weight:900;color:#fff;line-height:1.15;position:relative;margin-bottom:.75rem}
+.header h1 em{font-style:italic;color:var(--teal2)}
+.header-sub{font-size:.92rem;color:rgba(255,255,255,.6);position:relative;max-width:680px;margin:0 auto}
+.header-stats{display:flex;justify-content:center;gap:2.5rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);position:relative;flex-wrap:wrap}
+.hstat-n{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--teal2);line-height:1}
+.hstat-l{font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem}
+.section-label{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem;display:block}
+
+/* HRV CONCEPT VIZUAL */
+.hrv-concept{background:var(--navy2);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.hrv-heartbeat{display:flex;align-items:center;justify-content:center;gap:.5rem;margin:1.25rem 0;flex-wrap:wrap}
+.hb-interval{display:flex;flex-direction:column;align-items:center;gap:.25rem}
+.hb-bar{width:4px;background:var(--teal2);border-radius:2px;transition:height .5s}
+.hb-ms{font-family:monospace;font-size:.68rem;color:rgba(255,255,255,.6)}
+.hrv-annotation{text-align:center;font-size:.78rem;color:rgba(255,255,255,.55);margin-top:.5rem}
+.hrv-annotation strong{color:var(--gold2)}
+
+/* INTERPRETARE ZONES */
+.zones-section{margin-bottom:1.5rem}
+.zones-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:1rem 0}
+@media(max-width:700px){.zones-grid{grid-template-columns:repeat(2,1fr)}}
+.zone-card{border-radius:12px;padding:1.15rem 1rem;border:1px solid;text-align:center;cursor:pointer;transition:transform .22s,box-shadow .22s}
+.zone-card:hover{transform:translateY(-3px);box-shadow:0 6px 22px rgba(0,0,0,.1)}
+.zone-card.z-green{background:var(--green2);border-color:#C0DD97;border-top:4px solid var(--green)}
+.zone-card.z-teal{background:#E8F4F8;border-color:#9FE1CB;border-top:4px solid var(--teal)}
+.zone-card.z-gold{background:var(--gold3);border-color:#FAC775;border-top:4px solid var(--gold)}
+.zone-card.z-red{background:var(--red2);border-color:#F7C1C1;border-top:4px solid var(--red)}
+.zone-pct{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.25rem}
+.z-green .zone-pct{color:var(--green)}.z-teal .zone-pct{color:var(--teal)}.z-gold .zone-pct{color:var(--gold)}.z-red .zone-pct{color:var(--red)}
+.zone-label{font-size:.82rem;font-weight:700;margin-bottom:.35rem}
+.z-green .zone-label{color:var(--green)}.z-teal .zone-label{color:var(--teal)}.z-gold .zone-label{color:var(--gold)}.z-red .zone-label{color:var(--red)}
+.zone-action{font-size:.74rem;color:var(--g5);line-height:1.45}
+
+/* CHART TRENDING */
+.chart-section{margin-bottom:1.5rem}
+.chart-card{background:var(--white);border-radius:14px;padding:1.5rem;border:1px solid var(--g3)}
+
+/* WEARABLES COMPARISON */
+.wearables-section{margin-bottom:1.5rem}
+.wearables-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}
+@media(max-width:700px){.wearables-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.wearables-grid{grid-template-columns:1fr}}
+.wear-card{background:var(--white);border-radius:12px;padding:1.1rem;border:1px solid var(--g3);box-shadow:0 2px 8px rgba(0,0,0,.04);border-top:3px solid}
+.wear-card:nth-child(1){border-top-color:var(--teal)}.wear-card:nth-child(2){border-top-color:var(--purple)}
+.wear-card:nth-child(3){border-top-color:var(--green)}.wear-card:nth-child(4){border-top-color:var(--gold)}
+.wear-card:nth-child(5){border-top-color:var(--orange)}.wear-card:nth-child(6){border-top-color:var(--g4)}
+.wear-name{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:.25rem}
+.wear-prec{font-family:monospace;font-size:.7rem;font-weight:700;margin-bottom:.25rem}
+.wear-card:nth-child(1) .wear-prec{color:var(--teal)}.wear-card:nth-child(2) .wear-prec{color:var(--purple)}
+.wear-card:nth-child(3) .wear-prec{color:var(--green)}.wear-card:nth-child(4) .wear-prec{color:var(--gold)}
+.wear-card:nth-child(5) .wear-prec{color:var(--orange)}.wear-card:nth-child(6) .wear-prec{color:var(--g4)}
+.wear-cost{font-size:.72rem;color:var(--g4);margin-bottom:.3rem}
+.wear-for{font-size:.76rem;color:var(--g5);line-height:1.45}
+
+/* FACTORI acuti / cronici */
+.factori-section{margin-bottom:1.5rem}
+.factori-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1rem 0}
+@media(max-width:580px){.factori-cols{grid-template-columns:1fr}}
+.fc-col{border-radius:14px;padding:1.25rem;border:1px solid}
+.fc-col.down{background:var(--red2);border-color:#F7C1C1;border-top:4px solid var(--red)}
+.fc-col.up{background:var(--green2);border-color:#C0DD97;border-top:4px solid var(--green)}
+.fc-title{font-size:.9rem;font-weight:700;margin-bottom:.75rem;display:flex;align-items:center;gap:.45rem}
+.down .fc-title{color:var(--red)}.up .fc-title{color:var(--green)}
+.fc-items{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.fc-items li{font-size:.8rem;line-height:1.5;padding-left:1.15rem;position:relative;color:var(--g5)}
+.fc-items li::before{position:absolute;left:0;font-size:.75rem;top:.07em}
+.down .fc-items li::before{content:'↓';color:var(--red)}.up .fc-items li::before{content:'↑';color:var(--green)}
+.fc-items li strong{color:var(--dark)}
+
+/* ALCOOL DATA */
+.alcool-section{background:var(--navy);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.alcool-bars2{display:flex;flex-direction:column;gap:.85rem;margin:1rem 0}
+.ab-row{display:grid;grid-template-columns:180px 1fr 80px;gap:.75rem;align-items:center}
+@media(max-width:550px){.ab-row{grid-template-columns:1fr}}
+.ab-label{font-size:.82rem;color:rgba(255,255,255,.8);font-weight:500}
+.ab-track{height:14px;background:rgba(255,255,255,.1);border-radius:7px;overflow:hidden}
+.ab-fill{height:100%;border-radius:7px;background:linear-gradient(90deg,var(--orange),var(--red));width:0;transition:width 1.4s cubic-bezier(.4,0,.2,1)}
+.ab-val{font-family:monospace;font-size:.75rem;color:var(--red);font-weight:700;text-align:right;white-space:nowrap}
+.alcool-note{background:rgba(255,255,255,.06);border-radius:8px;padding:.85rem 1.1rem;border:1px solid rgba(255,255,255,.1);margin-top:.75rem;font-size:.82rem;color:rgba(255,255,255,.7);line-height:1.55}
+
+/* RESPIRATIE */
+.resp-section{margin-bottom:1.5rem}
+.resp-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:1rem 0}
+@media(max-width:600px){.resp-cards{grid-template-columns:1fr}}
+.resp-card2{background:var(--white);border-radius:12px;padding:1.1rem;border:1px solid var(--g3);box-shadow:0 2px 8px rgba(0,0,0,.04);border-left:4px solid var(--teal)}
+.resp-name2{font-size:.88rem;font-weight:700;color:var(--teal);margin-bottom:.2rem}
+.resp-pattern2{font-family:monospace;font-size:.72rem;color:var(--gold);margin-bottom:.35rem;font-weight:600}
+.resp-body2{font-size:.78rem;color:var(--g5);line-height:1.5}
+
+/* OBSESIE vs UTIL */
+.obsesie-section{margin-bottom:1.5rem}
+.obs-compare{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1rem 0}
+@media(max-width:580px){.obs-compare{grid-template-columns:1fr}}
+.obs-card{border-radius:14px;padding:1.25rem;border:1px solid}
+.obs-card.util{background:var(--green2);border-color:#C0DD97;border-top:4px solid var(--green)}
+.obs-card.obsesiv{background:var(--red2);border-color:#F7C1C1;border-top:4px solid var(--red)}
+.obs-title{font-size:.9rem;font-weight:700;margin-bottom:.75rem}
+.util .obs-title{color:var(--green)}.obsesiv .obs-title{color:var(--red)}
+.obs-items{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.obs-items li{font-size:.79rem;line-height:1.5;padding-left:1.15rem;position:relative;color:var(--g5)}
+.obs-items li::before{position:absolute;left:0;font-size:.75rem}
+.util .obs-items li::before{content:'✓';color:var(--green)}.obsesiv .obs-items li::before{content:'✗';color:var(--red)}
+
+/* PROTOCOL */
+.protocol-section{margin-bottom:1.5rem}
+.proto-timeline{display:flex;flex-direction:column;gap:.85rem;margin:1rem 0}
+.proto-row{display:grid;grid-template-columns:110px 1fr;gap:1rem;background:var(--white);border-radius:10px;padding:1rem 1.15rem;border:1px solid var(--g3);box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.proto-badge{border-radius:8px;padding:.5rem .65rem;text-align:center;align-self:start}
+.proto-row:nth-child(1) .proto-badge{background:#E8F4F8;color:var(--teal)}
+.proto-row:nth-child(2) .proto-badge{background:var(--green2);color:var(--green)}
+.proto-badge-lbl{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.15rem}
+.proto-badge-dur{font-family:monospace;font-size:.72rem;font-weight:600}
+.proto-title{font-size:.9rem;font-weight:700;margin-bottom:.25rem}
+.proto-row:nth-child(1) .proto-title{color:var(--teal)}.proto-row:nth-child(2) .proto-title{color:var(--green)}
+.proto-body{font-size:.82rem;color:var(--g5);line-height:1.55}
+.proto-body strong{color:var(--dark)}
+
+/* KPI */
+.kpi-section{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:14px;padding:2rem;margin-bottom:1.5rem;border-left:5px solid var(--teal)}
+.kpi-tag{font-family:monospace;font-size:.68rem;font-weight:600;color:var(--teal2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.75rem;display:block}
+.kpi-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:.6rem;font-weight:700}
+.kpi-items{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.kpi-items li{font-size:.88rem;color:rgba(255,255,255,.85);display:flex;gap:.65rem;align-items:baseline;line-height:1.5}
+.kpi-arrow{font-size:.75rem;color:var(--teal2);flex-shrink:0}
+
+.footer-info{text-align:center;padding:1rem;font-size:.75rem;color:var(--g4)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fi0{opacity:0;animation:fadeUp .55s ease forwards}.fi1{animation-delay:.05s}.fi2{animation-delay:.15s}.fi3{animation-delay:.25s}
+@keyframes beat{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.4)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header fi0 fi1">
+    <div class="header-tag">Biohacking 3.0 · Modul 2 · Lecția 2.2</div>
+    <h1>HRV și <em>wearables</em></h1>
+    <p class="header-sub">Variabilitatea frecvenței cardiace — cel mai valoros biomarker accesibil. Trending personal, nu valori absolute.</p>
+    <div class="header-stats">
+      <div><div class="hstat-n">rMSSD</div><div class="hstat-l">Metrica standard HRV (ms)</div></div>
+      <div><div class="hstat-n">14 zile</div><div class="hstat-l">Baseline HRV personal</div></div>
+      <div><div class="hstat-n">−35%</div><div class="hstat-l">HRV după 4+ băuturi alcool</div></div>
+      <div><div class="hstat-n">+25%</div><div class="hstat-l">HRV cu Zona 2 în 12 săptămâni</div></div>
+    </div>
+  </div>
+
+  <!-- HRV CONCEPT VIZUAL -->
+  <div class="hrv-concept fi0 fi1">
+    <span class="section-label" style="color:rgba(255,255,255,.5)">Ce este HRV</span>
+    <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem">Variabilitatea intervalelor RR — cum arată un HRV sănătos</div>
+    <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1rem">O inimă sănătoasă nu bate la intervale perfecte. Variabilitatea este sănătate, nu aritmie.</div>
+    <div class="hrv-heartbeat" id="heartbeatViz">
+      <div class="hb-interval"><div class="hb-bar" style="height:50px" id="b1"></div><div class="hb-ms">950 ms</div></div>
+      <div style="font-family:monospace;font-size:.65rem;color:rgba(255,255,255,.3)">···</div>
+      <div class="hb-interval"><div class="hb-bar" style="height:50px" id="b2"></div><div class="hb-ms">1050 ms</div></div>
+      <div style="font-family:monospace;font-size:.65rem;color:rgba(255,255,255,.3)">···</div>
+      <div class="hb-interval"><div class="hb-bar" style="height:50px" id="b3"></div><div class="hb-ms">980 ms</div></div>
+      <div style="font-family:monospace;font-size:.65rem;color:rgba(255,255,255,.3)">···</div>
+      <div class="hb-interval"><div class="hb-bar" style="height:50px" id="b4"></div><div class="hb-ms">1020 ms</div></div>
+      <div style="font-family:monospace;font-size:.65rem;color:rgba(255,255,255,.3)">···</div>
+      <div class="hb-interval"><div class="hb-bar" style="height:50px" id="b5"></div><div class="hb-ms">960 ms</div></div>
+    </div>
+    <div class="hrv-annotation">Variabilitatea acestor intervale = <strong>HRV (rMSSD)</strong> · HRV ridicat = SNA flexibil · HRV scăzut = SNA rigid / suprasolicitat</div>
+  </div>
+
+  <!-- ZONELE DE INTERPRETARE -->
+  <div class="zones-section fi0 fi2">
+    <span class="section-label">Interpretarea HRV personal</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Cele 4 zone — raport față de media ta personală</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Nu față de valorile altor persoane sau ale aplicației. <em>Exclusiv față de baseline-ul tău de 14 zile.</em></div>
+    <div class="zones-grid">
+      <div class="zone-card z-green">
+        <div class="zone-pct">&gt;110%</div>
+        <div class="zone-label">Recuperare excelentă</div>
+        <div class="zone-action">Crești intensitatea antrenamentului. Ceva funcționează bine. Verifică ce a fost diferit în ultimele 48h.</div>
+      </div>
+      <div class="zone-card z-teal">
+        <div class="zone-pct">90–110%</div>
+        <div class="zone-label">Zona normală</div>
+        <div class="zone-action">Continui planul. Totul este în parametri. Nicio ajustare necesară.</div>
+      </div>
+      <div class="zone-card z-gold">
+        <div class="zone-pct">75–90%</div>
+        <div class="zone-label">Atenție</div>
+        <div class="zone-action">Verifici câmpul 6 din jurnal. Cauza acută identificată → intensitate redusă. Fără cauză → activitate ușoară.</div>
+      </div>
+      <div class="zone-card z-red">
+        <div class="zone-pct">&lt;75%</div>
+        <div class="zone-label">Semnal de alarmă</div>
+        <div class="zone-action">Repaus obligatoriu. 3+ zile sub 75% fără cauza identificată → consult medical.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART HRV TRENDING -->
+  <div class="chart-section fi0 fi2">
+    <span class="section-label">De ce trending-ul contează mai mult decât valoarea absolută</span>
+    <div class="chart-card">
+      <div style="font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">30 de zile de HRV — baseline + intervenție Zona 2</div>
+      <div style="font-size:.8rem;color:var(--g4);margin-bottom:1rem">Corelat cu câmpul 6 din jurnal (alcool, exercițiu, stres). Observă cum tendința crește după Zona 2 consistentă.</div>
+      <div style="position:relative;height:220px"><canvas id="hrvChart"></canvas></div>
+      <div style="display:flex;gap:1.5rem;margin-top:.75rem;font-size:.74rem;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:.35rem"><span style="width:16px;height:3px;background:var(--teal);border-radius:2px;display:inline-block"></span>HRV zilnic (rMSSD ms)</span>
+        <span style="display:flex;align-items:center;gap:.35rem"><span style="width:16px;height:3px;background:var(--gold);border-radius:2px;border-style:dashed;display:inline-block"></span>Media mobilă 7 zile</span>
+        <span style="display:flex;align-items:center;gap:.35rem"><span style="width:8px;height:8px;background:var(--red);border-radius:50%;display:inline-block"></span>Zile cu alcool / stres acut (câmpul 6)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEARABLES -->
+  <div class="wearables-section fi0 fi2">
+    <span class="section-label">Ghid de alegere</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Wearables disponibile — precizie și scop</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Nu compara date între platforme — algoritmii sunt diferiți. Alege una și rămâi consistent.</div>
+    <div class="wearables-grid">
+      <div class="wear-card"><div class="wear-name">Centura Polar H10</div><div class="wear-prec">95–98% precizie</div><div class="wear-cost">~100 USD</div><div class="wear-for">Precizie maximă, sportivi, N=1 riguros</div></div>
+      <div class="wear-card"><div class="wear-name">Oura Ring Gen 3+</div><div class="wear-prec">85–92% precizie</div><div class="wear-cost">349 USD + abon.</div><div class="wear-for">Tracking nocturn, somn, discreție</div></div>
+      <div class="wear-card"><div class="wear-name">Garmin Fenix/Forerunner</div><div class="wear-prec">80–90% precizie</div><div class="wear-cost">500–900 USD</div><div class="wear-for">Atleți, antrenament GPS integrat</div></div>
+      <div class="wear-card"><div class="wear-name">Whoop 4.0</div><div class="wear-prec">88–93% precizie</div><div class="wear-cost">30 USD/lună</div><div class="wear-for">Periodizare antrenament, coaching auto</div></div>
+      <div class="wear-card"><div class="wear-name">Apple Watch S9+</div><div class="wear-prec">78–88% precizie</div><div class="wear-cost">400 USD</div><div class="wear-for">Ecosistem Apple, utilizare generală</div></div>
+      <div class="wear-card"><div class="wear-name">HRV4Training / Welltory</div><div class="wear-prec">75–85% precizie</div><div class="wear-cost">0–15 USD/lună</div><div class="wear-for">Start fără hardware, buget limitat</div></div>
+    </div>
+  </div>
+
+  <!-- FACTORI -->
+  <div class="factori-section fi0 fi3">
+    <span class="section-label">Ce influențează HRV</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.85rem">Factori acuți (24–72h) vs. factori cronici (8–12 săptămâni)</div>
+    <div class="factori-cols">
+      <div class="fc-col down">
+        <div class="fc-title">↓ Scad HRV acut</div>
+        <ul class="fc-items">
+          <li><strong>Alcool</strong> — −10 ms/băutură (Altini 2021)</li>
+          <li><strong>Somn insuficient</strong> — −8–12%/oră pierdută</li>
+          <li><strong>Exercițiu intens (HIIT)</strong> — scădere 12–24h (normal)</li>
+          <li><strong>Boală acută</strong> — −20–40% față de bazal</li>
+          <li><strong>Stres acut major</strong> — activare simpatică</li>
+          <li><strong>Jet lag, alimentație excesivă seara</strong></li>
+        </ul>
+      </div>
+      <div class="fc-col up">
+        <div class="fc-title">↑ Cresc HRV cronic</div>
+        <ul class="fc-items">
+          <li><strong>Zona 2</strong> (150+ min/săpt.) → +10–25% în 12 săpt.</li>
+          <li><strong>Somn de calitate</strong> (7–9h, ritm regulat)</li>
+          <li><strong>Respirație diafragmatică</strong> zilnică (5 min)</li>
+          <li><strong>Mg L-treonat + Omega-3</strong> (pilonul S C.E.L.O.S.)</li>
+          <li><strong>Abstinența de alcool</strong> → +10–20% în 30–60 zile</li>
+          <li><strong>Meditație / NSDR</strong> regulat</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALCOOL DATA -->
+  <div class="alcool-section fi0 fi3">
+    <span class="section-label" style="color:rgba(255,255,255,.5)">Datele Altini & Plews (2021) — 4.046 nopți analizate</span>
+    <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem">Alcoolul și HRV — cel mai documentat supresor acut</div>
+    <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1rem">Efectul este sistematic, reproducibil și durează 24–72h după un episod moderat.</div>
+    <div class="alcool-bars2" id="alcoolBars2">
+      <div class="ab-row"><div class="ab-label">1 băutură standard</div><div class="ab-track"><div class="ab-fill" data-w="15"></div></div><div class="ab-val">−10 ms · −15%</div></div>
+      <div class="ab-row"><div class="ab-label">2–3 băuturi</div><div class="ab-track"><div class="ab-fill" data-w="25"></div></div><div class="ab-val">−17 ms · −25%</div></div>
+      <div class="ab-row"><div class="ab-label">4+ băuturi</div><div class="ab-track"><div class="ab-fill" data-w="35"></div></div><div class="ab-val">−22 ms · −35%</div></div>
+    </div>
+    <div class="alcool-note">Mecanism: alcoolul activează SN simpatic și suprimă activarea vagală nocturnă. Perturbă arhitectura somnului (reduce NREM3) — amplificând efectul asupra HRV-ului. HRV scade <em>înainte</em> că starea să fie percepută subiectiv.</div>
+  </div>
+
+  <!-- RESPIRATIE -->
+  <div class="resp-section fi0 fi3">
+    <span class="section-label">Intervenție acută demonstrată</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Respirația diafragmatică — +20–40% HRV în sesiune</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Sincronizarea respirației cu ritmul cardiac produce aritmie sinusală respiratorie — mecanismul HRV.</div>
+    <div class="resp-cards">
+      <div class="resp-card2"><div class="resp-name2">Respirația rezonantă</div><div class="resp-pattern2">↑ 5,5 sec · ↓ 5,5 sec · 5,5 resp/min</div><div class="resp-body2">5–20 min. +20–40% HRV în sesiune. Efect cumulat cronic. Lehrer & Gevirtz (2014).</div></div>
+      <div class="resp-card2"><div class="resp-name2">Respirația 4-7-8</div><div class="resp-pattern2">↑ 4 sec · retenție 7 · ↓ 8 sec</div><div class="resp-body2">Activare vagală puternică. Recomandat pre-somn sau în stres acut. Expirul lung = parasimpatic.</div></div>
+      <div class="resp-card2"><div class="resp-name2">Box breathing (4-4-4-4)</div><div class="resp-pattern2">↑ 4 · pauza 4 · ↓ 4 · pauza 4 sec</div><div class="resp-body2">Echilibrare rapidă simpatic/parasimpatic. Utilizat de Navy SEALs. Efect imediat și reproductibil.</div></div>
+      <div class="resp-card2"><div class="resp-name2">NSDR / Yoga Nidra</div><div class="resp-pattern2">10–20 min relaxare ghidată</div><div class="resp-body2">Efecte comparabile cu somnul de 1h pe biomarkeri de stres. Restaurează capacitatea cognitivă.</div></div>
+    </div>
+  </div>
+
+  <!-- UTIL vs OBSESIV -->
+  <div class="obsesie-section fi0 fi3">
+    <span class="section-label">Distincția critică</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.85rem">Tracking util vs. obsesie cu wearable</div>
+    <div class="obs-compare">
+      <div class="obs-card util">
+        <div class="obs-title">✓ Tracking util cu HRV</div>
+        <ul class="obs-items">
+          <li>Verifici aplicația o singură dată pe zi — dimineața</li>
+          <li>Scor scăzut = cauți cauza în câmpul 6 din jurnal</li>
+          <li>Acționezi la tendințe de 3+ zile, nu la valori punctuale</li>
+          <li>Datele confirmă sau infirmă percepția</li>
+          <li>Dacă te simți bine și HRV e scăzut → identifici cauza</li>
+        </ul>
+      </div>
+      <div class="obs-card obsesiv">
+        <div class="obs-title">✗ Obsesia cu wearable-ul</div>
+        <ul class="obs-items">
+          <li>Verifici aplicația de 15–20 ori pe zi</li>
+          <li>Anulezi activități planificate exclusiv pe baza scorului</li>
+          <li>Anxietate sau vinovăție la un scor „roșu"</li>
+          <li>Vrei să „trucezi" scorul — eviți alimente sau exercițiu</li>
+          <li>Scorul determină starea emoțională a zilei</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROTOCOL -->
+  <div class="protocol-section fi0 fi3">
+    <span class="section-label">Implementare sigură</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.85rem">Protocol practic — primele 30 de zile cu HRV</div>
+    <div class="proto-timeline">
+      <div class="proto-row">
+        <div class="proto-badge"><div class="proto-badge-lbl">Faza 1</div><div class="proto-badge-dur">Zilele 1–14</div></div>
+        <div><div class="proto-title">Baseline — acumulezi, nu interpretezi</div>
+          <div class="proto-body">Dimineața, imediat la trezire, înainte de cafea, 5 min culcat. Notezi <strong>rMSSD în ms</strong> în jurnal. Nu interpretezi zilnic. La ziua 14: calculezi <strong>media personală</strong> = referința ta.</div>
+        </div>
+      </div>
+      <div class="proto-row">
+        <div class="proto-badge"><div class="proto-badge-lbl">Faza 2</div><div class="proto-badge-dur">Zilele 15–30</div></div>
+        <div><div class="proto-title">Tracking activ — trending față de media ta</div>
+          <div class="proto-body">Compari fiecare zi cu media personală (%). Corelezi cu câmpul 6 din jurnal. Acționezi la <strong>tendințe 3+ zile</strong> — nu la valori punctuale. Verifici aplicația <strong>o singură dată/zi</strong>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-section fi0 fi3">
+    <span class="kpi-tag">⬡ KPI lecția 2.2 — Baseline HRV personal</span>
+    <div class="kpi-title">14 zile de măsurare matinală — referința ta personală</div>
+    <ul class="kpi-items">
+      <li><span class="kpi-arrow">→</span>Alegi instrumentul (centura Polar, Oura, Garmin sau aplicație telefon)</li>
+      <li><span class="kpi-arrow">→</span>Măsori HRV dimineața pentru 14 zile consecutive</li>
+      <li><span class="kpi-arrow">→</span>Notezi valoarea rMSSD (ms) în câmpul opțional din jurnal</li>
+      <li><span class="kpi-arrow">→</span>La ziua 14 calculezi media personală și identifici primul pattern corelat</li>
+    </ul>
+  </div>
+
+  <div class="footer-info">
+    <strong>Biohacking 3.0 · Modul 2 · Lecția 2.2</strong> · dr.ing. Radu Pascu · NUTRISIB Sibiu · 2025<br>
+    Surse: Shaffer & Ginsberg (2017) Front Public Health; Altini & Plews (2021) Sensors; Malik et al. (2018); Walker (2017) Why We Sleep
+  </div>
+</div>
+
+<script>
+// Animatie batai inima
+const bars=[
+  {id:'b1',h:50},{id:'b2',h:70},{id:'b3',h:55},{id:'b4',h:65},{id:'b5',h:52}
+];
+const intervals=[950,1050,980,1020,960];
+let idx=0;
+function animateBeat(){
+  bars.forEach(b=>document.getElementById(b.id).style.height='10px');
+  setTimeout(()=>{
+    const b=bars[idx%bars.length];
+    document.getElementById(b.id).style.height=b.h+'px';
+    document.getElementById(b.id).style.transition='height .12s ease';
+    setTimeout(()=>{
+      document.getElementById(b.id).style.height='20px';
+      document.getElementById(b.id).style.transition='height .4s ease';
+    },150);
+    idx++;
+    setTimeout(animateBeat,intervals[idx%intervals.length]/1.5);
+  },50);
+}
+setTimeout(animateBeat,800);
+
+// HRV Chart
+const days=Array.from({length:30},(_,i)=>i+1);
+// Simuleaza: baseline (z1-14) ~45ms±8, intervenție Zona 2 (z15-30) creste treptat
+const hrv=[];
+const alcoholDays=[3,9,17,24]; // zile cu alcool
+for(let i=0;i<30;i++){
+  const base=i<14?45:47+i*0.5;
+  const noise=(Math.random()-0.5)*12;
+  const isAlcohol=alcoholDays.includes(i+1);
+  hrv.push(Math.round(Math.max(20,base+noise-(isAlcohol?15:0))));
+}
+// Media mobila 7 zile
+const ma7=hrv.map((_,i)=>{
+  if(i<3) return null;
+  const start=Math.max(0,i-3);
+  const vals=hrv.slice(start,i+4);
+  return Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
+});
+// Punct-uri alcool
+const alcPts=hrv.map((v,i)=>alcoholDays.includes(i+1)?v:null);
+
+new Chart(document.getElementById('hrvChart'),{
+  type:'line',
+  data:{
+    labels:days,
+    datasets:[
+      {label:'HRV zilnic',data:hrv,borderColor:'#0A7EA4',backgroundColor:'rgba(10,126,164,.07)',
+       borderWidth:2,tension:.3,pointRadius:3,pointHoverRadius:5,fill:true},
+      {label:'Media mobilă 7 zile',data:ma7,borderColor:'#C8920A',borderWidth:2,
+       borderDash:[5,4],tension:.4,pointRadius:0,fill:false},
+      {label:'Alcool/stres acut',data:alcPts,borderColor:'transparent',backgroundColor:'#B83030',
+       pointRadius:6,pointStyle:'circle',type:'scatter',showLine:false},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{
+        title:v=>'Ziua '+v[0].label,
+        label:v=>{
+          if(v.dataset.label==='Alcool/stres acut') return '⚠ Câmpul 6: alcool / stres acut';
+          return v.dataset.label+': '+v.parsed.y+' ms';
+        }
+      }}
+    },
+    scales:{
+      x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:10},color:'#9A9088'},
+        title:{display:true,text:'Ziua',font:{size:10},color:'#9A9088'}},
+      y:{min:20,max:80,grid:{color:'rgba(0,0,0,.04)'},
+        ticks:{font:{size:10},color:'#9A9088',callback:v=>v+' ms'},
+        title:{display:true,text:'HRV rMSSD (ms)',font:{size:10},color:'#9A9088'}}
+    }
+  }
+});
+
+// Animate alcool bars
+const alcIO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.ab-fill').forEach(b=>{b.style.width=b.dataset.w+'%';});
+      alcIO.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+alcIO.observe(document.getElementById('alcoolBars2'));
+</script>
+</body>
+</html>

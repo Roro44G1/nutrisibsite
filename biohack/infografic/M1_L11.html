@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infografic: Medicina 3.0 — De la tratarea bolii la ingineria longevității</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;--teal:#0A7EA4;--teal2:#13A0CC;--teal3:#E1F5EE;
+  --gold:#C8920A;--gold2:#E8AE1A;--gold3:#FEF8E8;
+  --green:#1A6B3C;--green2:#EAF4EE;
+  --red:#B83030;--red2:#FDEAEA;
+  --orange:#C85A0A;--orange2:#FEF2E8;
+  --purple:#5B3FA6;--purple2:#F0EBF8;
+  --gray1:#FAF7F2;--gray2:#F2EDE4;--gray3:#DDD6CC;--gray4:#9A9088;--gray5:#5A5248;
+  --white:#fff;
+}
+html{font-size:16px}
+body{font-family:'Inter',sans-serif;background:#F5F2EC;color:#1E1810;line-height:1.6;-webkit-font-smoothing:antialiased}
+
+/* ── LAYOUT ── */
+.infographic{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 3rem}
+
+/* ── HEADER ── */
+.header{text-align:center;padding:2.5rem 2rem;background:var(--navy);border-radius:16px;margin-bottom:2rem;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 40%,rgba(10,126,164,.25),transparent 65%)}
+.header-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:600;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem;position:relative}
+.header-tag::before,.header-tag::after{content:'';width:24px;height:1px;background:var(--gold2)}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3.5vw,2.5rem);font-weight:900;color:#fff;line-height:1.15;position:relative;margin-bottom:.75rem}
+.header h1 em{font-style:italic;color:var(--gold2)}
+.header-sub{font-size:.95rem;color:rgba(255,255,255,.6);position:relative;max-width:700px;margin:0 auto}
+.header-stats{display:flex;justify-content:center;gap:3rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);position:relative;flex-wrap:wrap;gap:1.5rem}
+.hstat-n{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--gold2);line-height:1}
+.hstat-l{font-size:.72rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem}
+
+/* ── SECTION LABEL ── */
+.section-label{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem;display:block}
+
+/* ── PARADIGME GRID (top 3-col) ── */
+.paradigme-grid{display:grid;grid-template-columns:1fr 80px 1fr;gap:0;margin-bottom:2rem;align-items:stretch}
+@media(max-width:700px){.paradigme-grid{grid-template-columns:1fr;gap:1rem}}
+
+.paradigma-card{border-radius:14px;padding:1.5rem;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s;cursor:default}
+.paradigma-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,.12)}
+.paradigma-card.reactiv{background:#fff;border:1px solid var(--gray3);border-left:4px solid var(--orange)}
+.paradigma-card.proactiv{background:var(--navy);border:1px solid var(--teal);border-right:4px solid var(--teal)}
+.p-ver{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem}
+.reactiv .p-ver{color:var(--orange)}
+.proactiv .p-ver{color:var(--gold2)}
+.p-title{font-size:1.15rem;font-weight:700;margin-bottom:.5rem;line-height:1.2}
+.reactiv .p-title{color:var(--navy)}
+.proactiv .p-title{color:#fff}
+.p-desc{font-size:.84rem;line-height:1.65;margin-bottom:1rem}
+.reactiv .p-desc{color:var(--gray5)}
+.proactiv .p-desc{color:rgba(255,255,255,.65)}
+.p-items{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.p-items li{font-size:.82rem;padding-left:1.25rem;position:relative;line-height:1.5}
+.p-items li::before{position:absolute;left:0;top:.05em;font-size:.8rem}
+.reactiv .p-items li{color:var(--gray5)}
+.reactiv .p-items li::before{content:'✗';color:var(--red)}
+.proactiv .p-items li{color:rgba(255,255,255,.8)}
+.proactiv .p-items li::before{content:'✓';color:#5DCAA5}
+
+.paradigme-arrow{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.35rem}
+.arrow-body{width:56px;height:56px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;flex-shrink:0}
+.arrow-body svg{width:22px;height:22px;fill:#fff}
+.arrow-label{font-size:.65rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;text-align:center;line-height:1.3}
+
+/* ── PATIENT ROLE ── */
+.patient-role{background:var(--gray2);border-radius:14px;padding:1.5rem;margin-bottom:2rem;border:1px solid var(--gray3)}
+.role-grid{display:grid;grid-template-columns:1fr 40px 1fr;gap:1rem;align-items:center;margin-top:1rem}
+@media(max-width:600px){.role-grid{grid-template-columns:1fr}}
+.role-card{background:#fff;border-radius:10px;padding:1.1rem;text-align:center;border:1px solid var(--gray3);transition:var(--tr)}
+.role-card.pasiv{border-top:3px solid var(--orange)}
+.role-card.activ{border-top:3px solid var(--green);background:var(--green2)}
+.role-icon{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto .6rem;font-size:1.2rem}
+.role-card.pasiv .role-icon{background:var(--orange2)}
+.role-card.activ .role-icon{background:var(--green2)}
+.role-title{font-size:.92rem;font-weight:700;margin-bottom:.25rem}
+.pasiv .role-title{color:var(--orange)}
+.activ .role-title{color:var(--green)}
+.role-desc{font-size:.8rem;color:var(--gray5);line-height:1.5}
+.vs-badge{width:36px;height:36px;border-radius:50%;background:var(--gray3);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--gray5);margin:0 auto;flex-shrink:0}
+@media(max-width:600px){.vs-badge{display:none}}
+
+/* ── CHARTS GRID ── */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem}
+@media(max-width:700px){.charts-grid{grid-template-columns:1fr}}
+
+.chart-card{background:#fff;border-radius:14px;padding:1.5rem;border:1px solid var(--gray3)}
+.chart-title{font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:.25rem}
+.chart-sub{font-size:.77rem;color:var(--gray4);margin-bottom:1rem;line-height:1.4}
+
+/* ── HEALTHSPAN BARS ── */
+.hs-bars{display:flex;flex-direction:column;gap:.85rem;margin-top:.5rem}
+.hs-bar-row{display:flex;flex-direction:column;gap:.3rem}
+.hs-bar-label{display:flex;justify-content:space-between;font-size:.78rem;color:var(--gray5)}
+.hs-bar-label span:last-child{font-weight:700;color:var(--navy)}
+.hs-bar-track{height:14px;background:var(--gray2);border-radius:7px;overflow:hidden}
+.hs-bar-fill{height:100%;border-radius:7px;width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.hs-bar-fill.ro-life{background:var(--teal);transition-delay:.2s}
+.hs-bar-fill.eu-life{background:var(--teal2);transition-delay:.4s}
+.hs-bar-fill.ro-hs{background:var(--orange);transition-delay:.6s}
+.hs-bar-fill.eu-hs{background:#E8AE1A;transition-delay:.8s}
+.hs-gap-note{margin-top:.75rem;padding:.65rem .85rem;background:var(--red2);border-radius:8px;border-left:3px solid var(--red)}
+.hs-gap-note p{font-size:.78rem;color:var(--red);line-height:1.5}
+.hs-gap-note strong{font-weight:700}
+
+/* ── CAVALERI ── */
+.cavaleri-section{margin-bottom:2rem}
+.cavaleri-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1rem}
+@media(max-width:700px){.cavaleri-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:400px){.cavaleri-grid{grid-template-columns:1fr}}
+
+.cav-card{border-radius:12px;padding:1.25rem 1rem;text-align:center;border:1px solid;cursor:pointer;transition:transform .22s,box-shadow .22s,background .22s;position:relative;overflow:hidden}
+.cav-card::after{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s;background:currentColor}
+.cav-card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(0,0,0,.1)}
+.cav-card.cv1{background:#EAF6FB;border-color:#9FE1CB;color:var(--teal)}
+.cav-card.cv2{background:var(--orange2);border-color:#F5C4B3;color:var(--orange)}
+.cav-card.cv3{background:var(--red2);border-color:#F7C1C1;color:var(--red)}
+.cav-card.cv4{background:var(--purple2);border-color:#CECBF6;color:var(--purple)}
+.cav-icon{font-size:2rem;margin-bottom:.5rem;display:block}
+.cav-title{font-size:.88rem;font-weight:700;margin-bottom:.35rem;line-height:1.3}
+.cav-sub{font-size:.76rem;line-height:1.5;opacity:.85}
+.cav-years{display:inline-block;font-size:.7rem;font-weight:700;padding:.15rem .5rem;border-radius:99px;margin-top:.5rem;background:currentColor;color:#fff}
+
+.cav-card .cav-detail{max-height:0;overflow:hidden;transition:max-height .4s ease,opacity .3s;opacity:0;font-size:.78rem;line-height:1.55;margin-top:0;text-align:left}
+.cav-card.expanded .cav-detail{max-height:200px;opacity:1;margin-top:.75rem}
+.cav-card.expanded{box-shadow:0 10px 36px rgba(0,0,0,.14)}
+.expand-hint{font-size:.68rem;margin-top:.4rem;opacity:.6}
+
+/* ── FEREASTRA DE PREVENTIE ── */
+.fereastra-section{background:var(--navy);border-radius:14px;padding:1.75rem;margin-bottom:2rem;color:#fff}
+.fereastra-title{font-size:1rem;font-weight:700;color:#fff;margin-bottom:.4rem}
+.fereastra-sub{font-size:.83rem;color:rgba(255,255,255,.55);margin-bottom:1.25rem}
+.timeline-wrap{position:relative;margin:.5rem 0 1rem;padding:0 .5rem}
+.timeline-track{height:12px;background:rgba(255,255,255,.12);border-radius:6px;position:relative;overflow:visible}
+.timeline-fill{position:absolute;top:0;left:0;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold),var(--gold2));width:0;transition:width 1.5s cubic-bezier(.4,0,.2,1) .3s}
+.timeline-marker{position:absolute;top:-24px;font-size:.68rem;font-weight:700;color:var(--gold2);transform:translateX(-50%);white-space:nowrap}
+.timeline-marker-dot{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:var(--gold2);border:2px solid var(--navy);transform:translate(-50%,-50%)}
+.timeline-labels{display:flex;justify-content:space-between;font-size:.7rem;color:rgba(255,255,255,.4);margin-top:.5rem}
+.fereastra-legend{display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:.75rem}
+.fl-item{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:rgba(255,255,255,.7)}
+.fl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* ── PILONI BIOHACKING ── */
+.piloni-section{margin-bottom:2rem}
+.piloni-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1rem}
+@media(max-width:700px){.piloni-grid{grid-template-columns:repeat(2,1fr)}}
+
+.pilon-card{background:#fff;border-radius:12px;padding:1.25rem 1rem;text-align:center;border:1px solid var(--gray3);border-top:3px solid;transition:transform .22s,box-shadow .22s;cursor:pointer}
+.pilon-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.08)}
+.pilon-card:nth-child(1){border-top-color:var(--green)}
+.pilon-card:nth-child(2){border-top-color:var(--teal)}
+.pilon-card:nth-child(3){border-top-color:var(--navy)}
+.pilon-card:nth-child(4){border-top-color:var(--purple)}
+.pilon-icon{font-size:1.8rem;margin-bottom:.5rem;display:block}
+.pilon-title{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:.25rem}
+.pilon-desc{font-size:.76rem;color:var(--gray4);line-height:1.5}
+.pilon-badge{display:inline-block;font-size:.68rem;font-weight:600;padding:.15rem .55rem;border-radius:99px;margin-top:.5rem}
+.pilon-card:nth-child(1) .pilon-badge{background:var(--green2);color:var(--green)}
+.pilon-card:nth-child(2) .pilon-badge{background:var(--teal3);color:var(--teal)}
+.pilon-card:nth-child(3) .pilon-badge{background:#E8F4F8;color:var(--navy)}
+.pilon-card:nth-child(4) .pilon-badge{background:var(--purple2);color:var(--purple)}
+
+/* ── ANALOGIA OS ── */
+.os-section{background:var(--gray2);border-radius:14px;padding:1.5rem;margin-bottom:2rem;border:1px solid var(--gray3)}
+.os-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem}
+@media(max-width:600px){.os-grid{grid-template-columns:1fr}}
+.os-card{background:#fff;border-radius:10px;padding:1.1rem;border:1px solid var(--gray3);text-align:center}
+.os-card.highlight{background:var(--navy);border-color:var(--teal)}
+.os-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;margin:0 auto .6rem}
+.os-card:nth-child(1) .os-num{background:#FEF2E8;color:var(--orange)}
+.os-card:nth-child(2) .os-num{background:#FEF8E8;color:var(--gold)}
+.os-card.highlight .os-num{background:rgba(10,126,164,.3);color:var(--teal2)}
+.os-title{font-size:.85rem;font-weight:700;margin-bottom:.25rem}
+.os-card.highlight .os-title{color:var(--gold2)}
+.os-card:not(.highlight) .os-title{color:var(--navy)}
+.os-desc{font-size:.78rem;line-height:1.5}
+.os-card.highlight .os-desc{color:rgba(255,255,255,.7)}
+.os-card:not(.highlight) .os-desc{color:var(--gray4)}
+
+/* ── KPI ACTIUNE ── */
+.kpi-section{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:14px;padding:2rem;margin-bottom:1.5rem;border-left:5px solid var(--gold)}
+.kpi-tag{font-family:'Inter',monospace;font-size:.68rem;font-weight:600;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.75rem;display:block}
+.kpi-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:.6rem;font-weight:700}
+.kpi-desc{font-size:.85rem;color:rgba(255,255,255,.6);line-height:1.65;margin-bottom:1.25rem}
+.kpi-domains{display:grid;grid-template-columns:repeat(5,1fr);gap:.75rem}
+@media(max-width:600px){.kpi-domains{grid-template-columns:repeat(3,1fr)}}
+.kpi-domain{background:rgba(255,255,255,.06);border-radius:8px;padding:.75rem .5rem;text-align:center;border:1px solid rgba(255,255,255,.1)}
+.kpi-domain-icon{font-size:1.2rem;margin-bottom:.3rem;display:block}
+.kpi-domain-name{font-size:.72rem;color:rgba(255,255,255,.8);font-weight:600;line-height:1.3}
+.kpi-score{display:flex;align-items:center;justify-content:center;gap:2px;margin-top:.4rem}
+.kpi-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.15);flex-shrink:0;transition:background .3s}
+.kpi-score.active .kpi-dot:nth-child(1){background:var(--gold2)}
+
+/* ── FOOTER ── */
+.footer-info{text-align:center;padding:1rem;font-size:.75rem;color:var(--gray4)}
+.footer-info a{color:var(--teal);text-decoration:none}
+
+/* ── ANIM ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{opacity:0;animation:fadeUp .6s ease forwards}
+.fade-in-1{animation-delay:.1s}
+.fade-in-2{animation-delay:.2s}
+.fade-in-3{animation-delay:.3s}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.pulse{animation:pulse 2.5s ease infinite}
+</style>
+</head>
+<body>
+<div class="infographic">
+
+  <!-- HEADER -->
+  <div class="header fade-in">
+    <div class="header-tag">Biohacking 3.0 · Modul 1 · Lecția 1.1</div>
+    <h1>Medicina 3.0: De la <em>tratarea bolii</em><br>la ingineria longevității</h1>
+    <p class="header-sub">Paradigma care redefinește momentul intervenției — cu decenii înainte de boală, nu la diagnostic</p>
+    <div class="header-stats">
+      <div><div class="hstat-n">~12 ani</div><div class="hstat-l">Healthspan gap România</div></div>
+      <div><div class="hstat-n">75–80%</div><div class="hstat-l">Longevitate influențată de stilul de viață</div></div>
+      <div><div class="hstat-n">20–40 ani</div><div class="hstat-l">Fereastra de prevenție activă</div></div>
+      <div><div class="hstat-n">4</div><div class="hstat-l">Cavaleri ai apocalipsei metabolice</div></div>
+    </div>
+  </div>
+
+  <!-- PARADIGME -->
+  <div style="margin-bottom:.5rem"><span class="section-label">Evoluția paradigmelor medicale</span></div>
+  <div class="paradigme-grid fade-in fade-in-1">
+    <div class="paradigma-card reactiv">
+      <div class="p-ver">Medicina 2.0 · Reactiv</div>
+      <div class="p-title">Tratarea bolilor cronice</div>
+      <p class="p-desc">Intervine <strong>după</strong> diagnosticul bolii — la 20–30 de ani după ce procesele subclinice au început. Statine, metformină, antihipertensive.</p>
+      <ul class="p-items">
+        <li>Intervine la diagnosticul bolii</li>
+        <li>8 minute per consultație (WONCA, 2022)</li>
+        <li>Protocoale standard populaționale</li>
+        <li>Pacient pasiv — primitor de tratament</li>
+        <li>Optimizat pentru crize acute</li>
+      </ul>
+    </div>
+
+    <div class="paradigme-arrow">
+      <div class="arrow-body pulse">
+        <svg viewBox="0 0 24 24"><path d="M13 7l5 5-5 5M6 12h12"/></svg>
+      </div>
+      <div class="arrow-label">Trecere<br>de paradigmă</div>
+    </div>
+
+    <div class="paradigma-card proactiv">
+      <div class="p-ver">Medicina 3.0 · Proactiv</div>
+      <div class="p-title">Ingineria longevității</div>
+      <p class="p-desc">Prevenire activă cu <strong>decenii înainte</strong> de boală. Personalizare prin biomarkeri. <em>Healthspan</em> ca KPI primar, nu absența bolii.</p>
+      <ul class="p-items">
+        <li>Intervine cu 20–30 ani înainte de boală</li>
+        <li>Personalizare prin biomarkeri individuali</li>
+        <li>Principiul N=1 — variabilitate biologică</li>
+        <li>Pacient activ — arhitect al sănătății</li>
+        <li>Optimizat pentru healthspan maxim</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PATIENT ROLE -->
+  <div class="patient-role fade-in fade-in-2">
+    <span class="section-label">Rolul pacientului în paradigma modernă</span>
+    <div class="role-grid">
+      <div class="role-card pasiv">
+        <div class="role-icon">🛏</div>
+        <div class="role-title">PASIV</div>
+        <div class="role-desc">Primitor de tratament. Urmează protocoalele prescrise. Vine la medic când apare simptomul.</div>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="role-card activ">
+        <div class="role-icon">📊</div>
+        <div class="role-title">ACTIV</div>
+        <div class="role-desc">Arhitect al propriei sănătăți. Măsoară, optimizează, experimentează controlat. Folosește date, nu speranțe.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-grid fade-in fade-in-2">
+    <!-- Compresia morbiditatii -->
+    <div class="chart-card">
+      <span class="section-label">Compresia morbidității</span>
+      <div class="chart-title">Curba healthspan: standard vs. optim</div>
+      <div class="chart-sub">Modelul Fries (NEJM, 1980) — obiectivul Medicinei 3.0: declin comprimat la finalul vieții</div>
+      <div style="position:relative;height:220px">
+        <canvas id="morbChart"></canvas>
+      </div>
+      <div style="display:flex;gap:1.25rem;margin-top:.75rem;font-size:.75rem;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:.4rem"><span style="width:20px;height:3px;background:#C85A0A;border-radius:2px;display:inline-block"></span>Medicina 2.0 (standard)</span>
+        <span style="display:flex;align-items:center;gap:.4rem"><span style="width:20px;height:3px;background:#0A7EA4;border-radius:2px;display:inline-block"></span>Medicina 3.0 (optim)</span>
+        <span style="display:flex;align-items:center;gap:.4rem"><span style="width:8px;height:8px;background:#FEF8E8;border:1px solid #E8AE1A;border-radius:2px;display:inline-block"></span>Healthspan gap (~12 ani)</span>
+      </div>
+    </div>
+
+    <!-- Romania vs UE -->
+    <div class="chart-card">
+      <span class="section-label">Date epidemiologice</span>
+      <div class="chart-title">Indicatori de sănătate: România vs. media UE</div>
+      <div class="chart-sub">WHO Global Health Observatory (2022) · Eurostat Healthy Life Years (2023)</div>
+      <div class="hs-bars">
+        <div class="hs-bar-row">
+          <div class="hs-bar-label"><span>Speranța de viață — România</span><span>76,2 ani</span></div>
+          <div class="hs-bar-track"><div class="hs-bar-fill ro-life" data-width="76.2" style="max-width:94%"></div></div>
+        </div>
+        <div class="hs-bar-row">
+          <div class="hs-bar-label"><span>Speranța de viață — media UE</span><span>81,0 ani</span></div>
+          <div class="hs-bar-track"><div class="hs-bar-fill eu-life" data-width="81" style="max-width:100%"></div></div>
+        </div>
+        <div class="hs-bar-row">
+          <div class="hs-bar-label"><span>Healthspan — România</span><span>~64 ani</span></div>
+          <div class="hs-bar-track"><div class="hs-bar-fill ro-hs" data-width="64" style="max-width:79%"></div></div>
+        </div>
+        <div class="hs-bar-row">
+          <div class="hs-bar-label"><span>Healthspan — media UE</span><span>~68 ani</span></div>
+          <div class="hs-bar-track"><div class="hs-bar-fill eu-hs" data-width="68" style="max-width:84%"></div></div>
+        </div>
+      </div>
+      <div class="hs-gap-note">
+        <p><strong>Healthspan Gap România: ~12 ani</strong> cu funcție degradată la finalul vieții. Parțial recuperabil prin intervenții preventive sistematice.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CEI 4 CAVALERI -->
+  <div class="cavaleri-section fade-in fade-in-2">
+    <span class="section-label">Riscurile metabolice majore</span>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem">
+      <div>
+        <div style="font-size:1rem;font-weight:700;color:var(--navy)">Cei 4 cavaleri ai apocalipsei metabolice</div>
+        <div style="font-size:.8rem;color:var(--gray4)">Generează ~80% din decesele premature. Toate au decenii de evoluție subclinică. <em>Apasă pe fiecare pentru detalii.</em></div>
+      </div>
+      <div style="font-size:.75rem;color:var(--teal);font-weight:600;background:#E1F5EE;padding:.3rem .75rem;border-radius:99px">Toți modificabili prin stilul de viață</div>
+    </div>
+    <div class="cavaleri-grid">
+      <div class="cav-card cv1" onclick="toggleCav(this)">
+        <span class="cav-icon">🫀</span>
+        <div class="cav-title">Boli cardiovasculare</div>
+        <div class="cav-sub">Cauza nr. 1 de deces global (OMS, 2023)</div>
+        <span class="cav-years">20–40 ani subclinic</span>
+        <div class="cav-detail">Ateroscleroza evoluează subclinic <strong>20–40 de ani</strong> înainte de primul eveniment (IMA, AVC). Biomarkeri modificabili timpuriu: ApoB, Lp(a), CRP hs, HOMA-IR. Exercițiul Zona 2 reduce riscul cu 30–45% (Lee et al., 2022, BJSM).</div>
+        <div class="expand-hint">↓ click pentru detalii</div>
+      </div>
+      <div class="cav-card cv2" onclick="toggleCav(this)">
+        <span class="cav-icon">🫁</span>
+        <div class="cav-title">Diabet tip 2 și rezistența la insulină</div>
+        <div class="cav-sub">Fundament metabolic comun</div>
+        <span class="cav-years">10–15 ani subclinic</span>
+        <div class="cav-detail">Rezistența la insulină evoluează asimptomatic <strong>10–15 ani</strong> înainte de diagnosticul clinic. HOMA-IR detectează problema cu ani înainte de HbA1c modificat. Co-factor în ateroscleroză, cancer și neurodegenerare.</div>
+        <div class="expand-hint">↓ click pentru detalii</div>
+      </div>
+      <div class="cav-card cv3" onclick="toggleCav(this)">
+        <span class="cav-icon">🔬</span>
+        <div class="cav-title">Cancer</div>
+        <div class="cav-sub">Al doilea factor de mortalitate</div>
+        <span class="cav-years">Co-factori metabolici</span>
+        <div class="cav-detail">Inflamația cronică de grad scăzut (CRP hs &gt; 1 mg/L) și hiperinsulinemia sunt co-factori documentați. IGF-1 crescut → proliferare celulară accelerată. Exercițiul fizic reduce riscul pentru ~13 tipuri de cancer (NCI, 2023).</div>
+        <div class="expand-hint">↓ click pentru detalii</div>
+      </div>
+      <div class="cav-card cv4" onclick="toggleCav(this)">
+        <span class="cav-icon">🧠</span>
+        <div class="cav-title">Boli neurodegenerative</div>
+        <div class="cav-sub">Alzheimer, Parkinson — dizabilitate 65+ ani</div>
+        <span class="cav-years">20–25 ani subclinic</span>
+        <div class="cav-detail">Acumularea amiloidului beta începe cu <strong>20–25 de ani</strong> înainte de primele simptome. Sistemul glimfatic (activ în NREM3) curăță depunerile. Somnul deficitar cronic = factor de risc documentat Alzheimer.</div>
+        <div class="expand-hint">↓ click pentru detalii</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEREASTRA DE PREVENTIE -->
+  <div class="fereastra-section fade-in fade-in-3">
+    <span class="section-label" style="color:var(--gold2)">Momentul critic al intervenției</span>
+    <div class="fereastra-title">Fereastra de prevenție activă: 20–40 de ani</div>
+    <div class="fereastra-sub">Bolile cronice evoluează subclinic decenii întregi. Medicina 3.0 intervine în această fereastră.</div>
+    <div class="timeline-wrap">
+      <div style="display:flex;justify-content:space-between;font-size:.68rem;color:rgba(255,255,255,.4);margin-bottom:.5rem">
+        <span>Vârsta 20</span><span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span>
+      </div>
+      <div class="timeline-track" id="tTrack">
+        <div class="timeline-fill" id="tFill"></div>
+        <div class="timeline-marker-dot" style="left:14.3%" id="tDot1"></div>
+        <div class="timeline-marker-dot" style="left:71.4%;background:var(--red)" id="tDot2"></div>
+      </div>
+      <div class="fereastra-legend" style="margin-top:1rem">
+        <div class="fl-item"><div class="fl-dot" style="background:var(--gold2)"></div>Fereastra intervenției Medicinei 3.0 (vârstele 20–60)</div>
+        <div class="fl-item"><div class="fl-dot" style="background:var(--red)"></div>Primul diagnostic clinic tipic (vârsta ~65–70)</div>
+        <div class="fl-item"><div class="fl-dot" style="background:rgba(255,255,255,.3)"></div>Medicina 2.0 intervine la diagnostic — prea târziu pentru prevenție</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PILONI BIOHACKING -->
+  <div class="piloni-section fade-in fade-in-3">
+    <span class="section-label">Optimizarea prin Biohacking 3.0</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.35rem">Cei 5 piloni acționabili</div>
+    <div style="font-size:.82rem;color:var(--gray4);margin-bottom:1rem">Fiecare pilon este lucrat sistematic în modulele 2–6 ale cursului</div>
+    <div class="piloni-grid">
+      <div class="pilon-card">
+        <span class="pilon-icon">🥗</span>
+        <div class="pilon-title">Nutriție personalizată</div>
+        <div class="pilon-desc">Structurată pe biomarkeri individuali: glicemie, HOMA-IR, profil lipidic, microbiom</div>
+        <span class="pilon-badge">Modul 3</span>
+      </div>
+      <div class="pilon-card">
+        <span class="pilon-icon">🏃</span>
+        <div class="pilon-title">Exercițiu fizic ca medicament</div>
+        <div class="pilon-desc">Zona 2, antrenament de forță și VO2max training — cu doze și intensități prescrise</div>
+        <span class="pilon-badge">Modul 5</span>
+      </div>
+      <div class="pilon-card">
+        <span class="pilon-icon">😴</span>
+        <div class="pilon-title">Somn și ritm circadian</div>
+        <div class="pilon-desc">Clearance amiloid beta (sistem glimfatic), reglare hormonală GH, HRV în creștere</div>
+        <span class="pilon-badge">Modul 4</span>
+      </div>
+      <div class="pilon-card">
+        <span class="pilon-icon">🧘</span>
+        <div class="pilon-title">Managementul stresului</div>
+        <div class="pilon-desc">Axa HPA, cortizol cronic, instrumente SNV (respirație, NSDR, tehnici somatice)</div>
+        <span class="pilon-badge">Modul 5</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANALOGIA OS -->
+  <div class="os-section fade-in fade-in-3">
+    <span class="section-label">Analogia inginerească</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Corpul tău ca sistem informatic</div>
+    <div style="font-size:.82rem;color:var(--gray5);margin-bottom:1rem">Hardware = structura fizică · Software = obiceiuri, nutriție, somn, mișcare</div>
+    <div class="os-grid">
+      <div class="os-card">
+        <div class="os-num">1.0</div>
+        <div class="os-title">Medicina 1.0</div>
+        <div class="os-desc">Repară hardware-ul spart. Operează, coase, imobilizează. Excepțional la crize acute.</div>
+      </div>
+      <div class="os-card">
+        <div class="os-num">2.0</div>
+        <div class="os-title">Medicina 2.0</div>
+        <div class="os-desc">Instalează patch-uri reactive: statina = patch LDL, metformina = patch glicemie. Repară crash-urile.</div>
+      </div>
+      <div class="os-card highlight">
+        <div class="os-num">3.0</div>
+        <div class="os-title">Biohacking 3.0</div>
+        <div class="os-desc">Update sistematic al OS-ului biologic înainte de crash. Audit periodic. Optimizare continuă.</div>
+      </div>
+    </div>
+    <div style="margin-top:1rem;padding:.85rem 1rem;background:#fff;border-radius:8px;border-left:3px solid var(--teal)">
+      <p style="font-size:.84rem;color:var(--gray5)">Întrebarea corectă nu este: <em>„Sunt bolnav?"</em><br>Întrebarea corectă este: <strong style="color:var(--navy)">„Pe ce versiune de OS rulează sistemul meu biologic — și cum îl actualizez?"</strong></p>
+    </div>
+  </div>
+
+  <!-- KPI ACTIUNE -->
+  <div class="kpi-section fade-in fade-in-3">
+    <span class="kpi-tag">⬡ KPI obligatoriu · Săptămâna 1</span>
+    <div class="kpi-title">Completează fișa de auto-evaluare inițială</div>
+    <div class="kpi-desc">Notează un scor de la 1 la 10 pe fiecare dintre cele 5 domenii. Acesta este baseline-ul tău personal — punctul zero al sistemului. În Săptămâna 6 vei calcula delta generată de program.</div>
+    <div class="kpi-domains">
+      <div class="kpi-domain">
+        <span class="kpi-domain-icon">😴</span>
+        <div class="kpi-domain-name">Somn</div>
+        <div class="kpi-score active">
+          <div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div>
+        </div>
+      </div>
+      <div class="kpi-domain">
+        <span class="kpi-domain-icon">⚡</span>
+        <div class="kpi-domain-name">Energie</div>
+        <div class="kpi-score active">
+          <div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div>
+        </div>
+      </div>
+      <div class="kpi-domain">
+        <span class="kpi-domain-icon">🌿</span>
+        <div class="kpi-domain-name">Stres</div>
+        <div class="kpi-score active">
+          <div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div>
+        </div>
+      </div>
+      <div class="kpi-domain">
+        <span class="kpi-domain-icon">🥗</span>
+        <div class="kpi-domain-name">Digestie</div>
+        <div class="kpi-score active">
+          <div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div>
+        </div>
+      </div>
+      <div class="kpi-domain">
+        <span class="kpi-domain-icon">🧠</span>
+        <div class="kpi-domain-name">Focus</div>
+        <div class="kpi-score active">
+          <div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div><div class="kpi-dot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-info">
+    <strong>Biohacking 3.0 · Modul 1 · Lecția 1.1</strong> · dr.ing. Radu Pascu · NUTRISIB Sibiu · 2025<br>
+    Surse: Attia (2023) Outlive; Fries (1980) NEJM; Myers (2002) NEJM; WHO (2022); Eurostat (2023)
+  </div>
+
+</div>
+
+<script>
+/* ── Compresia morbiditatii chart ── */
+const ages = [20,25,30,35,40,45,50,55,60,65,70,75,80,82];
+const standard = [100,99,98,97,95,93,90,85,76,65,50,32,15,5];
+const optim    = [100,100,99,99,98,97,96,95,93,90,86,80,60,20];
+
+new Chart(document.getElementById('morbChart'),{
+  type:'line',
+  data:{
+    labels:ages,
+    datasets:[
+      {label:'Medicina 2.0',data:standard,borderColor:'#C85A0A',backgroundColor:'rgba(200,90,10,.06)',borderWidth:2.5,tension:.4,fill:true,pointRadius:0,pointHoverRadius:4},
+      {label:'Medicina 3.0',data:optim,borderColor:'#0A7EA4',backgroundColor:'rgba(10,126,164,.08)',borderWidth:2.5,tension:.4,fill:true,pointRadius:0,pointHoverRadius:4},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        callbacks:{
+          title:v=>'Vârsta: '+v[0].label+' ani',
+          label:v=>v.dataset.label+': '+v.parsed.y+'%'
+        }
+      }
+    },
+    scales:{
+      x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:11},color:'#9A9088'},title:{display:true,text:'Vârstă (ani)',font:{size:11},color:'#9A9088'}},
+      y:{min:0,max:100,grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:11},color:'#9A9088',callback:v=>v+'%'},title:{display:true,text:'Funcție biologică (%)',font:{size:11},color:'#9A9088'}}
+    }
+  }
+});
+
+/* ── Animate bars on scroll ── */
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.hs-bar-fill').forEach(bar=>{
+        const target = parseFloat(bar.getAttribute('data-width'));
+        const maxPct = parseFloat(bar.style.maxWidth)||100;
+        const pct = (target/81)*100;
+        bar.style.width = Math.min(pct,maxPct)+'%';
+      });
+      io.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+document.querySelectorAll('.chart-card').forEach(c=>io.observe(c));
+
+/* ── Timeline animation ── */
+const tio = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.getElementById('tFill').style.width='71.4%';
+      tio.unobserve(e.target);
+    }
+  });
+},{threshold:.4});
+tio.observe(document.getElementById('tTrack'));
+
+/* ── Toggle cavaleri ── */
+function toggleCav(el){
+  const wasOpen = el.classList.contains('expanded');
+  document.querySelectorAll('.cav-card').forEach(c=>c.classList.remove('expanded'));
+  if(!wasOpen) el.classList.add('expanded');
+}
+</script>
+</body>
+</html>

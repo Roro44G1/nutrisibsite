@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M3 · L3.3 — Glicemia personalizată | Biohacking 3.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;--teal:#0A7EA4;
+  --amb:#E65100;--amb2:#FFF3E0;--amb3:#FF6D00;--amb4:#FFE0B2;
+  --gold:#C8920A;--gold2:#E8AE1A;--cream:#FAF7F2;--warm:#FFF8F0;
+  --white:#FFFFFF;--g1:#F0EBE3;--g2:#DDD6CC;--g3:#9A9088;--g4:#5A5248;
+  --dark:#1E1810;--green:#1A6B3C;--green2:#EAF4EE;--leaf:#2E7D32;
+  --red:#B83030;--red2:#FDEAEA;--purple:#5B3FA6;--purple2:#F0EBF8;
+  --serif:'DM Serif Display',serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+  --r:10px;--sh1:0 2px 16px rgba(15,30,60,.08);--tr:all .22s cubic-bezier(.4,0,.2,1)
+}
+body{font-family:var(--sans);background:var(--warm);color:var(--dark);line-height:1.7;-webkit-font-smoothing:antialiased}
+.lesson-wrap{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+@media(max-width:900px){.lesson-wrap{grid-template-columns:1fr}}
+.sidebar{background:var(--navy);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;scrollbar-width:none}
+.sidebar::-webkit-scrollbar{display:none}
+.sb-brand{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand-logo{font-family:var(--mono);font-size:.72rem;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;display:block;margin-bottom:.35rem}
+.brand-course{font-size:.78rem;color:rgba(255,255,255,.45);line-height:1.4}
+.sb-nav{padding:.75rem 0;flex:1}
+.nav-lbl{font-family:var(--mono);font-size:.62rem;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;padding:.9rem 1.25rem .35rem}
+.nav-l{display:flex;align-items:center;gap:.65rem;padding:.55rem 1.25rem;text-decoration:none;transition:var(--tr);border-left:2px solid transparent}
+.nav-l:hover{background:rgba(255,255,255,.05)}
+.nav-l.active{background:rgba(230,81,0,.2);border-left-color:var(--amb3)}
+.nav-l.done .nav-l-num::after{content:' ✓';color:var(--green)}
+.nav-l-num{font-family:var(--mono);font-size:.65rem;color:var(--amb3);min-width:24px}
+.nav-l-title{font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.35}
+.nav-l.active .nav-l-title{color:var(--white)}
+.sb-prog{padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.08)}
+.prog-lbl{font-family:var(--mono);font-size:.62rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
+.prog-bar{height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;width:43.3%;background:linear-gradient(90deg,var(--amb),var(--gold2));border-radius:2px}
+.prog-txt{font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.35);margin-top:.4rem}
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{background:var(--white);border-bottom:1px solid var(--g1);padding:.75rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:50;box-shadow:var(--sh1);flex-wrap:wrap}
+.topbar-bc{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--g3)}
+.topbar-bc a{color:var(--amb);text-decoration:none}
+.topbar-bc span{color:var(--g2)}
+.meta-chip{font-family:var(--mono);font-size:.7rem;color:var(--g4)}
+.btn-done{background:var(--amb);color:var(--white);font-family:var(--sans);font-size:.8rem;font-weight:600;padding:.45rem 1.1rem;border-radius:6px;border:none;cursor:pointer;transition:var(--tr)}
+.btn-done:hover{background:var(--amb3)}.btn-done.done{background:var(--green)}
+.read-meta{display:flex;align-items:center;gap:1.5rem;padding:.75rem 2rem;background:var(--amb2);border-bottom:1px solid rgba(230,81,0,.15);font-family:var(--mono);font-size:.7rem;color:var(--g3);flex-wrap:wrap}
+.read-meta a{color:var(--amb);text-decoration:none}
+.hero{background:var(--navy);
+  background-image:radial-gradient(ellipse 65% 55% at 70% 35%,rgba(230,81,0,.28) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 40% at 5% 80%,rgba(200,146,10,.15) 0%,transparent 55%);
+  padding:3rem 2rem 2.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.015) 40px)}
+.hero-inner{max-width:820px;position:relative;animation:fadeUp .6s ease both}
+.hero-ey{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.68rem;color:var(--amb4);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}
+.hero-ey::before{content:'';width:20px;height:1px;background:var(--amb4)}
+.hero h1{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.4rem);color:var(--white);line-height:1.2;margin-bottom:.75rem;font-weight:400}
+.hero h1 em{font-style:italic;color:var(--amb4)}
+.hero-desc{font-size:.95rem;color:rgba(255,255,255,.6);max-width:580px;line-height:1.65;margin-bottom:1.5rem}
+.hero-tags{display:flex;gap:.65rem;flex-wrap:wrap}
+.hero-tag{font-family:var(--mono);font-size:.67rem;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.15);padding:.2rem .65rem;border-radius:99px}
+.hero-tag.hl{color:var(--amb4);border-color:rgba(255,224,178,.4)}
+.vid-sec{padding:2rem;background:var(--white);border-bottom:1px solid var(--g1)}
+.vid-wrap{background:var(--navy);border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;max-height:480px;display:flex;align-items:center;justify-content:center}
+.vid-ph{display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center;padding:2rem}
+.play-btn{width:72px;height:72px;border-radius:50%;background:rgba(230,81,0,.3);border:2px solid rgba(230,81,0,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--tr)}
+.play-btn:hover{background:rgba(230,81,0,.55);transform:scale(1.08)}
+.play-btn svg{width:28px;height:28px;fill:white;margin-left:4px}
+.vid-ph p{font-size:.85rem;color:rgba(255,255,255,.5)}.vp-hint{font-family:var(--mono);font-size:.68rem;color:var(--amb4)}
+.body{padding:2.5rem 2rem 4rem;max-width:860px}
+.obj-box{background:var(--white);border:1px solid var(--g1);border-radius:var(--r);padding:1.5rem;margin-bottom:2.5rem;box-shadow:var(--sh1)}
+.obj-lbl{font-family:var(--mono);font-size:.68rem;color:var(--amb);letter-spacing:.1em;text-transform:uppercase;font-weight:500;margin-bottom:.75rem;display:block}
+.obj-list{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.obj-list li{display:flex;align-items:flex-start;gap:.75rem;font-size:.9rem;line-height:1.55}
+.obj-ck{width:18px;height:18px;border-radius:50%;background:var(--amb);color:white;font-size:.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem}
+.eyebrow{font-family:var(--mono);font-size:.67rem;color:var(--amb);letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:.4rem}
+.s-h2{font-family:var(--serif);font-size:1.65rem;color:var(--navy);font-weight:400;line-height:1.25;margin-bottom:.75rem}
+.p{font-size:.94rem;color:var(--g4);line-height:1.75;margin-bottom:.75rem}
+.p strong{color:var(--dark)}
+.div{height:1px;background:linear-gradient(90deg,var(--amb),transparent);margin:2.5rem 0;opacity:.4}
+.callout{border-radius:var(--r);padding:1.25rem 1.5rem;margin:1.25rem 0;border-left:4px solid}
+.callout.amber{background:var(--amb2);border-color:var(--amb)}.callout.green{background:var(--green2);border-color:var(--green)}
+.callout.red{background:var(--red2);border-color:var(--red)}.callout.navy{background:var(--navy);border-color:var(--gold)}
+.callout.purple{background:var(--purple2);border-color:var(--purple)}.callout.teal{background:#EAF6FB;border-color:var(--teal)}
+.callout-lbl{font-family:var(--mono);font-size:.65rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.callout.amber .callout-lbl{color:var(--amb)}.callout.green .callout-lbl{color:var(--green)}
+.callout.red .callout-lbl{color:var(--red)}.callout.navy .callout-lbl{color:var(--gold2)}
+.callout.purple .callout-lbl{color:var(--purple)}.callout.teal .callout-lbl{color:var(--teal)}
+.callout p{font-size:.9rem;line-height:1.65;margin-bottom:.35rem}.callout p:last-child{margin-bottom:0}
+.callout.navy p{color:rgba(255,255,255,.8)}.callout strong{color:var(--dark)}.callout.navy strong{color:#fff}
+/* TABEL TINTE */
+.tbl-wrap{overflow-x:auto;margin:1.25rem 0;border-radius:var(--r);box-shadow:var(--sh1)}
+.dtbl{width:100%;border-collapse:collapse;font-size:.875rem}
+.dtbl th{background:var(--navy);color:var(--white);font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.75rem 1rem;text-align:left}
+.dtbl td{padding:.7rem 1rem;border-bottom:1px solid var(--g1);color:var(--dark);vertical-align:top;line-height:1.5}
+.dtbl tr:last-child td{border-bottom:none}
+.dtbl tr:nth-child(even) td{background:var(--amb2)}
+.dtbl .opt{color:var(--green);font-weight:700;font-family:var(--mono);font-size:.8rem}
+.dtbl .norm{color:var(--g3);font-family:var(--mono);font-size:.8rem}
+/* FAZE raspuns glicemic */
+.faze-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.25rem 0}
+@media(max-width:580px){.faze-grid{grid-template-columns:1fr}}
+.faza{border-radius:var(--r);padding:1.1rem;border:1px solid;box-shadow:var(--sh1)}
+.faza.f1{background:var(--amb2);border-color:var(--amb4);border-top:3px solid var(--amb)}
+.faza.f2{background:var(--red2);border-color:#EF9A9A;border-top:3px solid var(--red)}
+.faza.f3{background:var(--green2);border-color:#A5D6A7;border-top:3px solid var(--green)}
+.faza.f4{background:var(--purple2);border-color:#CECBF6;border-top:3px solid var(--purple)}
+.faza-time{font-family:var(--mono);font-size:.68rem;font-weight:700;margin-bottom:.25rem}
+.f1 .faza-time{color:var(--amb)}.f2 .faza-time{color:var(--red)}.f3 .faza-time{color:var(--green)}.f4 .faza-time{color:var(--purple)}
+.faza-title{font-size:.9rem;font-weight:700;margin-bottom:.35rem;color:var(--navy)}
+.faza-body{font-size:.8rem;color:var(--g4);line-height:1.5}
+/* PROTOCOL N=1 */
+.protocol-steps{display:flex;flex-direction:column;gap:.5rem;margin:1.25rem 0}
+.pstep{display:grid;grid-template-columns:70px 1fr;gap:.85rem;background:var(--white);border-radius:var(--r);padding:.85rem 1.1rem;border:1px solid var(--g2);box-shadow:var(--sh1);align-items:center}
+.pstep-t{font-family:var(--mono);font-size:.85rem;font-weight:700;color:var(--amb);text-align:center;background:var(--amb2);border-radius:6px;padding:.4rem .5rem}
+.pstep-body{font-size:.85rem;color:var(--dark);line-height:1.5}
+/* FACTORI MODIFICATORI */
+.factori-mod{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin:1.25rem 0}
+@media(max-width:580px){.factori-mod{grid-template-columns:1fr}}
+.fm-card{border-radius:var(--r);padding:1rem;border:1px solid var(--g2);background:var(--white);box-shadow:var(--sh1);border-left:4px solid var(--amb)}
+.fm-title{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:.2rem}
+.fm-pct{font-family:var(--mono);font-size:.75rem;color:var(--green);font-weight:700;margin-bottom:.3rem}
+.fm-body{font-size:.78rem;color:var(--g4);line-height:1.45}
+/* CHART glicemic */
+.chart-card{background:var(--white);border-radius:var(--r);padding:1.5rem;margin:1.25rem 0;border:1px solid var(--g2);box-shadow:var(--sh1)}
+/* COASTER */
+.coaster-compare{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.25rem 0}
+@media(max-width:580px){.coaster-compare{grid-template-columns:1fr}}
+.coaster-card{border-radius:var(--r);padding:1.15rem;border:1px solid}
+.coaster-card.bad{background:var(--red2);border-color:#EF9A9A;border-top:3px solid var(--red)}
+.coaster-card.good{background:var(--green2);border-color:#A5D6A7;border-top:3px solid var(--green)}
+.coaster-title{font-size:.9rem;font-weight:700;margin-bottom:.4rem}
+.bad .coaster-title{color:var(--red)}.good .coaster-title{color:var(--green)}
+.coaster-body{font-size:.8rem;color:var(--g4);line-height:1.55}
+/* KPI */
+.kpi-box{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:var(--r);padding:2rem;margin-top:2rem;border-left:5px solid var(--amb)}
+.kpi-lbl{font-family:var(--mono);font-size:.72rem;color:var(--amb4);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}
+.kpi-box h3{font-family:var(--serif);font-size:1.3rem;color:var(--white);font-weight:400;margin-bottom:.75rem}
+.kpi-steps{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.kpi-steps li{font-size:.88rem;color:rgba(255,255,255,.85);display:flex;gap:.65rem;align-items:baseline;line-height:1.5}
+.kpi-n{font-family:var(--mono);font-size:.75rem;color:var(--amb4);flex-shrink:0}
+.bib-sec{background:var(--amb2);border-top:1px solid rgba(230,81,0,.15);padding:2rem}
+.bib-list{list-style:none;display:flex;flex-direction:column}
+.bib-list li{font-size:.8rem;color:var(--g4);line-height:1.6;padding:.5rem .75rem;border-bottom:1px solid rgba(230,81,0,.1);display:grid;grid-template-columns:1.8rem 1fr;gap:.5rem}
+.bib-n{font-family:var(--mono);font-size:.68rem;color:var(--amb);font-weight:500}
+.bib-list li em{font-style:italic;color:var(--dark)}
+.lesson-nav{padding:1.5rem 2rem;background:var(--white);border-top:1px solid var(--g1);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.nav-btn{display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;color:var(--navy);text-decoration:none;padding:.65rem 1.25rem;border-radius:var(--r);border:1px solid var(--g2);transition:var(--tr);background:var(--white)}
+.nav-btn:hover{border-color:var(--amb);color:var(--amb);background:var(--amb2)}
+.nav-btn.primary{background:var(--amb);color:var(--white);border-color:var(--amb)}.nav-btn.primary:hover{background:var(--amb3)}
+.nav-btn svg{width:16px;height:16px}.nav-btn-lbl{font-size:.7rem;font-weight:400;color:var(--g3);display:block;margin-bottom:.1rem}.nav-btn.primary .nav-btn-lbl{color:rgba(255,255,255,.6)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.sidebar{display:none}}
+</style>
+</head>
+<body>
+<div class="lesson-wrap">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <a href="../index.html" class="brand-logo">NUTRISIB / BH3.0</a>
+      <div class="brand-course">Biohacking 3.0<br>Ingineria sistemului tău biologic</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="nav-lbl">Modulele 1 & 2</div>
+      <a href="m2-l25.html" class="nav-l done"><span class="nav-l-num">1–2</span><span class="nav-l-title">Complet ✓</span></a>
+      <div class="nav-lbl" style="margin-top:.5rem">Modul 3 — Nutriție</div>
+      <a href="m3-l31.html" class="nav-l done"><span class="nav-l-num">3.1</span><span class="nav-l-title">Principiile nutriției</span></a>
+      <a href="m3-l32.html" class="nav-l done"><span class="nav-l-num">3.2</span><span class="nav-l-title">Microbiomul intestinal</span></a>
+      <a href="m3-l33.html" class="nav-l active"><span class="nav-l-num">3.3</span><span class="nav-l-title">Glicemia personalizată</span></a>
+      <a href="m3-l34.html" class="nav-l"><span class="nav-l-num">3.4</span><span class="nav-l-title">Post intermitent</span></a>
+      <a href="m3-l35.html" class="nav-l"><span class="nav-l-num">3.5</span><span class="nav-l-title">Nutrigenomică și C.E.L.O.S.</span></a>
+      <div class="nav-lbl" style="margin-top:.5rem">Modulele 4–6</div>
+      <a href="#" class="nav-l" style="opacity:.25;pointer-events:none"><span class="nav-l-num">4–6</span><span class="nav-l-title">Se deblochează progresiv</span></a>
+    </nav>
+    <div class="sb-prog">
+      <div class="prog-lbl">Progres curs</div>
+      <div class="prog-bar"><div class="prog-fill"></div></div>
+      <div class="prog-txt">13 / 30 lecții completate</div>
+    </div>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-bc">
+        <a href="../index.html">Biohacking 3.0</a><span>›</span>
+        <a href="#">Modul 3</a><span>›</span>
+        <span style="color:var(--dark);font-weight:500">Lecția 3.3</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap">
+        <span class="meta-chip">🩸 Glicemie · 22 min</span>
+        <button class="btn-done" id="doneBtn" onclick="markDone()">✓ Marchează completă</button>
+      </div>
+    </div>
+    <div class="read-meta">
+      <span>📖 ~16 min citire</span><span>🎬 ~22 min video</span>
+      <span>📥 <a href="BH30_M3_L33_Material_Curs.pdf">PDF curs</a></span>
+      <span>📄 <a href="BH30_M3_L33_Script_Video.pdf">Script video</a></span>
+    </div>
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-ey">Modul 3 · Lecția 3.3 · N=1 glicemic</div>
+        <h1>Glicemia <em>personalizată</em></h1>
+        <p class="hero-desc">Răspunsul glicemic la același aliment variază cu până la 4× între persoane. Glucometrul ca instrument N=1 — protocol, ținte optime și corelarea cu HRV și energia din jurnal.</p>
+        <div class="hero-tags">
+          <span class="hero-tag hl">Zeevi (Cell, 2015)</span>
+          <span class="hero-tag">Protocol T0–T60–T120</span>
+          <span class="hero-tag">Hipoglicemie reactivă</span>
+          <span class="hero-tag">Coaster glicemic</span>
+          <span class="hero-tag">HRV–glicemie</span>
+        </div>
+      </div>
+    </div>
+    <div class="vid-sec">
+      <div class="vid-wrap" id="vWrap">
+        <div class="vid-ph">
+          <div class="play-btn" onclick="loadVid()"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+          <p>Lecția 3.3 — Glicemia personalizată</p>
+          <span class="vp-hint">Adaugă data-video-src="URL" pe #vWrap</span>
+        </div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="obj-box">
+        <span class="obj-lbl">Obiective de învățare</span>
+        <ul class="obj-list">
+          <li><span class="obj-ck">✓</span>Explici de ce răspunsul glicemic la același aliment variază cu până la 4× între persoane</li>
+          <li><span class="obj-ck">✓</span>Proiectezi experimente N=1 valide cu glucometrul — protocol T0–T60–T120</li>
+          <li><span class="obj-ck">✓</span>Interpretezi valorile glicemice prin KPI-uri optime funcționale, nu clinice</li>
+          <li><span class="obj-ck">✓</span>Corelezi glicemia cu HRV-ul și energia din jurnalul de biohacking</li>
+          <li><span class="obj-ck">✓</span>Identifici pattern-ul coasterului glicemic matinal și intervențiile directe</li>
+        </ul>
+      </div>
+
+      <!-- S1 — Tinte optime -->
+      <span class="eyebrow">Secțiunea 1</span>
+      <h2 class="s-h2">Țintele glicemice optime funcționale</h2>
+      <p class="p"><strong>Zeevi et al. (Cell, 2015):</strong> 800 de participanți, 46.898 de mese. Răspunsul glicemic la același aliment variază cu până la 4×. Singura metodă validă: testarea personală.</p>
+
+      <div class="tbl-wrap">
+        <table class="dtbl">
+          <thead><tr><th>KPI glicemic</th><th>Normal clinic</th><th>Optim funcțional</th><th>Semnificația</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Glicemia a jeun</strong></td><td class="norm">&lt;100 mg/dL</td><td class="opt">70–85 mg/dL</td><td>La 95 mg/dL poți fi prediabetic funcțional</td></tr>
+            <tr><td><strong>Vârf la 1h post-prandial</strong></td><td class="norm">&lt;140 mg/dL</td><td class="opt">&lt;120 mg/dL</td><td>Minimizarea excursiilor glicemice</td></tr>
+            <tr><td><strong>Revenire la 2h</strong></td><td class="norm">&lt;140 mg/dL</td><td class="opt">&lt;100 mg/dL</td><td>La bazal — sensibilitate la insulina bună</td></tr>
+            <tr><td><strong>Amplitudinea vârfului</strong></td><td class="norm">—</td><td class="opt">&lt;30 mg/dL delta</td><td>Stabilitate glicemică post-prandială</td></tr>
+            <tr><td><strong>Time in Range (TIR)</strong></td><td class="norm">70% (diabetici)</td><td class="opt">&gt;90%</td><td>70–140 mg/dL — procent din timp</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="p" style="font-size:.82rem;color:var(--g3)">⚠ Aceste valori nu sunt criterii de diagnostic. Sunt KPI-uri de performanță biologică pentru persoane metabolic sănătoase care optimizează longevitatea funcțională.</p>
+
+      <div class="div"></div>
+
+      <!-- S2 — Fazele raspunsului glicemic -->
+      <span class="eyebrow">Secțiunea 2</span>
+      <h2 class="s-h2">Fiziologia răspunsului glicemic post-prandial</h2>
+
+      <div class="faze-grid">
+        <div class="faza f1"><div class="faza-time">Faza 1 · 0–30 min</div><div class="faza-title">Absorbția</div><div class="faza-body">Viteza depinde de: indexul glicemic, fibrele, combinația cu proteine și grăsimi, temperatura alimentului și stresul actual.</div></div>
+        <div class="faza f2"><div class="faza-time">Faza 2 · 30–90 min</div><div class="faza-title">Vârful glicemic</div><div class="faza-body">Nivelul maxim atins. Optim funcțional: &lt;120 mg/dL la 1h. Pragul patologic: &gt;180 mg/dL la 2h (criteriu diagnostic diabet).</div></div>
+        <div class="faza f3"><div class="faza-time">Faza 3 · 90–180 min</div><div class="faza-title">Revenirea la bazal</div><div class="faza-body">Viteza reflectă sensibilitatea la insulina. Revenire lentă = rezistență la insulina. Optim: sub 100 mg/dL la T+120 min.</div></div>
+        <div class="faza f4"><div class="faza-time">Faza 4 · reactiv</div><div class="faza-title">Hipoglicemia reactivă ⚠</div><div class="faza-body">Glicemia scade sub bazal. Manifestări: oboseală bruscă, foame acută, ceață mentală la 2–3h după masă. La fel de dăunătoare ca vârful.</div></div>
+      </div>
+
+      <!-- CHART glicemic comparativ -->
+      <div class="chart-card">
+        <div style="font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Profilul glicemic comparativ — mic dejun glicemic vs. proteic</div>
+        <div style="font-size:.78rem;color:var(--g3);margin-bottom:1rem">Același interval de timp, răspunsuri complet diferite.</div>
+        <div style="position:relative;height:200px"><canvas id="glicChart"></canvas></div>
+        <div style="display:flex;gap:1.5rem;margin-top:.75rem;font-size:.74rem;flex-wrap:wrap">
+          <span style="display:flex;align-items:center;gap:.35rem"><span style="width:14px;height:3px;background:var(--red);border-radius:2px;display:inline-block"></span>Cereale + suc (mic dejun glicemic)</span>
+          <span style="display:flex;align-items:center;gap:.35rem"><span style="width:14px;height:3px;background:var(--green);border-radius:2px;display:inline-block"></span>Ouă + avocado (mic dejun proteic)</span>
+        </div>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S3 — Protocolul N=1 -->
+      <span class="eyebrow">Secțiunea 3</span>
+      <h2 class="s-h2">Protocolul N=1 glicemic</h2>
+      <p class="p">Condițiile de standardizare sunt la fel de importante ca măsurătorile. Fără ele, rezultatul nu este valid.</p>
+
+      <div class="callout amber">
+        <div class="callout-lbl">⬡ Condiții obligatorii de standardizare</div>
+        <p>Post de minimum 3 ore înainte · Fără exercițiu intens în ultimele 4 ore · Câmpul 4 (stres) sub 6/10 · Fără alcool în ultimele 24 ore · Aceeași cantitate din aliment (100 g sau porția standard) · Alimentul testat singur, fără alte componente</p>
+      </div>
+
+      <div class="protocol-steps">
+        <div class="pstep"><div class="pstep-t">T0</div><div class="pstep-body"><strong>Glicemia bazală</strong> — măsoară înainte de masă. Notează valoarea.</div></div>
+        <div class="pstep"><div class="pstep-t">Masă</div><div class="pstep-body"><strong>Consumul alimentului testat</strong> — singur, cantitate standardizată.</div></div>
+        <div class="pstep"><div class="pstep-t">T+60</div><div class="pstep-body"><strong>Vârful glicemic</strong> — cel mai important moment. Calculezi delta: T+60 minus T0.</div></div>
+        <div class="pstep"><div class="pstep-t">T+120</div><div class="pstep-body"><strong>Revenirea la bazal</strong> — verifici hipoglicemia reactivă. Valoarea trebuie să fie sub 100 mg/dL.</div></div>
+        <div class="pstep"><div class="pstep-t">Jurnal</div><div class="pstep-body"><strong>Câmpul 14</strong> — notezi delta maxim (mg/dL). Câmpul 7 = delta ca metrică N=1.</div></div>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S4 — Factori modificatori -->
+      <span class="eyebrow">Secțiunea 4</span>
+      <h2 class="s-h2">Factorii care modifică același aliment</h2>
+
+      <div class="factori-mod">
+        <div class="fm-card"><div class="fm-title">Ordinea alimentelor la masă</div><div class="fm-pct">−20–30% vârf</div><div class="fm-body">Legume + proteine înaintea carbohidraților. Shukla, Diabetes Care 2015.</div></div>
+        <div class="fm-card"><div class="fm-title">Combinarea cu proteine + grăsimi</div><div class="fm-pct">−40–60% vârf</div><div class="fm-body">Orezul singur vs. orezul cu pui + ulei de măsline — diferența uriașă.</div></div>
+        <div class="fm-card"><div class="fm-title">Exercițiul post-prandial</div><div class="fm-pct">−10–20% vârf</div><div class="fm-body">10–15 min mers pe jos. Captarea glucozei prin GLUT4 independent de insulina.</div></div>
+        <div class="fm-card"><div class="fm-title">Oțetul de mere (ACV)</div><div class="fm-pct">−20–35% IG</div><div class="fm-body">1–2 linguri diluate înainte de masă. Inhibă alfa-amilaza. Johnston, 2004.</div></div>
+        <div class="fm-card"><div class="fm-title">Temperatura alimentului</div><div class="fm-pct">−10–25% vârf</div><div class="fm-body">Orezul rece vs. fierbinte. Amidonul retrogradat are IG mai mic.</div></div>
+        <div class="fm-card"><div class="fm-title">Somnul de calitate</div><div class="fm-pct">−10–30% vârf</div><div class="fm-body">Fiecare oră pierdută crește vârfurile glicemice de a doua zi cu 10–30%.</div></div>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S5 — Coaster glicemic -->
+      <span class="eyebrow">Secțiunea 5</span>
+      <h2 class="s-h2">Pattern-ul coasterului glicemic matinal</h2>
+      <p class="p">Cel mai frecvent pattern identificat prin corelarea câmpului 10 (proteina la micul dejun) cu câmpul 3 (energia la 11h).</p>
+
+      <div class="coaster-compare">
+        <div class="coaster-card bad">
+          <div class="coaster-title">🎢 Mic dejun glicemic</div>
+          <div class="coaster-body">Cereale + lapte + suc de portocale<br>Vârf 150–170 mg/dL → scădere rapidă → <strong>hipoglicemie reactivă</strong> → câmpul 3: 3–4/10 la ora 11 → foame acută → masă compensatorie → ciclul se repetă.</div>
+        </div>
+        <div class="coaster-card good">
+          <div class="coaster-title">⚡ Mic dejun proteic</div>
+          <div class="coaster-body">Ouă + avocado + legume<br>Vârf 95–110 mg/dL → revenire lentă → <strong>stabilitate glicemică</strong> → câmpul 3: 7–8/10 la ora 11 → sațietate prelungită → prânz echilibrat.</div>
+        </div>
+      </div>
+
+      <div class="callout teal">
+        <div class="callout-lbl">⬡ Identificarea în jurnal</div>
+        <p>Corelează <strong>câmpul 10</strong> (proteina la micul dejun) cu <strong>câmpul 3</strong> (energia la 11h) pe 14 zile. Dacă câmpul 10 = sub 20g <em>și</em> câmpul 3 = sub 5/10 sistematic → coasterul glicemic este cauza principală.</p>
+      </div>
+
+      <div class="callout purple">
+        <div class="callout-lbl">⬡ Conexiunea glicemie–HRV (Kataoka, 2013)</div>
+        <p>Vârfurile glicemice mari activează sistemul nervos simpatic și inhibă activitatea vagală → HRV scade tranzitoriu. <strong>Experimentul de validare personal:</strong> masă glicemică ridicată seara → compară HRV-ul de dimineață cu o seară de proteină + legume. Câmpul 6 documentează masa, câmpul 14 delta glicemic, câmpul 2 HRV-ul.</p>
+      </div>
+
+      <div class="kpi-box">
+        <div class="kpi-lbl">⬡ KPI lecția 3.3</div>
+        <h3>Primele experimente N=1 glicemice</h3>
+        <ul class="kpi-steps">
+          <li><span class="kpi-n">→</span>Îți procuri un glucometru standard și testezi primele 3 alimente „sănătoase" din dieta ta</li>
+          <li><span class="kpi-n">→</span>Aplici protocolul T0–T60–T120 și notezi delta în câmpul 14 din jurnal</li>
+          <li><span class="kpi-n">→</span>Corelezi câmpul 10 (proteina la micul dejun) cu câmpul 3 (energia la 11h) pe ultimele 14 zile</li>
+          <li><span class="kpi-n">→</span>Identifici dacă există pattern de coaster glicemic matinal</li>
+        </ul>
+      </div>
+    </div>
+    <div class="bib-sec">
+      <span class="eyebrow" style="margin-bottom:.6rem">Bibliografie — lecția 3.3</span>
+      <ul class="bib-list">
+        <li><span class="bib-n">[1]</span><span>Zeevi, D., et al. (2015). Personalized nutrition by prediction of glycemic responses. <em>Cell</em>, 163(5).</span></li>
+        <li><span class="bib-n">[2]</span><span>Attia, P. & Gifford, B. (2023). <em>Outlive: The Science and Art of Longevity.</em> Harmony Books.</span></li>
+        <li><span class="bib-n">[3]</span><span>Shukla, A.P., et al. (2015). Food order has significant impact on glucose. <em>Diabetes Care</em>, 38(7).</span></li>
+        <li><span class="bib-n">[4]</span><span>Monnier, L., et al. (2006). Oxidative stress and glucose fluctuations. <em>JAMA</em>, 295(14).</span></li>
+        <li><span class="bib-n">[5]</span><span>Johnston, C.S., et al. (2004). Vinegar improves insulin sensitivity. <em>Diabetes Care</em>, 27(1).</span></li>
+        <li><span class="bib-n">[6]</span><span>Kataoka, M., et al. (2013). Glucose variability and HRV. <em>J Diabetes Sci Technol</em>, 7(4).</span></li>
+      </ul>
+    </div>
+    <div class="lesson-nav">
+      <a href="m3-l32.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg><div><span class="nav-btn-lbl">Lecția anterioară</span>3.2 — Microbiomul intestinal</div></a>
+      <div style="text-align:center;font-family:var(--mono);font-size:.68rem;color:var(--g3)">Lecția 3 din 5 · Modul 3</div>
+      <a href="m3-l34.html" class="nav-btn primary"><div style="text-align:right"><span class="nav-btn-lbl">Lecția următoare</span>3.4 — Post intermitent</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+    </div>
+  </div>
+</div>
+<script>
+// Chart glicemie comparativ
+const timp=['T0','T+30','T+60','T+90','T+120','T+150','T+180'];
+const glicemic=[85,120,165,130,75,72,80];
+const proteic=[82,95,108,100,85,84,83];
+new Chart(document.getElementById('glicChart'),{
+  type:'line',
+  data:{
+    labels:timp,
+    datasets:[
+      {label:'Cereale + suc',data:glicemic,borderColor:'#B83030',backgroundColor:'rgba(184,48,48,.1)',borderWidth:2.5,tension:.4,fill:true,pointRadius:4,pointBackgroundColor:'#B83030'},
+      {label:'Ouă + avocado',data:proteic,borderColor:'#1A6B3C',backgroundColor:'rgba(26,107,60,.08)',borderWidth:2.5,tension:.4,fill:true,pointRadius:4,pointBackgroundColor:'#1A6B3C'},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:v=>v.dataset.label+': '+v.parsed.y+' mg/dL'}},
+      annotation:{annotations:{target:{type:'line',yMin:120,yMax:120,borderColor:'#E65100',borderWidth:1.5,borderDash:[6,4],label:{content:'Optim funcțional 120',enabled:true,position:'end',font:{size:9}}}}}
+    },
+    scales:{
+      x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:11},color:'#9A9088'}},
+      y:{min:60,max:180,grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:10},color:'#9A9088',callback:v=>v+' mg/dL'},
+        title:{display:true,text:'Glicemia (mg/dL)',font:{size:10},color:'#9A9088'}}
+    }
+  }
+});
+function markDone(){const b=document.getElementById('doneBtn');const d=b.classList.toggle('done');b.textContent=d?'✓ Completat':'✓ Marchează completă';localStorage.setItem('bh30_m3_l33_done',d?'1':'0');}
+window.addEventListener('DOMContentLoaded',()=>{if(localStorage.getItem('bh30_m3_l33_done')==='1'){const b=document.getElementById('doneBtn');b.classList.add('done');b.textContent='✓ Completat';}});
+function loadVid(){const w=document.getElementById('vWrap'),src=w.dataset.videoSrc;if(src){w.innerHTML=`<video controls autoplay style="width:100%;height:100%"><source src="${src}"></video>`;}else{const h=w.querySelector('.vp-hint');if(h){h.style.color='var(--amb4)';setTimeout(()=>h.style.color='',1200);}}}
+</script>
+</body>
+</html>

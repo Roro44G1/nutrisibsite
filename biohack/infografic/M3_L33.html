@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infografic: Glicemia personalizată — N=1 glicemic</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;
+  --amb:#E65100;--amb2:#FFF3E0;--amb3:#FF6D00;--amb4:#FFE0B2;
+  --gold:#C8920A;--gold2:#E8AE1A;
+  --green:#1A6B3C;--green2:#EAF4EE;--leaf:#2E7D32;
+  --red:#B83030;--red2:#FDEAEA;
+  --purple:#5B3FA6;--purple2:#F0EBF8;
+  --teal:#0A7EA4;--teal2:#EAF6FB;
+  --g1:#FAF7F2;--g2:#F2EDE4;--g3:#DDD6CC;--g4:#9A9088;--g5:#5A5248;
+  --white:#fff;
+}
+html{font-size:16px}
+body{font-family:'Inter',sans-serif;background:#FFF8F0;color:#1E1810;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 3rem}
+.header{text-align:center;padding:2.5rem 2rem;background:var(--navy);border-radius:16px;margin-bottom:2rem;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 60% 40%,rgba(230,81,0,.3),transparent 60%)}
+.header-badge{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:600;color:var(--amb4);letter-spacing:.14em;text-transform:uppercase;background:rgba(230,81,0,.12);border:1px solid rgba(230,81,0,.3);padding:.3rem .85rem;border-radius:99px;margin-bottom:1rem;position:relative}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.3rem);font-weight:900;color:#fff;line-height:1.15;position:relative;margin-bottom:.75rem}
+.header h1 em{font-style:italic;color:var(--amb4)}
+.header-sub{font-size:.9rem;color:rgba(255,255,255,.6);position:relative;max-width:680px;margin:0 auto}
+.header-stats{display:flex;justify-content:center;gap:2.5rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);position:relative;flex-wrap:wrap}
+.hstat-n{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--amb4);line-height:1}
+.hstat-l{font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem}
+.section-label{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--amb);margin-bottom:.5rem;display:block}
+
+/* TINTE glicemice */
+.tinte-section{background:var(--white);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem;border:1px solid var(--g3)}
+.tinte-grid{display:flex;flex-direction:column;gap:.65rem;margin:1rem 0}
+.tinta-row{display:grid;grid-template-columns:160px 1fr 1fr;gap:1rem;align-items:center;background:var(--g1);border-radius:8px;padding:.65rem 1rem;border-left:3px solid}
+.tinta-row.ok{border-left-color:var(--green)}.tinta-row.warn{border-left-color:var(--amb)}.tinta-row.crit{border-left-color:var(--red)}
+.tinta-name{font-size:.82rem;font-weight:600;color:var(--g5)}
+.tinta-norm{font-family:monospace;font-size:.78rem;color:var(--g4)}
+.tinta-opt{font-family:monospace;font-size:.82rem;font-weight:700;color:var(--green)}
+
+/* SIMULATOR glicemic */
+.sim-section{background:var(--navy2);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.sim-controls{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+@media(max-width:550px){.sim-controls{grid-template-columns:1fr}}
+.sim-field label{font-size:.7rem;color:rgba(255,255,255,.6);font-family:monospace;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.35rem;display:block}
+.sim-field select{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.6rem .8rem;font-size:.88rem;color:#fff;font-family:inherit;outline:none}
+.sim-field select option{background:var(--navy)}
+.sim-result{background:rgba(255,255,255,.07);border-radius:10px;padding:1.1rem;border:1px solid rgba(255,255,255,.1);margin-top:.75rem}
+.sim-vals{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:.75rem}
+@media(max-width:450px){.sim-vals{grid-template-columns:1fr}}
+.sim-val-box{background:rgba(255,255,255,.07);border-radius:8px;padding:.65rem;text-align:center}
+.sim-val{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;line-height:1;margin-bottom:.15rem}
+.sim-val-lbl{font-size:.68rem;color:rgba(255,255,255,.5)}
+.sim-verdict{font-size:.84rem;color:rgba(255,255,255,.8);line-height:1.5;border-top:1px solid rgba(255,255,255,.1);padding-top:.75rem}
+
+/* FAZE */
+.faze-section{margin-bottom:1.5rem}
+.faze-grid2{display:grid;grid-template-columns:repeat(4,1fr);gap:.85rem;margin:1rem 0}
+@media(max-width:700px){.faze-grid2{grid-template-columns:1fr 1fr}}
+.faza2{border-radius:12px;padding:1rem;border:1px solid}
+.fz1{background:var(--amb2);border-color:var(--amb4);border-top:4px solid var(--amb)}
+.fz2{background:var(--red2);border-color:#EF9A9A;border-top:4px solid var(--red)}
+.fz3{background:var(--green2);border-color:#A5D6A7;border-top:4px solid var(--green)}
+.fz4{background:var(--purple2);border-color:#CECBF6;border-top:4px solid var(--purple)}
+.fz-time{font-family:monospace;font-size:.67rem;font-weight:700;margin-bottom:.2rem}
+.fz1 .fz-time{color:var(--amb)}.fz2 .fz-time{color:var(--red)}.fz3 .fz-time{color:var(--green)}.fz4 .fz-time{color:var(--purple)}
+.fz-title{font-size:.87rem;font-weight:700;margin-bottom:.25rem;color:var(--navy)}
+.fz-body{font-size:.76rem;color:var(--g5);line-height:1.45}
+
+/* CHART principale */
+.chart-section{background:var(--white);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;border:1px solid var(--g3)}
+
+/* FACTORI MODIFICATORI */
+.factori-section{margin-bottom:1.5rem}
+.fm-bars{display:flex;flex-direction:column;gap:.65rem;margin:1rem 0}
+.fm-row{background:var(--white);border-radius:10px;padding:.85rem 1.1rem;border:1px solid var(--g3);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.fm-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.45rem;flex-wrap:wrap;gap:.5rem}
+.fm-name{font-size:.82rem;font-weight:600;color:var(--g5)}
+.fm-pct{font-family:monospace;font-size:.75rem;font-weight:700;color:var(--green)}
+.fm-track{height:10px;background:var(--g3);border-radius:5px;overflow:hidden}
+.fm-fill{height:100%;border-radius:5px;width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,var(--green),#81C784)}
+
+/* ALIMENTE surprize */
+.surprize-section{margin-bottom:1.5rem}
+.surprize-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}
+@media(max-width:650px){.surprize-grid{grid-template-columns:1fr 1fr}}
+.surpriza{border-radius:10px;padding:.9rem;border:1px solid;cursor:pointer;transition:all .2s}
+.surpriza.high{background:var(--red2);border-color:#EF9A9A}
+.surpriza.med{background:var(--amb2);border-color:var(--amb4)}
+.surpriza.low{background:var(--green2);border-color:#A5D6A7}
+.surp-icon{font-size:1.3rem;margin-bottom:.3rem}
+.surp-name{font-size:.84rem;font-weight:700;margin-bottom:.2rem;color:var(--navy)}
+.surp-impact{font-family:monospace;font-size:.7rem;font-weight:700;margin-bottom:.2rem}
+.high .surp-impact{color:var(--red)}.med .surp-impact{color:var(--amb)}.low .surp-impact{color:var(--green)}
+.surp-body{font-size:.74rem;color:var(--g5);line-height:1.4;display:none}
+.surpriza.open .surp-body{display:block}
+
+/* COASTER */
+.coaster-section{background:var(--navy2);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.coaster-compare2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+@media(max-width:550px){.coaster-compare2{grid-template-columns:1fr}}
+.cc2{border-radius:10px;padding:1rem;border:1px solid}
+.cc2-bad{background:rgba(184,48,48,.15);border-color:rgba(184,48,48,.3)}
+.cc2-good{background:rgba(26,107,60,.15);border-color:rgba(26,107,60,.3)}
+.cc2-title{font-size:.88rem;font-weight:700;margin-bottom:.5rem}
+.cc2-bad .cc2-title{color:#F48FB1}.cc2-good .cc2-title{color:#80CBC4}
+.cc2-steps{display:flex;flex-direction:column;gap:.3rem}
+.cc2-step{font-size:.78rem;color:rgba(255,255,255,.7);display:flex;align-items:center;gap:.5rem}
+.cc2-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cc2-bad .cc2-dot{background:#F48FB1}.cc2-good .cc2-dot{background:#80CBC4}
+
+/* KPI */
+.kpi-section{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:14px;padding:2rem;margin-bottom:1.5rem;border-left:5px solid var(--amb)}
+.kpi-tag{font-family:monospace;font-size:.68rem;font-weight:600;color:var(--amb4);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.75rem;display:block}
+.kpi-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:.6rem}
+.kpi-items{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.kpi-items li{font-size:.88rem;color:rgba(255,255,255,.85);display:flex;gap:.65rem;align-items:baseline;line-height:1.5}
+.kpi-arrow{font-size:.75rem;color:var(--amb4);flex-shrink:0}
+.footer-info{text-align:center;padding:1rem;font-size:.75rem;color:var(--g4)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fi0{opacity:0;animation:fadeUp .55s ease forwards}.fi1{animation-delay:.05s}.fi2{animation-delay:.15s}.fi3{animation-delay:.25s}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header fi0 fi1">
+    <div class="header-badge">🩸 Biohacking 3.0 · Modul 3 · Lecția 3.3</div>
+    <h1>Glicemia <em>personalizată</em></h1>
+    <p class="header-sub">Răspunsul glicemic la același aliment variază cu până la 4×. Glucometrul ca instrument N=1 — protocolul, țintele optime și corelațiile cu HRV și energia.</p>
+    <div class="header-stats">
+      <div><div class="hstat-n">4×</div><div class="hstat-l">Variația răspunsului glicemic între persoane (Zeevi, Cell 2015)</div></div>
+      <div><div class="hstat-n">T0–T60–T120</div><div class="hstat-l">Protocolul standard de testare N=1</div></div>
+      <div><div class="hstat-n">−30%</div><div class="hstat-l">Reducere vârf prin ordinea alimentelor</div></div>
+      <div><div class="hstat-n">−20%</div><div class="hstat-l">Reducere vârf prin 10 min mers post-prandial</div></div>
+    </div>
+  </div>
+
+  <!-- TINTE GLICEMICE -->
+  <div class="tinte-section fi0 fi2">
+    <span class="section-label">KPI-uri optime funcționale vs. normale clinice</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Țintele glicemice — distincția critică</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Normalul clinic = minimul pentru a evita diabetul. Optimul funcțional = KPI pentru longevitate și performanță biologică.</div>
+    <div class="tinte-grid">
+      <div class="tinta-row ok"><span class="tinta-name">Glicemia a jeun</span><span class="tinta-norm">&lt;100 mg/dL</span><span class="tinta-opt">70–85 mg/dL ✓</span></div>
+      <div class="tinta-row ok"><span class="tinta-name">Vârf la 1h post-prandial</span><span class="tinta-norm">&lt;140 mg/dL</span><span class="tinta-opt">&lt;120 mg/dL ✓</span></div>
+      <div class="tinta-row ok"><span class="tinta-name">Revenire la 2h</span><span class="tinta-norm">&lt;140 mg/dL</span><span class="tinta-opt">&lt;100 mg/dL ✓</span></div>
+      <div class="tinta-row warn"><span class="tinta-name">Delta maxim post-prandial</span><span class="tinta-norm">—</span><span class="tinta-opt">&lt;30 mg/dL delta</span></div>
+      <div class="tinta-row warn"><span class="tinta-name">Time in Range (TIR)</span><span class="tinta-norm">70% (diabetici)</span><span class="tinta-opt">&gt;90% (optim)</span></div>
+    </div>
+  </div>
+
+  <!-- SIMULATOR GLICEMIC -->
+  <div class="sim-section fi0 fi2">
+    <span class="section-label" style="color:rgba(255,255,255,.5)">Simulator interactiv N=1</span>
+    <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem">Estimează impactul glicemic al unui aliment</div>
+    <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1rem">Selectează alimentul și contextul pentru a vedea impactul estimat. Valorile sunt medii populaționale — testarea personală poate diferi semnificativ.</div>
+    <div class="sim-controls">
+      <div class="sim-field">
+        <label>Alimentul testat</label>
+        <select id="simAliment" onchange="calcSim()">
+          <option value="170,140">Orez alb (150g)</option>
+          <option value="150,120">Pâine albă (2 felii)</option>
+          <option value="130,115">Pâine integrală (2 felii)</option>
+          <option value="140,110">Fulgi de ovăz fierți (150g)</option>
+          <option value="160,130">Suc de portocale (250ml)</option>
+          <option value="120,105">Banană coaptă (1 buc.)</option>
+          <option value="105,95">Banană verde (1 buc.)</option>
+          <option value="110,100">Mere (1 buc.)</option>
+          <option value="95,88">Fructe de pădure (150g)</option>
+          <option value="105,90">Fasole fiartă (150g)</option>
+        </select>
+      </div>
+      <div class="sim-field">
+        <label>Contextul mesei</label>
+        <select id="simContext" onchange="calcSim()">
+          <option value="1.0">Aliment singur (fără proteine/grăsimi)</option>
+          <option value="0.6">Combinat cu proteine + grăsimi</option>
+          <option value="0.8">Cu legume înaintea carbohidraților</option>
+          <option value="0.75">Cu oțet de mere (ACV) înainte</option>
+          <option value="0.85">Post somn slab (&lt;6h)</option>
+          <option value="0.7">Combinat + mers 10 min după</option>
+        </select>
+      </div>
+    </div>
+    <div class="sim-result">
+      <div class="sim-vals">
+        <div class="sim-val-box"><div class="sim-val" id="svBasal" style="color:var(--amb4)">82</div><div class="sim-val-lbl">Bazal estimat (mg/dL)</div></div>
+        <div class="sim-val-box"><div class="sim-val" id="svVarf">—</div><div class="sim-val-lbl">Vârf estimat T+60 (mg/dL)</div></div>
+        <div class="sim-val-box"><div class="sim-val" id="svDelta">—</div><div class="sim-val-lbl">Delta estimat (mg/dL)</div></div>
+      </div>
+      <div class="sim-verdict" id="simVerdict">Selectează alimentul și contextul pentru estimare.</div>
+    </div>
+  </div>
+
+  <!-- FAZE -->
+  <div class="faze-section fi0 fi2">
+    <span class="section-label">Fiziologia răspunsului post-prandial</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.85rem">Cele 4 faze — inclusiv hipoglicemia reactivă</div>
+    <div class="faze-grid2">
+      <div class="faza2 fz1"><div class="fz-time">Faza 1 · 0–30 min</div><div class="fz-title">Absorbția</div><div class="fz-body">IG, fibre, combinații alimentare, temperatura și stresul determină viteza.</div></div>
+      <div class="faza2 fz2"><div class="fz-time">Faza 2 · 30–90 min</div><div class="fz-title">Vârful ⚠</div><div class="fz-body">Optim funcțional: &lt;120 mg/dL la 1h. Patologic: &gt;180 mg/dL la 2h.</div></div>
+      <div class="faza2 fz3"><div class="fz-time">Faza 3 · 90–180 min</div><div class="fz-title">Revenirea</div><div class="fz-body">Viteza reflectă sensibilitatea la insulina. Optim: &lt;100 mg/dL la T+120.</div></div>
+      <div class="faza2 fz4"><div class="fz-time">Faza 4 · reactiv</div><div class="fz-title">Hipoglicemia reactivă ⚠</div><div class="fz-body">La fel de dăunătoare ca vârful. Oboseală bruscă, foame acută, brain fog la 2–3h.</div></div>
+    </div>
+  </div>
+
+  <!-- CHART glicemie -->
+  <div class="chart-section fi0 fi2">
+    <span class="section-label">Profilul glicemic comparativ (Zeevi, 2015)</span>
+    <div style="font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Mic dejun glicemic vs. mic dejun proteic — 3 ore comparate</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:1rem">Același interval caloric, răspunsuri biologice complet diferite.</div>
+    <div style="position:relative;height:220px"><canvas id="glicChart2"></canvas></div>
+    <div style="display:flex;gap:1.5rem;margin-top:.75rem;font-size:.74rem;flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:.35rem"><span style="width:14px;height:3px;background:var(--red);border-radius:2px;display:inline-block"></span>Cereale + suc de portocale</span>
+      <span style="display:flex;align-items:center;gap:.35rem"><span style="width:14px;height:3px;background:var(--green);border-radius:2px;display:inline-block"></span>Ouă + avocado + legume</span>
+      <span style="display:flex;align-items:center;gap:.35rem"><span style="width:14px;height:1.5px;background:var(--amb);border-radius:2px;border-style:dashed;display:inline-block"></span>Optim funcțional 120 mg/dL</span>
+    </div>
+  </div>
+
+  <!-- FACTORI MODIFICATORI -->
+  <div class="factori-section fi0 fi3">
+    <span class="section-label">Intervenții cu efect demonstrat</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Factori care reduc vârful glicemic al aceluiași aliment</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Reducerea procentuală a vârfului glicemic față de alimentul consumat izolat.</div>
+    <div class="fm-bars" id="fmBars">
+      <div class="fm-row"><div class="fm-top"><span class="fm-name">Combinarea cu proteine + grăsimi (orez + pui + ulei)</span><span class="fm-pct">−40–60%</span></div><div class="fm-track"><div class="fm-fill" data-w="75"></div></div></div>
+      <div class="fm-row"><div class="fm-top"><span class="fm-name">Ordinea alimentelor — legume + proteine înaintea carbohidraților (Shukla, 2015)</span><span class="fm-pct">−20–30%</span></div><div class="fm-track"><div class="fm-fill" data-w="55"></div></div></div>
+      <div class="fm-row"><div class="fm-top"><span class="fm-name">Oțetul de mere (ACV) — 1–2 linguri înainte de masă (Johnston, 2004)</span><span class="fm-pct">−20–35%</span></div><div class="fm-track"><div class="fm-fill" data-w="52"></div></div></div>
+      <div class="fm-row"><div class="fm-top"><span class="fm-name">Exercițiul post-prandial — 10–15 min mers pe jos (GLUT4 independent)</span><span class="fm-pct">−10–20%</span></div><div class="fm-track"><div class="fm-fill" data-w="35"></div></div></div>
+      <div class="fm-row"><div class="fm-top"><span class="fm-name">Temperatura alimentului rece vs. fierbinte (amidon retrogradat)</span><span class="fm-pct">−10–25%</span></div><div class="fm-track"><div class="fm-fill" data-w="32"></div></div></div>
+      <div class="fm-row"><div class="fm-top"><span class="fm-name">Somnul de calitate (versus &lt;6h) — sensibilitate la insulina crescută</span><span class="fm-pct">−10–30%</span></div><div class="fm-track"><div class="fm-fill" data-w="40"></div></div></div>
+    </div>
+  </div>
+
+  <!-- ALIMENTE SURPRIZE -->
+  <div class="surprize-section fi0 fi3">
+    <span class="section-label">Date CGM populații non-diabetice</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Alimentele cu surprize glicemice — apasă pentru detalii</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Alimentele considerate „sănătoase" care produc frecvent răspunsuri glicemice neașteptat de mari.</div>
+    <div class="surprize-grid" id="surprizeGrid"></div>
+  </div>
+
+  <!-- COASTER GLICEMIC -->
+  <div class="coaster-section fi0 fi3">
+    <span class="section-label" style="color:rgba(255,255,255,.5)">Pattern-ul cel mai frecvent</span>
+    <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem">Coasterul glicemic matinal — identificarea în jurnal</div>
+    <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1rem">Corelarea câmpului 10 (proteina la micul dejun) cu câmpul 3 (energia la 11h) pe 14 zile.</div>
+    <div class="coaster-compare2">
+      <div class="cc2 cc2-bad">
+        <div class="cc2-title">🎢 Mic dejun glicemic — cereale + suc</div>
+        <div class="cc2-steps">
+          <div class="cc2-step"><div class="cc2-dot"></div>Vârf 150–170 mg/dL la T+60</div>
+          <div class="cc2-step"><div class="cc2-dot"></div>Scădere rapidă → hipoglicemie reactivă</div>
+          <div class="cc2-step"><div class="cc2-dot"></div>Câmpul 3: 3–4/10 la ora 11</div>
+          <div class="cc2-step"><div class="cc2-dot"></div>Foame acută → masă compensatorie</div>
+          <div class="cc2-step"><div class="cc2-dot"></div>Ciclul se repetă</div>
+        </div>
+      </div>
+      <div class="cc2 cc2-good">
+        <div class="cc2-title">⚡ Mic dejun proteic — ouă + avocado</div>
+        <div class="cc2-steps">
+          <div class="cc2-step"><div class="cc2-dot"></div>Vârf 95–110 mg/dL la T+60</div>
+          <div class="cc2-step"><div class="cc2-dot"></div>Revenire lentă → stabilitate glicemică</div>
+          <div class="cc2-step"><div class="cc2-dot"></div>Câmpul 3: 7–8/10 la ora 11</div>
+          <div class="cc2-step"><div class="cc2-dot"></div>Sațietate prelungită 3–4 ore</div>
+          <div class="cc2-step"><div class="cc2-dot"></div>Prânz echilibrat, fără compensare</div>
+        </div>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,.06);border-radius:8px;padding:.85rem 1.1rem;border:1px solid rgba(255,255,255,.1);font-size:.82rem;color:rgba(255,255,255,.75);margin-top:.75rem">
+      <strong style="color:var(--amb4)">Identificarea în jurnal:</strong> dacă câmpul 10 = sub 20g ȘI câmpul 3 = sub 5/10 sistematic pe 14 zile → coasterul glicemic este cauza principală. Intervins: micul dejun proteic de minimum 25g.
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-section fi0 fi3">
+    <span class="kpi-tag">⬡ KPI lecția 3.3 — N=1 glicemic</span>
+    <div class="kpi-title">Primele experimente cu glucometrul</div>
+    <ul class="kpi-items">
+      <li><span class="kpi-arrow">→</span>Îți procuri un glucometru standard și testezi primele 3 alimente „sănătoase" din dieta ta</li>
+      <li><span class="kpi-arrow">→</span>Aplici protocolul T0–T60–T120 și notezi delta în câmpul 14 din jurnal</li>
+      <li><span class="kpi-arrow">→</span>Corelezi câmpul 10 (proteina la micul dejun) cu câmpul 3 (energia la 11h) pe 14 zile</li>
+      <li><span class="kpi-arrow">→</span>Identifici dacă există pattern de coaster glicemic matinal</li>
+    </ul>
+  </div>
+
+  <div class="footer-info">
+    <strong>Biohacking 3.0 · Modul 3 · Lecția 3.3</strong> · dr.ing. Radu Pascu · NUTRISIB Sibiu · 2025<br>
+    Surse: Zeevi (2015) Cell; Attia (2023) Outlive; Shukla (2015) Diabetes Care; Monnier (2006) JAMA; Johnston (2004); Kataoka (2013)
+  </div>
+</div>
+
+<script>
+// Simulator glicemic
+function calcSim(){
+  const a=document.getElementById('simAliment').value.split(',').map(Number);
+  const ctx=parseFloat(document.getElementById('simContext').value);
+  const bazal=82;
+  const varf=Math.round(bazal+(a[0]-bazal)*ctx);
+  const delta=varf-bazal;
+  const vV=document.getElementById('svVarf');
+  const vD=document.getElementById('svDelta');
+  vV.textContent=varf+' mg/dL';
+  vD.textContent='+'+delta+' mg/dL';
+  vV.style.color=varf>140?'#F48FB1':varf>120?'#FFB74D':'#80CBC4';
+  vD.style.color=delta>58?'#F48FB1':delta>38?'#FFB74D':'#80CBC4';
+  let verdict='';
+  if(delta<30) verdict='✓ Excelent — delta sub 30 mg/dL, stabil glicemic. Alimentul este compatibil cu optimul funcțional în acest context.';
+  else if(delta<50) verdict='⚠ Moderat — delta 30–50 mg/dL. Combinarea cu proteine și grăsimi sau ordinea alimentelor poate reduce suplimentar.';
+  else verdict='✗ Impact crescut — delta peste 50 mg/dL. Testarea personală cu glucometrul este recomandată. Variația între persoane poate fi de 4×.';
+  document.getElementById('simVerdict').textContent=verdict;
+}
+calcSim();
+
+// Chart glicemie comparativ
+const timp2=['T0','T+30','T+60','T+90','T+120','T+150','T+180'];
+new Chart(document.getElementById('glicChart2'),{
+  type:'line',
+  data:{
+    labels:timp2,
+    datasets:[
+      {label:'Cereale + suc',data:[83,118,162,128,73,70,78],borderColor:'#B83030',backgroundColor:'rgba(184,48,48,.1)',borderWidth:2.5,tension:.4,fill:true,pointRadius:4,pointBackgroundColor:'#B83030'},
+      {label:'Ouă + avocado',data:[81,93,106,98,84,83,82],borderColor:'#1A6B3C',backgroundColor:'rgba(26,107,60,.08)',borderWidth:2.5,tension:.4,fill:true,pointRadius:4,pointBackgroundColor:'#1A6B3C'},
+      {label:'Optim 120',data:[120,120,120,120,120,120,120],borderColor:'#E65100',backgroundColor:'transparent',borderWidth:1.5,borderDash:[6,4],pointRadius:0},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>{if(v.datasetIndex===2)return null;return v.dataset.label+': '+v.parsed.y+' mg/dL';}}}},
+    scales:{
+      x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:11},color:'#9A9088'}},
+      y:{min:60,max:180,grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:10},color:'#9A9088',callback:v=>v+' mg/dL'},
+        title:{display:true,text:'Glicemia (mg/dL)',font:{size:10},color:'#9A9088'}}
+    }
+  }
+});
+
+// Animate factori bars
+const fIO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.fm-fill').forEach(b=>{b.style.width=b.dataset.w+'%';});fIO.unobserve(e.target);}});
+},{threshold:.3});
+fIO.observe(document.getElementById('fmBars'));
+
+// Alimente surprize
+const surprize=[
+  {icon:'🥤',name:'Suc de fructe „natural"',impact:'Impact RIDICAT',cls:'high',body:'Fructoză concentrată fără fibre. Vârf comparabil cu sucul de cola la mulți indivizi. Înlocuire: fructul întreg cu fibre.'},
+  {icon:'🥤',name:'Smoothie din fructe',impact:'Impact MODERAT-RIDICAT',cls:'med',body:'Mai bun decât sucul, dar fără efectul fibrelor integrale. Adăugarea de proteine + unt de migdale reduce dramatic vârful.'},
+  {icon:'🌾',name:'Granola / Müsli „sănătos"',impact:'Impact RIDICAT',cls:'high',body:'Zahăr adăugat + fructe deshidratate = vârf mare. Înlocuire: ovăz simplu cu proteine și grăsimi.'},
+  {icon:'🍞',name:'Pâinea integrală',impact:'Impact VARIABIL',cls:'med',body:'La unele persoane produce vârfuri similare pâinii albe. Testarea personală cu glucometrul este singura metodă validă.'},
+  {icon:'🍌',name:'Banane foarte coapte',impact:'Impact MODERAT',cls:'med',body:'IG crește cu coacerea. Banana verde = amidon rezistent prebiotic pentru microbiom. Banana coaptă = zahăr liber.'},
+  {icon:'🥕',name:'Morcovii fierți',impact:'Impact MODERAT',cls:'med',body:'IG crește semnificativ față de morcovii cruzi. Preferați morcovii cruzi sau fierți al dente.'},
+];
+const sg=document.getElementById('surprizeGrid');
+surprize.forEach(s=>{
+  const d=document.createElement('div');
+  d.className=`surpriza ${s.cls}`;
+  d.innerHTML=`<div class="surp-icon">${s.icon}</div><div class="surp-name">${s.name}</div><div class="surp-impact">${s.impact}</div><div class="surp-body">${s.body}</div>`;
+  d.addEventListener('click',()=>d.classList.toggle('open'));
+  sg.appendChild(d);
+});
+</script>
+</body>
+</html>

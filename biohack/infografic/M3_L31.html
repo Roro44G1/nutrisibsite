@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infografic: Nutriția pentru longevitate — Proteina, calitatea și tiparele alimentare</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;--teal:#0A7EA4;
+  --gold:#C8920A;--gold2:#E8AE1A;--gold3:#FEF8E8;
+  --leaf:#2E7D32;--leaf2:#E8F5E9;--lime:#558B2F;
+  --red:#B83030;--red2:#FDEAEA;
+  --orange:#C85A0A;--orange2:#FEF2E8;
+  --purple:#5B3FA6;--purple2:#F0EBF8;
+  --g1:#FAF7F2;--g2:#F2EDE4;--g3:#DDD6CC;--g4:#9A9088;--g5:#5A5248;
+  --white:#fff;
+}
+html{font-size:16px}
+body{font-family:'Inter',sans-serif;background:#F2F7F2;color:#1E1810;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 3rem}
+.header{text-align:center;padding:2.5rem 2rem;background:var(--navy);border-radius:16px;margin-bottom:2rem;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 60% 40%,rgba(46,125,50,.25),transparent 60%)}
+.header-badge{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:600;color:#81C784;letter-spacing:.14em;text-transform:uppercase;background:rgba(46,125,50,.12);border:1px solid rgba(46,125,50,.3);padding:.3rem .85rem;border-radius:99px;margin-bottom:1rem;position:relative}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.3rem);font-weight:900;color:#fff;line-height:1.15;position:relative;margin-bottom:.75rem}
+.header h1 em{font-style:italic;color:#81C784}
+.header-sub{font-size:.9rem;color:rgba(255,255,255,.6);position:relative;max-width:680px;margin:0 auto}
+.header-stats{display:flex;justify-content:center;gap:2.5rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);position:relative;flex-wrap:wrap}
+.hstat-n{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:#81C784;line-height:1}
+.hstat-l{font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem}
+.section-label{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--leaf);margin-bottom:.5rem;display:block}
+
+/* CALCULATOR PROTEIC */
+.calc-section{background:var(--navy2);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.calc-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1rem 0}
+@media(max-width:650px){.calc-inputs{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.calc-inputs{grid-template-columns:1fr}}
+.ci-field label{font-size:.7rem;color:rgba(255,255,255,.6);font-family:monospace;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.35rem;display:block}
+.ci-field input,.ci-field select{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.6rem .8rem;font-size:.9rem;color:#fff;font-family:inherit;outline:none;transition:border-color .2s}
+.ci-field input:focus,.ci-field select:focus{border-color:#81C784}
+.ci-field select option{background:var(--navy)}
+.calc-result{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1rem}
+@media(max-width:550px){.calc-result{grid-template-columns:1fr}}
+.cr-box{background:rgba(46,125,50,.18);border:1px solid rgba(46,125,50,.3);border-radius:10px;padding:1rem;text-align:center}
+.cr-val{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:#81C784;line-height:1}
+.cr-lbl{font-size:.72rem;color:rgba(255,255,255,.6);margin-top:.25rem}
+
+/* PIRAMIDA MACRONUTRIENTI */
+.macro-section{background:var(--white);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem;border:1px solid var(--g3)}
+.macro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1rem 0}
+@media(max-width:600px){.macro-grid{grid-template-columns:1fr}}
+.macro-card{border-radius:12px;padding:1.1rem;border:1px solid;text-align:center}
+.mc-prot{background:var(--leaf2);border-color:#A5D6A7;border-top:4px solid var(--leaf)}
+.mc-gras{background:#FFF9E6;border-color:#FFD54F;border-top:4px solid var(--gold)}
+.mc-carb{background:#E3F2FD;border-color:#90CAF9;border-top:4px solid var(--teal)}
+.macro-icon{font-size:1.6rem;margin-bottom:.35rem}
+.macro-title{font-size:.9rem;font-weight:700;margin-bottom:.25rem}
+.mc-prot .macro-title{color:var(--leaf)}.mc-gras .macro-title{color:var(--gold)}.mc-carb .macro-title{color:var(--teal)}
+.macro-val{font-family:monospace;font-size:.8rem;font-weight:700;margin-bottom:.25rem}
+.mc-prot .macro-val{color:var(--leaf)}.mc-gras .macro-val{color:var(--gold)}.mc-carb .macro-val{color:var(--teal)}
+.macro-body{font-size:.74rem;color:var(--g5);line-height:1.45}
+
+/* DIAAS surse proteina - bar chart */
+.diaas-section{background:var(--white);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;border:1px solid var(--g3)}
+.diaas-bars{display:flex;flex-direction:column;gap:.65rem;margin:1rem 0}
+.diaas-row{display:grid;grid-template-columns:160px 1fr 60px;gap:.75rem;align-items:center}
+@media(max-width:500px){.diaas-row{grid-template-columns:120px 1fr 50px}}
+.diaas-label{font-size:.8rem;font-weight:600;color:var(--g5)}
+.diaas-track{height:14px;background:var(--g3);border-radius:7px;overflow:hidden}
+.diaas-fill{height:100%;border-radius:7px;width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.diaas-val{font-family:monospace;font-size:.75rem;font-weight:700;text-align:right}
+.fill-ani{background:linear-gradient(90deg,var(--leaf),#81C784)}
+.fill-partial{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.fill-low{background:linear-gradient(90deg,var(--orange),#FFCC80)}
+
+/* NOVA 4 grupe */
+.nova-section{margin-bottom:1.5rem}
+.nova-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin:1rem 0}
+@media(max-width:700px){.nova-grid{grid-template-columns:1fr 1fr}}
+.nova-card{border-radius:12px;padding:1.1rem;border:1px solid;cursor:default;transition:transform .2s,box-shadow .2s}
+.nova-card:hover{transform:translateY(-2px);box-shadow:0 5px 18px rgba(0,0,0,.08)}
+.nc1{background:var(--leaf2);border-color:#A5D6A7;border-top:4px solid var(--leaf)}
+.nc2{background:#E3F2FD;border-color:#90CAF9;border-top:4px solid var(--teal)}
+.nc3{background:var(--orange2);border-color:#FFCC80;border-top:4px solid var(--orange)}
+.nc4{background:var(--red2);border-color:#EF9A9A;border-top:4px solid var(--red)}
+.nc-num{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.2rem}
+.nc1 .nc-num{color:var(--leaf)}.nc2 .nc-num{color:var(--teal)}.nc3 .nc-num{color:var(--orange)}.nc4 .nc-num{color:var(--red)}
+.nc-title{font-size:.83rem;font-weight:700;margin-bottom:.3rem;color:var(--navy)}
+.nc-body{font-size:.74rem;color:var(--g5);line-height:1.45}
+.nc-ex{font-size:.7rem;font-style:italic;color:var(--g4);margin-top:.4rem}
+
+/* TIPARE longevitate - radar */
+.tipare-section{background:var(--white);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;border:1px solid var(--g3)}
+
+/* DISTRIBUTIA PROTEINA pe zi */
+.distributie-section{background:var(--navy2);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.oras{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin:1rem 0}
+@media(max-width:600px){.oras{grid-template-columns:1fr 1fr}}
+.ora-card{background:rgba(255,255,255,.07);border-radius:10px;padding:.85rem;border:1px solid rgba(255,255,255,.1);text-align:center}
+.ora-time{font-family:monospace;font-size:.7rem;color:rgba(255,255,255,.5);margin-bottom:.2rem}
+.ora-title{font-size:.82rem;font-weight:700;color:#fff;margin-bottom:.2rem}
+.ora-gram{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#81C784}
+.ora-g{font-size:.65rem;color:rgba(255,255,255,.5)}
+.ora-ex{font-size:.72rem;color:rgba(255,255,255,.6);margin-top:.3rem;line-height:1.4}
+
+/* UPF identificare */
+.upf-section{margin-bottom:1.5rem}
+.upf-quiz{background:var(--white);border-radius:14px;padding:1.5rem;border:1px solid var(--g3)}
+.upf-items{display:flex;flex-direction:column;gap:.5rem;margin:1rem 0}
+.upf-item{display:flex;align-items:center;gap:.85rem;padding:.65rem .85rem;border-radius:8px;cursor:pointer;border:1px solid var(--g3);background:var(--g1);transition:all .2s;font-size:.84rem;color:var(--g5)}
+.upf-item:hover{border-color:var(--leaf);background:var(--leaf2)}
+.upf-item.is-upf{background:var(--red2);border-color:#EF9A9A;color:var(--red)}
+.upf-item.not-upf{background:var(--leaf2);border-color:#A5D6A7;color:var(--leaf)}
+.upf-dot{width:10px;height:10px;border-radius:50%;background:var(--g3);flex-shrink:0;transition:background .2s}
+.upf-item.is-upf .upf-dot{background:var(--red)}.upf-item.not-upf .upf-dot{background:var(--leaf)}
+
+/* KPI */
+.kpi-section{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:14px;padding:2rem;margin-bottom:1.5rem;border-left:5px solid var(--leaf)}
+.kpi-tag{font-family:monospace;font-size:.68rem;font-weight:600;color:#81C784;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.75rem;display:block}
+.kpi-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:.6rem}
+.kpi-items{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.kpi-items li{font-size:.88rem;color:rgba(255,255,255,.85);display:flex;gap:.65rem;align-items:baseline;line-height:1.5}
+.kpi-arrow{font-size:.75rem;color:#81C784;flex-shrink:0}
+.footer-info{text-align:center;padding:1rem;font-size:.75rem;color:var(--g4)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fi0{opacity:0;animation:fadeUp .55s ease forwards}.fi1{animation-delay:.05s}.fi2{animation-delay:.15s}.fi3{animation-delay:.25s}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header fi0 fi1">
+    <div class="header-badge">🌿 Biohacking 3.0 · Modul 3 · Lecția 3.1</div>
+    <h1>Nutriția pentru <em>longevitate</em></h1>
+    <p class="header-sub">Proteina adecvată, calitatea vs. cantitatea alimentelor și tiparele documentate pentru funcție optimă pe termen lung.</p>
+    <div class="header-stats">
+      <div><div class="hstat-n">1,6–2,0</div><div class="hstat-l">g proteină/kg/zi — optim activ</div></div>
+      <div><div class="hstat-n">25–40 g</div><div class="hstat-l">Per masă — pragul leucinic MPS</div></div>
+      <div><div class="hstat-n">4×</div><div class="hstat-l">Variația răspunsului glicemic între persoane</div></div>
+      <div><div class="hstat-n">−30%</div><div class="hstat-l">Risc CV — dieta mediteraneană vs. low-fat</div></div>
+    </div>
+  </div>
+
+  <!-- CALCULATOR PROTEIC -->
+  <div class="calc-section fi0 fi2">
+    <span class="section-label" style="color:rgba(255,255,255,.5)">Calculator interactiv</span>
+    <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem">Necesarul tău proteic personal</div>
+    <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1rem">Modifică valorile pentru a vedea targetul zilnic optim și distribuția per masă.</div>
+    <div class="calc-inputs">
+      <div class="ci-field">
+        <label>Greutatea (kg)</label>
+        <input type="number" id="greutate" value="75" min="40" max="150" oninput="calcProt()">
+      </div>
+      <div class="ci-field">
+        <label>Vârsta</label>
+        <select id="varsta" onchange="calcProt()">
+          <option value="1.0">Sub 40 ani</option>
+          <option value="1.1" selected>40–65 ani</option>
+          <option value="1.3">Peste 65 ani</option>
+        </select>
+      </div>
+      <div class="ci-field">
+        <label>Activitate fizică</label>
+        <select id="activitate" onchange="calcProt()">
+          <option value="1.2">Sedentar</option>
+          <option value="1.5">Ușor activ (1–2×/săpt.)</option>
+          <option value="1.7" selected>Moderat (3–5×/săpt.)</option>
+          <option value="2.0">Foarte activ (6–7×/săpt.)</option>
+        </select>
+      </div>
+    </div>
+    <div class="calc-result">
+      <div class="cr-box"><div class="cr-val" id="protMin">—</div><div class="cr-lbl">Minim zilnic (g/zi)</div></div>
+      <div class="cr-box"><div class="cr-val" id="protOpt">—</div><div class="cr-lbl">Optim zilnic (g/zi)</div></div>
+      <div class="cr-box"><div class="cr-val" id="protMasa">—</div><div class="cr-lbl">Per masă (25–40g MPS)</div></div>
+    </div>
+  </div>
+
+  <!-- MACRONUTRIENTI -->
+  <div class="macro-section fi0 fi2">
+    <span class="section-label">Macronutrienții pentru longevitate</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.85rem">Calitatea contează mai mult decât procentele</div>
+    <div class="macro-grid">
+      <div class="macro-card mc-prot">
+        <div class="macro-icon">🥩</div>
+        <div class="macro-title">Proteina</div>
+        <div class="macro-val">1,6–2,0 g/kg/zi</div>
+        <div class="macro-body">Masa musculară, repararea celulară, imunitate. Efect termic 20–30%. Distribuită în 3–4 mese de 25–40 g.</div>
+      </div>
+      <div class="macro-card mc-gras">
+        <div class="macro-icon">🫒</div>
+        <div class="macro-title">Grăsimile</div>
+        <div class="macro-val">MUFA + Omega-3</div>
+        <div class="macro-body">Ulei de măsline EV, avocado, nuci, pește gras. PREDIMED: −30% risc CV. Raport Omega-6/3 optim: ≤4:1.</div>
+      </div>
+      <div class="macro-card mc-carb">
+        <div class="macro-icon">🥦</div>
+        <div class="macro-title">Carbohidrații</div>
+        <div class="macro-val">Calitate, nu cantitate</div>
+        <div class="macro-body">Legume, fructe cu IG mic, leguminoase, cereale integrale. Răspunsul glicemic este individual — N=1 pentru nutriție.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIAAS surse proteina -->
+  <div class="diaas-section fi0 fi2">
+    <span class="section-label">Calitatea surselor proteice</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Scorul DIAAS — biodisponibilitatea reală a proteinei</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:1rem">DIAAS >100 = proteină completă cu biodisponibilitate maximă. Standard de referință: ou = 125.</div>
+    <div class="diaas-bars" id="diaasWrap">
+      <div class="diaas-row"><span class="diaas-label">Ouă</span><div class="diaas-track"><div class="diaas-fill fill-ani" data-w="98"></div></div><span class="diaas-val" style="color:var(--leaf)">~125</span></div>
+      <div class="diaas-row"><span class="diaas-label">Pește/fructe de mare</span><div class="diaas-track"><div class="diaas-fill fill-ani" data-w="92"></div></div><span class="diaas-val" style="color:var(--leaf)">~115</span></div>
+      <div class="diaas-row"><span class="diaas-label">Lactate (zer/cazeină)</span><div class="diaas-track"><div class="diaas-fill fill-ani" data-w="92"></div></div><span class="diaas-val" style="color:var(--leaf)">~115</span></div>
+      <div class="diaas-row"><span class="diaas-label">Carne roșie (pășune)</span><div class="diaas-track"><div class="diaas-fill fill-ani" data-w="88"></div></div><span class="diaas-val" style="color:var(--leaf)">~110</span></div>
+      <div class="diaas-row"><span class="diaas-label">Tofu / Tempeh (soia)</span><div class="diaas-track"><div class="diaas-fill fill-partial" data-w="79"></div></div><span class="diaas-val" style="color:var(--gold)">~99</span></div>
+      <div class="diaas-row"><span class="diaas-label">Leguminoase</span><div class="diaas-track"><div class="diaas-fill fill-partial" data-w="62"></div></div><span class="diaas-val" style="color:var(--gold)">~77</span></div>
+      <div class="diaas-row"><span class="diaas-label">Cereale integrale</span><div class="diaas-track"><div class="diaas-fill fill-low" data-w="50"></div></div><span class="diaas-val" style="color:var(--orange)">~63</span></div>
+    </div>
+    <div style="font-size:.75rem;color:var(--g4);margin-top:.5rem">Leguminoase + cereale integrale combinate = profil complet de aminoacizi esențiali</div>
+  </div>
+
+  <!-- NOVA -->
+  <div class="nova-section fi0 fi3">
+    <span class="section-label">Scala NOVA de procesare (Monteiro, 2019)</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Gradul de procesare — impactul biologic</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Grup 4 (ultra-procesate): corelat independent cu mortalitate, obezitate, diabet tip 2, depresie și cancer colorectal.</div>
+    <div class="nova-grid">
+      <div class="nova-card nc1"><div class="nc-num">1</div><div class="nc-title">Neprocesat / minim</div><div class="nc-body">Baza dietei — ≥80% din aport</div><div class="nc-ex">Legume, fructe, ouă, carne proaspătă, pește, leguminoase, cereale integrale</div></div>
+      <div class="nova-card nc2"><div class="nc-num">2</div><div class="nc-title">Ingrediente culinare</div><div class="nc-body">Folosite în cantități mici</div><div class="nc-ex">Ulei de măsline, sare, unt, zahăr pentru gătit tradițional</div></div>
+      <div class="nova-card nc3"><div class="nc-num">3</div><div class="nc-title">Procesate tradițional</div><div class="nc-body">Consum moderat</div><div class="nc-ex">Brânzeturi, conserve de calitate, pâine artizanală, mezeluri tradiționale</div></div>
+      <div class="nova-card nc4"><div class="nc-num">4</div><div class="nc-title">Ultra-procesate (UPF)</div><div class="nc-body">Minimizează — densitate zero</div><div class="nc-ex">Cereale de mic dejun cu zahăr, chipsuri, snackuri, băuturi îndulcite, fast-food industrial</div></div>
+    </div>
+  </div>
+
+  <!-- DISTRIBUTIA PROTEINA -->
+  <div class="distributie-section fi0 fi3">
+    <span class="section-label" style="color:rgba(255,255,255,.5)">Distribuția optimă pe parcursul zilei</span>
+    <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem">Proteina per masă — de ce contează distribuția</div>
+    <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1rem">MPS (sinteza proteică musculară) are un plafon per masă. Excesul nu este stocat ca mușchi — este oxidat.</div>
+    <div class="oras">
+      <div class="ora-card">
+        <div class="ora-time">07:00–09:00</div>
+        <div class="ora-title">Mic dejun</div>
+        <div class="ora-gram">25–40</div>
+        <div class="ora-g">g proteină</div>
+        <div class="ora-ex">Ouă, iaurt grecesc, somon afumat</div>
+      </div>
+      <div class="ora-card">
+        <div class="ora-time">12:00–14:00</div>
+        <div class="ora-title">Prânz</div>
+        <div class="ora-gram">30–40</div>
+        <div class="ora-g">g proteină</div>
+        <div class="ora-ex">Carne slabă sau pește + leguminoase</div>
+      </div>
+      <div class="ora-card">
+        <div class="ora-time">Post-antrenament</div>
+        <div class="ora-title">Gustare (dacă activ)</div>
+        <div class="ora-gram">25–35</div>
+        <div class="ora-g">g proteină</div>
+        <div class="ora-ex">Zer sau proteină + carbohidrat complex</div>
+      </div>
+      <div class="ora-card">
+        <div class="ora-time">19:00–21:00</div>
+        <div class="ora-title">Cină</div>
+        <div class="ora-gram">30–40</div>
+        <div class="ora-g">g proteină</div>
+        <div class="ora-ex">Cazeina (lentă) susține MPS nocturn</div>
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,.06);border-radius:8px;padding:.85rem 1.1rem;border:1px solid rgba(255,255,255,.1);font-size:.82rem;color:rgba(255,255,255,.7);margin-top:.5rem">
+      Pragul leucinic: minimum <strong style="color:#81C784">2,5–3 g leucină per masă</strong> = minimum 25 g proteină de înaltă calitate (DIAAS >100) pentru activarea optimă a MPS.
+    </div>
+  </div>
+
+  <!-- UPF IDENTIFICARE QUIZ -->
+  <div class="upf-section fi0 fi3">
+    <span class="section-label">Exercițiu interactiv</span>
+    <div class="upf-quiz">
+      <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Identifică ultra-procesatele — apasă pe fiecare aliment</div>
+      <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Apasă pentru a identifica dacă este UPF (grupa 4) sau nu. Surprizele sunt frecvente.</div>
+      <div class="upf-items" id="upfItems"></div>
+    </div>
+  </div>
+
+  <!-- CHART radar tipare -->
+  <div style="background:var(--white);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;border:1px solid var(--g3)" class="fi0 fi3">
+    <span class="section-label">Tiparele de alimentație documentate pentru longevitate</span>
+    <div style="font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Profilul nutrițional comparativ</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:1rem">Zonele Albastre vs. dieta mediteraneană vs. dieta occidentală modernă — 6 dimensiuni comparate.</div>
+    <div style="position:relative;height:260px"><canvas id="tiparChart"></canvas></div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-section fi0 fi3">
+    <span class="kpi-tag">⬡ KPI lecția 3.1 — Primii pași nutriționali</span>
+    <div class="kpi-title">Proteina, calitatea și extinderea jurnalului</div>
+    <ul class="kpi-items">
+      <li><span class="kpi-arrow">→</span>Calculezi necesarul proteic personal cu calculatorul de mai sus (kg × 1,6–2,0)</li>
+      <li><span class="kpi-arrow">→</span>Estimezi câte mese din ieri au conținut minimum 25 g proteină de calitate</li>
+      <li><span class="kpi-arrow">→</span>Adaugi câmpul 10 în jurnal — estimarea proteinei la micul dejun (3 categorii)</li>
+      <li><span class="kpi-arrow">→</span>Identifici top 3 surse UPF din dieta curentă — prioritățile de înlocuire</li>
+    </ul>
+  </div>
+
+  <div class="footer-info">
+    <strong>Biohacking 3.0 · Modul 3 · Lecția 3.1</strong> · dr.ing. Radu Pascu · NUTRISIB Sibiu · 2025<br>
+    Surse: Attia (2023) Outlive; Stokes (2018) Nutrients; Monteiro (2019); Estruch (2018) PREDIMED NEJM; Zeevi (2015) Cell; Buettner (2008) Blue Zones
+  </div>
+</div>
+
+<script>
+// Calculator proteic
+function calcProt(){
+  const g=parseFloat(document.getElementById('greutate').value)||75;
+  const v=parseFloat(document.getElementById('varsta').value)||1.1;
+  const a=parseFloat(document.getElementById('activitate').value)||1.7;
+  const factor=a*v;
+  const lo=Math.round(g*Math.min(factor*0.85,1.6));
+  const hi=Math.round(g*Math.min(factor,2.4));
+  const perMasa=Math.round((lo+hi)/2/4);
+  document.getElementById('protMin').textContent=lo+' g';
+  document.getElementById('protOpt').textContent=hi+' g';
+  document.getElementById('protMasa').textContent=perMasa+'–'+Math.round(perMasa*1.3)+' g';
+}
+calcProt();
+
+// Animate DIAAS bars
+const dIO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.diaas-fill').forEach(b=>{b.style.width=b.dataset.w+'%';});
+      dIO.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+dIO.observe(document.getElementById('diaasWrap'));
+
+// UPF Quiz
+const upfData=[
+  {name:'Ouă fierte',upf:false},
+  {name:'Chipsuri de cartofi',upf:true},
+  {name:'Iaurt grecesc simplu',upf:false},
+  {name:'Cereale de mic dejun colorate cu zahăr',upf:true},
+  {name:'Somon la grătar',upf:false},
+  {name:'Batoane proteice industriale',upf:true},
+  {name:'Fasole boabe fiartă',upf:false},
+  {name:'Pâine albă industrială cu aditivi',upf:true},
+  {name:'Avocado',upf:false},
+  {name:'Băuturi energizante',upf:true},
+];
+const upfEl=document.getElementById('upfItems');
+upfData.forEach(item=>{
+  const div=document.createElement('div');
+  div.className='upf-item';
+  div.innerHTML=`<div class="upf-dot"></div><span>${item.name}</span><span style="margin-left:auto;font-size:.7rem;opacity:0" id="ans-${item.name.replace(/\s/g,'-')}"></span>`;
+  div.addEventListener('click',()=>{
+    if(!div.classList.contains('is-upf')&&!div.classList.contains('not-upf')){
+      div.classList.add(item.upf?'is-upf':'not-upf');
+      const ans=div.querySelector('span:last-child');
+      ans.style.opacity='1';
+      ans.textContent=item.upf?'✗ Ultra-procesat (Grupa 4)':'✓ Aliment integral (Grupa 1)';
+    }
+  });
+  upfEl.appendChild(div);
+});
+
+// Radar tipare
+new Chart(document.getElementById('tiparChart'),{
+  type:'radar',
+  data:{
+    labels:['Plante (%)','Leguminoase','Procesare minimă','Proteina calitate','Grăsimi bune','Zahăr adăugat (inv.)'],
+    datasets:[
+      {label:'Zonele Albastre',data:[90,95,95,75,70,90],borderColor:'#2E7D32',backgroundColor:'rgba(46,125,50,.12)',borderWidth:2.5,pointRadius:4,pointBackgroundColor:'#2E7D32'},
+      {label:'Mediteraneană',data:[75,80,88,80,90,80],borderColor:'#0A7EA4',backgroundColor:'rgba(10,126,164,.1)',borderWidth:2,pointRadius:3,pointBackgroundColor:'#0A7EA4'},
+      {label:'Dieta occidentală modernă',data:[35,25,30,55,40,15],borderColor:'#B83030',backgroundColor:'rgba(184,48,48,.08)',borderWidth:2,pointRadius:3,pointBackgroundColor:'#B83030'},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:11},padding:12}},tooltip:{callbacks:{label:v=>v.dataset.label+': '+v.parsed.r+'%'}}},
+    scales:{r:{beginAtZero:true,min:0,max:100,
+      ticks:{stepSize:25,font:{size:9},backdropColor:'transparent',color:'#9A9088'},
+      grid:{color:'rgba(0,0,0,.06)'},angleLines:{color:'rgba(0,0,0,.06)'},
+      pointLabels:{font:{size:10},color:'#5A5248'}}}
+  }
+});
+</script>
+</body>
+</html>

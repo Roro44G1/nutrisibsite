@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M1 · L1.3 — Healthspan: KPI-ul suprem al sistemului | Biohacking 3.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:#1a1410}::-webkit-scrollbar-thumb{background:#0A7EA4;border-radius:3px}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;--teal:#0A7EA4;--teal2:#13A0CC;
+  --gold:#C8920A;--gold2:#E8AE1A;--cream:#FAF7F2;--warm:#F2EDE4;
+  --white:#FFFFFF;--g1:#F0EBE3;--g2:#DDD6CC;--g3:#9A9088;--g4:#5A5248;
+  --dark:#1E1810;--green:#1A6B3C;--red:#B83030;--orange:#C85A0A;--purple:#5B3FA6;
+  --serif:'DM Serif Display',serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+  --r:10px;--sh1:0 2px 16px rgba(15,30,60,.08);--sh2:0 6px 32px rgba(15,30,60,.14);--tr:all .22s cubic-bezier(.4,0,.2,1)
+}
+body{font-family:var(--sans);background:var(--cream);color:var(--dark);line-height:1.7;-webkit-font-smoothing:antialiased}
+.lesson-wrap{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+@media(max-width:900px){.lesson-wrap{grid-template-columns:1fr}}
+.sidebar{background:var(--navy);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;scrollbar-width:none}
+.sidebar::-webkit-scrollbar{display:none}
+@media(max-width:900px){.sidebar{position:relative;height:auto}}
+.sb-brand{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand-logo{font-family:var(--mono);font-size:.72rem;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;display:block;margin-bottom:.35rem}
+.brand-course{font-size:.78rem;color:rgba(255,255,255,.45);line-height:1.4}
+.sb-nav{padding:.75rem 0;flex:1}
+.nav-lbl{font-family:var(--mono);font-size:.62rem;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;padding:.9rem 1.25rem .35rem}
+.nav-l{display:flex;align-items:center;gap:.65rem;padding:.55rem 1.25rem;text-decoration:none;transition:var(--tr);border-left:2px solid transparent}
+.nav-l:hover{background:rgba(255,255,255,.05)}
+.nav-l.active{background:rgba(10,126,164,.18);border-left-color:var(--teal2)}
+.nav-l.done .nav-l-num::after{content:' ✓';color:var(--green)}
+.nav-l-num{font-family:var(--mono);font-size:.65rem;color:var(--teal2);min-width:24px}
+.nav-l-title{font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.35}
+.nav-l.active .nav-l-title{color:var(--white)}
+.sb-prog{padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.08)}
+.prog-lbl{font-family:var(--mono);font-size:.62rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
+.prog-bar{height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;width:20%;background:linear-gradient(90deg,var(--teal),var(--teal2));border-radius:2px;transition:width .6s ease}
+.prog-txt{font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.35);margin-top:.4rem}
+
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{background:var(--white);border-bottom:1px solid var(--g1);padding:.75rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:50;box-shadow:var(--sh1);flex-wrap:wrap}
+.topbar-bc{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--g3)}
+.topbar-bc a{color:var(--teal);text-decoration:none}
+.topbar-bc span{color:var(--g2)}
+.topbar-meta{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
+.meta-chip{display:flex;align-items:center;gap:.35rem;font-family:var(--mono);font-size:.7rem;color:var(--g4)}
+.meta-chip svg{width:13px;height:13px}
+.btn-done{background:var(--teal);color:var(--white);font-family:var(--sans);font-size:.8rem;font-weight:600;padding:.45rem 1.1rem;border-radius:6px;border:none;cursor:pointer;transition:var(--tr);white-space:nowrap}
+.btn-done:hover{background:var(--teal2)}
+.btn-done.done{background:var(--green)}
+.read-meta{display:flex;align-items:center;gap:1.5rem;padding:.75rem 2rem;background:var(--warm);border-bottom:1px solid var(--g1);font-family:var(--mono);font-size:.7rem;color:var(--g3);flex-wrap:wrap}
+.read-meta a{color:var(--teal);text-decoration:none}
+
+.hero{background:var(--navy);
+  background-image:radial-gradient(ellipse 65% 55% at 75% 45%,rgba(10,126,164,.22) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 40% at 15% 80%,rgba(91,63,166,.15) 0%,transparent 55%);
+  padding:3rem 2rem 2.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.015) 40px),
+    repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.015) 40px)}
+.hero-inner{max-width:820px;position:relative;animation:fadeUp .6s ease both}
+.hero-ey{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.68rem;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}
+.hero-ey::before{content:'';width:20px;height:1px;background:var(--gold2)}
+.hero h1{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.4rem);color:var(--white);line-height:1.2;margin-bottom:.75rem;font-weight:400}
+.hero h1 em{font-style:italic;color:var(--gold2)}
+.hero-desc{font-size:.95rem;color:rgba(255,255,255,.6);max-width:580px;line-height:1.65;margin-bottom:1.5rem}
+.hero-tags{display:flex;gap:.65rem;flex-wrap:wrap}
+.hero-tag{font-family:var(--mono);font-size:.67rem;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.15);padding:.2rem .65rem;border-radius:99px}
+.hero-tag.hl{color:var(--gold2);border-color:rgba(232,174,26,.4)}
+
+.vid-sec{padding:2rem;background:var(--white);border-bottom:1px solid var(--g1)}
+.vid-wrap{background:var(--navy);border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;max-height:480px;display:flex;align-items:center;justify-content:center}
+.vid-ph{display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center;padding:2rem}
+.play-btn{width:72px;height:72px;border-radius:50%;background:rgba(10,126,164,.3);border:2px solid rgba(10,126,164,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--tr)}
+.play-btn:hover{background:rgba(10,126,164,.55);transform:scale(1.08)}
+.play-btn svg{width:28px;height:28px;fill:white;margin-left:4px}
+.vid-ph p{font-size:.85rem;color:rgba(255,255,255,.5)}
+.vp-hint{font-family:var(--mono);font-size:.68rem;color:var(--gold2)}
+.vid-wrap iframe,.vid-wrap video{width:100%;height:100%;border:none}
+
+.body{padding:2.5rem 2rem 4rem;max-width:860px}
+
+.obj-box{background:var(--white);border:1px solid var(--g1);border-radius:var(--r);padding:1.5rem;margin-bottom:2.5rem;box-shadow:var(--sh1);animation:fadeUp .6s .1s ease both}
+.obj-hdr{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem}
+.obj-hdr svg{width:16px;height:16px;color:var(--teal);flex-shrink:0}
+.obj-lbl{font-family:var(--mono);font-size:.68rem;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.obj-list{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.obj-list li{display:flex;align-items:flex-start;gap:.75rem;font-size:.9rem;color:var(--dark);line-height:1.55}
+.obj-ck{width:18px;height:18px;border-radius:50%;background:var(--teal);color:white;font-size:.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem}
+
+.eyebrow{font-family:var(--mono);font-size:.67rem;color:var(--teal);letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:.4rem}
+.s-h2{font-family:var(--serif);font-size:1.65rem;color:var(--navy);font-weight:400;line-height:1.25;margin-bottom:.75rem}
+.s-h3{font-family:var(--serif);font-size:1.2rem;color:var(--navy);font-weight:400;line-height:1.3;margin-bottom:.5rem;margin-top:1.5rem}
+.s-h4{font-size:.82rem;font-weight:700;color:var(--teal);letter-spacing:.06em;text-transform:uppercase;margin-bottom:.6rem}
+.p{font-size:.94rem;color:var(--g4);line-height:1.75;margin-bottom:.75rem}
+.p strong{color:var(--dark)}
+.p em{color:var(--navy);font-style:italic}
+.div{height:1px;background:linear-gradient(90deg,var(--teal),transparent);margin:2.5rem 0;opacity:.35}
+
+.callout{border-radius:var(--r);padding:1.25rem 1.5rem;margin:1.25rem 0;border-left:4px solid}
+.callout.teal{background:#EAF6FB;border-color:var(--teal)}
+.callout.gold{background:#FEF8E8;border-color:var(--gold)}
+.callout.green{background:#EAF4EE;border-color:var(--green)}
+.callout.red{background:#FDEAEA;border-color:var(--red)}
+.callout.orange{background:#FEF2E8;border-color:var(--orange)}
+.callout.navy{background:var(--navy);border-color:var(--gold)}
+.callout.gray{background:var(--g1);border-color:var(--g3)}
+.callout-lbl{font-family:var(--mono);font-size:.65rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.callout.teal .callout-lbl{color:var(--teal)}
+.callout.gold .callout-lbl{color:var(--gold)}
+.callout.green .callout-lbl{color:var(--green)}
+.callout.red .callout-lbl{color:var(--red)}
+.callout.orange .callout-lbl{color:var(--orange)}
+.callout.navy .callout-lbl{color:var(--gold2)}
+.callout.gray .callout-lbl{color:var(--g4)}
+.callout p{font-size:.9rem;line-height:1.65;margin-bottom:.35rem}
+.callout.navy p{color:rgba(255,255,255,.75)}
+.callout p:last-child{margin-bottom:0}
+.callout strong{color:var(--dark)}
+.callout.navy strong{color:var(--white)}
+
+/* Compare boxes */
+.compare-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.25rem 0}
+@media(max-width:640px){.compare-2{grid-template-columns:1fr}}
+.cmp-card{border-radius:var(--r);padding:1.25rem;border:1px solid var(--g2);background:var(--white);box-shadow:var(--sh1)}
+.cmp-label{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.65rem;display:flex;align-items:center;gap:.4rem}
+.cmp-card.standard .cmp-label{color:var(--orange)}
+.cmp-card.optimal .cmp-label{color:var(--green)}
+.cmp-body{font-size:.85rem;color:var(--g4);line-height:1.6}
+.cmp-body strong{color:var(--dark)}
+
+/* Piloni grid */
+.piloni-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1.5rem 0}
+@media(max-width:768px){.piloni-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.piloni-grid{grid-template-columns:1fr}}
+.pilon-card{border-radius:var(--r);padding:1.1rem;border:1px solid var(--g2);background:var(--white);border-top:3px solid;box-shadow:var(--sh1);transition:var(--tr)}
+.pilon-card:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
+.pilon-card.c1,.pilon-card.c7{border-top-color:var(--teal)}
+.pilon-card.c2,.pilon-card.c8{border-top-color:var(--orange)}
+.pilon-card.c3{border-top-color:var(--green)}
+.pilon-card.c4,.pilon-card.c9{border-top-color:var(--purple)}
+.pilon-card.c5,.pilon-card.c6{border-top-color:var(--red)}
+.pilon-n{font-family:var(--mono);font-size:.62rem;font-weight:500;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.3rem}
+.c1 .pilon-n,.c7 .pilon-n{color:var(--teal)}
+.c2 .pilon-n,.c8 .pilon-n{color:var(--orange)}
+.c3 .pilon-n{color:var(--green)}
+.c4 .pilon-n,.c9 .pilon-n{color:var(--purple)}
+.c5 .pilon-n,.c6 .pilon-n{color:var(--red)}
+.pilon-title{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:.3rem;line-height:1.3}
+.pilon-kpi{font-size:.72rem;color:var(--g3);margin-bottom:.4rem;font-style:italic}
+.pilon-body{font-size:.8rem;color:var(--g4);line-height:1.55}
+
+/* VO2max table */
+.tbl-wrap{overflow-x:auto;margin:1.25rem 0;border-radius:var(--r);box-shadow:var(--sh1)}
+.dtbl{width:100%;border-collapse:collapse;font-size:.875rem}
+.dtbl th{background:var(--navy);color:var(--white);font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.75rem 1rem;text-align:left}
+.dtbl td{padding:.75rem 1rem;border-bottom:1px solid var(--g1);color:var(--dark);vertical-align:top;line-height:1.55}
+.dtbl tr:last-child td{border-bottom:none}
+.dtbl .lbl{font-weight:700;color:var(--navy)}
+.dtbl .hl{color:var(--green);font-weight:600}
+.dtbl .warn{color:var(--red);font-weight:600}
+.dtbl .med{color:var(--orange);font-weight:600}
+.dtbl .note{font-size:.8rem;color:var(--g3)}
+.vo2-row-low td{background:#FFF0F0}
+.vo2-row-med td{background:var(--warm)}
+.vo2-row-high td{background:#EAF4EE}
+.vo2-row-elite td{background:#D4EDDA}
+
+/* Scorecard */
+.scorecard{display:flex;flex-direction:column;gap:.75rem;margin:1.25rem 0}
+.score-item{display:grid;grid-template-columns:36px 1fr auto;gap:.75rem;align-items:start;background:var(--white);border:1px solid var(--g2);border-radius:var(--r);padding:1rem;box-shadow:var(--sh1)}
+.score-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.1rem;font-weight:700;flex-shrink:0}
+.score-item:nth-child(1) .score-num{background:#EAF6FB;color:var(--teal)}
+.score-item:nth-child(2) .score-num{background:#FEF2E8;color:var(--orange)}
+.score-item:nth-child(3) .score-num{background:#EAF4EE;color:var(--green)}
+.score-item:nth-child(4) .score-num{background:#F0EBF8;color:var(--purple)}
+.score-item:nth-child(5) .score-num{background:#FEF8E8;color:var(--gold)}
+.score-title{font-size:.92rem;font-weight:700;color:var(--navy);margin-bottom:.25rem}
+.score-how{font-size:.82rem;color:var(--g4);line-height:1.55;margin-bottom:.25rem}
+.score-ref{font-family:var(--mono);font-size:.7rem;background:var(--g1);border-radius:4px;padding:.2rem .55rem;color:var(--g4);white-space:nowrap;align-self:start}
+
+/* KPI action box */
+.kpi-box{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);border-radius:var(--r);padding:2rem;margin-top:2rem;border-left:5px solid var(--gold)}
+.kpi-lbl{font-family:var(--mono);font-size:.72rem;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}
+.kpi-box h3{font-family:var(--serif);font-size:1.3rem;color:var(--white);font-weight:400;margin-bottom:.75rem}
+.kpi-box .p-w{font-size:.88rem;color:rgba(255,255,255,.6);line-height:1.65;margin-bottom:1rem}
+.kpi-steps{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.25rem}
+.kpi-steps li{font-size:.88rem;color:rgba(255,255,255,.85);display:flex;align-items:baseline;gap:.65rem;line-height:1.5}
+.step-n{font-family:var(--mono);font-size:.7rem;color:var(--gold2);flex-shrink:0;min-width:1.5rem}
+.kpi-btn{display:inline-block;background:var(--gold);color:var(--navy);font-weight:700;font-size:.85rem;padding:.7rem 1.5rem;border-radius:var(--r);text-decoration:none;border:none;cursor:pointer;font-family:var(--sans);transition:var(--tr)}
+.kpi-btn:hover{background:var(--gold2)}
+
+.bib-sec{background:var(--warm);border-top:1px solid var(--g1);padding:2rem}
+.bib-list{list-style:none;display:flex;flex-direction:column}
+.bib-list li{font-size:.8rem;color:var(--g4);line-height:1.6;padding:.5rem .75rem;border-bottom:1px solid var(--g1);display:grid;grid-template-columns:1.8rem 1fr;gap:.5rem;align-items:baseline}
+.bib-n{font-family:var(--mono);font-size:.68rem;color:var(--teal);font-weight:500}
+.bib-list li em{font-style:italic;color:var(--dark)}
+
+.lesson-nav{padding:1.5rem 2rem;background:var(--white);border-top:1px solid var(--g1);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.nav-btn{display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;color:var(--navy);text-decoration:none;padding:.65rem 1.25rem;border-radius:var(--r);border:1px solid var(--g2);transition:var(--tr);background:var(--white)}
+.nav-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--warm)}
+.nav-btn.primary{background:var(--teal);color:var(--white);border-color:var(--teal)}
+.nav-btn.primary:hover{background:var(--teal2)}
+.nav-btn svg{width:16px;height:16px}
+.nav-btn-lbl{font-size:.7rem;font-weight:400;color:var(--g3);display:block;margin-bottom:.1rem}
+.nav-btn.primary .nav-btn-lbl{color:rgba(255,255,255,.6)}
+
+.c-list{list-style:none;display:flex;flex-direction:column;gap:.45rem;margin:.75rem 0 1rem}
+.c-list li{font-size:.9rem;color:var(--g4);line-height:1.6;padding-left:1.4rem;position:relative}
+.c-list li::before{content:'→';position:absolute;left:0;color:var(--teal);font-size:.8rem;top:.07em}
+.c-list li strong{color:var(--dark)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.sidebar{display:none}.sidebar.open{display:flex;position:fixed;inset:0;z-index:200}}
+@media(min-width:901px){.mob-btn{display:none}}
+.mob-btn{background:none;border:1px solid var(--g2);padding:.4rem .8rem;border-radius:6px;cursor:pointer;font-family:var(--sans);font-size:.8rem;color:var(--navy);display:flex;align-items:center;gap:.4rem}
+</style>
+</head>
+<body>
+<div class="lesson-wrap">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <a href="../index.html" class="brand-logo">NUTRISIB / BH3.0</a>
+      <div class="brand-course">Biohacking 3.0<br>Ingineria sistemului tău biologic</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="nav-lbl">Modul 1 — Mindset 3.0</div>
+      <a href="m1-l11.html" class="nav-l done"><span class="nav-l-num">1.1</span><span class="nav-l-title">Introducere și contextul Medicinei 3.0</span></a>
+      <a href="m1-l12.html" class="nav-l done"><span class="nav-l-num">1.2</span><span class="nav-l-title">Principiul N=1 și limitările studiilor populaționale</span></a>
+      <a href="m1-l13.html" class="nav-l active"><span class="nav-l-num">1.3</span><span class="nav-l-title">Healthspan: KPI-ul suprem al sistemului</span></a>
+      <a href="m1-l14.html" class="nav-l"><span class="nav-l-num">1.4</span><span class="nav-l-title">Arhitectura experimentului personal sigur</span></a>
+      <a href="m1-l15.html" class="nav-l"><span class="nav-l-num">1.5</span><span class="nav-l-title">Introducere în sistemul C.E.L.O.S.</span></a>
+      <div class="nav-lbl" style="margin-top:.5rem">Modul 2 — Măsurare</div>
+      <a href="#" class="nav-l" style="opacity:.4;pointer-events:none"><span class="nav-l-num">2.1</span><span class="nav-l-title">Jurnalul de biohacking</span></a>
+      <a href="#" class="nav-l" style="opacity:.4;pointer-events:none"><span class="nav-l-num">2.2</span><span class="nav-l-title">HRV și wearables</span></a>
+      <div class="nav-lbl" style="margin-top:.5rem">Modulele 3–6</div>
+      <a href="#" class="nav-l" style="opacity:.25;pointer-events:none"><span class="nav-l-num">3–6</span><span class="nav-l-title">Se deblochează progresiv</span></a>
+    </nav>
+    <div class="sb-prog">
+      <div class="prog-lbl">Progres curs</div>
+      <div class="prog-bar"><div class="prog-fill" id="pFill"></div></div>
+      <div class="prog-txt" id="pTxt">3 / 30 lecții completate</div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-bc">
+        <button class="mob-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰ Meniu</button>
+        <a href="../index.html">Biohacking 3.0</a><span>›</span>
+        <a href="#">Modul 1</a><span>›</span>
+        <span style="color:var(--dark);font-weight:500">Lecția 1.3</span>
+      </div>
+      <div class="topbar-meta">
+        <span class="meta-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>18 min</span>
+        <span class="meta-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>PDF inclus</span>
+        <button class="btn-done" id="doneBtn" onclick="markDone()">✓ Marchează completă</button>
+      </div>
+    </div>
+    <div class="read-meta">
+      <span>📖 Timp citire: ~12 min</span>
+      <span>🎬 Durată video: ~18 min</span>
+      <span>📥 <a href="BH30_M1_L13_Material_Curs.pdf">Descarcă PDF curs</a></span>
+      <span>📄 <a href="BH30_M1_L13_Script_Video.pdf">Script video</a></span>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-ey">Modul 1 · Lecția 1.3 · Săptămâna 1</div>
+        <h1>Healthspan: <em>KPI-ul suprem</em><br>al sistemului</h1>
+        <p class="hero-desc">Nu câți ani vei trăi, ci câți ani vei trăi în deplinătate. Cei 9 piloni ai funcției biologice pe termen lung și cum îi măsori azi, fără laborator.</p>
+        <div class="hero-tags">
+          <span class="hero-tag hl">Healthspan gap</span>
+          <span class="hero-tag">VO2max predictor</span>
+          <span class="hero-tag">Masa musculară</span>
+          <span class="hero-tag">Cei 9 piloni</span>
+          <span class="hero-tag">Scorecard funcțional</span>
+          <span class="hero-tag">Compresia morbidității</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Video -->
+    <div class="vid-sec">
+      <div class="vid-wrap" id="vWrap">
+        <div class="vid-ph">
+          <div class="play-btn" onclick="loadVid()"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+          <p>Lecția 1.3 — Healthspan: KPI-ul suprem al sistemului</p>
+          <span class="vp-hint">Adaugă data-video-src="URL" pe #vWrap pentru încărcare automată</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="body">
+
+      <!-- Obiective -->
+      <div class="obj-box">
+        <div class="obj-hdr">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span class="obj-lbl">Obiective de învățare</span>
+        </div>
+        <ul class="obj-list">
+          <li><span class="obj-ck">✓</span>Definești operațional <em>healthspan</em> și îl distingi clar de <em>lifespan</em></li>
+          <li><span class="obj-ck">✓</span>Calculezi propriul healthspan gap estimat pe baza istoricului familial și stilului de viață</li>
+          <li><span class="obj-ck">✓</span>Identifici cei 9 piloni ai healthspan-ului și KPI-urile măsurabile asociate</li>
+          <li><span class="obj-ck">✓</span>Înțelegi de ce VO2max este cel mai puternic predictor al mortalității de toate cauzele</li>
+          <li><span class="obj-ck">✓</span>Știi cum îți măsori funcția biologică actuală fără laborator (5 teste simple)</li>
+        </ul>
+      </div>
+
+      <!-- S1 -->
+      <span class="eyebrow">Secțiunea 1</span>
+      <h2 class="s-h2">De la lifespan la healthspan</h2>
+      <p class="p">Medicina tradițională a măsurat succesul prin <strong>lifespan</strong> — numărul de ani trăiți. O metrică simplă, ușor de comparat. Problema: nu spune nimic despre <em>cum</em> au fost trăiți acei ani.</p>
+
+      <div class="compare-2">
+        <div class="cmp-card standard">
+          <div class="cmp-label">Lifespan · Cantitate</div>
+          <div class="cmp-body">Numărul total de ani de viață biologică, <strong>indiferent de funcția cognitivă, capacitatea fizică sau independența funcțională</strong>. Metrica exclusivă a Medicinei 1.0 și 2.0.</div>
+        </div>
+        <div class="cmp-card optimal">
+          <div class="cmp-label">Healthspan · Calitate</div>
+          <div class="cmp-body">Numărul de ani trăiți cu funcție cognitivă adecvată, funcție fizică adecvată și <strong>independență funcțională completă</strong>. KPI-ul central al Medicinei 3.0.</div>
+        </div>
+      </div>
+
+      <div class="callout gold">
+        <div class="callout-lbl">⬡ Exemplul care schimbă perspectiva</div>
+        <p>Două persoane, ambele cu lifespan de 82 de ani. <strong>Persoana A:</strong> funcțională, activă, cognitiv intactă până la 80 de ani, urmată de 2 ani de declin accelerat. <strong>Persoana B:</strong> prime boli cronice la 62 de ani, pierdere cognitivă la 68, dependentă din 75 de ani — 7 ani de viață cu funcție aproape nulă.</p>
+        <p>Același lifespan. <strong>Healthspan radical diferit: 80 ani vs. 62 ani.</strong></p>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S2 -->
+      <span class="eyebrow">Secțiunea 2</span>
+      <h2 class="s-h2">Healthspan gap — calculul personal</h2>
+      <p class="p">Healthspan gap este diferența dintre câți ani vei trăi și câți ani vei trăi în funcție adecvată. Nu este un destin genetic — genetica explică ~20–25% din longevitate. Restul de 75–80% este influențat de stilul de viață.</p>
+
+      <div class="tbl-wrap">
+        <table class="dtbl">
+          <thead><tr><th>Indicator</th><th>România (est. 2022)</th><th>Media UE</th><th>Observație</th></tr></thead>
+          <tbody>
+            <tr><td class="lbl">Speranța de viață (lifespan)</td><td>76,2 ani</td><td>81,0 ani</td><td class="note">Date Eurostat</td></tr>
+            <tr><td class="lbl">Ani sănătoși (healthspan)</td><td>~64 ani</td><td>~68 ani</td><td class="note">HLY indicator</td></tr>
+            <tr><td class="lbl">Healthspan gap</td><td class="warn">~12 ani</td><td class="warn">~13 ani</td><td>Ani cu funcție degradată</td></tr>
+            <tr><td class="lbl">Recuperabilitate</td><td class="hl">Parțial, prin prevenție</td><td class="hl">Idem</td><td class="note">WHO 2022, Eurostat 2023</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="s-h3">Factori care influențează gap-ul tău personal</h3>
+      <div class="compare-2">
+        <div class="cmp-card standard">
+          <div class="cmp-label">⬆ Cresc gap-ul (risc mai mare)</div>
+          <ul class="c-list" style="margin-top:.5rem">
+            <li>Istoric familial de boli cronice cu debut sub 70 ani</li>
+            <li>Sedentarism cronic — sub 5.000 pași/zi, fără antrenament structurat</li>
+            <li>Rezistență la insulină documentată (HOMA-IR &gt; 2)</li>
+            <li>Somn cronic insuficient (sub 6,5 ore/noapte, 5+ ani)</li>
+            <li>Stres cronic neadresat + izolare socială</li>
+          </ul>
+        </div>
+        <div class="cmp-card optimal">
+          <div class="cmp-label">⬇ Reduc gap-ul (protecție)</div>
+          <ul class="c-list" style="margin-top:.5rem">
+            <li>VO2max ridicat pentru vârstă și sex (top 25% conform normelor)</li>
+            <li>Masă musculară adecvată + forță menținută prin antrenament regulat</li>
+            <li>Somn de calitate 7–8 ore/noapte, HRV în creștere</li>
+            <li>Managementul eficient al stresului, rețea socială activă</li>
+            <li>Suplimentare inteligentă bazată pe biomarkeri</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S3 -->
+      <span class="eyebrow">Secțiunea 3</span>
+      <h2 class="s-h2">Cei 9 piloni ai healthspan-ului</h2>
+      <p class="p">Healthspan nu este o singură variabilă — este un sistem cu nouă componente interdependente. Degradarea uneia accelerează degradarea celorlalte. Optimizarea uneia produce efecte cascade pozitive asupra întregului sistem.</p>
+
+      <div class="piloni-grid">
+        <div class="pilon-card c1">
+          <div class="pilon-n">01 · Cardiorespiratoriu</div>
+          <div class="pilon-title">Funcția cardiorespiratore (VO2max)</div>
+          <div class="pilon-kpi">KPI: VO2max ml/kg/min</div>
+          <div class="pilon-body">Cel mai puternic predictor al mortalității de toate cauzele. Scădere naturală ~10%/deceniu după 30 ani. Complet recuperabil prin antrenament.</div>
+        </div>
+        <div class="pilon-card c2">
+          <div class="pilon-n">02 · Musculoskeletal</div>
+          <div class="pilon-title">Masa musculară și forța</div>
+          <div class="pilon-kpi">KPI: grip strength, masa musculară %</div>
+          <div class="pilon-body">Organul metabolic subestimat. Secretă miokine cu efect neuroprotector. Sarcopenia: 3–8%/deceniu fără antrenament.</div>
+        </div>
+        <div class="pilon-card c3">
+          <div class="pilon-n">03 · Osos</div>
+          <div class="pilon-title">Densitatea osoasă</div>
+          <div class="pilon-kpi">KPI: BMD (DEXA scan)</div>
+          <div class="pilon-body">Fractura de șold: mortalitate 15–30% în primul an la vârste înaintate. Prevenibilă prin forță + vitamina D + proteine adecvate.</div>
+        </div>
+        <div class="pilon-card c4">
+          <div class="pilon-n">04 · Cognitiv</div>
+          <div class="pilon-title">Funcția cognitivă</div>
+          <div class="pilon-kpi">KPI: rezervă cognitivă, viteză procesare</div>
+          <div class="pilon-body">Rezerva cognitivă întârzie Alzheimer cu 5–10 ani. Exercițiul aerob crește volumul hipocampic cu 2–3%/an (Erickson, 2011, PNAS).</div>
+        </div>
+        <div class="pilon-card c5">
+          <div class="pilon-n">05 · Metabolic</div>
+          <div class="pilon-title">Sănătatea metabolică</div>
+          <div class="pilon-kpi">KPI: HOMA-IR, TG/HDL, glicemie</div>
+          <div class="pilon-body">Doar 12% din adulți sunt metabolic sănătoși (Aranica, 2019). Rezistența la insulină — co-factorul comun al majorității bolilor cronice.</div>
+        </div>
+        <div class="pilon-card c6">
+          <div class="pilon-n">06 · Microbiom</div>
+          <div class="pilon-title">Microbiomul intestinal</div>
+          <div class="pilon-kpi">KPI: diversitate, disconfort digestiv</div>
+          <div class="pilon-body">Al doilea creier. 90% din serotonină sintetizată intestinal. Target: 30+ specii diferite de plante/săptămână.</div>
+        </div>
+        <div class="pilon-card c7">
+          <div class="pilon-n">07 · Somn</div>
+          <div class="pilon-title">Somnul și ritmul circadian</div>
+          <div class="pilon-kpi">KPI: HRV, scor somn, ore NREM3</div>
+          <div class="pilon-body">NREM3 = secreție maximă GH + clearance amiloid beta (sistem glimfatic). Somnul insuficient cronic = factor de risc documentat Alzheimer.</div>
+        </div>
+        <div class="pilon-card c8">
+          <div class="pilon-n">08 · Stres</div>
+          <div class="pilon-title">Managementul stresului</div>
+          <div class="pilon-kpi">KPI: HRV, cortizol salivar</div>
+          <div class="pilon-body">Cortizolul cronic: hiperglicemie funcțională, inflamație sistemică (IL-6, TNF-α), scurtarea telomerilor. Tehnicile SNV au efect măsurabil pe HRV.</div>
+        </div>
+        <div class="pilon-card c9">
+          <div class="pilon-n">09 · Social</div>
+          <div class="pilon-title">Relațiile sociale și scopul</div>
+          <div class="pilon-kpi">KPI: calitatea relațiilor, sentiment scop</div>
+          <div class="pilon-body">Studiul Harvard (85 ani): calitatea relațiilor = predictor nr. 1 al sănătății la 80 ani. Izolarea socială crește riscul de deces cu 29% (Holt-Lunstad, 2015).</div>
+        </div>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S4 VO2max -->
+      <span class="eyebrow">Secțiunea 4</span>
+      <h2 class="s-h2">VO2max — predicitorul suprem</h2>
+      <p class="p">Myers et al. (2002, <em>NEJM</em>) au studiat 6.213 bărbați timp de 6 ani și au ajuns la o concluzie care a surprins comunitatea medicală: capacitatea de exercițiu este un predictor mai puternic al mortalității de toate cauzele decât hipertensiunea, diabetul, fumatul sau obezitatea luate <em>individual</em>.</p>
+
+      <div class="callout navy">
+        <div class="callout-lbl">⬡ Date cheie — Myers et al. (2002, NEJM)</div>
+        <p>Fiecare creștere cu <strong>1 MET</strong> (≈ 3,5 ml/kg/min VO2max) reduce mortalitatea cu <strong>12%</strong>. Persoanele în top 25% de fitness au risc de deces cu <strong>55% mai mic</strong> decât cele din bottom 25%. Aceasta nu se poate cumpăra farmacologic. Dar se poate antrena.</p>
+      </div>
+
+      <h3 class="s-h3">Riscul de mortalitate în funcție de nivelul de fitness</h3>
+      <div class="tbl-wrap">
+        <table class="dtbl">
+          <thead><tr><th>Categoria de fitness</th><th>VO2max la 40 ani (bărbați)</th><th>Risc mortalitate relativ</th></tr></thead>
+          <tbody>
+            <tr class="vo2-row-low"><td class="lbl">Scăzut (bottom 25%)</td><td class="warn">&lt; 34 ml/kg/min</td><td class="warn">Risc de bază (1,0×)</td></tr>
+            <tr class="vo2-row-med"><td class="lbl">Mediu (25–75%)</td><td>34–43 ml/kg/min</td><td class="med">Risc redus cu ~34%</td></tr>
+            <tr class="vo2-row-high"><td class="lbl">Ridicat (top 25%)</td><td class="hl">&gt; 43 ml/kg/min</td><td class="hl">Risc redus cu ~55%</td></tr>
+            <tr class="vo2-row-elite"><td class="lbl">Elite (top 2,5%)</td><td class="hl">&gt; 52 ml/kg/min</td><td class="hl">Risc redus cu ~70%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S5 Masa musculara -->
+      <span class="eyebrow">Secțiunea 5</span>
+      <h2 class="s-h2">Masa musculară — organul longevității</h2>
+      <p class="p">Mușchiul nu este doar un țesut care ridică greutate. Este un <strong>organ endocrin activ</strong> — secretă miokine la contracție cu efect neuroprotector, anti-inflamator și metabolic. Irisinina, IL-6 post-exercițiu și BDNF sunt componenții „pastilei de exercițiu" pe care nicio firmă nu o poate sintetiza deocamdată.</p>
+
+      <div class="callout orange">
+        <div class="callout-lbl">⚠ Sarcopenia — cifrele reale</div>
+        <p>Pierdere de <strong>3–8% masă musculară/deceniu</strong> după 30 de ani în absența antrenamentului. Rata se dublează după 60 de ani. La 80 de ani, o persoană sedentară poate pierde 30–40% din masa musculară față de vârful de la 25–30 de ani.</p>
+        <p><strong>Soluția:</strong> antrenament de forță 2–3 sesiuni/săptămână + 1,6–2,2g proteină/kg/zi = menținerea masei musculare la orice vârstă.</p>
+      </div>
+
+      <div class="callout teal">
+        <div class="callout-lbl">🔬 Grip strength ca predictor de mortalitate</div>
+        <p>Rantanen et al. (2003, <em>BMJ</em>) — studiu pe 6.000 de bărbați, urmăriți 30 de ani. Forța de prindere prezice mortalitatea pe 10–20 de ani <strong>mai bine decât tensiunea arterială sau colesterolul</strong>. Un test banal de 10 secunde cu un dinamometru.</p>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S6 Scorecard -->
+      <span class="eyebrow">Secțiunea 6</span>
+      <h2 class="s-h2">Cum îți măsori healthspan-ul acum</h2>
+      <p class="p">Cinci indicatori validați în literatura științifică ca predictori robuști ai healthspan-ului. Nu ai nevoie de laborator — poți efectua toate testele acasă sau în parc, în 15–20 de minute.</p>
+
+      <div class="scorecard">
+        <div class="score-item">
+          <div class="score-num">1</div>
+          <div>
+            <div class="score-title">VO2max estimat</div>
+            <div class="score-how">Folosește estimarea wearable-ului sau testul de mers rapid 1 km (formula Rockport, disponibilă online gratuit). Înregistrează valoarea.</div>
+            <div style="margin-top:.4rem;font-size:.78rem;font-style:italic;color:var(--g3);">Referință: bărbați 40 ani &gt; 40 ml/kg/min; femei 40 ani &gt; 35 ml/kg/min</div>
+          </div>
+          <span class="score-ref">Myers 2002 NEJM</span>
+        </div>
+        <div class="score-item">
+          <div class="score-num">2</div>
+          <div>
+            <div class="score-title">Forța de prindere (grip strength)</div>
+            <div class="score-how">Dinamometru sau cântarul de bucătărie strâns la maximum. Alternativ: cât timp poți atârna la o bară fără să dai drumul.</div>
+            <div style="margin-top:.4rem;font-size:.78rem;font-style:italic;color:var(--g3);">Referință: bărbați 40 ani &gt; 40 kg; femei 40 ani &gt; 25 kg</div>
+          </div>
+          <span class="score-ref">Rantanen 2003 BMJ</span>
+        </div>
+        <div class="score-item">
+          <div class="score-num">3</div>
+          <div>
+            <div class="score-title">Viteza de mers (4 metri)</div>
+            <div class="score-how">Cronometrează-te mergând 4 metri la viteza normală de mers. Calcul: 4m ÷ secunde = m/s.</div>
+            <div style="margin-top:.4rem;font-size:.78rem;font-style:italic;color:var(--g3);">Target: &gt; 1,0 m/s. Sub 0,8 m/s = risc funcțional crescut</div>
+          </div>
+          <span class="score-ref">Guralnik 1995 NEJM</span>
+        </div>
+        <div class="score-item">
+          <div class="score-num">4</div>
+          <div>
+            <div class="score-title">Echilibru monopodalic, ochi închiși</div>
+            <div class="score-how">Ridică un picior la câțiva centimetri de podea, închide ochii, cronometrează. Fă 3 încercări pe fiecare picior, reține cel mai bun rezultat.</div>
+            <div style="margin-top:.4rem;font-size:.78rem;font-style:italic;color:var(--g3);">Target: &gt; 10 secunde. Optim: &gt; 20 secunde</div>
+          </div>
+          <span class="score-ref">Vellas 1997</span>
+        </div>
+        <div class="score-item">
+          <div class="score-num">5</div>
+          <div>
+            <div class="score-title">Testul de ridicare de jos</div>
+            <div class="score-how">Așează-te în turcit pe podea fără ajutor. Ridică-te fără ajutor. Scazi 1 punct pentru fiecare sprijin cu mâna, genunchiul sau șoldul. Scor maxim: 10/10.</div>
+            <div style="margin-top:.4rem;font-size:.78rem;font-style:italic;color:var(--g3);">Target: 8–10 puncte. Sub 8 = mobilitate/forță reduse semnificativ</div>
+          </div>
+          <span class="score-ref">Brito 2012 EJPC</span>
+        </div>
+      </div>
+
+      <!-- KPI box -->
+      <div class="kpi-box">
+        <div class="kpi-lbl">⬡ KPI lecția 1.3 — Scorecard healthspan</div>
+        <h3>Efectuează cele 5 teste și înregistrează rezultatele</h3>
+        <p class="p-w">Acesta este baseline-ul tău funcțional obiectiv — complementar scorului subiectiv de la lecția 1.1. Identifică indicatorul cu scorul cel mai scăzut față de referință — acesta devine prioritatea ta de intervenție în Modulul 5.</p>
+        <ul class="kpi-steps">
+          <li><span class="step-n">01</span>VO2max estimat: ___ ml/kg/min</li>
+          <li><span class="step-n">02</span>Forța de prindere: ___ kg (mâna dominantă)</li>
+          <li><span class="step-n">03</span>Viteza de mers 4m: ___ secunde → ___ m/s</li>
+          <li><span class="step-n">04</span>Echilibru monopodalic, ochi închiși: ___ secunde</li>
+          <li><span class="step-n">05</span>Testul de ridicare de jos: ___ / 10 puncte</li>
+        </ul>
+        <a href="BH30_M1_L13_Material_Curs.pdf" class="kpi-btn">↓ Descarcă Scorecard complet</a>
+      </div>
+
+    </div><!-- /body -->
+
+    <!-- Bibliografie -->
+    <div class="bib-sec">
+      <span class="eyebrow" style="margin-bottom:.6rem">Bibliografie — lecția 1.3</span>
+      <h3 class="s-h3" style="margin-bottom:1rem;margin-top:.5rem">Referințe academice</h3>
+      <ul class="bib-list">
+        <li><span class="bib-n">[1]</span><span>Attia, P. & Gifford, B. (2023). <em>Outlive: The Science and Art of Longevity.</em> Harmony Books. Cap. 11–12.</span></li>
+        <li><span class="bib-n">[2]</span><span>Myers, J., et al. (2002). Exercise Capacity and Mortality among Men Referred for Exercise Testing. <em>NEJM</em>, 346(11), 793–801.</span></li>
+        <li><span class="bib-n">[3]</span><span>Rantanen, T., et al. (2003). Muscle Strength and Body Mass Index as Long-term Predictors of Mortality in Initially Healthy Men. <em>BMJ</em>, 326(7388), 551.</span></li>
+        <li><span class="bib-n">[4]</span><span>Manini, T.M. & Clark, B.C. (2010). Dynapenia and Aging: An Update. <em>JAMA</em>, 303(21), 2177–2178.</span></li>
+        <li><span class="bib-n">[5]</span><span>Erickson, K.I., et al. (2011). Exercise Training Increases Size of Hippocampus and Improves Memory. <em>PNAS</em>, 108(7), 3017–3022.</span></li>
+        <li><span class="bib-n">[6]</span><span>Brito, L.B., et al. (2012). Ability to Sit and Rise from the Floor as a Predictor of All-cause Mortality. <em>Eur J Prev Cardiol</em>, 21(7), 892–898.</span></li>
+        <li><span class="bib-n">[7]</span><span>Holt-Lunstad, J., et al. (2015). Loneliness and Social Isolation as Risk Factors for Mortality. <em>Perspect Psychol Sci</em>, 10(2), 227–237.</span></li>
+        <li><span class="bib-n">[8]</span><span>Waldinger, R. & Schulz, M. (2023). <em>The Good Life.</em> Simon & Schuster.</span></li>
+      </ul>
+    </div>
+
+    <!-- Nav -->
+    <div class="lesson-nav">
+      <a href="m1-l12.html" class="nav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        <div><span class="nav-btn-lbl">Lecția anterioară</span>1.2 — Principiul N=1</div>
+      </a>
+      <div style="text-align:center;font-family:var(--mono);font-size:.68rem;color:var(--g3)">Lecția 3 din 5 · Modul 1</div>
+      <a href="m1-l14.html" class="nav-btn primary">
+        <div style="text-align:right"><span class="nav-btn-lbl">Lecția următoare</span>1.4 — Arhitectura experimentului sigur</div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+function markDone(){
+  const b=document.getElementById('doneBtn');
+  const d=b.classList.toggle('done');
+  b.textContent=d?'✓ Completat':'✓ Marchează completă';
+  localStorage.setItem('bh30_m1_l13_done',d?'1':'0');
+  if(d){document.getElementById('pFill').style.width='26.6%';document.getElementById('pTxt').textContent='4 / 30 lecții completate';}
+}
+window.addEventListener('DOMContentLoaded',()=>{
+  if(localStorage.getItem('bh30_m1_l13_done')==='1'){
+    const b=document.getElementById('doneBtn');b.classList.add('done');b.textContent='✓ Completat';
+  }
+});
+function loadVid(){
+  const w=document.getElementById('vWrap'),src=w.dataset.videoSrc;
+  if(src){
+    if(src.includes('youtube')||src.includes('youtu.be')){const id=src.split('v=')[1]||src.split('/').pop();w.innerHTML=`<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" allow="autoplay;fullscreen" allowfullscreen style="width:100%;height:100%;border:none"></iframe>`;}
+    else if(src.includes('vimeo')){const id=src.split('/').pop();w.innerHTML=`<iframe src="https://player.vimeo.com/video/${id}?autoplay=1" allow="autoplay;fullscreen" allowfullscreen style="width:100%;height:100%;border:none"></iframe>`;}
+    else{w.innerHTML=`<video controls autoplay style="width:100%;height:100%"><source src="${src}" type="video/mp4"></video>`;}
+  }else{const h=w.querySelector('.vp-hint');if(h){h.style.color='#E8AE1A';setTimeout(()=>h.style.color='',1200);}}
+}
+</script>
+</body>
+</html>

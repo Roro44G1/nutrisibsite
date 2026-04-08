@@ -1,0 +1,1527 @@
+
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biohacking 3.0 | Platforma de Curs — NUTRISIB</title>
+<meta name="description" content="Program de 6 săptămâni pentru optimizarea energiei, somnului și longevității. Biohacking 3.0 — dr.ing. Radu Pascu.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ─── RESET & BASE ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:    #0F1E3C;
+  --navy2:   #162950;
+  --teal:    #0A7EA4;
+  --teal2:   #0D9CC8;
+  --gold:    #C8920A;
+  --gold2:   #E8AE1A;
+  --amber:   #F5A623;
+  --cream:   #FBF8F2;
+  --offwhite:#F4F1EB;
+  --white:   #FFFFFF;
+  --gray1:   #F2F0EC;
+  --gray2:   #E4E0D8;
+  --gray3:   #B8B0A0;
+  --gray4:   #7A7065;
+  --dark:    #1A1510;
+  --green:   #1A6B3C;
+  --red:     #B83030;
+  --orange:  #C85A0A;
+
+  --font-display: 'Playfair Display', serif;
+  --font-body:    'Space Grotesk', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  --radius:  10px;
+  --shadow:  0 4px 24px rgba(15,30,60,0.10);
+  --shadow2: 0 8px 40px rgba(15,30,60,0.16);
+  --trans:   all 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--dark);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── SCROLLBAR ───────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--gray1); }
+::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 3px; }
+
+/* ─── NAV ─────────────────────────────────────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(15,30,60,0.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(200,146,10,0.25);
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px;
+}
+.nav-brand {
+  font-family: var(--font-mono); font-weight: 500; font-size: 1rem;
+  color: var(--gold2); text-decoration: none; letter-spacing: 0.12em;
+}
+.nav-brand span { color: var(--white); }
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a {
+  font-size: 0.82rem; font-weight: 500; letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.65); text-decoration: none;
+  text-transform: uppercase; transition: var(--trans);
+}
+.nav-links a:hover, .nav-links a.active { color: var(--gold2); }
+.nav-cta {
+  background: var(--gold); color: var(--navy) !important; font-weight: 700 !important;
+  padding: 0.4rem 1.2rem; border-radius: 6px; transition: var(--trans) !important;
+}
+.nav-cta:hover { background: var(--gold2) !important; color: var(--navy) !important; }
+
+/* ─── HERO ────────────────────────────────────────────────────────────────── */
+.hero {
+  background: var(--navy);
+  background-image:
+    radial-gradient(ellipse 80% 60% at 70% 40%, rgba(10,126,164,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(200,146,10,0.10) 0%, transparent 60%);
+  padding: 5rem 2rem 4rem;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background-image: repeating-linear-gradient(
+    0deg, transparent, transparent 39px,
+    rgba(255,255,255,0.02) 39px, rgba(255,255,255,0.02) 40px
+  ), repeating-linear-gradient(
+    90deg, transparent, transparent 39px,
+    rgba(255,255,255,0.02) 39px, rgba(255,255,255,0.02) 40px
+  );
+  pointer-events: none;
+}
+.hero-inner { max-width: 980px; margin: 0 auto; position: relative; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-family: var(--font-mono); font-size: 0.75rem; font-weight: 500;
+  color: var(--gold2); letter-spacing: 0.12em; text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.hero-eyebrow::before {
+  content: ''; width: 24px; height: 1px; background: var(--gold2);
+}
+.hero h1 {
+  font-family: var(--font-display); font-size: clamp(2rem, 4.5vw, 3.6rem);
+  font-weight: 900; line-height: 1.15; color: var(--white);
+  margin-bottom: 1.5rem; max-width: 820px;
+}
+.hero h1 em { font-style: italic; color: var(--gold2); }
+.hero-sub {
+  font-size: 1.05rem; color: rgba(255,255,255,0.7);
+  max-width: 640px; margin-bottom: 2.5rem; line-height: 1.7;
+}
+.hero-author {
+  font-family: var(--font-mono); font-size: 0.78rem; color: var(--teal2);
+  margin-bottom: 2rem;
+}
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 3rem; }
+
+.btn-gold {
+  display: inline-block; padding: 0.85rem 2rem;
+  background: var(--gold); color: var(--navy); font-weight: 700;
+  font-size: 0.9rem; letter-spacing: 0.04em; border-radius: var(--radius);
+  text-decoration: none; border: none; cursor: pointer; transition: var(--trans);
+  font-family: var(--font-body);
+}
+.btn-gold:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(200,146,10,0.35); }
+
+.btn-outline {
+  display: inline-block; padding: 0.85rem 2rem;
+  background: transparent; color: var(--white); font-weight: 600;
+  font-size: 0.9rem; letter-spacing: 0.04em; border-radius: var(--radius);
+  text-decoration: none; border: 1px solid rgba(255,255,255,0.3); cursor: pointer; transition: var(--trans);
+  font-family: var(--font-body);
+}
+.btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+
+.btn-teal {
+  display: inline-block; padding: 0.75rem 1.75rem;
+  background: var(--teal); color: var(--white); font-weight: 600;
+  font-size: 0.88rem; border-radius: var(--radius);
+  text-decoration: none; border: none; cursor: pointer; transition: var(--trans);
+  font-family: var(--font-body);
+}
+.btn-teal:hover { background: var(--teal2); }
+
+.hero-stats {
+  display: flex; gap: 3rem; flex-wrap: wrap;
+  padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);
+}
+.hero-stat-num {
+  font-family: var(--font-display); font-size: 2.2rem; font-weight: 700;
+  color: var(--gold2); line-height: 1;
+}
+.hero-stat-label { font-size: 0.78rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.25rem; }
+
+/* ─── SECTION COMMON ─────────────────────────────────────────────────────── */
+.section { padding: 4rem 2rem; }
+.section-inner { max-width: 1040px; margin: 0 auto; }
+.section-label {
+  font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+  color: var(--teal); text-transform: uppercase; letter-spacing: 0.14em;
+  margin-bottom: 0.75rem; display: block;
+}
+.section-title {
+  font-family: var(--font-display); font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700; color: var(--navy); margin-bottom: 1rem; line-height: 1.2;
+}
+.section-desc {
+  font-size: 1rem; color: var(--gray4); max-width: 680px; line-height: 1.7;
+  margin-bottom: 3rem;
+}
+
+/* ─── PAIN/SOLUTION SPLIT ─────────────────────────────────────────────────── */
+.pain-section { background: var(--offwhite); border-top: 1px solid var(--gray2); border-bottom: 1px solid var(--gray2); }
+.pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+@media (max-width: 700px) { .pain-grid { grid-template-columns: 1fr; } }
+
+.pain-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 2rem; border: 1px solid var(--gray2);
+  box-shadow: var(--shadow);
+}
+.pain-card.negative { border-left: 4px solid var(--red); }
+.pain-card.positive { border-left: 4px solid var(--green); }
+.pain-card h3 {
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: 1.25rem;
+}
+.pain-card.negative h3 { color: var(--red); }
+.pain-card.positive h3 { color: var(--green); }
+.pain-items { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+.pain-items li {
+  font-size: 0.9rem; line-height: 1.55; padding-left: 1.5rem; position: relative; color: var(--gray4);
+}
+.pain-items li::before {
+  position: absolute; left: 0; top: 0.05em;
+  font-size: 0.85rem;
+}
+.pain-card.negative .pain-items li::before { content: '✗'; color: var(--red); }
+.pain-card.positive .pain-items li::before { content: '✓'; color: var(--green); }
+
+/* ─── AVATAR PILLS ───────────────────────────────────────────────────────── */
+.avatar-pills { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+.avatar-pill {
+  display: flex; align-items: center; gap: 0.75rem;
+  background: var(--white); border: 1px solid var(--gray2);
+  border-radius: 999px; padding: 0.5rem 1.25rem 0.5rem 0.5rem;
+  box-shadow: var(--shadow); cursor: default; transition: var(--trans);
+}
+.avatar-pill:hover { border-color: var(--teal); transform: translateY(-2px); box-shadow: var(--shadow2); }
+.avatar-icon {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; font-weight: 700; color: var(--white);
+  flex-shrink: 0;
+}
+.avatar-pill:nth-child(1) .avatar-icon { background: var(--teal); }
+.avatar-pill:nth-child(2) .avatar-icon { background: var(--navy); }
+.avatar-pill:nth-child(3) .avatar-icon { background: var(--orange); }
+.avatar-pill-text { font-size: 0.85rem; }
+.avatar-pill-name { font-weight: 700; color: var(--navy); display: block; line-height: 1.2; }
+.avatar-pill-role { color: var(--gray4); font-size: 0.78rem; }
+
+/* ─── MODULES SECTION ────────────────────────────────────────────────────── */
+.modules-section { background: var(--cream); }
+.module-list { display: flex; flex-direction: column; gap: 0; }
+
+/* ─── MODULE CARD ────────────────────────────────────────────────────────── */
+.module-card {
+  background: var(--white);
+  border: 1px solid var(--gray2);
+  border-radius: var(--radius);
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: var(--trans);
+}
+.module-card:hover { box-shadow: var(--shadow2); }
+
+.module-header {
+  display: grid;
+  grid-template-columns: 220px 1fr auto;
+  gap: 0;
+  align-items: stretch;
+  cursor: pointer;
+  min-height: 140px;
+}
+@media (max-width: 768px) {
+  .module-header { grid-template-columns: 1fr; }
+}
+
+.module-thumb {
+  background-size: cover; background-position: center;
+  position: relative; min-height: 140px;
+}
+.module-thumb-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(15,30,60,0.75) 0%, rgba(10,126,164,0.4) 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.module-num-big {
+  font-family: var(--font-display); font-size: 3.5rem; font-weight: 900;
+  color: rgba(255,255,255,0.25); line-height: 1;
+}
+.module-badge {
+  position: absolute; top: 0.75rem; left: 0.75rem;
+  background: var(--gold); color: var(--navy);
+  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.2rem 0.6rem; border-radius: 4px;
+}
+
+.module-summary {
+  padding: 1.25rem 1.5rem; display: flex; flex-direction: column; justify-content: center;
+  border-left: 1px solid var(--gray2);
+}
+.module-week {
+  font-family: var(--font-mono); font-size: 0.68rem; color: var(--teal);
+  text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.4rem;
+}
+.module-title {
+  font-family: var(--font-display); font-size: 1.25rem; font-weight: 700;
+  color: var(--navy); margin-bottom: 0.5rem; line-height: 1.25;
+}
+.module-tagline { font-size: 0.85rem; color: var(--gray4); line-height: 1.5; margin-bottom: 0.75rem; }
+.module-meta { display: flex; gap: 1rem; flex-wrap: wrap; }
+.module-meta-item {
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.78rem; color: var(--gray4);
+  font-family: var(--font-mono);
+}
+.module-meta-item svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+.module-toggle {
+  padding: 1.25rem 1.25rem 1.25rem 1rem;
+  display: flex; align-items: center; justify-content: center;
+  border-left: 1px solid var(--gray2);
+  color: var(--teal); transition: var(--trans);
+  min-width: 56px;
+}
+.module-toggle svg { width: 22px; height: 22px; transition: transform 0.3s ease; }
+.module-card.open .module-toggle svg { transform: rotate(180deg); }
+.module-card.open .module-header { background: var(--offwhite); }
+
+/* ─── MODULE BODY (accordion) ─────────────────────────────────────────────── */
+.module-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+  border-top: 0px solid transparent;
+}
+.module-card.open .module-body {
+  max-height: 3000px;
+  border-top: 2px solid var(--teal);
+}
+.module-body-inner { padding: 2rem; }
+
+/* ─── VIDEO PLAYER AREA ──────────────────────────────────────────────────── */
+.video-area {
+  background: var(--navy);
+  border-radius: var(--radius); margin-bottom: 2rem;
+  overflow: hidden; position: relative;
+  aspect-ratio: 16/9; max-height: 420px;
+  display: flex; align-items: center; justify-content: center;
+}
+.video-placeholder {
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  color: rgba(255,255,255,0.45);
+}
+.video-placeholder-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.06); transition: var(--trans); cursor: pointer;
+}
+.video-placeholder-icon:hover { background: rgba(10,126,164,0.4); border-color: var(--teal2); }
+.video-placeholder-icon svg { width: 28px; height: 28px; margin-left: 4px; fill: rgba(255,255,255,0.8); }
+.video-placeholder p { font-size: 0.85rem; letter-spacing: 0.05em; }
+.video-placeholder .vp-label { font-family: var(--font-mono); font-size: 0.72rem; color: var(--gold2); }
+
+.video-embed { width: 100%; height: 100%; border: none; }
+
+/* ─── LECTII TABS ─────────────────────────────────────────────────────────── */
+.lectii-title {
+  font-size: 0.72rem; font-family: var(--font-mono); letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 0.75rem;
+}
+.lectii-list { list-style: none; display: flex; flex-direction: column; gap: 0; margin-bottom: 2rem; }
+.lectie-item {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 0.8rem 1rem; border-radius: 6px;
+  border: 1px solid transparent; cursor: pointer; transition: var(--trans);
+}
+.lectie-item:hover { background: var(--offwhite); border-color: var(--gray2); }
+.lectie-num {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  background: var(--gray1); border: 1px solid var(--gray2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--gray4);
+}
+.lectie-info { flex: 1; }
+.lectie-name { font-size: 0.88rem; font-weight: 600; color: var(--navy); line-height: 1.3; }
+.lectie-desc { font-size: 0.78rem; color: var(--gray4); line-height: 1.45; margin-top: 0.15rem; }
+.lectie-dur { font-family: var(--font-mono); font-size: 0.72rem; color: var(--gray3); flex-shrink: 0; }
+
+/* ─── TWO-COL CONTENT ─────────────────────────────────────────────────────── */
+.content-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+@media (max-width: 700px) { .content-2col { grid-template-columns: 1fr; } }
+
+.content-block {
+  background: var(--offwhite); border-radius: var(--radius);
+  padding: 1.5rem; border: 1px solid var(--gray2);
+}
+.content-block h4 {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 1rem;
+}
+.content-block ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.content-block li {
+  font-size: 0.85rem; line-height: 1.55; color: var(--dark);
+  padding-left: 1.25rem; position: relative;
+}
+.content-block li::before { content: '→'; position: absolute; left: 0; color: var(--teal); font-size: 0.8rem; }
+.content-block li strong { color: var(--navy); }
+
+/* ─── DELIVERABLES BAR ───────────────────────────────────────────────────── */
+.deliverables-bar {
+  display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+  padding: 1rem 1.25rem; border-radius: var(--radius); margin-bottom: 2rem;
+}
+.deliverables-label {
+  font-family: var(--font-mono); font-size: 0.68rem; color: var(--gold2);
+  text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap;
+}
+.deliverable-tag {
+  background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85);
+  font-size: 0.78rem; padding: 0.2rem 0.7rem; border-radius: 99px;
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* ─── BIB TABLE ──────────────────────────────────────────────────────────── */
+.bib-toggle {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.8rem; font-weight: 600; color: var(--teal); cursor: pointer;
+  background: none; border: 1px solid var(--gray2); border-radius: 6px;
+  padding: 0.5rem 1rem; transition: var(--trans); font-family: var(--font-body);
+  margin-bottom: 0; width: fit-content;
+}
+.bib-toggle:hover { background: var(--offwhite); border-color: var(--teal); }
+.bib-toggle svg { width: 14px; height: 14px; transition: transform 0.25s; }
+.bib-toggle.open svg { transform: rotate(180deg); }
+
+.bib-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.bib-content.open { max-height: 600px; }
+
+.bib-list { list-style: none; margin-top: 1rem; }
+.bib-list li {
+  font-size: 0.8rem; line-height: 1.6; color: var(--gray4);
+  padding: 0.4rem 0 0.4rem 1.5rem; border-bottom: 1px solid var(--gray1);
+  position: relative;
+}
+.bib-list li::before {
+  content: attr(data-n); position: absolute; left: 0;
+  font-family: var(--font-mono); color: var(--teal); font-size: 0.72rem;
+}
+.bib-list li em { color: var(--navy); font-style: normal; font-weight: 600; }
+
+/* ─── KPI SCORE ──────────────────────────────────────────────────────────── */
+.kpi-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.kpi-chip {
+  background: var(--white); border: 1px solid var(--gray2);
+  border-radius: var(--radius); padding: 0.75rem 1rem; min-width: 120px;
+  text-align: center; box-shadow: var(--shadow);
+}
+.kpi-chip-val { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--teal); line-height: 1; }
+.kpi-chip-label { font-size: 0.72rem; color: var(--gray4); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 0.3rem; }
+
+/* ─── MEDICINE 3.0 GRID ──────────────────────────────────────────────────── */
+.med-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 3rem; }
+@media (max-width: 700px) { .med-grid { grid-template-columns: 1fr; } }
+
+.med-card {
+  border-radius: var(--radius); padding: 1.5rem 1.25rem;
+  border: 1px solid var(--gray2);
+}
+.med-card:nth-child(1) { background: var(--white); }
+.med-card:nth-child(2) { background: var(--white); }
+.med-card:nth-child(3) { background: var(--navy); color: var(--white); border-color: var(--teal); }
+.med-card-ver {
+  font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 0.6rem;
+}
+.med-card:nth-child(1) .med-card-ver { color: var(--gray4); }
+.med-card:nth-child(2) .med-card-ver { color: var(--gray4); }
+.med-card:nth-child(3) .med-card-ver { color: var(--gold2); }
+.med-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; }
+.med-card:nth-child(3) h4 { color: var(--white); }
+.med-card p { font-size: 0.83rem; line-height: 1.6; color: var(--gray4); }
+.med-card:nth-child(3) p { color: rgba(255,255,255,0.65); }
+
+/* ─── PRICING ─────────────────────────────────────────────────────────────── */
+.pricing-section { background: var(--navy); }
+.pricing-section .section-title { color: var(--white); }
+.pricing-section .section-desc { color: rgba(255,255,255,0.5); }
+.pricing-section .section-label { color: var(--gold2); }
+
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+@media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; } }
+
+.pricing-card {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius); padding: 2rem; position: relative;
+  transition: var(--trans);
+}
+.pricing-card:hover { border-color: rgba(10,126,164,0.5); background: rgba(255,255,255,0.08); }
+.pricing-card.featured {
+  background: rgba(10,126,164,0.15); border-color: var(--teal);
+  border-width: 2px;
+}
+.pricing-badge-pill {
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  background: var(--gold); color: var(--navy);
+  font-size: 0.7rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.25rem 1rem; border-radius: 999px;
+}
+.pricing-tier {
+  font-family: var(--font-mono); font-size: 0.72rem; color: var(--teal2);
+  text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem;
+}
+.pricing-name { font-size: 1.3rem; font-weight: 700; color: var(--white); margin-bottom: 0.3rem; }
+.pricing-who { font-size: 0.8rem; color: rgba(255,255,255,0.4); margin-bottom: 1.5rem; }
+.price-old { font-size: 0.9rem; color: rgba(255,255,255,0.3); text-decoration: line-through; margin-bottom: 0.15rem; }
+.price-main { font-family: var(--font-display); font-size: 2.5rem; font-weight: 700; color: var(--gold2); line-height: 1; margin-bottom: 0.25rem; }
+.price-note { font-size: 0.72rem; color: var(--red); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1.5rem; }
+.pricing-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; }
+.pricing-list li { font-size: 0.83rem; color: rgba(255,255,255,0.7); padding-left: 1.25rem; position: relative; line-height: 1.45; }
+.pricing-list li::before { content: '✓'; position: absolute; left: 0; color: var(--teal2); font-weight: 700; }
+.pricing-list li.highlight { color: var(--white); font-weight: 600; }
+.pricing-list li.faded { color: rgba(255,255,255,0.35); }
+.pricing-list li.faded::before { color: rgba(255,255,255,0.2); content: '–'; }
+
+.btn-pricing-outline {
+  display: block; width: 100%; text-align: center;
+  padding: 0.8rem; border: 1px solid rgba(255,255,255,0.25);
+  border-radius: var(--radius); color: var(--white); font-weight: 600;
+  font-size: 0.88rem; text-decoration: none; font-family: var(--font-body);
+  transition: var(--trans); background: transparent; cursor: pointer;
+}
+.btn-pricing-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.06); }
+
+.guarantee-box {
+  margin-top: 2.5rem; padding: 1.5rem 2rem;
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius); display: flex; align-items: flex-start; gap: 1.25rem;
+}
+.guarantee-icon { font-size: 2rem; flex-shrink: 0; margin-top: 0.1rem; }
+.guarantee-text h4 { color: var(--white); font-size: 1rem; margin-bottom: 0.35rem; }
+.guarantee-text p { font-size: 0.83rem; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+/* ─── BIBLIOGRAPHY FULL ──────────────────────────────────────────────────── */
+.bib-section { background: var(--offwhite); }
+.bib-full-table { width: 100%; border-collapse: collapse; }
+.bib-full-table th {
+  text-align: left; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--teal); padding: 0.75rem 1rem;
+  background: var(--white); border-bottom: 2px solid var(--gray2);
+}
+.bib-full-table td {
+  padding: 0.75rem 1rem; font-size: 0.83rem; line-height: 1.6; color: var(--dark);
+  border-bottom: 1px solid var(--gray2);
+}
+.bib-full-table tr:last-child td { border-bottom: none; }
+.bib-full-table tr:nth-child(even) td { background: rgba(0,0,0,0.015); }
+.bib-domain { font-weight: 700; color: var(--navy); font-size: 0.8rem; }
+.bib-ref { color: var(--gray4); }
+.bib-ref em { font-style: italic; color: var(--dark); }
+
+/* ─── FOOTER ─────────────────────────────────────────────────────────────── */
+footer {
+  background: var(--dark); color: rgba(255,255,255,0.45);
+  padding: 2.5rem 2rem;
+  text-align: center; font-size: 0.8rem;
+}
+footer strong { color: rgba(255,255,255,0.7); }
+footer a { color: var(--teal2); text-decoration: none; }
+
+/* ─── NOTICE / DISCLAIMER ────────────────────────────────────────────────── */
+.disclaimer {
+  background: var(--navy); color: rgba(255,255,255,0.35);
+  font-size: 0.75rem; text-align: center; padding: 0.75rem 2rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ─── STICKY ENROLL BAR ──────────────────────────────────────────────────── */
+.enroll-bar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 99;
+  background: rgba(15,30,60,0.97); backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(200,146,10,0.3);
+  padding: 0.85rem 2rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.enroll-bar.visible { transform: translateY(0); }
+.enroll-bar-text { color: rgba(255,255,255,0.7); font-size: 0.85rem; }
+.enroll-bar-text strong { color: var(--white); }
+
+/* ─── SECTION BG ALT ─────────────────────────────────────────────────────── */
+.bg-white-section { background: var(--white); }
+.bg-cream-section { background: var(--cream); }
+
+/* ─── UTIL ───────────────────────────────────────────────────────────────── */
+.text-teal { color: var(--teal); }
+.text-gold { color: var(--gold); }
+.text-navy { color: var(--navy); }
+.mt1 { margin-top: 1rem; }
+.mt2 { margin-top: 2rem; }
+.mb1 { margin-bottom: 1rem; }
+.mb2 { margin-bottom: 2rem; }
+
+/* ─── ANIMATION ──────────────────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeUp 0.6s ease both; }
+.fade-in-2 { animation: fadeUp 0.6s 0.15s ease both; }
+.fade-in-3 { animation: fadeUp 0.6s 0.3s ease both; }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─────────────────────────────────────────────────────────────── -->
+<nav class="nav">
+  <a href="#" class="nav-brand">NUTRISIB <span>/ BH3.0</span></a>
+  <div class="nav-links">
+    <a href="#concept">Concept</a>
+    <a href="#module">Module</a>
+    <a href="#bibliografie">Știință</a>
+    <a href="#oferta" class="nav-cta">Înscrie-te</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow fade-in">Produs Digital Premium · Ecosistem NUTRISIB</div>
+    <h1 class="fade-in-2">Corpul tău rulează pe un sistem de operare <em>învechit.</em><br>Biohacking 3.0 este update-ul.</h1>
+    <p class="hero-sub fade-in-3">Învață ingineria propriului sistem biologic în 6 săptămâni. Energie, somn, longevitate — bazate pe date, nu pe dorințe. Fără extreme. Fără hype.</p>
+    <p class="hero-author fade-in-3">autor: dr.ing. Radu Pascu · NUTRISIB Sibiu</p>
+    <div class="hero-btns fade-in-3">
+      <a href="#oferta" class="btn-gold">Vreau Accesul →</a>
+      <a href="#module" class="btn-outline">Vezi Programa</a>
+    </div>
+    <div class="hero-stats fade-in-3">
+      <div class="hero-stat">
+        <div class="hero-stat-num">6</div>
+        <div class="hero-stat-label">Săptămâni</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">30</div>
+        <div class="hero-stat-label">Lecții Video</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">18+</div>
+        <div class="hero-stat-label">Ore HD</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">40+</div>
+        <div class="hero-stat-label">Referințe Academice</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MEDICINA 3.0 CONCEPT ─────────────────────────────────────────────── -->
+<section class="section pain-section" id="concept">
+  <div class="section-inner">
+    <span class="section-label">Fundamentul programului</span>
+    <h2 class="section-title">De la „reparare" la ingineria Healthspan-ului</h2>
+    <p class="section-desc">Medicina 3.0 nu înlocuiește medicul. Redefinește momentul intervenției: cu decenii înainte de boală, nu la urgență.</p>
+
+    <div class="med-grid">
+      <div class="med-card">
+        <div class="med-card-ver">Medicina 1.0 · Trecut</div>
+        <h4>Urgențele și Infecțiile</h4>
+        <p>Chirurgie, antibiotice, tratarea crizelor acute. Revoluționară pentru vremea ei. Insuficientă pentru bolile cronice ale sec. XXI.</p>
+      </div>
+      <div class="med-card">
+        <div class="med-card-ver">Medicina 2.0 · Prezent</div>
+        <h4>Managementul Bolilor Cronice</h4>
+        <p>Statine, metformină, antihipertensive. Structural incapabilă să adreseze longevitatea activă — intervine <em>după</em> ce sistemul cade.</p>
+      </div>
+      <div class="med-card">
+        <div class="med-card-ver">Medicina 3.0 · Biohacking 3.0</div>
+        <h4>Ingineria Healthspan-ului</h4>
+        <p>Longevitate activă prin prevenție cu 20–30 de ani înainte de boală. Date, biomarkeri, personalizare. Acesta este cadrul cursului.</p>
+      </div>
+    </div>
+
+    <div class="pain-grid">
+      <div class="pain-card negative">
+        <h3>Dacă te regăsești în stările de mai jos, atunci acest curs este pentru tine:</h3>
+        <ul class="pain-items">
+          <li>Te trezești obosit după 7–8h de somn. Creierul „nu se încălzește" până la 10:00.</li>
+          <li>Analizele îți ies „în limite normale" dar funcționezi la vreo 60% din capacitate.</li>
+          <li>Ai citit vreo 200 de articole despre biohacking. Nu știe de unde să înceapă.</li>
+          <li>Ai plătit sute de RON pe suplimente „minune" care n-au schimbat nimic în afară de faptul că ai obținut cea mai scumpă urină din cartier.</li>
+          <li>Suferi de stres cronic → cortizol ridicat → rezistență la insulină → energie scăzută → motivație zero.</li>
+          <li>Paralizie prin analiză: prea mult zgomot informațional, prea puțin sistem.</li>
+        </ul>
+      </div>
+      <div class="pain-card positive">
+        <h3>Care poate fi starea ta după cursul "Biohacking 3.0"</h3>
+        <ul class="pain-items">
+          <li>Energie stabilă între 6:00–22:00 fără dependență de cafeină.</li>
+          <li>Somn 7–8h cu trezire clară, HRV în creștere săptămânală.</li>
+          <li>Un sistem de operare biologic înțeles, măsurat, optimizat.</li>
+          <li>Plan personal de 90 zile cu 2–3 pârghii mari cu ROI biologic real.</li>
+          <li>Suplimentare inteligentă bazată pe biomarkeri, nu pe reclame.</li>
+          <li>Știi când să-ți optimizezi singur sistemul și când să ceri ajutor medical.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="font-size:0.85rem; font-weight:600; color:var(--navy); margin-bottom:1rem;">Programul este construit exact pentru tine dacă ești:</p>
+    <div class="avatar-pills">
+      <div class="avatar-pill">
+        <div class="avatar-icon">A</div>
+        <div class="avatar-pill-text">
+          <span class="avatar-pill-name">"Andrei", 38+</span>
+          <span class="avatar-pill-role">CEO · Optimizatorul de Performanță</span>
+        </div>
+      </div>
+      <div class="avatar-pill">
+        <div class="avatar-icon">E</div>
+        <div class="avatar-pill-text">
+          <span class="avatar-pill-name">:"Elena", 45+</span>
+          <span class="avatar-pill-role">Director · Executiva Stresată Cronic</span>
+        </div>
+      </div>
+      <div class="avatar-pill">
+        <div class="avatar-icon">M</div>
+        <div class="avatar-pill-text">
+          <span class="avatar-pill-name">"Mihai", 42+</span>
+          <span class="avatar-pill-role">Avocat · „Am încercat tot"</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MODULES ───────────────────────────────────────────────────────────── -->
+<section class="section modules-section" id="module">
+  <div class="section-inner">
+    <span class="section-label">Programa completă · 6 module</span>
+    <h2 class="section-title">Structura detaliată a programului</h2>
+    <p class="section-desc">Fiecare modul este construit pe <strong>progressive overload cognitiv</strong>: nicio lecție nu presupune cunoștințe din viitor. Apasă pe orice modul pentru detalii complete, lecții și bibliografie.</p>
+
+    <div class="module-list" id="moduleList">
+
+      <!-- ══ MODUL 1 ══════════════════════════════════════════════════════ -->
+      <div class="module-card" id="m1">
+        <div class="module-header" onclick="toggleModule('m1')">
+          <div class="module-thumb" style="background-image:url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&q=70');">
+            <div class="module-thumb-overlay"><div class="module-num-big">01</div></div>
+            <div class="module-badge">Săptămâna 1</div>
+          </div>
+          <div class="module-summary">
+            <div class="module-week">Modul 1 · Fundația conceptuală</div>
+            <div class="module-title">Mindset de Biohacking 3.0</div>
+            <div class="module-tagline">De la „repararea bolii" la ingineria healthspan-ului. Cadrul conceptual corect, o singură dată, pentru tot.</div>
+            <div class="module-meta">
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 80 min video</span>
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 5 lecții</span>
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> KPI: Scor inițial 5 domenii</span>
+            </div>
+          </div>
+          <div class="module-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="module-body">
+          <div class="module-body-inner">
+            <div class="video-area">
+              <div class="video-placeholder">
+                <div class="video-placeholder-icon" onclick="loadVideo(this, 'YOUTUBE_ID_M1')">
+                  <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
+                <p>Lecția 1.1 — Introducere și contextul Medicinei 3.0</p>
+                <span class="vp-label">↑ Încarcă URL video în atribut data-src sau înlocuiește cu iframe YouTube/Vimeo</span>
+              </div>
+            </div>
+
+            <div class="lectii-title">Lecțiile modulului</div>
+            <ul class="lectii-list">
+              <li class="lectie-item">
+                <div class="lectie-num">1.1</div>
+                <div class="lectie-info">
+                  <div class="lectie-name">Introducere și contextul medicinei 3.0</div>
+                  <div class="lectie-desc">Istoria paradigmelor medicale. Medicina 1.0→2.0→3.0. Conceptul de „healthspan gap" și de ce medicina convențională este structural incapabilă să se ocupe de longevitate.</div>
+                </div>
+                <div class="lectie-dur">20 min</div>
+              </li>
+              <li class="lectie-item">
+                <div class="lectie-num">1.2</div>
+                <div class="lectie-info">
+                  <div class="lectie-name">Ce <strong>ESTE</strong> și ce <strong>NU ESTE </strong>Biohacking-ul</div>
+                  <div class="lectie-desc">Definiție tehnică: utilizarea principiilor științifice pentru a modifica funcția biologică proprie. Biohacking de calitate vs pseudoștiință. Diferențiatorul NUTRISIB: minimum nivel 2 de evidență.</div>
+                </div>
+                <div class="lectie-dur">15 min</div>
+              </li>
+              <li class="lectie-item">
+                <div class="lectie-num">1.3</div>
+                <div class="lectie-info">
+                  <div class="lectie-name">Healthspan — KPI-ul Suprem al Sistemului</div>
+                  <div class="lectie-desc">Definiție operațională. Date epidemiologice România: healthspan mediu &lt; lifespan cu 8–12 ani. Cei 4 „cavaleri ai apocalipsei metabolice" conform Medicinei 3.0: boli cardiovasculare, diabet tip 2, cancer, neurodegenerative.</div>
+                </div>
+                <div class="lectie-dur">20 min</div>
+              </li>
+              <li class="lectie-item">
+                <div class="lectie-num">1.4</div>
+                <div class="lectie-info">
+                  <div class="lectie-name">Arhitectura Experimentului Personal Sigur</div>
+                  <div class="lectie-desc">Cadrul N=1: tu ești subiectul și cercetătorul. Elementele unui experiment valid: ipoteză clară, variabilă independentă izolată, durată minimă 2–4 săptămâni, metrică măsurabilă. Red flags de stop obligatoriu.</div>
+                </div>
+                <div class="lectie-dur">15 min</div>
+              </li>
+              <li class="lectie-item">
+                <div class="lectie-num">1.5</div>
+                <div class="lectie-info">
+                  <div class="lectie-name">Introducere în Sistemul C.E.L.O.S. NUTRISIB</div>
+                  <div class="lectie-desc">Conexiunea biohacking–suplimentare inteligentă. Biodisponibilitatea ca KPI al suplimentării (nu doza, ci absorbția). Diferența între suplimentul standard și tehnologiile de livrare avansată (lipozomal, micelar).</div>
+                </div>
+                <div class="lectie-dur">10 min</div>
+              </li>
+            </ul>
+
+            <div class="content-2col">
+              <div class="content-block">
+                <h4>Competențe dobândite</h4>
+                <ul>
+                  <li>Evaluezi orice intervenție de sănătate prin lentila Medicinei 3.0</li>
+                  <li>Filtrezi informația de biohacking fără să te pierzi în zgomot</li>
+                  <li>Cuantifici propria direcție biologică și urgența intervenției preventive</li>
+                  <li>Construiești și evaluezi experimente personale sigure, repetabile</li>
+                  <li>Obții un punct de start măsurabil (scor pe 5 domenii) pentru comparație</li>
+                </ul>
+              </div>
+              <div class="content-block">
+                <h4>Avantaje practice</h4>
+                <ul>
+                  <li><strong>Claritate conceptuală:</strong> Nu mai ești confuz de articolele contradictorii despre biohacking</li>
+                  <li><strong>Cadru de filtrare:</strong> Identifici imediat ce e știință și ce e marketing</li>
+                  <li><strong>Motivație bazată pe date:</strong> Înțelegi de ce trebuie să acționezi acum, nu „mai târziu"</li>
+                  <li><strong>Baseline personal:</strong> Scorul inițial devine ghidul pentru săptămânile 2–6</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="deliverables-bar">
+              <span class="deliverables-label">Livrabile →</span>
+              <span class="deliverable-tag">Fișa de Auto-evaluare Inițială</span>
+              <span class="deliverable-tag">Manualul de Operare al Sistemului Biologic (PDF)</span>
+              <span class="deliverable-tag">Harta Conceptuală Medicina 3.0</span>
+              <span class="deliverable-tag">Ghid: Experimentul Personal Valid în 5 Pași</span>
+            </div>
+
+            <button class="bib-toggle" onclick="toggleBib(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Bibliografie Modul 1 (8 referințe)
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="bib-content">
+              <ul class="bib-list">
+                <li data-n="1">Attia, P. (2023). <em>Outlive: The Science and Art of Longevity.</em> Harmony Books.</li>
+                <li data-n="2">Fries, J.F., et al. (1980). Aging, Natural Death, and the Compression of Morbidity. <em>NEJM</em>, 303(3), 130–135.</li>
+                <li data-n="3">Olshansky, S.J., et al. (2009). Differences in Life Expectancy Due to Race and Educational Differences. <em>Health Affairs</em>, 28(4).</li>
+                <li data-n="4">WHO (2022). Global Health Observatory: Healthy Life Expectancy Data. Geneva.</li>
+                <li data-n="5">Khera, A.V., et al. (2016). Genetic Risk, Adherence to a Healthy Lifestyle, and Coronary Disease. <em>NEJM</em>, 375(24).</li>
+                <li data-n="6">Longo, V.D., et al. (2023). Hallmarks of Aging: An Expanding Universe. <em>Cell</em>, 186(2), 243–278.</li>
+                <li data-n="7">Lopez-Otin, C., et al. (2013). The Hallmarks of Aging. <em>Cell</em>, 153(6), 1194–1217.</li>
+                <li data-n="8">Kaeberlein, M. (2021). How Healthy Is the Healthspan Concept? <em>GeroScience</em>, 43(2), 905–910.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ MODUL 2 ══════════════════════════════════════════════════════ -->
+      <div class="module-card" id="m2">
+        <div class="module-header" onclick="toggleModule('m2')">
+          <div class="module-thumb" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=70');">
+            <div class="module-thumb-overlay"><div class="module-num-big">02</div></div>
+            <div class="module-badge">Săptămâna 2</div>
+          </div>
+          <div class="module-summary">
+            <div class="module-week">Modul 2 · Self-Tracking Inteligent</div>
+            <div class="module-title">Măsurare fără Obsesie</div>
+            <div class="module-tagline">Date simple pentru decizii mai bune. Principiul N=1 aplicat: măsurăm pentru a decide, nu pentru a ne anxia.</div>
+            <div class="module-meta">
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 85 min video</span>
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 5 lecții</span>
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> KPI: Primul pattern personal identificat</span>
+            </div>
+          </div>
+          <div class="module-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="module-body">
+          <div class="module-body-inner">
+            <div class="video-area">
+              <div class="video-placeholder">
+                <div class="video-placeholder-icon"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+                <p>Lecția 2.1 — Principiul N=1 și Limitările Studiilor Populaționale</p>
+                <span class="vp-label">↑ Înlocuiește cu iframe YouTube/Vimeo sau tag video HTML5</span>
+              </div>
+            </div>
+            <div class="lectii-title">Lecțiile modulului</div>
+            <ul class="lectii-list">
+              <li class="lectie-item"><div class="lectie-num">2.1</div><div class="lectie-info"><div class="lectie-name">Principiul N=1 și Limitările Studiilor Populaționale</div><div class="lectie-desc">De ce studiile de populație nu se aplică automat la tine. Variabilitate biologică inter-individuală (genetică, microbiom, expuneri). Cum să citești un studiu: RCT vs observațional, dimensiunea efectului, context.</div></div><div class="lectie-dur">15 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">2.2</div><div class="lectie-info"><div class="lectie-name">Jurnalul de Biohacking — Instrumentul Cheie</div><div class="lectie-desc">Structura jurnalului: dimineața (somn, energie, stare 1–10) + seara (alimentație, mișcare, stres, focus). Template de completat în 5 minute. Cum identifici pattern-uri după 2–3 săptămâni. Regula 80% compliance = succes.</div></div><div class="lectie-dur">20 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">2.3</div><div class="lectie-info"><div class="lectie-name">Wearables — Ce Merită și Ce Este Hype</div><div class="lectie-desc">Categoria 1 (bază): pedometru, ceas cu ritm cardiac. Categoria 2 (intermediară): Fitbit, Garmin, Apple Watch. Categoria 3 (avansată): Oura Ring (HRV, readiness), CGM. Avertisment: orthosomnia și metrici anxiety. Regula: un singur metric nou pe lună.</div></div><div class="lectie-dur">20 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">2.4</div><div class="lectie-info"><div class="lectie-name">HRV — Ce Este și De Ce Contează</div><div class="lectie-desc">Variabilitatea intervalelor RR ca proxy al echilibrului SNV (parasimpatic vs. simpatic). HRV ridicat = capacitate de recuperare. Factori care scad HRV: alcool, somn insuficient, antrenament excesiv, stres cronic. Aplicații gratuite: Elite HRV, Welltory.</div></div><div class="lectie-dur">15 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">2.5</div><div class="lectie-info"><div class="lectie-name">Markeri de Laborator Esențiali pentru Biohacking</div><div class="lectie-desc">Panel de bază: glicemie, HbA1c, insulină (HOMA-IR), TG/HDL, LDL, CRP hs, TSH, vitamina D, B12, fier/feritină, magneziu. Panel avansat: ApoB, Lp(a), cortizol matinal, DHEA-S, testosteron. Cum interpretezi „în limite normale" vs. valori optime.</div></div><div class="lectie-dur">15 min</div></li>
+            </ul>
+            <div class="content-2col">
+              <div class="content-block">
+                <h4>Competențe dobândite</h4>
+                <ul>
+                  <li>Înțelegi propriul HRV și ce îl influențează — competență rară, valoroasă în managementul stresului</li>
+                  <li>Știi ce analize să ceri medicului și cum să interpretezi dincolo de „în limite normale"</li>
+                  <li>Construiești primele corelații personale (ex: cafea după 14:00 → somn fragmentat)</li>
+                  <li>Elimini dependența de aplicații excesive — alegi 2–3 metrici cu impact real</li>
+                </ul>
+              </div>
+              <div class="content-block">
+                <h4>Avantaje practice</h4>
+                <ul>
+                  <li><strong>Control real:</strong> Date obiective înlocuiesc „mi se pare că..." cu „datele arată că..."</li>
+                  <li><strong>Economie:</strong> Știi dacă un supliment sau protocol funcționează pe tine — nu pe medie</li>
+                  <li><strong>Autonomie medicală:</strong> Prezinți medicului date structurate, nu simptome vagi</li>
+                  <li><strong>Fără obsesie:</strong> Sistem minimal de 10 min/zi cu impact maxim</li>
+                </ul>
+              </div>
+            </div>
+            <div class="deliverables-bar">
+              <span class="deliverables-label">Livrabile →</span>
+              <span class="deliverable-tag">Jurnalul de Biohacking 90 Zile (PDF + Notion)</span>
+              <span class="deliverable-tag">Ghid Interpretare Analize de Sânge</span>
+              <span class="deliverable-tag">Infografic HRV 101</span>
+              <span class="deliverable-tag">Calculator HOMA-IR (Excel)</span>
+              <span class="deliverable-tag">Lista aplicații tracking recomandate</span>
+            </div>
+            <button class="bib-toggle" onclick="toggleBib(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Bibliografie Modul 2 (7 referințe)
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="bib-content">
+              <ul class="bib-list">
+                <li data-n="1">Shaffer, F. & Ginsberg, J.P. (2017). An Overview of Heart Rate Variability Metrics and Norms. <em>Front. Public Health</em>, 5, 258.</li>
+                <li data-n="2">Malik, M. (1996). Heart Rate Variability. <em>Ann Noninvas Electrocardiol</em>, 1(2), 151–181.</li>
+                <li data-n="3">Munn, J. & Nagle, E. (2020). Continuous Glucose Monitoring in Healthy Adults. <em>Diabetes Care</em>, 43(8).</li>
+                <li data-n="4">Kravitz, L. & Kravitz, D. (2019). Wearable Activity Trackers — Validity and Reliability. <em>J Sport Health Sci.</em></li>
+                <li data-n="5">Baron, K.G., et al. (2017). Orthosomnia: Are Some Patients Taking the Quantified Self Too Far? <em>J Clin Sleep Med</em>, 13(2).</li>
+                <li data-n="6">Attia, P. (2023). Outlive — Chapter 3: Objective Assessment of Healthspan Markers.</li>
+                <li data-n="7">Mathiesen, E.F., et al. (2019). HOMA-IR as Predictor of Metabolic Syndrome. <em>J Endocrinol</em>, 243(2).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ MODUL 3 ══════════════════════════════════════════════════════ -->
+      <div class="module-card" id="m3">
+        <div class="module-header" onclick="toggleModule('m3')">
+          <div class="module-thumb" style="background-image:url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=70');">
+            <div class="module-thumb-overlay"><div class="module-num-big">03</div></div>
+            <div class="module-badge">Săptămâna 3</div>
+          </div>
+          <div class="module-summary">
+            <div class="module-week">Modul 3 · Biochimia Alimentației</div>
+            <div class="module-title">Nutriție, Microbiom și Energie</div>
+            <div class="module-tagline">Hrana ca instrument de performanță și longevitate. Mecanisme energetice, microbiom și sistemul C.E.L.O.S. de suplimentare.</div>
+            <div class="module-meta">
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 90 min video</span>
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 5 lecții</span>
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> KPI: Energie postprandială măsurată 7 zile</span>
+            </div>
+          </div>
+          <div class="module-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="module-body">
+          <div class="module-body-inner">
+            <div class="video-area">
+              <div class="video-placeholder">
+                <div class="video-placeholder-icon"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+                <p>Lecția 3.1 — Metabolismul Energetic: Cum Funcționează Sistemul</p>
+                <span class="vp-label">↑ Înlocuiește cu iframe YouTube/Vimeo sau tag video HTML5</span>
+              </div>
+            </div>
+            <div class="lectii-title">Lecțiile modulului</div>
+            <ul class="lectii-list">
+              <li class="lectie-item"><div class="lectie-num">3.1</div><div class="lectie-info"><div class="lectie-name">Metabolismul Energetic — Cum Funcționează Sistemul</div><div class="lectie-desc">Căile metabolice principale: glicoliză, ciclul Krebs, fosforilare oxidativă. De ce mitocondria este „motorul metabolic". Glicemia postprandială și efectul asupra energiei cognitive (studii CGM). Insulina ca hormon metabolic central: rezistența la insulină ca disfuncție sistemică.</div></div><div class="lectie-dur">20 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">3.2</div><div class="lectie-info"><div class="lectie-name">Proteine, Grăsimi, Glucide — Ierarhia Practică</div><div class="lectie-desc">Proteinele ca prioritate nr. 1 în Medicina 3.0: 1.6–2.2g/kg corp. Calitatea proteică: DIAAS score. Grăsimile esențiale: omega-3 (EPA/DHA), raportul omega-6/omega-3. Glucidele: index glicemic vs. sarcină glicemică. Time-restricted eating (TRE) — evidence review.</div></div><div class="lectie-dur">20 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">3.3</div><div class="lectie-info"><div class="lectie-name">Microbiomul — Al Doilea Creier al Sistemului</div><div class="lectie-desc">10¹⁴ microorganisme, 150× mai mulți geni decât genomul uman. Axa intestin-creier (gut-brain axis): serotonina intestinală, nervul vag, inflamația sistemică. Disbioza și manifestările: ceață mentală, oboseală cronică, anxietate. Target: 30+ specii diferite de plante/săptămână.</div></div><div class="lectie-dur">20 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">3.4</div><div class="lectie-info"><div class="lectie-name">Suplimentarea Inteligentă — Sistemul C.E.L.O.S.</div><div class="lectie-desc">De ce 90% din suplimentele standard au biodisponibilitate sub 15–20%. Barierele de absorbție: acid gastric, metabolism prim pasaj hepatic. Tehnologii avansate: encapsulare lipozomală (vitamina C, glutathion), micele (vitamina D, CoQ10). Cronobiologia suplimentării: ce se ia dimineața vs. seara.</div></div><div class="lectie-dur">25 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">3.5</div><div class="lectie-info"><div class="lectie-name">Protocoale de Eliminare și Reintroducere</div><div class="lectie-desc">Când are sens un protocol de eliminare: balonare cronică, ceață mentală postprandial, oboseală la 2h după masă. Protocol: eliminare 3–4 săptămâni → reintroducere sistematică → jurnal simptome. Alergeni comuni. Când consultul medical devine obligatoriu.</div></div><div class="lectie-dur">15 min</div></li>
+            </ul>
+            <div class="content-2col">
+              <div class="content-block">
+                <h4>Competențe dobândite</h4>
+                <ul>
+                  <li>Înțelegi mecanismul exact prin care alimentația îți afectează energia cognitivă și fizică</li>
+                  <li>Construiești o structură alimentară personală, sustenabilă, fără interdicții arbitrare</li>
+                  <li>Identifici semnele de disbioză și știi cum să acționezi</li>
+                  <li>Înțelegi de ce suplimentele anterioare nu au funcționat și cum să alegi corect</li>
+                </ul>
+              </div>
+              <div class="content-block">
+                <h4>Avantaje practice</h4>
+                <ul>
+                  <li><strong>Energie stabilă:</strong> Elimini spike-urile și crash-urile glicemice — focus susținut 6:00–22:00</li>
+                  <li><strong>ROI suplimentare:</strong> Știi că absorbi ceea ce plătești, nu arunci banii</li>
+                  <li><strong>Digestie optimă:</strong> Recunoști și adresezi disbioza fără intervenții extreme</li>
+                  <li><strong>Claritate digestivă:</strong> „Brain fog"-ul postprandial dispare odată cu optimizarea mesei</li>
+                </ul>
+              </div>
+            </div>
+            <div class="deliverables-bar">
+              <span class="deliverables-label">Livrabile →</span>
+              <span class="deliverable-tag">Planul Alimentar de 7 Zile</span>
+              <span class="deliverable-tag">Tabela C.E.L.O.S. — Stack Suplimentare</span>
+              <span class="deliverable-tag">Infografic Biodisponibilitate</span>
+              <span class="deliverable-tag">Lista 30+ surse microbiom</span>
+              <span class="deliverable-tag">Protocol Eliminare-Reintroducere</span>
+            </div>
+            <button class="bib-toggle" onclick="toggleBib(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Bibliografie Modul 3 (8 referințe)
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="bib-content">
+              <ul class="bib-list">
+                <li data-n="1">Sonnenburg, J. & Sonnenburg, E. (2015). <em>The Good Gut.</em> Penguin.</li>
+                <li data-n="2">Valdes, A.M., et al. (2018). Role of the Gut Microbiota in Nutrition and Health. <em>BMJ</em>, 361, k2179.</li>
+                <li data-n="3">Pedersen, H.K., et al. (2016). Human Gut Bacteria Impact Host Serum Metabolome and Insulin Sensitivity. <em>Nature</em>, 535, 376–381.</li>
+                <li data-n="4">Morton, R.W., et al. (2018). Protein Supplementation Meta-Analysis. <em>Br J Sports Med</em>, 52(6), 376–384.</li>
+                <li data-n="5">Patterson, R.E. & Sears, D.D. (2017). Metabolic Effects of Intermittent Fasting. <em>Ann Rev Nutr</em>, 37, 371–393.</li>
+                <li data-n="6">Taghizadeh, M. et al. (2017). Liposomal Vitamin C vs Standard — Comparative Bioavailability. <em>Eur J Clin Nutr.</em></li>
+                <li data-n="7">Holick, M.F. (2007). Vitamin D Deficiency. <em>NEJM</em>, 357(3), 266–281.</li>
+                <li data-n="8">Zeevi, D. et al. (2015). Personalized Nutrition by Prediction of Glycemic Responses. <em>Cell</em>, 163(5), 1079–1094.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ MODUL 4 ══════════════════════════════════════════════════════ -->
+      <div class="module-card" id="m4">
+        <div class="module-header" onclick="toggleModule('m4')">
+          <div class="module-thumb" style="background-image:url('https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=70');">
+            <div class="module-thumb-overlay"><div class="module-num-big">04</div></div>
+            <div class="module-badge">Săptămâna 4</div>
+          </div>
+          <div class="module-summary">
+            <div class="module-week">Modul 4 · Arhitectura Recuperării</div>
+            <div class="module-title">Somn, Ritm Circadian și Recuperare</div>
+            <div class="module-tagline">Cel mai puternic biohack legal disponibil. Sistemul glimfatic, ritmul molecular, protocolul de lumină și sleep stack-ul minimal.</div>
+            <div class="module-meta">
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 100 min video</span>
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 5 lecții</span>
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> KPI: Scor somn S4 vs S1</span>
+            </div>
+          </div>
+          <div class="module-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="module-body">
+          <div class="module-body-inner">
+            <div class="video-area">
+              <div class="video-placeholder">
+                <div class="video-placeholder-icon"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+                <p>Lecția 4.1 — Arhitectura Somnului: Ce Se Întâmplă Când Dormi</p>
+                <span class="vp-label">↑ Înlocuiește cu iframe YouTube/Vimeo sau tag video HTML5</span>
+              </div>
+            </div>
+            <div class="lectii-title">Lecțiile modulului</div>
+            <ul class="lectii-list">
+              <li class="lectie-item"><div class="lectie-num">4.1</div><div class="lectie-info"><div class="lectie-name">Arhitectura Somnului — Ce Se Întâmplă Când Dormi</div><div class="lectie-desc">Stadiile somnului: NREM1, NREM2, NREM3 (somn delta), REM. Funcțiile fiecărui stadiu. Presiunea somnului (adenozinergică) și efectul cofeinei. Ritmul circadian: genele CLOCK, BMAL1, zeitgebers. Sistemul glimfatic: curățarea amiloidului beta în timpul somnului NREM3.</div></div><div class="lectie-dur">25 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">4.2</div><div class="lectie-info"><div class="lectie-name">Cronotipul și Fereastra Optimă de Somn</div><div class="lectie-desc">Cronotipuri: matinal (lark), intermediar, nocturn (owl) — baza genetică (genele PER, CRY). Munich ChronoType Questionnaire (MCTQ) — gratuit online. De ce forarea unui program anti-cronotip crește cortizolul și scade HRV. Strategii de ajustare graduală.</div></div><div class="lectie-dur">20 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">4.3</div><div class="lectie-info"><div class="lectie-name">Protocolul de Lumină — Cel Mai Subestimat Hack</div><div class="lectie-desc">Lumina albastră seara: suprimă melatonina cu 50–80% (studii Harvard Czeisler). Celulele ipRGC: receptorii non-vizuali pentru ritm circadian. Protocolul matinal: 10–20 min lumină naturală în primele 60 min. Protocolul vesperal: dimming la 90–120 min înainte de culcare. Lumina roșie: singurul spectru non-perturbator.</div></div><div class="lectie-dur">20 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">4.4</div><div class="lectie-info"><div class="lectie-name">Sleep Stack Minimal — Protocoale Fără Suplimente Exotice</div><div class="lectie-desc">Temperatura camerei: 18–19°C = temperatura optimă. Rutina de deconectare wind-down: 30–60 min pre-culcare. Tehnica 4–7–8 (respirație): activare parasimpatică rapidă. Protocolul de urgență (trezire la 3–4 AM): stimulul paradoxal al somnului.</div></div><div class="lectie-dur">20 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">4.5</div><div class="lectie-info"><div class="lectie-name">Suplimentare pentru Somn — Raționalament Clinic</div><div class="lectie-desc">Magneziu glicinat (300–400mg): mecanism GABA-ergic, anxiolitic. Diferența formelor de magneziu: oxid vs. citrat vs. glicinat vs. L-treonat. L-teanina (200mg): sinergism cu magneziu, fără sedare. Melatonina: nu este soporific, este sincronizator circadian. Doza corectă: 0.3–0.5mg. Apigenina (50mg): ligand benzodiazepinic natural.</div></div><div class="lectie-dur">15 min</div></li>
+            </ul>
+            <div class="content-2col">
+              <div class="content-block">
+                <h4>Competențe dobândite</h4>
+                <ul>
+                  <li>Înțelegi de ce dormi prost chiar când „faci totul bine" — diagnoză mecanistică, nu empirică</li>
+                  <li>Aplici protocolul de lumină matinal și vesperal pentru sincronizare circadiană</li>
+                  <li>Alegi suplimentele pentru somn cu rațional clinic, nu după reclame</li>
+                  <li>Cunoști legătura directă somn–HRV–performanță cognitivă</li>
+                </ul>
+              </div>
+              <div class="content-block">
+                <h4>Avantaje practice</h4>
+                <ul>
+                  <li><strong>Trezire clară:</strong> HRV în creștere, creierul „pornit" la 6:30, nu 10:00</li>
+                  <li><strong>Fără somnifere:</strong> Protocol behavioral eficient, fără dependență farmacologică</li>
+                  <li><strong>Economie cognitivă:</strong> Sistemul glimfatic curăță amiloidul beta — prevenție Alzheimer reală</li>
+                  <li><strong>Testosteron/GH:</strong> NREM3 = vârf secreție hormon de creștere. Somn = anti-aging gratuit</li>
+                </ul>
+              </div>
+            </div>
+            <div class="deliverables-bar">
+              <span class="deliverables-label">Livrabile →</span>
+              <span class="deliverable-tag">Manualul Somnului Biohacked (PDF 20 pag)</span>
+              <span class="deliverable-tag">Checklist Protocolul de Seară în 10 Pași</span>
+              <span class="deliverable-tag">Infografic Arhitectura Somnului</span>
+              <span class="deliverable-tag">Tabela Forme Magneziu</span>
+              <span class="deliverable-tag">Tracker Jurnal Somn 30 Zile</span>
+            </div>
+            <button class="bib-toggle" onclick="toggleBib(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Bibliografie Modul 4 (8 referințe)
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="bib-content">
+              <ul class="bib-list">
+                <li data-n="1">Walker, M. (2017). <em>Why We Sleep: Unlocking the Power of Sleep and Dreams.</em> Scribner.</li>
+                <li data-n="2">Czeisler, C.A., et al. (2005). High Sensitivity of the Human Circadian Melatonin Rhythm to Resetting by Short Wavelength Light. <em>JCEM.</em></li>
+                <li data-n="3">Iliff, J.J., et al. (2012). A Paravascular Pathway Facilitates CSF Flow — the Glymphatic System. <em>Science Translational Medicine.</em></li>
+                <li data-n="4">Baron, K.G., et al. (2017). Orthosomnia: Quantified Self Too Far? <em>J Clin Sleep Med</em>, 13(2).</li>
+                <li data-n="5">Roehrs, T., et al. (2016). Ethanol as a Hypnotic in Insomniacs. <em>Neuropsychopharmacology.</em></li>
+                <li data-n="6">Abbasi, B., et al. (2012). Magnesium Supplementation Improves Insomnia. <em>J Research Med Sci.</em></li>
+                <li data-n="7">Benloucif, S., et al. (2005). Stability of Melatonin and Temperature as Circadian Phase Markers. <em>J Biol Rhythms.</em></li>
+                <li data-n="8">Leproult, R. & Van Cauter, E. (2011). Effect of 1 Week of Sleep Restriction on Testosterone Levels. <em>JAMA.</em></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ MODUL 5 ══════════════════════════════════════════════════════ -->
+      <div class="module-card" id="m5">
+        <div class="module-header" onclick="toggleModule('m5')">
+          <div class="module-thumb" style="background-image:url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=600&q=70');">
+            <div class="module-thumb-overlay"><div class="module-num-big">05</div></div>
+            <div class="module-badge">Săptămâna 5</div>
+          </div>
+          <div class="module-summary">
+            <div class="module-week">Modul 5 · Reziliență Biologică</div>
+            <div class="module-title">Mișcare, Sistem Nervos și Stres</div>
+            <div class="module-tagline">Ingineria rezilienței biologice. Piramida mișcării pentru healthspan, axa HPA, instrumentele SNV și conexiunea MTC/acupunctură.</div>
+            <div class="module-meta">
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 90 min video</span>
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 5 lecții</span>
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> KPI: Scor stres comparativ vs S1</span>
+            </div>
+          </div>
+          <div class="module-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="module-body">
+          <div class="module-body-inner">
+            <div class="video-area">
+              <div class="video-placeholder">
+                <div class="video-placeholder-icon"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+                <p>Lecția 5.1 — Piramida Mișcării pentru Healthspan</p>
+                <span class="vp-label">↑ Înlocuiește cu iframe YouTube/Vimeo sau tag video HTML5</span>
+              </div>
+            </div>
+            <div class="lectii-title">Lecțiile modulului</div>
+            <ul class="lectii-list">
+              <li class="lectie-item"><div class="lectie-num">5.1</div><div class="lectie-info"><div class="lectie-name">Piramida Mișcării pentru Healthspan</div><div class="lectie-desc">Modelul Attia: (1) Zona 2 — 3–4h/săptămână, lactat &lt;2mM, cel mai important biohack cardiovascular. (2) Forță — 2–3 sesiuni/săptămână, compuși. Masa musculară = organ de longevitate (miokine, sensibilitate insulinică). (3) Mobilitate și stabilitate. (4) HIIT/VO2max — 1 sesiune/săptămână după baza solidă.</div></div><div class="lectie-dur">20 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">5.2</div><div class="lectie-info"><div class="lectie-name">Stresul ca Problemă de Sistem, nu de Voință</div><div class="lectie-desc">Definiție: stresul nu este o stare emoțională, ci o cascadă biologică (axa HPA). Cortizolul acut (util) vs. cortizolul cronic (toxic). Alostazie și alostatic load: uzura cumulată sub stres repetitiv. Manifestări metabolice: hiperglicemie funcțională, inflamație sistemică (IL-6, TNF-alfa), accelerarea telomerilor (Epel, 2004).</div></div><div class="lectie-dur">20 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">5.3</div><div class="lectie-info"><div class="lectie-name">Instrumentele de Reglare a SNV</div><div class="lectie-desc">Balanța simpatic-parasimpatic. HRV ca proxy al tonusului vagal. Respirația diafragmatică: 4–6 resp/min = rezonanță cardiacă, HRV crescut imediat. Box breathing (SEAL Navy): 4–4–4–4. NSDR (Non-Sleep Deep Rest) — efecte comparabile somnului NREM. Mișcarea somatică: descărcarea tensiunii musculare din stres.</div></div><div class="lectie-dur">20 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">5.4</div><div class="lectie-info"><div class="lectie-name">Micro-Pauze și Reset-uri în Programul Aglomerat</div><div class="lectie-desc">Ritmul ultradian 90–120 min: cicluri naturale de atenție-detensionare. Micro-pauzele eficiente în 2–5 minute: mișcare ușoară (20 squats), respirație coerentă, lumină naturală. Regula „hard stop" la finalul zilei: lucrul cronic după 19:00 = cortizol tardiv = somn afectat. Protocolul de decomprimare la final de zi.</div></div><div class="lectie-dur">15 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">5.5</div><div class="lectie-info"><div class="lectie-name">MTC și Acupunctură în Biohacking Modern</div><div class="lectie-desc">Conexiunea MTC cu fiziologia modernă. Meridianele ca rețele nervoase și fasciale. Acupunctura și modularea SNV: studii fMRI și măsurători HRV post-acupunctură. NMG (neuro-modulare generativă) în contextul clinic NUTRISIB. Biorezonanța: principii de funcționare și limitele dovezilor actuale (poziție critică dar deschisă).</div></div><div class="lectie-dur">15 min</div></li>
+            </ul>
+            <div class="content-2col">
+              <div class="content-block">
+                <h4>Competențe dobândite</h4>
+                <ul>
+                  <li>Înțelegi că stresul tău este o problemă metabolică, nu de caracter — și că are soluții tehnice</li>
+                  <li>Folosești instrumente de reglare SNV în 2–5 minute, oriunde — efect măsurabil pe HRV</li>
+                  <li>Înțelegi ce sunt MTC și acupunctura în termeni biologici moderni</li>
+                  <li>Construiești un plan minim de mișcare pentru healthspan (&lt;5h/săptămână)</li>
+                </ul>
+              </div>
+              <div class="content-block">
+                <h4>Avantaje practice</h4>
+                <ul>
+                  <li><strong>Reziliență HPA:</strong> Cortizolul cronic scade cu protocoale dovedite, nu cu „gândire pozitivă"</li>
+                  <li><strong>Performanță cognitivă:</strong> Micro-pauzele ultradian cresc productivitatea mai mult decât 2h extra de lucru</li>
+                  <li><strong>Anti-inflamator:</strong> Zona 2 + forță = reducere IL-6 cronică. Cel mai eficient anti-inflamator fără pastile</li>
+                  <li><strong>Longevitate musculară:</strong> Masa musculară la 40–50 ani = independență funcțională la 70–80 ani</li>
+                </ul>
+              </div>
+            </div>
+            <div class="deliverables-bar">
+              <span class="deliverables-label">Livrabile →</span>
+              <span class="deliverable-tag">Ghid Mișcare pentru Healthspan (PDF)</span>
+              <span class="deliverable-tag">Planner Săptămânal Mișcare</span>
+              <span class="deliverable-tag">Video Demo Respirație Diafragmatică</span>
+              <span class="deliverable-tag">Infografic Axa HPA</span>
+              <span class="deliverable-tag">Protocol Decomprimare Final Zi</span>
+            </div>
+            <button class="bib-toggle" onclick="toggleBib(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Bibliografie Modul 5 (8 referințe)
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="bib-content">
+              <ul class="bib-list">
+                <li data-n="1">Attia, P. (2023). <em>Outlive</em> — Chapter 11–12: Exercise and Longevity.</li>
+                <li data-n="2">Seiler, S. & Tonnessen, E. (2009). Intervals, Thresholds and Long Slow Distance. <em>Int J Sports Physiol Perf</em>, 4(1), 32–53.</li>
+                <li data-n="3">McEwen, B.S. (1998). Stress, Adaptation and Disease — Allostasis and Allostatic Load. <em>Ann NY Acad Sci</em>, 840, 33–44.</li>
+                <li data-n="4">Epel, E.S., et al. (2004). Accelerated Telomere Shortening in Response to Life Stress. <em>PNAS</em>, 101(49), 17312–17315.</li>
+                <li data-n="5">Lehrer, P.M. & Gevirtz, R. (2014). Heart Rate Variability Biofeedback — How and Why? <em>Front Psychol</em>, 5, 756.</li>
+                <li data-n="6">Zaccaro, A., et al. (2018). How Breath-Control Can Change Your Life. <em>Front Human Neurosci</em>, 12, 353.</li>
+                <li data-n="7">Zhao, Z.Q. (2008). Neural Mechanism Underlying Acupuncture Analgesia. <em>Progress Neurobiol</em>, 85(4), 355–375.</li>
+                <li data-n="8">Lee, D-C., et al. (2022). Running and Cardiovascular Longevity. <em>BJSM.</em></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ MODUL 6 ══════════════════════════════════════════════════════ -->
+      <div class="module-card" id="m6">
+        <div class="module-header" onclick="toggleModule('m6')">
+          <div class="module-thumb" style="background-image:url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=70');">
+            <div class="module-thumb-overlay"><div class="module-num-big">06</div></div>
+            <div class="module-badge">Săptămâna 6</div>
+          </div>
+          <div class="module-summary">
+            <div class="module-week">Modul 6 · Sinteza Sistemică</div>
+            <div class="module-title">Integrare și Planul Personal 90 Zile</div>
+            <div class="module-tagline">De la cunoaștere la arhitectură. Planul personal cu 2–3 pârghii mari, sistemul de review periodic și limitele auto-experimentării.</div>
+            <div class="module-meta">
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 95 min video</span>
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 5 lecții</span>
+              <span class="module-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> KPI: Delta total 5 domenii S1→S6</span>
+            </div>
+          </div>
+          <div class="module-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="module-body">
+          <div class="module-body-inner">
+            <div class="video-area">
+              <div class="video-placeholder">
+                <div class="video-placeholder-icon"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+                <p>Lecția 6.1 — Revizuire și Sinteză: Cele 5 Sisteme</p>
+                <span class="vp-label">↑ Înlocuiește cu iframe YouTube/Vimeo sau tag video HTML5</span>
+              </div>
+            </div>
+            <div class="lectii-title">Lecțiile modulului</div>
+            <ul class="lectii-list">
+              <li class="lectie-item"><div class="lectie-num">6.1</div><div class="lectie-info"><div class="lectie-name">Revizuire și Sinteză — Cele 5 Sisteme ale Biohacking 3.0</div><div class="lectie-desc">Recapitularea structurată: mindset → măsurare → nutriție → somn → mișcare/stres. Interdependența sistemică: lanțul disfuncțiilor. Identificarea „nodului" primar personal. Modelul minimal stack vs. full stack.</div></div><div class="lectie-dur">20 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">6.2</div><div class="lectie-info"><div class="lectie-name">Construirea Planului Personal de Biohacking 90 Zile</div><div class="lectie-desc">Metoda „2–3 pârghii mari": selectezi domeniile cu scor cel mai mic + impact potențial. Structura pe 3 faze: Luna 1 (fundația) → 2 (consolidare) → 3 (optimizare). Template complet: obiectiv → intervenție → metrică → frecvență → review date. Regula 80% compliance = succes.</div></div><div class="lectie-dur">25 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">6.3</div><div class="lectie-info"><div class="lectie-name">Sistemul de Review — Iterația ca Principiu</div><div class="lectie-desc">Review săptămânal (10 min): analiza jurnalului, KPI principali. Review lunar (30 min): tendințe, comparație baseline, ajustare plan. Review trimestrial (1 oră + analize): evaluare completă, experimente noi. Regula: minimum 21 zile per intervenție nouă înainte de concluzii.</div></div><div class="lectie-dur">15 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">6.4</div><div class="lectie-info"><div class="lectie-name">Red Flags și Limitele Auto-Experimentării</div><div class="lectie-desc">Simptome care NECESITĂ consult medical obligatoriu: dureri toracice, tulburări ritm cardiac, pierdere inexplicabilă &gt;10% în 3 luni, scaune cu sânge, tulburări neurologice acute. Când suplimentarea trebuie supervizată medical. Semnele că ai depășit „biohacking de sufragerie".</div></div><div class="lectie-dur">15 min</div></li>
+              <li class="lectie-item"><div class="lectie-num">6.5</div><div class="lectie-info"><div class="lectie-name">Pasul Următor — Ecosistemul NUTRISIB și Nivelul 2</div><div class="lectie-desc">Cursul ca fundație, consultanța ca optimizare avansată. Diferența curs de grup vs. protocol personalizat 1:1 (evaluare BIA, analize, profil biorezonanță). Nivelul 2: biomarkeri avansați, suplimentare de performanță, protocol MTC. Comunitatea: beneficiile rețelei de Exploratori Conștienți.</div></div><div class="lectie-dur">20 min</div></li>
+            </ul>
+            <div class="content-2col">
+              <div class="content-block">
+                <h4>Competențe dobândite</h4>
+                <ul>
+                  <li>Pleci cu un plan concret de 90 de zile — nu cu informații vagi</li>
+                  <li>Ai un sistem de review repetabil care te ține pe traiectorie fără dependență de motivație</li>
+                  <li>Știi exact când să apelezi la specialist și când poți continua singur</li>
+                  <li>Înțelegi cum se integrează cursul în ecosistemul complet NUTRISIB</li>
+                </ul>
+              </div>
+              <div class="content-block">
+                <h4>Avantaje practice</h4>
+                <ul>
+                  <li><strong>Plan operațional:</strong> 90 zile cu obiective clare, nu „voi face ceva mai bine"</li>
+                  <li><strong>Sistem, nu motivație:</strong> Reviewul periodic înlocuiește voința cu arhitectură</li>
+                  <li><strong>Comunitate:</strong> Rețeaua de Exploratori Conștienți — efect multiplicator</li>
+                  <li><strong>Traiectorie pe termen lung:</strong> Știi care este Nivelul 2 și când ești pregătit</li>
+                </ul>
+              </div>
+            </div>
+            <div class="deliverables-bar">
+              <span class="deliverables-label">Livrabile →</span>
+              <span class="deliverable-tag">Planul Personal Biohacking 90 Zile (Template)</span>
+              <span class="deliverable-tag">Chestionarul Final de Auto-evaluare</span>
+              <span class="deliverable-tag">Ghid Review Săptămânal 10 Min</span>
+              <span class="deliverable-tag">Fișa Red Flags</span>
+              <span class="deliverable-tag">Certificat de Absolvire Digital</span>
+            </div>
+            <button class="bib-toggle" onclick="toggleBib(this)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Bibliografie Modul 6 (5 referințe)
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="bib-content">
+              <ul class="bib-list">
+                <li data-n="1">Clear, J. (2018). <em>Atomic Habits.</em> Avery.</li>
+                <li data-n="2">Prochaska, J.O. & DiClemente, C.C. (1983). Stages and Processes of Self-Change. <em>J Consult Clin Psychol</em>, 51(3), 390–395.</li>
+                <li data-n="3">Duhigg, C. (2012). <em>The Power of Habit.</em> Random House.</li>
+                <li data-n="4">Michie, S., et al. (2011). The Behaviour Change Wheel. <em>Implementation Science</em>, 6, 42.</li>
+                <li data-n="5">Hagger, M.S., et al. (2019). Ego Depletion and the Strength Model of Self-Control. <em>Front Psychol</em>, 10, 1145.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /module-list -->
+  </div>
+</section>
+
+<!-- ─── BIBLIOGRAFIE GENERALĂ ──────────────────────────────────────────────── -->
+<section class="section bib-section" id="bibliografie">
+  <div class="section-inner">
+    <span class="section-label">Fundament Academic</span>
+    <h2 class="section-title">Bibliografie Știință — Selecție Tematică</h2>
+    <p class="section-desc">Cursul este construit exclusiv pe literatura medicală peer-reviewed. Fiecare protocol prezentat are rațional biochimic documentat.</p>
+
+    <div style="overflow-x:auto;">
+      <table class="bib-full-table">
+        <thead>
+          <tr>
+            <th style="width:220px;">Domeniu</th>
+            <th>Referințe Cheie</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="bib-domain">Medicina 3.0 / Prevenție</td>
+            <td class="bib-ref">Attia, P. (2023). <em>Outlive: The Science and Art of Longevity</em> · Fries, J.F. (1980) <em>NEJM</em> — Compression of Morbidity · Khera, A.V. et al. (2016) <em>NEJM</em> · WHO Healthy Aging Reports (2020–2023)</td>
+          </tr>
+          <tr>
+            <td class="bib-domain">Biohacking / N=1</td>
+            <td class="bib-ref">Zeevi, D. et al. (2015) <em>Cell</em> — Personalized Nutrition · Sonnenburg et al. (2022) <em>Cell</em> — Gut Microbiome Diet RCT</td>
+          </tr>
+          <tr>
+            <td class="bib-domain">Nutriție / Macronutrienți</td>
+            <td class="bib-ref">Morton, R.W. et al. (2018) <em>Br J Sports Med</em> · Patterson & Sears (2017) <em>Ann Rev Nutr</em> — TRE · Hall, K.D. et al. (2021) <em>Cell Metabolism</em></td>
+          </tr>
+          <tr>
+            <td class="bib-domain">Microbiom</td>
+            <td class="bib-ref">Valdes, A.M. et al. (2018) <em>BMJ</em> · Pedersen, H.K. et al. (2016) <em>Nature</em> · Sonnenburg & Backhed (2016) <em>Nature</em></td>
+          </tr>
+          <tr>
+            <td class="bib-domain">Suplimentare / Biodisponibilitate</td>
+            <td class="bib-ref">Glade & Smith (2015) <em>Nutrition</em> · Taghizadeh (2017) <em>Eur J Clin Nutr</em> — Lipozomal · Holick, M.F. (2007) <em>NEJM</em> — Vitamina D</td>
+          </tr>
+          <tr>
+            <td class="bib-domain">Somn / Circadian</td>
+            <td class="bib-ref">Walker, M. (2017) <em>Why We Sleep</em> · Czeisler (2005) <em>JCEM</em> — Melatonin & Light · Iliff et al. (2012) <em>Sci Transl Med</em> — Sistemul Glimfatic</td>
+          </tr>
+          <tr>
+            <td class="bib-domain">Stres / Axa HPA</td>
+            <td class="bib-ref">McEwen, B.S. (1998) <em>Ann NY Acad Sci</em> — Allostasis · Epel, E.S. et al. (2004) <em>PNAS</em> — Telomere Shortening & Stress</td>
+          </tr>
+          <tr>
+            <td class="bib-domain">HRV / SNV</td>
+            <td class="bib-ref">Shaffer & Ginsberg (2017) <em>Front Public Health</em> · Lehrer & Gevirtz (2014) <em>Front Psychol</em> — HRV Biofeedback</td>
+          </tr>
+          <tr>
+            <td class="bib-domain">Mișcare / Healthspan</td>
+            <td class="bib-ref">Seiler & Tonnessen (2009) <em>Int J Sports Physiol</em> — Zona 2 · Lee, D-C. et al. (2022) <em>BJSM</em> — Running & Longevity</td>
+          </tr>
+          <tr>
+            <td class="bib-domain">MTC / Acupunctură</td>
+            <td class="bib-ref">Zhao, Z.Q. (2008) <em>Progress Neurobiol</em> · Langevin, H.M. (2006) <em>FASEB J</em> — Connective Tissue & Acupuncture</td>
+          </tr>
+          <tr>
+            <td class="bib-domain">Longevitate (Hallmarks)</td>
+            <td class="bib-ref">Lopez-Otin, C. et al. (2013) <em>Cell</em> — The Hallmarks of Aging · Longo, V.D. et al. (2023) <em>Cell</em> — Hallmarks Expanded</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRICING ───────────────────────────────────────────────────────────── -->
+<section class="section pricing-section" id="oferta">
+  <div class="section-inner">
+    <span class="section-label">Arhitectura Ofertei · Stacked Value</span>
+    <h2 class="section-title">Alege Nivelul de Acces</h2>
+    <p class="section-desc">Valoarea totală a materialelor cumulate depășește 3.500 RON. Mai jos găsești tier-urile de lansare, gândite pentru nivelul tău de implicare.</p>
+
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-tier">Tier 01</div>
+        <div class="pricing-name">Starter</div>
+        <div class="pricing-who">Recomandat pentru autodidactul pur</div>
+        <div class="price-old">897 RON</div>
+        <div class="price-main">697 RON</div>
+        <div class="price-note">&nbsp;</div>
+        <ul class="pricing-list">
+          <li class="highlight">6 Module Video HD (18+ ore)</li>
+          <li>Manual PDF Biohacking 3.0 (80+ pag)</li>
+          <li>6 Ghiduri Săptămânale de Implementare</li>
+          <li>Jurnalul de Biohacking 90 Zile</li>
+          <li>Fișa de Auto-evaluare Inițială + Finală</li>
+          <li>Bibliografie activă cu linkuri (per modul)</li>
+          <li>Acces garantat 12 luni</li>
+          <li class="faded">Comunitate Privată</li>
+          <li class="faded">Q&A Live Lunară</li>
+          <li class="faded">Webinar Bonus C.E.L.O.S.</li>
+          <li class="faded">Audit 1:1 (30 min)</li>
+        </ul>
+        <a href="#" class="btn-pricing-outline">Alege Starter →</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-badge-pill">⭐ Recomandat</div>
+        <div class="pricing-tier">Tier 02</div>
+        <div class="pricing-name">Standard</div>
+        <div class="pricing-who">Pentru avatarul standard NUTRISIB</div>
+        <div class="price-old">1.297 RON</div>
+        <div class="price-main">997 RON</div>
+        <div class="price-note">Preț de Lansare</div>
+        <ul class="pricing-list">
+          <li class="highlight">Tot ce include Starter, plus:</li>
+          <li class="highlight">Acces Comunitate Privată (12 luni)</li>
+          <li class="highlight">Q&A Live Lunar (3 sesiuni înregistrate)</li>
+          <li class="highlight">Webinar Bonus: Suplimentare C.E.L.O.S.</li>
+          <li class="highlight">Plan Personalizat Biohacking (Template)</li>
+          <li>Tabela C.E.L.O.S. Stack Complet</li>
+          <li>Infografice (6, câte unul per modul)</li>
+          <li class="faded">Audit 1:1 (30 min)</li>
+          <li class="faded">Profil Personalizat Biorezonanță</li>
+        </ul>
+        <a href="#" class="btn-gold" style="display:block;text-align:center;">Alege Standard →</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-tier">Tier 03</div>
+        <div class="pricing-name">Premium</div>
+        <div class="pricing-who">Optimizatorul / Executive (Andrei & Elena)</div>
+        <div class="price-old">1.997 RON</div>
+        <div class="price-main">1.497 RON</div>
+        <div class="price-note">&nbsp;</div>
+        <ul class="pricing-list">
+          <li class="highlight">Tot ce include Standard, plus:</li>
+          <li class="highlight">Sesiune 1:1 Audit Biologic (30 min)</li>
+          <li class="highlight">Profil Personalizat Biorezonanță</li>
+          <li class="highlight">Analiză Biomarkeri Avansați (ApoB, Lp(a), cortizol)</li>
+          <li>Acces prioritar la sesiunile Q&A</li>
+          <li>Recomandare suplimentare personalizată C.E.L.O.S.</li>
+        </ul>
+        <a href="#" class="btn-pricing-outline">Alege Premium →</a>
+      </div>
+    </div>
+
+    <div class="guarantee-box">
+      <div class="guarantee-icon">🛡️</div>
+      <div class="guarantee-text">
+        <h4>Garanția 30 de Zile — Fără Întrebări</h4>
+        <p>Dacă în primele 30 de zile parcurgi Modulele 1 și 2, completezi jurnalul de evaluare și nu simți nicio diferență măsurabilă în claritate sau energie, îți returnăm 100% din investiție. Fără formulare. Fără justificări. Condiție: parcurgerea minimă a primelor 2 module (barieră anti-„cumpărat și uitat"). Rata de retur estimată &lt;3%.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FINAL CTA ──────────────────────────────────────────────────────────── -->
+<section class="section bg-white-section" style="padding: 3rem 2rem; text-align:center; background: var(--navy);">
+  <div class="section-inner" style="max-width:680px;">
+    <p style="font-family:var(--font-mono);font-size:0.72rem;color:var(--gold2);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:1rem;">Healthspan-ul tău nu se negociază</p>
+    <h2 style="font-family:var(--font-display);font-size:clamp(1.5rem,3vw,2rem);color:var(--white);margin-bottom:1rem;">Fiecare an în oboseală cronică fără intervenție = 3–5 ani de healthspan consumați prematur.</h2>
+    <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;margin-bottom:2rem;">Nu este o metaforă. Este un datum epidemiologic din studii longitudinale. Întrebarea este doar când începi să lucrezi la sistem.</p>
+    <a href="#oferta" class="btn-gold" style="font-size:1rem;padding:1rem 2.5rem;">Înscrie-te la Biohacking 3.0 →</a>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────────────────────────── -->
+<footer>
+  <p><strong>© 2025 NUTRISIB — dr.ing. Radu Pascu</strong>. Toate drepturile rezervate.</p>
+  <p style="margin-top:0.5rem;">Produs digital premium · <a href="mailto:contact@nutrisib.ro">contact@nutrisib.ro</a> · Sibiu, România</p>
+</footer>
+<div class="disclaimer">
+  Cursul Biohacking 3.0 este un produs educațional, nu medical. Nu înlocuiește consultul medical. Conținutul este protejat prin drept de autor. © dr.ing. Radu Pascu / NUTRISIB 2025.
+</div>
+
+<!-- ─── STICKY ENROLL BAR ──────────────────────────────────────────────────── -->
+<div class="enroll-bar" id="enrollBar">
+  <div class="enroll-bar-text"><strong>Biohacking 3.0</strong> · Prețul de lansare expiră în curând</div>
+  <a href="#oferta" class="btn-gold" style="white-space:nowrap;font-size:0.85rem;padding:0.65rem 1.5rem;">Înscrie-te Acum →</a>
+</div>
+
+<!-- ─── JAVASCRIPT ─────────────────────────────────────────────────────────── -->
+<script>
+// ── Module accordion ────────────────────────────────────────────────────────
+function toggleModule(id) {
+  const card = document.getElementById(id);
+  const isOpen = card.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.module-card.open').forEach(c => c.classList.remove('open'));
+  // Open clicked (if was closed)
+  if (!isOpen) card.classList.add('open');
+}
+
+// ── Bibliography toggle ──────────────────────────────────────────────────────
+function toggleBib(btn) {
+  btn.classList.toggle('open');
+  const content = btn.nextElementSibling;
+  content.classList.toggle('open');
+}
+
+// ── Sticky enroll bar on scroll ──────────────────────────────────────────────
+const enrollBar = document.getElementById('enrollBar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 600) enrollBar.classList.add('visible');
+  else enrollBar.classList.remove('visible');
+}, { passive: true });
+
+// ── Video placeholder (replace with actual iframe on production) ─────────────
+// To embed a YouTube video:
+// <iframe class="video-embed" src="https://www.youtube.com/embed/VIDEO_ID" allow="autoplay; fullscreen" allowfullscreen></iframe>
+//
+// To embed Vimeo:
+// <iframe class="video-embed" src="https://player.vimeo.com/video/VIDEO_ID" allow="autoplay; fullscreen" allowfullscreen></iframe>
+//
+// To use HTML5 video:
+// <video class="video-embed" controls poster="thumbnail.jpg"><source src="video.mp4" type="video/mp4"></video>
+
+function loadVideo(iconEl, videoId) {
+  // Example: replace placeholder with YouTube iframe
+  const area = iconEl.closest('.video-area');
+  if (videoId && videoId !== 'YOUTUBE_ID_M1') {
+    area.innerHTML = `<iframe class="video-embed" src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  } else {
+    // Show instruction
+    iconEl.style.background = 'rgba(200,146,10,0.3)';
+    iconEl.style.borderColor = 'var(--gold2)';
+    setTimeout(() => {
+      iconEl.style.background = '';
+      iconEl.style.borderColor = '';
+    }, 800);
+  }
+}
+
+// ── Smooth open first module on page load if hash ────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash;
+  if (hash && hash.startsWith('#m')) {
+    const el = document.querySelector(hash);
+    if (el && el.classList.contains('module-card')) {
+      setTimeout(() => el.classList.add('open'), 400);
+    }
+  }
+});
+</script>
+</body>
+</html>
