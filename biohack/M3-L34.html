@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M3 · L3.4 — Post intermitent | Biohacking 3.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;--teal:#0A7EA4;
+  --ind:#283593;--ind2:#E8EAF6;--ind3:#3949AB;--ind4:#C5CAE9;
+  --gold:#C8920A;--gold2:#E8AE1A;--cream:#FAF7F2;--warm:#F0F4FF;
+  --white:#FFFFFF;--g1:#F0EBE3;--g2:#DDD6CC;--g3:#9A9088;--g4:#5A5248;
+  --dark:#1E1810;--green:#1A6B3C;--green2:#EAF4EE;--leaf:#2E7D32;
+  --red:#B83030;--red2:#FDEAEA;--orange:#C85A0A;--orange2:#FEF2E8;--purple:#5B3FA6;
+  --serif:'DM Serif Display',serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+  --r:10px;--sh1:0 2px 16px rgba(15,30,60,.08);--tr:all .22s cubic-bezier(.4,0,.2,1)
+}
+body{font-family:var(--sans);background:var(--warm);color:var(--dark);line-height:1.7;-webkit-font-smoothing:antialiased}
+.lesson-wrap{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+@media(max-width:900px){.lesson-wrap{grid-template-columns:1fr}}
+.sidebar{background:var(--navy);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;scrollbar-width:none}
+.sidebar::-webkit-scrollbar{display:none}
+.sb-brand{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand-logo{font-family:var(--mono);font-size:.72rem;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;display:block;margin-bottom:.35rem}
+.brand-course{font-size:.78rem;color:rgba(255,255,255,.45);line-height:1.4}
+.sb-nav{padding:.75rem 0;flex:1}
+.nav-lbl{font-family:var(--mono);font-size:.62rem;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;padding:.9rem 1.25rem .35rem}
+.nav-l{display:flex;align-items:center;gap:.65rem;padding:.55rem 1.25rem;text-decoration:none;transition:var(--tr);border-left:2px solid transparent}
+.nav-l:hover{background:rgba(255,255,255,.05)}
+.nav-l.active{background:rgba(40,53,147,.25);border-left-color:var(--ind4)}
+.nav-l.done .nav-l-num::after{content:' ✓';color:var(--green)}
+.nav-l-num{font-family:var(--mono);font-size:.65rem;color:var(--ind4);min-width:24px}
+.nav-l-title{font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.35}
+.nav-l.active .nav-l-title{color:var(--white)}
+.sb-prog{padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.08)}
+.prog-lbl{font-family:var(--mono);font-size:.62rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
+.prog-bar{height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;width:46.6%;background:linear-gradient(90deg,var(--ind),var(--gold2));border-radius:2px}
+.prog-txt{font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.35);margin-top:.4rem}
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{background:var(--white);border-bottom:1px solid var(--g1);padding:.75rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:50;box-shadow:var(--sh1);flex-wrap:wrap}
+.topbar-bc{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--g3)}
+.topbar-bc a{color:var(--ind);text-decoration:none}
+.topbar-bc span{color:var(--g2)}
+.meta-chip{font-family:var(--mono);font-size:.7rem;color:var(--g4)}
+.btn-done{background:var(--ind);color:var(--white);font-family:var(--sans);font-size:.8rem;font-weight:600;padding:.45rem 1.1rem;border-radius:6px;border:none;cursor:pointer;transition:var(--tr)}
+.btn-done:hover{background:var(--ind3)}.btn-done.done{background:var(--green)}
+.read-meta{display:flex;align-items:center;gap:1.5rem;padding:.75rem 2rem;background:var(--ind2);border-bottom:1px solid rgba(40,53,147,.15);font-family:var(--mono);font-size:.7rem;color:var(--g3);flex-wrap:wrap}
+.read-meta a{color:var(--ind);text-decoration:none}
+.hero{background:var(--navy);
+  background-image:radial-gradient(ellipse 65% 55% at 70% 35%,rgba(40,53,147,.35) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 40% at 5% 80%,rgba(57,73,171,.15) 0%,transparent 55%);
+  padding:3rem 2rem 2.5rem;position:relative;overflow:hidden}
+.hero-inner{max-width:820px;position:relative;animation:fadeUp .6s ease both}
+.hero-ey{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.68rem;color:var(--ind4);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}
+.hero-ey::before{content:'';width:20px;height:1px;background:var(--ind4)}
+.hero h1{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.4rem);color:var(--white);line-height:1.2;margin-bottom:.75rem;font-weight:400}
+.hero h1 em{font-style:italic;color:var(--ind4)}
+.hero-desc{font-size:.95rem;color:rgba(255,255,255,.6);max-width:580px;line-height:1.65;margin-bottom:1.5rem}
+.hero-tags{display:flex;gap:.65rem;flex-wrap:wrap}
+.hero-tag{font-family:var(--mono);font-size:.67rem;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.15);padding:.2rem .65rem;border-radius:99px}
+.hero-tag.hl{color:var(--ind4);border-color:rgba(197,202,233,.4)}
+.vid-sec{padding:2rem;background:var(--white);border-bottom:1px solid var(--g1)}
+.vid-wrap{background:var(--navy);border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;max-height:480px;display:flex;align-items:center;justify-content:center}
+.vid-ph{display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center;padding:2rem}
+.play-btn{width:72px;height:72px;border-radius:50%;background:rgba(40,53,147,.3);border:2px solid rgba(40,53,147,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--tr)}
+.play-btn:hover{background:rgba(40,53,147,.55);transform:scale(1.08)}
+.play-btn svg{width:28px;height:28px;fill:white;margin-left:4px}
+.vid-ph p{font-size:.85rem;color:rgba(255,255,255,.5)}.vp-hint{font-family:var(--mono);font-size:.68rem;color:var(--ind4)}
+.body{padding:2.5rem 2rem 4rem;max-width:860px}
+.obj-box{background:var(--white);border:1px solid var(--g1);border-radius:var(--r);padding:1.5rem;margin-bottom:2.5rem;box-shadow:var(--sh1)}
+.obj-lbl{font-family:var(--mono);font-size:.68rem;color:var(--ind);letter-spacing:.1em;text-transform:uppercase;font-weight:500;margin-bottom:.75rem;display:block}
+.obj-list{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.obj-list li{display:flex;align-items:flex-start;gap:.75rem;font-size:.9rem;line-height:1.55}
+.obj-ck{width:18px;height:18px;border-radius:50%;background:var(--ind);color:white;font-size:.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem}
+.eyebrow{font-family:var(--mono);font-size:.67rem;color:var(--ind);letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:.4rem}
+.s-h2{font-family:var(--serif);font-size:1.65rem;color:var(--navy);font-weight:400;line-height:1.25;margin-bottom:.75rem}
+.p{font-size:.94rem;color:var(--g4);line-height:1.75;margin-bottom:.75rem}
+.p strong{color:var(--dark)}
+.div{height:1px;background:linear-gradient(90deg,var(--ind),transparent);margin:2.5rem 0;opacity:.4}
+.callout{border-radius:var(--r);padding:1.25rem 1.5rem;margin:1.25rem 0;border-left:4px solid}
+.callout.ind{background:var(--ind2);border-color:var(--ind)}.callout.green{background:var(--green2);border-color:var(--green)}
+.callout.red{background:var(--red2);border-color:var(--red)}.callout.navy{background:var(--navy);border-color:var(--gold)}
+.callout.orange{background:var(--orange2);border-color:var(--orange)}
+.callout-lbl{font-family:var(--mono);font-size:.65rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.callout.ind .callout-lbl{color:var(--ind)}.callout.green .callout-lbl{color:var(--green)}
+.callout.red .callout-lbl{color:var(--red)}.callout.navy .callout-lbl{color:var(--gold2)}
+.callout.orange .callout-lbl{color:var(--orange)}
+.callout p{font-size:.9rem;line-height:1.65;margin-bottom:.35rem}.callout p:last-child{margin-bottom:0}
+.callout.navy p{color:rgba(255,255,255,.8)}.callout strong{color:var(--dark)}.callout.navy strong{color:#fff}
+/* PROTOCOALE */
+.proto-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:1.25rem 0}
+@media(max-width:580px){.proto-grid{grid-template-columns:1fr}}
+.proto{border-radius:var(--r);padding:1.1rem;border:1px solid;box-shadow:var(--sh1)}
+.proto.p168{background:var(--green2);border-color:#A5D6A7;border-top:4px solid var(--green)}
+.proto.p52{background:var(--ind2);border-color:var(--ind4);border-top:4px solid var(--ind)}
+.proto.p204{background:var(--orange2);border-color:#FFCC80;border-top:4px solid var(--orange)}
+.proto.omad{background:var(--red2);border-color:#EF9A9A;border-top:4px solid var(--red)}
+.proto-name{font-size:.95rem;font-weight:700;margin-bottom:.25rem}
+.p168 .proto-name{color:var(--green)}.p52 .proto-name{color:var(--ind)}.p204 .proto-name{color:var(--orange)}.omad .proto-name{color:var(--red)}
+.proto-window{font-family:var(--mono);font-size:.75rem;font-weight:700;margin-bottom:.35rem}
+.p168 .proto-window{color:var(--green)}.p52 .proto-window{color:var(--ind)}.p204 .proto-window{color:var(--orange)}.omad .proto-window{color:var(--red)}
+.proto-body{font-size:.8rem;color:var(--g4);line-height:1.5}
+/* FAZE IF */
+.faze-if{display:flex;flex-direction:column;gap:.5rem;margin:1.25rem 0;position:relative}
+.faza-if{display:grid;grid-template-columns:110px 1fr;gap:.85rem;background:var(--white);border-radius:var(--r);padding:.85rem 1.1rem;border:1px solid var(--g2);box-shadow:var(--sh1)}
+.faza-if-h{border-radius:8px;padding:.5rem .6rem;text-align:center;align-self:start}
+.faza-if-t{font-family:var(--mono);font-size:.68rem;font-weight:700;line-height:1.2}
+.faza-if-title{font-size:.88rem;font-weight:700;margin-bottom:.2rem;color:var(--navy)}
+.faza-if-body{font-size:.8rem;color:var(--g4);line-height:1.5}
+/* PROFIL beneficiari */
+.profil-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.25rem 0}
+@media(max-width:580px){.profil-grid{grid-template-columns:1fr}}
+.profil{border-radius:var(--r);padding:1rem;border:1px solid var(--g2);background:var(--white);border-left:4px solid var(--ind);box-shadow:var(--sh1)}
+.profil-n{font-family:var(--mono);font-size:.68rem;color:var(--ind);font-weight:700;margin-bottom:.2rem}
+.profil-title{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:.25rem}
+.profil-body{font-size:.79rem;color:var(--g4);line-height:1.5}
+/* EVALUATOR IF */
+.evaluator{background:var(--navy2);border-radius:var(--r);padding:1.5rem;margin:1.25rem 0}
+.ev-title{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.35rem}
+.ev-questions{display:flex;flex-direction:column;gap:.75rem;margin:1rem 0}
+.ev-q{background:rgba(255,255,255,.07);border-radius:8px;padding:.85rem 1.1rem;border:1px solid rgba(255,255,255,.1)}
+.ev-q-text{font-size:.85rem;color:rgba(255,255,255,.85);margin-bottom:.65rem}
+.ev-options{display:flex;gap:.5rem;flex-wrap:wrap}
+.ev-btn{font-size:.75rem;padding:.3rem .75rem;border-radius:99px;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.6);cursor:pointer;transition:var(--tr)}
+.ev-btn:hover{border-color:var(--ind4)}.ev-btn.sel-da{background:rgba(26,107,60,.4);border-color:#80CBC4;color:#fff}
+.ev-btn.sel-nu{background:rgba(184,48,48,.3);border-color:#F48FB1;color:#fff}
+.ev-result{background:rgba(255,255,255,.07);border-radius:8px;padding:1rem;border:1px solid rgba(255,255,255,.1);margin-top:.75rem}
+.ev-res-title{font-size:.9rem;font-weight:700;margin-bottom:.4rem;color:#fff}
+.ev-res-body{font-size:.82rem;color:rgba(255,255,255,.75);line-height:1.55}
+/* KPI */
+.kpi-box{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:var(--r);padding:2rem;margin-top:2rem;border-left:5px solid var(--ind)}
+.kpi-lbl{font-family:var(--mono);font-size:.72rem;color:var(--ind4);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}
+.kpi-box h3{font-family:var(--serif);font-size:1.3rem;color:var(--white);font-weight:400;margin-bottom:.75rem}
+.kpi-steps{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.kpi-steps li{font-size:.88rem;color:rgba(255,255,255,.85);display:flex;gap:.65rem;align-items:baseline;line-height:1.5}
+.kpi-n{font-family:var(--mono);font-size:.75rem;color:var(--ind4);flex-shrink:0}
+.bib-sec{background:var(--ind2);border-top:1px solid rgba(40,53,147,.15);padding:2rem}
+.bib-list{list-style:none;display:flex;flex-direction:column}
+.bib-list li{font-size:.8rem;color:var(--g4);line-height:1.6;padding:.5rem .75rem;border-bottom:1px solid rgba(40,53,147,.1);display:grid;grid-template-columns:1.8rem 1fr;gap:.5rem}
+.bib-n{font-family:var(--mono);font-size:.68rem;color:var(--ind);font-weight:500}
+.bib-list li em{font-style:italic;color:var(--dark)}
+.lesson-nav{padding:1.5rem 2rem;background:var(--white);border-top:1px solid var(--g1);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.nav-btn{display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;color:var(--navy);text-decoration:none;padding:.65rem 1.25rem;border-radius:var(--r);border:1px solid var(--g2);transition:var(--tr);background:var(--white)}
+.nav-btn:hover{border-color:var(--ind);color:var(--ind);background:var(--ind2)}
+.nav-btn.primary{background:var(--ind);color:var(--white);border-color:var(--ind)}.nav-btn.primary:hover{background:var(--ind3)}
+.nav-btn svg{width:16px;height:16px}.nav-btn-lbl{font-size:.7rem;font-weight:400;color:var(--g3);display:block;margin-bottom:.1rem}.nav-btn.primary .nav-btn-lbl{color:rgba(255,255,255,.6)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.sidebar{display:none}}
+</style>
+</head>
+<body>
+<div class="lesson-wrap">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <a href="../index.html" class="brand-logo">NUTRISIB / BH3.0</a>
+      <div class="brand-course">Biohacking 3.0<br>Ingineria sistemului tău biologic</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="nav-lbl">Modulele 1 & 2</div>
+      <a href="m2-l25.html" class="nav-l done"><span class="nav-l-num">1–2</span><span class="nav-l-title">Complet ✓</span></a>
+      <div class="nav-lbl" style="margin-top:.5rem">Modul 3 — Nutriție</div>
+      <a href="m3-l31.html" class="nav-l done"><span class="nav-l-num">3.1</span><span class="nav-l-title">Principiile nutriției</span></a>
+      <a href="m3-l32.html" class="nav-l done"><span class="nav-l-num">3.2</span><span class="nav-l-title">Microbiomul intestinal</span></a>
+      <a href="m3-l33.html" class="nav-l done"><span class="nav-l-num">3.3</span><span class="nav-l-title">Glicemia personalizată</span></a>
+      <a href="m3-l34.html" class="nav-l active"><span class="nav-l-num">3.4</span><span class="nav-l-title">Post intermitent</span></a>
+      <a href="m3-l35.html" class="nav-l"><span class="nav-l-num">3.5</span><span class="nav-l-title">Nutrigenomică și C.E.L.O.S.</span></a>
+      <div class="nav-lbl" style="margin-top:.5rem">Modulele 4–6</div>
+      <a href="#" class="nav-l" style="opacity:.25;pointer-events:none"><span class="nav-l-num">4–6</span><span class="nav-l-title">Se deblochează progresiv</span></a>
+    </nav>
+    <div class="sb-prog">
+      <div class="prog-lbl">Progres curs</div>
+      <div class="prog-bar"><div class="prog-fill"></div></div>
+      <div class="prog-txt">14 / 30 lecții completate</div>
+    </div>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-bc">
+        <a href="../index.html">Biohacking 3.0</a><span>›</span>
+        <a href="#">Modul 3</a><span>›</span>
+        <span style="color:var(--dark);font-weight:500">Lecția 3.4</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap">
+        <span class="meta-chip">⏰ Post intermitent · 22 min</span>
+        <button class="btn-done" id="doneBtn" onclick="markDone()">✓ Marchează completă</button>
+      </div>
+    </div>
+    <div class="read-meta">
+      <span>📖 ~16 min citire</span><span>🎬 ~22 min video</span>
+      <span>📥 <a href="BH30_M3_L34_Material_Curs.pdf">PDF curs</a></span>
+      <span>📄 <a href="BH30_M3_L34_Script_Video.pdf">Script video</a></span>
+    </div>
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-ey">Modul 3 · Lecția 3.4 · Tipar temporal al alimentației</div>
+        <h1>Protocoalele de <em>post intermitent</em></h1>
+        <p class="hero-desc">IF este un instrument, nu un protocol universal. Pentru cine funcționează, pentru cine nu și cum decizi prin datele din jurnalul de biohacking și prin biomarkeri.</p>
+        <div class="hero-tags">
+          <span class="hero-tag hl">16:8 · 5:2 · eTRF</span>
+          <span class="hero-tag">Ritm circadian</span>
+          <span class="hero-tag">HRV ca decident</span>
+          <span class="hero-tag">Masă musculară</span>
+          <span class="hero-tag">Contraindicații</span>
+        </div>
+      </div>
+    </div>
+    <div class="vid-sec">
+      <div class="vid-wrap" id="vWrap">
+        <div class="vid-ph">
+          <div class="play-btn" onclick="loadVid()"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+          <p>Lecția 3.4 — Protocoalele de post intermitent</p>
+          <span class="vp-hint">Adaugă data-video-src="URL" pe #vWrap</span>
+        </div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="obj-box">
+        <span class="obj-lbl">Obiective de învățare</span>
+        <ul class="obj-list">
+          <li><span class="obj-ck">✓</span>Descrii mecanismele biologice ale postului pe faze temporale</li>
+          <li><span class="obj-ck">✓</span>Distingi protocoalele IF și profilul de utilizator pentru fiecare</li>
+          <li><span class="obj-ck">✓</span>Evaluezi dacă IF este potrivit pentru profilul tău prin biomarkeri și jurnal</li>
+          <li><span class="obj-ck">✓</span>Identifici contraindicațiile absolute și relative</li>
+          <li><span class="obj-ck">✓</span>Implementezi gradual IF cu monitorizarea câmpurilor 2, 3 și HRV</li>
+        </ul>
+      </div>
+
+      <span class="eyebrow">Secțiunea 1</span>
+      <h2 class="s-h2">Protocoalele principale</h2>
+      <p class="p">IF nu prescrie ce mănânci, ci când mănânci. <strong>Fereastra timpurie (eTRF) produce beneficii metabolice superioare</strong> față de aceeași fereastră tardivă — alinierea cu ritmul circadian contează.</p>
+
+      <div class="proto-grid">
+        <div class="proto p168"><div class="proto-name">16:8 — cel mai studiat</div><div class="proto-window">16h post · 8h fereastră</div><div class="proto-body">Ex: 12:00–20:00 sau 8:00–16:00 (eTRF, preferabil). Cel mai bun raport beneficiu/aderență. Primul protocol de testat.</div></div>
+        <div class="proto p52"><div class="proto-name">5:2 — flexibil temporal</div><div class="proto-window">5 zile normal · 2 zile ~500 kcal</div><div class="proto-body">Pentru persoane cu program variabil sau la care TRF zilnic este dificil social. Risc: compensarea în zilele normale.</div></div>
+        <div class="proto p204"><div class="proto-name">18:6 / 20:4 — avansat</div><div class="proto-window">18–20h post · 4–6h fereastră</div><div class="proto-body">Numai după adaptare la 16:8. Beneficii metabolice mai pronunțate, dar aderență mai dificilă și risc nutrițional crescut.</div></div>
+        <div class="proto omad"><div class="proto-name">OMAD (23:1) — nerecomandat cronic</div><div class="proto-window">O singură masă pe zi</div><div class="proto-body">Practic imposibil să obții proteina necesară (pragul leucinic per masă). Risc major de pierdere musculară. Nu este recomandat ca protocol cronic.</div></div>
+      </div>
+
+      <div class="div"></div>
+
+      <span class="eyebrow">Secțiunea 2</span>
+      <h2 class="s-h2">Mecanismele biologice pe faze</h2>
+
+      <div class="faze-if">
+        <div class="faza-if"><div class="faza-if-h" style="background:#EAF4EE"><div class="faza-if-t" style="color:var(--green)">8–12 ore</div></div><div><div class="faza-if-title">Postul bazal</div><div class="faza-if-body">Glicemia și insulina scad. Tranziție de la glucoză la grăsimi (lipoliza crește). La persoane cu rezistență la insulina, tranziția este mai lentă.</div></div></div>
+        <div class="faza-if"><div class="faza-if-h" style="background:var(--orange2)"><div class="faza-if-t" style="color:var(--orange)">12–16 ore</div></div><div><div class="faza-if-title">Postul propriu-zis</div><div class="faza-if-body">Ketogeneză ușoară. GH (hormonul de creștere) crește — efect anabolic și lipolitic. Autofagia începe să se activeze.</div></div></div>
+        <div class="faza-if"><div class="faza-if-h" style="background:var(--ind2)"><div class="faza-if-t" style="color:var(--ind)">16–24 ore</div></div><div><div class="faza-if-title">Postul extins</div><div class="faza-if-body">Autofagia mai pronunțată. Cortizolul crește după 24h (răspuns la stres). IGF-1 scade — efect pro-longevitate celular.</div></div></div>
+        <div class="faza-if"><div class="faza-if-h" style="background:var(--red2)"><div class="faza-if-t" style="color:var(--red)">Peste 24h</div></div><div><div class="faza-if-title">Postul prelungit ⚠</div><div class="faza-if-body">Ketogeă marcată + resetare imunitară parțială (Longo, 2019). Risc crescut de pierdere musculară. Necesită supervizare medicală.</div></div></div>
+      </div>
+
+      <div class="div"></div>
+
+      <span class="eyebrow">Secțiunea 3</span>
+      <h2 class="s-h2">Cine beneficiază — profilul potrivit</h2>
+
+      <div class="profil-grid">
+        <div class="profil"><div class="profil-n">Profil 1</div><div class="profil-title">Rezistența la insulina (HOMA-IR &gt;2)</div><div class="profil-body">Perioadele de post reduc expunerea cronică la insulina → down-regulation a rezistenței. Monitorizare: HOMA-IR la 90 zile. Studiu: Sutton, Cell Metabolism 2018.</div></div>
+        <div class="profil"><div class="profil-n">Profil 2</div><div class="profil-title">Grăsime viscerală crescută</div><div class="profil-body">Circumferința abdominală &gt;94 cm bărbați, &gt;80 cm femei. IF mobilizează preferențial grăsimea viscerală (metabolic activă, nu subcutanată).</div></div>
+        <div class="profil"><div class="profil-n">Profil 3</div><div class="profil-title">TG/HDL crescut (&gt;2)</div><div class="profil-body">Nivelul scăzut de insulina în post permite lipoliza → reducerea trigliceridelor și creșterea HDL. Monitorizare la 90 zile.</div></div>
+        <div class="profil"><div class="profil-n">Profil 4</div><div class="profil-title">Alimentație dezorganizată temporal</div><div class="profil-body">Mâncat regulat după ora 21:00. Structurarea ferestrei elimină mâncatul tardiv → alinierea cu ritmul circadian.</div></div>
+      </div>
+
+      <div class="callout red">
+        <div class="callout-lbl">⚠ Contraindicații absolute — evaluare medicală prealabilă</div>
+        <p>Diabet zaharat tip 1 cu insulina exogenă · Tulburări de alimentație în istoric (anorexie, bulimie) · Sarcină și alăptare · Greutate sub normal (IMC &lt;18,5) sau subnutriție</p>
+      </div>
+      <div class="callout orange">
+        <div class="callout-lbl">⬡ Contraindicații relative — monitorizare atentă</div>
+        <p>Femei pre-menopauzale (protocoale blânde 12:12 sau 14:10) · Sportivi de performanță · Cortizol cronic ridicat sau HRV descendent cronic · TSH &gt;3 mUI/L</p>
+      </div>
+
+      <div class="div"></div>
+
+      <span class="eyebrow">Secțiunea 4</span>
+      <h2 class="s-h2">Evaluatorul personal — IF potrivit pentru tine?</h2>
+
+      <div class="evaluator">
+        <div class="ev-title">Răspunde la aceste întrebări pentru a evalua profilul tău IF</div>
+        <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1rem">Apasă Da/Nu pentru fiecare. Evaluarea este orientativă — nu înlocuiește consultația medicală.</div>
+        <div class="ev-questions" id="evQ"></div>
+        <div class="ev-result" id="evResult" style="display:none">
+          <div class="ev-res-title" id="evTitle"></div>
+          <div class="ev-res-body" id="evBody"></div>
+        </div>
+      </div>
+
+      <div class="div"></div>
+
+      <span class="eyebrow">Secțiunea 5</span>
+      <h2 class="s-h2">Cum decizi prin date — protocolul gradual</h2>
+      <p class="p">Nu pornești de la 16:8. Corpul necesită 2–4 săptămâni de adaptare metabolică. Debutul brusc produce oboseală, iritabilitate și abandon.</p>
+
+      <div class="callout navy">
+        <div class="callout-lbl">⬡ Implementarea graduală — 4 etape</div>
+        <p><strong>Săptămânile 1–2: 12:12</strong> — definești prima și ultima masă cu 12h diferență. Câmpul 9 activ zilnic. Aderență &gt;80%.<br><strong>Săptămânile 3–4: 14:10</strong> — extinzi cu 1 oră. Monitorizezi câmpurile 2, 3 și HRV.<br><strong>Săptămânile 5–6: evaluarea</strong> — câmpurile 2, 3 și HRV stabile? Continui spre 16:8. Deteriorate? Rămâi la 14:10.<br><strong>Săptămâna 7+: fereastra optimă personală</strong> — nu neapărat 16:8. Fereastra cu cel mai bun raport beneficiu-aderență pentru TINE.</p>
+      </div>
+
+      <div class="callout ind">
+        <div class="callout-lbl">⬡ Semnalele că IF nu funcționează pentru tine (Lowe, JAMA 2020)</div>
+        <p>HRV scade progresiv și nu revine la baseline după 3 săptămâni · Câmpul 3 (energia) cronic sub 5/10 după 14 zile · Câmpul 2 (somnul) se deteriorează sistematic · Câmpul 4 (stresul) crește în zilele de IF · Iritabilitate și foame excesivă după 21 de zile = lipsa adaptării</p>
+      </div>
+
+      <div class="callout green">
+        <div class="callout-lbl">⬡ Protejarea masei musculare în IF (Lowe, JAMA 2020)</div>
+        <p>Proteina: minimum 1,6–2,0 g/kg distribuită în fereastra de alimentație · Antrenament de rezistență plasat în fereastră sau imediat înainte de prima masă · Prima masă post-antrenament: minimum 35–40 g proteină de înaltă calitate · Monitorizare: greutate + circumferință abdominală la 30 zile</p>
+      </div>
+
+      <div class="kpi-box">
+        <div class="kpi-lbl">⬡ KPI lecția 3.4</div>
+        <h3>Fereastra de alimentație — baseline și decizia IF</h3>
+        <ul class="kpi-steps">
+          <li><span class="kpi-n">→</span>Identifici fereastra de alimentație actuală prin câmpul 9 activ în jurnal (7 zile baseline)</li>
+          <li><span class="kpi-n">→</span>Calculezi durata medie a postului natural actual (fără IF forțat)</li>
+          <li><span class="kpi-n">→</span>Evaluezi profilul personal: HOMA-IR, HRV, câmpul 3 — există indicații de beneficiu potențial?</li>
+          <li><span class="kpi-n">→</span>Dacă da: implementezi gradual 12:12 → 14:10 → 16:8 cu monitorizarea câmpurilor 2, 3 și HRV</li>
+        </ul>
+      </div>
+    </div>
+    <div class="bib-sec">
+      <span class="eyebrow" style="margin-bottom:.6rem">Bibliografie — lecția 3.4</span>
+      <ul class="bib-list">
+        <li><span class="bib-n">[1]</span><span>Sutton, E.F., et al. (2018). Early TRF improves insulin sensitivity. <em>Cell Metabolism</em>, 27(6).</span></li>
+        <li><span class="bib-n">[2]</span><span>Lowe, D.A., et al. (2020). Effects of time-restricted eating. <em>JAMA Internal Medicine</em>, 180(11).</span></li>
+        <li><span class="bib-n">[3]</span><span>Wilkinson, M.J., et al. (2020). Ten-hour TRF reduces weight and atherogenic lipids. <em>Cell Metabolism</em>, 31(1).</span></li>
+        <li><span class="bib-n">[4]</span><span>Longo, V.D. & Panda, S. (2016). Fasting, circadian rhythms and TRF. <em>Cell Metabolism</em>, 23(6).</span></li>
+        <li><span class="bib-n">[5]</span><span>Attia, P. & Gifford, B. (2023). <em>Outlive: The Science and Art of Longevity.</em> Harmony Books.</span></li>
+      </ul>
+    </div>
+    <div class="lesson-nav">
+      <a href="m3-l33.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg><div><span class="nav-btn-lbl">Lecția anterioară</span>3.3 — Glicemia personalizată</div></a>
+      <div style="text-align:center;font-family:var(--mono);font-size:.68rem;color:var(--g3)">Lecția 4 din 5 · Modul 3</div>
+      <a href="m3-l35.html" class="nav-btn primary"><div style="text-align:right"><span class="nav-btn-lbl">Lecția următoare</span>3.5 — Nutrigenomică și C.E.L.O.S.</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+    </div>
+  </div>
+</div>
+<script>
+// Evaluator IF
+const qs=[
+  {text:'HOMA-IR >2 (rezistență la insulina documentată prin analize)?',da:'Indicație pozitivă — IF are efect documentat pe sensibilitatea la insulina.',nu:'Fără rezistență la insulina, beneficiile metabolice ale IF sunt mai puțin clare.'},
+  {text:'Circumferința abdominală >94 cm (bărbați) sau >80 cm (femei)?',da:'Indicație pozitivă — IF mobilizează preferențial grăsimea viscerală.',nu:'Fără grăsime viscerală semnificativă, beneficiul corporal este limitat.'},
+  {text:'Ai în istoric tulburări de alimentație (anorexie, bulimie, restricție compulsivă)?',da:'⚠ Contraindicație relativă sau absolută — IF poate reactiva tipare maladaptive. Consultație medicală obligatorie.',nu:'Nu există contraindicație alimentară. Continuă evaluarea.'},
+  {text:'HRV-ul tău este cronic scăzut sau în trend descendent (câmpul 2 și stresul ridicat)?',da:'Atenție — postul activează cortizolul. Pe un sistem deja hiperstimulat, IF poate agrava stresul biologic. Pornești cu 12:12.',nu:'HRV bun — sistemul nervos autonom are capacitate de adaptare la stresul postului.'},
+  {text:'Ești femeie în perioadă pre-menopauză?',da:'Protocoale blânde recomandate (12:12 sau 14:10). Unele femei raportează perturbarea ciclului la IF agresiv.',nu:'Fără restricție de gen specifică. Continui gradual.'},
+];
+const evContainer=document.getElementById('evQ');
+const ans=new Array(qs.length).fill(null);
+qs.forEach((q,i)=>{
+  const div=document.createElement('div');div.className='ev-q';
+  div.innerHTML=`<div class="ev-q-text">${i+1}. ${q.text}</div>
+    <div class="ev-options">
+      <button class="ev-btn" onclick="ansQ(${i},'da',this)">Da</button>
+      <button class="ev-btn" onclick="ansQ(${i},'nu',this)">Nu</button>
+    </div>`;
+  evContainer.appendChild(div);
+});
+function ansQ(i,val,btn){
+  const opts=btn.parentElement.querySelectorAll('.ev-btn');
+  opts.forEach(b=>{b.classList.remove('sel-da','sel-nu');});
+  btn.classList.add('sel-'+val);
+  ans[i]=val;
+  // arată sfatul pentru întrebarea curentă
+  const q=qs[i];const msg=val==='da'?q.da:q.nu;
+  let tip=btn.closest('.ev-q').querySelector('.ev-q-tip');
+  if(!tip){tip=document.createElement('div');tip.className='ev-q-tip';tip.style.cssText='margin-top:.5rem;font-size:.78rem;color:rgba(255,255,255,.65);padding:.5rem .75rem;background:rgba(255,255,255,.06);border-radius:6px;';btn.closest('.ev-q').appendChild(tip);}
+  tip.textContent=msg;
+  // calcul sumar
+  const filled=ans.filter(a=>a!==null).length;
+  if(filled>=3){
+    const ci=ans.filter((a,idx)=>a==='da'&&[0,1].includes(idx)).length;
+    const ci_neg=ans.filter((a,idx)=>a==='da'&&[2,3,4].includes(idx)).length;
+    const r=document.getElementById('evResult');r.style.display='block';
+    if(ci_neg>=2){
+      document.getElementById('evTitle').textContent='⚠ IF necesită precauție sau contraindicat';
+      document.getElementById('evBody').textContent='Ai identificat factori de risc care necesită evaluare medicală prealabilă sau protocoale blânde (12:12). Discuți cu specialistul NUTRISIB înainte de implementare.';
+    } else if(ci>=1){
+      document.getElementById('evTitle').textContent='✓ IF poate fi benefic pentru profilul tău';
+      document.getElementById('evBody').textContent='Există indicații de beneficiu metabolic potențial. Pornești gradual: 12:12 → 14:10 → evaluare la 4 săptămâni. Monitorizezi câmpurile 2, 3 și HRV.';
+    } else {
+      document.getElementById('evTitle').textContent='→ IF este neutru pentru profilul tău curent';
+      document.getElementById('evBody').textContent='Fără indicații clare de beneficiu sau contraindicații majore. IF poate fi experimentat ca instrument de organizare temporală a alimentației, dar nu ca intervenție metabolică prioritară.';
+    }
+  }
+}
+function markDone(){const b=document.getElementById('doneBtn');const d=b.classList.toggle('done');b.textContent=d?'✓ Completat':'✓ Marchează completă';localStorage.setItem('bh30_m3_l34_done',d?'1':'0');}
+window.addEventListener('DOMContentLoaded',()=>{if(localStorage.getItem('bh30_m3_l34_done')==='1'){const b=document.getElementById('doneBtn');b.classList.add('done');b.textContent='✓ Completat';}});
+function loadVid(){const w=document.getElementById('vWrap'),src=w.dataset.videoSrc;if(src){w.innerHTML=`<video controls autoplay style="width:100%;height:100%"><source src="${src}"></video>`;}else{const h=w.querySelector('.vp-hint');if(h){h.style.color='var(--ind4)';setTimeout(()=>h.style.color='',1200);}}}
+</script>
+</body>
+</html>

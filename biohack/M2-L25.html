@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M2 · L2.5 — Sistemul personal de tracking | Biohacking 3.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;--teal:#0A7EA4;--teal2:#13A0CC;
+  --gold:#C8920A;--gold2:#E8AE1A;--cream:#FAF7F2;--warm:#F2EDE4;
+  --white:#FFFFFF;--g1:#F0EBE3;--g2:#DDD6CC;--g3:#9A9088;--g4:#5A5248;
+  --dark:#1E1810;--green:#1A6B3C;--red:#B83030;--orange:#C85A0A;--purple:#5B3FA6;
+  --serif:'DM Serif Display',serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+  --r:10px;--sh1:0 2px 16px rgba(15,30,60,.08);--tr:all .22s cubic-bezier(.4,0,.2,1)
+}
+body{font-family:var(--sans);background:var(--cream);color:var(--dark);line-height:1.7;-webkit-font-smoothing:antialiased}
+.lesson-wrap{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+@media(max-width:900px){.lesson-wrap{grid-template-columns:1fr}}
+.sidebar{background:var(--navy);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;scrollbar-width:none}
+.sidebar::-webkit-scrollbar{display:none}
+.sb-brand{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand-logo{font-family:var(--mono);font-size:.72rem;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;display:block;margin-bottom:.35rem}
+.brand-course{font-size:.78rem;color:rgba(255,255,255,.45);line-height:1.4}
+.sb-nav{padding:.75rem 0;flex:1}
+.nav-lbl{font-family:var(--mono);font-size:.62rem;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;padding:.9rem 1.25rem .35rem}
+.nav-l{display:flex;align-items:center;gap:.65rem;padding:.55rem 1.25rem;text-decoration:none;transition:var(--tr);border-left:2px solid transparent}
+.nav-l:hover{background:rgba(255,255,255,.05)}
+.nav-l.active{background:rgba(10,126,164,.18);border-left-color:var(--teal2)}
+.nav-l.done .nav-l-num::after{content:' ✓';color:var(--green)}
+.nav-l-num{font-family:var(--mono);font-size:.65rem;color:var(--teal2);min-width:24px}
+.nav-l-title{font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.35}
+.nav-l.active .nav-l-title{color:var(--white)}
+.sb-prog{padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.08)}
+.prog-lbl{font-family:var(--mono);font-size:.62rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
+.prog-bar{height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;width:33.3%;background:linear-gradient(90deg,var(--teal),var(--gold2));border-radius:2px}
+.prog-txt{font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.35);margin-top:.4rem}
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{background:var(--white);border-bottom:1px solid var(--g1);padding:.75rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:50;box-shadow:var(--sh1);flex-wrap:wrap}
+.topbar-bc{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--g3)}
+.topbar-bc a{color:var(--teal);text-decoration:none}
+.topbar-bc span{color:var(--g2)}
+.topbar-meta{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
+.meta-chip{font-family:var(--mono);font-size:.7rem;color:var(--g4)}
+.btn-done{background:var(--teal);color:var(--white);font-family:var(--sans);font-size:.8rem;font-weight:600;padding:.45rem 1.1rem;border-radius:6px;border:none;cursor:pointer;transition:var(--tr)}
+.btn-done:hover{background:var(--teal2)}.btn-done.done{background:var(--green)}
+.read-meta{display:flex;align-items:center;gap:1.5rem;padding:.75rem 2rem;background:var(--warm);border-bottom:1px solid var(--g1);font-family:var(--mono);font-size:.7rem;color:var(--g3);flex-wrap:wrap}
+.read-meta a{color:var(--teal);text-decoration:none}
+.hero{background:var(--navy);
+  background-image:radial-gradient(ellipse 70% 55% at 70% 35%,rgba(200,146,10,.18),transparent 60%),
+    radial-gradient(ellipse 40% 40% at 5% 80%,rgba(26,107,60,.15),transparent 55%);
+  padding:3rem 2rem 2.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.015) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.015) 40px)}
+.hero-inner{max-width:820px;position:relative;animation:fadeUp .6s ease both}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.68rem;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;background:rgba(200,146,10,.12);border:1px solid rgba(200,146,10,.3);padding:.3rem .8rem;border-radius:99px;margin-bottom:1rem}
+.hero h1{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.4rem);color:var(--white);line-height:1.2;margin-bottom:.75rem;font-weight:400}
+.hero h1 em{font-style:italic;color:var(--gold2)}
+.hero-desc{font-size:.95rem;color:rgba(255,255,255,.6);max-width:600px;line-height:1.65;margin-bottom:1.5rem}
+.hero-tags{display:flex;gap:.65rem;flex-wrap:wrap}
+.hero-tag{font-family:var(--mono);font-size:.67rem;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.15);padding:.2rem .65rem;border-radius:99px}
+.hero-tag.hl{color:var(--gold2);border-color:rgba(232,174,26,.4)}
+.vid-sec{padding:2rem;background:var(--white);border-bottom:1px solid var(--g1)}
+.vid-wrap{background:var(--navy);border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;max-height:480px;display:flex;align-items:center;justify-content:center}
+.vid-ph{display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center;padding:2rem}
+.play-btn{width:72px;height:72px;border-radius:50%;background:rgba(200,146,10,.2);border:2px solid rgba(200,146,10,.4);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--tr)}
+.play-btn:hover{background:rgba(200,146,10,.4);transform:scale(1.08)}
+.play-btn svg{width:28px;height:28px;fill:white;margin-left:4px}
+.vid-ph p{font-size:.85rem;color:rgba(255,255,255,.5)}.vp-hint{font-family:var(--mono);font-size:.68rem;color:var(--gold2)}
+.body{padding:2.5rem 2rem 4rem;max-width:860px}
+.obj-box{background:var(--white);border:1px solid var(--g1);border-radius:var(--r);padding:1.5rem;margin-bottom:2.5rem;box-shadow:var(--sh1)}
+.obj-lbl{font-family:var(--mono);font-size:.68rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;font-weight:500;margin-bottom:.75rem;display:block}
+.obj-list{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.obj-list li{display:flex;align-items:flex-start;gap:.75rem;font-size:.9rem;line-height:1.55}
+.obj-ck{width:18px;height:18px;border-radius:50%;background:var(--gold);color:white;font-size:.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem}
+.eyebrow{font-family:var(--mono);font-size:.67rem;color:var(--teal);letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:.4rem}
+.s-h2{font-family:var(--serif);font-size:1.65rem;color:var(--navy);font-weight:400;line-height:1.25;margin-bottom:.75rem}
+.p{font-size:.94rem;color:var(--g4);line-height:1.75;margin-bottom:.75rem}
+.p strong{color:var(--dark)}
+.div{height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:2.5rem 0;opacity:.4}
+.callout{border-radius:var(--r);padding:1.25rem 1.5rem;margin:1.25rem 0;border-left:4px solid}
+.callout.gold{background:#FEF8E8;border-color:var(--gold)}.callout.teal{background:#EAF6FB;border-color:var(--teal)}
+.callout.green{background:#EAF4EE;border-color:var(--green)}.callout.navy{background:var(--navy);border-color:var(--gold)}
+.callout-lbl{font-family:var(--mono);font-size:.65rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.callout.gold .callout-lbl{color:var(--gold)}.callout.teal .callout-lbl{color:var(--teal)}
+.callout.green .callout-lbl{color:var(--green)}.callout.navy .callout-lbl{color:var(--gold2)}
+.callout p{font-size:.9rem;line-height:1.65;margin-bottom:.35rem}.callout p:last-child{margin-bottom:0}
+.callout.navy p{color:rgba(255,255,255,.8)}.callout strong{color:var(--dark)}.callout.navy strong{color:#fff}
+/* COMPONENTE */
+.comp-grid{display:flex;flex-direction:column;gap:.85rem;margin:1.25rem 0}
+.comp{border-radius:var(--r);padding:1.1rem 1.25rem;border:1px solid;display:grid;grid-template-columns:120px 1fr;gap:1rem;box-shadow:var(--sh1)}
+.comp:nth-child(1){background:#EAF6FB;border-color:#9FE1CB;border-left:5px solid var(--teal)}
+.comp:nth-child(2){background:var(--warm);border-color:var(--g2);border-left:5px solid var(--orange)}
+.comp:nth-child(3){background:#EAF4EE;border-color:#C0DD97;border-left:5px solid var(--green)}
+.comp:nth-child(4){background:#F0EBF8;border-color:#CECBF6;border-left:5px solid var(--purple)}
+.comp:nth-child(5){background:#FEF8E8;border-color:#FAC775;border-left:5px solid var(--gold)}
+@media(max-width:500px){.comp{grid-template-columns:1fr}}
+.comp-badge{text-align:center;align-self:start}.comp-badge-n{font-family:var(--serif);font-size:1.3rem;font-weight:700}
+.comp:nth-child(1) .comp-badge-n{color:var(--teal)}.comp:nth-child(2) .comp-badge-n{color:var(--orange)}
+.comp:nth-child(3) .comp-badge-n{color:var(--green)}.comp:nth-child(4) .comp-badge-n{color:var(--purple)}
+.comp:nth-child(5) .comp-badge-n{color:var(--gold)}
+.comp-dur{font-family:var(--mono);font-size:.68rem;color:var(--g3);margin-top:.15rem}
+.comp-title{font-size:.9rem;font-weight:700;margin-bottom:.25rem}
+.comp:nth-child(1) .comp-title{color:var(--teal)}.comp:nth-child(2) .comp-title{color:var(--orange)}
+.comp:nth-child(3) .comp-title{color:var(--green)}.comp:nth-child(4) .comp-title{color:var(--purple)}
+.comp:nth-child(5) .comp-title{color:var(--gold)}
+.comp-body{font-size:.82rem;color:var(--g4);line-height:1.55}
+/* PLAN 90 ZILE */
+.plan-90{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1.25rem 0}
+@media(max-width:580px){.plan-90{grid-template-columns:1fr}}
+.plan-faza{border-radius:var(--r);padding:1.1rem;border:1px solid;box-shadow:var(--sh1)}
+.plan-faza:nth-child(1){background:#EAF6FB;border-color:#9FE1CB;border-top:3px solid var(--teal)}
+.plan-faza:nth-child(2){background:var(--orange2);border-color:#F5C4B3;border-top:3px solid var(--orange)}
+.plan-faza:nth-child(3){background:#EAF4EE;border-color:#C0DD97;border-top:3px solid var(--green)}
+.plan-faza:nth-child(4){background:#F0EBF8;border-color:#CECBF6;border-top:3px solid var(--purple)}
+.plan-saptamani{font-family:var(--mono);font-size:.68rem;color:var(--g3);margin-bottom:.3rem}
+.plan-faza:nth-child(1) .plan-saptamani{color:var(--teal)}.plan-faza:nth-child(2) .plan-saptamani{color:var(--orange)}
+.plan-faza:nth-child(3) .plan-saptamani{color:var(--green)}.plan-faza:nth-child(4) .plan-saptamani{color:var(--purple)}
+.plan-title{font-size:.9rem;font-weight:700;margin-bottom:.4rem;color:var(--navy)}
+.plan-body{font-size:.8rem;color:var(--g4);line-height:1.55}
+/* REZUMAT M2 */
+.rezumat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.75rem;margin:1.25rem 0}
+@media(max-width:700px){.rezumat-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:450px){.rezumat-grid{grid-template-columns:1fr 1fr}}
+.rez-card{border-radius:var(--r);padding:.9rem;text-align:center;border:1px solid;box-shadow:var(--sh1);cursor:default}
+.rez-card:nth-child(1){background:#EAF6FB;border-color:#9FE1CB}.rez-card:nth-child(2){background:var(--orange2);border-color:#F5C4B3}
+.rez-card:nth-child(3){background:#EAF4EE;border-color:#C0DD97}.rez-card:nth-child(4){background:#F0EBF8;border-color:#CECBF6}
+.rez-card:nth-child(5){background:#FEF8E8;border-color:#FAC775}
+.rez-num{font-family:var(--serif);font-size:1.5rem;font-weight:700;margin-bottom:.2rem}
+.rez-card:nth-child(1) .rez-num{color:var(--teal)}.rez-card:nth-child(2) .rez-num{color:var(--orange)}
+.rez-card:nth-child(3) .rez-num{color:var(--green)}.rez-card:nth-child(4) .rez-num{color:var(--purple)}.rez-card:nth-child(5) .rez-num{color:var(--gold)}
+.rez-title{font-size:.75rem;font-weight:700;margin-bottom:.25rem;color:var(--navy)}
+.rez-body{font-size:.7rem;color:var(--g4);line-height:1.4}
+/* FRECVENTE */
+.frecvente-tbl{width:100%;border-collapse:collapse;font-size:.875rem;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh1);margin:1.25rem 0}
+.frecvente-tbl th{background:var(--navy);color:var(--white);font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:.75rem 1rem;text-align:left}
+.frecvente-tbl td{padding:.75rem 1rem;border-bottom:1px solid var(--g1);color:var(--dark);vertical-align:top;line-height:1.55}
+.frecvente-tbl tr:last-child td{border-bottom:none}.frecvente-tbl tr:nth-child(even) td{background:var(--warm)}
+.frecvente-tbl .dur{font-family:var(--mono);font-size:.75rem;color:var(--teal);font-weight:600}
+/* KPI FINAL */
+.kpi-final{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:var(--r);padding:2rem;margin-top:2rem;border:2px solid var(--gold)}
+.kpi-final-badge{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.68rem;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;background:rgba(200,146,10,.15);border:1px solid rgba(200,146,10,.3);padding:.3rem .75rem;border-radius:99px;margin-bottom:1rem}
+.kpi-final h3{font-family:var(--serif);font-size:1.3rem;color:var(--white);font-weight:400;margin-bottom:.5rem}
+.kpi-final-sub{font-size:.85rem;color:rgba(255,255,255,.55);margin-bottom:1.25rem;line-height:1.6}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:.65rem}
+.checklist li{display:flex;align-items:center;gap:.85rem;font-size:.9rem;color:rgba(255,255,255,.9);line-height:1.5}
+.check-box{width:22px;height:22px;border-radius:5px;border:2px solid rgba(200,146,10,.5);background:rgba(200,146,10,.1);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--tr);font-size:.75rem;color:transparent}
+.check-box.checked{background:var(--gold);border-color:var(--gold);color:var(--white)}
+/* M3 preview */
+.m3-preview{background:var(--navy2);border-radius:var(--r);padding:1.5rem;margin-top:1.5rem;border-left:4px solid var(--teal)}
+.m3-label{font-family:var(--mono);font-size:.68rem;color:var(--teal2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem}
+.m3-title{font-family:var(--serif);font-size:1.2rem;color:var(--white);margin-bottom:.75rem;font-weight:400}
+.m3-lecții{display:flex;flex-direction:column;gap:.35rem}
+.m3-lec{display:flex;align-items:center;gap:.65rem;font-size:.84rem;color:rgba(255,255,255,.6)}
+.m3-lec-n{font-family:var(--mono);font-size:.7rem;color:var(--teal2);min-width:2.5rem}
+.bib-sec{background:var(--warm);border-top:1px solid var(--g1);padding:2rem}
+.bib-list{list-style:none;display:flex;flex-direction:column}
+.bib-list li{font-size:.8rem;color:var(--g4);line-height:1.6;padding:.5rem .75rem;border-bottom:1px solid var(--g1);display:grid;grid-template-columns:1.8rem 1fr;gap:.5rem}
+.bib-n{font-family:var(--mono);font-size:.68rem;color:var(--teal);font-weight:500}
+.bib-list li em{font-style:italic;color:var(--dark)}
+.lesson-nav{padding:1.5rem 2rem;background:var(--white);border-top:1px solid var(--g1);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.nav-btn{display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;color:var(--navy);text-decoration:none;padding:.65rem 1.25rem;border-radius:var(--r);border:1px solid var(--g2);transition:var(--tr);background:var(--white)}
+.nav-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--warm)}
+.nav-btn.primary{background:var(--teal);color:var(--white);border-color:var(--teal)}.nav-btn.primary:hover{background:var(--teal2)}
+.nav-btn svg{width:16px;height:16px}.nav-btn-lbl{font-size:.7rem;font-weight:400;color:var(--g3);display:block;margin-bottom:.1rem}.nav-btn.primary .nav-btn-lbl{color:rgba(255,255,255,.6)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.sidebar{display:none}}
+</style>
+</head>
+<body>
+<div class="lesson-wrap">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <a href="../index.html" class="brand-logo">NUTRISIB / BH3.0</a>
+      <div class="brand-course">Biohacking 3.0<br>Ingineria sistemului tău biologic</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="nav-lbl">Modul 1 — completat</div>
+      <a href="m1-l15.html" class="nav-l done"><span class="nav-l-num">1.1–1.5</span><span class="nav-l-title">Modul 1 ✓</span></a>
+      <div class="nav-lbl" style="margin-top:.5rem">Modul 2 — Măsurare</div>
+      <a href="m2-l21.html" class="nav-l done"><span class="nav-l-num">2.1</span><span class="nav-l-title">Jurnalul de biohacking</span></a>
+      <a href="m2-l22.html" class="nav-l done"><span class="nav-l-num">2.2</span><span class="nav-l-title">HRV și wearables</span></a>
+      <a href="m2-l23.html" class="nav-l done"><span class="nav-l-num">2.3</span><span class="nav-l-title">Markeri de laborator</span></a>
+      <a href="m2-l24.html" class="nav-l done"><span class="nav-l-num">2.4</span><span class="nav-l-title">Interpretarea datelor</span></a>
+      <a href="m2-l25.html" class="nav-l active"><span class="nav-l-num">2.5</span><span class="nav-l-title">Sistemul personal de tracking</span></a>
+      <div class="nav-lbl" style="margin-top:.5rem">Modulul 3 — Nutriție</div>
+      <a href="#" class="nav-l" style="opacity:.25;pointer-events:none"><span class="nav-l-num">3.1–3.5</span><span class="nav-l-title">Se deblochează la finalizarea M2</span></a>
+    </nav>
+    <div class="sb-prog">
+      <div class="prog-lbl">Progres curs</div>
+      <div class="prog-bar"><div class="prog-fill" id="pFill"></div></div>
+      <div class="prog-txt" id="pTxt">10 / 30 lecții completate</div>
+    </div>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-bc">
+        <a href="../index.html">Biohacking 3.0</a><span>›</span><a href="#">Modul 2</a><span>›</span>
+        <span style="color:var(--dark);font-weight:500">Lecția 2.5 — Finala modulului</span>
+      </div>
+      <div class="topbar-meta">
+        <span class="meta-chip">⏱ 22 min · Finala modulului</span>
+        <button class="btn-done" id="doneBtn" onclick="markDone()">✓ Marchează completă</button>
+      </div>
+    </div>
+    <div class="read-meta">
+      <span>📖 ~14 min citire</span><span>🎬 ~22 min video</span>
+      <span>📥 <a href="BH30_M2_L25_Material_Curs.pdf">PDF curs</a></span>
+      <span>📄 <a href="BH30_M2_L25_Script_Video.pdf">Script video</a></span>
+    </div>
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-badge">🏁 Lecția finală · Modul 2 · Măsurare fără obsesie</div>
+        <h1>Sistemul personal de <em>tracking</em></h1>
+        <p class="hero-desc">Arhitectura completă a celor 5 componente, planul personal de 90 de zile, regula celor două intervenții simultane și tranziția spre Modulul 3.</p>
+        <div class="hero-tags">
+          <span class="hero-tag hl">5 componente sistem</span>
+          <span class="hero-tag">Plan 90 zile</span>
+          <span class="hero-tag">Regula 2 intervenții</span>
+          <span class="hero-tag">Habit stacking</span>
+          <span class="hero-tag">→ Modulul 3</span>
+        </div>
+      </div>
+    </div>
+    <div class="vid-sec">
+      <div class="vid-wrap" id="vWrap">
+        <div class="vid-ph">
+          <div class="play-btn" onclick="loadVid()"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+          <p>Lecția 2.5 — Sistemul personal de tracking</p>
+          <span class="vp-hint">Adaugă data-video-src="URL" pe #vWrap</span>
+        </div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="obj-box">
+        <span class="obj-lbl">Obiective de învățare</span>
+        <ul class="obj-list">
+          <li><span class="obj-ck">✓</span>Construiești un sistem de tracking sustenabil pe termen lung, fără obsesie</li>
+          <li><span class="obj-ck">✓</span>Descrii cele cinci componente ale sistemului complet</li>
+          <li><span class="obj-ck">✓</span>Proiectezi planul personal de 90 de zile bazat pe datele din Modulul 2</li>
+          <li><span class="obj-ck">✓</span>Aplici regula celor două intervenții simultane și gestionezi eșecul de protocol</li>
+          <li><span class="obj-ck">✓</span>Înțelegi tranziția spre Modulul 3 — nutriție, microbiom și energie</li>
+        </ul>
+      </div>
+
+      <span class="eyebrow">Secțiunea 1</span>
+      <h2 class="s-h2">Cele cinci componente ale sistemului</h2>
+      <p class="p">Sistemul de tracking este mai mult decât un jurnal. <strong>Principiul arhitecturii: trebuie să fie mai simplu decât datele pe care le produce.</strong></p>
+
+      <div class="comp-grid">
+        <div class="comp">
+          <div class="comp-badge"><div class="comp-badge-n">1</div><div class="comp-dur">5–7 min/zi</div></div>
+          <div><div class="comp-title">Captura zilnică</div><div class="comp-body">Dimineața: HRV matinal + scorul de somn (câmpul 2) — 3 minute. Ora 11: energia (câmpul 3) — alarmă, 30 secunde. Seara: câmpurile 4–8 — 2 minute. <strong>Nicio altă verificare de date pe parcursul zilei.</strong></div></div>
+        </div>
+        <div class="comp">
+          <div class="comp-badge"><div class="comp-badge-n">2</div><div class="comp-dur">20 min/săpt.</div></div>
+          <div><div class="comp-title">Review-ul săptămânal</div><div class="comp-body">Duminică seara. Mediile pe câmpuri, delta față de săptămâna trecută, tendința HRV, corelația principală identificată, o singură decizie acționabilă.</div></div>
+        </div>
+        <div class="comp">
+          <div class="comp-badge"><div class="comp-badge-n">3</div><div class="comp-dur">60 min/90 zile</div></div>
+          <div><div class="comp-title">Revizuirea trimestrială</div><div class="comp-body">Analize de laborator noi, compararea cu baseline-ul, ajustarea protocolului C.E.L.O.S., planul pentru trimestrul următor. Output: o pagină de sinteză trimestrială.</div></div>
+        </div>
+        <div class="comp">
+          <div class="comp-badge"><div class="comp-badge-n">4</div><div class="comp-dur">Actualizat săpt.</div></div>
+          <div><div class="comp-title">Dashboard-ul vizual</div><div class="comp-body">Graficele de trending pe câmpurile cheie, rata de aderență la protocol, delta biomarkerilor față de optim funcțional. Template disponibil în resurse (Excel, Notion, caiet A5).</div></div>
+        </div>
+        <div class="comp">
+          <div class="comp-badge"><div class="comp-badge-n">5</div><div class="comp-dur">La 90 zile/nevoie</div></div>
+          <div><div class="comp-title">Consultația NUTRISIB</div><div class="comp-body">Validarea interpretărilor, ajustarea protocolului cu suport clinic, evaluarea biorezonanței, red flags clinice neidentificabile prin auto-monitorizare.</div></div>
+        </div>
+      </div>
+
+      <div class="callout gold">
+        <div class="callout-lbl">⬡ Regula de aur a capturii</div>
+        <p><strong>Consistența bate completitudinea.</strong> 5 câmpuri completate zilnic este mai valoros decât 12 câmpuri completate de 3 ori pe săptămână. Sistemul trebuie să trăiască în rutina ta — nu în aspirațiile tale.</p>
+      </div>
+
+      <div class="div"></div>
+
+      <span class="eyebrow">Secțiunea 2</span>
+      <h2 class="s-h2">Planul personal de 90 de zile</h2>
+      <div class="plan-90">
+        <div class="plan-faza"><div class="plan-saptamani">Săptămânile 1–2</div><div class="plan-title">Baseline (dacă nu e completat)</div><div class="plan-body">Jurnalul fără intervenție nouă. HRV matinal zilnic. Panelul de laborator C.E.L.O.S. Output: media personală per câmp + HRV baseline.</div></div>
+        <div class="plan-faza"><div class="plan-saptamani">Săptămânile 3–6</div><div class="plan-title">Intervenția principală (prioritatea 1)</div><div class="plan-body">O singură intervenție nouă, izolată. Tracking zilnic complet. Review săptămânal pentru monitorizarea tendinței. Verificarea aderenței la săptămâna 4.</div></div>
+        <div class="plan-faza"><div class="plan-saptamani">Săptămânile 7–10</div><div class="plan-title">Consolidarea + adaugi prioritatea 2</div><div class="plan-body">Prima intervenție continuă (dacă eficientă). Adaugi a doua din matricea de prioritizare. Maxim două intervenții active simultan.</div></div>
+        <div class="plan-faza"><div class="plan-saptamani">Săptămânile 11–12</div><div class="plan-title">Evaluarea și planul trimestrului 2</div><div class="plan-body">Analize repetate pentru markerii modificați inițial. Revizuire trimestrială (60 min). Planul ajustat pentru următoarele 90 de zile.</div></div>
+      </div>
+
+      <div class="callout teal">
+        <div class="callout-lbl">⬡ Regula celor două intervenții simultane</div>
+        <p>Nu lansezi mai mult de 2 intervenții noi simultan. <strong>Motivul:</strong> dacă lansezi 5 și te simți mai bine — nu știi care a produs efectul. Dacă nu te simți mai bine — nu știi dacă niciuna n-a funcționat sau una bună a fost anulată de alta. Excepție permisă: corectarea simultană a două deficite documentate independent prin analize.</p>
+      </div>
+
+      <div class="div"></div>
+
+      <span class="eyebrow">Secțiunea 3</span>
+      <h2 class="s-h2">Psihologia sistemului — obiceiuri, nu voință</h2>
+      <p class="p">Un sistem sustenabil este construit pe automatism, nu pe efort zilnic. (Clear, Atomic Habits, 2018)</p>
+
+      <div class="callout green">
+        <div class="callout-lbl">✓ Tehnici de construire a obiceiului</div>
+        <p><strong>Habit stacking:</strong> ataști captura de un obicei existent — „imediat după cafea, completez câmpurile 2 și 5." <strong>Reducerea frecăturii:</strong> caietul pe noptieră, aplicația pe ecranul principal. <strong>Minimum viable tracking:</strong> în perioadele dificile, reduci la 3 câmpuri — somn, energie, intervenție. <strong>Revenirea după pauză:</strong> repornești fără judecată cu un baseline nou de 7 zile.</p>
+      </div>
+
+      <div class="div"></div>
+
+      <span class="eyebrow">Secțiunea 4</span>
+      <h2 class="s-h2">Rezumatul Modulului 2 — ce ai construit</h2>
+      <div class="rezumat-grid">
+        <div class="rez-card"><div class="rez-num">2.1</div><div class="rez-title">Jurnalul</div><div class="rez-body">8 câmpuri, baseline 14 zile, review 15 min/săpt.</div></div>
+        <div class="rez-card"><div class="rez-num">2.2</div><div class="rez-title">HRV</div><div class="rez-body">Trending personal, 4 zone, 4 tehnici respirație</div></div>
+        <div class="rez-card"><div class="rez-num">2.3</div><div class="rez-title">Laborator</div><div class="rez-body">Panel C.E.L.O.S., valori optime, 6 pași citire</div></div>
+        <div class="rez-card"><div class="rez-num">2.4</div><div class="rez-title">Interpretare</div><div class="rez-body">Tablou integrat, zgomot vs. semnal, 4 teste</div></div>
+        <div class="rez-card"><div class="rez-num">2.5</div><div class="rez-title">Sistemul</div><div class="rez-body">5 componente, plan 90 zile, regula celor 2</div></div>
+      </div>
+
+      <table class="frecvente-tbl">
+        <thead><tr><th>Rutina</th><th>Durată</th><th>Momentul</th><th>Output</th></tr></thead>
+        <tbody>
+          <tr><td>Captura zilnică</td><td class="dur">5–7 min</td><td>Dimineața + ora 11 + seara</td><td>Câmpurile 1–8 + HRV completate</td></tr>
+          <tr><td>Review săptămânal</td><td class="dur">20 min</td><td>Duminică seara</td><td>Medii, tendință HRV, o decizie</td></tr>
+          <tr><td>Analiză lunară</td><td class="dur">10 min</td><td>Ziua 30</td><td>Baseline actualizat, aderență cumulată</td></tr>
+          <tr><td>Revizuire trimestrială</td><td class="dur">60 min + analize</td><td>Ziua 90</td><td>Pagina de sinteză, planul trimestrului 2</td></tr>
+          <tr><td>Evaluare anuală</td><td class="dur">120 min</td><td>Aniversar protocol</td><td>Bilanț complet, obiective an următor</td></tr>
+        </tbody>
+      </table>
+
+      <div class="div"></div>
+
+      <!-- KPI FINAL INTERACTIV -->
+      <div class="kpi-final" id="kpiFinal">
+        <div class="kpi-final-badge">🏁 KPI final · Modulul 2 complet</div>
+        <h3>Checklist de finalizare a Modulului 2</h3>
+        <p class="kpi-final-sub">Bifează fiecare element finalizat. La 5/5 — Modulul 2 este complet și Modulul 3 se deblochează.</p>
+        <ul class="checklist" id="checklist">
+          <li><div class="check-box" onclick="toggleCheck(this,0)" id="c0"></div>Jurnalul activ cu minimum 7 zile completate</li>
+          <li><div class="check-box" onclick="toggleCheck(this,1)" id="c1"></div>Baseline-ul HRV personal calculat (media pe 14 zile)</li>
+          <li><div class="check-box" onclick="toggleCheck(this,2)" id="c2"></div>Panelul de laborator inițial C.E.L.O.S. comandat sau programat</li>
+          <li><div class="check-box" onclick="toggleCheck(this,3)" id="c3"></div>Prima pagină de sinteză trimestrială scrisă cu tabloul integrat</li>
+          <li><div class="check-box" onclick="toggleCheck(this,4)" id="c4"></div>Planul de 90 de zile cu intervenția principală identificată</li>
+        </ul>
+        <div id="kpiProgress" style="margin-top:1.25rem;font-family:var(--mono);font-size:.8rem;color:rgba(255,255,255,.55);display:flex;align-items:center;gap:.75rem">
+          <div style="flex:1;height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden">
+            <div id="kpiBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--gold2));border-radius:3px;transition:width .5s ease"></div>
+          </div>
+          <span id="kpiLabel">0 / 5</span>
+        </div>
+      </div>
+
+      <!-- M3 Preview -->
+      <div class="m3-preview">
+        <div class="m3-label">Modulul următor</div>
+        <div class="m3-title">Modulul 3 — Nutriție, microbiom și energie celulară</div>
+        <div class="m3-lecții">
+          <div class="m3-lec"><span class="m3-lec-n">3.1</span>Principiile nutriției pentru longevitate — proteine, calitate vs. cantitate</div>
+          <div class="m3-lec"><span class="m3-lec-n">3.2</span>Microbiomul intestinal — diversitate, disbioză și modulare</div>
+          <div class="m3-lec"><span class="m3-lec-n">3.3</span>Glicemia personalizată — răspunsul individual la alimente (glucometrul ca N=1)</div>
+          <div class="m3-lec"><span class="m3-lec-n">3.4</span>Protocoalele de post intermitent — pentru cine funcționează, pentru cine nu</div>
+          <div class="m3-lec"><span class="m3-lec-n">3.5</span>Nutrigenomică și suplimentele C.E.L.O.S. — dozarea și formele optime</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bib-sec">
+      <span class="eyebrow" style="margin-bottom:.6rem">Bibliografie — lecția 2.5</span>
+      <ul class="bib-list">
+        <li><span class="bib-n">[1]</span><span>Attia, P. & Gifford, B. (2023). <em>Outlive: The Science and Art of Longevity.</em> Harmony Books.</span></li>
+        <li><span class="bib-n">[2]</span><span>Clear, J. (2018). <em>Atomic Habits.</em> Avery Publishing.</span></li>
+        <li><span class="bib-n">[3]</span><span>Sabate, E. (2003). <em>Adherence to Long-term Therapies: Evidence for Action.</em> WHO.</span></li>
+        <li><span class="bib-n">[4]</span><span>Lillie, E.O., et al. (2011). The n-of-1 clinical trial. <em>BMJ</em>, 343, d3350.</span></li>
+        <li><span class="bib-n">[5]</span><span>Duhigg, C. (2012). <em>The Power of Habit.</em> Random House.</span></li>
+      </ul>
+    </div>
+
+    <div class="lesson-nav">
+      <a href="m2-l24.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg><div><span class="nav-btn-lbl">Lecția anterioară</span>2.4 — Interpretarea datelor</div></a>
+      <div style="text-align:center;font-family:var(--mono);font-size:.68rem;color:var(--g3)">Lecția 5 din 5 · Modul 2 ✓ COMPLET</div>
+      <a href="m3-l31.html" class="nav-btn primary"><div style="text-align:right"><span class="nav-btn-lbl">Modulul următor</span>3.1 — Nutriție pentru longevitate</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+    </div>
+  </div>
+</div>
+<script>
+const checks=[false,false,false,false,false];
+function toggleCheck(el,idx){
+  checks[idx]=!checks[idx];
+  el.classList.toggle('checked',checks[idx]);
+  el.textContent=checks[idx]?'✓':'';
+  const done=checks.filter(Boolean).length;
+  document.getElementById('kpiBar').style.width=(done/5*100)+'%';
+  document.getElementById('kpiLabel').textContent=done+' / 5';
+  if(done===5){document.getElementById('kpiFinal').style.borderColor='var(--teal)';document.getElementById('kpiLabel').style.color='var(--gold2)';}
+  localStorage.setItem('bh30_m2_l25_checks',JSON.stringify(checks));
+}
+window.addEventListener('DOMContentLoaded',()=>{
+  const saved=JSON.parse(localStorage.getItem('bh30_m2_l25_checks')||'[false,false,false,false,false]');
+  saved.forEach((v,i)=>{if(v){const el=document.getElementById('c'+i);el.classList.add('checked');el.textContent='✓';checks[i]=true;}});
+  const done=checks.filter(Boolean).length;
+  document.getElementById('kpiBar').style.width=(done/5*100)+'%';
+  document.getElementById('kpiLabel').textContent=done+' / 5';
+  if(localStorage.getItem('bh30_m2_l25_done')==='1'){const b=document.getElementById('doneBtn');b.classList.add('done');b.textContent='✓ Completat';}
+});
+function markDone(){const b=document.getElementById('doneBtn');const d=b.classList.toggle('done');b.textContent=d?'✓ Completat':'✓ Marchează completă';localStorage.setItem('bh30_m2_l25_done',d?'1':'0');if(d){document.getElementById('pFill').style.width='36.6%';document.getElementById('pTxt').textContent='11 / 30 lecții completate';}}
+function loadVid(){const w=document.getElementById('vWrap'),src=w.dataset.videoSrc;if(src){w.innerHTML=`<video controls autoplay style="width:100%;height:100%"><source src="${src}"></video>`;}else{const h=w.querySelector('.vp-hint');if(h){h.style.color='var(--gold2)';setTimeout(()=>h.style.color='',1200);}}}
+</script>
+</body>
+</html>

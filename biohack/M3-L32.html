@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M3 · L3.2 — Microbiomul intestinal | Biohacking 3.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;--teal:#0A7EA4;
+  --teal-m:#00695C;--teal-m2:#E0F2F1;--teal-m3:#80CBC4;
+  --gold:#C8920A;--gold2:#E8AE1A;--cream:#FAF7F2;--warm:#F2EDE4;
+  --white:#FFFFFF;--g1:#F0EBE3;--g2:#DDD6CC;--g3:#9A9088;--g4:#5A5248;
+  --dark:#1E1810;--green:#1A6B3C;--green2:#EAF4EE;--leaf:#2E7D32;--leaf2:#E8F5E9;
+  --red:#B83030;--red2:#FDEAEA;--orange:#C85A0A;--orange2:#FEF2E8;--purple:#5B3FA6;
+  --serif:'DM Serif Display',serif;--sans:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+  --r:10px;--sh1:0 2px 16px rgba(15,30,60,.08);--tr:all .22s cubic-bezier(.4,0,.2,1)
+}
+body{font-family:var(--sans);background:#F0FAF9;color:var(--dark);line-height:1.7;-webkit-font-smoothing:antialiased}
+.lesson-wrap{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+@media(max-width:900px){.lesson-wrap{grid-template-columns:1fr}}
+.sidebar{background:var(--navy);position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;scrollbar-width:none}
+.sidebar::-webkit-scrollbar{display:none}
+.sb-brand{padding:1.5rem 1.25rem 1rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand-logo{font-family:var(--mono);font-size:.72rem;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;display:block;margin-bottom:.35rem}
+.brand-course{font-size:.78rem;color:rgba(255,255,255,.45);line-height:1.4}
+.sb-nav{padding:.75rem 0;flex:1}
+.nav-lbl{font-family:var(--mono);font-size:.62rem;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;padding:.9rem 1.25rem .35rem}
+.nav-l{display:flex;align-items:center;gap:.65rem;padding:.55rem 1.25rem;text-decoration:none;transition:var(--tr);border-left:2px solid transparent}
+.nav-l:hover{background:rgba(255,255,255,.05)}
+.nav-l.active{background:rgba(0,105,92,.25);border-left-color:var(--teal-m3)}
+.nav-l.done .nav-l-num::after{content:' ✓';color:var(--green)}
+.nav-l-num{font-family:var(--mono);font-size:.65rem;color:var(--teal-m3);min-width:24px}
+.nav-l-title{font-size:.8rem;color:rgba(255,255,255,.6);line-height:1.35}
+.nav-l.active .nav-l-title{color:var(--white)}
+.sb-prog{padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,.08)}
+.prog-lbl{font-family:var(--mono);font-size:.62rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
+.prog-bar{height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;width:40%;background:linear-gradient(90deg,var(--teal-m),var(--gold2));border-radius:2px}
+.prog-txt{font-family:var(--mono);font-size:.65rem;color:rgba(255,255,255,.35);margin-top:.4rem}
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{background:var(--white);border-bottom:1px solid var(--g1);padding:.75rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;position:sticky;top:0;z-index:50;box-shadow:var(--sh1);flex-wrap:wrap}
+.topbar-bc{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--g3)}
+.topbar-bc a{color:var(--teal-m);text-decoration:none}
+.topbar-bc span{color:var(--g2)}
+.topbar-meta{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
+.meta-chip{font-family:var(--mono);font-size:.7rem;color:var(--g4)}
+.btn-done{background:var(--teal-m);color:var(--white);font-family:var(--sans);font-size:.8rem;font-weight:600;padding:.45rem 1.1rem;border-radius:6px;border:none;cursor:pointer;transition:var(--tr)}
+.btn-done:hover{background:#004D40}.btn-done.done{background:var(--green)}
+.read-meta{display:flex;align-items:center;gap:1.5rem;padding:.75rem 2rem;background:var(--teal-m2);border-bottom:1px solid rgba(0,105,92,.15);font-family:var(--mono);font-size:.7rem;color:var(--g3);flex-wrap:wrap}
+.read-meta a{color:var(--teal-m);text-decoration:none}
+.hero{background:var(--navy);
+  background-image:radial-gradient(ellipse 65% 55% at 70% 35%,rgba(0,105,92,.3) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 40% at 5% 80%,rgba(0,105,92,.15) 0%,transparent 55%);
+  padding:3rem 2rem 2.5rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.015) 40px)}
+.hero-inner{max-width:820px;position:relative;animation:fadeUp .6s ease both}
+.hero-ey{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.68rem;color:var(--teal-m3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}
+.hero-ey::before{content:'';width:20px;height:1px;background:var(--teal-m3)}
+.hero h1{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.4rem);color:var(--white);line-height:1.2;margin-bottom:.75rem;font-weight:400}
+.hero h1 em{font-style:italic;color:var(--teal-m3)}
+.hero-desc{font-size:.95rem;color:rgba(255,255,255,.6);max-width:580px;line-height:1.65;margin-bottom:1.5rem}
+.hero-tags{display:flex;gap:.65rem;flex-wrap:wrap}
+.hero-tag{font-family:var(--mono);font-size:.67rem;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.15);padding:.2rem .65rem;border-radius:99px}
+.hero-tag.hl{color:var(--teal-m3);border-color:rgba(128,203,196,.4)}
+.vid-sec{padding:2rem;background:var(--white);border-bottom:1px solid var(--g1)}
+.vid-wrap{background:var(--navy);border-radius:var(--r);overflow:hidden;aspect-ratio:16/9;max-height:480px;display:flex;align-items:center;justify-content:center}
+.vid-ph{display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center;padding:2rem}
+.play-btn{width:72px;height:72px;border-radius:50%;background:rgba(0,105,92,.3);border:2px solid rgba(0,105,92,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--tr)}
+.play-btn:hover{background:rgba(0,105,92,.55);transform:scale(1.08)}
+.play-btn svg{width:28px;height:28px;fill:white;margin-left:4px}
+.vid-ph p{font-size:.85rem;color:rgba(255,255,255,.5)}.vp-hint{font-family:var(--mono);font-size:.68rem;color:var(--teal-m3)}
+.body{padding:2.5rem 2rem 4rem;max-width:860px}
+.obj-box{background:var(--white);border:1px solid var(--g1);border-radius:var(--r);padding:1.5rem;margin-bottom:2.5rem;box-shadow:var(--sh1)}
+.obj-lbl{font-family:var(--mono);font-size:.68rem;color:var(--teal-m);letter-spacing:.1em;text-transform:uppercase;font-weight:500;margin-bottom:.75rem;display:block}
+.obj-list{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.obj-list li{display:flex;align-items:flex-start;gap:.75rem;font-size:.9rem;line-height:1.55}
+.obj-ck{width:18px;height:18px;border-radius:50%;background:var(--teal-m);color:white;font-size:.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.15rem}
+.eyebrow{font-family:var(--mono);font-size:.67rem;color:var(--teal-m);letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:.4rem}
+.s-h2{font-family:var(--serif);font-size:1.65rem;color:var(--navy);font-weight:400;line-height:1.25;margin-bottom:.75rem}
+.p{font-size:.94rem;color:var(--g4);line-height:1.75;margin-bottom:.75rem}
+.p strong{color:var(--dark)}
+.div{height:1px;background:linear-gradient(90deg,var(--teal-m),transparent);margin:2.5rem 0;opacity:.4}
+.callout{border-radius:var(--r);padding:1.25rem 1.5rem;margin:1.25rem 0;border-left:4px solid}
+.callout.teal{background:var(--teal-m2);border-color:var(--teal-m)}.callout.green{background:var(--leaf2);border-color:var(--leaf)}
+.callout.red{background:var(--red2);border-color:var(--red)}.callout.gold{background:#FEF8E8;border-color:var(--gold)}
+.callout.navy{background:var(--navy);border-color:var(--gold)}
+.callout-lbl{font-family:var(--mono);font-size:.65rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.5rem}
+.callout.teal .callout-lbl{color:var(--teal-m)}.callout.green .callout-lbl{color:var(--leaf)}
+.callout.red .callout-lbl{color:var(--red)}.callout.gold .callout-lbl{color:var(--gold)}
+.callout.navy .callout-lbl{color:var(--gold2)}
+.callout p{font-size:.9rem;line-height:1.65;margin-bottom:.35rem}.callout p:last-child{margin-bottom:0}
+.callout.navy p{color:rgba(255,255,255,.8)}.callout strong{color:var(--dark)}.callout.navy strong{color:#fff}
+/* COUNTER PLANTE */
+.plante-counter{background:var(--navy2);border-radius:var(--r);padding:1.5rem;margin:1.25rem 0}
+.counter-title{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:.35rem}
+.counter-sub{font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1.25rem}
+.counter-grid{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.plant-chip{font-size:.75rem;padding:.25rem .65rem;border-radius:99px;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);cursor:pointer;transition:var(--tr);user-select:none}
+.plant-chip:hover{border-color:var(--teal-m3)}
+.plant-chip.selected{background:rgba(0,105,92,.4);border-color:var(--teal-m3);color:#fff}
+.counter-result{display:flex;align-items:center;gap:1.25rem;background:rgba(255,255,255,.07);border-radius:8px;padding:.85rem 1.1rem;border:1px solid rgba(255,255,255,.1)}
+.counter-num{font-family:var(--serif);font-size:2.4rem;font-weight:700;line-height:1;transition:color .3s}
+.counter-prog{flex:1;height:8px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden}
+.counter-fill{height:100%;border-radius:4px;transition:width .4s ease,background .4s}
+.counter-lbl{font-size:.82rem;color:rgba(255,255,255,.65);white-space:nowrap}
+/* FACTORII bars */
+.factori-bars{display:flex;flex-direction:column;gap:.75rem;margin:1.25rem 0}
+.fb-row{background:var(--white);border-radius:var(--r);padding:.85rem 1.1rem;border:1px solid var(--g2);box-shadow:var(--sh1)}
+.fb-top{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.5rem}
+.fb-name{color:var(--dark);font-weight:600}
+.fb-pct{font-family:var(--mono);font-size:.78rem;font-weight:700;color:var(--red)}
+.fb-track{height:10px;background:var(--g3);border-radius:5px;overflow:hidden}
+.fb-fill{height:100%;border-radius:5px;width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,var(--red),#F09595)}
+/* PREBIOTICE vs PROBIOTICE vs POSTBIOTICE */
+.ppp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.25rem 0}
+@media(max-width:600px){.ppp-grid{grid-template-columns:1fr}}
+.ppp-card{border-radius:var(--r);padding:1.1rem;border:1px solid;box-shadow:var(--sh1)}
+.ppp-card.pre{background:var(--leaf2);border-color:#A5D6A7;border-top:4px solid var(--leaf)}
+.ppp-card.pro{background:var(--teal-m2);border-color:var(--teal-m3);border-top:4px solid var(--teal-m)}
+.ppp-card.post{background:var(--orange2);border-color:#FFCC80;border-top:4px solid var(--orange)}
+.ppp-title{font-size:.9rem;font-weight:700;margin-bottom:.3rem}
+.pre .ppp-title{color:var(--leaf)}.pro .ppp-title{color:var(--teal-m)}.post .ppp-title{color:var(--orange)}
+.ppp-def{font-size:.78rem;color:var(--g4);margin-bottom:.4rem;line-height:1.45;font-style:italic}
+.ppp-ex{font-size:.78rem;color:var(--dark);font-weight:500}
+/* FERMENTATE */
+.ferm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;margin:1.25rem 0}
+@media(max-width:600px){.ferm-grid{grid-template-columns:1fr 1fr}}
+.ferm-card{background:var(--white);border-radius:var(--r);padding:.95rem;border:1px solid var(--g2);border-top:3px solid var(--teal-m);box-shadow:var(--sh1);text-align:center}
+.ferm-icon{font-size:1.5rem;margin-bottom:.3rem}
+.ferm-name{font-size:.84rem;font-weight:700;color:var(--navy);margin-bottom:.2rem}
+.ferm-body{font-size:.74rem;color:var(--g4);line-height:1.45}
+/* DISBIOZE tabs */
+.disbioze-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.dis-tab{font-size:.8rem;font-weight:600;padding:.35rem .85rem;border-radius:99px;cursor:pointer;border:1px solid var(--g2);background:var(--white);color:var(--g4);transition:var(--tr)}
+.dis-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.dis-panel{display:none}.dis-panel.active{display:block}
+/* KPI */
+.kpi-box{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:var(--r);padding:2rem;margin-top:2rem;border-left:5px solid var(--teal-m)}
+.kpi-lbl{font-family:var(--mono);font-size:.72rem;color:var(--teal-m3);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}
+.kpi-box h3{font-family:var(--serif);font-size:1.3rem;color:var(--white);font-weight:400;margin-bottom:.75rem}
+.kpi-steps{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.kpi-steps li{font-size:.88rem;color:rgba(255,255,255,.85);display:flex;gap:.65rem;align-items:baseline;line-height:1.5}
+.kpi-n{font-family:var(--mono);font-size:.75rem;color:var(--teal-m3);flex-shrink:0}
+.bib-sec{background:var(--teal-m2);border-top:1px solid rgba(0,105,92,.15);padding:2rem}
+.bib-list{list-style:none;display:flex;flex-direction:column}
+.bib-list li{font-size:.8rem;color:var(--g4);line-height:1.6;padding:.5rem .75rem;border-bottom:1px solid rgba(0,105,92,.1);display:grid;grid-template-columns:1.8rem 1fr;gap:.5rem}
+.bib-n{font-family:var(--mono);font-size:.68rem;color:var(--teal-m);font-weight:500}
+.bib-list li em{font-style:italic;color:var(--dark)}
+.lesson-nav{padding:1.5rem 2rem;background:var(--white);border-top:1px solid var(--g1);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.nav-btn{display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;color:var(--navy);text-decoration:none;padding:.65rem 1.25rem;border-radius:var(--r);border:1px solid var(--g2);transition:var(--tr);background:var(--white)}
+.nav-btn:hover{border-color:var(--teal-m);color:var(--teal-m);background:var(--teal-m2)}
+.nav-btn.primary{background:var(--teal-m);color:var(--white);border-color:var(--teal-m)}.nav-btn.primary:hover{background:#004D40}
+.nav-btn svg{width:16px;height:16px}.nav-btn-lbl{font-size:.7rem;font-weight:400;color:var(--g3);display:block;margin-bottom:.1rem}.nav-btn.primary .nav-btn-lbl{color:rgba(255,255,255,.6)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.sidebar{display:none}}
+</style>
+</head>
+<body>
+<div class="lesson-wrap">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <a href="../index.html" class="brand-logo">NUTRISIB / BH3.0</a>
+      <div class="brand-course">Biohacking 3.0<br>Ingineria sistemului tău biologic</div>
+    </div>
+    <nav class="sb-nav">
+      <div class="nav-lbl">Modulele 1 & 2</div>
+      <a href="m2-l25.html" class="nav-l done"><span class="nav-l-num">1–2</span><span class="nav-l-title">Complet ✓</span></a>
+      <div class="nav-lbl" style="margin-top:.5rem">Modul 3 — Nutriție</div>
+      <a href="m3-l31.html" class="nav-l done"><span class="nav-l-num">3.1</span><span class="nav-l-title">Principiile nutriției</span></a>
+      <a href="m3-l32.html" class="nav-l active"><span class="nav-l-num">3.2</span><span class="nav-l-title">Microbiomul intestinal</span></a>
+      <a href="m3-l33.html" class="nav-l"><span class="nav-l-num">3.3</span><span class="nav-l-title">Glicemia personalizată</span></a>
+      <a href="m3-l34.html" class="nav-l"><span class="nav-l-num">3.4</span><span class="nav-l-title">Post intermitent</span></a>
+      <a href="m3-l35.html" class="nav-l"><span class="nav-l-num">3.5</span><span class="nav-l-title">Nutrigenomică și C.E.L.O.S.</span></a>
+      <div class="nav-lbl" style="margin-top:.5rem">Modulele 4–6</div>
+      <a href="#" class="nav-l" style="opacity:.25;pointer-events:none"><span class="nav-l-num">4–6</span><span class="nav-l-title">Se deblochează progresiv</span></a>
+    </nav>
+    <div class="sb-prog">
+      <div class="prog-lbl">Progres curs</div>
+      <div class="prog-bar"><div class="prog-fill" id="pFill"></div></div>
+      <div class="prog-txt" id="pTxt">12 / 30 lecții completate</div>
+    </div>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-bc">
+        <a href="../index.html">Biohacking 3.0</a><span>›</span>
+        <a href="#">Modul 3</a><span>›</span>
+        <span style="color:var(--dark);font-weight:500">Lecția 3.2</span>
+      </div>
+      <div class="topbar-meta">
+        <span class="meta-chip">🦠 Microbiom · 22 min</span>
+        <button class="btn-done" id="doneBtn" onclick="markDone()">✓ Marchează completă</button>
+      </div>
+    </div>
+    <div class="read-meta">
+      <span>📖 ~16 min citire</span><span>🎬 ~22 min video</span>
+      <span>📥 <a href="BH30_M3_L32_Material_Curs.pdf">PDF curs</a></span>
+      <span>📄 <a href="BH30_M3_L32_Script_Video.pdf">Script video</a></span>
+    </div>
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-ey">Modul 3 · Lecția 3.2 · Nutriție pentru longevitate</div>
+        <h1>Microbiomul <em>intestinal</em></h1>
+        <p class="hero-desc">39 de trilioane de microorganisme — organ metabolic, imun și neurochimic activ. Diversitate, disbioză și cele mai eficiente strategii de modulare.</p>
+        <div class="hero-tags">
+          <span class="hero-tag hl">30 plante/săptămână</span>
+          <span class="hero-tag">Axa intestin-creier</span>
+          <span class="hero-tag">Akkermansia muciniphila</span>
+          <span class="hero-tag">Butirat</span>
+          <span class="hero-tag">Alimente fermentate</span>
+        </div>
+      </div>
+    </div>
+    <div class="vid-sec">
+      <div class="vid-wrap" id="vWrap">
+        <div class="vid-ph">
+          <div class="play-btn" onclick="loadVid()"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+          <p>Lecția 3.2 — Microbiomul intestinal</p>
+          <span class="vp-hint">Adaugă data-video-src="URL" pe #vWrap</span>
+        </div>
+      </div>
+    </div>
+    <div class="body">
+      <div class="obj-box">
+        <span class="obj-lbl">Obiective de învățare</span>
+        <ul class="obj-list">
+          <li><span class="obj-ck">✓</span>Descrii ce este microbiomul intestinal și rolul lui de organ metabolic, imun și neurochimic</li>
+          <li><span class="obj-ck">✓</span>Identifici factorii care reduc diversitatea și cum îi recunoști în contextul tău</li>
+          <li><span class="obj-ck">✓</span>Recunoști disbioza — manifestările clinice și sistemice</li>
+          <li><span class="obj-ck">✓</span>Aplici strategia celor 30 de plante pe săptămână și alimentele fermentate</li>
+          <li><span class="obj-ck">✓</span>Distingi prebioticele, probioticele și postbioticele cu mecanismele și dovezile lor</li>
+        </ul>
+      </div>
+
+      <!-- S1 — Cifrele microbiomului -->
+      <span class="eyebrow">Secțiunea 1</span>
+      <h2 class="s-h2">Microbiomul — organul metabolic ignorat</h2>
+      <p class="p">Nu un simplu „ajutor digestiv" — un organ cu 2–3 milioane de gene, 1,5–2 kg de masă activă și funcții documentate asupra energiei, cogniției, imunității și longevității.</p>
+
+      <div class="callout teal">
+        <div class="callout-lbl">⬡ Axa intestin-creier — cele 3 canale (Cryan, 2019)</div>
+        <p><strong>Nervul vag:</strong> 80% din fibre sunt aferente (intestin → creier). <strong>SCFA:</strong> butiratul, propionatul și acetatul traversează bariera intestinală și influențează funcția cerebrală. <strong>Neurotrânsmițători intestinali:</strong> 90% din serotonina corporală produsă intestinal. Disbioza este corelată cu depresia, anxietatea și deteriorarea cognitivă.</p>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S2 — Factorii distructivi -->
+      <span class="eyebrow">Secțiunea 2</span>
+      <h2 class="s-h2">Factorii care distrug diversitatea</h2>
+      <p class="p">Modernizarea a redus dramatic diversitatea față de populațiile tradiționale. Cunoașterea factorilor este primul pas spre modulare.</p>
+
+      <div class="factori-bars" id="factoriBars">
+        <div class="fb-row"><div class="fb-top"><span class="fb-name">Antibioticele</span><span class="fb-pct">−25–30% diversitate per curs</span></div><div class="fb-track"><div class="fb-fill" data-w="95"></div></div></div>
+        <div class="fb-row"><div class="fb-top"><span class="fb-name">Dieta săracă în fibre (&lt;15 g/zi)</span><span class="fb-pct">Impact cronic major</span></div><div class="fb-track"><div class="fb-fill" data-w="85"></div></div></div>
+        <div class="fb-row"><div class="fb-top"><span class="fb-name">Alimentele ultra-procesate (emulgatori)</span><span class="fb-pct">Perturbă mucusul intestinal</span></div><div class="fb-track"><div class="fb-fill" data-w="75"></div></div></div>
+        <div class="fb-row"><div class="fb-top"><span class="fb-name">Stresul cronic (cortizol)</span><span class="fb-pct">Crește permeabilitatea intestinală</span></div><div class="fb-track"><div class="fb-fill" data-w="65"></div></div></div>
+        <div class="fb-row"><div class="fb-top"><span class="fb-name">Somnul insuficient / perturbat</span><span class="fb-pct">Modificare în 24–48h (Thaiss, Cell 2014)</span></div><div class="fb-track"><div class="fb-fill" data-w="55"></div></div></div>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S3 — Disbioza tabs -->
+      <span class="eyebrow">Secțiunea 3</span>
+      <h2 class="s-h2">Disbioza — manifestările sistemice</h2>
+      <p class="p">Disbioza nu este doar balonare. Perturbarea microbiomului se manifestă sistemic prin mecanismul sindromului de intestin permeabil (LPS → inflamație cronică).</p>
+
+      <div class="disbioze-tabs">
+        <button class="dis-tab active" onclick="switchDis(this,'dd')">🫃 Digestive</button>
+        <button class="dis-tab" onclick="switchDis(this,'ds')">⚡ Sistemice</button>
+        <button class="dis-tab" onclick="switchDis(this,'dn')">🧠 Neurocomportamentale</button>
+      </div>
+      <div class="dis-panel active" id="dd">
+        <div class="callout teal"><div class="callout-lbl">⬡ Manifestări digestive (vizibile)</div><p>Balonare cronică · Tranzit instabil (constipație alternând cu diaree) · Sensibilitate alimentară dobândită · Reflux acid recurent · Greață post-prandială fără cauza aparentă</p></div>
+      </div>
+      <div class="dis-panel" id="ds">
+        <div class="callout red"><div class="callout-lbl">⚠ Manifestări sistemice (adesea neatribuite microbiomului)</div><p>Oboseală cronică inexplicabilă · Ceață mentală (brain fog) · Rezistența la insulină · <strong>CRP hs crescut</strong> fără cauza identificată · Probleme cutanate (acnee, eczeme, psoriazis) · Alergii alimentare dobândite la adult</p></div>
+      </div>
+      <div class="dis-panel" id="dn">
+        <div class="callout gold"><div class="callout-lbl">⬡ Manifestări neurocomportamentale (axa intestin-creier)</div><p>Anxietate și depresie corelate cu disbioza · Tulburări de somn (serotonina intestinală → melatonina) · Dificultăți cognitive și de memorie · Modificări ale apetitului și ale comportamentului alimentar</p></div>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S4 — 30 plante counter -->
+      <span class="eyebrow">Secțiunea 4</span>
+      <h2 class="s-h2">Strategia celor 30 de plante pe săptămână</h2>
+      <p class="p"><strong>Sonnenburg et al. (Cell, 2022):</strong> diversitatea plantelor consumate este cel mai puternic predictor al diversității microbiomului. Selectează ce ai mâncat săptămâna aceasta.</p>
+
+      <div class="plante-counter">
+        <div class="counter-title">Câte plante diferite ai mâncat săptămâna aceasta?</div>
+        <div class="counter-sub">Bifează fiecare categorie prezentă. Orice cantitate contează — chiar și o jumătate de linguriță de condiment.</div>
+        <div class="counter-grid" id="planteGrid"></div>
+        <div class="counter-result">
+          <div class="counter-num" id="counterNum" style="color:var(--red)">0</div>
+          <div style="flex:1">
+            <div class="counter-prog"><div class="counter-fill" id="counterFill" style="width:0%"></div></div>
+            <div class="counter-lbl" id="counterLbl" style="margin-top:.3rem;font-size:.78rem;color:rgba(255,255,255,.6)">Target: 30 plante diferite pe săptămână</div>
+          </div>
+          <div style="font-size:.75rem;color:rgba(255,255,255,.5);text-align:right" id="counterPct">0 / 30</div>
+        </div>
+      </div>
+
+      <!-- S5 — Fermentate -->
+      <h2 class="s-h2" style="margin-top:2rem">Alimentele fermentate — sursă directă de microorganisme</h2>
+      <p class="p"><strong>Sonnenburg (2022):</strong> 10 săptămâni de alimente fermentate crescute → creștere semnificativă a diversității microbiomului și reducere a 17 markeri inflamatori. Mai eficiente decât fibrele singure pentru diversitate.</p>
+
+      <div class="ferm-grid">
+        <div class="ferm-card"><div class="ferm-icon">🥛</div><div class="ferm-name">Iaurt viu</div><div class="ferm-body">L. bulgaricus + S. thermophilus. Cel mai studiat. Baza zilnică.</div></div>
+        <div class="ferm-card"><div class="ferm-icon">🥤</div><div class="ferm-name">Kefir</div><div class="ferm-body">30–50 tulpini bacterii + drojdii. Reduce permeabilitatea intestinală.</div></div>
+        <div class="ferm-card"><div class="ferm-icon">🥬</div><div class="ferm-name">Varza murată</div><div class="ferm-body">L. plantarum + vitamina C + fibre. Sinergie prebiotic-probiotic.</div></div>
+        <div class="ferm-card"><div class="ferm-icon">🌶️</div><div class="ferm-name">Kimchi</div><div class="ferm-body">Similar varza murată + condimente cu efect antiinflamator suplimentar.</div></div>
+        <div class="ferm-card"><div class="ferm-icon">🫘</div><div class="ferm-name">Tempeh</div><div class="ferm-body">Soia fermentată — proteina completă + microbiom. Disponibil în RO.</div></div>
+        <div class="ferm-card"><div class="ferm-icon">🧀</div><div class="ferm-name">Brânzeturi maturate</div><div class="ferm-body">Activ numai dacă nepasteurizate (burduf, Brie, Camembert artizanal).</div></div>
+      </div>
+
+      <div class="div"></div>
+
+      <!-- S6 — Pre/Pro/Post -->
+      <span class="eyebrow">Secțiunea 5</span>
+      <h2 class="s-h2">Prebiotice, probiotice și postbiotice</h2>
+
+      <div class="ppp-grid">
+        <div class="ppp-card pre">
+          <div class="ppp-title">🌿 Prebioticele</div>
+          <div class="ppp-def">Substrat fermentabil de către bacteriile benefice</div>
+          <div class="ppp-ex">Inulina, FOS, beta-glucani (ovăz), amidon rezistent · Efect cumulat cronic</div>
+        </div>
+        <div class="ppp-card pro">
+          <div class="ppp-title">🦠 Probioticele</div>
+          <div class="ppp-def">Microorganisme vii cu beneficiu documentat (OMS, 2001)</div>
+          <div class="ppp-ex">L. rhamnosus GG, S. boulardii, B. longum · Efect cât administrarea + 2–4 săpt.</div>
+        </div>
+        <div class="ppp-card post">
+          <div class="ppp-title">⚗️ Postbioticele</div>
+          <div class="ppp-def">Metaboliți microbieni cu efect direct (ISAPP, 2021)</div>
+          <div class="ppp-ex">Butiratul, SCFA, exopolizaharide · Efect direct, fără colonizare</div>
+        </div>
+      </div>
+
+      <div class="callout green">
+        <div class="callout-lbl">⬡ Akkermansia muciniphila — specia markerului longevității</div>
+        <p>3–5% din microbiomul uman sănătos. Scade dramatic la obezitate și diabet tip 2. <strong>Plovier (Nature Medicine, 2017):</strong> administrarea la oameni cu sindrom metabolic → îmbunătățire semnificativă a sensibilității la insulina. Cum o crești: polifenoli din fructe de pădure, ceai verde, rodie, cacao; beta-glucani din ovăz; post intermitent.</p>
+      </div>
+
+      <div class="kpi-box">
+        <div class="kpi-lbl">⬡ KPI lecția 3.2</div>
+        <h3>Baseline microbiom — câmpurile 12 și 13 active</h3>
+        <ul class="kpi-steps">
+          <li><span class="kpi-n">→</span>Numeri câte plante diferite ai consumat în ultima săptămână — baseline câmpul 12</li>
+          <li><span class="kpi-n">→</span>Estimezi câte porții de alimente fermentate ai pe zi — câmpul 13 activ în jurnal</li>
+          <li><span class="kpi-n">→</span>Identifici cel mai mare factor perturbator al microbiomului tău (antibiotice recente, UPF, stres, somn)</li>
+          <li><span class="kpi-n">→</span>Planifici adăugarea a 5 plante noi în săptămâna viitoare față de obiceiul curent</li>
+        </ul>
+      </div>
+    </div>
+    <div class="bib-sec">
+      <span class="eyebrow" style="margin-bottom:.6rem">Bibliografie — lecția 3.2</span>
+      <ul class="bib-list">
+        <li><span class="bib-n">[1]</span><span>Cryan, J.F., et al. (2019). The Microbiota-Gut-Brain Axis. <em>Physiological Reviews</em>, 99(4).</span></li>
+        <li><span class="bib-n">[2]</span><span>Sonnenburg, J.L., et al. (2022). Gut-microbiota-targeted diets. <em>Cell</em>, 184(16).</span></li>
+        <li><span class="bib-n">[3]</span><span>Chassaing, B., et al. (2015). Dietary emulsifiers impact gut microbiota. <em>Nature</em>, 519.</span></li>
+        <li><span class="bib-n">[4]</span><span>Plovier, H., et al. (2017). Akkermansia muciniphila improves metabolism. <em>Nature Medicine</em>, 23(1).</span></li>
+        <li><span class="bib-n">[5]</span><span>Mailing, L.J., et al. (2019). Exercise and the Gut Microbiome. <em>Exercise Sport Sci Rev</em>, 47(2).</span></li>
+        <li><span class="bib-n">[6]</span><span>Hill, C., et al. (2014). ISAPP consensus on probiotics. <em>Nat Rev Gastroenterol</em>, 11(8).</span></li>
+      </ul>
+    </div>
+    <div class="lesson-nav">
+      <a href="m3-l31.html" class="nav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg><div><span class="nav-btn-lbl">Lecția anterioară</span>3.1 — Principiile nutriției</div></a>
+      <div style="text-align:center;font-family:var(--mono);font-size:.68rem;color:var(--g3)">Lecția 2 din 5 · Modul 3</div>
+      <a href="m3-l33.html" class="nav-btn primary"><div style="text-align:right"><span class="nav-btn-lbl">Lecția următoare</span>3.3 — Glicemia personalizată</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></a>
+    </div>
+  </div>
+</div>
+<script>
+// Plante counter
+const plante=[
+  'Spanac','Broccoli','Morcovi','Ardei','Roșii','Vinete','Dovlecei','Varză','Conopidă','Sfeclă',
+  'Fasole','Linte','Năut','Mazăre','Soia/Tempeh','Ovăz','Quinoa','Orez brun','Hrișcă','Grâu integral',
+  'Mere','Banane','Afine','Zmeură','Portocale','Lămâi','Avocado','Rodie','Kiwi','Struguri',
+  'Nuci','Migdale','Semințe dovleac','Semințe floarea-soarelui','Semințe in','Chia',
+  'Usturoi','Ceapă','Praz','Ghimbir','Turmeric','Scorțișoară','Ardei iute','Oregano','Busuioc','Pătrunjel'
+];
+const grid=document.getElementById('planteGrid');
+let selected=0;
+plante.forEach(p=>{
+  const chip=document.createElement('div');
+  chip.className='plant-chip';
+  chip.textContent=p;
+  chip.addEventListener('click',()=>{
+    chip.classList.toggle('selected');
+    selected=document.querySelectorAll('.plant-chip.selected').length;
+    updateCounter();
+  });
+  grid.appendChild(chip);
+});
+function updateCounter(){
+  const n=document.getElementById('counterNum');
+  n.textContent=selected;
+  const pct=Math.min(100,Math.round(selected/30*100));
+  const fill=document.getElementById('counterFill');
+  fill.style.width=pct+'%';
+  fill.style.background=selected>=30?'linear-gradient(90deg,#1A6B3C,#81C784)':selected>=20?'linear-gradient(90deg,#C8920A,#E8AE1A)':'linear-gradient(90deg,#B83030,#F09595)';
+  n.style.color=selected>=30?'#81C784':selected>=20?'var(--gold2)':'var(--red)';
+  document.getElementById('counterPct').textContent=selected+' / 30';
+  document.getElementById('counterLbl').textContent=selected>=30?'🎉 Target atins! Microbiom bine aprovizionat':selected>=20?`Bine — mai adaugă ${30-selected} plante`:selected>=10?`${30-selected} plante distanță de target`:`Baseline: ${selected} plante. Target: 30.`;
+}
+
+// Factori bars animate
+const fIO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.fb-fill').forEach(b=>{b.style.width=b.dataset.w+'%';});fIO.unobserve(e.target);}});
+},{threshold:.3});
+fIO.observe(document.getElementById('factoriBars'));
+
+// Disbioza tabs
+function switchDis(btn,id){
+  document.querySelectorAll('.dis-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.dis-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');document.getElementById(id).classList.add('active');
+}
+
+function markDone(){const b=document.getElementById('doneBtn');const d=b.classList.toggle('done');b.textContent=d?'✓ Completat':'✓ Marchează completă';localStorage.setItem('bh30_m3_l32_done',d?'1':'0');}
+window.addEventListener('DOMContentLoaded',()=>{if(localStorage.getItem('bh30_m3_l32_done')==='1'){const b=document.getElementById('doneBtn');b.classList.add('done');b.textContent='✓ Completat';}});
+function loadVid(){const w=document.getElementById('vWrap'),src=w.dataset.videoSrc;if(src){w.innerHTML=`<video controls autoplay style="width:100%;height:100%"><source src="${src}"></video>`;}else{const h=w.querySelector('.vp-hint');if(h){h.style.color='var(--teal-m3)';setTimeout(()=>h.style.color='',1200);}}}
+</script>
+</body>
+</html>
