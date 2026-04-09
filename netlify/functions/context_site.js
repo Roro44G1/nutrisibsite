@@ -1,7 +1,7 @@
 // ============================================
 // CONTEXT SITE NUTRISIB - GENERAT AUTOMAT
 // Nu edita manual - regenereaza cu agent_context.py
-// Generat: 2026-04-09 14:19
+// Generat: 2026-04-09 14:29
 // Pagini indexate: 329
 // ============================================
 
