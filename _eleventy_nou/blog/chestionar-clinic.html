@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluare clinică și chestionar multidimensional – SSD și anxietate de examen</title>
+    <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .nota-clinica {
+            background: #fef9ec;
+            border-left: 4px solid var(--color-gold);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0;
+            font-size: 0.93rem;
+            color: #5a4200;
+        }
+        .nota-clinica strong { color: #7a5a00; }
+
+        .ref-inline {
+            font-size: 0.75em;
+            vertical-align: super;
+            color: var(--color-brand-medium);
+            font-weight: 700;
+        }
+
+        .tabel-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1rem 0; }
+        .tabel-wrap table { width: 100%; border-collapse: collapse; font-size: 0.88rem; min-width: 440px; }
+        .tabel-wrap th, .tabel-wrap td {
+            padding: 0.6rem 0.85rem;
+            border: 1px solid var(--color-border);
+            vertical-align: top;
+            line-height: 1.45;
+            text-align: left;
+        }
+        .tabel-wrap th { background: var(--color-navy); color: white; font-weight: 700; font-family: 'Inter', sans-serif; }
+        .tabel-wrap tr:nth-child(even) td { background: var(--color-pearl); }
+
+        /* Carduri de întrebări */
+        .q-card {
+            background: white;
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.85rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .q-card .q-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.6rem;
+        }
+        .q-num {
+            background: var(--color-brand-medium);
+            color: white;
+            min-width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 800;
+            font-family: 'Montserrat', sans-serif;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
+        }
+        .q-text {
+            font-weight: 700;
+            color: var(--color-navy);
+            font-size: 0.95rem;
+            line-height: 1.45;
+        }
+        .q-body { padding-left: 2.15rem; }
+        .q-scop {
+            font-size: 0.83rem;
+            color: var(--color-text-light);
+            margin-bottom: 0.3rem;
+        }
+        .q-scop strong { color: var(--color-brand-medium); }
+        .q-interpretare {
+            font-size: 0.83rem;
+            color: var(--color-text-medium);
+            background: var(--color-brand-light);
+            border-radius: 6px;
+            padding: 0.4rem 0.65rem;
+            border-left: 3px solid var(--color-brand-medium);
+        }
+        .q-interpretare strong { color: var(--color-navy); }
+
+        /* Secțiuni chestionar */
+        .sectiune-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+        .sectiune-badge {
+            background: var(--color-navy);
+            color: var(--color-gold);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .sectiune-title {
+            font-family: 'Lora', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-navy);
+            margin: 0;
+        }
+
+        /* Pattern-uri */
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+        @media (max-width: 640px) { .pattern-grid { grid-template-columns: 1fr; } }
+        .pattern-card {
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            border-left: 4px solid;
+        }
+        .pattern-card.p1 { background: #eff6ff; border-color: var(--color-brand-medium); }
+        .pattern-card.p2 { background: #fef2f2; border-color: var(--col-sanatate); }
+        .pattern-card.p3 { background: #fef9ec; border-color: var(--color-gold); }
+        .pattern-card.p4 { background: #f0fdf4; border-color: var(--col-nutritie); }
+        .pattern-card h5 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin: 0 0 0.3rem 0;
+            color: var(--color-navy);
+        }
+        .pattern-card p {
+            font-size: 0.83rem;
+            color: var(--color-text-medium);
+            margin: 0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+<div class="container-main">
+
+    <!-- NAV -->
+    <nav class="nav-bar">
+        <a href="/" class="nav-brand">
+            <span>NutriSib</span>
+        </a>
+        <button class="mobile-menu-btn" onclick="this.closest('.nav-bar').querySelector('.nav-links').classList.toggle('show')" aria-label="Meniu">☰</button>
+        <div class="nav-links">
+            <a href="/">Acasă</a>
+            <a href="/blog" class="active">Blog</a>
+            <a href="/servicii">Servicii</a>
+            <a href="/contact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- BACK LINK -->
+    <div style="margin-bottom:1rem;">
+        <a href="somatizarea.html" style="font-size:0.85rem; color:var(--color-brand-medium); font-weight:700; text-decoration:none;">
+            ← Înapoi la articolul principal
+        </a>
+    </div>
+
+    <!-- HERO -->
+    <div class="blog-hero">
+        <h1>Capitol 6 — Evaluare clinică</h1>
+        <p>Chestionar multidimensional de cabinet, instrumente standardizate și diagnostic diferențial pentru SSD și anxietate de performanță</p>
+    </div>
+
+    <div class="nota-clinica">
+        ⚠️ <strong>Notă:</strong> Chestionarul de mai jos nu este un instrument de diagnostic standardizat, ci un <strong>ghid de formulare clinică</strong>. Interpretarea se face pe patternuri, nu pe itemi izolați. Utilizarea sa este adresată exclusiv profesioniștilor din sănătate mintală sau medicilor cu formare clinică adecvată.
+    </div>
+
+    <!-- JUMP BAR -->
+    <div class="jump-bar">
+        <a href="#trei-straturi">Evaluare în 3 straturi</a>
+        <a href="#chestionar">Chestionar clinic</a>
+        <a href="#instrumente">Instrumente standardizate</a>
+        <a href="#patternuri">Interpretare patternuri</a>
+        <a href="#diagnostic-diferential">Diagnostic diferențial</a>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         EVALUAREA ÎN TREI STRATURI
+    ══════════════════════════════════════════════ -->
+    <div class="art-card" id="trei-straturi">
+        <div class="section-anchor-header">
+            <h2>6.1 Evaluarea în trei straturi</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+
+        <p>Înaintea construirii intervenției, recomandarea științifică este o evaluare în trei straturi complementare: <span class="ref-inline">[1, 2, 4]</span></p>
+
+        <div class="method-grid">
+            <div class="method-card">
+                <div class="method-header">
+                    <div class="method-number">1</div>
+                    <h3 class="method-title">Evaluare medicală</h3>
+                </div>
+                <p style="font-size:0.9rem; color:var(--color-text-medium);">Excluderea sau confirmarea unei probleme medicale active printr-un workup proporționat, <strong>nu excesiv</strong>: hemoleucogramă, funcție tiroidiană, vitamina D, B12, feritină, funcție hepatică — condiționat de simptome și context. <span class="ref-inline">[1, 2]</span></p>
+            </div>
+            <div class="method-card">
+                <div class="method-header">
+                    <div class="method-number">2</div>
+                    <h3 class="method-title">Evaluare psihologică</h3>
+                </div>
+                <p style="font-size:0.9rem; color:var(--color-text-medium);">SSD, anxietate, depresie, panică, traumă, perfecționism, atașament, stiluri de coping — folosind instrumente validate (PHQ-15, GAD-7, PCL-5, SOMS-7, TAS-20). <span class="ref-inline">[3, 39, 40]</span></p>
+            </div>
+            <div class="method-card">
+                <div class="method-header">
+                    <div class="method-number">3</div>
+                    <h3 class="method-title">Evaluare funcțională</h3>
+                </div>
+                <p style="font-size:0.9rem; color:var(--color-text-medium);">Ce nu mai poate face persoana, ce evită, cât timp consumă simptomul și ce rol joacă familia. Evaluarea include și contextul cultural al simptomelor. <span class="ref-inline">[2, 1]</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         CHESTIONAR MULTIDIMENSIONAL
+    ══════════════════════════════════════════════ -->
+    <div class="art-card" id="chestionar">
+        <div class="section-anchor-header">
+            <h2>6.2 Chestionar multidimensional de cabinet</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+
+        <p>Chestionarul acoperă 8 domenii funcționale. Fiecare întrebare include scopul diagnostic și interpretarea clinică orientativă.</p>
+
+        <!-- SECȚIUNEA A -->
+        <div class="sectiune-header">
+            <span class="sectiune-badge">Secțiunea A</span>
+            <h4 class="sectiune-title">Simptomul</h4>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">1</div>
+                <div class="q-text">„Ce simptome apar exact înaintea examenelor sau evaluărilor?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> clarifică topografia simptomelor.</p>
+                <div class="q-interpretare">Simptomele autonome, digestive, cefaleea, amețeala, greața sau palpitațiile cu pattern recurent pre-examen susțin răspunsul de stres. <span class="ref-inline">[7, 10, 2]</span></div>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">2</div>
+                <div class="q-text">„Cu câte ore sau zile înainte apar și cât durează?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> identifici relația temporală cu triggerul.</p>
+                <div class="q-interpretare">Apariția anticipatorie și remiterea rapidă după anularea amenințării sugerează <strong>condiționare anxioasă și evitare întărită</strong>. <span class="ref-inline">[2]</span></div>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">3</div>
+                <div class="q-text">„Care este primul gând când apare simptomul?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> detectezi credința centrală.</p>
+                <div class="q-interpretare">„O să pățesc ceva", „nu mai fac față", „mă fac de rușine" indică fie catastrofizare somatică, fie frică de eșec social. <span class="ref-inline">[3, 2]</span></div>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">4</div>
+                <div class="q-text">„Cât de periculos ți se pare simptomul pe o scară de la 0 la 10?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> cuantifici appraisal-ul amenințării.</p>
+                <div class="q-interpretare">Scorurile mari (7–10) arată amplificarea cognitivă a senzației — indicator central în SSD. <span class="ref-inline">[2]</span></div>
+            </div>
+        </div>
+
+        <!-- SECȚIUNEA B -->
+        <div class="sectiune-header">
+            <span class="sectiune-badge">Secțiunea B</span>
+            <h4 class="sectiune-title">Evitarea</h4>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">5</div>
+                <div class="q-text">„Ce faci imediat după ce apar simptomele?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> identifici comportamentele de siguranță.</p>
+                <div class="q-interpretare">Retragerea, anularea, căutarea de reasigurări, automedicația sau checking-ul mențin problema și consolidează patternul. <span class="ref-inline">[2]</span></div>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">6</div>
+                <div class="q-text">„Ce se schimbă în corp și în minte după ce decizi să nu mergi la examen?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> testezi întărirea negativă.</p>
+                <div class="q-interpretare">Dacă anxietatea scade rapid după luarea deciziei de a evita, <strong>evitarea devine autoîntărită</strong> — mecanism central al menținerii SSD. <span class="ref-inline">[2]</span></div>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">7</div>
+                <div class="q-text">„Dacă ai merge totuși, ce crezi că s-ar întâmpla?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> scoți la suprafață scenariul catastrofic.</p>
+                <div class="q-interpretare">Răspunsurile pot indica frica de leșin, panică, rușine, critică parentală sau destrămare a imaginii de sine — relevante pentru planul terapeutic. <span class="ref-inline">[2]</span></div>
+            </div>
+        </div>
+
+        <!-- SECȚIUNEA C -->
+        <div class="sectiune-header">
+            <span class="sectiune-badge">Secțiunea C</span>
+            <h4 class="sectiune-title">Emoțiile</h4>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">8</div>
+                <div class="q-text">„Ce emoție îți este cel mai greu să spui cu voce tare: frică, rușine, furie, tristețe sau neputință?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> explorezi alexitimia și mentalizarea emoțiilor.</p>
+                <div class="q-interpretare">Răspunsurile vagi sau exclusiv corporale sugerează <strong>canalizare somatică a afectului</strong> — indicator de alexitimie. <span class="ref-inline">[3, 2]</span></div>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">9</div>
+                <div class="q-text">„Când spui că «te-ai îmbolnăvit», ce parte crezi că a fost corp și ce parte a fost stres?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> evaluezi insight-ul.</p>
+                <div class="q-interpretare">Un minim insight al legăturii minte-corp ajută mult prognosticul și complianța la terapie. <span class="ref-inline">[2]</span></div>
+            </div>
+        </div>
+
+        <!-- SECȚIUNEA D -->
+        <div class="sectiune-header">
+            <span class="sectiune-badge">Secțiunea D</span>
+            <h4 class="sectiune-title">Istoria familială</h4>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">10</div>
+                <div class="q-text">„Cum erau trăite în familie greșelile, eșecurile și examenele?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> investighezi schema performanță–valoare personală.</p>
+                <div class="q-interpretare">Critica, comparația și condiționarea iubirii de rezultat cresc vulnerabilitatea la anxietate de performanță. <span class="ref-inline">[9, 12, 2]</span></div>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">11</div>
+                <div class="q-text">„Când erai mic(ă), boala aducea grijă, protecție sau scutire?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> explorezi învățarea relațională a rolului simptomului.</p>
+                <div class="q-interpretare">Dacă boala aducea îngrijire și suspendarea cerințelor, simptomul poate fi reactivat inconștient în situații similare. <span class="ref-inline">[2, 44]</span></div>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">12</div>
+                <div class="q-text">„Cât spațiu real ai să iei singur(ă) decizii importante?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> evaluezi autonomia și dependența.</p>
+                <div class="q-interpretare">Autonomie scăzută și dependență puternică pot transforma examenul într-o criză de identitate, nu doar de performanță. <span class="ref-inline">[2, 42]</span></div>
+            </div>
+        </div>
+
+        <!-- SECȚIUNEA E -->
+        <div class="sectiune-header">
+            <span class="sectiune-badge">Secțiunea E</span>
+            <h4 class="sectiune-title">Traumă și rușine</h4>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">13</div>
+                <div class="q-text">„Ai avut experiențe de umilire, bullying, critică extremă, abuz, abandon sau evenimente șocante?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> screening de traumă.</p>
+                <div class="q-interpretare">Trauma crește riscul de simptome somatice și hiperarousal. Trauma nu trebuie presupusă automat — uneori mecanismul central este anxietatea de performanță fără istoric traumatic major. <span class="ref-inline">[14, 13, 2]</span></div>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">14</div>
+                <div class="q-text">„Există situații în care corpul tău a vorbit în locul tău?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> introduci limbaj simbolic fără a impune explicația.</p>
+                <div class="q-interpretare">Poate facilita conștientizarea conexiunii minte-corp fără a declanșa rezistență defensivă. <span class="ref-inline">[2]</span></div>
+            </div>
+        </div>
+
+        <!-- SECȚIUNEA F -->
+        <div class="sectiune-header">
+            <span class="sectiune-badge">Secțiunea F</span>
+            <h4 class="sectiune-title">Perfecționism și imagine</h4>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">15</div>
+                <div class="q-text">„Cât de important este pentru tine să pari impecabil(ă), controlat(ă), admirat(ă)?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> explorezi investiția în imagine și legătura cu valoarea de sine.</p>
+                <div class="q-interpretare">Dacă valoarea de sine depinde de aparență și aprobare externă, examenul devine <strong>amenințare existențială pentru self</strong>. <span class="ref-inline">[7, 2]</span></div>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">16</div>
+                <div class="q-text">„Ce ar spune ceilalți despre tine dacă ai pica examenul?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> evaluezi rușinea socială anticipatorie.</p>
+                <div class="q-interpretare">Răspunsurile pline de rușine indică un nucleu de self fragil și teamă de devalorizare socială. <span class="ref-inline">[2]</span></div>
+            </div>
+        </div>
+
+        <!-- SECȚIUNEA G -->
+        <div class="sectiune-header">
+            <span class="sectiune-badge">Secțiunea G</span>
+            <h4 class="sectiune-title">Funcționarea</h4>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">17</div>
+                <div class="q-text">„Cât timp pe zi consumi gândindu-te la simptome sau la examen?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> măsori preocuparea — criteriu central în SSD.</p>
+                <div class="q-interpretare">Mai mult de 1–2 ore/zi dedicate gândurilor despre simptome reprezintă un indicator diagnostic important pentru SSD. <span class="ref-inline">[2, 21]</span></div>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">18</div>
+                <div class="q-text">„Ce ți-a fost afectat concret: somn, studiu, muncă, relații, ieșiri?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> măsori impactul funcțional.</p>
+                <div class="q-interpretare">Afectarea funcțională în mai multe domenii este criteriu diagnostic relevant și indicator de severitate. <span class="ref-inline">[2]</span></div>
+            </div>
+        </div>
+
+        <!-- SECȚIUNEA H -->
+        <div class="sectiune-header">
+            <span class="sectiune-badge">Secțiunea H</span>
+            <h4 class="sectiune-title">Stilul de coping</h4>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">19</div>
+                <div class="q-text">„Când ești sub presiune, tinzi să lupți, să îngheți, să fugi sau să te agăți de cineva?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> conturezi răspunsul defensiv dominant.</p>
+                <div class="q-interpretare">Freeze și flight apar frecvent în stres intens și traumă. Identificarea stilului defensiv orientează alegerea metodei terapeutice. <span class="ref-inline">[15, 2]</span></div>
+            </div>
+        </div>
+
+        <div class="q-card">
+            <div class="q-header">
+                <div class="q-num">20</div>
+                <div class="q-text">„Ce ți-a ajutat vreodată cu adevărat, chiar și puțin?"</div>
+            </div>
+            <div class="q-body">
+                <p class="q-scop"><strong>Scop:</strong> identifici resurse și excepții.</p>
+                <div class="q-interpretare">Excepțiile de la pattern oferă baza intervenției — ce a funcționat deja poate fi amplificat și generalizat. <span class="ref-inline">[2]</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         INSTRUMENTE STANDARDIZATE
+    ══════════════════════════════════════════════ -->
+    <div class="art-card" id="instrumente">
+        <div class="section-anchor-header">
+            <h2>6.3 Instrumente standardizate recomandate</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+
+        <div class="tabel-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Instrument</th>
+                        <th>Ce măsoară</th>
+                        <th>Utilizare clinică</th>
+                        <th>Referință</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>PHQ-15</strong></td>
+                        <td>Simptome somatice — 15 itemi (durere, oboseală, tulburări digestive etc.)</td>
+                        <td>Screening SSD și monitorizare a evoluției</td>
+                        <td><a href="https://reference.medscape.com/calculator/460/patient-health-questionnaire-15-phq-15" target="_blank" rel="noopener">↗</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>GAD-7</strong></td>
+                        <td>Anxietate generalizată — 7 itemi</td>
+                        <td>Comorbiditate frecventă cu SSD; screening rapid</td>
+                        <td>Spitzer et al., 2006</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PHQ-9</strong></td>
+                        <td>Depresie — 9 itemi</td>
+                        <td>Screening depresie comorbidă cu SSD</td>
+                        <td>Kroenke et al., 2001</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PCL-5 / IES-R</strong></td>
+                        <td>Simptome post-traumatice (PTSD)</td>
+                        <td>Indicat când există suspiciune de traumă</td>
+                        <td>Weathers et al., 2013</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TAS-20</strong></td>
+                        <td>Alexitimie — 20 de itemi (identificare, descriere emoții, gândire externă)</td>
+                        <td>Relevant la SSD cu dificultăți de verbalizare emoțională</td>
+                        <td>Bagby et al., 1994</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SOMS-7</strong></td>
+                        <td>Tulburare somatoformă — evaluare comprehensivă</td>
+                        <td>Evaluare completă a simptomelor multiple; utilă în cercetare și clinică</td>
+                        <td>Rief et al., 1997</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DSM-5 Level 2 — Somatic</strong></td>
+                        <td>Nivelul de distres asociat simptomelor somatice</td>
+                        <td>Completare pacient; măsoară severitatea per simptom <span class="ref-inline">[40]</span></td>
+                        <td><a href="https://www.psychiatry.org/File%20Library/Psychiatrists/Practice/DSM/APA_DSM5_Level-2-Somatic-Symptom-Adult.pdf" target="_blank" rel="noopener">↗</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p><em>Tabel 3. Instrumente standardizate recomandate pentru evaluarea clinică a SSD.</em></p>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         INTERPRETARE PATTERNURI
+    ══════════════════════════════════════════════ -->
+    <div class="art-card" id="patternuri">
+        <div class="section-anchor-header">
+            <h2>6.4 Interpretarea clinică: patternuri</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+
+        <p>Interpretarea nu se face pe itemi izolați, ci pe <strong>configurații de răspunsuri</strong> care conturează un pattern coerent. Patternurile identificate orientează alegerea strategiei terapeutice.</p>
+
+        <div class="pattern-grid">
+            <div class="pattern-card p1">
+                <h5>Somatizare / anxietate de performanță</h5>
+                <p>Trigger clar de evaluare, simptome anticipatorii, catastrofizare, ușurare prin evitare, body-scanning, afectare funcțională. <span class="ref-inline">[10, 2, 7]</span></p>
+            </div>
+            <div class="pattern-card p2">
+                <h5>Traumă</h5>
+                <p>Triggerul activează rușine, neputință, freeze, hiperreactivitate corporală; istoric de umilire sau amenințare; posibile simptome disociative. <span class="ref-inline">[13, 14, 30]</span></p>
+            </div>
+            <div class="pattern-card p3">
+                <h5>Dependență / autonomie blocată</h5>
+                <p>Boala suspendă cerințele, activează protecția figurilor de atașament și evită testul maturizării. Identitate difuză, anxietate de separare. <span class="ref-inline">[2, 42]</span></p>
+            </div>
+            <div class="pattern-card p4">
+                <h5>Perfecționism narcisic vulnerabil</h5>
+                <p>Imagine externă puternică, intoleranță la greșeală, rușine extremă la posibilitatea eșecului, investiție masivă în aparență. <span class="ref-inline">[7, 2, 11]</span></p>
+            </div>
+        </div>
+
+        <div class="nota-clinica">
+            📋 Patternurile nu sunt mutual exclusive — la același pacient pot coexista elemente din două sau mai multe configurații. Formularea clinică trebuie să reflecte această complexitate, nu să reducă tabloul la o singură etichetă.
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         DIAGNOSTIC DIFERENȚIAL
+    ══════════════════════════════════════════════ -->
+    <div class="art-card" id="diagnostic-diferential">
+        <div class="section-anchor-header">
+            <h2>6.5 Diagnostic diferențial</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+
+        <p>Trebuie diferențiate: <span class="ref-inline">[4, 2, 1]</span></p>
+
+        <div class="tabel-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Diagnostic</th>
+                        <th>Trăsături distinctive față de SSD</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>SSD (tulburare cu simptome somatice)</strong></td><td>Simptome persistente + gânduri/emoții/comportamente excesive față de simptome; fără necesitatea inexplicabilității medicale</td></tr>
+                    <tr><td>Illness Anxiety Disorder (ipohondrie)</td><td>Preocupare centrată pe posibilitatea bolii grave, cu simptome minime sau absente</td></tr>
+                    <tr><td>Panic Disorder</td><td>Atacuri de panică discrete, clare, cu frică de moarte sau pierdere a controlului; poate coexista cu SSD</td></tr>
+                    <tr><td>Generalized Anxiety Disorder</td><td>Îngrijorare persistentă și necontrolabilă pe multiple domenii, nu doar pe simptome somatice</td></tr>
+                    <tr><td>Major Depressive Disorder</td><td>Simptomele somatice apar în context de anhedonie, tristețe profundă, modificări somn/apetit</td></tr>
+                    <tr><td>PTSD</td><td>Simptomele legate de un eveniment traumatic identificabil; reexperimentare, evitare, hipervigilență</td></tr>
+                    <tr><td>Tulburări de personalitate</td><td>Pattern pervaziv stabil; dificultăți relaționale și de identitate transversale</td></tr>
+                    <tr><td>Afecțiune medicală reală sau comorbidă</td><td>SSD poate coexista cu IBS, fibromialgie, aritmii benigne, hipotiroidism — evaluare medicală obligatorie</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <p><em>Tabel — Diagnostic diferențial SSD.</em></p>
+
+        <div class="nota-clinica">
+            📋 <strong>SSD nu este un diagnostic de excludere.</strong> Studiile din 2024–2025 subliniază că SSD poate coexista cu patologie somatică reală. Evaluarea trebuie să fie atentă, proporționată și continuă — fără investigații exhaustive inutile și fără ignorarea simptomelor. <span class="ref-inline">[1, 26, 27]</span>
+        </div>
+
+        <div style="margin-top:2rem; text-align:center;">
+            <a href="somatizarea.html" class="btn">← Înapoi la articolul principal</a>
+            &nbsp;&nbsp;
+            <a href="script-cabinet.html" class="btn-pearl btn">→ Capitol 7: Script de cabinet</a>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', () => navLinks.classList.toggle('show'));
+    }
+});
+const sectIds2 = ['trei-straturi','chestionar','instrumente','patternuri','diagnostic-diferential'];
+window.addEventListener('scroll', () => {
+    let current = '';
+    sectIds2.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 100) current = id;
+    });
+    document.querySelectorAll('.jump-bar a').forEach(a => {
+        const href = a.getAttribute('href');
+        a.style.background = (href === '#' + current) ? 'var(--color-navy)' : '';
+        a.style.color = (href === '#' + current) ? 'white' : '';
+        a.style.borderColor = (href === '#' + current) ? 'var(--color-navy)' : '';
+    });
+}, { passive: true });
+</script>
+<script>fetch('https://nutrisib.club/footer.html').then(r=>r.text()).then(data=>{const c=document.getElementById('footer-placeholder');if(c)c.innerHTML=data;}).catch(()=>{});</script>
+<script src="https://nutrisib.club/script_protect.js" defer></script>
+</body>
+</html>
