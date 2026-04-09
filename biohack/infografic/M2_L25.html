@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infografic: Sistemul personal de tracking — arhitectura completă</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0F1E3C;--navy2:#162A50;--teal:#0A7EA4;--teal2:#13A0CC;
+  --gold:#C8920A;--gold2:#E8AE1A;--gold3:#FEF8E8;
+  --green:#1A6B3C;--green2:#EAF4EE;
+  --red:#B83030;--red2:#FDEAEA;
+  --orange:#C85A0A;--orange2:#FEF2E8;
+  --purple:#5B3FA6;--purple2:#F0EBF8;
+  --g1:#FAF7F2;--g2:#F2EDE4;--g3:#DDD6CC;--g4:#9A9088;--g5:#5A5248;
+  --white:#fff;
+}
+html{font-size:16px}
+body{font-family:'Inter',sans-serif;background:#F5F2EC;color:#1E1810;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 3rem}
+
+/* HEADER */
+.header{text-align:center;padding:2.5rem 2rem;background:var(--navy);border-radius:16px;margin-bottom:2rem;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 60% 40%,rgba(200,146,10,.2),transparent 60%),radial-gradient(ellipse 40% 40% at 5% 80%,rgba(10,126,164,.15),transparent 55%)}
+.header-badge{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:600;color:var(--gold2);letter-spacing:.14em;text-transform:uppercase;background:rgba(200,146,10,.12);border:1px solid rgba(200,146,10,.3);padding:.3rem .85rem;border-radius:99px;margin-bottom:1rem;position:relative}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.3rem);font-weight:900;color:#fff;line-height:1.15;position:relative;margin-bottom:.75rem}
+.header h1 em{font-style:italic;color:var(--gold2)}
+.header-sub{font-size:.9rem;color:rgba(255,255,255,.6);position:relative;max-width:680px;margin:0 auto}
+.header-stats{display:flex;justify-content:center;gap:2.5rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);position:relative;flex-wrap:wrap}
+.hstat-n{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--gold2);line-height:1}
+.hstat-l{font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem}
+.section-label{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem;display:block}
+
+/* ROATA SISTEMULUI */
+.wheel-section{background:var(--white);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem;border:1px solid var(--g3);box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.wheel-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.85rem;margin:1rem 0}
+@media(max-width:700px){.wheel-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:420px){.wheel-grid{grid-template-columns:1fr 1fr}}
+.wheel-card{border-radius:12px;padding:1.1rem;text-align:center;border:1px solid;cursor:default;transition:transform .2s,box-shadow .2s}
+.wheel-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
+.wc1{background:#EAF6FB;border-color:#9FE1CB;border-top:4px solid var(--teal)}
+.wc2{background:var(--orange2);border-color:#F5C4B3;border-top:4px solid var(--orange)}
+.wc3{background:var(--green2);border-color:#C0DD97;border-top:4px solid var(--green)}
+.wc4{background:var(--purple2);border-color:#CECBF6;border-top:4px solid var(--purple)}
+.wc5{background:var(--gold3);border-color:#FAC775;border-top:4px solid var(--gold)}
+.wc-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;margin-bottom:.2rem}
+.wc1 .wc-num{color:var(--teal)}.wc2 .wc-num{color:var(--orange)}.wc3 .wc-num{color:var(--green)}.wc4 .wc-num{color:var(--purple)}.wc5 .wc-num{color:var(--gold)}
+.wc-dur{font-family:monospace;font-size:.67rem;color:var(--g4);margin-bottom:.4rem;font-weight:600}
+.wc-title{font-size:.82rem;font-weight:700;margin-bottom:.25rem}
+.wc1 .wc-title{color:var(--teal)}.wc2 .wc-title{color:var(--orange)}.wc3 .wc-title{color:var(--green)}.wc4 .wc-title{color:var(--purple)}.wc5 .wc-title{color:var(--gold)}
+.wc-body{font-size:.72rem;color:var(--g5);line-height:1.45}
+
+/* PLANUL 90 ZILE interactiv */
+.plan-section{background:var(--navy2);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.plan-timeline{position:relative;margin:1.25rem 0}
+.plan-track{height:6px;background:rgba(255,255,255,.1);border-radius:3px;margin-bottom:1.5rem;position:relative}
+.plan-fill{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--gold2));border-radius:3px;transition:width .8s ease}
+.plan-markers{display:flex;justify-content:space-between;margin-bottom:.5rem}
+.plan-marker{font-family:monospace;font-size:.65rem;color:rgba(255,255,255,.4)}
+.plan-faze{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
+@media(max-width:650px){.plan-faze{grid-template-columns:1fr 1fr}}
+.pf{border-radius:10px;padding:.9rem 1rem;border:1px solid;cursor:pointer;transition:all .2s}
+.pf:hover{transform:translateY(-2px)}
+.pf.pf1{background:rgba(10,126,164,.15);border-color:rgba(10,126,164,.3)}.pf.pf1.sel{background:rgba(10,126,164,.3)}
+.pf.pf2{background:rgba(200,90,10,.15);border-color:rgba(200,90,10,.3)}.pf.pf2.sel{background:rgba(200,90,10,.3)}
+.pf.pf3{background:rgba(26,107,60,.15);border-color:rgba(26,107,60,.3)}.pf.pf3.sel{background:rgba(26,107,60,.3)}
+.pf.pf4{background:rgba(91,63,166,.15);border-color:rgba(91,63,166,.3)}.pf.pf4.sel{background:rgba(91,63,166,.3)}
+.pf-sapt{font-family:monospace;font-size:.65rem;margin-bottom:.25rem}
+.pf.pf1 .pf-sapt{color:var(--teal2)}.pf.pf2 .pf-sapt{color:var(--orange)}
+.pf.pf3 .pf-sapt{color:#5DCAA5}.pf.pf4 .pf-sapt{color:#A78BFA}
+.pf-title{font-size:.82rem;font-weight:700;color:#fff;margin-bottom:.2rem}
+.pf-body{font-size:.73rem;color:rgba(255,255,255,.6);line-height:1.45;display:none}
+.pf.sel .pf-body{display:block}
+
+/* REGULA 2 INTERVENTII */
+.regula2-section{margin-bottom:1.5rem}
+.regula2-flow{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;margin:1rem 0;padding:1.25rem;background:var(--white);border-radius:14px;border:1px solid var(--g3)}
+.r2-step{background:var(--navy);border-radius:10px;padding:.7rem 1rem;flex:1;min-width:120px;text-align:center}
+.r2-week{font-family:monospace;font-size:.65rem;color:var(--teal2);margin-bottom:.25rem}
+.r2-title{font-size:.8rem;font-weight:700;color:#fff;margin-bottom:.2rem}
+.r2-body{font-size:.7rem;color:rgba(255,255,255,.55)}
+.r2-arrow{font-size:1.2rem;color:var(--g3);flex-shrink:0}
+
+/* ADERENTA interactiva */
+.aderenta-section{background:var(--white);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem;border:1px solid var(--g3)}
+.adh-slider-wrap{margin:1rem 0}
+.adh-slider-wrap label{font-size:.8rem;color:var(--g5);margin-bottom:.5rem;display:block}
+input[type=range]{width:100%;accent-color:var(--teal)}
+.adh-result{margin-top:1rem;border-radius:10px;padding:1rem 1.25rem;text-align:center}
+.adh-pct{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;line-height:1}
+.adh-label{font-size:.88rem;font-weight:600;margin-top:.3rem}
+.adh-action{font-size:.8rem;margin-top:.35rem;opacity:.8}
+.adh-ok{background:var(--green2);color:var(--green)}.adh-mid{background:var(--gold3);color:var(--g5)}.adh-low{background:var(--red2);color:var(--red)}
+
+/* CHART aderenta vs rezultat */
+.chart-section{background:var(--white);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;border:1px solid var(--g3)}
+
+/* PSIHOLOGIA sistemului */
+.psih-section{margin-bottom:1.5rem}
+.psih-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+@media(max-width:580px){.psih-grid{grid-template-columns:1fr}}
+.psih-card{border-radius:12px;padding:1.1rem;border:1px solid var(--g3);background:var(--white);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.psih-icon{font-size:1.4rem;margin-bottom:.4rem}
+.psih-title{font-size:.88rem;font-weight:700;color:var(--navy);margin-bottom:.3rem}
+.psih-body{font-size:.79rem;color:var(--g5);line-height:1.55}
+
+/* CHECKLIST KPI */
+.checklist-section{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:14px;padding:2rem;margin-bottom:1.5rem;border:2px solid var(--gold)}
+.cl-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:.5rem}
+.cl-sub{font-size:.82rem;color:rgba(255,255,255,.55);margin-bottom:1.25rem}
+.cl-items{list-style:none;display:flex;flex-direction:column;gap:.7rem}
+.cl-item{display:flex;align-items:center;gap:.85rem;font-size:.88rem;color:rgba(255,255,255,.85);cursor:pointer;border-radius:8px;padding:.4rem .5rem;transition:background .2s}
+.cl-item:hover{background:rgba(255,255,255,.05)}
+.cl-box{width:22px;height:22px;border-radius:5px;border:2px solid rgba(200,146,10,.5);background:rgba(200,146,10,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.8rem;color:transparent;transition:all .2s}
+.cl-box.done{background:var(--gold);border-color:var(--gold);color:var(--white)}
+.cl-prog-wrap{margin-top:1.25rem;display:flex;align-items:center;gap:.75rem}
+.cl-prog-bar{flex:1;height:7px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden}
+.cl-prog-fill{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--gold2));border-radius:4px;transition:width .5s ease}
+.cl-prog-label{font-family:monospace;font-size:.78rem;color:rgba(255,255,255,.5);white-space:nowrap}
+
+/* M3 */
+.m3-section{background:var(--navy);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem;border-left:5px solid var(--teal)}
+.m3-label{font-family:monospace;font-size:.68rem;color:var(--teal2);text-transform:uppercase;letter-spacing:.12em;margin-bottom:.5rem}
+.m3-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:#fff;margin-bottom:1rem}
+.m3-lec{display:flex;gap:.75rem;font-size:.84rem;padding:.5rem 0;border-bottom:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.7)}
+.m3-lec:last-child{border-bottom:none}.m3-n{font-family:monospace;font-size:.7rem;color:var(--teal2);min-width:2.5rem;flex-shrink:0}
+
+.footer-info{text-align:center;padding:1rem;font-size:.75rem;color:var(--g4)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fi0{opacity:0;animation:fadeUp .55s ease forwards}.fi1{animation-delay:.05s}.fi2{animation-delay:.15s}.fi3{animation-delay:.25s}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header fi0 fi1">
+    <div class="header-badge">🏁 Biohacking 3.0 · Modul 2 · Lecția 2.5 — Finala modulului</div>
+    <h1>Sistemul personal de <em>tracking</em></h1>
+    <p class="header-sub">Arhitectura completă a celor 5 componente, planul de 90 de zile și tranziția spre Modulul 3.</p>
+    <div class="header-stats">
+      <div><div class="hstat-n">5</div><div class="hstat-l">Componente sistem</div></div>
+      <div><div class="hstat-n">90 zile</div><div class="hstat-l">Primul plan personal</div></div>
+      <div><div class="hstat-n">max 2</div><div class="hstat-l">Intervenții simultane</div></div>
+      <div><div class="hstat-n">5 min</div><div class="hstat-l">Captura zilnică</div></div>
+    </div>
+  </div>
+
+  <!-- ROATA SISTEMULUI -->
+  <div class="wheel-section fi0 fi2">
+    <span class="section-label">Arhitectura sistemului</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Cele 5 componente — frecvențe și roluri</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Principiul central: <strong>sistemul trebuie să fie mai simplu decât datele pe care le produce.</strong></div>
+    <div class="wheel-grid">
+      <div class="wheel-card wc1">
+        <div class="wc-num">1</div>
+        <div class="wc-dur">5–7 min/zi</div>
+        <div class="wc-title">Captura zilnică</div>
+        <div class="wc-body">Câmpurile 1–8 + HRV. Dimineața + ora 11 + seara. Nicio altă verificare.</div>
+      </div>
+      <div class="wheel-card wc2">
+        <div class="wc-num">2</div>
+        <div class="wc-dur">20 min/săpt.</div>
+        <div class="wc-title">Review săptămânal</div>
+        <div class="wc-body">Duminică seara. Medii, tendință HRV, corelație, o decizie.</div>
+      </div>
+      <div class="wheel-card wc3">
+        <div class="wc-num">3</div>
+        <div class="wc-dur">60 min/90 zile</div>
+        <div class="wc-title">Revizuire trimestrială</div>
+        <div class="wc-body">Analize, comparație cu baseline, ajustare C.E.L.O.S., planul următor.</div>
+      </div>
+      <div class="wheel-card wc4">
+        <div class="wc-num">4</div>
+        <div class="wc-dur">Actualizat săpt.</div>
+        <div class="wc-title">Dashboard vizual</div>
+        <div class="wc-body">Trending câmpuri cheie, aderență protocol, delta biomarkeri.</div>
+      </div>
+      <div class="wheel-card wc5">
+        <div class="wc-num">5</div>
+        <div class="wc-dur">La 90 zile</div>
+        <div class="wc-title">Consultația NUTRISIB</div>
+        <div class="wc-body">Validare clinică, ajustare protocol, biorezonanță, red flags.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANUL 90 ZILE -->
+  <div class="plan-section fi0 fi2">
+    <span class="section-label" style="color:rgba(255,255,255,.5)">Planul personal de 90 de zile</span>
+    <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem">Structura primului trimestru — apasă pe fiecare fază</div>
+    <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1.25rem">Fiecare fază are un obiectiv clar și un output concret.</div>
+    <div class="plan-timeline">
+      <div class="plan-markers"><span class="plan-marker">Ziua 1</span><span class="plan-marker">Ziua 14</span><span class="plan-marker">Ziua 42</span><span class="plan-marker">Ziua 70</span><span class="plan-marker">Ziua 90</span></div>
+      <div class="plan-track"><div class="plan-fill" id="planFill"></div></div>
+    </div>
+    <div class="plan-faze">
+      <div class="pf pf1 sel" onclick="selFaza(this,25)">
+        <div class="pf-sapt">Săpt. 1–2</div>
+        <div class="pf-title">Baseline</div>
+        <div class="pf-body">Jurnalul fără intervenție nouă. HRV zilnic. Panelul de laborator. Output: media personală per câmp + HRV baseline.</div>
+      </div>
+      <div class="pf pf2" onclick="selFaza(this,50)">
+        <div class="pf-sapt">Săpt. 3–6</div>
+        <div class="pf-title">Intervenția 1</div>
+        <div class="pf-body">O singură intervenție izolată. Tracking zilnic. Review săptămânal. Verificarea aderenței la săptămâna 4.</div>
+      </div>
+      <div class="pf pf3" onclick="selFaza(this,75)">
+        <div class="pf-sapt">Săpt. 7–10</div>
+        <div class="pf-title">+ Intervenția 2</div>
+        <div class="pf-body">Prima intervenție continuă. Adaugi prioritatea 2. Maxim două intervenții active. Monitorizezi aderența la ambele.</div>
+      </div>
+      <div class="pf pf4" onclick="selFaza(this,100)">
+        <div class="pf-sapt">Săpt. 11–12</div>
+        <div class="pf-title">Evaluare + Plan T2</div>
+        <div class="pf-body">Analize repetate. Revizuire trimestrială 60 min. Pagina de sinteză. Planul ajustat pentru trimestrul 2.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGULA 2 INTERVENTII -->
+  <div class="regula2-section fi0 fi2">
+    <span class="section-label">Regula centrală a protocolului C.E.L.O.S.</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Maxim 2 intervenții simultane — de ce și cum</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Principiul studiilor clinice controlate: o variabilă modificată la un moment dat. Altfel nu știi ce a produs efectul.</div>
+    <div class="regula2-flow">
+      <div class="r2-step"><div class="r2-week">Săpt. 1</div><div class="r2-title">Intervenția A</div><div class="r2-body">Ex.: Vitamina D 5.000 UI + K2. Izolată. Tracking complet.</div></div>
+      <div class="r2-arrow">→</div>
+      <div class="r2-step"><div class="r2-week">Săpt. 4 (dacă A eficientă)</div><div class="r2-title">+ Intervenția B</div><div class="r2-body">Ex.: Mg L-treonat. A continuă. Evaluezi B după 3 săpt.</div></div>
+      <div class="r2-arrow">→</div>
+      <div class="r2-step"><div class="r2-week">Săpt. 8 (dacă B eficientă)</div><div class="r2-title">+ Intervenția C</div><div class="r2-body">Ex.: Ashwagandha. Maxim 2 active simultan.</div></div>
+      <div class="r2-arrow">→</div>
+      <div class="r2-step" style="background:rgba(26,107,60,.3)"><div class="r2-week">Ziua 90</div><div class="r2-title">Evaluare completă</div><div class="r2-body">Analize, delta față de baseline, planul T2.</div></div>
+    </div>
+  </div>
+
+  <!-- ADERENTA INTERACTIVA -->
+  <div class="aderenta-section fi0 fi3">
+    <span class="section-label">Sabate & WHO (2003) — cel mai ignorat indicator</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Calculator aderență — interpretare instantă</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Schimbă procentul pentru a vedea interpretarea și acțiunea recomandată.</div>
+    <div class="adh-slider-wrap">
+      <label>Rata de aderență la protocol: <strong id="adhVal">75%</strong></label>
+      <input type="range" min="0" max="100" value="75" oninput="updateAdh(this.value)">
+    </div>
+    <div id="adhResult" class="adh-result adh-mid">
+      <div class="adh-pct" id="adhPct">75%</div>
+      <div class="adh-label" id="adhLabel">Aderență acceptabilă — concluzie posibil validă</div>
+      <div class="adh-action" id="adhAction">Rezultatele pot fi interpretate cu prudență. Urmărești tendința, nu confirmarea absolută.</div>
+    </div>
+  </div>
+
+  <!-- CHART aderenta vs rezultat (WHO) -->
+  <div class="chart-section fi0 fi3">
+    <span class="section-label">Sabate & WHO (2003)</span>
+    <div style="font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Aderența la protocol vs. rezultatele obținute</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:1rem">Persoanele cu aderență &gt;85% obțin rezultate de 2–3× mai bune — indiferent de protocol.</div>
+    <div style="position:relative;height:200px"><canvas id="adhChart"></canvas></div>
+  </div>
+
+  <!-- PSIHOLOGIA SISTEMULUI -->
+  <div class="psih-section fi0 fi3">
+    <span class="section-label">Clear (2018) — Atomic Habits</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.85rem">Psihologia sistemului — obiceiuri, nu voință</div>
+    <div class="psih-grid">
+      <div class="psih-card">
+        <div class="psih-icon">🔗</div>
+        <div class="psih-title">Habit stacking</div>
+        <div class="psih-body">Ataști captura de un obicei existent: „imediat după cafea, completez câmpurile 2 și 5." Sau: „imediat înainte de somn, câmpurile 4 și 6."</div>
+      </div>
+      <div class="psih-card">
+        <div class="psih-icon">⚡</div>
+        <div class="psih-title">Reducerea frecăturii</div>
+        <div class="psih-body">Caietul pe noptieră. Aplicația pe ecranul principal. Orice pas în plus între tine și captură reduce aderența.</div>
+      </div>
+      <div class="psih-card">
+        <div class="psih-icon">📉</div>
+        <div class="psih-title">Minimum viable tracking</div>
+        <div class="psih-body">În perioadele dificile: reduci la 3 câmpuri — somn, energie, intervenție. Îți dai permisiunea de a face mai puțin, nu de a abandona.</div>
+      </div>
+      <div class="psih-card">
+        <div class="psih-icon">🔄</div>
+        <div class="psih-title">Revenirea după pauză</div>
+        <div class="psih-body">Orice pauză &gt;3 zile: repornești cu un baseline nou de 7 zile, fără judecată. Datele lipsesc — nu concluziile.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST KPI -->
+  <div class="checklist-section fi0 fi3">
+    <div class="hstat-n" style="font-size:1.5rem;margin-bottom:.5rem">KPI final · Modulul 2</div>
+    <div class="cl-title">Checklist de finalizare a Modulului 2</div>
+    <div class="cl-sub">Bifează fiecare element completat. La 5/5 — Modulul 2 este complet și Modulul 3 se deblochează.</div>
+    <ul class="cl-items">
+      <li class="cl-item" onclick="toggleCl(0)"><div class="cl-box" id="cl0"></div>Jurnalul activ cu minimum 7 zile completate</li>
+      <li class="cl-item" onclick="toggleCl(1)"><div class="cl-box" id="cl1"></div>Baseline-ul HRV personal calculat (media pe 14 zile)</li>
+      <li class="cl-item" onclick="toggleCl(2)"><div class="cl-box" id="cl2"></div>Panelul de laborator inițial C.E.L.O.S. comandat sau programat</li>
+      <li class="cl-item" onclick="toggleCl(3)"><div class="cl-box" id="cl3"></div>Prima pagină de sinteză trimestrială scrisă cu tabloul integrat</li>
+      <li class="cl-item" onclick="toggleCl(4)"><div class="cl-box" id="cl4"></div>Planul de 90 de zile cu intervenția principală identificată</li>
+    </ul>
+    <div class="cl-prog-wrap">
+      <div class="cl-prog-bar"><div class="cl-prog-fill" id="clFill"></div></div>
+      <div class="cl-prog-label" id="clLabel">0 / 5 completate</div>
+    </div>
+  </div>
+
+  <!-- M3 PREVIEW -->
+  <div class="m3-section fi0 fi3">
+    <div class="m3-label">Urmează — Modulul 3</div>
+    <div class="m3-title">Nutriție, microbiom și energie celulară</div>
+    <div class="m3-lec"><span class="m3-n">3.1</span>Principiile nutriției pentru longevitate — proteine, calitate vs. cantitate</div>
+    <div class="m3-lec"><span class="m3-n">3.2</span>Microbiomul intestinal — diversitate, disbioză și modulare</div>
+    <div class="m3-lec"><span class="m3-n">3.3</span>Glicemia personalizată — răspunsul individual la alimente (glucometrul ca N=1)</div>
+    <div class="m3-lec"><span class="m3-n">3.4</span>Protocoalele de post intermitent — pentru cine funcționează, pentru cine nu</div>
+    <div class="m3-lec"><span class="m3-n">3.5</span>Nutrigenomică și suplimentele C.E.L.O.S. — dozarea și formele optime</div>
+  </div>
+
+  <div class="footer-info">
+    <strong>Biohacking 3.0 · Modul 2 · Lecția 2.5 — Finala modulului</strong> · dr.ing. Radu Pascu · NUTRISIB Sibiu · 2025<br>
+    Surse: Attia (2023) Outlive; Clear (2018) Atomic Habits; Sabate (2003) WHO; Lillie (2011) BMJ
+  </div>
+</div>
+
+<script>
+// Plan 90 zile
+function selFaza(el,pct){
+  document.querySelectorAll('.pf').forEach(p=>p.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('planFill').style.width=pct+'%';
+}
+document.getElementById('planFill').style.width='25%';
+
+// Aderenta slider
+function updateAdh(v){
+  v=parseInt(v);
+  document.getElementById('adhVal').textContent=v+'%';
+  document.getElementById('adhPct').textContent=v+'%';
+  const r=document.getElementById('adhResult');
+  let cls,label,action;
+  if(v>=85){cls='adh-ok';label='Aderență excelentă — concluzie validă';action='Rezultatele sunt interpretabile. Poți trage concluzii cu grad ridicat de încredere. Continuă protocolul.';}
+  else if(v>=70){cls='adh-mid';label='Aderență acceptabilă — concluzie posibil validă';action='Rezultatele pot fi interpretate cu prudență. Urmărești tendința și identifici cauzele zilelor nefinalizate.';}
+  else if(v>=50){cls='adh-low';label='Aderență insuficientă — concluzie probabil invalidă';action='Experimentul nu poate produce concluzii valide. Prima intervenție: construiești obiceiul de completare, nu schimbi protocolul.';}
+  else{cls='adh-low';label='Sub 50% — nu este un experiment valid';action='Nu poți trage concluzii. Identifici bariera principală de aderență și o elimini înainte de a evalua efectul.';}
+  r.className='adh-result '+cls;
+  document.getElementById('adhLabel').textContent=label;
+  document.getElementById('adhAction').textContent=action;
+}
+
+// Chart aderenta vs rezultat
+const adhLevels=[30,40,50,60,70,80,85,90,95,100];
+const results=adhLevels.map(a=>a<50?20:a<70?40:a<85?70:85+(a-85)*3);
+new Chart(document.getElementById('adhChart'),{
+  type:'bar',
+  data:{
+    labels:adhLevels.map(v=>v+'%'),
+    datasets:[{
+      label:'Rezultat relativ (%)',
+      data:results,
+      backgroundColor:adhLevels.map(v=>v>=85?'rgba(26,107,60,.7)':v>=70?'rgba(200,146,10,.6)':'rgba(184,48,48,.55)'),
+      borderRadius:6,
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{callbacks:{label:v=>'Rezultat relativ: '+v.parsed.y+'%'}}
+    },
+    scales:{
+      x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:11},color:'#9A9088'},title:{display:true,text:'Aderență la protocol',font:{size:11},color:'#9A9088'}},
+      y:{min:0,max:100,grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:10},color:'#9A9088',callback:v=>v+'%'},title:{display:true,text:'Rezultat relativ',font:{size:10},color:'#9A9088'}}
+    }
+  }
+});
+
+// Checklist
+const clState=[false,false,false,false,false];
+function toggleCl(i){
+  clState[i]=!clState[i];
+  const el=document.getElementById('cl'+i);
+  el.classList.toggle('done',clState[i]);
+  el.textContent=clState[i]?'✓':'';
+  const done=clState.filter(Boolean).length;
+  document.getElementById('clFill').style.width=(done/5*100)+'%';
+  document.getElementById('clLabel').textContent=done+' / 5 completate';
+  try{localStorage.setItem('bh30_infog_l25_cl',JSON.stringify(clState));}catch(e){}
+}
+try{
+  const saved=JSON.parse(localStorage.getItem('bh30_infog_l25_cl')||'[]');
+  if(saved.length===5){saved.forEach((v,i)=>{if(v)toggleCl(i);});}
+}catch(e){}
+</script>
+</body>
+</html>

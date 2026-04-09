@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infografic: Interpretarea datelor — sinteza tabloului personal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#0F1E3C;--navy2:#162A50;--teal:#0A7EA4;--teal2:#13A0CC;--gold:#C8920A;--gold2:#E8AE1A;--green:#1A6B3C;--green2:#EAF4EE;--red:#B83030;--red2:#FDEAEA;--orange:#C85A0A;--orange2:#FEF2E8;--purple:#5B3FA6;--purple2:#F0EBF8;--g1:#FAF7F2;--g2:#F2EDE4;--g3:#DDD6CC;--g4:#9A9088;--g5:#5A5248;--white:#fff}
+html{font-size:16px}
+body{font-family:'Inter',sans-serif;background:#F5F2EC;color:#1E1810;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 3rem}
+.header{text-align:center;padding:2.5rem 2rem;background:var(--navy);border-radius:16px;margin-bottom:2rem;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 65% 40%,rgba(91,63,166,.25),transparent 60%)}
+.header-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:600;color:#A78BFA;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem;position:relative}
+.header-tag::before,.header-tag::after{content:'';width:24px;height:1px;background:#A78BFA}
+.header h1{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,3vw,2.4rem);font-weight:900;color:#fff;line-height:1.15;position:relative;margin-bottom:.75rem}
+.header h1 em{font-style:italic;color:#A78BFA}
+.header-sub{font-size:.9rem;color:rgba(255,255,255,.6);position:relative;max-width:680px;margin:0 auto}
+.header-stats{display:flex;justify-content:center;gap:2.5rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);position:relative;flex-wrap:wrap}
+.hstat-n{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:#A78BFA;line-height:1}
+.hstat-l{font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem}
+.section-label{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:.5rem;display:block}
+
+/* PIRAMIDA 3 NIVELURI */
+.pyramid-section{background:var(--white);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem;border:1px solid var(--g3)}
+.pyramid{display:flex;flex-direction:column;gap:.75rem;margin:1rem 0}
+.pyr-level{border-radius:12px;padding:1.1rem 1.25rem;border:1px solid;display:grid;grid-template-columns:90px 1fr;gap:1rem;align-items:start}
+.pyr-level.l1{background:#E8F4F8;border-color:#9FE1CB;border-left:5px solid var(--teal)}
+.pyr-level.l2{background:var(--orange2);border-color:#F5C4B3;border-left:5px solid var(--orange)}
+.pyr-level.l3{background:var(--green2);border-color:#C0DD97;border-left:5px solid var(--green)}
+.pyr-badge{border-radius:10px;padding:.65rem;text-align:center}
+.l1 .pyr-badge{background:rgba(10,126,164,.12);color:var(--teal)}
+.l2 .pyr-badge{background:rgba(200,90,10,.12);color:var(--orange)}
+.l3 .pyr-badge{background:rgba(26,107,60,.12);color:var(--green)}
+.pyr-badge-n{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700}
+.pyr-badge-l{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.pyr-title{font-size:.9rem;font-weight:700;margin-bottom:.3rem}
+.l1 .pyr-title{color:var(--teal)}.l2 .pyr-title{color:var(--orange)}.l3 .pyr-title{color:var(--green)}
+.pyr-body{font-size:.8rem;color:var(--g5);line-height:1.55}
+
+/* ZGOMOT vs SEMNAL interactiv */
+.signal-section{background:var(--navy2);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.signal-title{font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem}
+.signal-sub{font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1.25rem}
+.signal-demo{display:flex;flex-direction:column;gap:.85rem}
+.signal-row{background:rgba(255,255,255,.07);border-radius:10px;padding:1rem 1.15rem;border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:all .2s}
+.signal-row:hover{background:rgba(255,255,255,.1)}
+.signal-row-top{display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+.signal-name{font-size:.88rem;font-weight:600;color:#fff}
+.signal-tag{font-size:.68rem;font-weight:700;padding:.2rem .6rem;border-radius:99px;flex-shrink:0}
+.tag-noise{background:rgba(200,90,10,.25);color:var(--orange)}
+.tag-signal{background:rgba(26,107,60,.25);color:#5DCAA5}
+.signal-detail{display:none;margin-top:.65rem;font-size:.8rem;color:rgba(255,255,255,.65);line-height:1.55;border-top:1px solid rgba(255,255,255,.1);padding-top:.65rem}
+.signal-row.open .signal-detail{display:block}
+
+/* CHART zgomot vs semnal */
+.chart-card{background:var(--white);border-radius:14px;padding:1.5rem;margin-bottom:1.5rem;border:1px solid var(--g3)}
+
+/* TESTE 4 */
+.teste-section{margin-bottom:1.5rem}
+.teste-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:1rem 0}
+@media(max-width:600px){.teste-grid{grid-template-columns:1fr}}
+.test-card{border-radius:12px;padding:1.1rem;border:1px solid var(--g3);background:var(--white);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.test-card:nth-child(4){border-top:3px solid var(--purple)}
+.test-num{font-size:1.4rem;font-weight:700;font-family:'Playfair Display',serif;color:var(--purple);margin-bottom:.25rem}
+.test-title{font-size:.87rem;font-weight:700;color:var(--navy);margin-bottom:.3rem}
+.test-body{font-size:.8rem;color:var(--g5);line-height:1.5}
+
+/* EXEMPLE integrate tabs */
+.ex-section{margin-bottom:1.5rem}
+.ex-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.ex-tab{font-size:.8rem;font-weight:600;padding:.35rem .85rem;border-radius:99px;cursor:pointer;border:1px solid var(--g3);background:var(--white);color:var(--g5);transition:all .2s}
+.ex-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.ex-panel{display:none}.ex-panel.active{display:block}
+.ex-card2{border-radius:12px;padding:1.35rem;border:1px solid}
+.ex-rows{display:flex;flex-direction:column;gap:.4rem;margin:.75rem 0}
+.ex-r{display:grid;grid-template-columns:100px 1fr;gap:.6rem;font-size:.84rem;border-bottom:1px solid rgba(0,0,0,.06);padding:.3rem 0}
+.ex-r:last-child{border-bottom:none}
+.ex-rl{font-family:monospace;font-size:.68rem;color:var(--g4);text-transform:uppercase;font-weight:600;padding-top:.1em}
+.ex-rv{color:var(--dark);line-height:1.5}
+.ex-box{margin-top:.75rem;border-radius:8px;padding:.7rem .9rem;font-size:.82rem;line-height:1.6;border-left:3px solid}
+
+/* ADERENTA */
+.aderenta-section{background:var(--navy);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem}
+.adh-bars{display:flex;flex-direction:column;gap:.75rem;margin:1rem 0}
+.adh-row{display:grid;grid-template-columns:1fr 80px;gap:.75rem;align-items:center}
+.adh-label{font-size:.8rem;color:rgba(255,255,255,.8)}
+.adh-track{height:14px;background:rgba(255,255,255,.1);border-radius:7px;overflow:hidden;margin:.3rem 0}
+.adh-fill{height:100%;border-radius:7px;width:0;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+.adh-val{font-family:monospace;font-size:.82rem;font-weight:700;text-align:right;white-space:nowrap}
+
+/* NARATIV */
+.narativ-section{background:var(--white);border-radius:14px;padding:1.75rem;margin-bottom:1.5rem;border:1px solid var(--g3)}
+.narativ-box{background:var(--navy);border-radius:10px;padding:1.25rem 1.5rem;border-left:4px solid var(--gold);font-size:.9rem;color:rgba(255,255,255,.85);line-height:1.7}
+.narativ-box strong{color:var(--gold2)}
+
+/* KPI */
+.kpi-section{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:14px;padding:2rem;margin-bottom:1.5rem;border-left:5px solid var(--purple)}
+.kpi-tag{font-family:monospace;font-size:.68rem;font-weight:600;color:#A78BFA;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.75rem;display:block}
+.kpi-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:#fff;margin-bottom:.6rem}
+.kpi-items{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.kpi-items li{font-size:.88rem;color:rgba(255,255,255,.85);display:flex;gap:.65rem;align-items:baseline;line-height:1.5}
+.kpi-arrow{font-size:.75rem;color:#A78BFA;flex-shrink:0}
+.footer-info{text-align:center;padding:1rem;font-size:.75rem;color:var(--g4)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fi0{opacity:0;animation:fadeUp .55s ease forwards}.fi1{animation-delay:.05s}.fi2{animation-delay:.15s}.fi3{animation-delay:.25s}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header fi0 fi1">
+    <div class="header-tag">Biohacking 3.0 · Modul 2 · Lecția 2.4</div>
+    <h1>Interpretarea datelor<br><em>Sinteza tabloului personal</em></h1>
+    <p class="header-sub">Jurnal + HRV + analize de laborator integrate într-o diagnoză funcțională acționabilă.</p>
+    <div class="header-stats">
+      <div><div class="hstat-n">3</div><div class="hstat-l">Niveluri de date integrate</div></div>
+      <div><div class="hstat-n">4 teste</div><div class="hstat-l">Validarea corelației</div></div>
+      <div><div class="hstat-n">7 zile</div><div class="hstat-l">Prag minim pentru semnal real</div></div>
+      <div><div class="hstat-n">&gt;85%</div><div class="hstat-l">Aderență pentru concluzie validă</div></div>
+    </div>
+  </div>
+
+  <!-- PIRAMIDA 3 NIVELURI -->
+  <div class="pyramid-section fi0 fi2">
+    <span class="section-label">Structura tabloului personal</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Cele 3 niveluri de date — roluri și limite</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Regula: <strong>nivelul 1 ghidează prioritatea · nivelul 2 confirmă · nivelul 3 explică mecanismul.</strong></div>
+    <div class="pyramid">
+      <div class="pyr-level l1">
+        <div class="pyr-badge"><div class="pyr-badge-n">1</div><div class="pyr-badge-l">Zilnic</div></div>
+        <div><div class="pyr-title">Jurnalul de biohacking — date subiective</div><div class="pyr-body">Câmpurile 1–8: somn, energie, stres, confundante. Frecvență zilnică, rezoluție înaltă. Zgomot biologic normal ±20%. Ghidează prioritatea de intervenție.</div></div>
+      </div>
+      <div class="pyr-level l2">
+        <div class="pyr-badge"><div class="pyr-badge-n">2</div><div class="pyr-badge-l">Periodic</div></div>
+        <div><div class="pyr-title">Wearables — date obiective (HRV, temperatură)</div><div class="pyr-body">HRV matinal, temperatura de repaus. Erori de măsurare 10–20%. Confirmă sau infirmă tendințele din nivelul 1. Limitare: artefacte tehnice, algoritmi diferiți.</div></div>
+      </div>
+      <div class="pyr-level l3">
+        <div class="pyr-badge"><div class="pyr-badge-n">3</div><div class="pyr-badge-l">Trimestrial</div></div>
+        <div><div class="pyr-title">Analize de laborator — biomarkeri C.E.L.O.S.</div><div class="pyr-body">Precis la momentul recoltării, static. Explică mecanismul biologic al tendințelor din nivelurile 1 și 2. Limitare: snapshot punctual, variabilitate ±15%.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ZGOMOT vs SEMNAL -->
+  <div class="signal-section fi0 fi2">
+    <span class="section-label" style="color:rgba(255,255,255,.5)">Distincția critică</span>
+    <div class="signal-title">Zgomot biologic vs. semnal real</div>
+    <div class="signal-sub">Apasă pe fiecare rând pentru interpretare și acțiunea corectă.</div>
+    <div class="signal-demo">
+      <div class="signal-row" onclick="this.classList.toggle('open')">
+        <div class="signal-row-top"><span class="signal-name">Scor somn variind cu ±2 puncte zi de zi</span><span class="signal-tag tag-noise">Zgomot</span></div>
+        <div class="signal-detail">Variabilitate biologică normală. Nu modifici protocolul. Nu este semnal. Înregistrezi și aștepți tendința pe 7+ zile.</div>
+      </div>
+      <div class="signal-row" onclick="this.classList.toggle('open')">
+        <div class="signal-row-top"><span class="signal-name">HRV cu 20% sub medie azi (după 4 pahare de vin ieri)</span><span class="signal-tag tag-noise">Zgomot acut</span></div>
+        <div class="signal-detail">Cauza este identificabilă din câmpul 6 (alcool). Efectul este acut și reversibil în 48h. Nu este semnal cronic. Notezi confundantul și continui.</div>
+      </div>
+      <div class="signal-row" onclick="this.classList.toggle('open')">
+        <div class="signal-row-top"><span class="signal-name">Scor somn sub 5/10 în 9 din ultimele 10 zile</span><span class="signal-tag tag-signal">Semnal</span></div>
+        <div class="signal-detail">Tendință susținută 7+ zile sub media personală = semnal real. Verifici câmpul 6 pentru corelații. Formulezi ipoteza de intervenție. Acționezi.</div>
+      </div>
+      <div class="signal-row" onclick="this.classList.toggle('open')">
+        <div class="signal-row-top"><span class="signal-name">HRV descendent 3 săptămâni fără cauza identificată</span><span class="signal-tag tag-signal">Semnal cronic</span></div>
+        <div class="signal-detail">Trending negativ consistent fără variabilă confundantă identificabilă = semnal care necesită investigare. Primul pas: panelul de laborator pentru axă HPA + inflamație.</div>
+      </div>
+      <div class="signal-row" onclick="this.classList.toggle('open')">
+        <div class="signal-row-top"><span class="signal-name">HRV cu 20% peste medie după 30 de zile Zona 2</span><span class="signal-tag tag-signal">Semnal pozitiv</span></div>
+        <div class="signal-detail">Delta pozitivă față de baseline după intervenție = efect real al intervenției. Confirmă cauzalitatea prin testul 4. Continuă protocolul.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART trending real -->
+  <div class="chart-card fi0 fi2">
+    <span class="section-label">Cum arată zgomotul vs. semnalul pe grafic</span>
+    <div style="font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">30 de zile — scor somn zilnic + media mobilă 7 zile</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:1rem">Variabilitatea zilnică este normală (zgomot). Trending-ul media mobile 7 zile este semnalul.</div>
+    <div style="position:relative;height:200px"><canvas id="trendChart"></canvas></div>
+    <div style="display:flex;gap:1.5rem;margin-top:.75rem;font-size:.74rem;flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:.4rem"><span style="width:14px;height:2px;background:var(--g3);border-radius:2px;display:inline-block"></span>Scor somn zilnic (zgomot)</span>
+      <span style="display:flex;align-items:center;gap:.4rem"><span style="width:14px;height:3px;background:var(--teal);border-radius:2px;display:inline-block"></span>Media mobilă 7 zile (semnalul)</span>
+      <span style="display:flex;align-items:center;gap:.4rem"><span style="width:14px;height:3px;background:var(--green);border-radius:2px;border-style:dashed;display:inline-block"></span>Baseline personal (referința)</span>
+    </div>
+  </div>
+
+  <!-- TESTE 4 -->
+  <div class="teste-section fi0 fi3">
+    <span class="section-label">Validarea corelației</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.25rem">Cele 4 teste pentru a transforma corelația în cauzalitate</div>
+    <div style="font-size:.8rem;color:var(--g4);margin-bottom:.85rem">Corelația nu implică cauzalitate. Exemplu clasic: HRV ridicat și energie bună — ambele sunt efecte, nu cauze.</div>
+    <div class="teste-grid">
+      <div class="test-card"><div class="test-num">T1</div><div class="test-title">Repetabilitate</div><div class="test-body">Corelația apare în ≥70% din cazurile comparabile? Alcool → somn scăzut în 8 din 10 nopți = confirmat.</div></div>
+      <div class="test-card"><div class="test-num">T2</div><div class="test-title">Temporalitate</div><div class="test-body">A precede B în timp? Cauza precede întotdeauna efectul. Alcoolul seara → somn scăzut în aceeași noapte ✓</div></div>
+      <div class="test-card"><div class="test-num">T3</div><div class="test-title">Plauzibilitate biologică</div><div class="test-body">Există mecanism biologic cunoscut? Alcoolul suprimă NREM3 (documentat în 6 studii) → confirmat ✓</div></div>
+      <div class="test-card"><div class="test-num">T4 ★</div><div class="test-title">Intervenția (cel mai puternic)</div><div class="test-body">Modifici A → se modifică B predictibil? Elim. alcool 14 zile → HRV +15% → cauzalitate demonstrată personal.</div></div>
+    </div>
+  </div>
+
+  <!-- EXEMPLE TABS -->
+  <div class="ex-section fi0 fi3">
+    <span class="section-label">Tablouri integrate complete</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.85rem">3 exemple reale — de la simptom la intervenție</div>
+    <div class="ex-tabs">
+      <button class="ex-tab active" onclick="switchEx(this,'e1')">⚡ Energie scăzută</button>
+      <button class="ex-tab" onclick="switchEx(this,'e2')">😴 Somn slab</button>
+      <button class="ex-tab" onclick="switchEx(this,'e3')">🔴 Stres cronic</button>
+    </div>
+    <div class="ex-panel active" id="e1">
+      <div class="ex-card2" style="background:#EAF6FB;border-color:#9FE1CB">
+        <div style="font-size:.95rem;font-weight:700;color:var(--teal);margin-bottom:.75rem">Energie scăzută cronică — tabloul integrat</div>
+        <div class="ex-rows">
+          <div class="ex-r"><span class="ex-rl">Jurnal N1</span><span class="ex-rv">Energie la 11h: medie 4,2/10 pe 14 zile (baseline: 6,5)</span></div>
+          <div class="ex-r"><span class="ex-rl">HRV N2</span><span class="ex-rv">15% sub media personală cronic — trending orizontal</span></div>
+          <div class="ex-r"><span class="ex-rl">Laborator N3</span><span class="ex-rv">Feritina 28 ng/mL · Vitamina D 24 ng/mL · HOMA-IR 2,0 · TSH 2,8</span></div>
+          <div class="ex-r"><span class="ex-rl">Mecanism</span><span class="ex-rv">Deficit fier → transportul O₂ redus → energie scăzută. Deficit D3 → funcție mitocondrială suboptimă</span></div>
+        </div>
+        <div class="ex-box" style="background:rgba(10,126,164,.08);border-color:var(--teal)">Intervenția ordonată: (1) fier bisglicinat 25 mg (seara, cu vitamina C) · (2) D3 5.000 UI + K2 mk-7 · (3) Zona 2 de 3× săptămânal · Reevaluare feritina + D3 la 90 zile.</div>
+      </div>
+    </div>
+    <div class="ex-panel" id="e2">
+      <div class="ex-card2" style="background:var(--orange2);border-color:#F5C4B3">
+        <div style="font-size:.95rem;font-weight:700;color:var(--orange);margin-bottom:.75rem">Somn slab cronic — tabloul integrat</div>
+        <div class="ex-rows">
+          <div class="ex-r"><span class="ex-rl">Jurnal N1</span><span class="ex-rv">Somn medie 4,8/10 · alcool în 4 din 6 zile slabe · orar culcare ±90 min</span></div>
+          <div class="ex-r"><span class="ex-rl">HRV N2</span><span class="ex-rv">20% sub medie · temperatura repaus +0,3°C față de medie (Oura)</span></div>
+          <div class="ex-r"><span class="ex-rl">Laborator N3</span><span class="ex-rv">Mg eritrocitar 1,9 mEq/L (sub optim 2,3) · cortizol salivar — curbă inversată</span></div>
+          <div class="ex-r"><span class="ex-rl">4 cauze</span><span class="ex-rv">(1) Alcool → suprimă NREM3 · (2) Orar neregulat → ritm circadian perturbat · (3) Deficit Mg → reglare SNV suboptimă · (4) Cortizol ridicat seara → inhibă melatonina</span></div>
+        </div>
+        <div class="ex-box" style="background:rgba(200,90,10,.08);border-color:var(--orange)">Ordinea intervențiilor: (1) orar fix ±15 min + eliminare alcool (N=1, 21 zile) → (2) Mg L-treonat 1.500 mg + ashwagandha 300 mg seara → (3) respirație diafragmatică 10 min pre-somn.</div>
+      </div>
+    </div>
+    <div class="ex-panel" id="e3">
+      <div class="ex-card2" style="background:var(--red2);border-color:#F7C1C1">
+        <div style="font-size:.95rem;font-weight:700;color:var(--red);margin-bottom:.75rem">Stres cronic cu HRV descendent — tabloul integrat</div>
+        <div class="ex-rows">
+          <div class="ex-r"><span class="ex-rl">Jurnal N1</span><span class="ex-rv">Stres perceput 7,2/10 pe 30 zile · somn 5,1/10 cronic</span></div>
+          <div class="ex-r"><span class="ex-rl">HRV N2</span><span class="ex-rv">Tendință descendentă 3 săptămâni — 25% sub media personală</span></div>
+          <div class="ex-r"><span class="ex-rl">Laborator N3</span><span class="ex-rv">CRP hs 2,8 mg/L · cortizol persistent la prânz · DHEA-S scăzut · D3 31 ng/mL</span></div>
+          <div class="ex-r"><span class="ex-rl">Mecanism</span><span class="ex-rv">Axă HPA hiperactivă → cortizol persistent → inflamație cronică (CRP 2,8) → somn perturbat → HRV descendent. D3 scăzut amplificator</span></div>
+        </div>
+        <div class="ex-box" style="background:rgba(184,48,48,.08);border-color:var(--red)">Intervenția: ashwagandha KSM-66 600 mg + Mg L-treonat · D3 5.000 UI + Omega-3 2 g/zi · Zona 2 de 3×/săpt. · NSDR 10 min zilnic · Monitorizare HRV trending la 4 săptămâni.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADERENTA -->
+  <div class="aderenta-section fi0 fi3">
+    <span class="section-label" style="color:rgba(255,255,255,.5)">Sabate & WHO (2003)</span>
+    <div style="font-size:1rem;font-weight:700;color:#fff;margin-bottom:.35rem">Aderența la protocol — indicatorul cel mai ignorat</div>
+    <div style="font-size:.8rem;color:rgba(255,255,255,.5);margin-bottom:1rem">Cum faci contează mai mult decât ce faci. Aderență &gt;85% = rezultate de 2–3× mai bune, indiferent de protocol.</div>
+    <div class="adh-bars" id="adhBars">
+      <div><div class="adh-row"><span class="adh-label">&gt;85% — aderență excelentă, concluzie validă</span><span class="adh-val" style="color:#5DCAA5">≥85%</span></div><div class="adh-track"><div class="adh-fill" data-w="85" style="background:linear-gradient(90deg,var(--teal),#5DCAA5)"></div></div></div>
+      <div><div class="adh-row"><span class="adh-label">70–85% — aderență acceptabilă, concluzie posibil validă</span><span class="adh-val" style="color:var(--gold2)">77%</span></div><div class="adh-track"><div class="adh-fill" data-w="77" style="background:linear-gradient(90deg,var(--gold),var(--gold2))"></div></div></div>
+      <div><div class="adh-row"><span class="adh-label">50–70% — aderență insuficientă, concluzie probabil invalidă</span><span class="adh-val" style="color:var(--orange)">60%</span></div><div class="adh-track"><div class="adh-fill" data-w="60" style="background:linear-gradient(90deg,var(--orange),#F5A775)"></div></div></div>
+      <div><div class="adh-row"><span class="adh-label">&lt;50% — nu este un experiment valid</span><span class="adh-val" style="color:var(--red)">40%</span></div><div class="adh-track"><div class="adh-fill" data-w="40" style="background:linear-gradient(90deg,var(--red),#F09595)"></div></div></div>
+    </div>
+  </div>
+
+  <!-- NARATIV -->
+  <div class="narativ-section fi0 fi3">
+    <span class="section-label">De la date la acțiune</span>
+    <div style="font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.5rem">Exemplu de narativ personal acționabil</div>
+    <div class="narativ-box">„În ultimele 14 zile, scorul meu de somn a scăzut la 5,8/10 față de baseline-ul de 6,9. HRV a scăzut cu 18% față de medie. Câmpul 6 arată că în 5 din 6 zile slabe a existat alcool sau stres &gt;7. Feritina este 31 ng/mL — sub optim. <strong>Prioritatea: eliminarea alcoolului în weekenduri (N=1, 21 zile) + suplimentarea fierului (bisglicinat, confirmată prin analiză).</strong>"</div>
+    <div style="margin-top:.75rem;font-size:.82rem;color:var(--g4);line-height:1.6">Acesta <strong>nu</strong> este o lamentare. Nu este o enumerare de valori. Este o <strong>diagnoză funcțională cu un plan concret</strong> — bazat pe cele trei niveluri de date integrate.</div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-section fi0 fi3">
+    <span class="kpi-tag">⬡ KPI lecția 2.4 — Tabloul integrat personal</span>
+    <div class="kpi-title">Prima diagnoză funcțională din date proprii</div>
+    <ul class="kpi-items">
+      <li><span class="kpi-arrow">→</span>Construiești tabloul integrat din datele disponibile (jurnal + HRV + analize)</li>
+      <li><span class="kpi-arrow">→</span>Identifici prioritatea de intervenție nr. 1 din tablou</li>
+      <li><span class="kpi-arrow">→</span>Formulezi ipoteza de intervenție: cauzalitate plauzibilă, variabilă izolată, durată minimum 21 zile</li>
+      <li><span class="kpi-arrow">→</span>Scrii prima pagină de sinteză trimestrială dacă ai date din ultimele 30 de zile</li>
+    </ul>
+  </div>
+
+  <div class="footer-info">
+    <strong>Biohacking 3.0 · Modul 2 · Lecția 2.4</strong> · dr.ing. Radu Pascu · NUTRISIB Sibiu · 2025<br>
+    Surse: Attia (2023) Outlive; Kahneman (2011); Lillie (2011) BMJ; Sabate (2003) WHO
+  </div>
+</div>
+
+<script>
+// Zgomot vs semnal clicks
+// Deja implementat via onclick pe .signal-row
+
+// Tabs exemple
+function switchEx(btn,id){
+  document.querySelectorAll('.ex-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.ex-panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+// Chart trending
+const days=Array.from({length:30},(_,i)=>i+1);
+// Baseline ~6.5, intervenție din ziua 15 → ușoară creștere
+const baseline=6.5;
+const scores=days.map(d=>{
+  const base=d<15?baseline:baseline+0.06*(d-15);
+  return +(base+(Math.random()-0.5)*2.2).toFixed(1);
+}).map(v=>Math.max(1,Math.min(10,v)));
+// Media mobila 7 zile
+const ma7=scores.map((_,i)=>{
+  if(i<3) return null;
+  const s=Math.max(0,i-3);
+  const vals=scores.slice(s,i+4);
+  return +(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(2);
+});
+
+new Chart(document.getElementById('trendChart'),{
+  type:'line',
+  data:{
+    labels:days,
+    datasets:[
+      {label:'Scor somn zilnic',data:scores,borderColor:'#C8C0B0',backgroundColor:'transparent',
+       borderWidth:1.5,tension:.3,pointRadius:2,pointBackgroundColor:'#C8C0B0',fill:false},
+      {label:'Media mobilă 7 zile',data:ma7,borderColor:'#0A7EA4',backgroundColor:'rgba(10,126,164,.06)',
+       borderWidth:2.5,tension:.4,pointRadius:0,fill:true},
+      {label:'Baseline',data:Array(30).fill(baseline),borderColor:'#1A6B3C',borderWidth:1.5,
+       borderDash:[6,4],pointRadius:0,fill:false},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{title:v=>'Ziua '+v[0].label,label:v=>v.dataset.label+': '+v.parsed.y}}},
+    scales:{
+      x:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:10},color:'#9A9088',maxTicksLimit:10}},
+      y:{min:1,max:10,grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{size:10},color:'#9A9088'},
+        title:{display:true,text:'Scor somn (1–10)',font:{size:10},color:'#9A9088'}}
+    }
+  }
+});
+
+// Animate aderenta bars
+const aIO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.adh-fill').forEach(b=>{b.style.width=b.dataset.w+'%';});
+      aIO.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+aIO.observe(document.getElementById('adhBars'));
+</script>
+</body>
+</html>
