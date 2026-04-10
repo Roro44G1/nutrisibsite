@@ -19,17 +19,14 @@ ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 
 IGNORA_FOLDERE = {
     "en", "admin", "_site", "node_modules",
-    "_eleventy_nou", ".git", "logo", "imagini",
-    "cards", "patches", "meridiane", "chackra",
-    "CELOS10", "CELOS20", "celos10", "celos20",
-    "nutritrack", "essent"
+    ".git", "logo", "imagini",
+    "cards", "patches", "nutritrack"
 }
 
 IGNORA_FISIERE = {
     "footer.html", "success.html", "acord_EN.html",
     "acord_RO.html", "acord_RO1.html",
-    "celos - Copie.html", "povestea - Copie.html",
-    "disclaimer_EN.html",
+    "disclaimer_EN.html", "disclaimer_RO.html",
 }
 
 MAX_FRAGMENT = 1500
