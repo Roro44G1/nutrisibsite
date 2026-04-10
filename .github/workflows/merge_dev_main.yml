@@ -1,0 +1,43 @@
+name: Merge automat dev → main
+
+on:
+  schedule:
+    # In fiecare luni la 05:00 UTC (07:00 ora Romaniei)
+    - cron: '0 5 * * 1'
+  # Permite rulare manuala din GitHub
+  workflow_dispatch:
+
+jobs:
+  merge-dev-in-main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cloneaza repo-ul
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Cloneaza tot istoricul
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configureaza Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Fetch toate branch-urile
+        run: git fetch --all
+
+      - name: Trece pe main
+        run: git checkout main
+
+      - name: Merge dev in main
+        run: |
+          git merge origin/dev --no-edit --strategy-option=theirs
+        # --strategy-option=theirs = in caz de conflict, dev castiga
+
+      - name: Push pe main
+        run: git push origin main
+
+      - name: Rezultat
+        run: |
+          echo "✅ Merge dev → main finalizat cu succes!"
+          echo "Commit: $(git log -1 --oneline)"
