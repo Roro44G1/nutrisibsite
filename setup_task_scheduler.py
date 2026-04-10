@@ -5,13 +5,13 @@ from pathlib import Path
 
 # ============================================
 #  CONFIGURARE TASK SCHEDULER WINDOWS
-#  Ruleaza agent_context.py saptamanal
+#  Ruleaza agent_supabase.py saptamanal
 #  Ruleaza acest script O SINGURA DATA
 # ============================================
 
 # ── Configurare ──
 NUME_TASK = "NutriSib_Regenerare_Context"
-SCRIPT = Path(__file__).parent / "agent_context.py"
+SCRIPT = Path(__file__).parent / "agent_supabase.py"
 ZI_SAPTAMANA = "MON"   # MON, TUE, WED, THU, FRI, SAT, SUN
 ORA = "08:00"          # ora la care ruleaza
 
@@ -26,7 +26,7 @@ def creeaza_task():
 
     if not SCRIPT.exists():
         print(f"\n  EROARE: Nu gasesc {SCRIPT}")
-        print("  Asigura-te ca agent_context.py e in acelasi folder.")
+        print("  Asigura-te ca setup_task_scheduler.py e in acelasi folder.")
         input("\n  Apasa Enter...")
         return False
 
