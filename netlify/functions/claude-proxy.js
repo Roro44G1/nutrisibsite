@@ -5,24 +5,23 @@ async function cautaInSupabase(intrebare) {
   try {
     const rezultate = new Map();
 
-    // Extrage toate cuvintele cu 3+ caractere
+    // Extrage cuvinte cu 3+ caractere si fraze de 2 cuvinte
     const cuvinte = intrebare
       .replace(/[?,!.]/g, '')
       .split(/\s+/)
       .filter(c => c.length >= 3);
 
-    // Cauta si fraze de 2 cuvinte consecutive
     const fraze = [];
     for (let i = 0; i < cuvinte.length - 1; i++) {
       fraze.push(cuvinte[i] + ' ' + cuvinte[i+1]);
     }
 
-    // Combina cuvinte si fraze pentru cautare
-    const termeni = [...fraze, ...cuvinte].slice(0, 5);
+    // Cauta fraze intai, apoi cuvinte individuale
+    const termeni = [...fraze, ...cuvinte].slice(0, 6);
 
     for (const termen of termeni) {
       const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/nutrisib_context?continut=ilike.*${encodeURIComponent(termen)}*&select=titlu,url,continut&limit=3`,
+        `${SUPABASE_URL}/rest/v1/nutrisib_context?continut=ilike.*${encodeURIComponent(termen)}*&select=titlu,url,continut&limit=20`,
         {
           headers: {
             "apikey": SUPABASE_KEY,
@@ -44,7 +43,7 @@ async function cautaInSupabase(intrebare) {
     if (rezultate.size === 0) return "";
 
     return Array.from(rezultate.values())
-      .slice(0, 5)
+      .slice(0, 15)
       .map(r => `[${r.titlu} — ${r.url}]\n${r.continut}`)
       .join("\n\n");
 
@@ -94,19 +93,12 @@ Program de 6 săptămâni, 30 lecții video, 18+ ore HD. URL: https://nutrisib.c
 Module: 1) Mindset biohacking 3.0. 2) Self-tracking inteligent, HRV. 3) Biochimia alimentației, microbiom. 4) Arhitectura recuperării, somn. 5) Mișcare și longevitate. 6) Stres, cogniție, plan 90 zile.
 
 BLOG: 80+ articole la https://nutrisib.club/blog — nutriție, sănătate, lifestyle, suplimente.
-PRODUSE: https://nutrisib.club/produse - informații despre suplimente
-MICRONUTRIENȚI: https://nutrisib.club/micronutrienti - informații de spre micronutrienți și vitamine
-CHACKRA: https://nutrisib.club/chackra - informații despre spiritualitate și chackra 
-NUTRIȚIE: https://nutrisib.club/CELOS20 și https://nutrisib.club/CELOS10 informații despre temele principale de nutriție
-MERIDIANE ENERGETICE: https://nutrisib.club/meridiane - informații despre medridianele energetice ale corpului și acupunctură
-
 ${contextExtra}
 REGULI:
 - Răspunde întotdeauna în română, indiferent de limba întrebării
 - Fii prietenos, științific dar accesibil
-- Folosește informațiile relevante din site-ul https://nutrisib.club când sunt disponibile
+- Folosește informațiile relevante din site de mai sus când sunt disponibile
 - Dacă nu știi ceva specific, trimite la pagina relevantă sau sugerează contact direct
-- Dacă nu găsești informații pe site, poți face o căutare rapidă pe internet și să extragi informații la nivel de 2-3 paragarfe și apoi trimiți la o evaluare la nutrisib
 - Nu inventa prețuri specifice
 - Pentru întrebări medicale, recomandă consultarea unui medic
 
@@ -119,7 +111,7 @@ REGULI STRICTE DE LIMBĂ ROMÂNĂ:
 FORMAT:
 - Fără Markdown: fără asteriscuri, bold, liniuțe, hashtag-uri
 - Propoziții și paragrafe naturale
-- Maxim 5 paragrafe`;
+- Maxim 4-5 paragrafe`;
 
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -130,7 +122,7 @@ FORMAT:
       },
       body: JSON.stringify({
         model: "claude-haiku-4-5-20251001",
-        max_tokens: 1024,
+        max_tokens: 2048,
         system: systemPrompt,
         messages: messages
       })
