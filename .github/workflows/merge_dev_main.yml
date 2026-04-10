@@ -1,43 +1,110 @@
-name: Merge automat dev → main
+name: Deploy zilnic dev → main (NUTRISIB)
+
+# ══════════════════════════════════════════════════════════
+# DECLANȘATORI:
+#
+# 1. AUTOMAT — în fiecare zi la 23:30 ora României (21:30 UTC), 7/7
+#    Rulează doar dacă există diferențe între dev și main.
+#
+# 2. MANUAL — buton "Run workflow" în GitHub Actions
+#    Util când vrei un deploy în timpul zilei după modificări importante.
+#
+# NU se declanșează la fiecare push.
+# Netlify nu primește nimic până la ora programată.
+# ══════════════════════════════════════════════════════════
 
 on:
   schedule:
-    # In fiecare luni la 05:00 UTC (07:00 ora Romaniei)
-    - cron: '0 5 * * 1'
-  # Permite rulare manuala din GitHub
-  workflow_dispatch:
+    - cron: '30 21 * * *'    # Zilnic (7/7) la 23:30 ora României (UTC+2 = 21:30 UTC)
+
+  workflow_dispatch:          # Deploy manual oricând în timpul zilei
+    inputs:
+      motiv:
+        description: 'Motiv deploy (ex: lansare promo, fix critic, lecție nouă)'
+        required: false
+        default: 'Deploy manual ad-hoc'
+
+permissions:
+  contents: write
 
 jobs:
-  merge-dev-in-main:
+
+  deploy-zilnic:
+    name: "Deploy zilnic dev → main"
     runs-on: ubuntu-latest
 
     steps:
-      - name: Cloneaza repo-ul
+      - name: Clonează repo-ul complet
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Cloneaza tot istoricul
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Configureaza Git
+      - name: Configurare identitate Git
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
+          git config user.name  "NUTRISIB Auto-Deploy"
+          git config user.email "deploy@nutrisib.ro"
 
       - name: Fetch toate branch-urile
         run: git fetch --all
 
-      - name: Trece pe main
-        run: git checkout main
-
-      - name: Merge dev in main
+      # ── Verifică dacă există diferențe dev vs main ────────
+      # Dacă nu s-a schimbat nimic azi, Netlify nu e deranjat
+      - name: Verifică dacă există modificări față de main
+        id: check_diff
         run: |
-          git merge origin/dev --no-edit --strategy-option=theirs
-        # --strategy-option=theirs = in caz de conflict, dev castiga
+          DIFF=$(git log origin/main..origin/dev --oneline)
+          if [ -z "$DIFF" ]; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ Nicio modificare față de main — deploy sărit."
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "✅ Modificări detectate:"
+            echo "$DIFF"
+          fi
 
-      - name: Push pe main
-        run: git push origin main
+      # ── Audit terminologie ReDefine → CELOS ───────────────
+      - name: Audit terminologie
+        if: steps.check_diff.outputs.has_changes == 'true'
+        run: |
+          if [ -f "redefine_to_celos.py" ]; then
+            python3 redefine_to_celos.py \
+              --folder . \
+              --dry-run \
+              --ext .html .htm .js .css .txt .md \
+              --log redefine_audit.txt
+            echo "=== RAPORT TERMINOLOGIE ==="
+            cat redefine_audit.txt
+          else
+            echo "Script redefine_to_celos.py negăsit — audit sărit."
+          fi
 
+      # ── Merge dev → main ──────────────────────────────────
+      # --strategy-option=theirs = în caz de conflict, dev câștigă
+      - name: Merge dev → main
+        if: steps.check_diff.outputs.has_changes == 'true'
+        run: |
+          git checkout main
+          git merge origin/dev --no-edit --strategy-option=theirs \
+            -m "deploy: sync dev→main $(date '+%Y-%m-%d %H:%M UTC')"
+          git push origin main
+
+      # ── Rezultat final ────────────────────────────────────
       - name: Rezultat
         run: |
-          echo "✅ Merge dev → main finalizat cu succes!"
-          echo "Commit: $(git log -1 --oneline)"
+          if [ "${{ steps.check_diff.outputs.has_changes }}" == "true" ]; then
+            echo "════════════════════════════════════════"
+            echo "✅ DEPLOY NUTRISIB FINALIZAT"
+            echo "════════════════════════════════════════"
+            echo "Commit: $(git log -1 --oneline)"
+            echo "Data:   $(date '+%Y-%m-%d %H:%M UTC')"
+            if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+              echo "Tip:    Manual — ${{ github.event.inputs.motiv }}"
+            else
+              echo "Tip:    Programat (cron zilnic 23:30)"
+            fi
+            echo "Netlify preia automat în ~60 secunde."
+            echo "════════════════════════════════════════"
+          else
+            echo "ℹ️ Nicio modificare — Netlify nu a fost deranjat."
+          fi
