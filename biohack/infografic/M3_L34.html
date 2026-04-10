@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Infografic L3.4 — Protocoalele de post intermitent</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --ind:  #283593;
+  --indl: #3F51B5;
+  --indd: #1A237E;
+  --gold: #F9A825;
+  --navy: #0D1226;
+  --bg:   #E8EAF6;
+  --gray: #546E7A;
+  --white:#F0F4FF;
+  --green:#2E7D32;
+  --red:  #B71C1C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--navy);font-family:'Segoe UI',system-ui,sans-serif;color:var(--white);min-height:100vh}
+
+header{background:linear-gradient(135deg,var(--indd),var(--ind));padding:28px 24px 20px;text-align:center;border-bottom:3px solid var(--gold)}
+header .tag{font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+header h1{font-size:clamp(20px,4vw,30px);font-weight:700;letter-spacing:1px}
+header p{font-size:13px;color:#C5CAE9;margin-top:6px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;padding:16px;max-width:1100px;margin:0 auto}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(63,81,181,0.3);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--ind)}
+.card.gold-top::before{background:var(--gold)}
+.card.green-top::before{background:var(--green)}
+.card.red-top::before{background:var(--red)}
+.card h2{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;font-weight:600}
+
+/* ── SIMULATOR ── */
+#simulator{grid-column:1/-1;background:linear-gradient(135deg,rgba(26,35,126,0.7),rgba(13,18,38,0.9));border:1px solid var(--indl)}
+.sim-label{font-size:11px;letter-spacing:2px;color:#C5CAE9;text-transform:uppercase;margin-bottom:6px}
+.sim-value{font-size:42px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:4px}
+.sim-sub{font-size:12px;color:var(--gray)}
+.slider-wrap{margin:14px 0}
+input[type=range]{width:100%;-webkit-appearance:none;height:6px;border-radius:3px;background:linear-gradient(to right,var(--indl) 0%,var(--indl) 50%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.1) 100%);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--navy)}
+.phase-bar{display:flex;height:36px;border-radius:6px;overflow:hidden;margin:12px 0;position:relative}
+.phase-seg{display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:all .3s;cursor:pointer;position:relative}
+.phase-seg:hover{filter:brightness(1.2)}
+.phase-seg.active{outline:3px solid var(--gold);outline-offset:-2px;z-index:1}
+.bio-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.bio-item{background:rgba(0,0,0,0.3);border-radius:6px;padding:10px;border-left:3px solid var(--indl);transition:all .3s}
+.bio-item.active-bio{border-left-color:var(--gold);background:rgba(249,168,37,0.08)}
+.bio-item .bi-icon{font-size:18px;margin-bottom:4px}
+.bio-item .bi-name{font-size:10px;font-weight:700;color:var(--white);margin-bottom:2px}
+.bio-item .bi-desc{font-size:9px;color:var(--gray);line-height:1.4}
+.bio-item .bi-status{font-size:9px;color:var(--gold);font-weight:600;margin-top:4px}
+
+/* ── PROTOCOALE CARD ── */
+.proto-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.proto-tab{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:1px;cursor:pointer;border:1px solid rgba(63,81,181,0.5);background:transparent;color:#C5CAE9;transition:all .2s}
+.proto-tab.active{background:var(--ind);color:var(--white);border-color:var(--ind)}
+.proto-content{display:none;animation:fadeIn .3s}
+.proto-content.visible{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.proto-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.pm-box{background:rgba(0,0,0,0.3);border-radius:6px;padding:10px;text-align:center}
+.pm-val{font-size:22px;font-weight:700;color:var(--gold);line-height:1}
+.pm-lbl{font-size:9px;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-top:3px}
+.proto-list{list-style:none}
+.proto-list li{padding:5px 0;font-size:12px;color:#C5CAE9;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+.proto-list li::before{content:'▶';color:var(--indl);font-size:8px;flex-shrink:0;margin-top:3px}
+.proto-bar{height:8px;border-radius:4px;margin:12px 0 4px;background:rgba(255,255,255,0.08);position:relative;overflow:hidden}
+.proto-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--indd),var(--indl));transition:width 1s cubic-bezier(.4,0,.2,1)}
+.proto-fill.gold-fill{background:linear-gradient(90deg,#E65100,var(--gold))}
+.proto-legend{display:flex;justify-content:space-between;font-size:9px;color:var(--gray);letter-spacing:1px}
+
+/* ── CHART ── */
+.chart-wrap{position:relative;height:200px}
+
+/* ── FAZE CIRCADIENE ── */
+.circadian-timeline{display:flex;position:relative;margin:10px 0;height:50px}
+.ct-seg{flex:1;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;border-radius:0}
+.ct-seg:first-child{border-radius:6px 0 0 6px}
+.ct-seg:last-child{border-radius:0 6px 6px 0}
+
+/* ── ETRF vs LTRF ── */
+.compare-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cmp-box{background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;border-top:3px solid}
+.cmp-box.etrf{border-color:var(--green)}
+.cmp-box.ltrf{border-color:var(--indl)}
+.cmp-box h3{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.cmp-box.etrf h3{color:var(--green)}
+.cmp-box.ltrf h3{color:var(--indl)}
+.cmp-list{list-style:none}
+.cmp-list li{font-size:10px;color:#B0BEC5;padding:3px 0;display:flex;gap:6px;line-height:1.4}
+.cmp-list li.plus::before{content:'✓';color:var(--green)}
+.cmp-list li.minus::before{content:'✗';color:var(--red)}
+
+/* ── CONTRAINDICATII ── */
+.contra-grid{display:grid;gap:6px}
+.contra-item{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:6px;background:rgba(0,0,0,0.3)}
+.contra-item.abs{border-left:3px solid var(--red)}
+.contra-item.rel{border-left:3px solid var(--gold)}
+.contra-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.contra-dot.abs{background:var(--red)}
+.contra-dot.rel{background:var(--gold)}
+.contra-text{font-size:11px;color:#B0BEC5;line-height:1.4}
+
+/* ── BIOMARKERI ── */
+.bm-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)}
+.bm-row:last-child{border-bottom:none}
+.bm-name{font-size:11px;font-weight:600;color:var(--white);width:130px;flex-shrink:0}
+.bm-bar-wrap{flex:1;height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden}
+.bm-bar{height:100%;border-radius:4px;transition:width 1.5s cubic-bezier(.4,0,.2,1)}
+.bm-val{font-size:10px;color:var(--gold);width:80px;text-align:right;flex-shrink:0}
+
+/* ── HRV WIDGET ── */
+.hrv-display{text-align:center;padding:10px 0}
+.hrv-val{font-size:52px;font-weight:700;color:var(--gold);line-height:1;transition:all .4s}
+.hrv-status{font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-top:6px;transition:color .4s}
+.hrv-note{font-size:11px;color:var(--gray);margin-top:8px;line-height:1.5}
+.hrv-btns{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.hrv-btn{padding:8px 16px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid;transition:all .2s;background:transparent;letter-spacing:1px}
+.hrv-btn:hover{transform:translateY(-1px)}
+
+footer{text-align:center;padding:20px;font-size:11px;color:var(--gray);border-top:1px solid rgba(63,81,181,0.2);margin-top:10px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">// Biohacking 3.0 · Modul 3 · Lecția 3.4</div>
+  <h1>Protocoalele de post intermitent</h1>
+  <p>Simulator interactiv · Faze biologice · Protocol N=1</p>
+</header>
+
+<div class="grid">
+
+  <!-- ══ SIMULATOR PRINCIPAL ══ -->
+  <div class="card" id="simulator">
+    <h2>⏱ Simulator ore de post</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px">
+      <div>
+        <div class="sim-label">Ore de post</div>
+        <div class="sim-value" id="hours-val">0</div>
+        <div class="sim-sub">ore</div>
+      </div>
+      <div>
+        <div class="sim-label">Faza activa</div>
+        <div style="font-size:18px;font-weight:700;color:var(--indl);margin-top:6px" id="phase-name">—</div>
+      </div>
+      <div>
+        <div class="sim-label">Cetone estimate</div>
+        <div class="sim-value" id="ketone-val" style="font-size:28px">0.0</div>
+        <div class="sim-sub">mmol/L</div>
+      </div>
+    </div>
+
+    <div class="slider-wrap">
+      <input type="range" id="fast-slider" min="0" max="48" value="0" step="1" oninput="updateSimulator(this.value)"/>
+    </div>
+
+    <!-- Bara faze -->
+    <div class="phase-bar" id="phase-bar">
+      <div class="phase-seg" style="width:25%;background:rgba(63,81,181,0.4)" data-phase="0">0–12h</div>
+      <div class="phase-seg" style="width:16.6%;background:rgba(63,81,181,0.6)" data-phase="1">12–20h</div>
+      <div class="phase-seg" style="width:16.6%;background:rgba(63,81,181,0.8)" data-phase="2">20–28h</div>
+      <div class="phase-seg" style="width:25%;background:rgba(26,35,126,0.9)" data-phase="3">28–40h</div>
+      <div class="phase-seg" style="width:16.6%;background:rgba(13,19,78,0.95)" data-phase="4">40–48h</div>
+    </div>
+
+    <!-- Grid bio-efecte -->
+    <div class="bio-grid" id="bio-grid">
+      <div class="bio-item" id="bio-insulin">
+        <div class="bi-icon">📉</div>
+        <div class="bi-name">Insulina</div>
+        <div class="bi-desc">Scade odata cu epuizarea glucozei</div>
+        <div class="bi-status" id="stat-insulin">—</div>
+      </div>
+      <div class="bio-item" id="bio-hgh">
+        <div class="bi-icon">💪</div>
+        <div class="bi-name">HGH (Hormon crestere)</div>
+        <div class="bi-desc">Protejeaza masa musculara</div>
+        <div class="bi-status" id="stat-hgh">—</div>
+      </div>
+      <div class="bio-item" id="bio-autophagy">
+        <div class="bi-icon">♻️</div>
+        <div class="bi-name">Autofagie</div>
+        <div class="bi-desc">Curatare celulara (Nobel 2016)</div>
+        <div class="bi-status" id="stat-autophagy">—</div>
+      </div>
+      <div class="bio-item" id="bio-ampk">
+        <div class="bi-icon">⚡</div>
+        <div class="bi-name">AMPK</div>
+        <div class="bi-desc">Senzor energetic celular</div>
+        <div class="bi-status" id="stat-ampk">—</div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px;padding:10px;background:rgba(0,0,0,0.3);border-radius:6px;border-left:3px solid var(--gold)">
+      <div style="font-size:11px;color:#C5CAE9;font-style:italic" id="phase-desc">Muta slider-ul pentru a vedea fazele biologice ale postului.</div>
+    </div>
+  </div>
+
+  <!-- ══ PROTOCOALE ══ -->
+  <div class="card" style="grid-column:span 2">
+    <h2>📋 Protocoalele principale</h2>
+    <div class="proto-tabs">
+      <button class="proto-tab active" onclick="showProto('p168',this)">16:8</button>
+      <button class="proto-tab" onclick="showProto('p52',this)">5:2</button>
+      <button class="proto-tab" onclick="showProto('p204',this)">20:4</button>
+      <button class="proto-tab" onclick="showProto('pomad',this)">OMAD</button>
+    </div>
+
+    <div id="p168" class="proto-content visible">
+      <div class="proto-meta">
+        <div class="pm-box"><div class="pm-val">16h</div><div class="pm-lbl">Post</div></div>
+        <div class="pm-box"><div class="pm-val">8h</div><div class="pm-lbl">Fereastra</div></div>
+      </div>
+      <div class="proto-bar"><div class="proto-fill" style="width:67%"></div></div>
+      <div class="proto-legend"><span>POST</span><span>FEREASTRA ALIMENTARA</span></div>
+      <ul class="proto-list" style="margin-top:10px">
+        <li>Protocolul de referinta — cel mai studiat, efect clar pe sensibilitate insulinica</li>
+        <li>Exemplu: ultima masa 20:00 → prima masa a doua zi 12:00</li>
+        <li>Wilkinson et al. 2020: reducere TG, TA, greutate fara numarare calorii</li>
+        <li>Ideal pentru: entry-level IF, profesionisti activi, program predictibil</li>
+        <li>Limitari: compatibilitate sociala redusa seara daca fereastra e devreme</li>
+      </ul>
+    </div>
+
+    <div id="p52" class="proto-content">
+      <div class="proto-meta">
+        <div class="pm-box"><div class="pm-val">2</div><div class="pm-lbl">Zile restrictie/sapt</div></div>
+        <div class="pm-box"><div class="pm-val">500</div><div class="pm-lbl">kcal in zilele restrictive</div></div>
+      </div>
+      <div class="proto-bar"><div class="proto-fill gold-fill" style="width:28.5%"></div></div>
+      <div class="proto-legend"><span>ZILE RESTRICTIE (2/7)</span><span>ZILE NORMALE (5/7)</span></div>
+      <ul class="proto-list" style="margin-top:10px">
+        <li>5 zile alimentatie normala + 2 zile non-consecutive la 500–600 kcal</li>
+        <li>Mai usor de mentinut social; restrictia nu este zilnica</li>
+        <li>Harvie et al. 2011: reducere similara cu restrictia calorica continua</li>
+        <li>Ideal pentru: viata sociala intensa, dificultate cu restrictia zilnica</li>
+        <li>Atentie: zilele restrictive pot afecta performanta cognitiva</li>
+      </ul>
+    </div>
+
+    <div id="p204" class="proto-content">
+      <div class="proto-meta">
+        <div class="pm-box"><div class="pm-val">20h</div><div class="pm-lbl">Post</div></div>
+        <div class="pm-box"><div class="pm-val">4h</div><div class="pm-lbl">Fereastra</div></div>
+      </div>
+      <div class="proto-bar"><div class="proto-fill" style="width:83%"></div></div>
+      <div class="proto-legend"><span>POST EXTINS</span><span>FEREASTRA 4h</span></div>
+      <ul class="proto-list" style="margin-top:10px">
+        <li>Warrior Diet — fereastra de obicei 16:00–20:00 (seara)</li>
+        <li>Autofagie extinsa, claritate cognitiva ridicata in cursul zilei</li>
+        <li>Ideal: practicanti avansati IF, toleranta crescuta la foame</li>
+        <li>Risc: dificultate acoperire target proteic (1.6–2.0 g/kg) in 4 ore</li>
+        <li>Atentie: risc de supraalimentare compensatorie in fereastra scurta</li>
+      </ul>
+    </div>
+
+    <div id="pomad" class="proto-content">
+      <div class="proto-meta">
+        <div class="pm-box"><div class="pm-val">1</div><div class="pm-lbl">Masa / zi</div></div>
+        <div class="pm-box"><div class="pm-val">23h</div><div class="pm-lbl">Post efectiv</div></div>
+      </div>
+      <div class="proto-bar"><div class="proto-fill gold-fill" style="width:96%"></div></div>
+      <div class="proto-legend"><span>POST 23h</span><span>MASA 1h</span></div>
+      <ul class="proto-list" style="margin-top:10px">
+        <li>O singura masa pe zi — protocol terapeutic, nu cronic</li>
+        <li>Autofagie maxima, simplificare extrema a logisticii alimentare</li>
+        <li>Risc major: deficit proteic si micro-nutritional cronizat</li>
+        <li>Nu recomandat ca protocol principal pentru masa musculara</li>
+        <li>Necesita monitorizare medicala si adaptare strict individuala</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══ eTRF vs lTRF ══ -->
+  <div class="card">
+    <h2>🕐 eTRF vs. lTRF</h2>
+    <p style="font-size:11px;color:var(--gray);margin-bottom:12px">Aceeasi durata — timing diferit → rezultate diferite</p>
+    <div class="compare-row">
+      <div class="cmp-box etrf">
+        <h3>eTRF</h3>
+        <p style="font-size:10px;color:#81C784;margin-bottom:8px">Dimineata–Pranz<br/>08:00–16:00</p>
+        <ul class="cmp-list">
+          <li class="plus">Insulina optima</li>
+          <li class="plus">Cortizol utilizat</li>
+          <li class="plus">Sutton 2018: beneficii maxime</li>
+          <li class="minus">Dificil social (cine)</li>
+          <li class="minus">Contra ritmului urban</li>
+        </ul>
+      </div>
+      <div class="cmp-box ltrf">
+        <h3>lTRF</h3>
+        <p style="font-size:10px;color:#90CAF9;margin-bottom:8px">Pranz–Seara<br/>12:00–20:00</p>
+        <ul class="cmp-list">
+          <li class="plus">Compatibil social</li>
+          <li class="plus">Mai usor de mentinut</li>
+          <li class="plus">Majoritate studii</li>
+          <li class="minus">Peak cortizol irosit</li>
+          <li class="minus">Rezultate mai slabe vs. eTRF</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:10px;background:rgba(0,0,0,0.3);border-radius:6px;font-size:11px;color:#C5CAE9;font-style:italic;border-left:3px solid var(--gold)">
+      Recomandare: impinge fereastra cat mai devreme posibil. lTRF ramane mult mai bun decat fara nicio structura.
+    </div>
+  </div>
+
+  <!-- ══ HRV DECIDENT ══ -->
+  <div class="card gold-top">
+    <h2>💓 HRV — Decidentul tau</h2>
+    <div class="hrv-display">
+      <div class="hrv-val" id="hrv-val">72</div>
+      <div class="hrv-status" id="hrv-status" style="color:var(--green)">● VERDE — IF SIGUR</div>
+      <div class="hrv-note" id="hrv-note">HRV in parametrii normali. Postul intermitent este bine tolerat. Continua protocolul curent.</div>
+    </div>
+    <div class="hrv-btns">
+      <button class="hrv-btn" style="color:var(--green);border-color:var(--green)" onclick="setHRV('green')">HRV normal</button>
+      <button class="hrv-btn" style="color:var(--gold);border-color:var(--gold)" onclick="setHRV('yellow')">HRV -5%–10%</button>
+      <button class="hrv-btn" style="color:var(--red);border-color:var(--red)" onclick="setHRV('red')">HRV &lt; -10%</button>
+    </div>
+    <p style="font-size:10px;color:var(--gray);text-align:center;margin-top:10px">Altini & Plews (2021) Sensors — HRV ca indicator stres adaptativ</p>
+  </div>
+
+  <!-- ══ CONTRAINDICATII ══ -->
+  <div class="card red-top">
+    <h2>⚠️ Contraindicatii</h2>
+    <p style="font-size:10px;color:var(--red);font-weight:600;letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">Absolute — stop complet</p>
+    <div class="contra-grid">
+      <div class="contra-item abs"><div class="contra-dot abs"></div><div class="contra-text">Diabet zaharat tip 1</div></div>
+      <div class="contra-item abs"><div class="contra-dot abs"></div><div class="contra-text">Sarcina si alaptare</div></div>
+      <div class="contra-item abs"><div class="contra-dot abs"></div><div class="contra-text">Tulburari de alimentatie in antecedente</div></div>
+      <div class="contra-item abs"><div class="contra-dot abs"></div><div class="contra-text">Subpondere (IMC &lt; 18.5)</div></div>
+      <div class="contra-item abs"><div class="contra-dot abs"></div><div class="contra-text">Copii si adolescenti (&lt;18 ani)</div></div>
+    </div>
+    <p style="font-size:10px;color:var(--gold);font-weight:600;letter-spacing:1px;margin:10px 0 8px;text-transform:uppercase">Relative — supraveghere medicala</p>
+    <div class="contra-grid">
+      <div class="contra-item rel"><div class="contra-dot rel"></div><div class="contra-text">Diabet tip 2 tratat medicamentos</div></div>
+      <div class="contra-item rel"><div class="contra-dot rel"></div><div class="contra-text">Hipotiroidism necontrolat</div></div>
+      <div class="contra-item rel"><div class="contra-dot rel"></div><div class="contra-text">Sportivi performanta &gt; 10h/saptamana</div></div>
+      <div class="contra-item rel"><div class="contra-dot rel"></div><div class="contra-text">Stres cronic sever (cortizol &gt; 20)</div></div>
+    </div>
+  </div>
+
+  <!-- ══ CHART GLICEMIE POST ══ -->
+  <div class="card green-top">
+    <h2>📊 Glicemie si cetone pe durata postului</h2>
+    <div class="chart-wrap">
+      <canvas id="ifChart"></canvas>
+    </div>
+    <p style="font-size:10px;color:var(--gray);text-align:center;margin-top:8px">Valori orientative — variabilitate individuala semnificativa</p>
+  </div>
+
+  <!-- ══ BIOMARKERI ══ -->
+  <div class="card">
+    <h2>🔬 Biomarkeri de monitorizat</h2>
+    <div class="bm-row">
+      <div class="bm-name">Glicemie a jeun</div>
+      <div class="bm-bar-wrap"><div class="bm-bar" style="width:0%;background:linear-gradient(90deg,var(--green),#81C784)" id="bm1"></div></div>
+      <div class="bm-val">70–85 mg/dL</div>
+    </div>
+    <div class="bm-row">
+      <div class="bm-name">Insulina bazala</div>
+      <div class="bm-bar-wrap"><div class="bm-bar" style="width:0%;background:linear-gradient(90deg,var(--ind),var(--indl))" id="bm2"></div></div>
+      <div class="bm-val">&lt; 5 µIU/mL</div>
+    </div>
+    <div class="bm-row">
+      <div class="bm-name">HOMA-IR</div>
+      <div class="bm-bar-wrap"><div class="bm-bar" style="width:0%;background:linear-gradient(90deg,#00695C,#00897B)" id="bm3"></div></div>
+      <div class="bm-val">&lt; 1.5</div>
+    </div>
+    <div class="bm-row">
+      <div class="bm-name">HbA1c</div>
+      <div class="bm-bar-wrap"><div class="bm-bar" style="width:0%;background:linear-gradient(90deg,var(--gold),#FFD54F)" id="bm4"></div></div>
+      <div class="bm-val">4.8–5.4%</div>
+    </div>
+    <div class="bm-row">
+      <div class="bm-name">Cetone serice</div>
+      <div class="bm-bar-wrap"><div class="bm-bar" style="width:0%;background:linear-gradient(90deg,#6A1B9A,#9C27B0)" id="bm5"></div></div>
+      <div class="bm-val">0.5–3.0 mmol/L</div>
+    </div>
+    <div class="bm-row">
+      <div class="bm-name">HRV matinal</div>
+      <div class="bm-bar-wrap"><div class="bm-bar" style="width:0%;background:linear-gradient(90deg,#E65100,var(--gold))" id="bm6"></div></div>
+      <div class="bm-val">≥ baseline</div>
+    </div>
+    <p style="font-size:9px;color:var(--gray);margin-top:10px;font-style:italic">* Bare = nivel optim relativ. Valorile absolute variaza individual.</p>
+  </div>
+
+  <!-- ══ PROGRESIE IMPLEMENTARE ══ -->
+  <div class="card" style="grid-column:1/-1">
+    <h2>📅 Implementare graduala — roadmap N=1</h2>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px">
+      <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:14px;border-top:3px solid rgba(63,81,181,0.5)">
+        <div style="font-size:10px;color:var(--gold);font-weight:700;letter-spacing:2px;margin-bottom:6px">SÂPt. 1–2</div>
+        <div style="font-size:20px;font-weight:700;color:var(--white);margin-bottom:4px">12:12</div>
+        <div style="font-size:11px;color:#C5CAE9;margin-bottom:8px">08:00–20:00</div>
+        <p style="font-size:10px;color:var(--gray)">Elimini gustarea de noapte. Adaptezi ritmul circadian. Zero sacrificii sociale.</p>
+      </div>
+      <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:14px;border-top:3px solid rgba(63,81,181,0.65)">
+        <div style="font-size:10px;color:var(--gold);font-weight:700;letter-spacing:2px;margin-bottom:6px">SAPT. 3–4</div>
+        <div style="font-size:20px;font-weight:700;color:var(--white);margin-bottom:4px">14:10</div>
+        <div style="font-size:11px;color:#C5CAE9;margin-bottom:8px">09:00–19:00</div>
+        <p style="font-size:10px;color:var(--gray)">Prima masa la 9–10:00. Glicemia se stabilizeaza. Foamea matinala scade.</p>
+      </div>
+      <div style="background:rgba(0,0,0,0.3);border-radius:8px;padding:14px;border-top:3px solid var(--indl)">
+        <div style="font-size:10px;color:var(--gold);font-weight:700;letter-spacing:2px;margin-bottom:6px">SAPT. 5–8</div>
+        <div style="font-size:20px;font-weight:700;color:var(--white);margin-bottom:4px">16:8</div>
+        <div style="font-size:11px;color:#C5CAE9;margin-bottom:8px">12:00–20:00</div>
+        <p style="font-size:10px;color:var(--gray)">Protocolul standard. Autofagie activa. Monitorizezi glicemie, HRV, energie.</p>
+      </div>
+      <div style="background:linear-gradient(135deg,rgba(26,35,126,0.5),rgba(40,53,147,0.3));border-radius:8px;padding:14px;border-top:3px solid var(--gold)">
+        <div style="font-size:10px;color:var(--gold);font-weight:700;letter-spacing:2px;margin-bottom:6px">SAPT. 9+</div>
+        <div style="font-size:20px;font-weight:700;color:var(--gold);margin-bottom:4px">N=1</div>
+        <div style="font-size:11px;color:#C5CAE9;margin-bottom:8px">Personalizat</div>
+        <p style="font-size:10px;color:var(--gray)">Ajustezi durata si timing-ul functie de HRV, biomarkeri si obiective.</p>
+      </div>
+    </div>
+    <div style="margin-top:14px;padding:12px;background:rgba(249,168,37,0.08);border-radius:8px;border:1px solid rgba(249,168,37,0.25);display:flex;gap:12px;align-items:center">
+      <span style="font-size:22px">📓</span>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px">Câmpul 15 — Jurnalul Biohacking 3.0</div>
+        <div style="font-size:11px;color:#C5CAE9">Ora ultimei mese · Ora primei mese → calcul durata post · Glicemie a jeun · Nivel energie 1–10 · HRV matinal</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end grid -->
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Infografic educativ · Nu substituie consultul medical</footer>
+
+<script>
+// ── SIMULATOR ──────────────────────────────────────────────────────────────
+const phases = [
+  { max:8,  name:"Glicogenoliza",    ketone:0.1, insulin:"↓ Scade", hgh:"Bazal", autophagy:"Inactiva", ampk:"Inactiv",
+    desc:"Corpul consuma glicogenul hepatic. Insulina scade. Inca nu esti in post metabolic real. Glicemia tinde spre 80 mg/dL." },
+  { max:12, name:"Tranzitie lipidica", ketone:0.3, insulin:"↓↓ Scazut", hgh:"↑ Usor",  autophagy:"Initiata",  ampk:"Activat partial",
+    desc:"Tranzitie catre acizi grasi liberi. Apar primele cetone urinare. Senzatia de foame poate creste — este normala." },
+  { max:16, name:"Autofagie initiata", ketone:0.5, insulin:"Minim bazal", hgh:"↑↑ Crescut", autophagy:"Activa",  ampk:"Complet activat",
+    desc:"PRAG CRITIC: AMPK activat, mTOR inhibat, autofagia incepe activ. HGH urca pentru a proteja masa musculara. Cetone detectabile." },
+  { max:24, name:"Cetoza + Autofagie maxima", ketone:1.5, insulin:"Minim", hgh:"↑↑↑ Peak",  autophagy:"Maxima", ampk:"Complet activat",
+    desc:"Autofagie maxima — celulele curata componentele deteriorate (Ohsumi Nobel 2016). Cetone 0.5–3 mmol/L. Claritate cognitiva crescuta." },
+  { max:48, name:"Post extins", ketone:3.5, insulin:"Minim", hgh:"Peak/platou", autophagy:"Maxima extinsa",ampk:"Complet activat",
+    desc:"Post prelungit — beneficii suplimentare dar riscuri crescute. Necesita electroliti, monitorizare medicala. Nu recomandat fara supervizare." },
+];
+
+function updateSimulator(h){
+  h = parseInt(h);
+  document.getElementById('hours-val').textContent = h;
+  document.getElementById('ketone-val').textContent = getKetone(h).toFixed(1);
+
+  // determine phase
+  let ph = phases[0];
+  let pi = 0;
+  if(h>=40){ph=phases[4];pi=4;}
+  else if(h>=24){ph=phases[3];pi=3;}
+  else if(h>=16){ph=phases[3];pi=3;}
+  else if(h>=12){ph=phases[2];pi=2;}
+  else if(h>=8) {ph=phases[1];pi=1;}
+
+  document.getElementById('phase-name').textContent = ph.name;
+  document.getElementById('phase-desc').textContent = ph.desc;
+
+  // bar segments active
+  document.querySelectorAll('.phase-seg').forEach((s,i)=>{
+    s.classList.toggle('active', i===pi);
+  });
+
+  // bio items
+  const activeItems = pi >= 2 ? ['bio-autophagy','bio-ampk'] : [];
+  if(pi>=1) activeItems.push('bio-hgh');
+  if(pi>=0) activeItems.push('bio-insulin');
+
+  document.querySelectorAll('.bio-item').forEach(it=>it.classList.remove('active-bio'));
+  activeItems.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.classList.add('active-bio');
+  });
+
+  document.getElementById('stat-insulin').textContent = ph.insulin;
+  document.getElementById('stat-hgh').textContent = ph.hgh;
+  document.getElementById('stat-autophagy').textContent = ph.autophagy;
+  document.getElementById('stat-ampk').textContent = ph.ampk;
+
+  // update slider gradient
+  const pct = (h/48)*100;
+  const sl = document.getElementById('fast-slider');
+  sl.style.background=`linear-gradient(to right,var(--indl) 0%,var(--indl) ${pct}%,rgba(255,255,255,0.1) ${pct}%,rgba(255,255,255,0.1) 100%)`;
+}
+
+function getKetone(h){
+  if(h<8) return 0.05*h/8;
+  if(h<12) return 0.05+0.25*(h-8)/4;
+  if(h<16) return 0.3+0.2*(h-12)/4;
+  if(h<24) return 0.5+1.0*(h-16)/8;
+  if(h<36) return 1.5+2.0*(h-24)/12;
+  return 3.5+0.5*(h-36)/12;
+}
+
+updateSimulator(0);
+
+// ── PROTOCOALE TABS ────────────────────────────────────────────────────────
+function showProto(id,btn){
+  document.querySelectorAll('.proto-content').forEach(c=>c.classList.remove('visible'));
+  document.querySelectorAll('.proto-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('visible');
+  btn.classList.add('active');
+}
+
+// ── HRV WIDGET ─────────────────────────────────────────────────────────────
+function setHRV(state){
+  const vEl=document.getElementById('hrv-val');
+  const sEl=document.getElementById('hrv-status');
+  const nEl=document.getElementById('hrv-note');
+  if(state==='green'){
+    vEl.textContent='72'; sEl.textContent='● VERDE — IF SIGUR'; sEl.style.color='#4CAF50';
+    nEl.textContent='HRV in parametrii normali. Postul intermitent este bine tolerat. Continua protocolul curent.';
+  } else if(state==='yellow'){
+    vEl.textContent='65'; sEl.textContent='● GALBEN — MONITORIZARE'; sEl.style.color='var(--gold)';
+    nEl.textContent='HRV in scadere usoara (-5% fata de medie). Reduce cu 2h durata postului. Creste hidratarea si electrolit.';
+  } else {
+    vEl.textContent='55'; sEl.textContent='● ROSU — PAUZA IF'; sEl.style.color='#F44336';
+    nEl.textContent='HRV scazut critic (>-10%). Stop IF temporar. Prioritate: somn, recuperare, alimentatie completa. Reiei IF dupa 3–5 zile.';
+  }
+}
+
+// ── CHART GLICEMIE + CETONE ──────────────────────────────────────────────
+const ctx=document.getElementById('ifChart').getContext('2d');
+const hours=[0,4,8,12,16,20,24,30,36,48];
+new Chart(ctx,{
+  type:'line',
+  data:{
+    labels:hours.map(h=>h+'h'),
+    datasets:[
+      {
+        label:'Glicemie (mg/dL)',
+        data:[95,90,82,75,70,66,63,60,58,55],
+        borderColor:'#3F51B5',fill:false,tension:0.4,
+        yAxisID:'y',borderWidth:2,pointBackgroundColor:'#3F51B5',pointRadius:3,
+      },
+      {
+        label:'Cetone (mmol/L x10)',
+        data:[0,0.3,0.5,1.5,3,6,15,22,32,40],
+        borderColor:'#F9A825',fill:true,
+        backgroundColor:'rgba(249,168,37,0.08)',
+        tension:0.4,yAxisID:'y',borderWidth:2,pointBackgroundColor:'#F9A825',pointRadius:3,
+      }
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#90A4AE',font:{size:10}}},tooltip:{backgroundColor:'rgba(13,18,38,0.95)'}},
+    scales:{
+      y:{ticks:{color:'#546E7A',font:{size:9}},grid:{color:'rgba(63,81,181,0.1)'},
+        border:{color:'rgba(63,81,181,0.2)'}},
+      x:{ticks:{color:'#546E7A',font:{size:9}},grid:{color:'rgba(63,81,181,0.05)'},
+        border:{color:'rgba(63,81,181,0.2)'}}
+    }
+  }
+});
+
+// ── ANIMATE BIOMARKERI BARS ──────────────────────────────────────────────
+const bmWidths=['75%','70%','68%','72%','65%','80%'];
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      bmWidths.forEach((w,i)=>{
+        const el=document.getElementById('bm'+(i+1));
+        if(el) setTimeout(()=>el.style.width=w, i*150+200);
+      });
+      obs.disconnect();
+    }
+  });
+},{threshold:0.2});
+const bm1=document.getElementById('bm1');
+if(bm1) obs.observe(bm1);
+</script>
+</body>
+</html>
