@@ -3,22 +3,48 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 
 async function cautaInSupabase(intrebare) {
   try {
-    // Cauta text simplu in Supabase (fara embeddings)
-    const response = await fetch(
-      `${SUPABASE_URL}/rest/v1/nutrisib_context?continut=ilike.*${encodeURIComponent(intrebare.substring(0, 50))}*&select=titlu,url,continut&limit=5`,
-      {
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": `Bearer ${SUPABASE_KEY}`
+    // Extrage cuvintele cheie din intrebare (min 4 caractere)
+    const cuvinte = intrebare
+      .toLowerCase()
+      .replace(/[?,!.]/g, '')
+      .split(' ')
+      .filter(c => c.length >= 4)
+      .slice(0, 3); // max 3 cuvinte cheie
+
+    if (cuvinte.length === 0) return "";
+
+    // Cauta fiecare cuvant cheie separat si combina rezultatele
+    const rezultate = new Map();
+
+    for (const cuvant of cuvinte) {
+      const response = await fetch(
+        `${SUPABASE_URL}/rest/v1/nutrisib_context?continut=ilike.*${encodeURIComponent(cuvant)}*&select=titlu,url,continut&limit=3`,
+        {
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": `Bearer ${SUPABASE_KEY}`
+          }
         }
+      );
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        data.forEach(r => {
+          if (!rezultate.has(r.url + r.continut.substring(0, 50))) {
+            rezultate.set(r.url + r.continut.substring(0, 50), r);
+          }
+        });
       }
-    );
-    const data = await response.json();
-    if (data && data.length > 0) {
-      return data.map(r => `[${r.titlu} - ${r.url}]\n${r.continut}`).join("\n\n");
     }
-    return "";
+
+    if (rezultate.size === 0) return "";
+
+    return Array.from(rezultate.values())
+      .slice(0, 5)
+      .map(r => `[${r.titlu} — ${r.url}]\n${r.continut}`)
+      .join("\n\n");
+
   } catch (e) {
+    console.log("Eroare Supabase:", e.message);
     return "";
   }
 }
@@ -31,16 +57,14 @@ exports.handler = async function(event) {
   try {
     const { messages } = JSON.parse(event.body);
 
-    // Extrage ultima intrebare a utilizatorului
     const ultimaIntrebare = messages
       .filter(m => m.role === "user")
       .slice(-1)[0]?.content || "";
 
-    // Cauta context relevant in Supabase
     const contextRelevant = await cautaInSupabase(ultimaIntrebare);
 
     const contextExtra = contextRelevant
-      ? `\nINFORMATII RELEVANTE DIN SITE:\n${contextRelevant}\n`
+      ? `\nINFORMATII RELEVANTE DIN SITE NUTRISIB:\n${contextRelevant}\n`
       : "";
 
     const systemPrompt = `Ești Asistentul NutriSib, specialist în nutriție biologică și metoda C.E.L.O.S. creată de dr.ing. Radu Pascu din Sibiu, România.
@@ -69,6 +93,7 @@ ${contextExtra}
 REGULI:
 - Răspunde întotdeauna în română, indiferent de limba întrebării
 - Fii prietenos, științific dar accesibil
+- Folosește informațiile relevante din site de mai sus când sunt disponibile
 - Dacă nu știi ceva specific, trimite la pagina relevantă sau sugerează contact direct
 - Nu inventa prețuri specifice
 - Pentru întrebări medicale, recomandă consultarea unui medic
