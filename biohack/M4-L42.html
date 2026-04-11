@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>L4.2 — Igiena somnului | BH 3.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --grn:#1B5E20;--grnl:#2E7D32;--grnd:#0D3B11;--grnll:#A5D6A7;
+  --gold:#F9A825;--navy:#050E1E;--navy2:#071510;
+  --white:#E8F5E9;--gray:#78909C;--bg:#E8F5E9;
+  --red:#B71C1C;--amber:#F57C00;--teal:#006064;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'Syne',sans-serif;line-height:1.6}
+#pb{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--grnl),var(--gold));width:0%;z-index:100}
+
+nav{position:sticky;top:0;background:rgba(5,14,30,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(165,214,167,0.15);z-index:50;padding:0 24px}
+.ni{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold)}
+.nl{display:flex;gap:18px}
+.nl a{font-size:11px;letter-spacing:2px;color:var(--gray);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nl a:hover,.nl a.active{color:var(--grnll)}
+
+.hero{background:linear-gradient(135deg,var(--grnd) 0%,var(--navy2) 60%);padding:70px 24px 50px;text-align:center;border-bottom:1px solid rgba(165,214,167,0.2);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(46,125,50,0.18) 0%,transparent 70%)}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;position:relative}
+.hero h1{font-size:clamp(26px,5vw,46px);font-weight:800;line-height:1.1;margin-bottom:16px;position:relative}
+.hero h1 span{color:var(--grnll)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gray);font-style:italic;max-width:640px;margin:0 auto 28px;position:relative}
+.chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+.chip{background:rgba(27,94,32,0.22);border:1px solid rgba(165,214,167,0.3);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:var(--grnll)}
+
+.main{max-width:1100px;margin:0 auto;padding:40px 24px}
+section{margin-bottom:60px;scroll-margin-top:70px}
+.stag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--grnll);text-transform:uppercase;margin-bottom:8px}
+h2{font-size:clamp(22px,3vw,30px);font-weight:700;margin-bottom:20px}
+h3{font-size:17px;font-weight:600;color:var(--grnll);margin:24px 0 10px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:48px}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(165,214,167,0.15);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--grnl)}
+.card.g::before{background:var(--gold)}
+.cv{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:var(--gold);line-height:1}
+.cu{font-size:11px;color:var(--gray);letter-spacing:1px;margin:4px 0}
+.cl{font-size:12px;color:var(--white);font-weight:600}
+
+/* Timeline pre-somn */
+.timeline{display:flex;flex-direction:column;gap:0;position:relative}
+.timeline::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:2px;background:rgba(165,214,167,0.2)}
+.tl-item{display:flex;gap:16px;padding:12px 0;position:relative}
+.tl-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;flex-shrink:0;border:2px solid;z-index:1}
+.tl-body{flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(165,214,167,0.12);border-radius:8px;padding:12px 14px}
+.tl-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);font-weight:700;margin-bottom:4px}
+.tl-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px}
+.tl-desc{font-size:11px;color:rgba(232,245,233,0.75);line-height:1.5}
+.tl-mec{font-size:10px;color:var(--grnll);margin-top:4px;font-style:italic}
+
+/* Lumina grid */
+.lumina-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.lum-card{border-radius:8px;padding:14px;border:1px solid}
+.lum-icon{font-size:24px;margin-bottom:8px}
+.lum-time{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--gold);margin-bottom:4px}
+.lum-action{font-size:12px;font-weight:700;color:var(--white);margin-bottom:4px}
+.lum-why{font-size:10px;line-height:1.4}
+
+/* Checklist */
+.chk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.chk-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(165,214,167,0.15);border-radius:8px}
+.chk-box{width:20px;height:20px;border-radius:4px;border:2px solid;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+.chk-box.done{color:var(--white)}
+.chk-body{flex:1}
+.chk-label{font-size:12px;font-weight:600;color:var(--white);margin-bottom:2px}
+.chk-note{font-size:10px;color:var(--gray);line-height:1.4}
+.chk-pri{padding:1px 6px;border-radius:6px;font-size:9px;font-weight:700;letter-spacing:0.5px}
+
+/* Tabel */
+.tw{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--grnd);color:var(--gold);padding:10px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+td{padding:9px 12px;border-bottom:1px solid rgba(165,214,167,0.1);color:var(--white);vertical-align:top;line-height:1.5}
+tr:nth-child(even) td{background:rgba(27,94,32,0.04)}
+tr:hover td{background:rgba(27,94,32,0.08)}
+
+.info-box{background:rgba(27,94,32,0.08);border:1px solid rgba(165,214,167,0.2);border-left:4px solid var(--grnl);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.warn-box{background:rgba(249,168,37,0.07);border:1px solid rgba(249,168,37,0.25);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.danger-box{background:rgba(183,28,28,0.08);border:1px solid rgba(183,28,28,0.3);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+
+.cw{height:220px;position:relative;margin:16px 0}
+
+footer{text-align:center;padding:32px 24px;border-top:1px solid rgba(165,214,167,0.1);font-size:11px;color:var(--gray)}
+</style>
+</head>
+<body>
+<div id="pb"></div>
+<nav>
+  <div class="ni">
+    <div class="nb">// BH 3.0 · L4.2</div>
+    <div class="nl">
+      <a href="#orar">Orar</a>
+      <a href="#presomn">Pre-somn</a>
+      <a href="#lumina">Lumina</a>
+      <a href="#temperatura">Temp.</a>
+      <a href="#substante">Substanțe</a>
+      <a href="#checklist">Checklist</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// Modul 4 · Lecția 4.2</div>
+  <h1>Igiena <span>somnului</span></h1>
+  <p class="hero-sub">Protocolul complet de optimizare — comportamente, mediu și rutine cu mecanism biologic documentat</p>
+  <div class="chips">
+    <div class="chip">±30 min orar</div>
+    <div class="chip">2h stop ecrane</div>
+    <div class="chip">17–19°C</div>
+    <div class="chip">< 13:00 cafea</div>
+    <div class="chip">10 min lumina matinala</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="cards">
+    <div class="card g"><div class="cv">±30 min</div><div class="cu">fereastra orar culcare/trezire</div><div class="cl">7/7 zile — ancora circadiana principala</div></div>
+    <div class="card"><div class="cv">2h</div><div class="cu">stop lumina albastra</div><div class="cl">Melatonina nesuprimata → adormire biologica</div></div>
+    <div class="card"><div class="cv">17–19°C</div><div class="cu">temperatura camera</div><div class="cl">Core body cooling — condiție N3 profund</div></div>
+    <div class="card"><div class="cv">-10 min</div><div class="cu">latenta adormire</div><div class="cl">Dus cald cu 90 min pre-somn (Haghayegh 2019)</div></div>
+    <div class="card g"><div class="cv">< 13:00</div><div class="cu">ultima cafea</div><div class="cl">T½ = 5.5h · N3 cu -20% la cafea tardiva (Walker 2017)</div></div>
+  </div>
+
+  <!-- ORAR -->
+  <section id="orar">
+    <div class="stag">// 01</div>
+    <h2>Consistența orarului — ancora circadiana</h2>
+    <div class="info-box"><strong style="color:var(--grnll)">Regula de aur:</strong> Aceeași oră de culcare și trezire, ±30 minute, 7 zile din 7. Inclusiv weekend. Ora trezirii este ancora principala — seteaz-o fix și somnolența de culcare apare natural în 7–14 zile.</div>
+    <div class="warn-box"><strong style="color:var(--gold)">Social jetlag:</strong> Wittle 2019 — fiecare oră de decalaj biologic-social crește riscul de obezitate cu 33%. "Recuperarea" somnului duminica dimineata decalează melatonina duminica seara → insomnie → Monday fatigue.</div>
+    <div class="cw"><canvas id="olarChart"></canvas></div>
+  </section>
+
+  <!-- PRE-SOMN -->
+  <section id="presomn">
+    <div class="stag">// 02</div>
+    <h2>Protocolul celor 3 ore — fereastra pre-somn</h2>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:20px">Fiecare decizie în ultimele 3 ore înainte de culcare are impact direct și masurabil pe arhitectura somnului.</p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(183,28,28,0.15);border-color:#EF5350;color:#EF9A9A">-3h</div>
+        <div class="tl-body">
+          <div class="tl-time">Cu 3 ore înainte</div>
+          <div class="tl-title">Ultima masă principală · Stop alcool complet</div>
+          <div class="tl-desc">Digestia activă creste temperatura corporala și perturbă N3. Alcoolul induce somnolentă (sedare) dar fragmenteaza N3 și suprimă REM în a 2-a jumătate a nopții.</div>
+          <div class="tl-mec">Impact: GH nocturn redus · REM suprimat · HRV -15 ms</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(245,124,0,0.15);border-color:#FF9800;color:#FFB74D">-2h</div>
+        <div class="tl-body">
+          <div class="tl-time">Cu 2 ore înainte</div>
+          <div class="tl-title">Dimmer lumina < 50 lux · Camera la 17–19°C</div>
+          <div class="tl-desc">Debutul secreției de melatonina necesita reducerea intensitatii luminoase. Core body cooling incepe — temperatura camerei facilitează disiparea căldurii corporale.</div>
+          <div class="tl-mec">Impact: melatonina la ora biologica · latentă N3 redusă</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(27,94,32,0.2);border-color:var(--grnl);color:var(--grnll)">-90m</div>
+        <div class="tl-body">
+          <div class="tl-time">Cu 90 minute înainte</div>
+          <div class="tl-title">Stop ecrane sau ochelari portocalii 100% · Stop efort cognitiv intens</div>
+          <div class="tl-desc">Chang 2015 (PNAS): iPad 2h pre-somn → melatonina suprimata, latentă adormire +10 min, somnolentă matinală mai mare. Ochelarii cu filtru portocaliu 100% blochează efectul.</div>
+          <div class="tl-mec">Impact: melatonina nesuprimata · SCN stabil · adormire la ora biologica</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(27,94,32,0.3);border-color:var(--grnll);color:var(--white)">-60m</div>
+        <div class="tl-body">
+          <div class="tl-time">Cu 60 minute înainte</div>
+          <div class="tl-title">Rutina de relaxare · Dus/baie caldă (opțional)</div>
+          <div class="tl-desc">Citit la lumina galbena, stretching, respiratie 4-7-8. Dusul cald produce vasodilatatie periferică → disipare căldura → temperatura core scade → inductie somn. Haghayegh 2019: latenta -10 min.</div>
+          <div class="tl-mec">Impact: parasimpatic dominant · cortizol redus · latenta adormire ↓</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(249,168,37,0.15);border-color:var(--gold);color:var(--gold)">-30m</div>
+        <div class="tl-body">
+          <div class="tl-time">Cu 30 minute înainte</div>
+          <div class="tl-title">Suplimente (dacă e cazul) · Temperatură finală setată</div>
+          <div class="tl-desc">Fereastra optimă de absorbție pentru Mg L-Treonat, L-Teanina, Melatonina 0.3 mg, Glicina 3g. Verifica temperatura camerei — sub 20°C.</div>
+          <div class="tl-mec">Impact: biodiponibilitate maximă · suport N3 pregătit</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="background:rgba(27,94,32,0.4);border-color:var(--grn);color:var(--white)">😴</div>
+        <div class="tl-body">
+          <div class="tl-time">Ora culcarii</div>
+          <div class="tl-title">Intuneric complet < 1 lux · Telefon in altă cameră / mod avion</div>
+          <div class="tl-desc">Melatonina la concentratie maxima. LED-urile mici (charger, stand-by) pot suprima partial melatonina. Telefon in alta camera — nu pe noptiera. Ceas desteptator separat.</div>
+          <div class="tl-mec">Impact: N3 maxim din primul ciclu · fara treziri reactive la notificari</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LUMINA -->
+  <section id="lumina">
+    <div class="stag">// 03</div>
+    <h2>Managementul luminii — protocolul circadian complet</h2>
+    <div class="info-box"><strong style="color:var(--grnll)">Lumina = zeitgeber #1.</strong> Nu temperatura, nu mâncarea — lumina este cel mai puternic sincronizator extern al SCN. Gooley 2011: lumina de cameră standard (200 lux) seara suprimă melatonina cu 50% și decalează debutul cu 90 minute.</div>
+    <div class="lumina-grid">
+      <div class="lum-card" style="background:rgba(249,168,37,0.06);border-color:rgba(249,168,37,0.3)">
+        <div class="lum-icon">🌅</div>
+        <div class="lum-time">DIMINEATA · 0–60 min</div>
+        <div class="lum-action">10–15 min afara</div>
+        <div class="lum-why" style="color:#FFD54F">Reset SCN zilnic. Chiar și pe noros: 1000–5000 lux afara vs. 200–500 lux interior. Cortizol CAR amplificat.</div>
+      </div>
+      <div class="lum-card" style="background:rgba(27,94,32,0.06);border-color:rgba(165,214,167,0.25)">
+        <div class="lum-icon">☀️</div>
+        <div class="lum-time">ZIUA · 08:00–17:00</div>
+        <div class="lum-action">Expunere maximă</div>
+        <div class="lum-why" style="color:var(--grnll)">Lumina albă intensa consolideaza ritmul. Biroul la geam. Pauze afara. Vigoare și adenozina corecta.</div>
+      </div>
+      <div class="lum-card" style="background:rgba(245,124,0,0.05);border-color:rgba(245,124,0,0.25)">
+        <div class="lum-icon">🌇</div>
+        <div class="lum-time">SEARA DEVREME · 17:00–20:00</div>
+        <div class="lum-action">Lumina caldă 3000K</div>
+        <div class="lum-why" style="color:#FFAB40">Dimmer treptat. Becuri galbene. Temperatura culoare redusă. Pregatire circadiana pentru noapte.</div>
+      </div>
+      <div class="lum-card" style="background:rgba(183,28,28,0.05);border-color:rgba(183,28,28,0.25)">
+        <div class="lum-icon">🌙</div>
+        <div class="lum-time">SEARA · 20:00–culcare</div>
+        <div class="lum-action">< 50 lux · lumina rosie</div>
+        <div class="lum-why" style="color:#EF9A9A">Ecrane eliminate sau ochelari portocalii. Becuri rosii/portocalii. Melatonina nesuprimata.</div>
+      </div>
+      <div class="lum-card" style="background:rgba(5,14,30,0.5);border-color:rgba(165,214,167,0.1)">
+        <div class="lum-icon">⬛</div>
+        <div class="lum-time">NOAPTE · culcare–trezire</div>
+        <div class="lum-action">< 1 lux — intuneric complet</div>
+        <div class="lum-why" style="color:var(--gray)">Perdele opace. Banda mascare LED-uri. Masca de somn. Melatonina la concentratie maxima.</div>
+      </div>
+    </div>
+    <div class="cw"><canvas id="luminaChart"></canvas></div>
+  </section>
+
+  <!-- TEMPERATURA -->
+  <section id="temperatura">
+    <div class="stag">// 04</div>
+    <h2>Temperatura — condiția fizică pentru N3</h2>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Interventie</th><th>Mecanism</th><th>Impact masurabil</th><th>Timing</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Camera 17–19°C</strong></td><td>Core body cooling → initierea N3; fiecare grad peste 20°C creste latenta N3</td><td>N3 mai lung, SWS crescut, HRV nocturn mai mare</td><td>Setat cu 1–2h pre-somn</td></tr>
+          <tr><td><strong>Dus/baie caldă (38–40°C)</strong></td><td>Vasodilatatie periferică → disipare căldura → temperatura core scade sub baseline</td><td>Latentă adormire -10 min (Haghayegh 2019, meta-analiză)</td><td>Cu 60–90 min pre-somn</td></tr>
+          <tr><td><strong>Sauna 80–90°C</strong></td><td>Vasodilatatie intensă → racire rapidă post-sauna → temperatura core sub baseline</td><td>N3 mai profund și lung (Laukkanen 2018)</td><td>Cu 2–4h pre-somn</td></tr>
+          <tr><td><strong>NU cold plunge seara</strong></td><td>Adrenalina + norepinefrina → simpatic activat → contraindica N3</td><td>Latenta crescuta, N3 intarziat</td><td>Cold plunge DIMINEATA</td></tr>
+          <tr><td><strong>Sosete subtiri (dacă picioare reci)</strong></td><td>Circulatia periferică la extremitati — critică pentru termoreglare</td><td>Adormire mai rapidă prin vasodilatatie facilitată</td><td>La culcare</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SUBSTANTE -->
+  <section id="substante">
+    <div class="stag">// 05</div>
+    <h2>Cafeina, alcool și substanțe perturbatoare</h2>
+    <div class="danger-box"><strong>Alcoolul este cel mai frecvent sabotaj al somnului invocat ca ajutor.</strong> "Mă ajuta să adorm" — sedare da, recuperare nu. HRV -15 ms, N3 fragmentat, REM suprimat complet în ciclurile 3–5.</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Substanță</th><th>Regula operativa</th><th>Mecanism exact</th><th>Consecința încălcării</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Cafeina</strong></td><td>Ultima doză înainte de 13:00 (metabolizatori lenti: 11:00)</td><td>T½ = 5.5h. Blochează receptorii adenozinei — nu o elimina. Adenozina se acumulează în continuare.</td><td>N3 cu -20% la EEG chiar dacă adormi normal (Walker 2017)</td></tr>
+          <tr><td><strong>Alcool</strong></td><td>Zero cu 3h pre-somn; ideal eliminat complet seara</td><td>Sedare → adormire rapidă aparentă. Acetaldehida fragmentează N3 + suprimă REM ciclurile 3–5.</td><td>HRV -15 ms; REM suprima; recuperare zero; treziri frecvente</td></tr>
+          <tr><td><strong>Nicotina</strong></td><td>Stop cu ≥ 2h pre-somn (ideal total)</td><td>Stimulant — creste HR și cortizol. Sevraj nocturn fragmenteaza somnul după 3–4h.</td><td>Latentă crescută; treziri frecvente; N3 redus</td></tr>
+          <tr><td><strong>Antihistaminice gen. 1</strong></td><td>Evitate pentru inducerea somnului (Benadryl, Nytol)</td><td>Sedare anticolinergică — nu somn fiziologic. Suprimă N3 și REM.</td><td>Somn non-restaurativ; "hangover" cognitiv matinal</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cw"><canvas id="cafChart"></canvas></div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section id="checklist">
+    <div class="stag">// 06</div>
+    <h2>Checklist igiena somnului — audit personal</h2>
+    <div class="info-box">Implementare graduala — nu tot deodata. Prioritizează în ordinea: CRITICA → INALTĂ → MEDIE. Bifează zilnic în Câmpul 17.</div>
+    <div class="chk-grid" id="chk-grid">
+      <div class="chk-item"><div class="chk-box" style="border-color:var(--red)" onclick="toggleChk(this)"></div><div class="chk-body"><div class="chk-label">Orar culcare consistent ±30 min</div><div class="chk-note">7/7 zile, inclusiv weekend — ancora SCN</div></div><span class="chk-pri" style="background:rgba(183,28,28,0.2);color:#EF9A9A">CRITICĂ</span></div>
+      <div class="chk-item"><div class="chk-box" style="border-color:var(--red)" onclick="toggleChk(this)"></div><div class="chk-body"><div class="chk-label">Orar trezire consistent ±30 min</div><div class="chk-note">Ancora principala — mai importanta decat culcarea</div></div><span class="chk-pri" style="background:rgba(183,28,28,0.2);color:#EF9A9A">CRITICĂ</span></div>
+      <div class="chk-item"><div class="chk-box" style="border-color:var(--red)" onclick="toggleChk(this)"></div><div class="chk-body"><div class="chk-label">Lumina solara 10–15 min dimineata</div><div class="chk-note">Primele 30–60 min; reset SCN zilnic</div></div><span class="chk-pri" style="background:rgba(183,28,28,0.2);color:#EF9A9A">CRITICĂ</span></div>
+      <div class="chk-item"><div class="chk-box" style="border-color:var(--amber)" onclick="toggleChk(this)"></div><div class="chk-body"><div class="chk-label">Stop ecrane 2h pre-somn</div><div class="chk-note">Sau ochelari portocalii 100% blocare albastru</div></div><span class="chk-pri" style="background:rgba(245,124,0,0.15);color:#FFAB40">ÎNALTĂ</span></div>
+      <div class="chk-item"><div class="chk-box" style="border-color:var(--amber)" onclick="toggleChk(this)"></div><div class="chk-body"><div class="chk-label">Camera 17–19°C</div><div class="chk-note">Termostat sau ventilator — condiție N3</div></div><span class="chk-pri" style="background:rgba(245,124,0,0.15);color:#FFAB40">ÎNALTĂ</span></div>
+      <div class="chk-item"><div class="chk-box" style="border-color:var(--amber)" onclick="toggleChk(this)"></div><div class="chk-body"><div class="chk-label">Ultima cafea înainte de 13:00</div><div class="chk-note">T½ = 5.5h; N3 -20% la cafea tardiva</div></div><span class="chk-pri" style="background:rgba(245,124,0,0.15);color:#FFAB40">ÎNALTĂ</span></div>
+      <div class="chk-item"><div class="chk-box" style="border-color:var(--amber)" onclick="toggleChk(this)"></div><div class="chk-body"><div class="chk-label">Întuneric complet în cameră</div><div class="chk-note">< 1 lux; perdele opace; mascare LED-uri</div></div><span class="chk-pri" style="background:rgba(245,124,0,0.15);color:#FFAB40">ÎNALTĂ</span></div>
+      <div class="chk-item"><div class="chk-box" style="border-color:var(--amber)" onclick="toggleChk(this)"></div><div class="chk-body"><div class="chk-label">Telefon în alta cameră / mod avion</div><div class="chk-note">Nu pe noptiera; ceas desteptator separat</div></div><span class="chk-pri" style="background:rgba(245,124,0,0.15);color:#FFAB40">ÎNALTĂ</span></div>
+      <div class="chk-item"><div class="chk-box" style="border-color:var(--grnl)" onclick="toggleChk(this)"></div><div class="chk-body"><div class="chk-label">Cina cu 3h înainte de culcare</div><div class="chk-note">Masă ușoară; digestia creste temperatura</div></div><span class="chk-pri" style="background:rgba(27,94,32,0.2);color:var(--grnll)">MEDIE</span></div>
+      <div class="chk-item"><div class="chk-box" style="border-color:var(--grnl)" onclick="toggleChk(this)"></div><div class="chk-body"><div class="chk-label">Zero alcool cu 3h pre-somn</div><div class="chk-note">Ideal eliminat complet seara</div></div><span class="chk-pri" style="background:rgba(27,94,32,0.2);color:var(--grnll)">MEDIE</span></div>
+      <div class="chk-item"><div class="chk-box" style="border-color:var(--grnl)" onclick="toggleChk(this)"></div><div class="chk-body"><div class="chk-label">Dus cald cu 60–90 min pre-somn</div><div class="chk-note">Vasodilatatie → racire core → N3 mai rapid</div></div><span class="chk-pri" style="background:rgba(27,94,32,0.2);color:var(--grnll)">MEDIE</span></div>
+      <div class="chk-item"><div class="chk-box" style="border-color:var(--grnl)" onclick="toggleChk(this)"></div><div class="chk-body"><div class="chk-label">Rutina relaxare 30–60 min pre-somn</div><div class="chk-note">Citit, stretching, respiratie — parasimpatic</div></div><span class="chk-pri" style="background:rgba(27,94,32,0.2);color:var(--grnll)">MEDIE</span></div>
+    </div>
+    <div style="margin-top:14px;padding:10px 14px;background:rgba(27,94,32,0.08);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--grnll)" id="chk-score">
+      Bifate: 0 / 12 comportamente
+    </div>
+  </section>
+
+</div>
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Biohacking 3.0 — Lecția 4.2 · Conținut educativ exclusiv</footer>
+
+<script>
+// Progress
+window.addEventListener('scroll',()=>{
+  document.getElementById('pb').style.width=Math.min((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100,100)+'%';
+});
+const secs=document.querySelectorAll('section[id]');
+const nls=document.querySelectorAll('.nl a');
+window.addEventListener('scroll',()=>{
+  let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-80)c=s.id;});
+  nls.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+c));
+});
+
+// Checklist
+let checked=0;
+function toggleChk(box){
+  box.classList.toggle('done');
+  if(box.classList.contains('done')){
+    box.textContent='✓';box.style.background=box.style.borderColor.replace('rgb','rgba').replace(')',',.2)');
+    checked++;
+  } else {box.textContent='';box.style.background='';checked--;}
+  document.getElementById('chk-score').textContent=`Bifate: ${checked} / 12 comportamente ${checked>=9?'— Excelent! Protocol complet.':checked>=6?'— Bine! Continua.':checked>=3?'— In progres.':'— Incepe cu cele CRITICE.'}`;
+}
+
+// ORAR Chart — melatonina consistent vs. neregulat
+const orarLabels=['L','Ma','Mi','J','V','S','D'];
+new Chart(document.getElementById('olarChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:orarLabels,
+    datasets:[
+      {label:'Debut melatonina — Orar consistent (ora)',data:[22.5,22.5,22.5,22.5,22.5,22.5,22.5],backgroundColor:'rgba(27,94,32,0.6)',borderRadius:4},
+      {label:'Debut melatonina — Orar neregulat (ora)',data:[22.5,23.0,23.5,22.5,23.0,01.5,01.0].map(v=>v<2?v+24:v),backgroundColor:'rgba(183,28,28,0.4)',borderRadius:4},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:10},boxWidth:10}},tooltip:{backgroundColor:'rgba(5,14,30,0.95)',callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw>24?(ctx.raw-24).toFixed(1)+':00 (+24h)':ctx.raw.toFixed(1)+':00'}`}}},
+    scales:{
+      x:{ticks:{color:'#78909C',font:{size:10}},grid:{color:'rgba(165,214,167,0.05)'}},
+      y:{min:21,max:27,ticks:{color:'#78909C',font:{size:9},callback:v=>v>=24?`0${v-24}:00`:`${v}:00`},grid:{color:'rgba(165,214,167,0.06)'},title:{display:true,text:'Ora debut melatonina',color:'#A5D6A7',font:{size:9}}}
+    }
+  }
+});
+
+// LUMINA Chart — intensitate recomandata per interval
+new Chart(document.getElementById('luminaChart').getContext('2d'),{
+  type:'line',
+  data:{
+    labels:['06:00','07:00','08:00','10:00','12:00','15:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00','00:00'],
+    datasets:[
+      {label:'Lumina recomandata (lux)',data:[10000,8000,5000,5000,5000,5000,3000,1000,200,50,20,5,1,0],borderColor:'rgba(249,168,37,0.8)',backgroundColor:'rgba(249,168,37,0.08)',fill:true,pointRadius:3,borderWidth:2,tension:0.4},
+      {label:'Lumina tipica neoptimizata (lux)',data:[100,300,400,400,400,400,400,400,300,300,200,200,200,100],borderColor:'rgba(183,28,28,0.6)',backgroundColor:'rgba(183,28,28,0.05)',fill:true,pointRadius:2,borderWidth:1.5,borderDash:[4,4],tension:0.3},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:10},boxWidth:8}},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{
+      x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(165,214,167,0.05)'}},
+      y:{type:'log',min:0.5,max:15000,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(165,214,167,0.05)'},title:{display:true,text:'Intensitate lux (log)',color:'#A5D6A7',font:{size:9}}}
+    }
+  }
+});
+
+// CAFEINA Chart
+new Chart(document.getElementById('cafChart').getContext('2d'),{
+  type:'line',
+  data:{
+    labels:['08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00','00:00','02:00'],
+    datasets:[
+      {label:'Cafeina activa — ultima 08:00 (%)',data:[100,100,100,50,25,12,6,3,1,0],borderColor:'rgba(27,94,32,0.8)',backgroundColor:'rgba(27,94,32,0.1)',fill:true,pointRadius:3,borderWidth:2,tension:0.4},
+      {label:'Cafeina activa — ultima 13:00 (%)',data:[0,0,0,100,70,49,35,25,17,12],borderColor:'rgba(249,168,37,0.8)',backgroundColor:'rgba(249,168,37,0.08)',fill:true,pointRadius:3,borderWidth:2,tension:0.4},
+      {label:'Cafeina activa — ultima 17:00 (%)',data:[0,0,0,0,0,100,70,49,35,25],borderColor:'rgba(183,28,28,0.7)',backgroundColor:'rgba(183,28,28,0.06)',fill:true,pointRadius:3,borderWidth:2,tension:0.4},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{
+      x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(165,214,167,0.05)'}},
+      y:{min:0,max:105,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(165,214,167,0.05)'},title:{display:true,text:'Cafeina activă (%)',color:'#A5D6A7',font:{size:9}}}
+    }
+  }
+});
+</script>
+</body>
+</html>

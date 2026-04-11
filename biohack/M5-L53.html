@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>L5.3 — Stresul ca sistem | BH 3.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --brg:#880E4F;--brgl:#AD1457;--brgd:#4A0028;--brgll:#F48FB1;
+  --gold:#F9A825;--navy:#050E1E;--navy2:#0E0309;
+  --white:#FCE4EC;--gray:#78909C;
+  --grn:#1B5E20;--red:#B71C1C;--amber:#F57C00;--ocn:#01579B;--tel:#004D40;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'Syne',sans-serif;line-height:1.6}
+#pb{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--brgl),var(--gold));width:0%;z-index:100}
+nav{position:sticky;top:0;background:rgba(5,14,30,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(244,143,177,0.15);z-index:50;padding:0 24px}
+.ni{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold)}
+.nl{display:flex;gap:18px}
+.nl a{font-size:11px;letter-spacing:2px;color:var(--gray);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nl a:hover,.nl a.active{color:var(--brgll)}
+.hero{background:linear-gradient(135deg,var(--brgd) 0%,var(--navy2) 60%);padding:70px 24px 50px;text-align:center;border-bottom:1px solid rgba(244,143,177,0.2);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(173,20,87,0.18) 0%,transparent 70%)}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;position:relative}
+.hero h1{font-size:clamp(26px,5vw,46px);font-weight:800;line-height:1.1;margin-bottom:16px;position:relative}
+.hero h1 span{color:var(--brgll)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gray);font-style:italic;max-width:640px;margin:0 auto 28px;position:relative}
+.chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+.chip{background:rgba(136,14,79,0.22);border:1px solid rgba(244,143,177,0.3);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:var(--brgll)}
+.main{max-width:1100px;margin:0 auto;padding:40px 24px}
+section{margin-bottom:60px;scroll-margin-top:70px}
+.stag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--brgll);text-transform:uppercase;margin-bottom:8px}
+h2{font-size:clamp(22px,3vw,30px);font-weight:700;margin-bottom:20px}
+h3{font-size:17px;font-weight:600;color:var(--brgll);margin:24px 0 10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:48px}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(244,143,177,0.15);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--brgl)}
+.card.g::before{background:var(--gold)}
+.cv{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;color:var(--gold);line-height:1}
+.cu{font-size:11px;color:var(--gray);letter-spacing:1px;margin:4px 0}
+.cl{font-size:12px;color:var(--white);font-weight:600}
+
+/* HPA cascade */
+.hpa-cascade{display:flex;flex-direction:column;gap:0;align-items:center}
+.hpa-node{background:rgba(255,255,255,0.04);border:1px solid rgba(244,143,177,0.25);border-radius:8px;padding:12px 16px;width:100%;position:relative;cursor:pointer;transition:all .2s}
+.hpa-node:hover,.hpa-node.open{background:rgba(136,14,79,0.1);border-color:rgba(244,143,177,0.4)}
+.hpa-arrow{text-align:center;color:var(--brgl);font-size:18px;padding:4px;line-height:1}
+.hpa-name{font-size:13px;font-weight:700;color:var(--white)}
+.hpa-mol{font-size:11px;color:var(--brgll);font-family:'JetBrains Mono',monospace;margin-top:2px}
+.hpa-detail{display:none;margin-top:8px;font-size:11px;color:rgba(252,228,236,0.75);line-height:1.6}
+.hpa-detail.show{display:block}
+
+/* Eustres/Distres */
+.ed-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ed-card{border-radius:10px;padding:14px;border:1px solid}
+.ed-title{font-size:13px;font-weight:700;margin-bottom:8px}
+.ed-rows{display:flex;flex-direction:column;gap:4px}
+.ed-row{font-size:11px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;gap:8px;align-items:flex-start}
+.ed-key{color:var(--gray);min-width:80px;flex-shrink:0}
+.ed-val{color:var(--white);line-height:1.4}
+
+/* Adaptogeni */
+.adapt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.adapt-card{background:rgba(255,255,255,0.03);border:1px solid rgba(244,143,177,0.15);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s}
+.adapt-card:hover,.adapt-card.open{background:rgba(136,14,79,0.08);border-color:rgba(244,143,177,0.3)}
+.adapt-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px}
+.adapt-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;display:inline-block;margin-bottom:6px}
+.adapt-dose{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);margin-bottom:4px}
+.adapt-detail{display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(244,143,177,0.15);font-size:11px;color:rgba(252,228,236,0.75);line-height:1.6}
+.adapt-detail.show{display:block}
+
+/* Protocol non-farm */
+.prot-rows{display:flex;flex-direction:column;gap:8px}
+.prot-row{display:flex;gap:12px;padding:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(244,143,177,0.12);border-radius:8px;align-items:flex-start}
+.prot-icon{font-size:22px;width:34px;text-align:center;flex-shrink:0;padding-top:2px}
+.prot-body{flex:1}
+.prot-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px}
+.prot-desc{font-size:11px;color:rgba(252,228,236,0.75);line-height:1.5}
+.prot-kpi{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);margin-top:4px}
+
+/* Tabel */
+.tw{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--brgd);color:var(--gold);padding:10px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+td{padding:9px 12px;border-bottom:1px solid rgba(244,143,177,0.1);color:var(--white);vertical-align:top;line-height:1.5}
+tr:nth-child(even) td{background:rgba(136,14,79,0.04)}
+tr:hover td{background:rgba(136,14,79,0.08)}
+
+.info-box{background:rgba(136,14,79,0.08);border:1px solid rgba(244,143,177,0.2);border-left:4px solid var(--brgl);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.warn-box{background:rgba(249,168,37,0.07);border:1px solid rgba(249,168,37,0.25);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.danger-box{background:rgba(183,28,28,0.08);border:1px solid rgba(183,28,28,0.3);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+
+.cw{height:220px;position:relative;margin:16px 0}
+footer{text-align:center;padding:32px 24px;border-top:1px solid rgba(244,143,177,0.1);font-size:11px;color:var(--gray)}
+</style>
+</head>
+<body>
+<div id="pb"></div>
+<nav>
+  <div class="ni">
+    <div class="nb">// BH 3.0 · M5 · L5.3</div>
+    <div class="nl">
+      <a href="#hpa">Axa HPA</a>
+      <a href="#eudis">Eu/Distres</a>
+      <a href="#cronic">Cronic</a>
+      <a href="#adaptogeni">Adaptogeni</a>
+      <a href="#protocoale">Protocoale</a>
+      <a href="#biomarkeri">Biomarkeri</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// Modul 5 · Lecția 5.3</div>
+  <h1>Stresul ca <span>sistem</span></h1>
+  <p class="hero-sub">Axa HPA · Cortizol cronic · Alostatic load · Adaptogeni · Protocoale non-farmacologice · Biomarkeri</p>
+  <div class="chips">
+    <div class="chip">Axa HPA</div>
+    <div class="chip">Cortizol + DHEA-S</div>
+    <div class="chip">Ashwagandha KSM-66</div>
+    <div class="chip">-27.9% cortizol</div>
+    <div class="chip">Alostatic load</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="cards">
+    <div class="card g"><div class="cv">HPA</div><div class="cu">axa hipotalamo-pituitaro-adrenala</div><div class="cl">Sistemul central de reglare a raspunsului la stres</div></div>
+    <div class="card"><div class="cv">-27.9%</div><div class="cu">cortizol cu Ashwagandha</div><div class="cl">Chandrasekhar 2012 — 300mg × 2/zi, 60 zile, RCT</div></div>
+    <div class="card"><div class="cv">CAR</div><div class="cu">Cortisol Awakening Response</div><div class="cl">KPI al sanatatii axei HPA — blunt = burnout</div></div>
+    <div class="card"><div class="cv">28%</div><div class="cu">risc mortalitate</div><div class="cl">McGonigal 2013 — redus dacă nu crezi că stresul e nociv</div></div>
+    <div class="card g"><div class="cv">HRV</div><div class="cu">biomarker tonus vagal</div><div class="cl">Cel mai sensibil indicator indirect al stresului cronic</div></div>
+  </div>
+
+  <!-- AXA HPA -->
+  <section id="hpa">
+    <div class="stag">// 01</div>
+    <h2>Axa HPA — cascada biologică a stresului</h2>
+    <div class="info-box"><strong style="color:var(--brgll)">Cronologie:</strong> Stimul stresant → CRH → ACTH → Cortizol sistemic în 15–30 minute. Paralel: Simpatic → Adrenalina + NE în secunde. Două viteze, un scop: mobilizare de urgentă.</div>
+    <div class="hpa-cascade">
+      <div class="hpa-node" onclick="toggleHPA(this)">
+        <div class="hpa-name">🧠 Hipotalamus</div>
+        <div class="hpa-mol">CRH — Corticotropin-Releasing Hormone</div>
+        <div class="hpa-detail">Nucleul paraventricular al hipotalamusului detecteaza stresorul (real sau perceput). Elibereaza CRH → hipofiza. Concomitent: sistemul limbic (amigdala) amplifica raspunsul emotional. Hipocampul (cortizol-sensibil!) moduleaza feedback-ul negativ.</div>
+      </div>
+      <div class="hpa-arrow">↓</div>
+      <div class="hpa-node" onclick="toggleHPA(this)">
+        <div class="hpa-name">🫀 Hipofiza anterioara</div>
+        <div class="hpa-mol">ACTH — Adrenocorticotropic Hormone</div>
+        <div class="hpa-detail">CRH stimuleaza hipofiza anterioara → ACTH eliberat in circulatie. ACTH ajunge la cortexul adrenal in cateva minute. Feedback negativ: cortizolul inhiba atat hipotalamusul cat si hipofiza → autoreglare. In stres cronic, acest feedback esueaza.</div>
+      </div>
+      <div class="hpa-arrow">↓</div>
+      <div class="hpa-node" onclick="toggleHPA(this)">
+        <div class="hpa-name">🫁 Cortex adrenal</div>
+        <div class="hpa-mol">Cortizol — glucocorticoid principal</div>
+        <div class="hpa-detail">ACTH stimuleaza cortexul adrenal → cortizol sintetizat din colesterol. Peak la 15–30 min de la stimul. Cortizolul mobilizeaza glucoza, suprima imunitatea, potentiaza adrenalina, inhiba inflamatia acut, fragmenteaza proteinele musculare. Util pe termen scurt — nociv cronic.</div>
+      </div>
+      <div class="hpa-arrow">↓</div>
+      <div class="hpa-node" onclick="toggleHPA(this)" style="border-color:rgba(249,168,37,0.4);background:rgba(249,168,37,0.05)">
+        <div class="hpa-name" style="color:var(--gold)">⚡ Efecte sistemice</div>
+        <div class="hpa-mol" style="color:var(--gold)">Glucoza ↑ · Imunitate ↓ · BDNF ↓ · HRV ↓</div>
+        <div class="hpa-detail">Acut: utilitate adaptiva. Cronic: gluconeogeneza excesiva → diabet. Imunosupresie → infectii. BDNF suprima → cognitie degradata. HRV cronic scazut → risc cardiovascular. Hipocampus atrofiat (McEwen 1999) → memorie declarativa compromisa.</div>
+      </div>
+    </div>
+    <div class="cw"><canvas id="cortisolChart"></canvas></div>
+  </section>
+
+  <!-- EUSTRES / DISTRES -->
+  <section id="eudis">
+    <div class="stag">// 02</div>
+    <h2>Eustres vs. Distres — distinctia critică</h2>
+    <div class="warn-box"><strong style="color:var(--gold)">McGonigal 2013 (TED Global):</strong> Studiu pe 30.000 americani — stresul creste mortalitatea NUMAI la cei care cred că este nociv. Cei cu stres ridicat dar fără credința că e dăunător aveau mortalitate mai mică decât cei cu stres redus. Perceptia este o variabilă biologica reala.</div>
+    <div class="ed-grid">
+      <div class="ed-card" style="background:rgba(27,94,32,0.08);border-color:rgba(27,94,32,0.35)">
+        <div class="ed-title" style="color:#81C784">✅ Eustres — stres adaptiv</div>
+        <div class="ed-rows">
+          <div class="ed-row"><div class="ed-key">Durata</div><div class="ed-val">Scurt, episodic, limitat temporal</div></div>
+          <div class="ed-row"><div class="ed-key">Perceptie</div><div class="ed-val">Provocare controlabila cu sens</div></div>
+          <div class="ed-row"><div class="ed-key">Cortizol</div><div class="ed-val">Spike acut + revenire rapidă la baseline</div></div>
+          <div class="ed-row"><div class="ed-key">DHEA-S</div><div class="ed-val">Crescut — protector</div></div>
+          <div class="ed-row"><div class="ed-key">BDNF</div><div class="ed-val">Crescut → neuroplasticitate</div></div>
+          <div class="ed-row"><div class="ed-key">Exemple</div><div class="ed-val">Exercitiu intens, prezentare, imersie rece</div></div>
+        </div>
+      </div>
+      <div class="ed-card" style="background:rgba(183,28,28,0.08);border-color:rgba(183,28,28,0.35)">
+        <div class="ed-title" style="color:#EF9A9A">❌ Distres — stres patologic</div>
+        <div class="ed-rows">
+          <div class="ed-row"><div class="ed-key">Durata</div><div class="ed-val">Cronic, persistent, fara recuperare</div></div>
+          <div class="ed-row"><div class="ed-key">Perceptie</div><div class="ed-val">Amenintare incontrolabila fara sens</div></div>
+          <div class="ed-row"><div class="ed-key">Cortizol</div><div class="ed-val">Cronic crescut; baseline ridicat</div></div>
+          <div class="ed-row"><div class="ed-key">DHEA-S</div><div class="ed-val">Scazut — epuizat</div></div>
+          <div class="ed-row"><div class="ed-key">BDNF</div><div class="ed-val">Suprima → declin cognitiv</div></div>
+          <div class="ed-row"><div class="ed-key">Exemple</div><div class="ed-val">Conflict cronic, insecuritate, burnout</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CRONIC -->
+  <section id="cronic">
+    <div class="stag">// 03</div>
+    <h2>Cortizol cronic — deteriorarea sistemica</h2>
+    <div class="danger-box"><strong>Burnout ≠ Cortizol crescut.</strong> Burnout = axa HPA epuizata → cortizol MIC, CAR blunt, DHEA-S scazut. Nu se recupereaza in weekenduri — necesita luni de recuperare structurata. Diagnostic: cortizol salivar × 4 (ritm diurn) + DHEA-S.</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Sistem</th><th>Mecanism</th><th>Consecinta clinica</th><th>Biomarker</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Neurocognitiv</strong></td><td>Atrofie hipocampal (McEwen 1999); BDNF suprima; blocheaza LTP in PFC</td><td>Memorie declarativa degradata; WM redusa; declin cognitiv accelerat; risc depresie</td><td>BDNF seric ↓; volum hipocampal RMN</td></tr>
+          <tr><td><strong>Metabolic</strong></td><td>Gluconeogeneza crescuta; rezistenta la insulina; lipogenie viscerala</td><td>Sindrom metabolic; diabet tip 2 accelerat; obezitate abdominala</td><td>HbA1c; insulina bazala; circumferinta abdominala</td></tr>
+          <tr><td><strong>Imun</strong></td><td>Imunosupresie cronica; inflamatie paradoxala (IL-6, TNF-α)</td><td>Infectii frecvente; boli autoimune; vindecari lente; risc cancer crescut</td><td>CRP hs; IL-6; WBC diferential</td></tr>
+          <tr><td><strong>Cardiovascular</strong></td><td>Hipertensiune; ateroscleroza accelerata; HRV cronic redus</td><td>Risc infarct; AVC; aritmii; boala coronariana</td><td>Tensiune arteriala; ApoB; HRV RMSSD</td></tr>
+          <tr><td><strong>Hormonal</strong></td><td>Suprima HPG (testosteron, estrogen); tiroida</td><td>Libido scazut; infertilitate; hipotiroidism functional</td><td>Testosteron; TSH; FT3; DHEA-S</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ADAPTOGENI -->
+  <section id="adaptogeni">
+    <div class="stag">// 04</div>
+    <h2>Adaptogeni — modularea farmacologică a axei HPA</h2>
+    <div class="info-box"><strong style="color:var(--brgll)">Definitie Brekhman 1968:</strong> Substante care normalizeaza raspunsul la stres — reduc cortizolul cand e crescut, sustin partial cand e scazut (burnout). Nu sedativeaza, nu stimuleaza — moduleaza.</div>
+    <div class="adapt-grid">
+      <div class="adapt-card" onclick="toggleAdapt(this)">
+        <div class="adapt-name">🌿 Ashwagandha KSM-66</div>
+        <span class="adapt-tag" style="background:rgba(27,94,32,0.2);color:#81C784">REFERINTA</span>
+        <div class="adapt-dose">300–600 mg/zi · 5% withanolide</div>
+        <div class="adapt-detail"><strong>Chandrasekhar 2012 (RCT):</strong> cortizol -27.9%, stres perceput -44%, anxietate -69%, somn imbunatatit semnificativ. Protocol: seara sau dimineata+seara split, cu masa. Efectul la 4–6 saptamani. Ciclare: 8–12 sapt ON, 4 OFF. Precautii: evita sarcina; monitorizare tiroidiana (poate creste FT3).</div>
+      </div>
+      <div class="adapt-card" onclick="toggleAdapt(this)">
+        <div class="adapt-name">🌸 Rhodiola rosea SHR-5</div>
+        <span class="adapt-tag" style="background:rgba(1,87,155,0.2);color:#90CAF9">ANTI-FATIGA</span>
+        <div class="adapt-dose">200–400 mg/zi · 3% rosavine</div>
+        <div class="adapt-detail"><strong>Darbinyan 2000:</strong> fatiga si performanta mentala imbunatatite sub stres acut. Stimulant usor — luat dimineata, NU seara. Ideal pentru stres cognitiv si fizic acut (examene, deadlines, sport). Evita in faza maniacala sau la anxietate severa.</div>
+      </div>
+      <div class="adapt-card" onclick="toggleAdapt(this)">
+        <div class="adapt-name">🌲 Eleutherococcus</div>
+        <span class="adapt-tag" style="background:rgba(0,77,64,0.2);color:#80CBC4">REZISTENTA</span>
+        <div class="adapt-dose">300–1200 mg/zi · extract std.</div>
+        <div class="adapt-detail"><strong>Gaffney 2003:</strong> cortizol si performanta ameliorate la atleti. Modulator HPA; creste rezistenta la stres oxidativ. Prudenta in hipertensiune. Evita seara. Unul dintre primii adaptogeni studiati sistematic (medicina sovietica).</div>
+      </div>
+      <div class="adapt-card" onclick="toggleAdapt(this)">
+        <div class="adapt-name">🫚 Panax Ginseng</div>
+        <span class="adapt-tag" style="background:rgba(245,124,0,0.15);color:#FFAB40">COGNITIV</span>
+        <div class="adapt-dose">200–400 mg/zi · extract std.</div>
+        <div class="adapt-detail"><strong>Reay 2005:</strong> memoria si calmul imbunatatite acut. Neuroprotector prin ginsenoside Rg1; modulator HPA; anti-fatiga. Ciclare: 3 luni ON / 1 OFF. Interactiuni: evita cu anticoagulante (Warfarina), prudenta in diabet (creste efectul insulinei).</div>
+      </div>
+      <div class="adapt-card" onclick="toggleAdapt(this)">
+        <div class="adapt-name">🍒 Schisandra chinensis</div>
+        <span class="adapt-tag" style="background:rgba(136,14,79,0.2);color:var(--brgll)">HEPATOPROTECTOR</span>
+        <div class="adapt-dose">500–2000 mg/zi · fruct/extract</div>
+        <div class="adapt-detail"><strong>Panossian 2008:</strong> toleranta crescuta la stres fizic si mental. Anti-fatiga, hepatoprotector, modulator cortizol moderat. Evita in sarcina si alaptare. Studii clinice mai putine vs. Ashwagandha si Rhodiola.</div>
+      </div>
+      <div class="adapt-card" onclick="toggleAdapt(this)">
+        <div class="adapt-name">⚠️ Combinatii si precautii</div>
+        <span class="adapt-tag" style="background:rgba(183,28,28,0.2);color:#EF9A9A">ATENTIE</span>
+        <div class="adapt-dose">Nu combinati fara monitorizare</div>
+        <div class="adapt-detail">Nu combinati mai multi adaptogeni simultan fara monitorizare hormonala. Incepeti cu un singur adaptogens, evaluati dupa 4–6 saptamani (biomarkeri), adaugati al doilea daca necesar. Adaptogenii nu inlocuiesc protocolul de baza (somn + igiena cognitiva + exercitiu).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROTOCOALE -->
+  <section id="protocoale">
+    <div class="stag">// 05</div>
+    <h2>Protocoale non-farmacologice de modulare a stresului</h2>
+    <div class="prot-rows">
+      <div class="prot-row">
+        <div class="prot-icon">🌬️</div>
+        <div class="prot-body">
+          <div class="prot-title">Respiratie controlata — 4-7-8 / Coerenta cardiaca</div>
+          <div class="prot-desc">4-7-8: 4 sec inspir, 7 sec retinere, 8 sec expir × 4 cicluri. Coerenta cardiaca: 5 sec inspir / 5 sec expir × 5 min. Activare parasimpatica directa prin nervul vag. Imediat accesibila, zero cost.</div>
+          <div class="prot-kpi">HRV +15–20 ms acut · Cortizol -20–30% dupa 6 sapt practica zilnica</div>
+        </div>
+      </div>
+      <div class="prot-row">
+        <div class="prot-icon">🧘</div>
+        <div class="prot-body">
+          <div class="prot-title">Meditatie mindfulness — MBSR (Kabat-Zinn)</div>
+          <div class="prot-desc">8 saptamani MBSR sau 10 min/zi practica simpla de concentrare pe respiratie. Reduce activitatea amigdalei, creste DLPFC, restructureaza cognitiv relatia cu stresul.</div>
+          <div class="prot-kpi">Cortizol redus · Imunitate crescuta · Burnout ameliorat dupa 8 saptamani · Jha 2010</div>
+        </div>
+      </div>
+      <div class="prot-row">
+        <div class="prot-icon">🏃</div>
+        <div class="prot-body">
+          <div class="prot-title">Exercitiu aerob moderat — 30–45 min, 60–70% FCmax</div>
+          <div class="prot-desc">Metabolizeaza cortizolul excesiv, creste BDNF, elibereaza endorfine, moduleaza HPA. ATENTIE: exercitiu intens cronic (> 2h/zi) creste cortizol — efectul opus.</div>
+          <div class="prot-kpi">Anxietate -48% (Raglin 1990) · Cortizol seric redus post-exercitiu · BDNF +200%</div>
+        </div>
+      </div>
+      <div class="prot-row">
+        <div class="prot-icon">🌲</div>
+        <div class="prot-body">
+          <div class="prot-title">Shinrin-yoku — imersie in natura (2h/saptamana)</div>
+          <div class="prot-desc">Li 2008: cortizol salivar -12%, celule NK crescute, tensiunea arteriala scazuta dupa 2h in padure fara telefon. Activare senzoriala (auz, miros, vedere) amplifica efectul.</div>
+          <div class="prot-kpi">Cortizol salivar -12% · NK cells ↑ · Tensiune arteriala ↓ (Li 2008)</div>
+        </div>
+      </div>
+      <div class="prot-row">
+        <div class="prot-icon">🧊</div>
+        <div class="prot-body">
+          <div class="prot-title">Cold exposure — dus rece progresiv (dimineata)</div>
+          <div class="prot-desc">Søberg 2021: 11 minute/saptamana de cold exposure → NE +200–300%, DA +250% durabile. Incepe cu 30 sec dus rece, creste la 2–3 min in 4 saptamani. DIMINEATA — seara contraindica somnul.</div>
+          <div class="prot-kpi">NE +200% · DA +250% durabile · HRV imbunatatit cronic (Søberg 2021)</div>
+        </div>
+      </div>
+      <div class="prot-row">
+        <div class="prot-icon">😴</div>
+        <div class="prot-body">
+          <div class="prot-title">Somn optim — protocolul complet M4</div>
+          <div class="prot-desc">Somnul reseteaza axa HPA — cortizol CAR normalizat, feedback negativ restaurat. Privarea de somn produce cortizol cronic crescut si DHEA-S scazut (Walker 2017).</div>
+          <div class="prot-kpi">CAR normalizat · HRV nocturn crescut · Feedback HPA restaurat</div>
+        </div>
+      </div>
+    </div>
+    <div class="cw"><canvas id="protChart"></canvas></div>
+  </section>
+
+  <!-- BIOMARKERI -->
+  <section id="biomarkeri">
+    <div class="stag">// 06</div>
+    <h2>Biomarkeri ai stresului cronic — panelul complet</h2>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Biomarker</th><th>Valoare optima</th><th>Interpretare clinica</th><th>Frecventa</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Cortizol matinal (08:00)</strong></td><td>15–25 µg/dL</td><td>Crescut cronic = stres/hipercortizolism. Scazut = burnout/insuficienta adrenala</td><td>La 3–6 luni sau la simptome</td></tr>
+          <tr><td><strong>DHEA-S</strong></td><td>Varsta/sex specific; raport cortizol/DHEA &lt; 0.5</td><td>Scazut = imbatranire accelerata, burnout, depletie adrenala; contrabalanseaza cortizolul</td><td>Anual in profil hormonal</td></tr>
+          <tr><td><strong>Cortizol salivar × 4 (ritm diurn)</strong></td><td>Peak matinal → scadere progresiva → nadir noapte</td><td>Ritm plat = burnout sau Cushing. Ritm inversat = tulburare circadiana</td><td>Semestrial la burnout sau suspiciune</td></tr>
+          <tr><td><strong>CRP hs</strong></td><td>&lt; 1 mg/L optim; &lt; 3 mg/L acceptabil</td><td>Inflamatie cronica corelata cu stres cronic si cortizol; risc cardiovascular</td><td>Trimestrial</td></tr>
+          <tr><td><strong>HRV RMSSD nocturn</strong></td><td>Trend stabil; -10% pe 7 zile = alarma</td><td>Cel mai sensibil biomarker tonus vagal si recuperare SNA; cronic scazut = stres nerezolvat</td><td>Zilnic (tracker)</td></tr>
+          <tr><td><strong>IL-6</strong></td><td>&lt; 3 pg/mL</td><td>Citokina proinflamatorie crescuta in stres cronic; predictiva pentru depresie si boala coronariana</td><td>Semestrial/anual</td></tr>
+          <tr><td><strong>Cortizol urinar 24h</strong></td><td>20–90 µg/24h</td><td>Gold standard pentru hipercortizolism cronic sau sindrom Cushing subclinic</td><td>La suspiciune clinica specifica</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Biohacking 3.0 — Lecția 5.3 · Conținut educativ exclusiv</footer>
+
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('pb').style.width=Math.min((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100,100)+'%';});
+const secs=document.querySelectorAll('section[id]'),nls=document.querySelectorAll('.nl a');
+window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-80)c=s.id;});nls.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+c));});
+
+function toggleHPA(el){el.classList.toggle('open');el.querySelector('.hpa-detail').classList.toggle('show');}
+function toggleAdapt(el){el.classList.toggle('open');el.querySelector('.adapt-detail').classList.toggle('show');}
+
+// Cortizol chart — profil diurn normal vs. stres cronic vs. burnout
+new Chart(document.getElementById('cortisolChart').getContext('2d'),{
+  type:'line',
+  data:{
+    labels:['06:00','07:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00','00:00'],
+    datasets:[
+      {label:'Profil normal',data:[12,18,22,16,12,9,7,6,5,4,3],borderColor:'rgba(27,94,32,0.8)',backgroundColor:'rgba(27,94,32,0.08)',fill:true,pointRadius:3,borderWidth:2,tension:0.4},
+      {label:'Stres cronic',data:[18,26,30,24,20,18,16,14,12,10,9],borderColor:'rgba(136,14,79,0.8)',backgroundColor:'rgba(136,14,79,0.08)',fill:true,pointRadius:3,borderWidth:2,tension:0.4},
+      {label:'Burnout',data:[6,8,10,8,7,6,5,5,4,4,3],borderColor:'rgba(120,144,156,0.7)',backgroundColor:'rgba(120,144,156,0.05)',fill:true,pointRadius:3,borderWidth:1.5,tension:0.4,borderDash:[4,4]},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:10},boxWidth:8}},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{
+      x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(244,143,177,0.05)'}},
+      y:{min:0,max:35,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(244,143,177,0.06)'},title:{display:true,text:'Cortizol (µg/dL)',color:'#F48FB1',font:{size:9}}}
+    }
+  }
+});
+
+// Protocol effectiveness chart
+new Chart(document.getElementById('protChart').getContext('2d'),{
+  type:'radar',
+  data:{
+    labels:['Reducere cortizol','Impact HRV','BDNF ↑','Imunitate','Accesibilitate','Viteza efect'],
+    datasets:[
+      {label:'Ashwagandha KSM-66',data:[85,60,50,55,75,40],borderColor:'rgba(136,14,79,0.8)',backgroundColor:'rgba(136,14,79,0.08)',pointRadius:3},
+      {label:'Respiratie controlata',data:[65,90,30,45,100,95],borderColor:'rgba(27,94,32,0.7)',backgroundColor:'rgba(27,94,32,0.07)',pointRadius:3},
+      {label:'Exercitiu aerob',data:[70,75,95,80,80,60],borderColor:'rgba(1,87,155,0.7)',backgroundColor:'rgba(1,87,155,0.06)',pointRadius:3},
+      {label:'Shinrin-yoku',data:[55,65,40,75,70,80],borderColor:'rgba(0,77,64,0.7)',backgroundColor:'rgba(0,77,64,0.06)',pointRadius:3},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}}},
+    scales:{r:{ticks:{display:false},grid:{color:'rgba(244,143,177,0.1)'},pointLabels:{color:'#78909C',font:{size:9}},min:0,max:100}}
+  }
+});
+</script>
+</body>
+</html>

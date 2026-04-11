@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>L3.5 — Nutrigenomică și suplimentele C.E.L.O.S. | BH 3.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --purp:#6A1B9A;--purpl:#9C27B0;--purpd:#4A0072;--purpll:#CE93D8;
+  --gold:#F9A825;--navy:#0D1020;--navy2:#150A20;
+  --white:#F5F0FF;--gray:#9E9BB8;--bg:#F3E5F5;
+  --green:#2E7D32;--red:#B71C1C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'Syne',sans-serif;line-height:1.6}
+
+/* PROGRESS */
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--purpl),var(--gold));width:0%;z-index:100;transition:width .1s}
+
+/* NAV */
+nav{position:sticky;top:0;background:rgba(13,16,32,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(206,147,216,0.15);z-index:50;padding:0 24px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold)}
+.nav-links{display:flex;gap:20px}
+.nav-links a{font-size:11px;letter-spacing:2px;color:var(--gray);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--purpll)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--purpd) 0%,var(--navy2) 60%);padding:70px 24px 50px;text-align:center;border-bottom:1px solid rgba(206,147,216,0.2);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(156,39,176,0.15) 0%,transparent 70%)}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;position:relative}
+.hero h1{font-size:clamp(28px,5vw,48px);font-weight:800;letter-spacing:-0.5px;line-height:1.1;margin-bottom:16px;position:relative}
+.hero h1 span{color:var(--purpll)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gray);font-style:italic;max-width:600px;margin:0 auto 28px;position:relative}
+.hero-chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+.chip{background:rgba(106,27,154,0.2);border:1px solid rgba(206,147,216,0.3);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:var(--purpll)}
+
+/* MAIN */
+.main{max-width:1100px;margin:0 auto;padding:40px 24px}
+section{margin-bottom:60px;scroll-margin-top:70px}
+.section-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--purpll);text-transform:uppercase;margin-bottom:8px}
+h2{font-size:clamp(22px,3vw,30px);font-weight:700;margin-bottom:20px;color:var(--white)}
+h3{font-size:17px;font-weight:600;color:var(--purpll);margin:24px 0 10px}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(206,147,216,0.15);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--purpl)}
+.card.gold-top::before{background:var(--gold)}
+.card.green-top::before{background:var(--green)}
+.card-val{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:var(--gold);line-height:1}
+.card-unit{font-size:11px;color:var(--gray);letter-spacing:1px;margin:4px 0}
+.card-label{font-size:12px;color:var(--white);font-weight:600}
+
+/* CELOS TABS */
+.celos-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.ctab{padding:8px 18px;border-radius:24px;font-size:12px;font-weight:600;letter-spacing:1px;cursor:pointer;border:1px solid rgba(206,147,216,0.3);background:transparent;color:var(--gray);transition:all .2s;font-family:'Syne',sans-serif}
+.ctab.active{background:var(--purp);color:var(--white);border-color:var(--purp)}
+.celos-panel{display:none}
+.celos-panel.active{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--purpd);color:var(--gold);padding:10px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid rgba(206,147,216,0.1);color:var(--white);vertical-align:top;line-height:1.5}
+tr:nth-child(even) td{background:rgba(106,27,154,0.06)}
+tr:hover td{background:rgba(106,27,154,0.12)}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;letter-spacing:0.5px}
+.tag-ok{background:rgba(46,125,50,0.2);color:#81C784;border:1px solid rgba(46,125,50,0.3)}
+.tag-warn{background:rgba(249,168,37,0.15);color:#FFD54F;border:1px solid rgba(249,168,37,0.3)}
+
+/* INFO BOX */
+.info-box{background:rgba(106,27,154,0.1);border:1px solid rgba(206,147,216,0.2);border-left:4px solid var(--purpl);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px;font-size:13px;color:var(--white);line-height:1.6}
+.warn-box{background:rgba(249,168,37,0.07);border:1px solid rgba(249,168,37,0.25);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px;font-size:13px;color:var(--white)}
+
+/* TIMING GRID */
+.timing-grid{display:grid;gap:10px}
+.timing-row{display:flex;align-items:flex-start;gap:14px;padding:12px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(206,147,216,0.12);border-radius:8px}
+.timing-hour{min-width:80px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);font-weight:600;padding-top:2px}
+.timing-supls{flex:1;font-size:12px;color:var(--white);line-height:1.6}
+.timing-supls strong{color:var(--purpll)}
+
+/* BIODIS BARS */
+.biodis-item{margin-bottom:14px}
+.bdl{display:flex;justify-content:space-between;margin-bottom:5px;font-size:12px}
+.bdl span:first-child{color:var(--white);font-weight:600}
+.bdl span:last-child{color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:11px}
+.bar-track{height:8px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--purpd),var(--purpl));transition:width 1.4s cubic-bezier(.4,0,.2,1)}
+.bar-fill.gold-fill{background:linear-gradient(90deg,#C67C00,var(--gold))}
+
+/* BIOMARKERI */
+.bm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.bm-card{background:rgba(255,255,255,0.03);border:1px solid rgba(206,147,216,0.15);border-radius:8px;padding:14px;display:flex;gap:12px;align-items:flex-start}
+.bm-letter{width:36px;height:36px;border-radius:6px;background:var(--purp);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--gold);flex-shrink:0}
+.bm-content{}
+.bm-name{font-size:12px;font-weight:700;color:var(--white);margin-bottom:3px}
+.bm-val{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold)}
+.bm-note{font-size:10px;color:var(--gray);margin-top:3px;line-height:1.4}
+
+/* JURNAL */
+.journal-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}
+.jf{display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,0.03);border:1px solid rgba(206,147,216,0.15);border-radius:8px;padding:12px}
+.jf-num{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--gold);width:28px;flex-shrink:0}
+.jf-text{font-size:12px;color:var(--white);line-height:1.5}
+
+/* CHART */
+.chart-wrap{position:relative;height:260px;margin:16px 0}
+
+/* GENETIC QUIZ */
+.quiz-wrap{background:rgba(106,27,154,0.08);border:1px solid rgba(206,147,216,0.2);border-radius:12px;padding:24px;margin:20px 0}
+.quiz-q{font-size:14px;font-weight:600;color:var(--white);margin-bottom:12px}
+.quiz-opts{display:flex;flex-direction:column;gap:8px}
+.quiz-opt{display:flex;gap:10px;align-items:center;cursor:pointer;padding:8px 12px;border-radius:6px;border:1px solid rgba(206,147,216,0.2);transition:all .2s;font-size:12px;color:var(--gray)}
+.quiz-opt:hover{background:rgba(106,27,154,0.15);color:var(--white);border-color:var(--purpll)}
+.quiz-opt input{accent-color:var(--purpl)}
+.quiz-result{margin-top:16px;padding:14px;background:rgba(249,168,37,0.08);border:1px solid rgba(249,168,37,0.25);border-radius:8px;font-size:12px;color:var(--white);line-height:1.6;display:none}
+.quiz-result.show{display:block;animation:fadeIn .3s}
+.quiz-btn{margin-top:12px;padding:10px 22px;background:var(--purp);color:var(--white);border:none;border-radius:6px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:background .2s}
+.quiz-btn:hover{background:var(--purpl)}
+
+footer{text-align:center;padding:32px 24px;border-top:1px solid rgba(206,147,216,0.1);font-size:11px;color:var(--gray)}
+
+@media(max-width:600px){
+  .nav-links{display:none}
+  .celos-tabs{gap:6px}
+  .ctab{padding:6px 12px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">// BH 3.0 · L3.5</div>
+    <div class="nav-links">
+      <a href="#nutrigenomica">Nutrigenomică</a>
+      <a href="#celos">C.E.L.O.S.</a>
+      <a href="#biodis">Biodisponibilitate</a>
+      <a href="#timing">Timing</a>
+      <a href="#biomarkeri">Biomarkeri</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// Modul 3 · Lecția 3.5</div>
+  <h1>Nutrigenomică și<br/><span>suplimentele C.E.L.O.S.</span></h1>
+  <p class="hero-sub">De ce doi oameni răspund diferit la același supliment — și cum construim protocolul tău precis</p>
+  <div class="hero-chips">
+    <div class="chip">5 piloni biologici</div>
+    <div class="chip">SNP-uri relevante clinic</div>
+    <div class="chip">Forme optime</div>
+    <div class="chip">Timing circadian</div>
+    <div class="chip">Biomarkeri masurabili</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- KPI-uri -->
+  <div class="card-grid" style="margin-bottom:48px">
+    <div class="card">
+      <div class="card-val">38%</div>
+      <div class="card-unit">din populație</div>
+      <div class="card-label">varianta MTHFR C677T sau A1298C</div>
+    </div>
+    <div class="card">
+      <div class="card-val">4–10×</div>
+      <div class="card-unit">diferență absorbtie</div>
+      <div class="card-label">Mg glicinat vs. oxid de Mg</div>
+    </div>
+    <div class="card">
+      <div class="card-val">29×</div>
+      <div class="card-unit">biodisponibilitate</div>
+      <div class="card-label">Curcumina fitosomală vs. standard</div>
+    </div>
+    <div class="card gold-top">
+      <div class="card-val">60–80%</div>
+      <div class="card-unit">deficit estimat</div>
+      <div class="card-label">Vitamina D în Europa (Płudowski 2022)</div>
+    </div>
+    <div class="card">
+      <div class="card-val">300+</div>
+      <div class="card-unit">reacții enzimatice</div>
+      <div class="card-label">cofactor Magneziu în corp</div>
+    </div>
+  </div>
+
+  <!-- NUTRIGENOMICĂ -->
+  <section id="nutrigenomica">
+    <div class="section-tag">// 01</div>
+    <h2>Nutrigenomică — variabilitate biologică individuală</h2>
+    <div class="info-box">
+      <strong style="color:var(--purpll)">Principiu fundamental:</strong> Gena nu este destinul — este probabilitatea. Nutritia și suplimentarea modifică expresia genică (epigenetică). SNP-urile nu se schimbă; se compensează precis.
+    </div>
+
+    <h3>Variante genetice relevante clinic</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Genă/Variantă</th><th>Frecvență</th><th>Efect funcțional</th><th>Intervenție</th></tr></thead>
+        <tbody>
+          <tr><td><strong>MTHFR C677T</strong></td><td>~38% hetero-/homozigoti</td><td>Reducere activitate metiltransferază 30–70%</td><td>Folat metilat (5-MTHF), B12 metilcobalamină</td></tr>
+          <tr><td><strong>MTHFR A1298C</strong></td><td>~30% populație</td><td>Deficit metilare moderat</td><td>Complex B metilat complet</td></tr>
+          <tr><td><strong>VDR (receptor D)</strong></td><td>Variabil etnic</td><td>Absorbție/utilizare D3 redusă</td><td>Doze D3 mai mari, D3+K2 obligatoriu</td></tr>
+          <tr><td><strong>APOE ε4</strong></td><td>~25% populație</td><td>Risc CV crescut, ApoB ↑</td><td>Omega-3 rTG doze terapeutice</td></tr>
+          <tr><td><strong>FUT2 (secretor)</strong></td><td>~20% non-secretori</td><td>Absorbție B12 și microbiom reduse</td><td>B12 sublingual/injectabil, probiotice</td></tr>
+          <tr><td><strong>SOD2 A16V</strong></td><td>Frecvent</td><td>Capacitate antioxidantă mitocondrială redusă</td><td>Mn, CoQ10, NAC prioritizate</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Quiz genetic -->
+    <div class="quiz-wrap">
+      <div class="quiz-q">🧬 Test rapid: care profil genetic îți descrie cel mai bine simptomele?</div>
+      <div class="quiz-opts" id="quiz-opts">
+        <label class="quiz-opt"><input type="radio" name="gq" value="mthfr"/> Oboseală cronică, ceată mentală, nivel B12 "normal" dar simptome de deficit</label>
+        <label class="quiz-opt"><input type="radio" name="gq" value="vdr"/> Deficit vitamina D persistent chiar și cu suplimentare standard</label>
+        <label class="quiz-opt"><input type="radio" name="gq" value="apoe"/> Colesterol/ApoB crescut cu dietă corectă, risc cardiovascular familial</label>
+        <label class="quiz-opt"><input type="radio" name="gq" value="sod2"/> Recuperare lentă post-efort, stres oxidativ crescut, inflamație recurentă</label>
+      </div>
+      <button class="quiz-btn" onclick="checkQuiz()">Analizează profilul</button>
+      <div class="quiz-result" id="quiz-result"></div>
+    </div>
+  </section>
+
+  <!-- C.E.L.O.S. -->
+  <section id="celos">
+    <div class="section-tag">// 02</div>
+    <h2>Sistemul C.E.L.O.S. — arhitectura completă</h2>
+    <p style="color:var(--gray);font-size:14px;margin-bottom:20px">5 piloni, fiecare cu suplimente de primă alegere, forme optime și biomarkeri masurabili.</p>
+
+    <div class="celos-tabs">
+      <button class="ctab active" onclick="showCelos('C',this)">C — Celular</button>
+      <button class="ctab" onclick="showCelos('E',this)">E — Energetic</button>
+      <button class="ctab" onclick="showCelos('L',this)">L — Longevitate</button>
+      <button class="ctab" onclick="showCelos('O',this)">O — Oxidativ</button>
+      <button class="ctab" onclick="showCelos('S',this)">S — Sistem nervos</button>
+    </div>
+
+    <!-- C -->
+    <div class="celos-panel active" id="panel-C">
+      <div class="warn-box"><strong style="color:var(--gold)">Obiectiv:</strong> Optimizare producție ATP, protecție membranară, suport mitocondrial</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Supliment</th><th>Doză</th><th>Formă optimă</th><th>Biomarker țintă</th><th>Note esențiale</th></tr></thead>
+        <tbody>
+          <tr><td><strong>CoQ10 Ubiquinol</strong></td><td>100–300 mg/zi</td><td><span class="tag tag-ok">Ubiquinol</span></td><td>CoQ10 seric > 1.5 µg/mL</td><td>Cu masă grasă; esențial > 40 ani și statine</td></tr>
+          <tr><td><strong>Mg Glicinat</strong></td><td>300–400 mg/zi</td><td><span class="tag tag-ok">Glicinat / L-Treonat</span></td><td>Mg eritrocitar 4.2–6.8 mg/dL</td><td>Seara; evita oxid/sulfat — absorbție slabă</td></tr>
+          <tr><td><strong>Vitamina D3+K2</strong></td><td>2000–5000 UI D3<br/>100–200 µg K2 MK-7</td><td><span class="tag tag-ok">Colecalciferol + MK-7</span></td><td>25-OH-D3: 50–80 ng/mL</td><td>Cu masă grasă; ajustare după nivel seric</td></tr>
+          <tr><td><strong>Zinc Bisglicinat</strong></td><td>15–30 mg/zi</td><td><span class="tag tag-ok">Bisglicinat chelat</span></td><td>Zn seric 80–120 µg/dL</td><td>Seara; nu cu Ca sau Fe simultan</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <!-- E -->
+    <div class="celos-panel" id="panel-E">
+      <div class="warn-box"><strong style="color:var(--gold)">Obiectiv:</strong> Optimizare producție energetică, suport tiroidian, management stres cronic</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Supliment</th><th>Doză</th><th>Formă optimă</th><th>Biomarker țintă</th><th>Note esențiale</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Complex B metilat</strong></td><td>Conform label</td><td><span class="tag tag-ok">5-MTHF + Metilcobalamină</span></td><td>B12 activă > 600 pmol/L</td><td>Dimineața; critic pentru MTHFR+</td></tr>
+          <tr><td><strong>Ashwagandha KSM-66</strong></td><td>300–600 mg/zi</td><td><span class="tag tag-ok">KSM-66 sau Sensoril</span></td><td>Cortizol matinal, HRV</td><td>Chandrasekhar 2012: cortizol -27.9% în 8 săpt.</td></tr>
+          <tr><td><strong>Fier Bisglicinat</strong></td><td>18–36 mg/zi (F)<br/>10 mg/zi (B)</td><td><span class="tag tag-ok">Bisglicinat chelat</span></td><td>Ferritina 70–150 ng/mL</td><td>Cu vitamina C; nu cu Ca, ceai, cafea</td></tr>
+          <tr><td><strong>Iod + Seleniu</strong></td><td>150–200 µg I<br/>100–200 µg Se</td><td><span class="tag tag-ok">KI + Selenometionină</span></td><td>TSH 1–2 mUI/L</td><td>Se obligatoriu cu I; suport tiroidian</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <!-- L -->
+    <div class="celos-panel" id="panel-L">
+      <div class="warn-box"><strong style="color:var(--gold)">Obiectiv:</strong> Reducere risc cardiovascular, protecție telomeri, modulare căi longevitate (sirtuine, NAD+)</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Supliment</th><th>Doză</th><th>Formă optimă</th><th>Biomarker țintă</th><th>Note esențiale</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Omega-3 rTG</strong></td><td>2–4 g EPA+DHA/zi</td><td><span class="tag tag-ok">rTG (trigliceride reesterif.)</span></td><td>Omega-3 Index > 8%; ApoB</td><td>Cu masă grasă; IFOS 5 stele minim</td></tr>
+          <tr><td><strong>NMN sau NR</strong></td><td>250–500 mg/zi</td><td><span class="tag tag-ok">NMN sublingual / NR</span></td><td>NAD+ (indisponibil curent)</td><td>Dimineața; Sinclair 2019 Lifespan</td></tr>
+          <tr><td><strong>Resveratrol</strong></td><td>150–500 mg/zi</td><td><span class="tag tag-ok">Trans-resveratrol</span></td><td>—</td><td>Cu masă grasă; sinergie cu NMN</td></tr>
+          <tr><td><strong>Astaxantină</strong></td><td>4–12 mg/zi</td><td><span class="tag tag-ok">Natural (H. pluvialis)</span></td><td>—</td><td>Caroten antioxidant superior; cu masă</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <!-- O -->
+    <div class="celos-panel" id="panel-O">
+      <div class="warn-box"><strong style="color:var(--gold)">Obiectiv:</strong> Reducere CRP hs, stres oxidativ, suport glutation endogen</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Supliment</th><th>Doză</th><th>Formă optimă</th><th>Biomarker țintă</th><th>Note esențiale</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Vitamina C tamponată</strong></td><td>500–1000 mg/zi</td><td><span class="tag tag-ok">Ascorbat Na/Ca</span></td><td>CRP hs < 1 mg/L</td><td>Split doze; evita acid pur la gastric sensibil</td></tr>
+          <tr><td><strong>Curcumină fitosomală</strong></td><td>400–800 mg/zi</td><td><span class="tag tag-ok">Meriva® sau BCM-95</span></td><td>CRP hs, IL-6</td><td>29× absorbție vs. standard (Meriva)</td></tr>
+          <tr><td><strong>NAC</strong></td><td>600–1200 mg/zi</td><td><span class="tag tag-ok">N-acetil-L-cisteină</span></td><td>Glutation eritrocitar</td><td>Dimineața pe stomac gol; precursor glutation</td></tr>
+          <tr><td><strong>Quercetină</strong></td><td>500–1000 mg/zi</td><td><span class="tag tag-ok">+ Bromelaină</span></td><td>—</td><td>Seneolitic potențial; sinergie cu Zn</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <!-- S -->
+    <div class="celos-panel" id="panel-S">
+      <div class="warn-box"><strong style="color:var(--gold)">Obiectiv:</strong> Neuroprotecție, calitate somn, axă gut-brain, HRV optim</div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Supliment</th><th>Doză</th><th>Formă optimă</th><th>Biomarker țintă</th><th>Note esențiale</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Mg L-Treonat</strong></td><td>1000–2000 mg/zi</td><td><span class="tag tag-ok">Magtein®</span></td><td>Mg eritrocitar, HRV</td><td>Singura formă cu penetrare BBB eficientă</td></tr>
+          <tr><td><strong>L-Teanină</strong></td><td>100–200 mg/zi</td><td><span class="tag tag-ok">L-Teanină pură</span></td><td>HRV, calitate somn</td><td>Relaxare alertă; cu sau fără cofeină</td></tr>
+          <tr><td><strong>Melatonină</strong></td><td>0.3–1 mg/zi</td><td><span class="tag tag-warn">Doză fiziologică!</span></td><td>HRV nocturn, latență somn</td><td>Evita 5–10 mg; 30 min pre-somn</td></tr>
+          <tr><td><strong>Bacopa Monnieri</strong></td><td>300–450 mg/zi</td><td><span class="tag tag-ok">50% bacosides</span></td><td>—</td><td>Efect cognitiv la 8–12 săpt.; dimineața</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- BIODISPONIBILITATE -->
+  <section id="biodis">
+    <div class="section-tag">// 03</div>
+    <h2>Biodisponibilitate — de ce forma chimică decide totul</h2>
+    <div class="info-box">Un supliment bun în formă greșită = eficiență parțial irosită. Diferența poate depăși 400% în absorbție reală.</div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px">
+      <div>
+        <h3>Diferențe de absorbție relative</h3>
+        <div id="biodis-bars">
+          <div class="biodis-item"><div class="bdl"><span>Mg glicinat vs. oxid</span><span>4–10×</span></div><div class="bar-track"><div class="bar-fill" style="width:0%" data-w="90%"></div></div></div>
+          <div class="biodis-item"><div class="bdl"><span>Curcumină Meriva vs. standard</span><span>29×</span></div><div class="bar-track"><div class="bar-fill gold-fill" style="width:0%" data-w="98%"></div></div></div>
+          <div class="biodis-item"><div class="bdl"><span>Omega-3 rTG vs. ester etilic</span><span>1.7×</span></div><div class="bar-track"><div class="bar-fill" style="width:0%" data-w="60%"></div></div></div>
+          <div class="biodis-item"><div class="bdl"><span>Fier bisglicinat vs. sulfat</span><span>3–4×</span></div><div class="bar-track"><div class="bar-fill gold-fill" style="width:0%" data-w="75%"></div></div></div>
+          <div class="biodis-item"><div class="bdl"><span>CoQ10 ubiquinol vs. ubichinonă</span><span>2–3×</span></div><div class="bar-track"><div class="bar-fill" style="width:0%" data-w="65%"></div></div></div>
+        </div>
+      </div>
+      <div>
+        <h3>Chart biodisponibilitate comparativă</h3>
+        <div class="chart-wrap"><canvas id="biodisChart"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMING -->
+  <section id="timing">
+    <div class="section-tag">// 04</div>
+    <h2>Timing circadian — când contează la fel de mult ca ce iei</h2>
+    <div class="warn-box">Suplimentele liposolubile (D3, K2, CoQ10, Omega-3, Curcumină) necesită obligatoriu o masă cu grăsimi. Fără grăsimi → absorbție redusă cu 50–80%.</div>
+
+    <div class="timing-grid">
+      <div class="timing-row">
+        <div class="timing-hour">☀ Dimineața<br/>pe stomac gol</div>
+        <div class="timing-supls"><strong>NAC</strong>, <strong>Complex B metilat</strong>, Ashwagandha (optional)<br/><span style="color:var(--gray);font-size:11px">Absorbție maximă NAC; B metilat pentru energie matinală</span></div>
+      </div>
+      <div class="timing-row">
+        <div class="timing-hour">🍳 Dimineața<br/>cu masă grasă</div>
+        <div class="timing-supls"><strong>D3+K2</strong>, <strong>CoQ10 ubiquinol</strong>, <strong>Omega-3 rTG</strong>, Curcumină, Astaxantină<br/><span style="color:var(--gray);font-size:11px">Liposolubile — obligatoriu cu grăsimi alimentare</span></div>
+      </div>
+      <div class="timing-row">
+        <div class="timing-hour">🌤 Prânz /<br/>gustare</div>
+        <div class="timing-supls"><strong>Vitamina C tamponată</strong>, Quercetină, Fier bisglicinat (dacă nu seara)<br/><span style="color:var(--gray);font-size:11px">Split doze vitamina C; Fier departe de Ca și Zn</span></div>
+      </div>
+      <div class="timing-row">
+        <div class="timing-hour">🌙 Seara<br/>cu masă</div>
+        <div class="timing-supls"><strong>Mg Glicinat sau L-Treonat</strong>, <strong>Zinc bisglicinat</strong>, Resveratrol, NMN<br/><span style="color:var(--gray);font-size:11px">Recuperare, relaxare, somn; Zn nu simultan cu Ca</span></div>
+      </div>
+      <div class="timing-row">
+        <div class="timing-hour">🌛 Pre-somn<br/>-30 min</div>
+        <div class="timing-supls"><strong>Melatonină 0.3 mg</strong>, <strong>L-Teanină 100–200 mg</strong><br/><span style="color:var(--gray);font-size:11px">Semnalizare circadiană; anxiolitic ușor, inducere somn</span></div>
+      </div>
+    </div>
+
+    <div class="warn-box" style="margin-top:16px">
+      <strong style="color:var(--gold)">Incompatibilități de reținut:</strong> Ca + Fe (interval 2h) · Zn + Cu (ratio 10:1) · Fe + ceai/cafea (interval 1h) · Mg + Ca (ore diferite)
+    </div>
+  </section>
+
+  <!-- BIOMARKERI -->
+  <section id="biomarkeri">
+    <div class="section-tag">// 05</div>
+    <h2>Biomarkeri — protocolul de testare N=1</h2>
+    <div class="bm-grid">
+      <div class="bm-card"><div class="bm-letter">C</div><div class="bm-content"><div class="bm-name">CoQ10 seric</div><div class="bm-val">1.5–3.0 µg/mL optim</div><div class="bm-note">< 1.0 → ubiquinol 200–300 mg; anual</div></div></div>
+      <div class="bm-card"><div class="bm-letter">C</div><div class="bm-content"><div class="bm-name">Mg eritrocitar</div><div class="bm-val">4.2–6.8 mg/dL optim</div><div class="bm-note">< 4.2 → creste glicinat cu 100 mg; semestrial</div></div></div>
+      <div class="bm-card"><div class="bm-letter">C</div><div class="bm-content"><div class="bm-name">25-OH-D3</div><div class="bm-val">50–80 ng/mL optim</div><div class="bm-note">< 30 → 5000 UI/zi; > 100 → reduce; trimestrial inițial</div></div></div>
+      <div class="bm-card"><div class="bm-letter">E</div><div class="bm-content"><div class="bm-name">B12 activă (HoloTC)</div><div class="bm-val">> 600 pmol/L optim</div><div class="bm-note">< 400 → metilcobalamină sublingual; semestrial</div></div></div>
+      <div class="bm-card"><div class="bm-letter">E</div><div class="bm-content"><div class="bm-name">Ferritină</div><div class="bm-val">70–150 ng/mL optim</div><div class="bm-note">< 50 → fier bisglicinat 25 mg/zi; semestrial</div></div></div>
+      <div class="bm-card"><div class="bm-letter">E</div><div class="bm-content"><div class="bm-name">TSH</div><div class="bm-val">1.0–2.0 mUI/L optim</div><div class="bm-note">> 2.5 → verifica I, Se, Fe, stres; semestrial</div></div></div>
+      <div class="bm-card"><div class="bm-letter">L</div><div class="bm-content"><div class="bm-name">Omega-3 Index</div><div class="bm-val">≥ 8% optim</div><div class="bm-note">< 6% → creste la 3–4 g EPA+DHA/zi; anual</div></div></div>
+      <div class="bm-card"><div class="bm-letter">L</div><div class="bm-content"><div class="bm-name">ApoB</div><div class="bm-val">< 70 mg/dL (risc CV)</div><div class="bm-note">≥ 90 → omega-3 terapeutic, APOE status; anual</div></div></div>
+      <div class="bm-card"><div class="bm-letter">O</div><div class="bm-content"><div class="bm-name">CRP hs</div><div class="bm-val">< 1.0 mg/L optim</div><div class="bm-note">> 3 → curcumină, omega-3, dieta anti-inflam.; trimestrial</div></div></div>
+      <div class="bm-card"><div class="bm-letter">S</div><div class="bm-content"><div class="bm-name">HRV matinal</div><div class="bm-val">≥ baseline personal</div><div class="bm-note">Scădere > 10% → revizuiește protocolul; zilnic</div></div></div>
+    </div>
+
+    <!-- Câmpul 16 -->
+    <h3 style="margin-top:32px">Câmpul 16 — Jurnalul Biohacking 3.0</h3>
+    <div class="journal-fields">
+      <div class="jf"><div class="jf-num">01</div><div class="jf-text">Suplimentele luate astăzi (cu ora și doza)</div></div>
+      <div class="jf"><div class="jf-num">02</div><div class="jf-text">Efecte subiective la 2h post-administrare</div></div>
+      <div class="jf"><div class="jf-num">03</div><div class="jf-text">Biomarkeri recent măsurați și data testării</div></div>
+      <div class="jf"><div class="jf-num">04</div><div class="jf-text">Ajustări de doză sau formă chimică efectuate</div></div>
+      <div class="jf"><div class="jf-num">05</div><div class="jf-text">Reacții adverse observate (dacă există)</div></div>
+      <div class="jf"><div class="jf-num">06</div><div class="jf-text">Pilon C.E.L.O.S. prioritizat în această săptămână</div></div>
+    </div>
+
+    <div class="info-box" style="margin-top:20px">
+      <strong style="color:var(--purpll)">Principiu operativ:</strong> Alege UN pilon C.E.L.O.S. deficitar → fă UN biomarker relevant → suplimentează cu forma corectă → retestează la 90 zile. Maraton, nu sprint.
+    </div>
+  </section>
+
+</div><!-- end main -->
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Biohacking 3.0 — Lecția 3.5 · Conținut educativ exclusiv</footer>
+
+<script>
+// Progress bar
+window.addEventListener('scroll',()=>{
+  const el=document.getElementById('progress-bar');
+  const pct=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+  el.style.width=Math.min(pct,100)+'%';
+});
+
+// Nav active
+const sections=document.querySelectorAll('section[id]');
+const links=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-80)cur=s.id});
+  links.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+cur)});
+});
+
+// CELOS tabs
+function showCelos(id,btn){
+  document.querySelectorAll('.celos-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ctab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Quiz
+const quizData={
+  mthfr:{title:"Profil MTHFR+",text:"Indicatori sugestivi pentru varianta MTHFR. Prioritizează: Complex B metilat (5-MTHF + metilcobalamină), nu acid folic sintetic. Testare: homocisteină serică (optim < 8 µmol/L). Pilon prioritar: E — Energetic."},
+  vdr:{title:"Profil VDR / Deficit D3",text:"Absorbție/utilizare D3 posibil redusă genetic. Necesită doze mai mari (3000–5000 UI/zi), monitorizare 25-OH-D3 la 60 zile. Obligatoriu K2 MK-7 simultan. Pilon prioritar: C — Celular."},
+  apoe:{title:"Profil APOE ε4",text:"Risc cardiovascular crescut asociat cu varianta APOE ε4. Prioritizează: Omega-3 rTG 3–4 g/zi, monitorizare ApoB (țintă < 70 mg/dL). Reduce grăsimi saturate. Pilon prioritar: L — Longevitate."},
+  sod2:{title:"Profil SOD2 / Stres oxidativ",text:"Capacitate antioxidantă mitocondrială posibil redusă. Prioritizează: NAC 600–1200 mg, CoQ10 ubiquinol 200 mg, Mn, vitamina C tamponată. Monitorizare: CRP hs. Pilon prioritar: O — Oxidativ."},
+};
+function checkQuiz(){
+  const sel=document.querySelector('input[name="gq"]:checked');
+  const r=document.getElementById('quiz-result');
+  if(!sel){r.innerHTML='Selectează o opțiune mai întâi.';r.classList.add('show');return;}
+  const d=quizData[sel.value];
+  r.innerHTML=`<strong style="color:var(--gold)">${d.title}</strong><br/>${d.text}`;
+  r.classList.add('show');
+}
+
+// Biodis bars - animate on scroll
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll('#biodis-bars .bar-fill').forEach((b,i)=>{
+        setTimeout(()=>{b.style.width=b.dataset.w},i*200+100);
+      });
+      obs.disconnect();
+    }
+  });
+},{threshold:0.2});
+const bd=document.getElementById('biodis-bars');
+if(bd)obs.observe(bd);
+
+// Biodis Chart
+new Chart(document.getElementById('biodisChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['Mg Glicinat\nvs. Oxid','Curcumină\nMeriva','Omega-3 rTG\nvs. EE','Fier\nBisglicinat','CoQ10\nUbiquinol'],
+    datasets:[
+      {label:'Formă slabă (=1)',data:[1,1,1,1,1],backgroundColor:'rgba(255,255,255,0.1)',borderRadius:4},
+      {label:'Formă optimă',data:[7,29,1.7,3.5,2.5],backgroundColor:'rgba(156,39,176,0.7)',borderRadius:4},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#9E9BB8',font:{size:10}}},tooltip:{backgroundColor:'rgba(13,16,32,0.95)'}},
+    scales:{
+      x:{ticks:{color:'#9E9BB8',font:{size:9}},grid:{color:'rgba(206,147,216,0.08)'}},
+      y:{ticks:{color:'#9E9BB8',font:{size:9}},grid:{color:'rgba(206,147,216,0.08)'},
+        title:{display:true,text:'Absorbție relativă (×)',color:'#CE93D8',font:{size:10}}}
+    }
+  }
+});
+</script>
+</body>
+</html>

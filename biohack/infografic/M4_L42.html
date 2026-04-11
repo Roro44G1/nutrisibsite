@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Infografic L4.2 — Igiena somnului</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--grn:#1B5E20;--grnl:#2E7D32;--grnd:#0D3B11;--grnll:#A5D6A7;--gold:#F9A825;--navy:#050E1E;--navy2:#071510;--white:#E8F5E9;--gray:#78909C;--red:#B71C1C;--amber:#F57C00;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--navy);font-family:'Segoe UI',system-ui,sans-serif;color:var(--white)}
+header{background:linear-gradient(135deg,var(--grnd),var(--navy2));padding:22px;text-align:center;border-bottom:3px solid var(--gold)}
+header .tag{font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
+header h1{font-size:clamp(18px,4vw,26px);font-weight:700}
+header p{font-size:12px;color:var(--grnll);margin-top:4px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;padding:14px;max-width:1100px;margin:0 auto}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(165,214,167,0.2);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--grnl)}
+.card.gold::before{background:var(--gold)}
+.card.wide{grid-column:1/-1}
+.card h2{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:700}
+.cw{position:relative;height:190px}
+
+/* Simulare cafeina */
+.caf-sim{background:rgba(0,0,0,0.3);border-radius:8px;padding:14px}
+.caf-opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.co{padding:6px 14px;border-radius:20px;border:1px solid rgba(165,214,167,0.25);background:transparent;color:var(--gray);cursor:pointer;font-size:11px;transition:all .2s;font-family:inherit}
+.co.active{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:700}
+.caf-result{padding:10px;background:rgba(27,94,32,0.1);border-radius:6px;font-size:11px;color:var(--white);line-height:1.6}
+
+/* Audit interactiv */
+.audit-items{display:flex;flex-direction:column;gap:6px}
+.ai-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(0,0,0,0.2);border-radius:6px;cursor:pointer;transition:all .2s;border:1px solid rgba(165,214,167,0.1)}
+.ai-item:hover{background:rgba(27,94,32,0.1)}
+.ai-item.ok{background:rgba(27,94,32,0.12);border-color:rgba(165,214,167,0.3)}
+.ai-check{width:20px;height:20px;border-radius:4px;border:2px solid;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;transition:all .2s}
+.ai-label{flex:1;font-size:11px;color:var(--white)}
+.ai-pri{font-size:9px;padding:2px 6px;border-radius:6px;font-weight:700}
+.score-bar{height:8px;background:rgba(255,255,255,0.07);border-radius:4px;overflow:hidden;margin:10px 0 4px}
+.score-fill{height:100%;border-radius:4px;transition:width .6s,background .4s}
+
+/* Lumina bars */
+.lum-bars{display:flex;flex-direction:column;gap:6px}
+.lb{display:flex;align-items:center;gap:10px}
+.lb-time{width:70px;font-size:10px;color:var(--gray);flex-shrink:0;font-family:monospace}
+.lb-bar{flex:1;height:20px;border-radius:3px;position:relative;overflow:hidden}
+.lb-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:8px;font-size:9px;font-weight:700;transition:width 1.2s}
+.lb-val{width:70px;font-size:9px;text-align:right;color:var(--gray)}
+
+/* Pre-somn timeline mini */
+.ptl{display:flex;flex-direction:column;gap:6px}
+.pt-item{display:flex;gap:8px;padding:7px 10px;background:rgba(0,0,0,0.2);border-radius:6px;border-left:3px solid}
+.pt-time{font-family:monospace;font-size:10px;color:var(--gold);min-width:40px;font-weight:700;padding-top:1px}
+.pt-body{font-size:10px;color:#C8E6C9;line-height:1.5}
+.pt-body strong{color:var(--white)}
+
+/* Quiz */
+.qz-q{font-size:13px;font-weight:700;margin-bottom:10px;color:var(--white)}
+.qz-opts{display:flex;flex-direction:column;gap:6px}
+.qz-opt{padding:8px 12px;background:rgba(0,0,0,0.25);border:1px solid rgba(165,214,167,0.2);border-radius:6px;cursor:pointer;font-size:11px;color:var(--gray);display:flex;gap:8px;transition:all .2s}
+.qz-opt:hover{background:rgba(27,94,32,0.1);color:var(--white)}
+.qz-opt.ok{background:rgba(27,94,32,0.12);border-color:#4CAF50;color:#81C784}
+.qz-opt.ko{background:rgba(183,28,28,0.12);border-color:#F44336;color:#EF9A9A}
+.qz-exp{display:none;margin-top:8px;padding:10px;background:rgba(27,94,32,0.1);border-radius:6px;font-size:11px;color:#C8E6C9;border-left:3px solid var(--gold);line-height:1.5}
+.qz-exp.show{display:block}
+.qz-btn{margin-top:10px;padding:7px 16px;background:var(--grn);color:var(--white);border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+.qz-score{font-size:11px;color:var(--gold);font-family:monospace;margin-top:6px;text-align:right}
+
+footer{text-align:center;padding:16px;font-size:10px;color:var(--gray);border-top:1px solid rgba(165,214,167,0.1);margin-top:10px}
+</style>
+</head>
+<body>
+<header>
+  <div class="tag">// Biohacking 3.0 · Modul 4 · Lecția 4.2</div>
+  <h1>Igiena somnului</h1>
+  <p>Calculator cafeina · Audit comportamente · Protocol lumina · Timeline pre-somn · Quiz</p>
+</header>
+
+<div class="grid">
+
+  <!-- CAFEINA CALC -->
+  <div class="card gold">
+    <h2>☕ Calculator cafeina — impact pe somn</h2>
+    <div class="caf-sim">
+      <div style="font-size:11px;color:var(--gray);margin-bottom:8px">Ultima cafea la ora:</div>
+      <div class="caf-opts">
+        <button class="co active" onclick="calcCaf(8,this)">08:00</button>
+        <button class="co" onclick="calcCaf(10,this)">10:00</button>
+        <button class="co" onclick="calcCaf(13,this)">13:00</button>
+        <button class="co" onclick="calcCaf(15,this)">15:00</button>
+        <button class="co" onclick="calcCaf(17,this)">17:00</button>
+        <button class="co" onclick="calcCaf(19,this)">19:00</button>
+      </div>
+      <div class="caf-result" id="caf-result"></div>
+    </div>
+    <div class="cw" style="margin-top:12px"><canvas id="cafChart"></canvas></div>
+  </div>
+
+  <!-- AUDIT COMPORTAMENTE -->
+  <div class="card">
+    <h2>✅ Audit comportamente — bifează</h2>
+    <div class="audit-items" id="audit-items">
+      <div class="ai-item" onclick="toggleAudit(this)"><div class="ai-check" style="border-color:var(--red)"></div><div class="ai-label">Orar culcare/trezire consistent ±30 min</div><span class="ai-pri" style="background:rgba(183,28,28,0.2);color:#EF9A9A">CRITICĂ</span></div>
+      <div class="ai-item" onclick="toggleAudit(this)"><div class="ai-check" style="border-color:var(--red)"></div><div class="ai-label">Lumina solara 10–15 min in dimineata</div><span class="ai-pri" style="background:rgba(183,28,28,0.2);color:#EF9A9A">CRITICĂ</span></div>
+      <div class="ai-item" onclick="toggleAudit(this)"><div class="ai-check" style="border-color:var(--amber)"></div><div class="ai-label">Stop ecrane 2h pre-somn sau ochelari</div><span class="ai-pri" style="background:rgba(245,124,0,0.15);color:#FFAB40">ÎNALTĂ</span></div>
+      <div class="ai-item" onclick="toggleAudit(this)"><div class="ai-check" style="border-color:var(--amber)"></div><div class="ai-label">Camera 17–19°C la culcare</div><span class="ai-pri" style="background:rgba(245,124,0,0.15);color:#FFAB40">ÎNALTĂ</span></div>
+      <div class="ai-item" onclick="toggleAudit(this)"><div class="ai-check" style="border-color:var(--amber)"></div><div class="ai-label">Ultima cafea înainte de 13:00</div><span class="ai-pri" style="background:rgba(245,124,0,0.15);color:#FFAB40">ÎNALTĂ</span></div>
+      <div class="ai-item" onclick="toggleAudit(this)"><div class="ai-check" style="border-color:var(--amber)"></div><div class="ai-label">Întuneric complet — perdele opace</div><span class="ai-pri" style="background:rgba(245,124,0,0.15);color:#FFAB40">ÎNALTĂ</span></div>
+      <div class="ai-item" onclick="toggleAudit(this)"><div class="ai-check" style="border-color:var(--grnl)"></div><div class="ai-label">Zero alcool cu 3h pre-somn</div><span class="ai-pri" style="background:rgba(27,94,32,0.2);color:var(--grnll)">MEDIE</span></div>
+      <div class="ai-item" onclick="toggleAudit(this)"><div class="ai-check" style="border-color:var(--grnl)"></div><div class="ai-label">Dus cald cu 60–90 min pre-somn</div><span class="ai-pri" style="background:rgba(27,94,32,0.2);color:var(--grnll)">MEDIE</span></div>
+    </div>
+    <div class="score-bar"><div class="score-fill" id="score-fill" style="width:0%;background:var(--grn)"></div></div>
+    <div style="font-size:11px;color:var(--gold);font-family:monospace" id="score-label">Scor: 0/8</div>
+  </div>
+
+  <!-- PROTOCOL LUMINA -->
+  <div class="card">
+    <h2>💡 Protocol lumina — intensitate per interval</h2>
+    <div class="lum-bars" id="lum-bars">
+      <div class="lb"><div class="lb-time">06–07:00</div><div class="lb-bar"><div class="lb-fill" style="background:var(--gold);width:0" data-w="95%">10.000+ lux afara</div></div><div class="lb-val" style="color:var(--gold)">MAXIM</div></div>
+      <div class="lb"><div class="lb-time">08–17:00</div><div class="lb-bar"><div class="lb-fill" style="background:var(--grnl);width:0" data-w="75%">Lumina alba intensa</div></div><div class="lb-val" style="color:var(--grnll)">INALTA</div></div>
+      <div class="lb"><div class="lb-time">17–20:00</div><div class="lb-bar"><div class="lb-fill" style="background:var(--amber);width:0" data-w="40%">Calda 3000K</div></div><div class="lb-val" style="color:#FFAB40">MEDIE</div></div>
+      <div class="lb"><div class="lb-time">20–22:00</div><div class="lb-bar"><div class="lb-fill" style="background:#795548;width:0" data-w="15%">&lt;50 lux calda</div></div><div class="lb-val" style="color:#A1887F">MICA</div></div>
+      <div class="lb"><div class="lb-time">22–00:00</div><div class="lb-bar"><div class="lb-fill" style="background:#4E342E;width:0" data-w="4%">&lt;5 lux rosu</div></div><div class="lb-val" style="color:#8D6E63">MINI</div></div>
+      <div class="lb"><div class="lb-time">NOAPTE</div><div class="lb-bar"><div class="lb-fill" style="background:#1A237E;width:0" data-w="1%">&lt;1 lux</div></div><div class="lb-val" style="color:#9FA8DA">ZERO</div></div>
+    </div>
+    <div style="font-size:10px;color:var(--gray);margin-top:10px;font-style:italic">Gooley 2011: 200 lux seara suprimă melatonina cu 50% și decalează debutul cu 90 min.</div>
+  </div>
+
+  <!-- TIMELINE PRE-SOMN -->
+  <div class="card">
+    <h2>🌙 Timeline pre-somn — protocolul 3 ore</h2>
+    <div class="ptl">
+      <div class="pt-item" style="border-color:var(--red)"><div class="pt-time">-3h</div><div class="pt-body"><strong>Ultima masă + Stop alcool</strong> — digestia creste temp. corp; alcoolul suprimă REM</div></div>
+      <div class="pt-item" style="border-color:var(--amber)"><div class="pt-time">-2h</div><div class="pt-body"><strong>Dimmer < 50 lux + 17–19°C</strong> — debut melatonina; core body cooling incepe</div></div>
+      <div class="pt-item" style="border-color:var(--grnll)"><div class="pt-time">-90m</div><div class="pt-body"><strong>Stop ecrane / ochelari portocalii</strong> — Chang 2015: latenta +10 min fara; melatonina nesuprimata cu</div></div>
+      <div class="pt-item" style="border-color:var(--grnl)"><div class="pt-time">-60m</div><div class="pt-body"><strong>Dus cald + rutina relaxare</strong> — Haghayegh 2019: latenta -10 min; parasimpatic activat</div></div>
+      <div class="pt-item" style="border-color:var(--gold)"><div class="pt-time">-30m</div><div class="pt-body"><strong>Suplimente (dacă e cazul)</strong> — fereastra optima Mg+Teanina+Melatonina 0.3mg</div></div>
+      <div class="pt-item" style="border-color:var(--grn)"><div class="pt-time">😴</div><div class="pt-body"><strong>Intuneric complet + Telefon modul avion</strong> — melatonina la peak; fara stimuli externi</div></div>
+    </div>
+  </div>
+
+  <!-- CHART ORAR -->
+  <div class="card">
+    <h2>📊 Melatonina — orar consistent vs. neregulat</h2>
+    <div class="cw"><canvas id="olarChart"></canvas></div>
+    <div style="font-size:10px;color:var(--gray);margin-top:6px;font-style:italic">Orar neregulat = melatonina la ore impredictibile = N3 fragmentat = recuperare compromisa.</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card wide">
+    <h2>🎯 Quiz — igiena somnului</h2>
+    <div id="quiz-container"></div>
+  </div>
+
+</div>
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Infografic educativ · Nu substituie consultul medical</footer>
+
+<script>
+// CAFEINA
+let cafChartInst=null;
+function calcCaf(h,btn){
+  document.querySelectorAll('.co').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const sleepAt=23;const elapsed=sleepAt-h;
+  const remaining=Math.round(100*Math.pow(0.5,elapsed/5.5));
+  const n3impact=h>=16?'MAJOR (-20% N3)':h>=13?'Moderat (-10% N3)':h>=10?'Minor':'Neglijabil';
+  const color=h>=16?'#EF5350':h>=13?'#FF9800':h>=10?'#FFD54F':'#81C784';
+  document.getElementById('caf-result').innerHTML=`
+    La adormire (23:00) — cafea din ${h}:00 are <strong style="color:var(--gold)">${remaining}%</strong> activ.<br>
+    Impact N3: <strong style="color:${color}">${n3impact}</strong><br>
+    <span style="font-size:10px;color:var(--gray)">${h>=16?'Walker 2017: N3 degradat cu ~20% chiar dacă adormi normal (EEG detectabil).':h>=13?'Impact detectabil pe tracker. Metabolizatori lenti: mai devreme.':h>=10?'Impact minor la metabolizatori rapizi.':'Cofeina complet eliminată. Somn neafectat.'}</span>`;
+  const hours=Array.from({length:19},(_,i)=>i+h);
+  const caf=hours.map((_,i)=>Math.round(100*Math.pow(0.5,i/5.5)));
+  const ctx=document.getElementById('cafChart').getContext('2d');
+  if(cafChartInst)cafChartInst.destroy();
+  cafChartInst=new Chart(ctx,{
+    type:'line',
+    data:{labels:hours.map(h=>`${h%24}:00`),datasets:[{label:'Cafeina activa (%)',data:caf,borderColor:h>=16?'#EF5350':h>=13?'#FF9800':'#81C784',backgroundColor:(h>=16?'#EF5350':h>=13?'#FF9800':'#81C784')+'15',fill:true,pointRadius:2,borderWidth:2,tension:0.4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#78909C',font:{size:8},maxTicksLimit:10},grid:{color:'rgba(165,214,167,0.05)'}},y:{min:0,max:105,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(165,214,167,0.05)'},title:{display:true,text:'% activ',color:'#A5D6A7',font:{size:9}}}}}
+  });
+}
+calcCaf(8,document.querySelector('.co'));
+
+// AUDIT
+let auditScore=0;
+function toggleAudit(el){
+  const box=el.querySelector('.ai-check');
+  el.classList.toggle('ok');
+  if(el.classList.contains('ok')){box.textContent='✓';box.style.background=box.style.borderColor.replace('rgb','rgba').replace(')',',.15)');auditScore++;}
+  else{box.textContent='';box.style.background='';auditScore--;}
+  const pct=auditScore/8*100;
+  document.getElementById('score-fill').style.width=pct+'%';
+  document.getElementById('score-fill').style.background=pct>=75?'#4CAF50':pct>=50?'#FF9800':'#EF5350';
+  document.getElementById('score-label').textContent=`Scor: ${auditScore}/8 ${auditScore>=7?'— Excelent!':auditScore>=5?'— Bine, continua.':auditScore>=3?'— In progres.':'— Prioritizeaza cele CRITICE.'}`;
+}
+
+// LUMINA BARS
+const obs=new IntersectionObserver(e=>{
+  e.forEach(x=>{if(x.isIntersecting){
+    document.querySelectorAll('#lum-bars .lb-fill').forEach((b,i)=>{setTimeout(()=>{b.style.width=b.dataset.w;},i*150+100);});
+    obs.disconnect();
+  }});
+},{threshold:0.2});
+const lb=document.getElementById('lum-bars');if(lb)obs.observe(lb);
+
+// ORAR Chart
+new Chart(document.getElementById('olarChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['L','Ma','Mi','J','V','S','D'],
+    datasets:[
+      {label:'Debut melatonina consistent (22:30)',data:[22.5,22.5,22.5,22.5,22.5,22.5,22.5],backgroundColor:'rgba(27,94,32,0.65)',borderRadius:4},
+      {label:'Debut melatonina neregulat',data:[22.5,23.1,23.7,22.5,23.2,25.5,25.0],backgroundColor:'rgba(183,28,28,0.45)',borderRadius:4},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}},tooltip:{backgroundColor:'rgba(5,14,30,0.95)',callbacks:{label:ctx=>{const v=ctx.raw;return `${ctx.dataset.label}: ${v>=24?(v-24).toFixed(1)+':00 (a doua zi)':v.toFixed(1)+':00'}`;}}}},
+    scales:{
+      x:{ticks:{color:'#78909C',font:{size:10}},grid:{color:'rgba(165,214,167,0.05)'}},
+      y:{min:21,max:27,ticks:{color:'#78909C',font:{size:9},callback:v=>v>=24?`0${Math.round(v-24)}:00`:`${v}:00`},grid:{color:'rgba(165,214,167,0.06)'},title:{display:true,text:'Ora debut melatonina',color:'#A5D6A7',font:{size:9}}}
+    }
+  }
+});
+
+// QUIZ
+const qs=[
+  {q:"Care este fereastra de consistenta acceptabila pentru ora de culcare si trezire?",opts:["±1 ora — suficient","±15 minute — strict","±30 minute — standard","Conteaza doar in weekend"],ans:2,exp:"±30 minute, 7/7 zile inclusiv weekend. SCN-ul se sincronizeaza dupa semnale repetate. Orar neregulat = melatonina la ore impredictibile = N3 fragmentat."},
+  {q:"Care este mecanismul prin care dusul cald pre-somn imbunatateste adormirea?",opts:["Relaxeaza muschii direct","Creste temperatura corporala pentru a induce somnolenta","Vasodilatatie periferica → disipare caldura → temperatura core scade sub baseline","Elibereaza melatonina prin piele"],ans:2,exp:"Haghayegh 2019 (meta-analiza): apa calda 38–40°C cu 60–90 min pre-somn produce vasodilatatie periferică → caldura se disipa prin piele → temperatura corporala CENTRALA scade sub baseline → inductie N3. Latenta adormire -10 min."},
+  {q:"Gooley 2011: lumina de camera standard seara (200 lux) suprima melatonina cu cat si decaleaza debutul cu cat?",opts:["10% si 20 min","25% si 45 min","50% si 90 min","75% si 3 ore"],ans:2,exp:"Gooley 2011 (J Clin Endocrinol Metab): 200 lux seara (lumina de camera standard) suprima melatonina cu 50% si decaleaza debutul cu 90 minute. Implicatie: interiorul iluminat normal seara echivaleaza cu un jet lag cronic fara deplasare."},
+  {q:"De ce alcoolul este un sabotaj al somnului chiar daca ajuta adormirea?",opts:["Creste temperatura corporala excesiv","Metabolitii sai fragmenteaza N3 si suprima REM in a 2-a jumatate a noptii","Blocheaza melatonina","Produce diureza excesiva care trezeste"],ans:1,exp:"Alcoolul produce sedare (adormire rapida aparenta) dar metabolitii — in special acetaldehida — fragmenteaza N3 in prima parte a noptii si suprima complet REM in a doua jumatate. HRV scade cu ~15 ms. Recuperare zero in ciuda somnului de 8 ore."},
+  {q:"De ce prima cafea nu trebuie consumata imediat la trezire?",opts:["Cafeina blocheaza cortizolul CAR natural daca e luata prea devreme","Stomacul nu tolereaza cafeina pe nemancat","Cafeina nu functioneaza fara adenozina acumulata suficient","Nu exista niciun motiv — e un mit"],ans:0,exp:"In primele 60–90 minute dupa trezire, cortizolul CAR (Cortisol Awakening Response) este la peak natural — ofera vigoarea matinala. Cafeina luata in aceasta fereastra suprima CAR si accelereaza dependenta. Recomandat: asteapta 90 min dupa trezire pentru prima cafea."},
+];
+let qi=0,score=0;
+function renderQ(){
+  const c=document.getElementById('quiz-container');
+  if(qi>=qs.length){
+    c.innerHTML=`<div style="text-align:center;padding:18px"><div style="font-size:40px;font-weight:700;color:var(--gold)">${score}/${qs.length}</div><div style="font-size:13px;color:var(--grnll);margin-top:6px">${score===qs.length?'Excelent! Igiena somnului stapanita.':score>=3?'Bine — revizuieste raspunsurile gresite.':'Reia materialul — bazele sunt critice.'}</div><button class="qz-btn" onclick="qi=0;score=0;renderQ()" style="margin-top:12px">Restart</button></div>`;
+    return;
+  }
+  const q=qs[qi];
+  c.innerHTML=`<div class="qz-q">${qi+1}/${qs.length}. ${q.q}</div>
+    <div class="qz-opts">${q.opts.map((o,i)=>`<div class="qz-opt" id="qo-${i}" onclick="ans(${i})"><span>○</span>${o}</div>`).join('')}</div>
+    <div class="qz-exp" id="qz-exp">${q.exp}</div>
+    <div class="qz-score" id="qz-sc"></div>
+    <button class="qz-btn" id="qz-btn" style="display:none" onclick="qi++;renderQ()">Urmatoarea →</button>`;
+}
+function ans(sel){
+  const q=qs[qi];
+  if(document.getElementById('qz-btn').style.display!=='none')return;
+  if(sel===q.ans)score++;
+  q.opts.forEach((_,i)=>{
+    const el=document.getElementById(`qo-${i}`);
+    if(i===q.ans){el.classList.add('ok');el.querySelector('span').textContent='✓';}
+    else if(i===sel&&sel!==q.ans){el.classList.add('ko');el.querySelector('span').textContent='✗';}
+  });
+  document.getElementById('qz-exp').classList.add('show');
+  document.getElementById('qz-sc').textContent=`Scor: ${score}/${qi+1}`;
+  document.getElementById('qz-btn').style.display='inline-block';
+}
+renderQ();
+</script>
+</body>
+</html>

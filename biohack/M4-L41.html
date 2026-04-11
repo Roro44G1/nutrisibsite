@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>L4.1 — Arhitectura somnului | BH 3.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --blue:#0D47A1;--bluel:#1565C0;--blued:#082967;--bluell:#90CAF9;
+  --gold:#F9A825;--navy:#050E1E;--navy2:#0A1830;
+  --white:#EEF5FF;--gray:#78909C;--bg:#E3F2FD;
+  --green:#2E7D32;--red:#B71C1C;--cyan:#0097A7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'Syne',sans-serif;line-height:1.6}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--bluel),var(--gold));width:0%;z-index:100;transition:width .1s}
+
+nav{position:sticky;top:0;background:rgba(5,14,30,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(144,202,249,0.15);z-index:50;padding:0 24px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold)}
+.nav-links{display:flex;gap:20px}
+.nav-links a{font-size:11px;letter-spacing:2px;color:var(--gray);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--bluell)}
+
+.hero{background:linear-gradient(135deg,var(--blued) 0%,var(--navy2) 60%);padding:70px 24px 50px;text-align:center;border-bottom:1px solid rgba(144,202,249,0.2);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(21,101,192,0.2) 0%,transparent 70%)}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;position:relative}
+.hero h1{font-size:clamp(28px,5vw,48px);font-weight:800;letter-spacing:-0.5px;line-height:1.1;margin-bottom:16px;position:relative}
+.hero h1 span{color:var(--bluell)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gray);font-style:italic;max-width:600px;margin:0 auto 28px;position:relative}
+.hero-chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+.chip{background:rgba(13,71,161,0.25);border:1px solid rgba(144,202,249,0.3);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:var(--bluell)}
+
+.main{max-width:1100px;margin:0 auto;padding:40px 24px}
+section{margin-bottom:60px;scroll-margin-top:70px}
+.section-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--bluell);text-transform:uppercase;margin-bottom:8px}
+h2{font-size:clamp(22px,3vw,30px);font-weight:700;margin-bottom:20px;color:var(--white)}
+h3{font-size:17px;font-weight:600;color:var(--bluell);margin:24px 0 10px}
+
+/* KPI CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:48px}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(144,202,249,0.15);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--bluel)}
+.card.gold-top::before{background:var(--gold)}
+.card-val{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:var(--gold);line-height:1}
+.card-unit{font-size:11px;color:var(--gray);letter-spacing:1px;margin:4px 0}
+.card-label{font-size:12px;color:var(--white);font-weight:600}
+
+/* HIPNOGRAMA */
+.hypno-wrap{position:relative;margin:20px 0}
+.hypno-canvas{width:100%;height:220px;display:block}
+.hypno-legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:var(--gray)}
+.hl-item{display:flex;align-items:center;gap:6px}
+.hl-dot{width:12px;height:12px;border-radius:2px}
+
+/* STADII */
+.stadii-grid{display:grid;gap:10px}
+.stadiu-row{display:flex;gap:14px;padding:14px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(144,202,249,0.12);border-radius:8px;align-items:flex-start}
+.stadiu-label{min-width:50px;text-align:center}
+.stadiu-code{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;line-height:1}
+.stadiu-name{font-size:9px;color:var(--gray);text-transform:uppercase;letter-spacing:1px}
+.stadiu-body{flex:1}
+.stadiu-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px}
+.stadiu-desc{font-size:12px;color:rgba(238,245,255,0.7);line-height:1.5}
+.stadiu-kpi{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);margin-top:4px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--blued);color:var(--gold);padding:10px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid rgba(144,202,249,0.1);color:var(--white);vertical-align:top;line-height:1.5}
+tr:nth-child(even) td{background:rgba(13,71,161,0.06)}
+tr:hover td{background:rgba(13,71,161,0.12)}
+
+/* INFO BOX */
+.info-box{background:rgba(13,71,161,0.1);border:1px solid rgba(144,202,249,0.2);border-left:4px solid var(--bluel);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px;font-size:13px;color:var(--white);line-height:1.6}
+.warn-box{background:rgba(249,168,37,0.07);border:1px solid rgba(249,168,37,0.25);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px;font-size:13px;color:var(--white)}
+.danger-box{background:rgba(183,28,28,0.08);border:1px solid rgba(183,28,28,0.3);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:16px;font-size:13px;color:var(--white)}
+
+/* CIRCADIAN */
+.circadian-clock{position:relative;margin:20px auto;max-width:400px}
+.clock-inner{width:320px;height:320px;border-radius:50%;border:3px solid rgba(144,202,249,0.2);margin:0 auto;position:relative;background:rgba(5,14,30,0.9)}
+.clock-segment{position:absolute;width:100%;height:100%;border-radius:50%;clip-path:none}
+.clock-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
+.cc-title{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:2px}
+.cc-val{font-size:18px;font-weight:700;color:var(--gold)}
+
+/* CRONOTIP */
+.crono-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.crono-card{background:rgba(255,255,255,0.03);border:1px solid rgba(144,202,249,0.15);border-radius:10px;padding:18px;position:relative}
+.crono-icon{font-size:32px;margin-bottom:10px}
+.crono-name{font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px}
+.crono-pct{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--gold)}
+.crono-window{font-size:11px;color:var(--gray);margin-top:6px;line-height:1.5}
+
+/* ADENOZINA SIMULATOR */
+.ade-sim{background:rgba(255,255,255,0.03);border:1px solid rgba(144,202,249,0.15);border-radius:10px;padding:20px}
+.ade-controls{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.ade-btn{padding:8px 16px;border-radius:6px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;cursor:pointer;border:1px solid rgba(144,202,249,0.3);background:rgba(13,71,161,0.2);color:var(--white);transition:all .2s}
+.ade-btn:hover{background:var(--blue);border-color:var(--bluel)}
+.ade-btn.active{background:var(--blue);border-color:var(--gold);color:var(--gold)}
+.ade-chart-wrap{height:200px;position:relative}
+.ade-legend{font-size:10px;color:var(--gray);margin-top:8px;font-style:italic}
+
+/* BIOMARKERI */
+.bm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.bm-card{background:rgba(255,255,255,0.03);border:1px solid rgba(144,202,249,0.15);border-radius:8px;padding:14px;display:flex;gap:12px;align-items:flex-start}
+.bm-icon{font-size:20px;width:36px;text-align:center;flex-shrink:0;padding-top:2px}
+.bm-name{font-size:12px;font-weight:700;color:var(--white);margin-bottom:3px}
+.bm-val{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold)}
+.bm-note{font-size:10px;color:var(--gray);margin-top:3px;line-height:1.4}
+
+/* JURNAL */
+.journal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.jf{display:flex;gap:10px;background:rgba(255,255,255,0.03);border:1px solid rgba(144,202,249,0.15);border-radius:8px;padding:12px}
+.jf-num{font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--gold);width:28px;flex-shrink:0}
+.jf-text{font-size:12px;color:var(--white);line-height:1.5}
+
+/* CHART WRAP */
+.chart-wrap{height:240px;position:relative;margin:16px 0}
+
+footer{text-align:center;padding:32px 24px;border-top:1px solid rgba(144,202,249,0.1);font-size:11px;color:var(--gray)}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">// BH 3.0 · L4.1</div>
+    <div class="nav-links">
+      <a href="#stadii">Stadii</a>
+      <a href="#swsrem">SWS & REM</a>
+      <a href="#circadian">Circadian</a>
+      <a href="#cronotip">Cronotip</a>
+      <a href="#adenozina">Adenozina</a>
+      <a href="#biomarkeri">Biomarkeri</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// Modul 4 · Lecția 4.1</div>
+  <h1>Arhitectura <span>somnului</span></h1>
+  <p class="hero-sub">Cicluri ultradian · Stadii NREM/REM · Sistemul glimfatic · Cronotip genetic · Adenozina și cafeina</p>
+  <div class="hero-chips">
+    <div class="chip">~90 min / ciclu</div>
+    <div class="chip">4–6 cicluri/noapte</div>
+    <div class="chip">N3 = curățare creier</div>
+    <div class="chip">REM = cogniție</div>
+    <div class="chip">Walker 2017</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- KPI -->
+  <div class="card-grid">
+    <div class="card gold-top">
+      <div class="card-val">40%</div>
+      <div class="card-unit">reducere memorie</div>
+      <div class="card-label">la < 6h somn/noapte (Walker 2017)</div>
+    </div>
+    <div class="card">
+      <div class="card-val">60%</div>
+      <div class="card-unit">dilatare spații interstițiale</div>
+      <div class="card-label">Sistemul glimfatic în N3 (Nedergaard 2013)</div>
+    </div>
+    <div class="card">
+      <div class="card-val">70–80%</div>
+      <div class="card-unit">secretie GH zilnică</div>
+      <div class="card-label">concentrată în primul ciclu N3</div>
+    </div>
+    <div class="card">
+      <div class="card-val">5–6h</div>
+      <div class="card-unit">timp de înjumătățire</div>
+      <div class="card-label">cofeina — impactează arhitectura somnului</div>
+    </div>
+    <div class="card gold-top">
+      <div class="card-val">90 min</div>
+      <div class="card-unit">durata ciclu ultradian</div>
+      <div class="card-label">4–6 cicluri complete = noapte optimă</div>
+    </div>
+  </div>
+
+  <!-- HIPNOGRAMA -->
+  <section id="stadii">
+    <div class="section-tag">// 01</div>
+    <h2>Arhitectura nopții — hipnograma</h2>
+    <div class="info-box">
+      <strong style="color:var(--bluell)">Principiu fundamental:</strong> Somnul nu este uniform. Primele cicluri sunt dominate de N3 (SWS), ultimele de REM. Alarma la 06:00 elimină disproporționat REM din ciclurile 4–5.
+    </div>
+    <div class="hypno-wrap">
+      <canvas id="hypnoChart" class="hypno-canvas"></canvas>
+      <div class="hypno-legend">
+        <div class="hl-item"><div class="hl-dot" style="background:#42A5F5"></div>N1 — Tranzitie</div>
+        <div class="hl-item"><div class="hl-dot" style="background:#1565C0"></div>N2 — Somn usor</div>
+        <div class="hl-item"><div class="hl-dot" style="background:#0D47A1"></div>N3 — Unda lentă (SWS)</div>
+        <div class="hl-item"><div class="hl-dot" style="background:#F9A825"></div>REM</div>
+        <div class="hl-item"><div class="hl-dot" style="background:rgba(255,255,255,0.15)"></div>Veghe</div>
+      </div>
+    </div>
+
+    <h3>Stadiile somnului — funcții biologice</h3>
+    <div class="stadii-grid">
+      <div class="stadiu-row">
+        <div class="stadiu-label"><div class="stadiu-code" style="color:#42A5F5">N1</div><div class="stadiu-name">Tranziție</div></div>
+        <div class="stadiu-body">
+          <div class="stadiu-title">Tranzitie veghe → somn</div>
+          <div class="stadiu-desc">1–7 min per ciclu. Relaxare musculară, debut unde theta (4–8 Hz). Usor de intrerupt. Hipersomnie dacă endormiti pe canapea = N1 nu N2.</div>
+          <div class="stadiu-kpi">EEG: theta · Durată: 1–7% din noapte</div>
+        </div>
+      </div>
+      <div class="stadiu-row">
+        <div class="stadiu-label"><div class="stadiu-code" style="color:#1565C0">N2</div><div class="stadiu-name">Somn usor</div></div>
+        <div class="stadiu-body">
+          <div class="stadiu-title">Consolidare procedurală + termoreglare</div>
+          <div class="stadiu-desc">10–25 min per ciclu. Sleep spindles (12–15 Hz) consolidează memoria motrică și procedurală. Temperatura corporală scade activ. K-complexe = supresia stimulilor externi.</div>
+          <div class="stadiu-kpi">EEG: spindles + K-complexe · ~50% din noapte</div>
+        </div>
+      </div>
+      <div class="stadiu-row" style="border-color:rgba(13,71,161,0.4);background:rgba(13,71,161,0.08)">
+        <div class="stadiu-label"><div class="stadiu-code" style="color:#90CAF9">N3</div><div class="stadiu-name">SWS ★</div></div>
+        <div class="stadiu-body">
+          <div class="stadiu-title">Somnul de undă lentă — mentenanță hardware</div>
+          <div class="stadiu-desc">20–40 min în ciclul 1, scade spre dimineată. <strong style="color:#90CAF9">Prioritate #1.</strong> Secretie GH (70–80% zilnic), sistemul glimfatic activ (curăță β-amiloid), refacere imunității, sinteză proteică musculară. Delta &lt; 4 Hz.</div>
+          <div class="stadiu-kpi">EEG: delta · HRV maxim · GH peak · β-amiloid clearance</div>
+        </div>
+      </div>
+      <div class="stadiu-row" style="border-color:rgba(249,168,37,0.3);background:rgba(249,168,37,0.04)">
+        <div class="stadiu-label"><div class="stadiu-code" style="color:#F9A825">REM</div><div class="stadiu-name">Visare</div></div>
+        <div class="stadiu-body">
+          <div class="stadiu-title">Cogniție, memorie emoțională, creativitate</div>
+          <div class="stadiu-desc">10–60 min, crește spre dimineată (ciclurile 4–5). Activare cerebrală intensă, paralizie musculară. Consolidare memorie emoțională, procesare creativă, "overnight therapy" (Walker). Amigdala hiperreactivă la deprivare REM.</div>
+          <div class="stadiu-kpi">EEG: theta/beta · 20–25% din noapte · Creste in ciclurile 4–5</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SWS & REM -->
+  <section id="swsrem">
+    <div class="section-tag">// 02</div>
+    <h2>N3 și REM — de ce primele și ultimele ore nu sunt echivalente</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div>
+        <div class="warn-box"><strong style="color:var(--gold)">N3 — Prioritatea biologică #1</strong><br/>Primele 4 ore = N3 dominant. Niciodată sacrificat.</div>
+        <p style="font-size:13px;color:rgba(238,245,255,0.8);line-height:1.7;margin-bottom:12px">
+          <strong style="color:var(--bluell)">Sistemul glimfatic</strong> (Nedergaard 2013): în N3, spațiile interstitiale cerebrale se dilată cu 60%. LCR curge activ, eliminând β-amiloid și proteina tau — markerii Alzheimer.
+        </p>
+        <p style="font-size:13px;color:rgba(238,245,255,0.8);line-height:1.7">
+          <strong style="color:var(--bluell)">GH:</strong> 70–80% din secreția zilnică concentrată în primul ciclu N3, la ~30–60 min după adormire. Alcool, cină târzie (>22:00) și lumina artificială deprimă selectiv N3.
+        </p>
+      </div>
+      <div>
+        <div class="warn-box" style="border-left-color:var(--gold)"><strong style="color:var(--gold)">REM — Cogniție și emoție</strong><br/>Ultimele cicluri = REM dominant. Alarma precoce îl elimină.</div>
+        <p style="font-size:13px;color:rgba(238,245,255,0.8);line-height:1.7;margin-bottom:12px">
+          <strong style="color:var(--bluell)">Yoo et al. (2007):</strong> amigdala hiperreactivă cu 60% la deprivare REM. Un om fără REM este neurobiologic un om cu reactivitate emoțională patologică.
+        </p>
+        <p style="font-size:13px;color:rgba(238,245,255,0.8);line-height:1.7">
+          <strong style="color:var(--bluell)">Overnight therapy</strong> (Walker): REM re-experimentează amintiri emoționale fără norepinefrină → integrare emoțională fără re-traumatizare. Baza biologică a psihoterapiei.
+        </p>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="cycleChart"></canvas>
+    </div>
+  </section>
+
+  <!-- CIRCADIAN -->
+  <section id="circadian">
+    <div class="section-tag">// 03</div>
+    <h2>Ritmul circadian — arhitectura hormonală temporală</h2>
+    <div class="info-box">
+      Nucleul suprachiasmatic (SCN) din hipotalamus oscilează cu perioadă ~24.2h. Antrenat zilnic de lumina solară. Lumina albastră seara (ecrane) poate decala melatonina cu 2–3 ore.
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Hormon</th><th>Peak fiziologic</th><th>Rol circadian</th><th>Perturbator major</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Cortizol (CAR)</strong></td><td>06:00–08:00</td><td>Mobilizare energetică, vigoare, imunomodulare matinală</td><td>Lumina albastră seara, stres cronic, somn neregulat</td></tr>
+          <tr><td><strong>Melatonina</strong></td><td>21:00–23:00 debut, peak 02:00–04:00</td><td>Semnalizare noapte → inducție somn, antioxidant cerebral</td><td>Lumina albastră > 10 lux la 2h pre-somn → delay 2–3h</td></tr>
+          <tr><td><strong>GH (hormon creștere)</strong></td><td>22:30–00:30 (primul N3)</td><td>Reparare celulară, lipoliză, sinteză proteică musculară</td><td>Alcool seara, cină > 22:00, lumina artificială</td></tr>
+          <tr><td><strong>Adenozina</strong></td><td>Acumul. progresivă, peak seara</td><td>Presiunea homeostatică a somnului (drive-ul biologic)</td><td>Cafeina blochează receptori — nu elimină adenozina</td></tr>
+          <tr><td><strong>Temp. corporală</strong></td><td>Min. 04:00–05:00, max. 17:00–18:00</td><td>Scădere → inducție somn; Creștere → vigoare</td><td>Cameră > 20°C, duș fierbinte pre-somn</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="danger-box">
+      <strong>Regula luminii albastre:</strong> 2 ore de ecran (smartphone, laptop) la intensitate normală înainte de somn suprimă secreția de melatonina cu 50% și dekalează onset-ul cu 90 min. Nu este percepție — este biologie măsurabilă.
+    </div>
+  </section>
+
+  <!-- CRONOTIP -->
+  <section id="cronotip">
+    <div class="section-tag">// 04</div>
+    <h2>Cronotipul — configurația genetică de somn</h2>
+    <div class="info-box">Cronotipul este determinat de variante ale genelor <strong style="color:var(--bluell)">PER3, CLOCK și CRY1</strong>. Nu este o preferință sau un viciu — este biologie hardcodata. Nu se schimbă prin voință; se adaptează prin structură socială.</div>
+    <div class="crono-grid">
+      <div class="crono-card">
+        <div class="crono-icon">🌅</div>
+        <div class="crono-name">Matinal (Lark)</div>
+        <div class="crono-pct">~25%</div>
+        <div class="crono-window">
+          Somn: 21:30–22:30 → 05:30–06:30<br/>
+          Peak cognitiv: 07:00–12:00<br/>
+          Genă: PER3 variantă lungă
+        </div>
+      </div>
+      <div class="crono-card">
+        <div class="crono-icon">🌤</div>
+        <div class="crono-name">Intermediar</div>
+        <div class="crono-pct">~50%</div>
+        <div class="crono-window">
+          Somn: 23:00–00:00 → 07:00–08:00<br/>
+          Peak cognitiv: 09:00–14:00<br/>
+          Genă: mixtaj alele PER3
+        </div>
+      </div>
+      <div class="crono-card">
+        <div class="crono-icon">🌙</div>
+        <div class="crono-name">Nocturn (Owl)</div>
+        <div class="crono-pct">~25%</div>
+        <div class="crono-window">
+          Somn: 00:30–02:00 → 08:00–10:00<br/>
+          Peak cognitiv: 12:00–18:00<br/>
+          Genă: PER3 scurtă, CRY1 mutație
+        </div>
+      </div>
+    </div>
+    <div class="warn-box" style="margin-top:16px">
+      <strong style="color:var(--gold)">Social jetlag</strong> — discrepanța dintre cronotipul biologic și orarul social impus. Wittle (2019): fiecare oră de social jetlag crește riscul de obezitate cu 33% și degradează markeri metabolici măsurabili (cortizol, HbA1c, CRP).
+    </div>
+    <p style="font-size:13px;color:var(--gray);margin-top:12px">
+      <strong style="color:var(--bluell)">Test cronotip (MSFsc):</strong> ora mijlocului somnului în weekenduri complet libere (fără alarmă, fără alcool, fără stimuli). Cel mai fidel indicator al cronotipului real. Disponibil prin Munich Chronotype Questionnaire (MCTQ) online.
+    </p>
+  </section>
+
+  <!-- ADENOZINA -->
+  <section id="adenozina">
+    <div class="section-tag">// 05</div>
+    <h2>Adenozina și cafeina — mecanismul real al presiunii somnului</h2>
+    <div class="ade-sim">
+      <p style="font-size:13px;color:var(--gray);margin-bottom:14px">Simulează profilul adenozinei și al cofeinei în funcție de ora cafelei. Cafeina <strong style="color:var(--bluell)">blochează</strong> adenozina — nu o elimina.</p>
+      <div class="ade-controls">
+        <span style="font-size:12px;color:var(--gray)">Ultima cafea la:</span>
+        <button class="ade-btn active" onclick="setAde(8,this)">08:00</button>
+        <button class="ade-btn" onclick="setAde(10,this)">10:00</button>
+        <button class="ade-btn" onclick="setAde(13,this)">13:00</button>
+        <button class="ade-btn" onclick="setAde(16,this)">16:00</button>
+        <button class="ade-btn" onclick="setAde(19,this)">19:00</button>
+      </div>
+      <div class="ade-chart-wrap"><canvas id="adeChart"></canvas></div>
+      <div class="ade-legend" id="ade-legend">Fereastra de somn: 23:00–07:00 (bandă gri). Cafeina activă = zona galbenă. La cruce: "crash" de cofeină — adenozina blocată revine brusc.</div>
+    </div>
+    <div class="danger-box" style="margin-top:16px">
+      <strong>Mitul "dorm bine după cafea seara":</strong> Walker (2017): chiar și persoanele care adorm normal după cafea târzie au un N3 cu <strong>20% mai sarac</strong> — dar nu conștientizează degradarea calității, pentru că nu au comparabilitate. Eficiența somnului scade invizibil.
+    </div>
+  </section>
+
+  <!-- BIOMARKERI -->
+  <section id="biomarkeri">
+    <div class="section-tag">// 06</div>
+    <h2>Biomarkeri și instrumente de măsurare</h2>
+    <div class="bm-grid">
+      <div class="bm-card"><div class="bm-icon">💓</div><div><div class="bm-name">HRV nocturn (RMSSD)</div><div class="bm-val">≥ baseline personal ±15%</div><div class="bm-note">Wearable (Oura, Garmin, Polar). Cel mai sensibil indicator al calității N3 și REM.</div></div></div>
+      <div class="bm-card"><div class="bm-icon">🫁</div><div><div class="bm-name">SpO2 nocturnă</div><div class="bm-val">≥ 95% medie noapte</div><div class="bm-note">Pulsoximetru nocturn / Oura. < 90% episodic → evaluare apnee în somn la somnolog.</div></div></div>
+      <div class="bm-card"><div class="bm-icon">⏱</div><div><div class="bm-name">Latența adormirii</div><div class="bm-val">10–20 minute</div><div class="bm-note">< 5 min = privare cronică de somn (nu ești "bun dormitor"). > 30 min = insomnie de inițiere.</div></div></div>
+      <div class="bm-card"><div class="bm-icon">📊</div><div><div class="bm-name">Eficiența somnului</div><div class="bm-val">≥ 85%</div><div class="bm-note">Total somn / Timp în pat × 100. < 75% = fragmentare semnificativă. Calculabil manual.</div></div></div>
+      <div class="bm-card"><div class="bm-icon">🌡</div><div><div class="bm-name">Temp. corporală nocturnă</div><div class="bm-val">Scădere 0.5–1°C</div><div class="bm-note">Oura Ring. Camera optimă: 17–19°C. Indiciu pentru N3 profund.</div></div></div>
+      <div class="bm-card"><div class="bm-icon">🩸</div><div><div class="bm-name">Cortizol matinal (CAR)</div><div class="bm-val">Peak la 30–45 min post-trezire</div><div class="bm-note">Salivary cortisol kit. Ritm CAR absent = disfuncție ax HPA / somn de slabă calitate.</div></div></div>
+    </div>
+
+    <h3 style="margin-top:32px">Câmpul 17 — Jurnalul Biohacking 3.0</h3>
+    <div class="journal-grid">
+      <div class="jf"><div class="jf-num">01</div><div class="jf-text">Ora adormirii și ora trezirii (cu/fără alarmă)</div></div>
+      <div class="jf"><div class="jf-num">02</div><div class="jf-text">Latența adormirii estimată (cât timp până ai adormit)</div></div>
+      <div class="jf"><div class="jf-num">03</div><div class="jf-text">Numărul și durata trezirilor nocturne</div></div>
+      <div class="jf"><div class="jf-num">04</div><div class="jf-text">HRV matinal (dacă ai device) + SpO2 medie</div></div>
+      <div class="jf"><div class="jf-num">05</div><div class="jf-text">Calitate subiectivă somn 1–10 + stare la trezire</div></div>
+      <div class="jf"><div class="jf-num">06</div><div class="jf-text">Ultima cafea (ora) + ora cinei — corelezi cu calitatea</div></div>
+    </div>
+
+    <div class="info-box" style="margin-top:20px">
+      <strong style="color:var(--bluell)">Regula operativă:</strong> Monitorizează 14 nopți consecutive. Identifică pattern-ul tău personal. Nu căuta optimul general — caută deviațiile față de propria ta linie de bază.
+    </div>
+  </section>
+
+</div>
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Biohacking 3.0 — Lecția 4.1 · Conținut educativ exclusiv</footer>
+
+<script>
+// Progress bar
+window.addEventListener('scroll',()=>{
+  const el=document.getElementById('progress-bar');
+  el.style.width=Math.min((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100,100)+'%';
+});
+
+// Nav active
+const sections=document.querySelectorAll('section[id]');
+const links=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-80)cur=s.id});
+  links.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+cur)});
+});
+
+// ── HIPNOGRAMA ────────────────────────────────────────────────────────────
+// Simplified hypnogram: hours 0-8, stage mapping (0=wake,1=N1,2=N2,3=N3,4=REM)
+// Higher number = deeper sleep → invert for display
+const hypnoStages = [
+  // Ciclu 1: 0–90min
+  {t:0,s:0},{t:5,s:1},{t:12,s:2},{t:18,s:3},{t:50,s:3},{t:55,s:2},{t:65,s:4},{t:80,s:4},
+  // Ciclu 2: 90–180min
+  {t:82,s:2},{t:90,s:2},{t:95,s:3},{t:115,s:3},{t:120,s:2},{t:130,s:4},{t:150,s:4},
+  // Ciclu 3: 180–270min
+  {t:152,s:2},{t:160,s:3},{t:175,s:3},{t:180,s:2},{t:190,s:4},{t:215,s:4},
+  // Ciclu 4: 270–360min
+  {t:217,s:2},{t:225,s:2},{t:235,s:3},{t:245,s:2},{t:255,s:4},{t:285,s:4},
+  // Ciclu 5: 360–480min
+  {t:287,s:2},{t:295,s:2},{t:305,s:4},{t:360,s:4},{t:362,s:1},{t:365,s:0},
+];
+const hypnoColors = {0:'rgba(255,255,255,0.15)',1:'#42A5F5',2:'#1565C0',3:'#0D47A1',4:'#F9A825'};
+const hypnoLabels = {0:'Veghe',1:'N1',2:'N2',3:'N3',4:'REM'};
+const hypnoYval = {0:4,1:3,2:2,3:1,4:4.5}; // inverted for chart
+
+const hypnoCtx = document.getElementById('hypnoChart').getContext('2d');
+// Build step data
+const hData=[];
+for(let i=0;i<hypnoStages.length-1;i++){
+  const cur=hypnoStages[i],nxt=hypnoStages[i+1];
+  hData.push({x:cur.t,y:hypnoYval[cur.s],s:cur.s});
+  hData.push({x:nxt.t-0.1,y:hypnoYval[cur.s],s:cur.s});
+}
+new Chart(hypnoCtx,{
+  type:'line',
+  data:{datasets:[{
+    data:hData.map(d=>({x:d.x,y:d.y})),
+    borderColor:'rgba(144,202,249,0.8)',
+    backgroundColor:'rgba(13,71,161,0.15)',
+    fill:false,
+    borderWidth:2,
+    pointRadius:0,
+    stepped:'before',
+  }]},
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:ctx=>{
+        const t=ctx.raw.x;const y=ctx.raw.y;
+        const sl={4:'Veghe/REM',4.5:'REM',3:'N1',2:'N2',1:'N3'};
+        return `${Math.floor(t/60)}h${String(t%60).padStart(2,'0')}m — ${sl[y]||'?'}`;
+      }}}},
+    scales:{
+      x:{type:'linear',min:0,max:480,
+        ticks:{color:'#78909C',font:{size:9},callback:v=>`${Math.floor(v/60)}:${String(v%60).padStart(2,'0')}`},
+        grid:{color:'rgba(144,202,249,0.05)'},
+        title:{display:true,text:'Timp (ore de la adormire)',color:'#78909C',font:{size:9}}},
+      y:{reverse:false,min:0.5,max:5,
+        ticks:{display:false},
+        grid:{color:'rgba(144,202,249,0.06)'}},
+    }
+  }
+});
+
+// ── CYCLE CHART ────────────────────────────────────────────────────────────
+new Chart(document.getElementById('cycleChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['Ciclu 1\n(22:30–00:00)','Ciclu 2\n(00:00–01:30)','Ciclu 3\n(01:30–03:00)','Ciclu 4\n(03:00–04:30)','Ciclu 5\n(04:30–06:00)'],
+    datasets:[
+      {label:'N3 SWS (min)',data:[40,25,15,8,5],backgroundColor:'rgba(13,71,161,0.7)',borderRadius:4},
+      {label:'REM (min)',data:[10,20,30,45,55],backgroundColor:'rgba(249,168,37,0.7)',borderRadius:4},
+      {label:'N2 (min)',data:[25,30,32,30,25],backgroundColor:'rgba(21,101,192,0.4)',borderRadius:4},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:10},boxWidth:10}},
+      tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{
+      x:{stacked:true,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(144,202,249,0.06)'}},
+      y:{stacked:true,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(144,202,249,0.06)'},
+        title:{display:true,text:'Minute',color:'#90CAF9',font:{size:9}}}
+    }
+  }
+});
+
+// ── ADENOZINA SIMULATOR ────────────────────────────────────────────────────
+let adeChartInst = null;
+function setAde(coffeeHour, btn) {
+  document.querySelectorAll('.ade-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const hours = Array.from({length:25},(_,i)=>i+6); // 06:00–06:00 next day
+  const adenosine = hours.map(h=>{
+    // Adenosine accumulates from 06:00, peaks at ~22:00
+    const hoursAwake = Math.max(0, h - 6);
+    return Math.min(100, hoursAwake * 6.5);
+  });
+  // Caffeine: half-life 5.5h, administered at coffeeHour
+  const caffeine = hours.map(h=>{
+    if(h < coffeeHour) return 0;
+    const elapsed = h - coffeeHour;
+    return 100 * Math.pow(0.5, elapsed/5.5);
+  });
+  // Net adenosine effect = adenosine - caffeine blockade
+  const netAde = hours.map((h,i)=>Math.max(0, adenosine[i] - caffeine[i]*0.8));
+
+  const labels = hours.map(h=>`${h>24?h-24:h}:00`);
+  const ctx = document.getElementById('adeChart').getContext('2d');
+  if(adeChartInst) adeChartInst.destroy();
+  adeChartInst = new Chart(ctx,{
+    type:'line',
+    data:{
+      labels,
+      datasets:[
+        {label:'Adenozina acumulată',data:adenosine,borderColor:'rgba(144,202,249,0.6)',backgroundColor:'transparent',borderDash:[4,4],pointRadius:0,borderWidth:1.5},
+        {label:'Blocare cafea',data:caffeine,borderColor:'rgba(249,168,37,0.8)',backgroundColor:'rgba(249,168,37,0.08)',fill:true,pointRadius:0,borderWidth:1.5},
+        {label:'Adenozina efectivă (post-crash)',data:netAde,borderColor:'#0D47A1',backgroundColor:'rgba(13,71,161,0.2)',fill:true,pointRadius:0,borderWidth:2},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}},
+        tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+      scales:{
+        x:{ticks:{color:'#78909C',font:{size:9},maxTicksLimit:13},grid:{color:'rgba(144,202,249,0.05)'}},
+        y:{min:0,max:110,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(144,202,249,0.05)'},
+          title:{display:true,text:'Nivel relativ (%)',color:'#90CAF9',font:{size:9}}}
+      }
+    }
+  });
+
+  const impact = coffeeHour >= 14 ? 'IMPACT MAJOR' : coffeeHour >= 10 ? 'Impact moderat' : 'Impact minim';
+  const color = coffeeHour >= 14 ? '#EF5350' : coffeeHour >= 10 ? '#FF9800' : '#66BB6A';
+  document.getElementById('ade-legend').innerHTML =
+    `Ultima cafea la <strong style="color:var(--gold)">${coffeeHour}:00</strong> → ` +
+    `<strong style="color:${color}">${impact}</strong> pe arhitectura somnului. ` +
+    `T½ cofeina = 5.5h → la ${coffeeHour+5}:30 mai rămâne 50% activ. ` +
+    (coffeeHour >= 14 ? '<strong style="color:#EF5350">N3 afectat cu ~20% (Walker 2017).</strong>' :
+     coffeeHour >= 10 ? 'Impact minor pe somn dacă adormi după 23:00.' :
+     'Cofeina eliminată complet înainte de somn.');
+}
+setAde(8, document.querySelector('.ade-btn'));
+</script>
+</body>
+</html>

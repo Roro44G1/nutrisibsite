@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>L4.5 — Integrare Modul 4 | BH 3.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --vio:#4527A0;--viol:#5E35B1;--viod:#2A0D6B;--violl:#CE93D8;
+  --gold:#F9A825;--navy:#050E1E;--navy2:#0A0718;
+  --white:#EDE7F6;--gray:#78909C;
+  --grn:#1B5E20;--teal:#00838F;--blue:#0D47A1;--ind:#1A237E;
+  --red:#B71C1C;--amber:#F57C00;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'Syne',sans-serif;line-height:1.6}
+#pb{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--viol),var(--gold));width:0%;z-index:100}
+nav{position:sticky;top:0;background:rgba(5,14,30,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(206,147,216,0.15);z-index:50;padding:0 24px}
+.ni{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold)}
+.nl{display:flex;gap:18px}
+.nl a{font-size:11px;letter-spacing:2px;color:var(--gray);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nl a:hover,.nl a.active{color:var(--violl)}
+.hero{background:linear-gradient(135deg,var(--viod) 0%,var(--navy2) 60%);padding:70px 24px 50px;text-align:center;border-bottom:1px solid rgba(206,147,216,0.2);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(94,53,177,0.2) 0%,transparent 70%)}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;position:relative}
+.hero h1{font-size:clamp(26px,5vw,46px);font-weight:800;line-height:1.1;margin-bottom:16px;position:relative}
+.hero h1 span{color:var(--violl)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gray);font-style:italic;max-width:640px;margin:0 auto 28px;position:relative}
+.chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+.chip{background:rgba(69,39,160,0.22);border:1px solid rgba(206,147,216,0.3);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:var(--violl)}
+.main{max-width:1100px;margin:0 auto;padding:40px 24px}
+section{margin-bottom:60px;scroll-margin-top:70px}
+.stag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--violl);text-transform:uppercase;margin-bottom:8px}
+h2{font-size:clamp(22px,3vw,30px);font-weight:700;margin-bottom:20px}
+h3{font-size:17px;font-weight:600;color:var(--violl);margin:24px 0 10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:48px}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(206,147,216,0.15);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--viol)}
+.card.g::before{background:var(--gold)}
+.cv{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:var(--gold);line-height:1}
+.cu{font-size:11px;color:var(--gray);letter-spacing:1px;margin:4px 0}
+.cl{font-size:12px;color:var(--white);font-weight:600}
+
+/* Piramida */
+.pyramid{display:flex;flex-direction:column;gap:8px}
+.layer{border-radius:8px;padding:16px;border:1px solid;display:flex;gap:14px;align-items:center;cursor:pointer;transition:all .3s}
+.layer-num{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;width:48px;text-align:center;flex-shrink:0}
+.layer-body{flex:1}
+.layer-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.layer-desc{font-size:11px;line-height:1.5}
+.layer-expand{display:none;margin-top:8px;padding:8px 10px;background:rgba(0,0,0,0.25);border-radius:6px;font-size:11px;color:#E1BEE7;line-height:1.6}
+.layer-expand.show{display:block}
+.layer-tag{font-size:10px;font-weight:700;letter-spacing:1px;padding:2px 8px;border-radius:8px}
+
+/* Timeline zilnic */
+.timeline-grid{display:flex;flex-direction:column;gap:0;position:relative}
+.timeline-grid::before{content:'';position:absolute;left:30px;top:0;bottom:0;width:2px;background:rgba(206,147,216,0.15)}
+.tl-item{display:flex;gap:14px;padding:8px 0;position:relative}
+.tl-time{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;flex-shrink:0;border:2px solid;z-index:1;text-align:center;line-height:1.2}
+.tl-card{flex:1;padding:10px 14px;border-radius:8px;border:1px solid rgba(206,147,216,0.1);background:rgba(255,255,255,0.03)}
+.tl-act{font-size:12px;font-weight:700;color:var(--white);margin-bottom:3px}
+.tl-why{font-size:10px;color:var(--gray);line-height:1.4}
+.tl-strat{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--violl);margin-top:3px}
+
+/* Diagnostic */
+.diag-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.diag-card{background:rgba(255,255,255,0.03);border:1px solid rgba(206,147,216,0.15);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s}
+.diag-card:hover{background:rgba(69,39,160,0.08)}
+.diag-card.open{background:rgba(69,39,160,0.1);border-color:rgba(206,147,216,0.3)}
+.dc-simptom{font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px}
+.dc-cauza{font-size:11px;color:var(--violl);margin-bottom:6px}
+.dc-detail{display:none;margin-top:8px;padding:8px;background:rgba(0,0,0,0.25);border-radius:6px}
+.dc-detail.show{display:block}
+.dc-interventie{font-size:11px;color:#E1BEE7;line-height:1.6;margin-bottom:6px}
+.dc-bm{font-size:10px;color:var(--gold);font-family:'JetBrains Mono',monospace}
+
+/* Plan 6 sapt */
+.plan-grid{display:flex;flex-direction:column;gap:6px}
+.plan-item{display:flex;gap:12px;padding:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(206,147,216,0.12);border-radius:8px;align-items:flex-start}
+.plan-wk{min-width:64px;text-align:center}
+.plan-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin:0 auto 4px;border:2px solid}
+.plan-wlbl{font-size:9px;color:var(--gray);text-align:center;letter-spacing:1px}
+.plan-body{flex:1}
+.plan-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px}
+.plan-actions{font-size:11px;color:rgba(237,231,246,0.75);line-height:1.5}
+.plan-kpi{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);margin-top:4px}
+
+/* Info boxes */
+.info-box{background:rgba(69,39,160,0.08);border:1px solid rgba(206,147,216,0.2);border-left:4px solid var(--viol);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.tw{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--viod);color:var(--gold);padding:10px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+td{padding:9px 12px;border-bottom:1px solid rgba(206,147,216,0.1);color:var(--white);vertical-align:top;line-height:1.5}
+tr:nth-child(even) td{background:rgba(69,39,160,0.04)}
+tr:hover td{background:rgba(69,39,160,0.08)}
+.cw{height:220px;position:relative;margin:16px 0}
+footer{text-align:center;padding:32px 24px;border-top:1px solid rgba(206,147,216,0.1);font-size:11px;color:var(--gray)}
+
+/* Module completion */
+.module-complete{background:linear-gradient(135deg,var(--viod),var(--navy2));border:2px solid var(--gold);border-radius:12px;padding:28px;text-align:center;margin-top:32px}
+.mc-title{font-size:14px;font-weight:700;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+.mc-check{font-size:48px;margin:12px 0}
+.mc-text{font-size:15px;color:var(--white);line-height:1.7}
+.mc-next{margin-top:16px;padding:12px 20px;background:var(--vio);border-radius:8px;font-size:12px;color:var(--violl);display:inline-block}
+</style>
+</head>
+<body>
+<div id="pb"></div>
+<nav>
+  <div class="ni">
+    <div class="nb">// BH 3.0 · L4.5 · INTEGRARE</div>
+    <div class="nl">
+      <a href="#piramida">Piramida</a>
+      <a href="#zilnic">Timeline zilnic</a>
+      <a href="#diagnostic">Diagnostic</a>
+      <a href="#plan">Plan 6 săpt.</a>
+      <a href="#campul17">Câmpul 17</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// Modul 4 · Lecția 4.5 · INTEGRARE</div>
+  <h1>Protocolul <span>complet</span> al somnului</h1>
+  <p class="hero-sub">Sinteza L4.1 → L4.4 · Protocol zilnic integrat · Diagnostic per problemă · Plan de 6 săptămâni · Dashboard Câmpul 17</p>
+  <div class="chips">
+    <div class="chip">4 lecții integrate</div>
+    <div class="chip">1 protocol coerent</div>
+    <div class="chip">N=1 strict</div>
+    <div class="chip">14 zile per strat</div>
+    <div class="chip">Câmpul 17 complet</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="cards">
+    <div class="card g"><div class="cv">4</div><div class="cu">lecții integrate</div><div class="cl">Arhitectura → Igiena → Suplimentare → Biohacking</div></div>
+    <div class="card"><div class="cv">3</div><div class="cu">straturi operative</div><div class="cl">Igiena → Suplimentare → Biohacking (in aceasta ordine)</div></div>
+    <div class="card"><div class="cv">14 zile</div><div class="cu">minimum per element nou</div><div class="cl">N=1 strict — o modificare la un moment dat</div></div>
+    <div class="card"><div class="cv">6 săpt.</div><div class="cu">plan de implementare</div><div class="cl">Gradual, masurabil, ajustabil pe date proprii</div></div>
+    <div class="card g"><div class="cv">7</div><div class="cu">câmpuri jurnal zilnic</div><div class="cl">Dashboard complet Câmpul 17 — toate straturile M4</div></div>
+  </div>
+
+  <!-- PIRAMIDA -->
+  <section id="piramida">
+    <div class="stag">// 01</div>
+    <h2>Piramida integrată — ierarhia intervenției</h2>
+    <div class="info-box"><strong style="color:var(--violl)">Regula fundamentală:</strong> Fiecare strat superior <em>amplifică</em> straturile inferioare. Nu inversezi ordinea. Suplimentele fără igienă = placebo. Biohacking-ul fără igiena + suplimentare = date fără context.</div>
+    <div class="pyramid">
+      <div class="layer" style="background:rgba(13,71,161,0.08);border-color:rgba(13,71,161,0.35)" onclick="toggleLayer(this,'l1')">
+        <div class="layer-num" style="color:#64B5F6">F</div>
+        <div class="layer-body">
+          <div class="layer-title" style="color:#90CAF9">FUNDAMENT — Arhitectura somnului (L4.1)</div>
+          <div class="layer-desc" style="color:var(--gray)">Stadii N1/N2/N3/REM · Ciclu 90 min · Sistemul glimfatic · GH nocturn · Ritm circadian · Cronotip genetic</div>
+          <div class="layer-expand" id="l1">Înțelegerea mecanismelor biologice este precondița oricărei intervenții. N3 curăță creierul de β-amiloid. REM procesează emoțional. Fiecare ciclu de 90 min are o compoziție diferită. Cronotipul (PER3/CLOCK/CRY1) este genetic — nu o preferință. Fără acest fundament, celelalte straturi sunt aplicate orb.</div>
+          <div class="layer-tag" style="background:rgba(13,71,161,0.2);color:#90CAF9;margin-top:6px;display:inline-block">L4.1 · MIDBLUE</div>
+        </div>
+      </div>
+      <div class="layer" style="background:rgba(27,94,32,0.08);border-color:rgba(27,94,32,0.4)" onclick="toggleLayer(this,'l2')">
+        <div class="layer-num" style="color:#81C784">1</div>
+        <div class="layer-body">
+          <div class="layer-title" style="color:#A5D6A7">STRAT 1 — Igiena somnului (L4.2) ← PRIORITATE MAXIMĂ</div>
+          <div class="layer-desc" style="color:var(--gray)">Orar ±30 min · Lumina matinală · Stop ecrane 2h · 17–19°C · Cafea < 13:00 · Duș cald · Alcool eliminat</div>
+          <div class="layer-expand" id="l2">Cel mai înalt ROI per efort din tot Modulul 4. Fără comportamentele din L4.2, niciun supliment nu poate compensa. <strong style="color:#A5D6A7">Implementare înaintea oricărui supliment.</strong> Consistența orarului este ancora SCN. Lumina matinală = cel mai important biohack gratuit disponibil. Alcoolul este sabotajul invizibil #1.</div>
+          <div class="layer-tag" style="background:rgba(27,94,32,0.2);color:#A5D6A7;margin-top:6px;display:inline-block">L4.2 · FOREST GREEN</div>
+        </div>
+      </div>
+      <div class="layer" style="background:rgba(0,131,143,0.08);border-color:rgba(0,131,143,0.35)" onclick="toggleLayer(this,'l3')">
+        <div class="layer-num" style="color:#80DEEA">2</div>
+        <div class="layer-body">
+          <div class="layer-title" style="color:#80DEEA">STRAT 2 — Suplimentare (L4.3)</div>
+          <div class="layer-desc" style="color:var(--gray)">Mg L-Treonat + L-Teanina + Melatonina 0.3 mg → Glicina · Apigenina · KSM-66 · Fosfatidilserina</div>
+          <div class="layer-expand" id="l3">Adăugat după 2–4 săptămâni de igienă stabilizată. Protocol de bază: Mg L-Treonat 1000 mg + L-Teanina 200 mg + Melatonina 0.3 mg. Extensii bazate pe problema specifică: Glicina 3g pentru N3, KSM-66 pentru cortizol nocturn, Apigenina pentru anxietate. <strong style="color:#80DEEA">5-HTP contraindicat cu SSRI/IMAO — absolut.</strong></div>
+          <div class="layer-tag" style="background:rgba(0,131,143,0.2);color:#80DEEA;margin-top:6px;display:inline-block">L4.3 · TEAL</div>
+        </div>
+      </div>
+      <div class="layer" style="background:rgba(69,39,160,0.1);border-color:rgba(206,147,216,0.35)" onclick="toggleLayer(this,'l4')">
+        <div class="layer-num" style="color:var(--violl)">3</div>
+        <div class="layer-body">
+          <div class="layer-title" style="color:var(--violl)">STRAT 3 — Biohacking (L4.4)</div>
+          <div class="layer-desc" style="color:var(--gray)">HRV nocturn · Readiness Loop · Trackere · NSDR · NASA nap · Sauna · OSA screening · Sleep banking</div>
+          <div class="layer-expand" id="l4">Optimizare bazată pe date. HRV scăzut -10% față de baseline 7 zile = recuperare activă, nu antrenament. NSDR 20 min = dopamina +65%, recuperare neurală fără sleep inertia. Readiness <70 = stop efort. SpO2 <90% recurent = somnolog. Sleep banking 2 săptămâni pre-eveniment stresant (Rupp 2009).</div>
+          <div class="layer-tag" style="background:rgba(69,39,160,0.2);color:var(--violl);margin-top:6px;display:inline-block">L4.4 · DEEP INDIGO</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE ZILNIC -->
+  <section id="zilnic">
+    <div class="stag">// 02</div>
+    <h2>Protocolul zilnic integrat — de la trezire la culcare</h2>
+    <div class="timeline-grid">
+      <div class="tl-item"><div class="tl-time" style="background:rgba(249,168,37,0.12);border-color:var(--gold);color:var(--gold)">06:00</div><div class="tl-card"><div class="tl-act">Trezire fixă ±30 min · NU telefon 30 min · 500 ml apă</div><div class="tl-why">Ancora SCN; CAR neinhibat de cortizol reactiv; rehidratare post-noapte</div><div class="tl-strat">IGIENĂ</div></div></div>
+      <div class="tl-item"><div class="tl-time" style="background:rgba(249,168,37,0.1);border-color:#FFB74D;color:#FFD54F">06:30</div><div class="tl-card"><div class="tl-act">10–15 min afară (lumina solară)</div><div class="tl-why">Reset SCN zilnic; cortizol CAR amplificat; melatonina seara la ora corectă</div><div class="tl-strat">IGIENĂ · cel mai important biohack gratuit</div></div></div>
+      <div class="tl-item"><div class="tl-time" style="background:rgba(69,39,160,0.1);border-color:var(--violl);color:var(--violl)">07:30</div><div class="tl-card"><div class="tl-act">HRV interpretat → decizie ziua · Prima cafea (după 90 min trezire)</div><div class="tl-why">Readiness loop; fereastra CAR respectată</div><div class="tl-strat">BIOHACKING + IGIENĂ</div></div></div>
+      <div class="tl-item"><div class="tl-time" style="background:rgba(0,131,143,0.1);border-color:#80DEEA;color:#80DEEA">12:30</div><div class="tl-card"><div class="tl-act">Ultima cafea (strict înainte 13:00) · Nap 10–20 min dacă necesar</div><div class="tl-why">T½ = 5.5h; nap înainte de 15:00 = alertness +54% fără impact nocturn</div><div class="tl-strat">IGIENĂ + BIOHACKING</div></div></div>
+      <div class="tl-item"><div class="tl-time" style="background:rgba(27,94,32,0.1);border-color:#A5D6A7;color:#A5D6A7">19:00</div><div class="tl-card"><div class="tl-act">Cina (cu 3h pre-culcare) · Ashwagandha + Fosfatidilserina (dacă protocol cortizol)</div><div class="tl-why">Digestia finalizată la culcare; cortizol redus pre-somn</div><div class="tl-strat">IGIENĂ + SUPLIMENTARE</div></div></div>
+      <div class="tl-item"><div class="tl-time" style="background:rgba(245,124,0,0.1);border-color:#FFAB40;color:#FFAB40">20:00</div><div class="tl-card"><div class="tl-act">Dimmer lumina < 50 lux · Termostat 17–19°C · Mg Glicinat (opțional)</div><div class="tl-why">Debut melatonina; core body cooling; suport GABAergic seara</div><div class="tl-strat">IGIENĂ + SUPLIMENTARE</div></div></div>
+      <div class="tl-item"><div class="tl-time" style="background:rgba(183,28,28,0.08);border-color:#EF5350;color:#EF9A9A">21:00</div><div class="tl-card"><div class="tl-act">Stop ecrane / ochelari portocalii · Rutina relaxare · Duș cald 38–40°C</div><div class="tl-why">Melatonina nesuprimată; vasodilatatie→răcire core; parasimpatic activat</div><div class="tl-strat">IGIENĂ</div></div></div>
+      <div class="tl-item"><div class="tl-time" style="background:rgba(69,39,160,0.12);border-color:var(--viol);color:var(--violl)">22:00</div><div class="tl-card"><div class="tl-act">Mg L-Treonat 1000 mg + L-Teanina 200 mg + Apigenina 50 mg</div><div class="tl-why">BBB + GABAergic + GABA-A; fereastra optimă de absorbție</div><div class="tl-strat">SUPLIMENTARE</div></div></div>
+      <div class="tl-item"><div class="tl-time" style="background:rgba(69,39,160,0.15);border-color:var(--violl);color:var(--violl)">22:30</div><div class="tl-card"><div class="tl-act">Melatonina 0.3 mg + Glicina 3g (dizolvată)</div><div class="tl-why">Semnal circadian; termoregulare → N3 mai rapid; GABAergic</div><div class="tl-strat">SUPLIMENTARE</div></div></div>
+      <div class="tl-item"><div class="tl-time" style="background:rgba(5,14,30,0.5);border-color:rgba(206,147,216,0.3);color:rgba(206,147,216,0.5)">23:00</div><div class="tl-card"><div class="tl-act">Culcare · Întuneric complet < 1 lux · Telefon mod avion · Câmpul 17</div><div class="tl-why">Melatonina la peak; N3 maxim în ciclu 1; fără stimuli externi; loop închis</div><div class="tl-strat">IGIENĂ + BIOHACKING</div></div></div>
+    </div>
+  </section>
+
+  <!-- DIAGNOSTIC -->
+  <section id="diagnostic">
+    <div class="stag">// 03</div>
+    <h2>Diagnostic per problemă — protocolul tintă</h2>
+    <p style="font-size:13px;color:var(--gray);margin-bottom:16px">Identifică tiparul tău și aplică protocolul specific. Click pentru a expanda.</p>
+    <div class="diag-grid">
+      <div class="diag-card" onclick="toggleDiag(this)">
+        <div class="dc-simptom">😫 Adormire dificilă (> 30 min)</div>
+        <div class="dc-cauza">Cortizol nocturn · Melatonina întârziată · Cafeina tardivă</div>
+        <div class="dc-detail">
+          <div class="dc-interventie"><strong>Intervenție:</strong> Stop ecrane 2h (sau ochelari); melatonina 0.3 mg; L-Teanina 200 mg; KSM-66 seara; ultima cafea strict < 13:00.</div>
+          <div class="dc-bm">Biomarker: cortizol salivar 22:00 · latentă tracker</div>
+        </div>
+      </div>
+      <div class="diag-card" onclick="toggleDiag(this)">
+        <div class="dc-simptom">🔁 Treziri nocturne frecvente</div>
+        <div class="dc-cauza">Alcool · OSA · Cortizol nocturn inversat · Zgomot</div>
+        <div class="dc-detail">
+          <div class="dc-interventie"><strong>Intervenție:</strong> Elimina alcoolul; SpO2 nocturn screening; fosfatidilserina; white noise 50–70 dB; Mg glicinat seara.</div>
+          <div class="dc-bm">Biomarker: SpO2 min nocturn · eficiență somn < 75%</div>
+        </div>
+      </div>
+      <div class="diag-card" onclick="toggleDiag(this)">
+        <div class="dc-simptom">😴 Somn neodihnitor (N3 insuficient)</div>
+        <div class="dc-cauza">Temperatură > 20°C · Alcool · Cafeina tardivă · OSA</div>
+        <div class="dc-detail">
+          <div class="dc-interventie"><strong>Intervenție:</strong> Camera la 17–19°C strict; duș cald -90 min; eliminare alcool complet seara; Glicina 3g; Mg L-Treonat 2000 mg.</div>
+          <div class="dc-bm">Biomarker: N3% tracker · HRV nocturn · temperatura corp</div>
+        </div>
+      </div>
+      <div class="diag-card" onclick="toggleDiag(this)">
+        <div class="dc-simptom">⚡ Somnolență matinală cronică</div>
+        <div class="dc-cauza">Privare cronică de somn · Social jetlag · OSA · Cronotip ignorat</div>
+        <div class="dc-detail">
+          <div class="dc-interventie"><strong>Intervenție:</strong> Orar consistent 7/7; lumina matinală 10 min; SpO2 screening; respectă fereastra cronotipului tău (MSFsc).</div>
+          <div class="dc-bm">Latentă adormire < 5 min = privare cronică · SpO2 nocturn</div>
+        </div>
+      </div>
+      <div class="diag-card" onclick="toggleDiag(this)">
+        <div class="dc-simptom">📉 HRV cronic scăzut</div>
+        <div class="dc-cauza">Supraantrenament · Stres cronic · OSA · Infecție subclinică</div>
+        <div class="dc-detail">
+          <div class="dc-interventie"><strong>Intervenție:</strong> Recuperare activă 3–5 zile (stop antrenament); KSM-66 + fosfatidilserina; NSDR 20 min zilnic; SpO2 screening OSA.</div>
+          <div class="dc-bm">Trend HRV 14 zile · cortizol · CRP hs · SpO2</div>
+        </div>
+      </div>
+      <div class="diag-card" onclick="toggleDiag(this)">
+        <div class="dc-simptom">🌙 Trezire la 3–4 AM (imposibil readormire)</div>
+        <div class="dc-cauza">Cortizol nocturn inversat · Hipoglicemie · Alcool</div>
+        <div class="dc-detail">
+          <div class="dc-interventie"><strong>Intervenție:</strong> KSM-66 + fosfatidilserina seara; cina proteică ușoară; eliminare alcool; Mg glicinat; CBT-I dacă persistent > 4 săptămâni.</div>
+          <div class="dc-bm">Cortizol salivar 03:00 (kit) · glicemie jeun</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAN 6 SAPT -->
+  <section id="plan">
+    <div class="stag">// 04</div>
+    <h2>Planul de 6 săptămâni — implementare graduală</h2>
+    <div class="info-box"><strong style="color:var(--violl)">Regula N=1:</strong> O modificare la un moment dat. Minimum 14 nopți de observație per element. Nu schimbi 10 lucruri simultan — nu vei ști niciodată ce a funcționat.</div>
+    <div class="plan-grid">
+      <div class="plan-item">
+        <div class="plan-wk"><div class="plan-dot" style="background:rgba(27,94,32,0.2);border-color:#4CAF50;color:#81C784">1–2</div><div class="plan-wlbl">SĂPT.</div></div>
+        <div class="plan-body"><div class="plan-title">Ancora circadiana</div><div class="plan-actions">Setează ora trezirii fixă (±30 min). Lumina solară 10 min în primele 60 min. Ultima cafea strict < 13:00. Nimic altceva.</div><div class="plan-kpi">Măsori: jurnal orar culcare/trezire · calitate subiectivă 1–10</div></div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-wk"><div class="plan-dot" style="background:rgba(27,94,32,0.2);border-color:#66BB6A;color:#A5D6A7">3–4</div><div class="plan-wlbl">SĂPT.</div></div>
+        <div class="plan-body"><div class="plan-title">Mediu de somn</div><div class="plan-actions">Stop ecrane 2h sau ochelari portocalii. Camera 17–19°C. Întuneric complet. Telefon mod avion. Duș cald -90 min (3–5x/săpt).</div><div class="plan-kpi">Măsori: latentă adormire estimată · numărul trezirilor</div></div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-wk"><div class="plan-dot" style="background:rgba(0,131,143,0.2);border-color:#00ACC1;color:#80DEEA">5–6</div><div class="plan-wlbl">SĂPT.</div></div>
+        <div class="plan-body"><div class="plan-title">Supliment de bază</div><div class="plan-actions">Mg L-Treonat 1000 mg + L-Teanina 200 mg + Melatonina 0.3 mg. Timing exact (L4.3). Nimic altceva adăugat în aceste 2 săptămâni.</div><div class="plan-kpi">Măsori: HRV (HRV4Training sau tracker) · latentă · calitate</div></div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-wk"><div class="plan-dot" style="background:rgba(0,131,143,0.15);border-color:#80DEEA;color:#B2EBF2">7–8</div><div class="plan-wlbl">SĂPT.</div></div>
+        <div class="plan-body"><div class="plan-title">Extindere supliment (dacă necesar)</div><div class="plan-actions">Glicina 3g (dacă N3 insuficient) SAU Apigenina 50 mg (dacă anxietate culcare). Nu ambele simultan. Bazat pe problema identificată.</div><div class="plan-kpi">Măsori: calitate N3 (tracker) · temperatura corporală</div></div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-wk"><div class="plan-dot" style="background:rgba(69,39,160,0.2);border-color:var(--viol);color:var(--violl)">9–10</div><div class="plan-wlbl">SĂPT.</div></div>
+        <div class="plan-body"><div class="plan-title">Protocol anti-cortizol (dacă indicat)</div><div class="plan-actions">Doar dacă: treziri 3–4 AM, HRV cronic scăzut sau cortizol salivar crescut. KSM-66 300–600 mg + Fosfatidilserina 200–400 mg seara.</div><div class="plan-kpi">Măsori: cortizol salivar kit · trend HRV 14 zile</div></div>
+      </div>
+      <div class="plan-item">
+        <div class="plan-wk"><div class="plan-dot" style="background:rgba(249,168,37,0.15);border-color:var(--gold);color:var(--gold)">11–12</div><div class="plan-wlbl">SĂPT.</div></div>
+        <div class="plan-body"><div class="plan-title">Audit complet — comparativă față de săptămâna 1</div><div class="plan-actions">Compari toți biomarkerii cu baseline-ul. Ce a adus diferență măsurabilă? Ce nu? Elimini ce nu produce efect în 14 nopți. Fine-tuning continuu.</div><div class="plan-kpi">Comparativă: HRV · latentă · calitate · N3% · SpO2</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAMPUL 17 -->
+  <section id="campul17">
+    <div class="stag">// 05</div>
+    <h2>Câmpul 17 — Dashboard integrat Modul 4</h2>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Câmp</th><th>Ce notezi</th><th>Frecvență</th><th>Utilizare</th></tr></thead>
+        <tbody>
+          <tr><td><strong>1 — Ore somn</strong></td><td>Ora culcarii exactă · Ora trezirii · Cu/fără alarmă</td><td>Zilnic</td><td>Trend orar; social jetlag; consistența ±30 min</td></tr>
+          <tr><td><strong>2 — HRV</strong></td><td>RMSSD nocturn (tracker) sau matinal (HRV4Training)</td><td>Zilnic</td><td>Readiness; trend 7 zile; prag -10%</td></tr>
+          <tr><td><strong>3 — Calitate</strong></td><td>Scor subiectiv 1–10 · Starea la trezire (0=zombie, 10=optim)</td><td>Zilnic</td><td>Corelație cu comportamentele seara precedentă</td></tr>
+          <tr><td><strong>4 — Comportamente</strong></td><td>Cafea (ora) · Alcool (da/nu) · Ecrane (da/nu) · Temperatura</td><td>Zilnic</td><td>Identificare perturbatori personali specifici</td></tr>
+          <tr><td><strong>5 — Suplimente</strong></td><td>Ce · Cât · La ce oră · Noi adăugate / retrase</td><td>Zilnic când activ</td><td>Evaluare eficacitate per supliment; timing</td></tr>
+          <tr><td><strong>6 — Biomarkeri</strong></td><td>SpO2 medie nocturnă · Eficiența somn · N3% (dacă tracker)</td><td>Săptămânal</td><td>Evaluare progres obiectiv; tendință 30 zile</td></tr>
+          <tr><td><strong>7 — Biohack aplicat</strong></td><td>NSDR (da/nu/durata) · Nap · Sauna · Duș cald · Alt protocol</td><td>Zilnic când activ</td><td>Corelație cu HRV și calitate somn</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cw"><canvas id="progressChart"></canvas></div>
+  </section>
+
+  <!-- COMPLETARE MODUL -->
+  <div class="module-complete">
+    <div class="mc-title">// Modul 4 — Complet</div>
+    <div class="mc-check">🎯</div>
+    <div class="mc-text">
+      Ai construit un sistem complet de optimizare a somnului pe 4 niveluri.<br/>
+      <strong style="color:var(--gold)">Somnul nu este un obiectiv în sine</strong> — este fundația pe care se construiesc performanța cognitivă, managementul stresului, echilibrul hormonal și longevitatea.<br/><br/>
+      Fără somn optim, niciun protocol din modulele 5–6 nu atinge potențialul complet.
+    </div>
+    <div class="mc-next">
+      → Modul 5: Performanța cognitivă și managementul stresului
+    </div>
+  </div>
+
+</div>
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Biohacking 3.0 — Lecția 4.5 · Integrare Modul 4</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('pb').style.width=Math.min((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100,100)+'%';
+});
+const secs=document.querySelectorAll('section[id]');
+const nls=document.querySelectorAll('.nl a');
+window.addEventListener('scroll',()=>{
+  let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-80)c=s.id;});
+  nls.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+c));
+});
+
+function toggleLayer(el,id){
+  const exp=document.getElementById(id);
+  exp.classList.toggle('show');
+}
+function toggleDiag(el){
+  el.classList.toggle('open');
+  el.querySelector('.dc-detail').classList.toggle('show');
+}
+
+// PROGRESS CHART — progres simulat pe 6 saptamani
+new Chart(document.getElementById('progressChart').getContext('2d'),{
+  type:'line',
+  data:{
+    labels:['Sapt 1','Sapt 2','Sapt 3','Sapt 4','Sapt 5','Sapt 6','Sapt 7','Sapt 8','Sapt 9','Sapt 10','Sapt 11','Sapt 12'],
+    datasets:[
+      {label:'HRV (RMSSD ms)',data:[35,37,42,45,50,52,55,57,60,62,63,65],borderColor:'rgba(69,39,160,0.8)',backgroundColor:'rgba(69,39,160,0.1)',fill:true,pointRadius:3,borderWidth:2,tension:0.4,yAxisID:'y'},
+      {label:'Calitate subiectiva (1-10)',data:[4.5,5.0,5.8,6.2,7.0,7.2,7.5,7.8,8.0,8.2,8.3,8.5],borderColor:'rgba(249,168,37,0.8)',backgroundColor:'rgba(249,168,37,0.06)',fill:true,pointRadius:3,borderWidth:2,tension:0.4,yAxisID:'y2'},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:10},boxWidth:8}},
+      tooltip:{backgroundColor:'rgba(5,14,30,0.95)'},
+      title:{display:true,text:'Progres tipic la implementare graduală (simulat)',color:'#78909C',font:{size:10}}},
+    scales:{
+      x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(206,147,216,0.05)'}},
+      y:{min:25,max:75,ticks:{color:'#CE93D8',font:{size:9}},grid:{color:'rgba(206,147,216,0.06)'},title:{display:true,text:'HRV (ms)',color:'#CE93D8',font:{size:9}}},
+      y2:{position:'right',min:0,max:10,ticks:{color:'#F9A825',font:{size:9}},grid:{display:false},title:{display:true,text:'Calitate 1–10',color:'#F9A825',font:{size:9}}}
+    }
+  }
+});
+</script>
+</body>
+</html>
