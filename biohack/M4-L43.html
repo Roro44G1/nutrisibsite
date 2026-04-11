@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>L4.3 — Suplimentarea pentru somn | BH 3.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --teal:#00838F;--teall:#00ACC1;--teald:#006064;--tealll:#80DEEA;
+  --gold:#F9A825;--navy:#050E1E;--navy2:#071520;
+  --white:#E0F7FA;--gray:#78909C;--bg:#E0F7FA;
+  --green:#2E7D32;--red:#B71C1C;--amber:#F57C00;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'Syne',sans-serif;line-height:1.6}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--teall),var(--gold));width:0%;z-index:100;transition:width .1s}
+
+nav{position:sticky;top:0;background:rgba(5,14,30,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(128,222,234,0.15);z-index:50;padding:0 24px}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nav-brand{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold)}
+.nav-links{display:flex;gap:20px}
+.nav-links a{font-size:11px;letter-spacing:2px;color:var(--gray);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--tealll)}
+
+.hero{background:linear-gradient(135deg,var(--teald) 0%,var(--navy2) 60%);padding:70px 24px 50px;text-align:center;border-bottom:1px solid rgba(128,222,234,0.2);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(0,172,193,0.18) 0%,transparent 70%)}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;position:relative}
+.hero h1{font-size:clamp(28px,5vw,48px);font-weight:800;letter-spacing:-0.5px;line-height:1.1;margin-bottom:16px;position:relative}
+.hero h1 span{color:var(--tealll)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gray);font-style:italic;max-width:640px;margin:0 auto 28px;position:relative}
+.hero-chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+.chip{background:rgba(0,131,143,0.2);border:1px solid rgba(128,222,234,0.3);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:var(--tealll)}
+
+.main{max-width:1100px;margin:0 auto;padding:40px 24px}
+section{margin-bottom:60px;scroll-margin-top:70px}
+.section-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--tealll);text-transform:uppercase;margin-bottom:8px}
+h2{font-size:clamp(22px,3vw,30px);font-weight:700;margin-bottom:20px}
+h3{font-size:17px;font-weight:600;color:var(--tealll);margin:24px 0 10px}
+
+/* KPI */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:48px}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(128,222,234,0.15);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--teall)}
+.card.gold-top::before{background:var(--gold)}
+.card-val{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:var(--gold);line-height:1}
+.card-unit{font-size:11px;color:var(--gray);letter-spacing:1px;margin:4px 0}
+.card-label{font-size:12px;color:var(--white);font-weight:600}
+
+/* SUPLS TABS */
+.supl-tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.stab{padding:8px 16px;border-radius:24px;font-size:12px;font-weight:600;letter-spacing:1px;cursor:pointer;border:1px solid rgba(128,222,234,0.25);background:transparent;color:var(--gray);transition:all .2s;font-family:'Syne',sans-serif}
+.stab.active{background:var(--teal);color:var(--white);border-color:var(--teal)}
+.supl-panel{display:none}
+.supl-panel.active{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* SUPL CARDS */
+.supl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.supl-card{background:rgba(255,255,255,0.03);border:1px solid rgba(128,222,234,0.15);border-radius:10px;padding:16px;position:relative}
+.sc-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px}
+.sc-mec{font-size:11px;color:var(--tealll);line-height:1.5;margin-bottom:8px}
+.sc-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.sc-pill{padding:3px 10px;border-radius:10px;font-size:10px;font-weight:600;letter-spacing:0.5px}
+.sc-pill.dose{background:rgba(0,131,143,0.2);color:var(--tealll);border:1px solid rgba(128,222,234,0.3)}
+.sc-pill.time{background:rgba(249,168,37,0.1);color:#FFD54F;border:1px solid rgba(249,168,37,0.3)}
+.sc-pill.ev{background:rgba(46,125,50,0.15);color:#81C784;border:1px solid rgba(46,125,50,0.3)}
+.sc-ref{font-size:10px;color:var(--gray);margin-top:6px;font-style:italic;line-height:1.4}
+
+/* STACKING */
+.stack-card{background:rgba(0,131,143,0.06);border:1px solid rgba(128,222,234,0.2);border-radius:10px;padding:18px;margin-bottom:14px}
+.sk-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sk-badge{background:var(--teal);color:var(--white);padding:4px 12px;border-radius:16px;font-size:10px;font-weight:700;letter-spacing:1px}
+.sk-title{font-size:15px;font-weight:700;color:var(--white)}
+.sk-items{display:flex;flex-direction:column;gap:6px}
+.sk-item{display:flex;align-items:center;gap:10px;padding:7px 10px;background:rgba(0,0,0,0.2);border-radius:6px}
+.sk-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);width:24px;text-align:center;flex-shrink:0}
+.sk-name{font-size:12px;font-weight:700;color:var(--white);flex:1}
+.sk-dose{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--tealll)}
+.sk-when{font-size:10px;color:var(--gray);text-align:right;min-width:80px}
+
+/* WARNINGS */
+.warn-box{background:rgba(249,168,37,0.07);border:1px solid rgba(249,168,37,0.25);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.danger-box{background:rgba(183,28,28,0.1);border:1px solid rgba(183,28,28,0.35);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.info-box{background:rgba(0,131,143,0.08);border:1px solid rgba(128,222,234,0.2);border-left:4px solid var(--teall);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+
+/* TABLA */
+.tbl-wrap{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--teald);color:var(--gold);padding:10px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid rgba(128,222,234,0.1);color:var(--white);vertical-align:top;line-height:1.5}
+tr:nth-child(even) td{background:rgba(0,131,143,0.05)}
+tr:hover td{background:rgba(0,131,143,0.1)}
+
+/* TIMELINE protcol */
+.proto-steps{display:flex;flex-direction:column;gap:0}
+.ps-item{display:flex;gap:14px;padding:14px 16px;position:relative}
+.ps-item::before{content:'';position:absolute;left:36px;top:42px;width:2px;height:calc(100% - 14px);background:rgba(128,222,234,0.2)}
+.ps-item:last-child::before{display:none}
+.ps-week{min-width:52px;text-align:center}
+.ps-dot{width:28px;height:28px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--white);margin:0 auto 4px}
+.ps-wlbl{font-size:9px;color:var(--gray);text-align:center;letter-spacing:1px}
+.ps-body{flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(128,222,234,0.12);border-radius:8px;padding:12px}
+.ps-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px}
+.ps-desc{font-size:11px;color:rgba(224,247,250,0.75);line-height:1.5}
+.ps-kpi{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);margin-top:5px}
+
+/* CHART */
+.chart-wrap{height:240px;position:relative;margin:16px 0}
+
+/* CICLU */
+.ciclu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.cic-card{background:rgba(255,255,255,0.03);border:1px solid rgba(128,222,234,0.15);border-radius:8px;padding:14px}
+.cic-name{font-size:12px;font-weight:700;color:var(--white);margin-bottom:6px}
+.cic-state{display:flex;gap:8px;margin-bottom:8px}
+.cic-on{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:rgba(0,131,143,0.2);color:var(--tealll);border:1px solid rgba(128,222,234,0.25)}
+.cic-off{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;background:rgba(183,28,28,0.15);color:#EF9A9A;border:1px solid rgba(183,28,28,0.25)}
+.cic-note{font-size:10px;color:var(--gray);line-height:1.4}
+
+footer{text-align:center;padding:32px 24px;border-top:1px solid rgba(128,222,234,0.1);font-size:11px;color:var(--gray)}
+</style>
+</head>
+<body>
+<div id="progress-bar"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">// BH 3.0 · L4.3</div>
+    <div class="nav-links">
+      <a href="#principii">Principii</a>
+      <a href="#supls">Suplimente</a>
+      <a href="#stacking">Stacking</a>
+      <a href="#protocol">Protocol</a>
+      <a href="#ciclu">Ciclare</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// Modul 4 · Lecția 4.3</div>
+  <h1>Suplimentarea <span>pentru somn</span></h1>
+  <p class="hero-sub">Mecanisme reale, doze corecte, combinații validate — fără marketing, cu referințe</p>
+  <div class="hero-chips">
+    <div class="chip">0.3 mg melatonina</div>
+    <div class="chip">4 mecanisme distincte</div>
+    <div class="chip">Protocol N=1</div>
+    <div class="chip">Ciclare anti-toleranta</div>
+    <div class="chip">Contraindicatii reale</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- KPI -->
+  <div class="card-grid">
+    <div class="card gold-top">
+      <div class="card-val">0.3 mg</div>
+      <div class="card-unit">doza fiziologica melatonina</div>
+      <div class="card-label">Nu 5–10 mg (dozele comerciale sunt farmacologice)</div>
+    </div>
+    <div class="card">
+      <div class="card-val">3 g</div>
+      <div class="card-unit">glicina pre-somn</div>
+      <div class="card-label">Reduce temperatura corp → N3 mai profund (Bannai 2012)</div>
+    </div>
+    <div class="card">
+      <div class="card-val">-27.9%</div>
+      <div class="card-unit">cortizol dupa KSM-66</div>
+      <div class="card-label">Chandrasekhar 2012 — 8 saptamani</div>
+    </div>
+    <div class="card">
+      <div class="card-val">-13 min</div>
+      <div class="card-unit">latenta adormire</div>
+      <div class="card-label">Glicina 3g vs. placebo (Bannai 2012)</div>
+    </div>
+    <div class="card gold-top">
+      <div class="card-val">5</div>
+      <div class="card-unit">mecanisme tinta</div>
+      <div class="card-label">Protocol complet: GABA · Circadian · Termic · Cortizol · BBB</div>
+    </div>
+  </div>
+
+  <!-- PRINCIPII -->
+  <section id="principii">
+    <div class="section-tag">// 01</div>
+    <h2>Principii operaționale</h2>
+    <div class="info-box">
+      <strong style="color:var(--tealll)">Suplimentul de somn ≠ somnifer.</strong> Benzodiazepinele și Z-drugs produc somn sedativ — suprimă N3 și REM. Suplimentele din acest protocol acționează pe mecanisme fiziologice și nu produc dependență sau degradarea arhitecturii somnului.
+    </div>
+    <div class="danger-box">
+      <strong>Ierarhia rămâne intactă:</strong> Fără lumina albastră controlată (L4.2), cameră rece și orar consistent, nicio moleculă nu compensează. Suplimentarea este stratul 3 — nu înlocuiește straturile 1 și 2.
+    </div>
+    <div class="warn-box">
+      <strong style="color:var(--gold)">Regula N=1:</strong> O modificare odată. Minimum 14 nopți de observație. Biomarker relevant înainte și după. Adaugi stratul următor doar după ce ai date clare pe cel curent.
+    </div>
+  </section>
+
+  <!-- SUPLIMENTE -->
+  <section id="supls">
+    <div class="section-tag">// 02</div>
+    <h2>Compendiul suplimentelor — mecanisme și doze</h2>
+    <div class="supl-tabs">
+      <button class="stab active" onclick="showCat('circadian',this)">Circadian</button>
+      <button class="stab" onclick="showCat('gaba',this)">GABAergic</button>
+      <button class="stab" onclick="showCat('cortizol',this)">Anti-cortizol</button>
+      <button class="stab" onclick="showCat('termic',this)">Termic/BBB</button>
+    </div>
+
+    <!-- CIRCADIAN -->
+    <div class="supl-panel active" id="panel-circadian">
+      <div class="supl-grid">
+        <div class="supl-card">
+          <div class="sc-name">🌙 Melatonina</div>
+          <div class="sc-mec">Agonist MT1/MT2 — semnal noapte, nu somnifer direct. Antioxidant cerebral. Sincronizează SCN cu mediul extern.</div>
+          <div class="sc-row">
+            <span class="sc-pill dose">0.3–1 mg</span>
+            <span class="sc-pill time">30–60 min pre-somn</span>
+            <span class="sc-pill ev">Nivel I — RCT multiple</span>
+          </div>
+          <div class="sc-ref">Ferracioli-Oda 2013: 0.3 mg la fel de eficient ca dozele mari, mai puține efecte adverse. Release imediat — nu slow-release.</div>
+        </div>
+        <div class="supl-card">
+          <div class="sc-name">🔗 5-HTP</div>
+          <div class="sc-mec">Precursor serotonina → melatonina. Creste REM și calitatea somnului profund. Efect anxiolitic moderat.</div>
+          <div class="sc-row">
+            <span class="sc-pill dose">100–200 mg</span>
+            <span class="sc-pill time">60–90 min pre-somn</span>
+            <span class="sc-pill ev">Nivel II</span>
+          </div>
+          <div class="sc-ref">Birdsall 1998. CU B6 pentru conversie optimă. ⚠️ CONTRAINDICAT cu SSRI/IMAO — risc sindrom serotoninergic.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GABA -->
+    <div class="supl-panel" id="panel-gaba">
+      <div class="supl-grid">
+        <div class="supl-card">
+          <div class="sc-name">🍵 L-Teanina</div>
+          <div class="sc-mec">Crește GABA, glicina, serotonina. Produce unde alfa EEG — relaxare alertă, nu sedare. Reduce anxietate acuta.</div>
+          <div class="sc-row">
+            <span class="sc-pill dose">200–400 mg</span>
+            <span class="sc-pill time">30–60 min pre-somn</span>
+            <span class="sc-pill ev">Nivel II — Kimura 2007</span>
+          </div>
+          <div class="sc-ref">Kimura 2007: unde alfa +8%, anxietate redusă. Sigură la utilizare zilnică. Sinergică cu Mg L-Treonat.</div>
+        </div>
+        <div class="supl-card">
+          <div class="sc-name">🌼 Apigenina</div>
+          <div class="sc-mec">Flavonoid din mușețel. Agonist parțial GABA-A — același receptor ca benzodiazepinele, fără dependență sau supresia REM.</div>
+          <div class="sc-row">
+            <span class="sc-pill dose">50 mg</span>
+            <span class="sc-pill time">60 min pre-somn</span>
+            <span class="sc-pill ev">Nivel III — preclinic</span>
+          </div>
+          <div class="sc-ref">Populariazat în protocolul Huberman. Nu produce sedare. Nu afectează arhitectura REM. Fără dependență.</div>
+        </div>
+        <div class="supl-card">
+          <div class="sc-name">🌿 Valerian</div>
+          <div class="sc-mec">Acid valerianic inhibă degradarea GABA la sinapse. Efect cumulativ — minimum 2–4 săptămâni pentru efect deplin.</div>
+          <div class="sc-row">
+            <span class="sc-pill dose">300–600 mg</span>
+            <span class="sc-pill time">30–60 min pre-somn</span>
+            <span class="sc-pill ev">Nivel II — Bent 2006</span>
+          </div>
+          <div class="sc-ref">Bent 2006 meta-analiză: calitate subiectivă somn ↑. Ciclu 4–6 săpt on / 2 off. Miros specific puternic.</div>
+        </div>
+        <div class="supl-card">
+          <div class="sc-name">⬡ Glicina (GABAergic)</div>
+          <div class="sc-mec">Neurotransmițător inhibitor. Activează receptori glicinergici în trunchiul cerebral — suport REM și reducere fragmentare.</div>
+          <div class="sc-row">
+            <span class="sc-pill dose">3 g</span>
+            <span class="sc-pill time">30 min pre-somn</span>
+            <span class="sc-pill ev">Nivel II — Bannai 2012</span>
+          </div>
+          <div class="sc-ref">Bannai 2012 (Front Neurol): latență adormire -13 min, calitate somn ↑. Gust dulce, dizolvabil în apă. Dublu mecanism.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CORTIZOL -->
+    <div class="supl-panel" id="panel-cortizol">
+      <div class="supl-grid">
+        <div class="supl-card">
+          <div class="sc-name">🌿 Ashwagandha KSM-66</div>
+          <div class="sc-mec">Adaptogen — modulează axa HPA, reduce cortizol, IL-6, TNF-alfa. Creste DHEA-S. Efect la 4–8 săptămâni.</div>
+          <div class="sc-row">
+            <span class="sc-pill dose">300–600 mg/zi</span>
+            <span class="sc-pill time">Seara cu masă</span>
+            <span class="sc-pill ev">Nivel I — Chandrasekhar 2012</span>
+          </div>
+          <div class="sc-ref">Chandrasekhar 2012: cortizol -27.9% în 8 săpt, HRV ↑, scoruri stres ↓. KSM-66 sau Sensoril — nu extract generic.</div>
+        </div>
+        <div class="supl-card">
+          <div class="sc-name">🧠 Fosfatidilserina</div>
+          <div class="sc-mec">Fosfolipid membranar neuronal. Suprimă cortizolul indus de stres prin feedback negativ axa HPA. Suport cognitiv.</div>
+          <div class="sc-row">
+            <span class="sc-pill dose">200–400 mg/zi</span>
+            <span class="sc-pill time">Cu cina</span>
+            <span class="sc-pill ev">Nivel II — Hellhammer 2004</span>
+          </div>
+          <div class="sc-ref">Hellhammer 2004: cortizol post-stres redus, cogniție ↑. Soia sau floarea-soarelui (non-GMO). Efect la 3–6 săpt.</div>
+        </div>
+        <div class="supl-card">
+          <div class="sc-name">💊 Mg Glicinat</div>
+          <div class="sc-mec">Cofactor GABA-ergic. Relaxare musculară. Reduce cortizol nocturn indirect prin suport SNP parasimpatic.</div>
+          <div class="sc-row">
+            <span class="sc-pill dose">300–400 mg</span>
+            <span class="sc-pill time">Seara</span>
+            <span class="sc-pill ev">Nivel II — Nielsen 2010</span>
+          </div>
+          <div class="sc-ref">Nielsen 2010: somn ↑ la persoane cu deficit Mg. HRV nocturn crescut. Glicinat — absorbție 4× vs. oxid.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TERMIC / BBB -->
+    <div class="supl-panel" id="panel-termic">
+      <div class="supl-grid">
+        <div class="supl-card">
+          <div class="sc-name">🌡 Glicina (termoregulare)</div>
+          <div class="sc-mec">Activare receptori NMDA hipotalamici → vasodilatație periferică → disipare căldură → reducere temperatură corporală centrală cu ~0.5°C → condiție pentru N3 profund.</div>
+          <div class="sc-row">
+            <span class="sc-pill dose">3 g</span>
+            <span class="sc-pill time">30 min pre-somn</span>
+            <span class="sc-pill ev">Nivel II — Bannai 2012</span>
+          </div>
+          <div class="sc-ref">Mecanismul termoregulator este distinct de cel GABAergic — aceeași moleculă, două acțiuni complementare pe somn.</div>
+        </div>
+        <div class="supl-card">
+          <div class="sc-name">🔬 Mg L-Treonat (Magtein)</div>
+          <div class="sc-mec">Singura formă de Mg cu penetrare documentată a barierei hematoencefalice. Crește densitatea sinaptică în hipocamp și cortex prefrontal. Suport N3 și cogniție.</div>
+          <div class="sc-row">
+            <span class="sc-pill dose">1000–2000 mg/zi</span>
+            <span class="sc-pill time">Cu 2h pre-somn</span>
+            <span class="sc-pill ev">Nivel II — Liu 2010</span>
+          </div>
+          <div class="sc-ref">Liu 2010 (Neuron): densitate sinaptică ↑; Slutsky 2010: memorie ↑. Cost mai ridicat — justificat de unicitatea mecanismului BBB.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STACKING -->
+  <section id="stacking">
+    <div class="section-tag">// 03</div>
+    <h2>Protocoale de stacking validate</h2>
+    <div class="warn-box">Nu combina toate suplimentele simultan. Logica: mecanisme complementare, nu aditive. O modificare odată — minimum 14 nopți de observație per strat adăugat.</div>
+
+    <div class="stack-card">
+      <div class="sk-header"><span class="sk-badge">BAZA</span><span class="sk-title">Protocol de intrare — 3 componente</span></div>
+      <div class="sk-items">
+        <div class="sk-item"><div class="sk-num">1</div><div class="sk-name">Mg L-Treonat (Magtein)</div><div class="sk-dose">1000 mg</div><div class="sk-when">cu 2h pre-somn</div></div>
+        <div class="sk-item"><div class="sk-num">2</div><div class="sk-name">L-Teanina</div><div class="sk-dose">200 mg</div><div class="sk-when">30–60 min pre-somn</div></div>
+        <div class="sk-item"><div class="sk-num">3</div><div class="sk-name">Melatonina</div><div class="sk-dose">0.3 mg</div><div class="sk-when">30 min pre-somn</div></div>
+      </div>
+    </div>
+
+    <div class="stack-card">
+      <div class="sk-header"><span class="sk-badge" style="background:var(--gold);color:var(--navy)">AVANSAT</span><span class="sk-title">Protocol complet — 5 mecanisme</span></div>
+      <div class="sk-items">
+        <div class="sk-item"><div class="sk-num">1</div><div class="sk-name">Mg L-Treonat</div><div class="sk-dose">1000–2000 mg</div><div class="sk-when">cu 2h pre-somn</div></div>
+        <div class="sk-item"><div class="sk-num">2</div><div class="sk-name">L-Teanina</div><div class="sk-dose">200–400 mg</div><div class="sk-when">60 min pre-somn</div></div>
+        <div class="sk-item"><div class="sk-num">3</div><div class="sk-name">Apigenina</div><div class="sk-dose">50 mg</div><div class="sk-when">60 min pre-somn</div></div>
+        <div class="sk-item"><div class="sk-num">4</div><div class="sk-name">Glicina (disolvata)</div><div class="sk-dose">3 g</div><div class="sk-when">30 min pre-somn</div></div>
+        <div class="sk-item"><div class="sk-num">5</div><div class="sk-name">Melatonina</div><div class="sk-dose">0.3 mg</div><div class="sk-when">30 min pre-somn</div></div>
+      </div>
+    </div>
+
+    <div class="stack-card">
+      <div class="sk-header"><span class="sk-badge" style="background:#B71C1C">CORTIZOL</span><span class="sk-title">Protocol anti-cortizol nocturn</span></div>
+      <div class="sk-items">
+        <div class="sk-item"><div class="sk-num">1</div><div class="sk-name">Ashwagandha KSM-66</div><div class="sk-dose">300–600 mg</div><div class="sk-when">seara cu masă</div></div>
+        <div class="sk-item"><div class="sk-num">2</div><div class="sk-name">Fosfatidilserina</div><div class="sk-dose">200–400 mg</div><div class="sk-when">cu cina</div></div>
+        <div class="sk-item"><div class="sk-num">3</div><div class="sk-name">Mg Glicinat</div><div class="sk-dose">300–400 mg</div><div class="sk-when">seara</div></div>
+        <div class="sk-item"><div class="sk-num">4</div><div class="sk-name">L-Teanina</div><div class="sk-dose">200 mg</div><div class="sk-when">30–60 min pre-somn</div></div>
+      </div>
+    </div>
+
+    <h3>Contraindicații — non-negociabile</h3>
+    <div class="danger-box">
+      <strong>⚠️ 5-HTP + SSRI/IMAO = CONTRAINDICAT.</strong> Risc sindrom serotoninergic — potențial sever. Dacă iei orice antidepresiv (Prozac, Zoloft, Cipralex, Effexor, Venlafaxina etc.) — 5-HTP este interzis fără aviz medical explicit.
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Combinație</th><th>Risc</th><th>Severitate</th></tr></thead>
+        <tbody>
+          <tr><td><strong>5-HTP + orice SSRI sau IMAO</strong></td><td>Sindrom serotoninergic</td><td style="color:#EF5350;font-weight:700">SEVER — CONTRAINDICAT</td></tr>
+          <tr><td><strong>Valerian + Benzodiazepine / alcool</strong></td><td>Potentare sedare necontrolata</td><td style="color:#FF9800;font-weight:700">MODERAT — EVITA</td></tr>
+          <tr><td><strong>Melatonina > 1 mg + Anticoagulante</strong></td><td>Potentare warfarina</td><td style="color:#FF9800;font-weight:700">MODERAT — monitorizare INR</td></tr>
+          <tr><td><strong>Ashwagandha + Imunosupresoare</strong></td><td>Stimulare imunitate — risc autoimun</td><td style="color:#FFD54F;font-weight:700">PRECAUTIE — aviz medical</td></tr>
+          <tr><td><strong>Melatonina > 1 mg pe termen lung</strong></td><td>Supresia productiei endogene</td><td style="color:#FFD54F;font-weight:700">PRECAUTIE — ciclare obligatorie</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PROTOCOL GRADUAL -->
+  <section id="protocol">
+    <div class="section-tag">// 04</div>
+    <h2>Protocolul gradual de implementare N=1</h2>
+    <div class="proto-steps">
+      <div class="ps-item">
+        <div class="ps-week"><div class="ps-dot">1</div><div class="ps-wlbl">SĂPT 1–2</div></div>
+        <div class="ps-body">
+          <div class="ps-title">Baza: Mg L-Treonat + L-Teanina</div>
+          <div class="ps-desc">Incepi cu cele două molecule cu cea mai bună tolerabilitate și fără interacțiuni. Doze standard. Noteaza HRV și latenta adormirii în Câmpul 17.</div>
+          <div class="ps-kpi">Masori: HRV matinal + calitate subiectiva 1–10</div>
+        </div>
+      </div>
+      <div class="ps-item">
+        <div class="ps-week"><div class="ps-dot">2</div><div class="ps-wlbl">SĂPT 3–4</div></div>
+        <div class="ps-body">
+          <div class="ps-title">Adaugă Melatonina 0.3 mg</div>
+          <div class="ps-desc">Dacă bazele produc îmbunătățire vizibilă, adaugi semnalul circadian. Consistența orei este critică — aceeași oră în fiecare seară.</div>
+          <div class="ps-kpi">Masori: latenta adormire + continuitate somn</div>
+        </div>
+      </div>
+      <div class="ps-item">
+        <div class="ps-week"><div class="ps-dot">3</div><div class="ps-wlbl">SĂPT 5–6</div></div>
+        <div class="ps-body">
+          <div class="ps-title">Adaugă Glicina 3g sau Apigenina 50 mg</div>
+          <div class="ps-desc">Adaugi un al patrulea mecanism. Glicina dacă N3 e sărac (adormire grea, senzatie de somn neodihnitor). Apigenina dacă anxietatea de culcare e prezentă.</div>
+          <div class="ps-kpi">Masori: calitate N3 (tracker) + temperatura</div>
+        </div>
+      </div>
+      <div class="ps-item">
+        <div class="ps-week"><div class="ps-dot">4</div><div class="ps-wlbl">DACĂ CORTIZOL</div></div>
+        <div class="ps-body">
+          <div class="ps-title">Opțional: Protocol anti-cortizol</div>
+          <div class="ps-desc">Dacă te trezești la 3–4 dimineața și nu mai adormi, sau HRV e constant scăzut — adaugi Ashwagandha KSM-66 seara + Fosfatidilserina cu cina. Efect la 4–8 săptămâni.</div>
+          <div class="ps-kpi">Masori: cortizol salivar pre-somn (kit) + HRV trend 30 zile</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CICLARE -->
+  <section id="ciclu">
+    <div class="section-tag">// 05</div>
+    <h2>Ciclarea — managementul toleranței</h2>
+    <div class="info-box">Toleranța receptorilor este reală chiar și la suplimente. Ciclarea menține sensibilitatea și eficacitatea pe termen lung.</div>
+    <div class="ciclu-grid">
+      <div class="cic-card">
+        <div class="cic-name">Melatonina</div>
+        <div class="cic-state"><span class="cic-on">5 nopți ON</span><span class="cic-off">2 OFF</span></div>
+        <div class="cic-note">Sau 3 săpt ON / 1 săpt pauza. Semnal de toleranță: adormire dificilă fără supliment.</div>
+      </div>
+      <div class="cic-card">
+        <div class="cic-name">Valerian</div>
+        <div class="cic-state"><span class="cic-on">4–6 săpt ON</span><span class="cic-off">2 săpt OFF</span></div>
+        <div class="cic-note">Efect cumulativ la debut. Toleranță moderată. Semnal: scădere efect subiectiv progresivă.</div>
+      </div>
+      <div class="cic-card">
+        <div class="cic-name">5-HTP</div>
+        <div class="cic-state"><span class="cic-on">6 săpt ON</span><span class="cic-off">2 săpt OFF</span></div>
+        <div class="cic-note">Maximum 6 luni continuu — pauza obligatorie. Semnal: vise intense, agitație nocturnă.</div>
+      </div>
+      <div class="cic-card">
+        <div class="cic-name">L-Teanina</div>
+        <div class="cic-state"><span class="cic-on">Zilnic OK</span><span class="cic-off">Pauza la 3 luni</span></div>
+        <div class="cic-note">Toleranță minimă. Utilizare zilnică acceptabilă. Pauza periodică din precauție.</div>
+      </div>
+      <div class="cic-card">
+        <div class="cic-name">Mg L-Treonat</div>
+        <div class="cic-state"><span class="cic-on">Zilnic pe termen lung</span></div>
+        <div class="cic-note">Practic fără toleranță documentată. Utilizare cronică acceptabilă în doze standard.</div>
+      </div>
+      <div class="cic-card">
+        <div class="cic-name">Ashwagandha</div>
+        <div class="cic-state"><span class="cic-on">8–12 săpt ON</span><span class="cic-off">4 săpt OFF</span></div>
+        <div class="cic-note">Toleranță minimă dar pauza recomandată. Efect maxim la 8 săpt. Nu se oprește brusc dacă doza e mare.</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:28px">Comparatie mecanism: fiziologic vs. farmacologic</h3>
+    <div class="chart-wrap">
+      <canvas id="mechChart"></canvas>
+    </div>
+  </section>
+
+</div>
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Biohacking 3.0 — Lecția 4.3 · Conținut educativ exclusiv</footer>
+
+<script>
+// Progress
+window.addEventListener('scroll',()=>{
+  document.getElementById('progress-bar').style.width=
+    Math.min((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100,100)+'%';
+});
+// Nav active
+const secs=document.querySelectorAll('section[id]');
+const links=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-80)c=s.id;});
+  links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+c));
+});
+
+// Tabs
+function showCat(id,btn){
+  document.querySelectorAll('.supl-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.stab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Radar / bar chart — mecanism overview
+new Chart(document.getElementById('mechChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['Mg L-Treonat\n(BBB/N3)','L-Teanina\n(GABA/alfa)','Glicina\n(NMDA/termic)','Melatonina\n(circadian)','Apigenina\n(GABA-A)','Ashwagandha\n(cortizol)','5-HTP\n(serotonina)','Valerian\n(GABA)','Fosfatidilserina\n(HPA)'],
+    datasets:[
+      {label:'Evidența clinică (1–5)',data:[3.5,4,4,5,2.5,5,3,4,3.5],backgroundColor:'rgba(0,172,193,0.6)',borderRadius:4},
+      {label:'Tolerabilitate (1–5)',data:[5,5,5,4,5,4.5,3,3.5,4.5],backgroundColor:'rgba(249,168,37,0.5)',borderRadius:4},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:10},boxWidth:10}},
+      tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{
+      x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(128,222,234,0.06)'}},
+      y:{min:0,max:5.5,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(128,222,234,0.06)'},
+        title:{display:true,text:'Scor 1–5',color:'#80DEEA',font:{size:9}}}
+    }
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Infografic L3.5 — Nutrigenomică & C.E.L.O.S.</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --purp:#6A1B9A;--purpl:#9C27B0;--purpd:#4A0072;--purpll:#CE93D8;
+  --gold:#F9A825;--navy:#0D1020;--navy2:#160A24;
+  --white:#F5F0FF;--gray:#7B6E8E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--navy);font-family:'Segoe UI',system-ui,sans-serif;color:var(--white)}
+header{background:linear-gradient(135deg,var(--purpd),var(--navy2));padding:28px 24px 22px;text-align:center;border-bottom:3px solid var(--gold)}
+header .tag{font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+header h1{font-size:clamp(20px,4vw,30px);font-weight:700}
+header p{font-size:13px;color:var(--purpll);margin-top:5px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;padding:16px;max-width:1100px;margin:0 auto}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(206,147,216,0.2);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--purpl)}
+.card.gold-top::before{background:var(--gold)}
+.card.green-top::before{background:#2E7D32}
+.card h2{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;font-weight:700}
+
+/* ── CELOS WHEEL ── */
+#celos-card{grid-column:span 2}
+.celos-wheel{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.cw-btn{flex:1;min-width:80px;padding:10px 6px;border-radius:8px;cursor:pointer;border:2px solid transparent;text-align:center;transition:all .25s;background:rgba(255,255,255,0.04)}
+.cw-btn .cw-letter{font-size:28px;font-weight:700;line-height:1;display:block}
+.cw-btn .cw-name{font-size:9px;letter-spacing:1px;text-transform:uppercase;margin-top:3px;opacity:.7}
+.cw-btn.active{transform:translateY(-3px)}
+.cw-btn:nth-child(1){border-color:#00E5FF}.cw-btn:nth-child(1) .cw-letter{color:#00E5FF}
+.cw-btn:nth-child(2){border-color:var(--gold)}.cw-btn:nth-child(2) .cw-letter{color:var(--gold)}
+.cw-btn:nth-child(3){border-color:#66BB6A}.cw-btn:nth-child(3) .cw-letter{color:#66BB6A}
+.cw-btn:nth-child(4){border-color:#FF7043}.cw-btn:nth-child(4) .cw-letter{color:#FF7043}
+.cw-btn:nth-child(5){border-color:var(--purpll)}.cw-btn:nth-child(5) .cw-letter{color:var(--purpll)}
+.cw-btn:nth-child(1).active{background:rgba(0,229,255,0.1)}
+.cw-btn:nth-child(2).active{background:rgba(249,168,37,0.1)}
+.cw-btn:nth-child(3).active{background:rgba(102,187,106,0.1)}
+.cw-btn:nth-child(4).active{background:rgba(255,112,67,0.1)}
+.cw-btn:nth-child(5).active{background:rgba(206,147,216,0.1)}
+.celos-detail{background:rgba(0,0,0,0.3);border-radius:8px;padding:16px;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.cd-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.cd-letter{font-size:36px;font-weight:700;line-height:1}
+.cd-info{}
+.cd-obj{font-size:10px;color:var(--gray);letter-spacing:1px;text-transform:uppercase}
+.cd-name{font-size:16px;font-weight:700;color:var(--white)}
+.cd-supls{display:grid;gap:6px}
+.cs-item{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:rgba(255,255,255,0.04);border-radius:6px;font-size:11px}
+.cs-name{color:var(--white);font-weight:600}
+.cs-dose{color:var(--purpll);font-family:monospace;font-size:10px}
+.cs-bm{color:var(--gold);font-size:10px}
+
+/* ── SNP EXPLORER ── */
+.snp-grid{display:grid;gap:8px}
+.snp-item{padding:10px 12px;background:rgba(0,0,0,0.3);border-radius:6px;border-left:3px solid var(--purpl);cursor:pointer;transition:all .2s}
+.snp-item:hover,.snp-item.open{background:rgba(106,27,154,0.15);border-left-color:var(--gold)}
+.snp-top{display:flex;justify-content:space-between;align-items:center}
+.snp-gene{font-size:12px;font-weight:700;color:var(--white)}
+.snp-freq{font-size:10px;color:var(--gold);font-family:monospace}
+.snp-body{display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,0.07)}
+.snp-body.show{display:block;animation:fadeIn .3s}
+.snp-row{display:flex;gap:8px;margin-bottom:4px}
+.snp-tag{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--purpll);min-width:55px;padding-top:1px}
+.snp-val{font-size:11px;color:#C5CAE9;line-height:1.4}
+
+/* ── BIODIS CHART ── */
+.chart-wrap{position:relative;height:220px}
+
+/* ── TIMING ── */
+.timing-list{display:flex;flex-direction:column;gap:6px}
+.tl-item{display:flex;gap:10px;padding:8px 10px;background:rgba(0,0,0,0.25);border-radius:6px;border-left:3px solid var(--purpl);align-items:flex-start}
+.tl-time{font-size:10px;font-family:monospace;color:var(--gold);min-width:65px;padding-top:1px;font-weight:600}
+.tl-supls{font-size:11px;color:#C5CAE9;line-height:1.5}
+.tl-supls strong{color:var(--white)}
+
+/* ── BIOMARKERI RADAR ── */
+.bm-meter{display:grid;gap:8px}
+.bm-row2{display:flex;align-items:center;gap:10px}
+.bm-name2{font-size:10px;color:var(--white);width:100px;flex-shrink:0;font-weight:600}
+.bm-track{flex:1;height:7px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+.bm-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--purpd),var(--purpl));transition:width 1.5s cubic-bezier(.4,0,.2,1)}
+.bm-fill.gold{background:linear-gradient(90deg,#C67C00,var(--gold))}
+.bm-fill.green{background:linear-gradient(90deg,#1B5E20,#4CAF50)}
+.bm-val2{font-size:9px;color:var(--gold);font-family:monospace;text-align:right;min-width:80px;flex-shrink:0}
+
+/* ── PILONI QUICK ── */
+.piloni-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.pg-pill{text-align:center;padding:10px 4px;background:rgba(0,0,0,0.3);border-radius:6px;border-bottom:2px solid}
+.pg-letter{font-size:24px;font-weight:700;line-height:1}
+.pg-name{font-size:8px;letter-spacing:.5px;color:var(--gray);text-transform:uppercase;margin-top:3px;line-height:1.3}
+.pg-count{font-size:9px;color:var(--gold);margin-top:4px;font-family:monospace}
+
+/* ── FORMA QUIZ ── */
+.fq-question{font-size:13px;color:var(--white);font-weight:600;margin-bottom:10px}
+.fq-opts{display:flex;flex-direction:column;gap:6px}
+.fq-opt{padding:8px 12px;background:rgba(0,0,0,0.3);border:1px solid rgba(206,147,216,0.2);border-radius:6px;cursor:pointer;font-size:11px;color:var(--gray);transition:all .2s;display:flex;align-items:center;gap:8px}
+.fq-opt:hover{background:rgba(106,27,154,0.15);color:var(--white);border-color:var(--purpll)}
+.fq-opt.correct{background:rgba(46,125,50,0.15);border-color:#4CAF50;color:#81C784}
+.fq-opt.wrong{background:rgba(183,28,28,0.15);border-color:#F44336;color:#EF9A9A}
+.fq-icon{font-size:14px}
+.fq-next{margin-top:10px;padding:7px 16px;background:var(--purp);color:var(--white);border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:background .2s}
+.fq-next:hover{background:var(--purpl)}
+.fq-score{font-size:11px;color:var(--gold);font-family:monospace;margin-top:6px;text-align:center}
+
+footer{text-align:center;padding:20px;font-size:11px;color:var(--gray);border-top:1px solid rgba(206,147,216,0.15);margin-top:10px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">// Biohacking 3.0 · Modul 3 · Lecția 3.5</div>
+  <h1>Nutrigenomică & suplimentele C.E.L.O.S.</h1>
+  <p>Explorer interactiv · SNP-uri · Forme optime · Timing circadian · Biomarkeri</p>
+</header>
+
+<div class="grid">
+
+  <!-- ══ CELOS EXPLORER ══ -->
+  <div class="card" id="celos-card" style="grid-column:1/-1">
+    <h2>⬡ Sistem C.E.L.O.S. — explorer interactiv</h2>
+    <div class="celos-wheel">
+      <div class="cw-btn active" onclick="showPilon(0,this)"><span class="cw-letter">C</span><span class="cw-name">Celular</span></div>
+      <div class="cw-btn" onclick="showPilon(1,this)"><span class="cw-letter">E</span><span class="cw-name">Energetic</span></div>
+      <div class="cw-btn" onclick="showPilon(2,this)"><span class="cw-letter">L</span><span class="cw-name">Longevitate</span></div>
+      <div class="cw-btn" onclick="showPilon(3,this)"><span class="cw-letter">O</span><span class="cw-name">Oxidativ</span></div>
+      <div class="cw-btn" onclick="showPilon(4,this)"><span class="cw-letter">S</span><span class="cw-name">Sistem nervos</span></div>
+    </div>
+    <div class="celos-detail" id="celos-detail"></div>
+  </div>
+
+  <!-- ══ SNP EXPLORER ══ -->
+  <div class="card">
+    <h2>🧬 SNP-uri relevante clinic</h2>
+    <div class="snp-grid" id="snp-grid"></div>
+  </div>
+
+  <!-- ══ BIODISPONIBILITATE ══ -->
+  <div class="card gold-top">
+    <h2>📊 Biodisponibilitate — forme optime</h2>
+    <div class="chart-wrap"><canvas id="biodisChart"></canvas></div>
+    <div style="margin-top:10px;padding:8px 10px;background:rgba(0,0,0,0.3);border-radius:6px;font-size:10px;color:#CE93D8;font-style:italic;border-left:3px solid var(--gold)">
+      Curcumina Meriva® = 29× absorbție vs. standard · Mg glicinat = 4–10× vs. oxid
+    </div>
+  </div>
+
+  <!-- ══ TIMING CIRCADIAN ══ -->
+  <div class="card">
+    <h2>🕐 Timing circadian optimal</h2>
+    <div class="timing-list">
+      <div class="tl-item"><div class="tl-time">☀ Dimineața<br/>stomac gol</div><div class="tl-supls"><strong>NAC</strong>, <strong>Complex B metilat</strong><br/><span style="font-size:10px;color:var(--gray)">Absorbție maximă; energie matinală</span></div></div>
+      <div class="tl-item"><div class="tl-time">🍳 Cu masă<br/>grasă</div><div class="tl-supls"><strong>D3+K2 · CoQ10 · Omega-3</strong><br/><strong>Curcumină · Astaxantină</strong><br/><span style="font-size:10px;color:var(--gray)">Liposolubile — fără grăsimi: -50–80%</span></div></div>
+      <div class="tl-item"><div class="tl-time">🌤 Prânz</div><div class="tl-supls"><strong>Vitamina C tamponată</strong>, Quercetină<br/><span style="font-size:10px;color:var(--gray)">Split doze; Fier departe de Ca</span></div></div>
+      <div class="tl-item"><div class="tl-time">🌙 Seara<br/>cu masă</div><div class="tl-supls"><strong>Mg Glicinat / L-Treonat · Zinc</strong><br/><span style="font-size:10px;color:var(--gray)">Recuperare, somn; Zn ≠ Ca simultan</span></div></div>
+      <div class="tl-item"><div class="tl-time">🌛 Pre-somn</div><div class="tl-supls"><strong>Melatonină 0.3 mg · L-Teanină</strong><br/><span style="font-size:10px;color:var(--gray)">30 min înainte; doză fiziologică!</span></div></div>
+    </div>
+  </div>
+
+  <!-- ══ PILONI QUICK VIEW ══ -->
+  <div class="card">
+    <h2>⊙ Piloni — vedere rapidă</h2>
+    <div class="piloni-grid">
+      <div class="pg-pill" style="border-color:#00E5FF"><div class="pg-letter" style="color:#00E5FF">C</div><div class="pg-name">Celular</div><div class="pg-count">4 suplem.</div></div>
+      <div class="pg-pill" style="border-color:var(--gold)"><div class="pg-letter" style="color:var(--gold)">E</div><div class="pg-name">Energetic</div><div class="pg-count">4 suplem.</div></div>
+      <div class="pg-pill" style="border-color:#66BB6A"><div class="pg-letter" style="color:#66BB6A">L</div><div class="pg-name">Longevitate</div><div class="pg-count">4 suplem.</div></div>
+      <div class="pg-pill" style="border-color:#FF7043"><div class="pg-letter" style="color:#FF7043">O</div><div class="pg-name">Oxidativ</div><div class="pg-count">4 suplem.</div></div>
+      <div class="pg-pill" style="border-color:var(--purpll)"><div class="pg-letter" style="color:var(--purpll)">S</div><div class="pg-name">Sistem nervos</div><div class="pg-count">4 suplem.</div></div>
+    </div>
+    <div style="margin-top:14px;padding:10px 12px;background:rgba(0,0,0,0.3);border-radius:6px;font-size:11px;color:#C5CAE9;line-height:1.6">
+      <strong style="color:var(--gold)">Strategia N=1:</strong> Alege UN pilon deficitar → testează UN biomarker → suplimentează forma corectă → retestează la 90 zile.
+    </div>
+  </div>
+
+  <!-- ══ BIOMARKERI ══ -->
+  <div class="card green-top">
+    <h2>🔬 Biomarkeri — niveluri optime funcționale</h2>
+    <div class="bm-meter" id="bm-meter">
+      <div class="bm-row2"><div class="bm-name2">25-OH-D3</div><div class="bm-track"><div class="bm-fill" style="width:0%" data-w="78%"></div></div><div class="bm-val2">50–80 ng/mL</div></div>
+      <div class="bm-row2"><div class="bm-name2">Mg eritrocitar</div><div class="bm-track"><div class="bm-fill gold" style="width:0%" data-w="65%"></div></div><div class="bm-val2">4.2–6.8 mg/dL</div></div>
+      <div class="bm-row2"><div class="bm-name2">Omega-3 Index</div><div class="bm-track"><div class="bm-fill green" style="width:0%" data-w="72%"></div></div><div class="bm-val2">≥ 8%</div></div>
+      <div class="bm-row2"><div class="bm-name2">B12 activă</div><div class="bm-track"><div class="bm-fill" style="width:0%" data-w="80%"></div></div><div class="bm-val2">> 600 pmol/L</div></div>
+      <div class="bm-row2"><div class="bm-name2">CRP hs</div><div class="bm-track"><div class="bm-fill gold" style="width:0%" data-w="85%"></div></div><div class="bm-val2">< 1.0 mg/L</div></div>
+      <div class="bm-row2"><div class="bm-name2">CoQ10 seric</div><div class="bm-track"><div class="bm-fill" style="width:0%" data-w="60%"></div></div><div class="bm-val2">1.5–3.0 µg/mL</div></div>
+      <div class="bm-row2"><div class="bm-name2">Ferritină</div><div class="bm-track"><div class="bm-fill green" style="width:0%" data-w="70%"></div></div><div class="bm-val2">70–150 ng/mL</div></div>
+      <div class="bm-row2"><div class="bm-name2">TSH</div><div class="bm-track"><div class="bm-fill gold" style="width:0%" data-w="75%"></div></div><div class="bm-val2">1.0–2.0 mUI/L</div></div>
+    </div>
+    <p style="font-size:9px;color:var(--gray);margin-top:10px;font-style:italic">* Bare = poziție relativă în intervalul optim funcțional. Valorile absolute variază individual.</p>
+  </div>
+
+  <!-- ══ QUIZ FORME OPTIME ══ -->
+  <div class="card" style="grid-column:1/-1">
+    <h2>🎯 Quiz rapid — forme optime</h2>
+    <div id="quiz-container"></div>
+  </div>
+
+</div>
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Infografic educativ · Nu substituie consultul medical</footer>
+
+<script>
+// ── DATE C.E.L.O.S. ─────────────────────────────────────────────────────
+const celosData = [
+  { letter:"C", name:"Celular", color:"#00E5FF", obj:"Funcție mitocondrială, producție ATP, protecție membranară",
+    supls:[
+      {name:"CoQ10 Ubiquinol",dose:"100–300 mg/zi",bm:"CoQ10 > 1.5 µg/mL"},
+      {name:"Mg Glicinat",dose:"300–400 mg/zi",bm:"Mg eritrocitar 4.2–6.8"},
+      {name:"D3 + K2 MK-7",dose:"2000–5000 UI D3",bm:"25-OH-D3: 50–80 ng/mL"},
+      {name:"Zinc Bisglicinat",dose:"15–30 mg/zi",bm:"Zn seric 80–120 µg/dL"},
+    ]},
+  { letter:"E", name:"Energetic", color:"#F9A825", obj:"Metabolism energetic, tiroidă, management stres cronic",
+    supls:[
+      {name:"Complex B metilat",dose:"Conform label",bm:"B12 activă > 600 pmol/L"},
+      {name:"Ashwagandha KSM-66",dose:"300–600 mg/zi",bm:"Cortizol matinal, HRV"},
+      {name:"Fier Bisglicinat",dose:"18–36 mg/zi (F)",bm:"Ferritină 70–150 ng/mL"},
+      {name:"Iod + Seleniu",dose:"150–200 µg I + Se",bm:"TSH 1–2 mUI/L"},
+    ]},
+  { letter:"L", name:"Longevitate", color:"#66BB6A", obj:"Protecție telomeri, risc CV, activare sirtuine/NAD+",
+    supls:[
+      {name:"Omega-3 rTG",dose:"2–4 g EPA+DHA/zi",bm:"Omega-3 Index > 8%"},
+      {name:"NMN / NR",dose:"250–500 mg/zi",bm:"NAD+ (în cercetare)"},
+      {name:"Resveratrol",dose:"150–500 mg/zi",bm:"—"},
+      {name:"Astaxantină",dose:"4–12 mg/zi",bm:"—"},
+    ]},
+  { letter:"O", name:"Oxidativ", color:"#FF7043", obj:"Reducere CRP hs, stres oxidativ, suport glutation endogen",
+    supls:[
+      {name:"Vitamina C tamponată",dose:"500–1000 mg/zi",bm:"CRP hs < 1.0 mg/L"},
+      {name:"Curcumină Meriva®",dose:"400–800 mg/zi",bm:"CRP hs, IL-6"},
+      {name:"NAC",dose:"600–1200 mg/zi",bm:"Glutation eritrocitar"},
+      {name:"Quercetină + Bromelain",dose:"500–1000 mg/zi",bm:"—"},
+    ]},
+  { letter:"S", name:"Sistem nervos", color:"#CE93D8", obj:"Neuroprotecție, calitate somn, axă intestin-creier, HRV",
+    supls:[
+      {name:"Mg L-Treonat (Magtein)",dose:"1000–2000 mg/zi",bm:"Mg eritrocitar, HRV"},
+      {name:"L-Teanină",dose:"100–200 mg/zi",bm:"HRV, calitate somn"},
+      {name:"Melatonină 0.3 mg",dose:"0.3–1 mg/zi",bm:"HRV nocturn"},
+      {name:"Bacopa Monnieri",dose:"300–450 mg/zi",bm:"Cogniție (8–12 săpt)"},
+    ]},
+];
+
+function showPilon(idx, btn) {
+  document.querySelectorAll('.cw-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = celosData[idx];
+  const html = `
+    <div class="cd-header">
+      <div class="cd-letter" style="color:${d.color}">${d.letter}</div>
+      <div class="cd-info">
+        <div class="cd-obj">${d.obj}</div>
+        <div class="cd-name">${d.name}</div>
+      </div>
+    </div>
+    <div class="cd-supls">
+      ${d.supls.map(s=>`
+        <div class="cs-item">
+          <div class="cs-name">${s.name}</div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="cs-dose">${s.dose}</div>
+            ${s.bm!=='—'?`<div class="cs-bm">→ ${s.bm}</div>`:''}
+          </div>
+        </div>`).join('')}
+    </div>`;
+  document.getElementById('celos-detail').innerHTML = html;
+}
+showPilon(0, document.querySelector('.cw-btn'));
+
+// ── SNP DATA ─────────────────────────────────────────────────────────────
+const snps = [
+  {gene:"MTHFR C677T",freq:"~38%",effect:"Reducere activitate metiltransferază 30–70%",action:"5-MTHF + Metilcobalamină (nu acid folic sintetic)",test:"Homocisteină < 8 µmol/L"},
+  {gene:"MTHFR A1298C",freq:"~30%",effect:"Deficit metilare moderat",action:"Complex B metilat complet",test:"Homocisteină, B12 activă"},
+  {gene:"VDR (receptor D3)",freq:"Variabil",effect:"Absorbție/utilizare D3 redusă",action:"Doze D3 mai mari (3000–5000 UI), K2 MK-7 obligatoriu",test:"25-OH-D3 la 60 zile"},
+  {gene:"APOE ε4",freq:"~25%",effect:"Risc CV crescut, ApoB ↑",action:"Omega-3 rTG 3–4 g/zi, reducere grasimi saturate",test:"ApoB < 70 mg/dL"},
+  {gene:"FUT2 (non-secretor)",freq:"~20%",effect:"Absorbție B12 și microbiom reduse",action:"B12 sublingual/injectabil, probiotice specifice",test:"B12 activă (HoloTC)"},
+  {gene:"SOD2 A16V",freq:"Frecvent",effect:"Capacitate antioxidantă mitocondrială redusă",action:"NAC, CoQ10, Mangan, vitamina C tamponată",test:"CRP hs, glutation"},
+];
+
+const snpGrid = document.getElementById('snp-grid');
+snps.forEach((s,i)=>{
+  const div = document.createElement('div');
+  div.className = 'snp-item';
+  div.innerHTML = `
+    <div class="snp-top">
+      <div class="snp-gene">${s.gene}</div>
+      <div class="snp-freq">${s.freq}</div>
+    </div>
+    <div class="snp-body" id="snp-${i}">
+      <div class="snp-row"><span class="snp-tag">Efect</span><span class="snp-val">${s.effect}</span></div>
+      <div class="snp-row"><span class="snp-tag">Acțiune</span><span class="snp-val">${s.action}</span></div>
+      <div class="snp-row"><span class="snp-tag">Test</span><span class="snp-val">${s.test}</span></div>
+    </div>`;
+  div.addEventListener('click',()=>{
+    const body=document.getElementById(`snp-${i}`);
+    const isOpen=body.classList.contains('show');
+    document.querySelectorAll('.snp-body').forEach(b=>b.classList.remove('show'));
+    document.querySelectorAll('.snp-item').forEach(b=>b.classList.remove('open'));
+    if(!isOpen){body.classList.add('show');div.classList.add('open');}
+  });
+  snpGrid.appendChild(div);
+});
+
+// ── CHART BIODIS ─────────────────────────────────────────────────────────
+new Chart(document.getElementById('biodisChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['Mg\nGlicinat','Curcumină\nMeriva','Omega-3\nrTG','Fier\nBisglicinat','CoQ10\nUbiquinol','Folat\n5-MTHF'],
+    datasets:[
+      {label:'Formă slabă (baza=1)',data:[1,1,1,1,1,1],backgroundColor:'rgba(255,255,255,0.08)',borderRadius:4},
+      {label:'Formă optimă (×)',data:[7,29,1.7,3.5,2.5,15],backgroundColor:'rgba(156,39,176,0.75)',borderRadius:4},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#9E9BB8',font:{size:9},boxWidth:10}},
+      tooltip:{backgroundColor:'rgba(13,16,32,0.95)'}},
+    scales:{
+      x:{ticks:{color:'#7B6E8E',font:{size:8}},grid:{color:'rgba(206,147,216,0.06)'}},
+      y:{ticks:{color:'#7B6E8E',font:{size:9}},grid:{color:'rgba(206,147,216,0.06)'},
+        title:{display:true,text:'Biodisponibilitate relativă (×)',color:'#CE93D8',font:{size:9}}},
+    }
+  }
+});
+
+// ── ANIMATE BIOMARKERI ────────────────────────────────────────────────────
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      document.querySelectorAll('.bm-fill').forEach((b,i)=>{
+        setTimeout(()=>{b.style.width=b.dataset.w},i*120+100);
+      });
+      obs.disconnect();
+    }
+  });
+},{threshold:0.2});
+const bm=document.getElementById('bm-meter');
+if(bm)obs.observe(bm);
+
+// ── QUIZ ─────────────────────────────────────────────────────────────────
+const questions=[
+  {q:"Care formă de magneziu are cea mai bună absorbție?",opts:["Oxid de Mg","Sulfat de Mg","Glicinat de Mg","Carbonat de Mg"],ans:2,exp:"Mg glicinat are absorbție de 4–10× față de oxid. Mg L-treonat este singura formă care penetrează bariera hematoencefalică eficient."},
+  {q:"De ce vitamina D3 se ia obligatoriu cu K2?",opts:["K2 creste producția de D3","K2 MK-7 direcționează calciul absorbit spre oase, nu artere","K2 reduce costul suplimentului","K2 și D3 sunt din aceeași sursă"],ans:1,exp:"D3 creste absorbția calciului; K2 MK-7 (forma MK-7, nu MK-4) asigură că acel calciu ajunge la oase și nu se depune în artere. Carboxilează osteocalcina și MGP."},
+  {q:"La ce varianta MTHFR, acidul folic sintetic este ineficient?",opts:["APOE ε4","FUT2","MTHFR C677T","SOD2 A16V"],ans:2,exp:"MTHFR C677T reduce activitatea enzimei cu 30–70%, blocând conversia acidului folic sintetic în 5-MTHF (forma activă). Soluția: folat metilat (5-MTHF) direct."},
+  {q:"Ce doză de melatonină este fiziologică și optimă?",opts:["5 mg","10 mg","0.3–1 mg","2.5 mg"],ans:2,exp:"Doza fiziologică de melatonina este 0.3–1 mg. Dozele mari (5–10 mg) suprimă producția endogenă și pot perturba ritmul circadian pe termen lung. Melatonina nu este somnifer — este semnal circadian."},
+  {q:"Ce formă de omega-3 are biodisponibilitate superioară?",opts:["Ester etilic (EE)","Trigliceride reesterificate (rTG)","Capsule din alge","Ulei de in"],ans:1,exp:"rTG (trigliceride reesterificate) au absorbție cu ~70% mai mare față de forma ester etilic și stabilitate oxidativă superioară. Certificare IFOS 5 stele pentru verificarea purității."},
+];
+let qi=0,score=0;
+function renderQ(){
+  const c=document.getElementById('quiz-container');
+  if(qi>=questions.length){
+    c.innerHTML=`<div style="text-align:center;padding:20px"><div style="font-size:36px;font-weight:700;color:var(--gold)">${score}/${questions.length}</div><div style="font-size:13px;color:var(--purpll);margin-top:6px">${score===questions.length?'Perfect! Cunoști formele optime.':score>=3?'Foarte bine! Revizuieste răspunsurile greșite.':'Revizuieste materialul — formele chimice sunt esențiale.'}</div><button class="fq-next" onclick="qi=0;score=0;renderQ()" style="margin-top:14px">Restart</button></div>`;
+    return;
+  }
+  const q=questions[qi];
+  c.innerHTML=`
+    <div class="fq-question">${qi+1}/${questions.length}. ${q.q}</div>
+    <div class="fq-opts">${q.opts.map((o,i)=>`<div class="fq-opt" id="fopt-${i}" onclick="answer(${i})"><span class="fq-icon">○</span>${o}</div>`).join('')}</div>
+    <div class="fq-score" id="fq-sc" style="display:none"></div>
+    <div id="fq-exp" style="display:none;margin-top:8px;padding:10px 12px;background:rgba(106,27,154,0.15);border-radius:6px;font-size:11px;color:#C5CAE9;line-height:1.5;border-left:3px solid var(--gold)"></div>
+    <button class="fq-next" id="fq-btn" style="display:none" onclick="qi++;renderQ()">Următoarea →</button>`;
+}
+function answer(sel){
+  const q=questions[qi];
+  if(document.getElementById('fq-btn').style.display!=='none')return;
+  const correct=sel===q.ans;
+  if(correct)score++;
+  q.opts.forEach((_,i)=>{
+    const el=document.getElementById(`fopt-${i}`);
+    if(i===q.ans)el.classList.add('correct'),el.querySelector('.fq-icon').textContent='✓';
+    else if(i===sel&&!correct)el.classList.add('wrong'),el.querySelector('.fq-icon').textContent='✗';
+  });
+  document.getElementById('fq-exp').style.display='block';
+  document.getElementById('fq-exp').textContent=q.exp;
+  document.getElementById('fq-sc').style.display='block';
+  document.getElementById('fq-sc').textContent=`Scor curent: ${score}/${qi+1}`;
+  document.getElementById('fq-btn').style.display='inline-block';
+}
+renderQ();
+</script>
+</body>
+</html>

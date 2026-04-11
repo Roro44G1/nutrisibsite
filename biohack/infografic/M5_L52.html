@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Infografic L5.2 — Igiena cognitivă</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--tel:#004D40;--tell:#00695C;--teld:#002B24;--telll:#80CBC4;--gold:#F9A825;--navy:#050E1E;--navy2:#030E0C;--white:#E0F2F1;--gray:#78909C;--grn:#1B5E20;--red:#B71C1C;--amber:#F57C00;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--navy);font-family:'Segoe UI',system-ui,sans-serif;color:var(--white)}
+header{background:linear-gradient(135deg,var(--teld),var(--navy2));padding:22px;text-align:center;border-bottom:3px solid var(--gold)}
+header .tag{font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
+header h1{font-size:clamp(18px,4vw,26px);font-weight:700}
+header p{font-size:12px;color:var(--telll);margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;padding:14px;max-width:1100px;margin:0 auto}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(128,203,196,0.2);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--tell)}
+.card.gold::before{background:var(--gold)}
+.card.wide{grid-column:1/-1}
+.card h2{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:700}
+.cw{position:relative;height:190px}
+.cwt{position:relative;height:230px}
+
+/* Simulare intreruperi */
+.sim-wrap{display:flex;flex-direction:column;gap:8px}
+.sw-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.sb{padding:5px 12px;border-radius:14px;border:1px solid rgba(128,203,196,0.25);background:transparent;color:var(--gray);cursor:pointer;font-size:10px;transition:all .2s;font-family:inherit}
+.sb.active{background:var(--tel);color:var(--white);border-color:var(--telll)}
+.sw-result{padding:10px;background:rgba(0,77,64,0.1);border-radius:6px;font-size:11px;color:var(--white);line-height:1.7;border-left:3px solid var(--tell)}
+
+/* Focus meter */
+.fm-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fm-item{padding:10px;background:rgba(0,0,0,0.25);border-radius:6px;border:1px solid rgba(128,203,196,0.1);text-align:center;cursor:pointer;transition:all .2s}
+.fm-item:hover,.fm-item.active{background:rgba(0,77,64,0.1);border-color:rgba(128,203,196,0.3)}
+.fm-val{font-family:monospace;font-size:28px;font-weight:700;color:var(--gold)}
+.fm-label{font-size:10px;color:var(--gray);margin-top:2px}
+.fm-detail{display:none;grid-column:1/-1;padding:10px;background:rgba(0,0,0,0.3);border-radius:6px;font-size:11px;color:#B2DFDB;line-height:1.5;border-left:3px solid var(--tell)}
+.fm-detail.show{display:block}
+
+/* MIT builder */
+.mit-wrap{display:flex;flex-direction:column;gap:6px}
+.mit-item{display:flex;gap:8px;align-items:center;padding:8px 10px;background:rgba(0,0,0,0.2);border-radius:6px;border:1px solid rgba(128,203,196,0.1)}
+.mit-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.mit-input{flex:1;background:transparent;border:none;color:var(--white);font-size:11px;font-family:inherit;outline:none}
+.mit-input::placeholder{color:var(--gray)}
+.mit-pri{font-size:9px;padding:2px 6px;border-radius:6px;font-weight:700}
+
+/* Quiz */
+.qz-q{font-size:13px;font-weight:700;margin-bottom:10px;color:var(--white)}
+.qz-opts{display:flex;flex-direction:column;gap:6px}
+.qz-opt{padding:8px 12px;background:rgba(0,0,0,0.25);border:1px solid rgba(128,203,196,0.2);border-radius:6px;cursor:pointer;font-size:11px;color:var(--gray);display:flex;gap:8px;transition:all .2s}
+.qz-opt:hover{background:rgba(0,77,64,0.1);color:var(--white)}
+.qz-opt.ok{background:rgba(27,94,32,0.12);border-color:#4CAF50;color:#81C784}
+.qz-opt.ko{background:rgba(183,28,28,0.12);border-color:#F44336;color:#EF9A9A}
+.qz-exp{display:none;margin-top:8px;padding:10px;background:rgba(0,77,64,0.1);border-radius:6px;font-size:11px;color:#B2DFDB;border-left:3px solid var(--gold);line-height:1.5}
+.qz-exp.show{display:block}
+.qz-btn{margin-top:10px;padding:7px 16px;background:var(--tel);color:var(--white);border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+.qz-score{font-size:11px;color:var(--gold);font-family:monospace;margin-top:6px;text-align:right}
+footer{text-align:center;padding:16px;font-size:10px;color:var(--gray);border-top:1px solid rgba(128,203,196,0.1);margin-top:10px}
+</style>
+</head>
+<body>
+<header>
+  <div class="tag">// Biohacking 3.0 · Modul 5 · Lecția 5.2</div>
+  <h1>Igiena cognitivă</h1>
+  <p>Simulator intreruperi · Focus meter · MIT builder · Protocol comparatie · Quiz</p>
+</header>
+
+<div class="grid">
+
+  <!-- SIMULATOR INTRERUPERI -->
+  <div class="card gold">
+    <h2>⚡ Simulator cost intreruperi</h2>
+    <div class="sim-wrap">
+      <div class="sw-btns">
+        <button class="sb active" onclick="simInt(0,this)">0 intreruperi</button>
+        <button class="sb" onclick="simInt(3,this)">3 intreruperi</button>
+        <button class="sb" onclick="simInt(5,this)">5 intreruperi</button>
+        <button class="sb" onclick="simInt(10,this)">10 intreruperi</button>
+        <button class="sb" onclick="simInt(15,this)">15 intreruperi</button>
+      </div>
+      <div class="sw-result" id="sim-result"></div>
+    </div>
+    <div class="cw" style="margin-top:12px"><canvas id="intChart"></canvas></div>
+  </div>
+
+  <!-- FOCUS METER -->
+  <div class="card">
+    <h2>🎯 Focus meter — impactul distragilor</h2>
+    <div class="fm-grid" id="fm-grid">
+      <div class="fm-item" onclick="showFM('tel',this)"><div class="fm-val">📱</div><div class="fm-label">Telefon pe masă</div></div>
+      <div class="fm-item" onclick="showFM('notif',this)"><div class="fm-val">🔔</div><div class="fm-label">Notificari active</div></div>
+      <div class="fm-item" onclick="showFM('taburi',this)"><div class="fm-val">📁</div><div class="fm-label">15 tab-uri deschise</div></div>
+      <div class="fm-item" onclick="showFM('email',this)"><div class="fm-val">📧</div><div class="fm-label">Email deschis continuu</div></div>
+      <div class="fm-item" onclick="showFM('colegi',this)"><div class="fm-val">🗣️</div><div class="fm-label">Conversatii open office</div></div>
+      <div class="fm-item" onclick="showFM('music',this)"><div class="fm-val">🎵</div><div class="fm-label">Muzica cu versuri</div></div>
+      <div class="fm-detail" id="fm-detail"></div>
+    </div>
+  </div>
+
+  <!-- COMPARATIE PROTOCOALE -->
+  <div class="card">
+    <h2>📊 Comparație protocoale focus</h2>
+    <div class="cwt"><canvas id="protChart"></canvas></div>
+  </div>
+
+  <!-- MIT BUILDER -->
+  <div class="card">
+    <h2>🏆 MIT Builder — planifică ziua de azi</h2>
+    <p style="font-size:11px;color:var(--gray);margin-bottom:10px">Scrie cele 3 sarcini cele mai importante pentru azi (atacate dimineata prima):</p>
+    <div class="mit-wrap">
+      <div class="mit-item">
+        <div class="mit-num" style="background:rgba(183,28,28,0.2);color:#EF9A9A;border:2px solid #EF9A9A">1</div>
+        <input class="mit-input" placeholder="Sarcina critica #1 — deep work dimineata..." id="mit1"/>
+        <span class="mit-pri" style="background:rgba(183,28,28,0.2);color:#EF9A9A">CRITIC</span>
+      </div>
+      <div class="mit-item">
+        <div class="mit-num" style="background:rgba(245,124,0,0.2);color:#FFAB40;border:2px solid #FFAB40">2</div>
+        <input class="mit-input" placeholder="Sarcina importanta #2..." id="mit2"/>
+        <span class="mit-pri" style="background:rgba(245,124,0,0.15);color:#FFAB40">INALT</span>
+      </div>
+      <div class="mit-item">
+        <div class="mit-num" style="background:rgba(0,105,92,0.2);color:var(--telll);border:2px solid var(--telll)">3</div>
+        <input class="mit-input" placeholder="Sarcina secundara #3..." id="mit3"/>
+        <span class="mit-pri" style="background:rgba(0,77,64,0.2);color:var(--telll)">MEDIE</span>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:10px;background:rgba(0,0,0,0.25);border-radius:6px;font-size:10px;color:var(--gray);line-height:1.5">
+      <strong style="color:var(--telll)">Regula MIT:</strong> Nu deschizi email, nu verifici notificari, nu faci altceva pana nu ai completat MIT #1. Numai atunci restul zilei.
+    </div>
+  </div>
+
+  <!-- ZIUA OPTIMA CHART -->
+  <div class="card wide">
+    <h2>📅 Ziua optimă — energia cognitiva si blocurile de focus</h2>
+    <div style="height:200px;position:relative"><canvas id="zilChart"></canvas></div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px;margin-top:10px;font-size:10px">
+      <div style="padding:5px 8px;background:rgba(27,94,32,0.1);border-radius:4px;border-left:3px solid #4CAF50;color:#A5D6A7">08:00 Deep Work #1</div>
+      <div style="padding:5px 8px;background:rgba(27,94,32,0.1);border-radius:4px;border-left:3px solid #66BB6A;color:#A5D6A7">09:50 Deep Work #2</div>
+      <div style="padding:5px 8px;background:rgba(0,105,92,0.1);border-radius:4px;border-left:3px solid var(--tell);color:var(--telll)">14:30 Deep Work #3</div>
+      <div style="padding:5px 8px;background:rgba(245,124,0,0.08);border-radius:4px;border-left:3px solid var(--amber);color:#FFAB40">Shallow / Admin</div>
+      <div style="padding:5px 8px;background:rgba(1,87,155,0.1);border-radius:4px;border-left:3px solid #1565C0;color:#90CAF9">Recuperare activa</div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card wide">
+    <h2>🎯 Quiz — Igiena cognitivă</h2>
+    <div id="quiz-container"></div>
+  </div>
+
+</div>
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Infografic educativ · Nu substituie consultul medical</footer>
+
+<script>
+// SIMULATOR INTRERUPERI
+let intChartInst=null;
+function simInt(n,btn){
+  document.querySelectorAll('.sb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const workHours=8;
+  const refocusMin=23;
+  const lostHours=Math.min(n*refocusMin/60,workHours*0.85);
+  const focusHours=Math.max(workHours-lostHours-n*0.2,0.3);
+  const output=Math.round(focusHours/4*100);
+  const msgs={
+    0:`Nicio intrerupere in blocul de focus. Focus real: ~${workHours}h potential, output cognitiv maxim. Rar de obtinut — dar acesta este tinta.`,
+    3:`3 intreruperi → ${Math.round(lostHours*60)} min pierduti in refocus (23 min × 3). Focus net: ~${focusHours.toFixed(1)}h. Output cognitiv: ~${output}% din potential.`,
+    5:`5 intreruperi → ${Math.round(lostHours*60)} min pierduti. Focus net: ~${focusHours.toFixed(1)}h. Output: ~${output}%. Zi tipica 'ocupata dar neproductiva'.`,
+    10:`10 intreruperi → ${Math.round(lostHours*60)} min pierduti. Focus net: ~${focusHours.toFixed(1)}h. Output: ~${output}%. Asta inseamna ca din 8h la birou, sub 2h sunt de deep work real.`,
+    15:`15 intreruperi → aproape tot timpul in refocus. Focus net: ~${focusHours.toFixed(1)}h. Output: ~${output}%. Aceasta este realitatea multor open offices moderne.`,
+  };
+  document.getElementById('sim-result').innerHTML=msgs[n]||msgs[0];
+  const ctx=document.getElementById('intChart').getContext('2d');
+  if(intChartInst)intChartInst.destroy();
+  const color=output>=80?'rgba(27,94,32,0.7)':output>=50?'rgba(245,124,0,0.6)':'rgba(183,28,28,0.6)';
+  intChartInst=new Chart(ctx,{
+    type:'doughnut',
+    data:{labels:['Focus real','Pierdut in refocus','Superficial'],
+      datasets:[{data:[Math.max(focusHours,0).toFixed(1),lostHours.toFixed(1),Math.max(workHours-focusHours-lostHours,0).toFixed(1)],
+        backgroundColor:[color,'rgba(183,28,28,0.4)','rgba(120,144,156,0.3)'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}}}
+  });
+}
+simInt(0,document.querySelector('.sb'));
+
+// FOCUS METER
+const fmData={
+  tel:{t:'Telefon pe masă — impact invizibil',d:'Stothart 2015: prezenta telefonului pe masa (chiar oprit cu fata in jos) reduce memoria de lucru disponibila cu ~20%. Atentia este partial alocata monitorizarii potentialelor notificari. Solutia: telefon in alta camera fizica, nu pe silentios.'},
+  notif:{t:'Notificari active — fragmentare garantata',d:'Mark 2008: 23 min medie pentru refocus complet dupa o notificare. Setul complet de notificari active (email, Slack, SMS, social) poate produce 8–15 intreruperi/ora. Solutia: DO NOT DISTURB permanent cu 2–3 exceptii alese (urgente reale).'},
+  taburi:{t:'15 tab-uri deschise — RAM cognitiv supraîncarcat',d:'Fiecare tab deschis mentine o mica parte din atentie "alocata" — similar cu attention residue. 15 tab-uri = 15 sarcini potential incomplete vizibile. Solutia: o singura fereastra cu un singur tab activ in blocul de focus.'},
+  email:{t:'Email deschis continuu — task-switching constant',d:'Email-ul deschis si verificat in timp real produce task-switching la fiecare notificare. Mark 2012: batching email de 2–3 ori/zi reduce sarcina cognitiva cu 26% fata de verificare continua. Solutia: email deschis doar in ferestrele alocate.'},
+  colegi:{t:'Conversatii open office — -52 min focus/zi',d:'Cercetare open office: angajatii in open space au in medie 52 min mai putin focus pe zi vs. birou inchis. Zgomot conversational > 70 dB fragmenteaza atentia selectiva. Solutia: casti noise-cancelling, work from home in zilele de deep work, comunicarea blocurilor de focus echipei.'},
+  music:{t:'Muzica cu versuri — interferenta lingvistica',d:'Versurile in limba materna activeaza procesarea lingvistica si concureaza cu sarcinile de scriere sau citire. Muzica instrumentala (lo-fi, classical, ambient) la 60–70 dB poate amplifica concentrarea pe sarcini repetitive sau creative (Mehta 2012). Solutia: playlist instrumental dedicat deep work.'},
+};
+function showFM(key,btn){
+  document.querySelectorAll('.fm-item').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const d=fmData[key];
+  const det=document.getElementById('fm-detail');
+  det.innerHTML=`<strong style="color:var(--telll)">${d.t}</strong><br/><br/>${d.d}`;
+  det.classList.add('show');
+}
+
+// PROTOCOALE CHART
+new Chart(document.getElementById('protChart').getContext('2d'),{
+  type:'radar',
+  data:{
+    labels:['Accesibilitate','Flow profund','Antrenament atentie','Flexibilitate','Output expert','Sustenabilitate'],
+    datasets:[
+      {label:'Pomodoro 25+5',data:[95,30,70,80,45,85],borderColor:'rgba(245,124,0,0.7)',backgroundColor:'rgba(245,124,0,0.07)',pointRadius:3},
+      {label:'Newport 90 min',data:[50,95,85,60,95,80],borderColor:'rgba(0,105,92,0.8)',backgroundColor:'rgba(0,105,92,0.08)',pointRadius:3},
+      {label:'MIT 3 task',data:[90,60,60,90,70,90],borderColor:'rgba(128,203,196,0.7)',backgroundColor:'rgba(128,203,196,0.07)',pointRadius:3},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}}},
+    scales:{r:{ticks:{display:false},grid:{color:'rgba(128,203,196,0.1)'},pointLabels:{color:'#78909C',font:{size:9}},min:0,max:100}}
+  }
+});
+
+// ZIL CHART
+new Chart(document.getElementById('zilChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['06:00','07:30','08:00','09:30','09:50','11:20','13:00','14:00','14:30','16:00','17:30'],
+    datasets:[{
+      label:'Energie cognitiva',
+      data:[60,80,95,80,90,70,60,35,80,55,30],
+      backgroundColor:['rgba(0,105,92,0.5)','rgba(0,105,92,0.6)','rgba(27,94,32,0.8)','rgba(1,87,155,0.5)','rgba(27,94,32,0.75)','rgba(245,124,0,0.4)','rgba(245,124,0,0.3)','rgba(1,87,155,0.4)','rgba(0,105,92,0.7)','rgba(245,124,0,0.3)','rgba(183,28,28,0.4)'],
+      borderRadius:4
+    }]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{x:{ticks:{color:'#78909C',font:{size:8}},grid:{color:'rgba(128,203,196,0.05)'}},
+      y:{min:0,max:105,ticks:{color:'#78909C',font:{size:8}},grid:{color:'rgba(128,203,196,0.05)'},title:{display:true,text:'Energie (%)',color:'#80CBC4',font:{size:8}}}}}
+});
+
+// QUIZ
+const qs=[
+  {q:"Cat timp dureaza in medie refocusarea completa dupa o intrerupere?",opts:["5 minute","10–15 minute","23 minute","45 minute"],ans:2,exp:"Mark 2008, UC Irvine: 23 minute medie pentru refocus complet dupa o intrerupere. 10 intreruperi/zi = maxim 2–3h de focus real dintr-o zi de 8h la birou."},
+  {q:"Ce produce multitasking-ul frecvent conform APA 2006?",opts:["-10% productivitate — impact minor","Imbunatatire eficienta prin parallelism","Crestere oboseala dar nu impact productivitate","-40% productivitate globala"],ans:3,exp:"APA 2006: multitasking-ul reduce productivitatea globala cu 40%. Nu 40% per sarcina — 40% din output total al zilei. Eficienta perceputa este iluzie — creierul comuta rapid cu cost real la fiecare tranzitie."},
+  {q:"Ce este 'attention residue' (Leroy 2009)?",opts:["Oboseala acumulata dupa o zi intensa","Atentia ramasa partial pe sarcina anterioara care degradeaza noua sarcina","Capacitatea de a mentine atentia pe termen lung","Memoria de lucru utilizata de sarcini simultane"],ans:1,exp:"Leroy 2009: cand comuti de la sarcina A la sarcina B, o parte din atentie ramane 'blocata' pe sarcina A — mai ales daca A era incompleta. Aceasta atentie reziduala degradeaza calitatea muncii pe sarcina B. Solutia: inchiderea explicita a sarcinii A inainte de comutare."},
+  {q:"Care este plafonul neurobiologic de deep work pentru un expert antrenat?",opts:["2 ore pe zi","4 ore pe zi","8 ore pe zi","12 ore pe zi"],ans:1,exp:"Newport 2016: experti antrenati produc maxim 4h/zi de deep work autentic — acesta este plafoanele neurobiologic. Incepatorii: 1–2h. Productia peste acest prag este shallow work deghizat. Nu cantitatea de ore la birou, ci numarul de cicluri de focus autentic."},
+  {q:"CO2 > 1000 ppm intr-un spatiu inchis produce ce efect cognitiv?",opts:["Cresterea concentrarii prin hipoxie usoara","Reducere cu -15% a performantei cognitive (Allen 2016)","Nicun efect masurabil — mitul CO2","Somnolenta dar fara impact pe calitate output"],ans:1,exp:"Allen 2016 (Harvard T.H. Chan School): CO2 > 1000 ppm intr-un spatiu inchis reduce performanta cognitiva cu ~15% si viteza de luare a deciziei. Spatiile de birouri tipice ajung frecvent la 1000–2000 ppm fara ventilatie adecvata. Solutia: fereastra intredeschisa sau ventilatie activa in blocurile de focus."},
+];
+let qi=0,score=0;
+function renderQ(){
+  const c=document.getElementById('quiz-container');
+  if(qi>=qs.length){
+    c.innerHTML=`<div style="text-align:center;padding:18px"><div style="font-size:40px;font-weight:700;color:var(--gold)">${score}/${qs.length}</div><div style="font-size:13px;color:var(--telll);margin-top:6px">${score===qs.length?'Excelent! Igiena cognitiva stapanita.':score>=3?'Bine — revizuieste raspunsurile gresite.':'Reia materialul L5.2.'}</div><button class="qz-btn" onclick="qi=0;score=0;renderQ()" style="margin-top:12px">Restart</button></div>`;
+    return;
+  }
+  const q=qs[qi];
+  c.innerHTML=`<div class="qz-q">${qi+1}/${qs.length}. ${q.q}</div><div class="qz-opts">${q.opts.map((o,i)=>`<div class="qz-opt" id="qo-${i}" onclick="ans(${i})"><span>○</span>${o}</div>`).join('')}</div><div class="qz-exp" id="qz-exp">${q.exp}</div><div class="qz-score" id="qz-sc"></div><button class="qz-btn" id="qz-btn" style="display:none" onclick="qi++;renderQ()">Urmatoarea →</button>`;
+}
+function ans(sel){
+  const q=qs[qi];
+  if(document.getElementById('qz-btn').style.display!=='none')return;
+  if(sel===q.ans)score++;
+  q.opts.forEach((_,i)=>{const el=document.getElementById(`qo-${i}`);if(i===q.ans){el.classList.add('ok');el.querySelector('span').textContent='✓';}else if(i===sel&&sel!==q.ans){el.classList.add('ko');el.querySelector('span').textContent='✗';}});
+  document.getElementById('qz-exp').classList.add('show');
+  document.getElementById('qz-sc').textContent=`Scor: ${score}/${qi+1}`;
+  document.getElementById('qz-btn').style.display='inline-block';
+}
+renderQ();
+</script>
+</body>
+</html>

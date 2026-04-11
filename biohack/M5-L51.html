@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>L5.1 — Arhitectura cogniției | BH 3.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --ocn:#01579B;--ocnl:#0277BD;--ocnd:#003770;--ocnll:#81D4FA;
+  --gold:#F9A825;--navy:#050E1E;--navy2:#030B18;
+  --white:#E1F5FE;--gray:#78909C;
+  --grn:#1B5E20;--vio:#4527A0;--teal:#004D40;
+  --red:#B71C1C;--amber:#F57C00;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'Syne',sans-serif;line-height:1.6}
+#pb{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--ocnl),var(--gold));width:0%;z-index:100}
+nav{position:sticky;top:0;background:rgba(5,14,30,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(129,212,250,0.15);z-index:50;padding:0 24px}
+.ni{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold)}
+.nl{display:flex;gap:18px}
+.nl a{font-size:11px;letter-spacing:2px;color:var(--gray);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nl a:hover,.nl a.active{color:var(--ocnll)}
+.hero{background:linear-gradient(135deg,var(--ocnd) 0%,var(--navy2) 60%);padding:70px 24px 50px;text-align:center;border-bottom:1px solid rgba(129,212,250,0.2);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(2,119,189,0.2) 0%,transparent 70%)}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;position:relative}
+.hero h1{font-size:clamp(26px,5vw,46px);font-weight:800;line-height:1.1;margin-bottom:16px;position:relative}
+.hero h1 span{color:var(--ocnll)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gray);font-style:italic;max-width:640px;margin:0 auto 28px;position:relative}
+.chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+.chip{background:rgba(1,87,155,0.22);border:1px solid rgba(129,212,250,0.3);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:var(--ocnll)}
+.main{max-width:1100px;margin:0 auto;padding:40px 24px}
+section{margin-bottom:60px;scroll-margin-top:70px}
+.stag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--ocnll);text-transform:uppercase;margin-bottom:8px}
+h2{font-size:clamp(22px,3vw,30px);font-weight:700;margin-bottom:20px}
+h3{font-size:17px;font-weight:600;color:var(--ocnll);margin:24px 0 10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:48px}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(129,212,250,0.15);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--ocnl)}
+.card.g::before{background:var(--gold)}
+.cv{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;color:var(--gold);line-height:1}
+.cu{font-size:11px;color:var(--gray);letter-spacing:1px;margin:4px 0}
+.cl{font-size:12px;color:var(--white);font-weight:600}
+
+/* Neuroplasticitate visual */
+.np-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.np-card{background:rgba(255,255,255,0.03);border:1px solid rgba(129,212,250,0.15);border-radius:8px;padding:14px;cursor:pointer;transition:all .2s}
+.np-card:hover,.np-card.open{background:rgba(1,87,155,0.1);border-color:rgba(129,212,250,0.3)}
+.np-name{font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px}
+.np-short{font-size:11px;color:var(--ocnll);margin-bottom:4px}
+.np-detail{display:none;font-size:11px;color:rgba(225,245,254,0.75);line-height:1.6;margin-top:8px;padding-top:8px;border-top:1px solid rgba(129,212,250,0.15)}
+.np-detail.show{display:block}
+
+/* Neurotransmitatori */
+.nt-rows{display:flex;flex-direction:column;gap:8px}
+.nt-item{display:flex;gap:10px;padding:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(129,212,250,0.12);border-radius:8px;align-items:flex-start;cursor:pointer;transition:all .2s}
+.nt-item:hover{background:rgba(1,87,155,0.08)}
+.nt-bullet{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.nt-body{flex:1}
+.nt-name{font-size:13px;font-weight:700;margin-bottom:2px}
+.nt-rol{font-size:11px;color:var(--gray);margin-bottom:4px}
+.nt-expand{display:none;margin-top:6px;font-size:11px;line-height:1.6}
+.nt-expand.show{display:block}
+
+/* BDNF meter */
+.bdnf-meter{display:flex;flex-direction:column;gap:8px}
+.bm-row{display:flex;align-items:center;gap:12px}
+.bm-label{width:160px;font-size:11px;color:var(--gray);flex-shrink:0}
+.bm-bar{flex:1;height:20px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden}
+.bm-fill{height:100%;border-radius:4px;transition:width 1.4s;display:flex;align-items:center;padding-left:8px;font-size:9px;font-weight:700;color:var(--navy)}
+.bm-val{width:50px;font-family:'JetBrains Mono',monospace;font-size:10px;text-align:right;color:var(--gold)}
+
+/* Ciclul ultradian */
+.ultradian{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.ud-block{border-radius:8px;padding:12px;text-align:center;flex:1;min-width:120px;max-width:160px;border:1px solid}
+.ud-dur{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--gold)}
+.ud-label{font-size:11px;font-weight:700;margin:4px 0}
+.ud-why{font-size:10px;line-height:1.4}
+
+/* Biomarkeri */
+.tw{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--ocnd);color:var(--gold);padding:10px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+td{padding:9px 12px;border-bottom:1px solid rgba(129,212,250,0.1);color:var(--white);vertical-align:top;line-height:1.5}
+tr:nth-child(even) td{background:rgba(1,87,155,0.04)}
+tr:hover td{background:rgba(1,87,155,0.08)}
+
+.info-box{background:rgba(1,87,155,0.08);border:1px solid rgba(129,212,250,0.2);border-left:4px solid var(--ocnl);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.warn-box{background:rgba(249,168,37,0.07);border:1px solid rgba(249,168,37,0.25);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.cw{height:220px;position:relative;margin:16px 0}
+
+footer{text-align:center;padding:32px 24px;border-top:1px solid rgba(129,212,250,0.1);font-size:11px;color:var(--gray)}
+</style>
+</head>
+<body>
+<div id="pb"></div>
+<nav>
+  <div class="ni">
+    <div class="nb">// BH 3.0 · M5 · L5.1</div>
+    <div class="nl">
+      <a href="#neuroplasticitate">Neuroplasticitate</a>
+      <a href="#bdnf">BDNF</a>
+      <a href="#nt">Neurotransmitatori</a>
+      <a href="#intestin">Intestin-Creier</a>
+      <a href="#ultradian">Ultradian</a>
+      <a href="#biomarkeri">Biomarkeri</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// Modul 5 · Lecția 5.1</div>
+  <h1>Arhitectura <span>cogniției</span></h1>
+  <p class="hero-sub">Neuroplasticitate · BDNF · Sisteme neurotransmitatori · Axa intestin-creier · Ciclul ultradian cognitiv · Biomarkeri</p>
+  <div class="chips">
+    <div class="chip">BDNF seric</div>
+    <div class="chip">LTP/LTD</div>
+    <div class="chip">Neurogeneza adulta</div>
+    <div class="chip">Ciclu 90 min</div>
+    <div class="chip">Homocisteina</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="cards">
+    <div class="card g"><div class="cv">86 mld</div><div class="cu">neuroni în creier</div><div class="cl">Fiecare conectat la ~7000 alte sinapse</div></div>
+    <div class="card"><div class="cv">BDNF</div><div class="cu">fertilizatorul neuronal</div><div class="cl">Exercitiu aerob → +200–300% acut (Cotman 2002)</div></div>
+    <div class="card"><div class="cv">20%</div><div class="cu">energia corpului</div><div class="cl">Consumata de creier — deși e 2% din masa corporala</div></div>
+    <div class="card"><div class="cv">90 min</div><div class="cu">ciclu ultradian cognitiv</div><div class="cl">BRAC — Basic Rest-Activity Cycle (Kleitman 1982)</div></div>
+    <div class="card g"><div class="cv">< 7</div><div class="cu">homocisteina µmol/L</div><div class="cl">Biomarker neurotoxicitate — urgent dacă > 10</div></div>
+  </div>
+
+  <!-- NEUROPLASTICITATE -->
+  <section id="neuroplasticitate">
+    <div class="stag">// 01</div>
+    <h2>Neuroplasticitatea — creierul care se rescrie</h2>
+    <div class="info-box"><strong style="color:var(--ocnll)">Definiție mecanistică:</strong> Neuroplasticitatea este capacitatea creierului de a-și modifica structura și funcția în răspuns la experiență. Nu metaforă — biologie moleculară măsurabilă: densitate sinaptică, mielinizare, expresie genică, volum regional (RMN).</div>
+    <div class="np-grid">
+      <div class="np-card" onclick="toggleNP(this)"><div class="np-name">LTP — Long-Term Potentiation</div><div class="np-short">Baza fizică a memoriei și învățarii</div><div class="np-detail">Întărirea sinaptică prin stimulare repetată. Regula Hebb (1949): "neurons that fire together, wire together." Implicație: repetitia spatiata > cramming — exploatezi curba uitarii pentru consolidare maximă.</div></div>
+      <div class="np-card" onclick="toggleNP(this)"><div class="np-name">LTD — Long-Term Depression</div><div class="np-short">Pruning selectiv — elimini ce nu folosești</div><div class="np-detail">Slăbirea conexiunilor inactive. Somnul N3 execută pruning-ul selectiv al conexiunilor — păstrează utile, elimină redundante. Motivul pentru care "a dormi pe o problemă" funcționează biologic.</div></div>
+      <div class="np-card" onclick="toggleNP(this)"><div class="np-name">Neurogeneza adulta</div><div class="np-short">Hipocampus formează neuroni noi</div><div class="np-detail">Erickson 2011 (PNAS): exercitiu aerob 1 an → hipocamp creste cu 2%. Sedentarism dupa 55 ani → scadere 1.4%/an. BDNF este mediatorul critic. Condiție: somn N3, exercitiu, BDNF.</div></div>
+      <div class="np-card" onclick="toggleNP(this)"><div class="np-name">Sinaptogeneza</div><div class="np-short">Noi conexiuni sinaptice prin invatare</div><div class="np-detail">Formarea de noi sinapse prin invatare activa, noutate, stare de flow. Mielinizarea axonala (Omega-3 DHA + B12) creste viteza de conductie nervoasa.</div></div>
+      <div class="np-card" onclick="toggleNP(this)"><div class="np-name">Repetitia spatiata</div><div class="np-short">Algoritmul optim de consolidare LTP</div><div class="np-detail">Ebbinghaus 1885, Cepeda 2006: repetitia spatiata cu intervale crescatoare consolideaza LTP maxim cu efort minim. Sisteme: Anki, SuperMemo. Opusul cramming-ului — care esueaza la retrieval pe termen lung.</div></div>
+    </div>
+  </section>
+
+  <!-- BDNF -->
+  <section id="bdnf">
+    <div class="stag">// 02</div>
+    <h2>BDNF — factorul neurotrofic derivat din creier</h2>
+    <div class="info-box"><strong style="color:var(--ocnll)">De ce contează:</strong> BDNF reglează supraviețuirea neuronală, sinaptogeneza și neurogeneza. Valorile scăzute corelează cu depresie, declin cognitiv și risc Alzheimer. Biomarker clinic relevant — nu academic.</div>
+    <h3>Ce modulează BDNF — impact relativ</h3>
+    <div class="bdnf-meter" id="bdnf-meter">
+      <div class="bm-row"><div class="bm-label">Exercitiu aerob 30–45 min</div><div class="bm-bar"><div class="bm-fill" style="background:rgba(27,94,32,0.8);width:0" data-w="95%">Cotman 2002</div></div><div class="bm-val">+200–300%</div></div>
+      <div class="bm-row"><div class="bm-label">IF 16:8 (restrictie calorica)</div><div class="bm-bar"><div class="bm-fill" style="background:rgba(1,87,155,0.8);width:0" data-w="65%">+BDNF</div></div><div class="bm-val">+40–80%</div></div>
+      <div class="bm-row"><div class="bm-label">Omega-3 DHA (≥2g/zi)</div><div class="bm-bar"><div class="bm-fill" style="background:rgba(1,87,155,0.7);width:0" data-w="50%">+BDNF</div></div><div class="bm-val">+30–50%</div></div>
+      <div class="bm-row"><div class="bm-label">Lion's Mane (Hericium)</div><div class="bm-bar"><div class="bm-fill" style="background:rgba(1,87,155,0.6);width:0" data-w="40%">NGF+BDNF</div></div><div class="bm-val">+20–40%</div></div>
+      <div class="bm-row"><div class="bm-label">Curcumina fitosomala</div><div class="bm-bar"><div class="bm-fill" style="background:rgba(1,87,155,0.5);width:0" data-w="30%">anti-inflamator</div></div><div class="bm-val">+15–30%</div></div>
+      <div class="bm-row"><div class="bm-label">Sedentarism cronic</div><div class="bm-bar"><div class="bm-fill" style="background:rgba(183,28,28,0.7);width:0" data-w="55%">-BDNF cronic</div></div><div class="bm-val">-30–50%</div></div>
+      <div class="bm-row"><div class="bm-label">Stres cronic (cortizol)</div><div class="bm-bar"><div class="bm-fill" style="background:rgba(183,28,28,0.65);width:0" data-w="45%">suprima BDNF</div></div><div class="bm-val">-20–40%</div></div>
+      <div class="bm-row"><div class="bm-label">Privare somn (< 6h cronic)</div><div class="bm-bar"><div class="bm-fill" style="background:rgba(183,28,28,0.6);width:0" data-w="35%">-BDNF hipocampal</div></div><div class="bm-val">-15–25%</div></div>
+    </div>
+    <div class="cw" style="margin-top:20px"><canvas id="bdnfChart"></canvas></div>
+  </section>
+
+  <!-- NEUROTRANSMITATORI -->
+  <section id="nt">
+    <div class="stag">// 03</div>
+    <h2>Sisteme neurotransmitatori — arhitectura chimică</h2>
+    <div class="warn-box"><strong style="color:var(--gold)">Principiu critic:</strong> Niciun neurotransmițator nu funcționează izolat. Optimizarea unuia fără context poate dezechilibra altul. 5-HTP (serotonina) contraindicat cu SSRI/IMAO — absolut non-negociabil.</div>
+    <div class="nt-rows">
+      <div class="nt-item" onclick="toggleNT(this)">
+        <div class="nt-bullet" style="background:#E91E63;margin-top:4px"></div>
+        <div class="nt-body">
+          <div class="nt-name" style="color:#F48FB1">Dopamina</div>
+          <div class="nt-rol">Motivație · Recompensă · Focus · Planificare prefrontală</div>
+          <div class="nt-expand"><strong>Deficit:</strong> Procrastinare, anhedonie, lipsă inițiativă, ADD.<br/><strong>Modulatori:</strong> Tirozina (precursor), Mucuna pruriens, exercițiu fizic, noutate, realizări micro, muzică preferată, cafea (blocheaza adenozina → DA ↑).<br/><strong>KPI:</strong> Motivație matinală, capacitate de inițiere a sarcinilor.</div>
+        </div>
+      </div>
+      <div class="nt-item" onclick="toggleNT(this)">
+        <div class="nt-bullet" style="background:#FF9800;margin-top:4px"></div>
+        <div class="nt-body">
+          <div class="nt-name" style="color:#FFB74D">Acetilcolina</div>
+          <div class="nt-rol">Memorie · Atenție · Învățare · Plasticitate sinaptică</div>
+          <div class="nt-expand"><strong>Deficit:</strong> Ceată cognitivă, memorie slabă, atenție difuză, "brain fog".<br/><strong>Modulatori:</strong> Alpha-GPC 300–600 mg, Citicoline 250–500 mg, oua (sursă colina), Huperzine A (inhibitor colinesteraza — ciclare necesara).<br/><strong>KPI:</strong> Memorie declarativă de lucru, viteza de encoding.</div>
+        </div>
+      </div>
+      <div class="nt-item" onclick="toggleNT(this)">
+        <div class="nt-bullet" style="background:#4CAF50;margin-top:4px"></div>
+        <div class="nt-body">
+          <div class="nt-name" style="color:#81C784">Serotonina</div>
+          <div class="nt-rol">Dispoziție · Control impuls · Procesare socială · Saturație</div>
+          <div class="nt-expand"><strong>Deficit:</strong> Depresie, anxietate, irascibilitate, compulsivitate, somn perturbat.<br/><strong>Modulatori:</strong> Lumina solară, exercițiu aerob, triptofan (precursor), 5-HTP ⚠️ CONTRAINDICAT cu SSRI/IMAO.<br/><strong>Important:</strong> 90–95% produsă în intestin — axa intestin-creier este critică.</div>
+        </div>
+      </div>
+      <div class="nt-item" onclick="toggleNT(this)">
+        <div class="nt-bullet" style="background:#2196F3;margin-top:4px"></div>
+        <div class="nt-body">
+          <div class="nt-name" style="color:#90CAF9">Norepinefrină</div>
+          <div class="nt-rol">Vigilență · Alertness · Atenție selectivă · Răspuns la stres</div>
+          <div class="nt-expand"><strong>Deficit:</strong> Ceată cognitivă matinală, fatiga, concentrație scăzută, depresie atipică.<br/><strong>Modulatori:</strong> Tirozina (precursor direct), cafeina (creste NE), exercitiu fizic intens, frig (cold exposure matinal).<br/><strong>L-Teanina modulează excesul NE-indus de cafeina — combinatia ideala cognitiv.</strong></div>
+        </div>
+      </div>
+      <div class="nt-item" onclick="toggleNT(this)">
+        <div class="nt-bullet" style="background:#9C27B0;margin-top:4px"></div>
+        <div class="nt-body">
+          <div class="nt-name" style="color:#CE93D8">GABA</div>
+          <div class="nt-rol">Inhibiție · Calm · Sleep onset · Reducere anxietate</div>
+          <div class="nt-expand"><strong>Deficit:</strong> Anxietate, insomnie, hiperstimulare cognitivă, dificultate de oprire a gândirii.<br/><strong>Modulatori:</strong> Mg L-Treonat (L4.3), L-Teanina (GABA ↑ + unde alfa), Apigenina (GABA-A agonist), Valerian (GABA-T inhibitor).<br/><strong>Benzodiazepinele suprimă GABA natural — dependență rapidă.</strong></div>
+        </div>
+      </div>
+      <div class="nt-item" onclick="toggleNT(this)">
+        <div class="nt-bullet" style="background:#FF5722;margin-top:4px"></div>
+        <div class="nt-body">
+          <div class="nt-name" style="color:#FFAB91">Glutamat</div>
+          <div class="nt-rol">Excitație · LTP · Învațare · Memorie de lucru</div>
+          <div class="nt-expand"><strong>Excitotoxicitate:</strong> Excesul de glutamat (stres, inflamație, excitotoxine alimentare) distruge neuronii.<br/><strong>Magneziu blochează canalele NMDA la exces</strong> — mecanismul protectiv. Echilibrul GABA/Glutamat este fundamental pentru cognitie sanatoasa și somn.<br/><strong>MSG (glutamat monosodic) în exces</strong> — controversat, prudenta justificata.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTESTIN-CREIER -->
+  <section id="intestin">
+    <div class="stag">// 04</div>
+    <h2>Axa intestin-creier — al doilea creier</h2>
+    <div class="info-box"><strong style="color:var(--ocnll)">Date concrete:</strong> 500 milioane neuroni în intestin · 90–95% din serotonina corpului produsă intestinal · 80% din fibrele vagale sunt ascendente (intestin → creier).</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Mecanism</th><th>Cum funcționează</th><th>Impactul cognitiv</th><th>Intervenție practică</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Nervul vag</strong></td><td>Autostrada bidirectionala — 80% fibre aferente. Microbiomul semnalizează direct spre creier.</td><td>Disbioza → semnal negativ → anxietate, ceată cognitivă, dispoziție scăzută</td><td>Stimulare vagala: respiratie diafragmatica, cold exposure, gargarizare, cantare</td></tr>
+          <tr><td><strong>Disbioza → Neuroinflamatie</strong></td><td>Microbiom disfunctional → LPS → bariera intestinala permeabila → inflamatie sistemica → neuroinflamatie</td><td>CRP crescut = marker indirect al neuroinflamatiei. Cognitie degradata.</td><td>Diversitate dietetica > 30 plante/sapt · Fermentate · Reducere zaharuri</td></tr>
+          <tr><td><strong>Microbiom + Serotonina</strong></td><td>Enterocromafin celulele produc 5-HT intestinal. Lacto/Bifido specii sintetizeaza precursori.</td><td>Disbioza = deficit serotoninergic intestinal → dispozitie, control impuls, somn</td><td>Probiotice: L. rhamnosus, B. longum · Prebiotice: inulina, FOS</td></tr>
+          <tr><td><strong>Microbiom + BDNF</strong></td><td>Bravo 2011 (PNAS): L. rhamnosus creste BDNF hipocampal la animale. Mecanism uman: in investigatie.</td><td>Microbiom sanatos → BDNF crescut → neuroplasticitate amplificata</td><td>Kefir, kimchi, sauerkraut, kombucha · Diversitate dietetica · Omega-3</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ULTRADIAN -->
+  <section id="ultradian">
+    <div class="stag">// 05</div>
+    <h2>Ciclul cognitiv ultradian — 90 de minute</h2>
+    <div class="info-box"><strong style="color:var(--ocnll)">BRAC — Basic Rest-Activity Cycle (Kleitman 1982):</strong> La fel ca somnul are cicluri de 90 min, starea de veghe are cicluri ultradiene de performanță cognitivă optimă urmate de recuperare necesară.</div>
+    <div class="ultradian">
+      <div class="ud-block" style="background:rgba(27,94,32,0.1);border-color:rgba(27,94,32,0.4)">
+        <div class="ud-dur">90 min</div>
+        <div class="ud-label" style="color:#81C784">Deep Work</div>
+        <div class="ud-why" style="color:var(--gray)">Focus maxim, producție cognitivă, stare de flow. Fără întreruperi, fără multitasking.</div>
+      </div>
+      <div class="ud-block" style="background:rgba(249,168,37,0.08);border-color:rgba(249,168,37,0.3)">
+        <div class="ud-dur">15–20 min</div>
+        <div class="ud-label" style="color:var(--gold)">Recuperare</div>
+        <div class="ud-why" style="color:var(--gray)">NSDR scurt, plimbare, respirație, mișcare ușoară. Nu: scroll, email, știri.</div>
+      </div>
+      <div class="ud-block" style="background:rgba(1,87,155,0.1);border-color:rgba(129,212,250,0.3)">
+        <div class="ud-dur">4–5×</div>
+        <div class="ud-label" style="color:var(--ocnll)">Cicluri/zi max</div>
+        <div class="ud-why" style="color:var(--gray)">Nu mai mult. Productia neta > fortat continuu. Respectă limita biologică.</div>
+      </div>
+    </div>
+    <div class="cw" style="margin-top:16px"><canvas id="ultradianChart"></canvas></div>
+    <div class="warn-box" style="margin-top:12px"><strong style="color:var(--gold)">Semnalele de sfârșit de ciclu</strong> — dificultate de focus, nevoia de distragere, oboseala ochi, boscorodire internă — nu sunt slăbiciune. Sunt semnale biologice reale. Ignorarea lor reduce productia neta în ciclul urmator.</div>
+  </section>
+
+  <!-- BIOMARKERI -->
+  <section id="biomarkeri">
+    <div class="stag">// 06</div>
+    <h2>Biomarkeri cognitivi — panelul complet</h2>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Biomarker</th><th>Valoare optima</th><th>Relevanta cognitiva</th><th>Frecventa evaluare</th></tr></thead>
+        <tbody>
+          <tr><td><strong>BDNF seric</strong></td><td>15–30 ng/mL</td><td>Neurogeneza, sinaptogeneza, neuroplasticitate directa</td><td>La 6 luni (ELISA specializat)</td></tr>
+          <tr><td><strong>Homocisteina</strong></td><td>< 7 µmol/L (urgent > 10)</td><td>Neurotoxic la > 10; distruge mielina; atrofie hipocampala</td><td>Anual in profil cardiovascular</td></tr>
+          <tr><td><strong>B12 activa (HoloTC)</strong></td><td>≥ 70 pmol/L</td><td>Sinteza mielina, metabolism Hcy, functie neurologica</td><td>Anual sau la simptome</td></tr>
+          <tr><td><strong>Omega-3 Index</strong></td><td>≥ 8% (DHA+EPA eritrocitar)</td><td>DHA structural in membrane neuronale; anti-inflamator cerebral</td><td>La 3–6 luni cu suplimentare</td></tr>
+          <tr><td><strong>Glicemie jeun + HbA1c</strong></td><td>70–90 mg/dL; HbA1c < 5.5%</td><td>Glucoza = combustibil neuronal; hiperinsulinism = neuroinflamatie</td><td>Trimestrial</td></tr>
+          <tr><td><strong>Cortizol matinal (08:00)</strong></td><td>15–25 µg/dL</td><td>Cortizol cronic crescut inhiba cognitia si suprima BDNF</td><td>Semestrial sau la burnout</td></tr>
+          <tr><td><strong>Feritin + Fe seric</strong></td><td>Feritin 50–150 ng/mL</td><td>Cofactor sinteza dopamina si mielinizare; deficit = ceata cognitiva</td><td>Anual (hemograma + feritin)</td></tr>
+          <tr><td><strong>TSH + FT3</strong></td><td>TSH 0.5–2.0 µUI/mL</td><td>Hipotiroidism subclinic = ceata cognitiva, fatiga, depresie</td><td>Anual in profil hormonal</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Biohacking 3.0 — Lecția 5.1 · Conținut educativ exclusiv</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('pb').style.width=Math.min((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100,100)+'%';
+});
+const secs=document.querySelectorAll('section[id]');
+const nls=document.querySelectorAll('.nl a');
+window.addEventListener('scroll',()=>{
+  let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-80)c=s.id;});
+  nls.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+c));
+});
+
+function toggleNP(el){el.classList.toggle('open');el.querySelector('.np-detail').classList.toggle('show');}
+function toggleNT(el){
+  const exp=el.querySelector('.nt-expand');
+  document.querySelectorAll('.nt-expand.show').forEach(e=>{if(e!==exp){e.classList.remove('show');}});
+  exp.classList.toggle('show');
+}
+
+// BDNF Bars animation
+const obs=new IntersectionObserver(e=>{
+  e.forEach(x=>{if(x.isIntersecting){
+    document.querySelectorAll('#bdnf-meter .bm-fill').forEach((b,i)=>{
+      setTimeout(()=>{b.style.width=b.dataset.w;},i*120+100);
+    });obs.disconnect();
+  }});
+},{threshold:0.2});
+const bm=document.getElementById('bdnf-meter');if(bm)obs.observe(bm);
+
+// BDNF Chart — exercitiu vs. sedentarism pe 12 luni
+new Chart(document.getElementById('bdnfChart').getContext('2d'),{
+  type:'line',
+  data:{
+    labels:['L1','L2','L3','L4','L5','L6','L7','L8','L9','L10','L11','L12'],
+    datasets:[
+      {label:'Exercitiu aerob 4x/sapt — BDNF relativ (%)',data:[100,108,118,130,142,155,162,170,175,180,183,185],borderColor:'rgba(27,94,32,0.8)',backgroundColor:'rgba(27,94,32,0.1)',fill:true,pointRadius:3,borderWidth:2,tension:0.4},
+      {label:'Sedentarism — BDNF relativ (%)',data:[100,99,97,95,93,90,88,86,84,82,80,78],borderColor:'rgba(183,28,28,0.7)',backgroundColor:'rgba(183,28,28,0.07)',fill:true,pointRadius:3,borderWidth:2,tension:0.4,borderDash:[4,4]},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:10},boxWidth:8}},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{
+      x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(129,212,250,0.05)'},title:{display:true,text:'Luna',color:'#81D4FA',font:{size:9}}},
+      y:{min:60,max:200,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(129,212,250,0.06)'},title:{display:true,text:'BDNF relativ (%)',color:'#81D4FA',font:{size:9}}}
+    }
+  }
+});
+
+// ULTRADIAN Chart — productivitate cu vs. fara pauze
+new Chart(document.getElementById('ultradianChart').getContext('2d'),{
+  type:'line',
+  data:{
+    labels:Array.from({length:10},(_,i)=>`${i+1}h`),
+    datasets:[
+      {label:'Cu cicluri 90+20 min',data:[90,88,92,95,88,90,93,91,89,86],borderColor:'rgba(27,94,32,0.8)',backgroundColor:'rgba(27,94,32,0.1)',fill:true,pointRadius:3,borderWidth:2,tension:0.3},
+      {label:'Fara pauze (fortat continuu)',data:[90,82,72,60,50,40,32,25,20,18],borderColor:'rgba(183,28,28,0.7)',backgroundColor:'rgba(183,28,28,0.07)',fill:true,pointRadius:3,borderWidth:2,tension:0.4,borderDash:[4,4]},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:10},boxWidth:8}},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{
+      x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(129,212,250,0.05)'}},
+      y:{min:0,max:105,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(129,212,250,0.06)'},title:{display:true,text:'Calitate output cognitiv (%)',color:'#81D4FA',font:{size:9}}}
+    }
+  }
+});
+</script>
+</body>
+</html>

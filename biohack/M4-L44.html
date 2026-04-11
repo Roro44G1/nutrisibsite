@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>L4.4 — Biohacking-ul somnului | BH 3.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --ind:#1A237E;--indl:#3949AB;--indd:#0D1657;--indll:#9FA8DA;
+  --gold:#F9A825;--navy:#050E1E;--navy2:#080F24;
+  --white:#E8EAF6;--gray:#78909C;--bg:#E8EAF6;
+  --green:#2E7D32;--red:#B71C1C;--amber:#F57C00;--cyan:#00838F;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'Syne',sans-serif;line-height:1.6}
+#pb{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--indl),var(--gold));width:0%;z-index:100}
+
+nav{position:sticky;top:0;background:rgba(5,14,30,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(159,168,218,0.15);z-index:50;padding:0 24px}
+.ni{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold)}
+.nl{display:flex;gap:20px}
+.nl a{font-size:11px;letter-spacing:2px;color:var(--gray);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nl a:hover,.nl a.active{color:var(--indll)}
+
+.hero{background:linear-gradient(135deg,var(--indd) 0%,var(--navy2) 60%);padding:70px 24px 50px;text-align:center;border-bottom:1px solid rgba(159,168,218,0.2);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(57,73,171,0.22) 0%,transparent 70%)}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;position:relative}
+.hero h1{font-size:clamp(26px,5vw,46px);font-weight:800;line-height:1.1;margin-bottom:16px;position:relative}
+.hero h1 span{color:var(--indll)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gray);font-style:italic;max-width:640px;margin:0 auto 28px;position:relative}
+.chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+.chip{background:rgba(26,35,126,0.25);border:1px solid rgba(159,168,218,0.3);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:var(--indll)}
+
+.main{max-width:1100px;margin:0 auto;padding:40px 24px}
+section{margin-bottom:60px;scroll-margin-top:70px}
+.stag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--indll);text-transform:uppercase;margin-bottom:8px}
+h2{font-size:clamp(22px,3vw,30px);font-weight:700;margin-bottom:20px}
+h3{font-size:17px;font-weight:600;color:var(--indll);margin:24px 0 10px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:48px}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(159,168,218,0.15);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--indl)}
+.card.g::before{background:var(--gold)}
+.cv{font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;color:var(--gold);line-height:1}
+.cu{font-size:11px;color:var(--gray);letter-spacing:1px;margin:4px 0}
+.cl{font-size:12px;color:var(--white);font-weight:600}
+
+/* HRV Live sim */
+.hrv-sim{background:rgba(255,255,255,0.03);border:1px solid rgba(159,168,218,0.18);border-radius:10px;padding:20px}
+.hrv-controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.hb{padding:7px 16px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid rgba(159,168,218,0.3);background:rgba(26,35,126,0.15);color:var(--white);transition:all .2s;font-family:'Syne',sans-serif}
+.hb:hover{background:var(--ind)}
+.hb.active{background:var(--ind);border-color:var(--gold);color:var(--gold)}
+.hrv-chart{height:200px;position:relative}
+.hrv-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:14px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700}
+
+/* Trackere */
+.tracker-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.tk-card{background:rgba(255,255,255,0.03);border:1px solid rgba(159,168,218,0.15);border-radius:10px;padding:14px}
+.tk-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.tk-badge{padding:2px 8px;border-radius:8px;font-size:9px;font-weight:700;letter-spacing:1px}
+.tk-ok{background:rgba(46,125,50,0.2);color:#81C784;border:1px solid rgba(46,125,50,0.3)}
+.tk-mid{background:rgba(249,168,37,0.12);color:#FFD54F;border:1px solid rgba(249,168,37,0.3)}
+.tk-rows{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.tk-row{display:flex;justify-content:space-between;font-size:10px;padding:3px 0;border-bottom:1px solid rgba(159,168,218,0.08)}
+.tk-key{color:var(--gray)}
+.tk-val{color:var(--white);font-weight:600}
+
+/* Readiness */
+.readiness-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.rd-card{border-radius:10px;padding:16px;border:1px solid}
+.rd-score{font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:700;line-height:1;margin-bottom:6px}
+.rd-label{font-size:13px;font-weight:700;margin-bottom:8px}
+.rd-action{font-size:11px;line-height:1.6}
+
+/* Table */
+.tw{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--indd);color:var(--gold);padding:10px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+td{padding:9px 12px;border-bottom:1px solid rgba(159,168,218,0.1);color:var(--white);vertical-align:top;line-height:1.5}
+tr:nth-child(even) td{background:rgba(26,35,126,0.05)}
+tr:hover td{background:rgba(26,35,126,0.1)}
+
+.info-box{background:rgba(26,35,126,0.08);border:1px solid rgba(159,168,218,0.2);border-left:4px solid var(--indl);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.warn-box{background:rgba(249,168,37,0.07);border:1px solid rgba(249,168,37,0.25);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.danger-box{background:rgba(183,28,28,0.1);border:1px solid rgba(183,28,28,0.35);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+
+/* NAP */
+.nap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.nap-card{background:rgba(255,255,255,0.03);border:1px solid rgba(159,168,218,0.15);border-radius:10px;padding:14px}
+.nap-dur{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:4px}
+.nap-name{font-size:13px;font-weight:700;color:var(--white);margin-bottom:8px}
+.nap-note{font-size:11px;color:var(--gray);line-height:1.5}
+
+/* Chart wrap */
+.cw-h{height:220px;position:relative;margin:16px 0}
+
+/* OSA */
+.osa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.osa-card{background:rgba(255,255,255,0.03);border:1px solid;border-radius:8px;padding:12px}
+.osa-sev{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.osa-ahi{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--gold)}
+.osa-note{font-size:10px;color:var(--gray);margin-top:6px;line-height:1.4}
+
+footer{text-align:center;padding:32px 24px;border-top:1px solid rgba(159,168,218,0.1);font-size:11px;color:var(--gray)}
+</style>
+</head>
+<body>
+<div id="pb"></div>
+<nav>
+  <div class="ni">
+    <div class="nb">// BH 3.0 · L4.4</div>
+    <div class="nl">
+      <a href="#hrv">HRV</a>
+      <a href="#trackere">Trackere</a>
+      <a href="#readiness">Readiness</a>
+      <a href="#mediu">Mediu</a>
+      <a href="#osa">Apnee</a>
+      <a href="#nap">Nap</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// Modul 4 · Lecția 4.4</div>
+  <h1>Biohacking-ul <span>somnului</span></h1>
+  <p class="hero-sub">HRV · Trackere · Readiness · Temperatura & lumina · Apnee · Nap strategic · Recuperare bazata pe date</p>
+  <div class="chips">
+    <div class="chip">HRV nocturn</div>
+    <div class="chip">Readiness Score</div>
+    <div class="chip">NSDR protocol</div>
+    <div class="chip">17–19°C</div>
+    <div class="chip">NASA nap 26 min</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="cards">
+    <div class="card g"><div class="cv">HRV</div><div class="cu">biomarker #1 recuperare</div><div class="cl">RMSSD nocturn — cel mai predictiv pentru calitatea N3</div></div>
+    <div class="card"><div class="cv">17–19°C</div><div class="cu">temperatura camera</div><div class="cl">Core body cooling → condiție pentru N3 profund</div></div>
+    <div class="card"><div class="cv">20 min</div><div class="cu">nap optim</div><div class="cl">N1–N2, alertness +54%, fara sleep inertia (NASA 1995)</div></div>
+    <div class="card"><div class="cv">10–15 min</div><div class="cu">lumina matinala</div><div class="cl">Reset SCN, cortizol CAR, melatonina seara normala</div></div>
+    <div class="card g"><div class="cv">-10%</div><div class="cu">HRV vs. baseline 7 zile</div><div class="cl">Pragul de alarmă — nu valoarea absoluta, trendul</div></div>
+  </div>
+
+  <!-- HRV -->
+  <section id="hrv">
+    <div class="stag">// 01</div>
+    <h2>HRV — variabilitatea ritmului cardiac</h2>
+    <div class="info-box"><strong style="color:var(--indll)">Definitie mecanistica:</strong> HRV masoara variatia intervalelor R-R intre batai cardiace consecutive. Nu este frecventa cardiaca — este capacitatea SNA de a se adapta dinamic. HRV nocturn ridicat = parasimpatic dominant = recuperare de calitate, N3 complet.</div>
+
+    <div class="hrv-sim">
+      <p style="font-size:13px;color:var(--gray);margin-bottom:12px">Simulare HRV nocturn — selecteaza scenariul:</p>
+      <div class="hrv-controls">
+        <button class="hb active" onclick="setHrv('optim',this)">Somn optim</button>
+        <button class="hb" onclick="setHrv('alcool',this)">Alcool seara</button>
+        <button class="hb" onclick="setHrv('stres',this)">Stres acut</button>
+        <button class="hb" onclick="setHrv('supraantr',this)">Supraantrenament</button>
+        <button class="hb" onclick="setHrv('infectie',this)">Infectie subclinică</button>
+      </div>
+      <div class="hrv-chart"><canvas id="hrvChart"></canvas></div>
+      <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap" id="hrv-badges"></div>
+      <p style="font-size:10px;color:var(--gray);margin-top:8px;font-style:italic" id="hrv-note"></p>
+    </div>
+
+    <h3>Indicatori HRV — interpretare</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Indicator</th><th>Definitie</th><th>Valoare optima</th><th>Semnal de alarmă</th></tr></thead>
+        <tbody>
+          <tr><td><strong>RMSSD</strong></td><td>Radacina medie patratica a diferentelor R-R consecutive — cel mai folosit nocturn</td><td>&gt; 50 ms sau &gt; baseline personal</td><td>&lt; -10% fata de media 7 zile</td></tr>
+          <tr><td><strong>SDNN (24h)</strong></td><td>Deviatie standard toate intervalele N-N — variabilitate globala</td><td>&gt; 100 ms optim</td><td>&lt; 50 ms = risc cardiovascular</td></tr>
+          <tr><td><strong>Readiness Score</strong></td><td>Compozit algoritmic (Oura/Whoop/Garmin) — include HRV, temp, SpO2</td><td>≥ 85 / 100</td><td>&lt; 70 = recuperare activa necesara</td></tr>
+          <tr><td><strong>HRV Trend 7 zile</strong></td><td>Media rulanta a 7 nopti consecutive</td><td>Stabil sau crescator</td><td>Scadere > 10% pe 7 zile consecutive</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn-box"><strong style="color:var(--gold)">Regula fundamentala:</strong> Nu te compara cu media populatiei. Construieste baseline-ul personal in 14–28 zile de masurare consistenta. O scadere de 10% fata de propria ta medie pe 7 zile este semnalul operational — independent de valoarea absoluta.</div>
+  </section>
+
+  <!-- TRACKERE -->
+  <section id="trackere">
+    <div class="stag">// 02</div>
+    <h2>Trackere de somn — ce merita si ce nu</h2>
+    <div class="info-box">Niciun tracker consumer nu egaleaza PSG clinica. Utilitatea lor este in monitorizarea trendului personal — nu diagnosticul stadiilor. Un N3 de 45% raportat de Oura poate fi 25% real — dar trendul este consistent si operationally util.</div>
+    <div class="tracker-grid">
+      <div class="tk-card">
+        <div class="tk-name">💍 Oura Ring Gen3 <span class="tk-badge tk-ok">RECOMANDAT</span></div>
+        <div class="tk-rows">
+          <div class="tk-row"><span class="tk-key">HRV nocturn</span><span class="tk-val">★★★★★</span></div>
+          <div class="tk-row"><span class="tk-key">Temperatura</span><span class="tk-val">★★★★★</span></div>
+          <div class="tk-row"><span class="tk-key">SpO2</span><span class="tk-val">★★★★☆</span></div>
+          <div class="tk-row"><span class="tk-key">Stadii somn</span><span class="tk-val">★★★☆☆</span></div>
+          <div class="tk-row"><span class="tk-key">Pret</span><span class="tk-val">350–500 EUR</span></div>
+        </div>
+      </div>
+      <div class="tk-card">
+        <div class="tk-name">⌚ Garmin Fenix/Forerunner <span class="tk-badge tk-mid">BUN</span></div>
+        <div class="tk-rows">
+          <div class="tk-row"><span class="tk-key">HRV nocturn</span><span class="tk-val">★★★★☆</span></div>
+          <div class="tk-row"><span class="tk-key">Body Battery</span><span class="tk-val">★★★★☆</span></div>
+          <div class="tk-row"><span class="tk-key">SpO2</span><span class="tk-val">★★★☆☆</span></div>
+          <div class="tk-row"><span class="tk-key">Stadii somn</span><span class="tk-val">★★☆☆☆</span></div>
+          <div class="tk-row"><span class="tk-key">Pret</span><span class="tk-val">300–800 EUR</span></div>
+        </div>
+      </div>
+      <div class="tk-card">
+        <div class="tk-name">📿 Whoop 4.0 <span class="tk-badge tk-ok">SPORT</span></div>
+        <div class="tk-rows">
+          <div class="tk-row"><span class="tk-key">Recovery Score</span><span class="tk-val">★★★★★</span></div>
+          <div class="tk-row"><span class="tk-key">HRV</span><span class="tk-val">★★★★☆</span></div>
+          <div class="tk-row"><span class="tk-key">Strain</span><span class="tk-val">★★★★★</span></div>
+          <div class="tk-row"><span class="tk-key">Display</span><span class="tk-val">Nu are</span></div>
+          <div class="tk-row"><span class="tk-key">Pret</span><span class="tk-val">~30 EUR/luna</span></div>
+        </div>
+      </div>
+      <div class="tk-card">
+        <div class="tk-name">🧠 Muse S (EEG) <span class="tk-badge tk-mid">EEG REAL</span></div>
+        <div class="tk-rows">
+          <div class="tk-row"><span class="tk-key">Delta/Theta</span><span class="tk-val">★★★★☆</span></div>
+          <div class="tk-row"><span class="tk-key">N3 detectie</span><span class="tk-val">★★★★☆</span></div>
+          <div class="tk-row"><span class="tk-key">Confort noapte</span><span class="tk-val">★★☆☆☆</span></div>
+          <div class="tk-row"><span class="tk-key">HRV</span><span class="tk-val">Nu</span></div>
+          <div class="tk-row"><span class="tk-key">Pret</span><span class="tk-val">400–500 EUR</span></div>
+        </div>
+      </div>
+      <div class="tk-card">
+        <div class="tk-name">📱 HRV4Training (app) <span class="tk-badge tk-ok">GRATUIT</span></div>
+        <div class="tk-rows">
+          <div class="tk-row"><span class="tk-key">HRV matinal</span><span class="tk-val">★★★★☆</span></div>
+          <div class="tk-row"><span class="tk-key">Trend</span><span class="tk-val">★★★★★</span></div>
+          <div class="tk-row"><span class="tk-key">Hardware</span><span class="tk-val">Camera tel.</span></div>
+          <div class="tk-row"><span class="tk-key">Cost</span><span class="tk-val">Gratuit/low</span></div>
+          <div class="tk-row"><span class="tk-key">Ideal</span><span class="tk-val">Entry-level</span></div>
+        </div>
+      </div>
+      <div class="tk-card">
+        <div class="tk-name">🏥 PSG Clinica <span class="tk-badge tk-ok">GOLD STD</span></div>
+        <div class="tk-rows">
+          <div class="tk-row"><span class="tk-key">Acuratete stadii</span><span class="tk-val">★★★★★</span></div>
+          <div class="tk-row"><span class="tk-key">Diagnostic</span><span class="tk-val">★★★★★</span></div>
+          <div class="tk-row"><span class="tk-key">Portabilitate</span><span class="tk-val">Nu</span></div>
+          <div class="tk-row"><span class="tk-key">Pret</span><span class="tk-val">600–1500 EUR</span></div>
+          <div class="tk-row"><span class="tk-key">Indicat la</span><span class="tk-val">SpO2 &lt;90%; OSA suspictat</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- READINESS -->
+  <section id="readiness">
+    <div class="stag">// 03</div>
+    <h2>Readiness Score — decizia operationala zilnica</h2>
+    <div class="readiness-grid">
+      <div class="rd-card" style="background:rgba(46,125,50,0.08);border-color:rgba(46,125,50,0.35)">
+        <div class="rd-score" style="color:#81C784">≥ 85</div>
+        <div class="rd-label" style="color:#81C784">🟢 Optimal</div>
+        <div class="rd-action">HRV ≥ +10% vs. baseline. Fereastra optima pentru antrenament intens, output cognitiv maxim, sesiuni complexe. Corpul este complet recuperat.</div>
+      </div>
+      <div class="rd-card" style="background:rgba(249,168,37,0.06);border-color:rgba(249,168,37,0.3)">
+        <div class="rd-score" style="color:#FFD54F">70–84</div>
+        <div class="rd-label" style="color:#FFD54F">🟡 Normal</div>
+        <div class="rd-action">HRV aproape de baseline (±5%). Activitate fizica moderata, muncă normala. Evita efortul supramaximal sau sesiunile de forta la maxim.</div>
+      </div>
+      <div class="rd-card" style="background:rgba(183,28,28,0.08);border-color:rgba(183,28,28,0.3)">
+        <div class="rd-score" style="color:#EF9A9A">&lt; 70</div>
+        <div class="rd-label" style="color:#EF9A9A">🔴 Recuperare activa</div>
+        <div class="rd-action">HRV &lt; -10% vs. baseline 7 zile. <strong>Nu forta antrenamentul.</strong> NSDR, plimbare usoara, stretching, hidratare, somn prelungit. Semnalul nu minte.</div>
+      </div>
+    </div>
+
+    <h3>NSDR — Non-Sleep Deep Rest</h3>
+    <div class="info-box">
+      <strong style="color:var(--indll)">Protocol Huberman/Stanford:</strong> 10–20 minute de relaxare profunda guidata (Yoga Nidra modificat) — produce recuperare neurala comparabila cu un nap de 20 min fara sleep inertia. Kjaer 2002: dopamina +65% post-NSDR.
+    </div>
+    <div class="cw-h"><canvas id="nsdrChart"></canvas></div>
+  </section>
+
+  <!-- MEDIU -->
+  <section id="mediu">
+    <div class="stag">// 04</div>
+    <h2>Optimizarea mediului fizic</h2>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Variabilă</th><th>Optim</th><th>Mecanism</th><th>Implementare</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Temperatura camera</strong></td><td>17–19°C</td><td>Core body cooling → debut N3; temperatura sub 20°C reduce latenta N3</td><td>Termostat; ventilator; ChiliPad/Ooler</td></tr>
+          <tr><td><strong>Lumina matinala</strong></td><td>10–15 min, &gt;10.000 lux</td><td>Reset SCN; cortizol CAR amplificat; melatonina seara normalizata</td><td>Iesit afara in primele 30–60 min post-trezire</td></tr>
+          <tr><td><strong>Lumina albastra blocat</strong></td><td>2h pre-somn complet</td><td>Melatonina nesuprima; SCN stabil; adormire la ora biologica</td><td>Ochelari portocalii 100% blocare; f.lux; Night Shift</td></tr>
+          <tr><td><strong>Lumina rosie pre-somn</strong></td><td>630–850 nm; &lt;10 lux</td><td>Nu suprima melatonina; suport mitocondrial propus</td><td>Becuri rosii; panouri LED; lampi Joovv</td></tr>
+          <tr><td><strong>Zgomot de fond</strong></td><td>&lt;30 dB; white/pink noise</td><td>Mascarea stimulilor perturbatori; continuitate somn</td><td>Dopuri; white noise machine; pink noise app</td></tr>
+          <tr><td><strong>Sauna pre-somn</strong></td><td>80–90°C, 15–20 min, cu 2–4h pre</td><td>Vasodilatatie → racire rapida → temperatura sub baseline → N3 ↑</td><td>Sauna publica/privata; Laukkanen 2018</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn-box"><strong style="color:var(--gold)">Prioritate implementare:</strong> Lumina matinala (gratis) → Temperatura camera (low-cost) → Ochelari anti-blue light (50–100 EUR) → Sauna → Dispozitive avansate.</div>
+  </section>
+
+  <!-- OSA -->
+  <section id="osa">
+    <div class="stag">// 05</div>
+    <h2>Apneea în somn — screening obligatoriu</h2>
+    <div class="danger-box"><strong>Semnul rosu:</strong> HRV cronic scazut + somn non-restaurativ + somnolenta matinala persistenta + sforait = screening obligatoriu pentru OSA. Prevalenta: 10–30% din populatie, 80% nediagnosticati.</div>
+    <div class="osa-grid">
+      <div class="osa-card" style="border-color:rgba(46,125,50,0.4)">
+        <div class="osa-sev" style="color:#81C784">Normal</div>
+        <div class="osa-ahi">&lt; 5/h AHI</div>
+        <div class="osa-note">SpO2 ≥ 90% constant. HRV normal. Nicio interventie necesara.</div>
+      </div>
+      <div class="osa-card" style="border-color:rgba(249,168,37,0.4)">
+        <div class="osa-sev" style="color:#FFD54F">OSA Usor</div>
+        <div class="osa-ahi">5–15/h AHI</div>
+        <div class="osa-note">SpO2 88–90% episodic. HRV usor scazut. Pozitie laterala, igienă somn, trimitere la somnolog.</div>
+      </div>
+      <div class="osa-card" style="border-color:rgba(245,124,0,0.4)">
+        <div class="osa-sev" style="color:#FFAB40">OSA Moderat</div>
+        <div class="osa-ahi">15–30/h AHI</div>
+        <div class="osa-note">SpO2 85–88%. HRV -20%. CPAP indicat. Evaluare cardiovasculara.</div>
+      </div>
+      <div class="osa-card" style="border-color:rgba(183,28,28,0.5)">
+        <div class="osa-sev" style="color:#EF9A9A">OSA Sever</div>
+        <div class="osa-ahi">&gt; 30/h AHI</div>
+        <div class="osa-note">SpO2 &lt; 85%. HRV -30–40%. CPAP obligatoriu. Risc cardiovascular major.</div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--gray);margin-top:14px;line-height:1.6"><strong style="color:var(--indll)">Screening primar:</strong> Pulsoximetru nocturn — 40 RON din farmacie. Daca SpO2 &lt; 90% recurent sau media &lt; 95% → somnolog. STOP-BANG questionnaire: ≥ 3 din 8 → risc moderat-sever. <strong style="color:var(--red)">Niciun supliment sau biohack nu trateaza OSA.</strong></p>
+  </section>
+
+  <!-- NAP -->
+  <section id="nap">
+    <div class="stag">// 06</div>
+    <h2>Napul strategic — tipuri și reguli</h2>
+    <div class="nap-grid">
+      <div class="nap-card">
+        <div class="nap-dur">10–20 min</div>
+        <div class="nap-name">Power Nap</div>
+        <div class="nap-note">N1–N2. Alertness ↑, adenozina redusa, performanta cognitiva ↑. Sleep inertia minima. Ideal inainte de 15:00.</div>
+      </div>
+      <div class="nap-card" style="border-color:rgba(249,168,37,0.3)">
+        <div class="nap-dur" style="color:#FFD54F">26 min</div>
+        <div class="nap-name">NASA Nap ⭐</div>
+        <div class="nap-note">Vigilenta +54%, performanta +34% (Rosekind 1995, NASA). Exact 26 min — testata pe piloti de avion. Standard de referinta.</div>
+      </div>
+      <div class="nap-card">
+        <div class="nap-dur">30–60 min</div>
+        <div class="nap-name">SWS Nap</div>
+        <div class="nap-note">Intra in N3. Recuperare fizica, GH mic. Sleep inertia 15–30 min la trezire. Afecteaza somnul nocturn daca > 15:00.</div>
+      </div>
+      <div class="nap-card">
+        <div class="nap-dur">60–90 min</div>
+        <div class="nap-name">Full Cycle Nap</div>
+        <div class="nap-note">N3 + REM complet. Creativitate, procesare emotionala. Recomandat doar la nevoie acuta. Afecteaza semnificativ somnul nocturn.</div>
+      </div>
+    </div>
+    <div class="warn-box" style="margin-top:16px"><strong style="color:var(--gold)">Regula operativa:</strong> Power nap sau NASA nap (10–26 min), alarma setata, inainte de 15:00. Dupa 15:00 — orice nap afecteaza latenta somnului nocturn.</div>
+    <div class="cw-h"><canvas id="napChart"></canvas></div>
+  </section>
+
+</div>
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Biohacking 3.0 — Lecția 4.4 · Conținut educativ exclusiv</footer>
+
+<script>
+// Progress
+window.addEventListener('scroll',()=>{
+  document.getElementById('pb').style.width=Math.min((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100,100)+'%';
+});
+const secs=document.querySelectorAll('section[id]');
+const nls=document.querySelectorAll('.nl a');
+window.addEventListener('scroll',()=>{
+  let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-80)c=s.id;});
+  nls.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+c));
+});
+
+// ── HRV SIMULATOR ─────────────────────────────────────────────────────────
+const scenarios={
+  optim:{label:'Somn optim',rmssd:62,color:'#81C784',
+    note:'HRV nocturn ridicat — parasimpatic dominant pe tot parcursul noptii. N3 de calitate, REM complet. Recuperare excelenta.',
+    trend:[55,58,60,62,65,63,62,64,62,65,63,62,61,60,62,63,64,62,60,59,61,62,64,63]},
+  alcool:{label:'Alcool seara',rmssd:38,color:'#EF5350',
+    note:'Alcoolul induce adormire rapida dar fragmenteaza N3 si suprima REM in a 2-a jumatate a noptii. HRV colpaseza dupa ora 02:00.',
+    trend:[62,58,45,38,35,32,28,30,35,38,40,42,45,48,50,52,48,45,42,40,38,36,35,38]},
+  stres:{label:'Stres acut',rmssd:32,color:'#FF9800',
+    note:'Simpaticul activat cronic — cortizol nocturn crescut. N3 fragmentat, treziri frecvente. HRV scazut uniform pe toata noaptea.',
+    trend:[40,38,35,32,30,28,30,32,30,28,27,28,30,32,35,32,30,28,27,28,30,32,33,32]},
+  supraantr:{label:'Supraantrenament',rmssd:28,color:'#F44336',
+    note:'Supraantrenamentul cronic epuizeaza SNA. HRV scade progresiv pe saptamani. Semnalul de stop — recuperare completa obligatorie.',
+    trend:[45,42,38,35,32,30,28,27,28,30,28,27,25,26,28,30,28,27,25,24,25,26,28,28]},
+  infectie:{label:'Infectie subclinica',rmssd:30,color:'#E91E63',
+    note:'Infectia subclinica (viremie, bacteremie) produce raspuns imun care scade HRV cu 24–48h inainte de simptome. Tracker-ul vede inainte de a simti.',
+    trend:[62,60,58,55,45,38,30,28,27,26,25,27,30,32,35,38,40,42,44,45,48,50,52,52]},
+};
+let hrvChartInst=null;
+function setHrv(key,btn){
+  document.querySelectorAll('.hb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const sc=scenarios[key];
+  const labels=Array.from({length:24},(_,i)=>`${Math.floor(i*30/60+22)%24}:${i*30%60===0?'00':'30'}`);
+  const ctx=document.getElementById('hrvChart').getContext('2d');
+  if(hrvChartInst)hrvChartInst.destroy();
+  hrvChartInst=new Chart(ctx,{
+    type:'line',
+    data:{labels,datasets:[{
+      label:'RMSSD (ms)',data:sc.trend,
+      borderColor:sc.color,backgroundColor:sc.color+'20',
+      fill:true,pointRadius:2,borderWidth:2,tension:0.3,
+    }]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+      scales:{
+        x:{ticks:{color:'#78909C',font:{size:9},maxTicksLimit:12},grid:{color:'rgba(159,168,218,0.05)'}},
+        y:{min:15,max:80,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(159,168,218,0.06)'},
+          title:{display:true,text:'RMSSD (ms)',color:'#9FA8DA',font:{size:9}}}
+      }
+    }
+  });
+  const colorMap={optim:'rgba(46,125,50,0.15)',alcool:'rgba(183,28,28,0.15)',stres:'rgba(249,168,37,0.1)',supraantr:'rgba(183,28,28,0.2)',infectie:'rgba(233,30,99,0.1)'};
+  document.getElementById('hrv-badges').innerHTML=`
+    <span class="hrv-badge" style="background:${colorMap[key]};color:${sc.color};border:1px solid ${sc.color}40">RMSSD mediu: ${sc.rmssd} ms</span>
+    <span class="hrv-badge" style="background:rgba(26,35,126,0.2);color:#9FA8DA;border:1px solid rgba(159,168,218,0.2)">${sc.label}</span>
+  `;
+  document.getElementById('hrv-note').textContent=sc.note;
+}
+setHrv('optim',document.querySelector('.hb'));
+
+// ── NSDR CHART ─────────────────────────────────────────────────────────────
+new Chart(document.getElementById('nsdrChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['Nimic','Coffee\n15 min','Power Nap\n20 min','NSDR\n20 min','Somn REM\n20 min'],
+    datasets:[
+      {label:'Alertness post (relativ)',data:[0,35,54,52,45],backgroundColor:['rgba(159,168,218,0.3)','rgba(249,168,37,0.5)','rgba(26,35,126,0.6)','rgba(57,73,171,0.7)','rgba(26,35,126,0.5)'],borderRadius:4},
+      {label:'Sleep inertia (min)',data:[0,0,5,0,15],backgroundColor:'rgba(183,28,28,0.4)',borderRadius:4},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:10},boxWidth:10}},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{
+      x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(159,168,218,0.05)'}},
+      y:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(159,168,218,0.05)'},title:{display:true,text:'Relativ (%)',color:'#9FA8DA',font:{size:9}}}
+    }
+  }
+});
+
+// ── NAP CHART ──────────────────────────────────────────────────────────────
+new Chart(document.getElementById('napChart').getContext('2d'),{
+  type:'radar',
+  data:{
+    labels:['Alertness\npost','Fara\nSleep Inertia','Memorie\ndeclarativa','Recuperare\nfizica','Fara impact\nsomn nocturn','Practicabilitate'],
+    datasets:[
+      {label:'Power Nap 20 min',data:[85,90,60,50,95,95],borderColor:'rgba(57,73,171,0.8)',backgroundColor:'rgba(57,73,171,0.1)',pointRadius:3},
+      {label:'NASA Nap 26 min',data:[90,85,70,55,90,90],borderColor:'rgba(249,168,37,0.8)',backgroundColor:'rgba(249,168,37,0.08)',pointRadius:3},
+      {label:'SWS Nap 60 min',data:[80,40,85,80,50,60],borderColor:'rgba(0,131,143,0.7)',backgroundColor:'rgba(0,131,143,0.07)',pointRadius:3},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}}},
+    scales:{r:{ticks:{display:false},grid:{color:'rgba(159,168,218,0.1)'},pointLabels:{color:'#78909C',font:{size:9}},min:0,max:100}}
+  }
+});
+</script>
+</body>
+</html>

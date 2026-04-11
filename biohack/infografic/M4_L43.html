@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Infografic L4.3 — Suplimentarea pentru somn</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--teal:#00838F;--teall:#00ACC1;--teald:#006064;--tealll:#80DEEA;--gold:#F9A825;--navy:#050E1E;--navy2:#071520;--white:#E0F7FA;--gray:#78909C;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--navy);font-family:'Segoe UI',system-ui,sans-serif;color:var(--white)}
+header{background:linear-gradient(135deg,var(--teald),var(--navy2));padding:22px;text-align:center;border-bottom:3px solid var(--gold)}
+header .tag{font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
+header h1{font-size:clamp(18px,4vw,26px);font-weight:700}
+header p{font-size:12px;color:var(--tealll);margin-top:4px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;padding:14px;max-width:1100px;margin:0 auto}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(128,222,234,0.2);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--teall)}
+.card.gold::before{background:var(--gold)}
+.card.wide{grid-column:1/-1}
+.card h2{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:700}
+
+/* Melatonina dose viz */
+.dose-compare{display:flex;gap:10px;align-items:flex-end;height:160px;margin:10px 0}
+.dc-bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.dc-fill{border-radius:4px 4px 0 0;width:100%;transition:height 1.5s cubic-bezier(.4,0,.2,1)}
+.dc-label{font-size:10px;color:var(--gray);text-align:center;line-height:1.3}
+.dc-val{font-family:monospace;font-size:12px;font-weight:700;color:var(--gold)}
+
+/* Mecanism cards */
+.mec-grid{display:grid;gap:7px}
+.mec-item{display:flex;gap:10px;padding:8px 10px;background:rgba(0,0,0,0.25);border-radius:6px;border-left:3px solid;cursor:pointer;transition:all .2s}
+.mec-item:hover{background:rgba(0,131,143,0.12)}
+.mec-icon{font-size:18px;width:26px;text-align:center;flex-shrink:0}
+.mec-body{flex:1}
+.mec-name{font-size:11px;font-weight:700;color:var(--white)}
+.mec-desc{font-size:10px;color:var(--gray);line-height:1.4;margin-top:2px;display:none}
+.mec-item.open .mec-desc{display:block}
+.mec-dose{font-family:monospace;font-size:10px;color:var(--tealll);margin-top:3px}
+
+/* Stacking builder */
+.builder-wrap{background:rgba(0,0,0,0.3);border-radius:8px;padding:14px}
+.builder-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.bb{padding:6px 12px;border-radius:20px;border:1px solid rgba(128,222,234,0.25);background:transparent;color:var(--gray);cursor:pointer;font-size:10px;transition:all .2s;font-family:inherit}
+.bb.on{background:var(--teal);color:var(--white);border-color:var(--teal)}
+.bb.danger{border-color:#F44336;color:#EF9A9A}
+.builder-result{padding:10px 12px;background:rgba(0,131,143,0.08);border-radius:6px;font-size:11px;color:var(--white);line-height:1.7;min-height:80px;border:1px solid rgba(128,222,234,0.15)}
+.build-warn{color:#EF9A9A;font-weight:700;margin-top:6px}
+
+/* Timeline */
+.tl-wrap{display:flex;flex-direction:column;gap:6px}
+.tl-item{display:flex;gap:10px;padding:8px 10px;background:rgba(0,0,0,0.25);border-radius:6px;border-left:3px solid var(--teall);align-items:flex-start}
+.tl-time{font-size:10px;font-family:monospace;color:var(--gold);min-width:70px;padding-top:1px;font-weight:700}
+.tl-body{font-size:11px;color:#B2EBF2;line-height:1.5}
+.tl-body strong{color:var(--white)}
+
+/* Ciclu grid */
+.cg{display:grid;gap:7px}
+.ci{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:rgba(0,0,0,0.2);border-radius:6px;font-size:11px}
+.ci-name{color:var(--white);font-weight:600}
+.ci-cycle{font-family:monospace;font-size:10px;color:var(--tealll)}
+.ci-tol{padding:2px 7px;border-radius:8px;font-size:9px;font-weight:700}
+.ci-tol.low{background:rgba(0,131,143,0.2);color:var(--tealll);border:1px solid rgba(128,222,234,0.25)}
+.ci-tol.mid{background:rgba(249,168,37,0.12);color:#FFD54F;border:1px solid rgba(249,168,37,0.3)}
+.ci-tol.hi{background:rgba(183,28,28,0.15);color:#EF9A9A;border:1px solid rgba(183,28,28,0.3)}
+
+/* Chart */
+.chart-wrap{position:relative;height:200px}
+
+/* Quiz */
+.qz-q{font-size:13px;font-weight:700;margin-bottom:10px;color:var(--white)}
+.qz-opts{display:flex;flex-direction:column;gap:6px}
+.qz-opt{padding:8px 12px;background:rgba(0,0,0,0.25);border:1px solid rgba(128,222,234,0.2);border-radius:6px;cursor:pointer;font-size:11px;color:var(--gray);display:flex;gap:8px;align-items:flex-start;transition:all .2s}
+.qz-opt:hover{background:rgba(0,131,143,0.12);color:var(--white);border-color:var(--tealll)}
+.qz-opt.ok{background:rgba(46,125,50,0.12);border-color:#4CAF50;color:#81C784}
+.qz-opt.ko{background:rgba(183,28,28,0.12);border-color:#F44336;color:#EF9A9A}
+.qz-exp{display:none;margin-top:8px;padding:10px;background:rgba(0,131,143,0.1);border-radius:6px;font-size:11px;color:#B2EBF2;border-left:3px solid var(--gold);line-height:1.5}
+.qz-exp.show{display:block}
+.qz-btn{margin-top:10px;padding:7px 16px;background:var(--teal);color:var(--white);border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;transition:background .2s;font-family:inherit}
+.qz-btn:hover{background:var(--teall)}
+.qz-score{font-size:11px;color:var(--gold);font-family:monospace;margin-top:6px;text-align:right}
+
+footer{text-align:center;padding:16px;font-size:10px;color:var(--gray);border-top:1px solid rgba(128,222,234,0.1);margin-top:10px}
+</style>
+</head>
+<body>
+<header>
+  <div class="tag">// Biohacking 3.0 · Modul 4 · Lecția 4.3</div>
+  <h1>Suplimentarea pentru somn</h1>
+  <p>Mecanisme · Doze corecte · Stacking builder · Ciclare · Quiz contraindicatii</p>
+</header>
+
+<div class="grid">
+
+  <!-- MELATONINA DOZE -->
+  <div class="card gold">
+    <h2>💊 Melatonina — doza care contează</h2>
+    <div class="dose-compare" id="dose-bars">
+      <div class="dc-bar"><div class="dc-val">0.3 mg</div><div class="dc-fill" style="background:var(--teal);height:0px" data-h="40px"></div><div class="dc-label">Fiziologică<br/>Optima</div></div>
+      <div class="dc-bar"><div class="dc-val">1 mg</div><div class="dc-fill" style="background:var(--teall);height:0px" data-h="70px"></div><div class="dc-label">Acceptabilă<br/>unii</div></div>
+      <div class="dc-bar"><div class="dc-val">3 mg</div><div class="dc-fill" style="background:var(--amber,#F57C00);height:0px" data-h="100px"></div><div class="dc-label">Farmacologică<br/>⚠️</div></div>
+      <div class="dc-bar"><div class="dc-val">5 mg</div><div class="dc-fill" style="background:#F44336;height:0px" data-h="130px"></div><div class="dc-label">EVITA<br/>suprima endogen</div></div>
+      <div class="dc-bar"><div class="dc-val">10 mg</div><div class="dc-fill" style="background:#B71C1C;height:0px" data-h="155px"></div><div class="dc-label">NU<br/>Deregulare</div></div>
+    </div>
+    <div style="font-size:10px;color:var(--gray);margin-top:6px;font-style:italic">Ferracioli-Oda 2013: 0.3 mg la fel de eficient ca dozele mari, mai puțin efecte adverse. Dozele mari de 5–10 mg suprimă producția endogenă pe termen lung.</div>
+  </div>
+
+  <!-- MECANISME -->
+  <div class="card">
+    <h2>⚙️ Mecanisme — click pe fiecare</h2>
+    <div class="mec-grid" id="mec-grid">
+      <div class="mec-item" style="border-color:var(--teal)" onclick="toggleMec(this)">
+        <div class="mec-icon">🔬</div>
+        <div class="mec-body">
+          <div class="mec-name">BBB — Mg L-Treonat</div>
+          <div class="mec-desc">Singura formă Mg cu penetrare documentată a barierei hematoencefalice. Creste densitatea sinaptică în hipocamp și cortex prefrontal. Liu 2010, Neuron. 1000–2000 mg seara.</div>
+          <div class="mec-dose">1000–2000 mg · cu 2h pre-somn</div>
+        </div>
+      </div>
+      <div class="mec-item" style="border-color:var(--teall)" onclick="toggleMec(this)">
+        <div class="mec-icon">🧘</div>
+        <div class="mec-body">
+          <div class="mec-name">GABA — L-Teanina + Apigenina</div>
+          <div class="mec-desc">L-Teanina creste GABA, glicina și serotonina → unde alfa EEG (+8%, Kimura 2007). Apigenina = agonist parțial GABA-A — anxiolitic fără dependență sau supresia REM.</div>
+          <div class="mec-dose">L-Teanina 200–400 mg · Apigenina 50 mg · 30–60 min</div>
+        </div>
+      </div>
+      <div class="mec-item" style="border-color:#80DEEA" onclick="toggleMec(this)">
+        <div class="mec-icon">🌡</div>
+        <div class="mec-body">
+          <div class="mec-name">TERMIC — Glicina</div>
+          <div class="mec-desc">Glicina activează receptori NMDA hipotalamici → vasodilatație periferică → disipare căldură → temperatura corp scade cu 0.5°C → condiție pentru N3 profund. Bannai 2012: latență -13 min.</div>
+          <div class="mec-dose">3 g dizolvat în apă · 30 min pre-somn</div>
+        </div>
+      </div>
+      <div class="mec-item" style="border-color:var(--gold)" onclick="toggleMec(this)">
+        <div class="mec-icon">🌙</div>
+        <div class="mec-body">
+          <div class="mec-name">CIRCADIAN — Melatonina</div>
+          <div class="mec-desc">Agonist MT1/MT2 — semnal de noapte, nu somnifer direct. Sincronizează SCN. 0.3 mg = doza fiziologică. Release imediat, nu slow-release. Ciclare: 5 ON / 2 OFF.</div>
+          <div class="mec-dose">0.3–1 mg · 30 min pre-somn</div>
+        </div>
+      </div>
+      <div class="mec-item" style="border-color:#F44336" onclick="toggleMec(this)">
+        <div class="mec-icon">📉</div>
+        <div class="mec-body">
+          <div class="mec-name">CORTIZOL — KSM-66 + PS</div>
+          <div class="mec-desc">Ashwagandha KSM-66 modulează axa HPA → cortizol -27.9% (Chandrasekhar 2012). Fosfatidilserina suprimă cortizolul indus de stres prin feedback negativ HPA (Hellhammer 2004).</div>
+          <div class="mec-dose">KSM-66 300–600 mg · PS 200–400 mg · seara</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STACKING BUILDER -->
+  <div class="card gold">
+    <h2>🔧 Stacking builder interactiv</h2>
+    <div class="builder-wrap">
+      <div style="font-size:11px;color:var(--gray);margin-bottom:8px">Selectează componentele protocolului tau:</div>
+      <div class="builder-btns">
+        <button class="bb on" onclick="toggleSupl('mgl',this)">Mg L-Treonat</button>
+        <button class="bb on" onclick="toggleSupl('tean',this)">L-Teanina</button>
+        <button class="bb on" onclick="toggleSupl('mela',this)">Melatonina 0.3 mg</button>
+        <button class="bb" onclick="toggleSupl('api',this)">Apigenina</button>
+        <button class="bb" onclick="toggleSupl('glic',this)">Glicina 3g</button>
+        <button class="bb" onclick="toggleSupl('ash',this)">Ashwagandha</button>
+        <button class="bb" onclick="toggleSupl('ps',this)">Fosfatidilserina</button>
+        <button class="bb" onclick="toggleSupl('val',this)">Valerian</button>
+        <button class="bb danger" onclick="toggleSupl('fhtp',this)">5-HTP ⚠️</button>
+      </div>
+      <div class="builder-result" id="builder-result"></div>
+    </div>
+  </div>
+
+  <!-- TIMING -->
+  <div class="card">
+    <h2>🕐 Timing complet</h2>
+    <div class="tl-wrap">
+      <div class="tl-item"><div class="tl-time">Seara<br/>cu masă</div><div class="tl-body"><strong>Ashwagandha KSM-66</strong> 300–600 mg · <strong>Fosfatidilserina</strong> 200–400 mg<br/><span style="font-size:10px;color:var(--gray)">Anti-cortizol; efecte la 4–8 săptămâni</span></div></div>
+      <div class="tl-item"><div class="tl-time">Seara<br/>masa sau după</div><div class="tl-body"><strong>Mg Glicinat</strong> 300–400 mg sau <strong>Mg L-Treonat</strong> 1000–2000 mg<br/><span style="font-size:10px;color:var(--gray)">Cu 2h pre-somn pentru L-Treonat; Glicinat mai flexibil</span></div></div>
+      <div class="tl-item"><div class="tl-time">-60 min<br/>pre-somn</div><div class="tl-body"><strong>L-Teanina</strong> 200–400 mg · <strong>Apigenina</strong> 50 mg · <strong>5-HTP</strong> 100 mg (dacă e cazul)<br/><span style="font-size:10px;color:var(--gray)">GABAergic; relaxare alertă; nu sedare</span></div></div>
+      <div class="tl-item"><div class="tl-time">-30 min<br/>pre-somn</div><div class="tl-body"><strong>Glicina</strong> 3g (dizolvată) · <strong>Melatonina</strong> 0.3 mg · <strong>Valerian</strong> 300–600 mg<br/><span style="font-size:10px;color:var(--gray)">Semnalizare finală; termoregulare; release imediat</span></div></div>
+    </div>
+  </div>
+
+  <!-- CICLARE -->
+  <div class="card">
+    <h2>🔄 Ciclare — anti-toleranță</h2>
+    <div class="cg">
+      <div class="ci"><div class="ci-name">Mg L-Treonat</div><div class="ci-cycle">Zilnic, termen lung</div><span class="ci-tol low">Minimă</span></div>
+      <div class="ci"><div class="ci-name">L-Teanina</div><div class="ci-cycle">Zilnic; pauza la 3 luni</div><span class="ci-tol low">Minimă</span></div>
+      <div class="ci"><div class="ci-name">Melatonina</div><div class="ci-cycle">5 ON / 2 OFF</div><span class="ci-tol mid">Posibilă</span></div>
+      <div class="ci"><div class="ci-name">Apigenina</div><div class="ci-cycle">Zilnic acceptabil</div><span class="ci-tol low">Minimă</span></div>
+      <div class="ci"><div class="ci-name">Ashwagandha</div><div class="ci-cycle">8–12 săpt ON / 4 OFF</div><span class="ci-tol low">Minimă</span></div>
+      <div class="ci"><div class="ci-name">Valerian</div><div class="ci-cycle">4–6 săpt ON / 2 OFF</div><span class="ci-tol mid">Moderată</span></div>
+      <div class="ci"><div class="ci-name">5-HTP</div><div class="ci-cycle">Max 6 luni; pauza 2 săpt</div><span class="ci-tol hi">⚠️ SSRI interzis</span></div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="card">
+    <h2>📊 Evidenta clinică vs. tolerabilitate</h2>
+    <div class="chart-wrap"><canvas id="mechChart"></canvas></div>
+    <div style="font-size:10px;color:var(--gray);margin-top:6px">Scor 1–5 estimat pe baza literaturii disponibile. Nu reprezintă ierarhizare terapeutică absoluta.</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card wide">
+    <h2>🎯 Quiz — suplimentare si contraindicatii</h2>
+    <div id="quiz-container"></div>
+  </div>
+
+</div>
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Infografic educativ · Nu substituie consultul medical</footer>
+
+<script>
+// ── ANIMATII ───────────────────────────────────────────────────────────────
+const obs=new IntersectionObserver(e=>{
+  e.forEach(x=>{
+    if(x.isIntersecting){
+      document.querySelectorAll('#dose-bars .dc-fill').forEach((b,i)=>{
+        setTimeout(()=>{b.style.height=b.dataset.h;},i*120+100);
+      });
+      obs.disconnect();
+    }
+  });
+},{threshold:0.2});
+const db=document.getElementById('dose-bars');
+if(db)obs.observe(db);
+
+// ── MECANISME ACCORDION ────────────────────────────────────────────────────
+function toggleMec(el){
+  const isOpen=el.classList.contains('open');
+  document.querySelectorAll('.mec-item').forEach(m=>m.classList.remove('open'));
+  if(!isOpen)el.classList.add('open');
+}
+
+// ── STACKING BUILDER ──────────────────────────────────────────────────────
+const suplData={
+  mgl:{name:"Mg L-Treonat",dose:"1000–2000 mg",when:"Cu 2h pre-somn",warn:null},
+  tean:{name:"L-Teanina",dose:"200–400 mg",when:"60 min pre-somn",warn:null},
+  mela:{name:"Melatonina",dose:"0.3 mg",when:"30 min pre-somn",warn:null},
+  api:{name:"Apigenina",dose:"50 mg",when:"60 min pre-somn",warn:null},
+  glic:{name:"Glicina",dose:"3 g (dizolvat)",when:"30 min pre-somn",warn:null},
+  ash:{name:"Ashwagandha KSM-66",dose:"300–600 mg",when:"Seara cu masă",warn:null},
+  ps:{name:"Fosfatidilserina",dose:"200–400 mg",when:"Cu cina",warn:null},
+  val:{name:"Valerian",dose:"300–600 mg",when:"30–60 min pre-somn",warn:null},
+  fhtp:{name:"5-HTP ⚠️",dose:"100–200 mg",when:"60–90 min pre-somn",warn:"⚠️ CONTRAINDICAT cu SSRI/IMAO. Dacă iei orice antidepresiv — NU folosi 5-HTP fără aviz medical!"},
+};
+const selected=new Set(['mgl','tean','mela']);
+function toggleSupl(key,btn){
+  if(selected.has(key)){selected.delete(key);btn.classList.remove('on');}
+  else{selected.add(key);btn.classList.add('on');}
+  renderBuilder();
+}
+function renderBuilder(){
+  const r=document.getElementById('builder-result');
+  if(selected.size===0){r.innerHTML='<span style="color:var(--gray)">Nicio componentă selectată.</span>';return;}
+  let html='<div style="display:flex;flex-direction:column;gap:6px">';
+  let warns=[];
+  [...selected].forEach(k=>{
+    const d=suplData[k];
+    html+=`<div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font-weight:700;color:var(--white)">${d.name}</span>
+      <span style="font-family:monospace;font-size:10px;color:var(--tealll)">${d.dose}</span>
+      <span style="font-size:10px;color:var(--gold)">${d.when}</span>
+    </div>`;
+    if(d.warn)warns.push(d.warn);
+  });
+  html+='</div>';
+  if(warns.length)html+=`<div class="build-warn" style="margin-top:10px;font-size:11px">${warns.join('<br/>')}</div>`;
+  const n=selected.size;
+  const complexity=n<=2?'Protocol simplu — ideal pentru debut.':n<=4?'Protocol moderat — introduce gradual.':'Protocol avansat — asigura-te ca ai date pe fiecare componentă.';
+  html+=`<div style="margin-top:8px;font-size:10px;color:var(--gray);font-style:italic">${complexity}</div>`;
+  r.innerHTML=html;
+}
+renderBuilder();
+
+// ── CHART ─────────────────────────────────────────────────────────────────
+new Chart(document.getElementById('mechChart').getContext('2d'),{
+  type:'radar',
+  data:{
+    labels:['Evidenta\nclinica','Tolerabilitate','Viteza\nefect','Siguranta','Acces /\nCost'],
+    datasets:[
+      {label:'Mg L-Treonat',data:[3.5,5,3,5,3],borderColor:'rgba(0,172,193,0.8)',backgroundColor:'rgba(0,172,193,0.1)',pointRadius:3},
+      {label:'Melatonina',data:[5,4,5,4,5],borderColor:'rgba(249,168,37,0.8)',backgroundColor:'rgba(249,168,37,0.1)',pointRadius:3},
+      {label:'Ashwagandha',data:[5,4.5,2,4.5,4],borderColor:'rgba(183,28,28,0.7)',backgroundColor:'rgba(183,28,28,0.07)',pointRadius:3},
+      {label:'Glicina',data:[4,5,4,5,5],borderColor:'rgba(128,222,234,0.8)',backgroundColor:'rgba(128,222,234,0.07)',pointRadius:3},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}}},
+    scales:{r:{ticks:{display:false,stepSize:1},grid:{color:'rgba(128,222,234,0.1)'},pointLabels:{color:'#78909C',font:{size:9}},min:0,max:5}}
+  }
+});
+
+// ── QUIZ ─────────────────────────────────────────────────────────────────
+const qs=[
+  {q:"Care este doza fiziologică corectă de melatonina?",opts:["5 mg","10 mg","0.3 mg","2.5 mg"],ans:2,exp:"Ferracioli-Oda 2013: 0.3 mg este la fel de eficient ca dozele mari și produce mai puține efecte adverse. Dozele de 5–10 mg sunt farmacologice — pot suprima producția endogenă pe termen lung."},
+  {q:"5-HTP este CONTRAINDICAT cu ce clasă de medicamente?",opts:["Antibiotice","Antihipertensive","SSRI și IMAO (antidepresive)","Antihistaminice"],ans:2,exp:"5-HTP + SSRI/IMAO = risc sindrom serotoninergic — potențial sever. Dacă iei Prozac, Zoloft, Cipralex, Effexor sau orice IMAO — 5-HTP este interzis fără aviz medical explicit."},
+  {q:"Cum acționează glicina pentru îmbunătățirea somnului?",opts:["Sedare directă","Activare NMDA hipotalamic → scădere temperatură corp → N3 mai profund","Blochează adenozina","Creste melatonina"],ans:1,exp:"Bannai 2012 (Front Neurol): glicina activează receptori NMDA în hipotalamus → vasodilatație periferică → disiparea căldurii → temperatura corp scade cu ~0.5°C — condiție esențială pentru N3 profund. Latenta adormirii: -13 min vs. placebo."},
+  {q:"Care supliment are dovezi clinice de nivel I pentru reducerea cortizolului?",opts:["Valerian","L-Teanina","Ashwagandha KSM-66","Glicina"],ans:2,exp:"Chandrasekhar 2012 (Indian J Psychol Med): KSM-66 300 mg × 2/zi, 8 săptămâni → cortizol salivar -27.9%, scoruri stres semnificativ reduse, HRV crescut. Nivel I — RCT dublu-orb."},
+  {q:"Mg L-Treonat (Magtein) este unic față de alte forme de Mg prin ce proprietate?",opts:["Este mai ieftin","Penetrează bariera hematoencefalică eficient","Se absoarbe mai lent","Are mai mult Mg elemental"],ans:1,exp:"Liu 2010 (Neuron): Mg L-Treonat este singura formă de magneziu care penetrează bariera hematoencefalică în concentrație semnificativă. Creste densitatea sinaptică în hipocamp și cortexul prefrontal — efecte pe cogniție și calitate N3."},
+];
+let qi=0,score=0;
+function renderQ(){
+  const c=document.getElementById('quiz-container');
+  if(qi>=qs.length){
+    c.innerHTML=`<div style="text-align:center;padding:18px"><div style="font-size:40px;font-weight:700;color:var(--gold)">${score}/${qs.length}</div><div style="font-size:13px;color:var(--tealll);margin-top:6px">${score===qs.length?'Excelent! Suplimentarea pentru somn stăpânită.':score>=3?'Bine — revizuieste contraindicatiile.':'Reia materialul, în special secțiunea de contraindicații.'}</div><button class="qz-btn" onclick="qi=0;score=0;renderQ()" style="margin-top:12px">Restart</button></div>`;
+    return;
+  }
+  const q=qs[qi];
+  c.innerHTML=`
+    <div class="qz-q">${qi+1}/${qs.length}. ${q.q}</div>
+    <div class="qz-opts">${q.opts.map((o,i)=>`<div class="qz-opt" id="qo-${i}" onclick="ans(${i})"><span>○</span>${o}</div>`).join('')}</div>
+    <div class="qz-exp" id="qz-exp">${q.exp}</div>
+    <div class="qz-score" id="qz-sc"></div>
+    <button class="qz-btn" id="qz-btn" style="display:none" onclick="qi++;renderQ()">Următoarea →</button>`;
+}
+function ans(sel){
+  const q=qs[qi];
+  if(document.getElementById('qz-btn').style.display!=='none')return;
+  if(sel===q.ans)score++;
+  q.opts.forEach((_,i)=>{
+    const el=document.getElementById(`qo-${i}`);
+    if(i===q.ans){el.classList.add('ok');el.querySelector('span').textContent='✓';}
+    else if(i===sel&&sel!==q.ans){el.classList.add('ko');el.querySelector('span').textContent='✗';}
+  });
+  document.getElementById('qz-exp').classList.add('show');
+  document.getElementById('qz-sc').textContent=`Scor: ${score}/${qi+1}`;
+  document.getElementById('qz-btn').style.display='inline-block';
+}
+renderQ();
+</script>
+</body>
+</html>

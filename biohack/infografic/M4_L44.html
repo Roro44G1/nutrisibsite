@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Infografic L4.4 — Biohacking-ul somnului</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--ind:#1A237E;--indl:#3949AB;--indd:#0D1657;--indll:#9FA8DA;--gold:#F9A825;--navy:#050E1E;--navy2:#080F24;--white:#E8EAF6;--gray:#78909C;--green:#2E7D32;--red:#B71C1C;--amber:#F57C00;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--navy);font-family:'Segoe UI',system-ui,sans-serif;color:var(--white)}
+header{background:linear-gradient(135deg,var(--indd),var(--navy2));padding:22px;text-align:center;border-bottom:3px solid var(--gold)}
+header .tag{font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
+header h1{font-size:clamp(18px,4vw,26px);font-weight:700}
+header p{font-size:12px;color:var(--indll);margin-top:4px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;padding:14px;max-width:1100px;margin:0 auto}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(159,168,218,0.2);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--indl)}
+.card.gold::before{background:var(--gold)}
+.card.wide{grid-column:1/-1}
+.card h2{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:700}
+.cw{position:relative;height:190px}
+.cwt{position:relative;height:220px}
+
+/* HRV gauge */
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+.gauge-val{font-family:monospace;font-size:48px;font-weight:700;line-height:1;transition:color .5s}
+.gauge-label{font-size:10px;letter-spacing:2px;color:var(--gray);text-transform:uppercase}
+.gauge-bar{width:100%;height:10px;background:rgba(255,255,255,0.07);border-radius:5px;overflow:hidden;margin:4px 0}
+.gauge-fill{height:100%;border-radius:5px;transition:width .8s,background .5s}
+.gauge-opts{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.go{padding:5px 12px;border-radius:16px;border:1px solid rgba(159,168,218,0.25);background:transparent;color:var(--gray);cursor:pointer;font-size:10px;transition:all .2s;font-family:inherit}
+.go.active{background:var(--ind);color:var(--white);border-color:var(--ind)}
+
+/* Loop diagram */
+.loop-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lp{display:flex;flex-direction:column;align-items:center;padding:12px;background:rgba(0,0,0,0.25);border-radius:8px;border:1px solid rgba(159,168,218,0.15);cursor:pointer;transition:all .2s;text-align:center}
+.lp:hover{background:rgba(26,35,126,0.15)}
+.lp-icon{font-size:24px;margin-bottom:6px}
+.lp-label{font-size:11px;font-weight:700;color:var(--white)}
+.lp-sub{font-size:9px;color:var(--gray);margin-top:3px;line-height:1.3}
+.lp-detail{display:none;grid-column:1/-1;padding:10px;background:rgba(26,35,126,0.1);border-radius:6px;border-left:3px solid var(--indl);font-size:11px;color:#C5CAE9;line-height:1.5}
+.lp-detail.show{display:block;animation:fi .3s}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* Readiness meter */
+.rm-wrap{display:flex;flex-direction:column;gap:8px}
+.rm-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;cursor:pointer;transition:all .2s}
+.rm-row:hover{filter:brightness(1.1)}
+.rm-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;border:2px solid}
+.rm-body{flex:1}
+.rm-score{font-size:12px;font-weight:700}
+.rm-action{font-size:10px;color:var(--gray);margin-top:2px;line-height:1.4}
+.rm-expand{display:none;margin-top:6px;padding:8px;background:rgba(0,0,0,0.25);border-radius:4px;font-size:10px;color:#C5CAE9;line-height:1.5}
+.rm-expand.show{display:block}
+
+/* OSA bars */
+.osa-bars{display:flex;flex-direction:column;gap:6px}
+.ob{display:flex;align-items:center;gap:10px}
+.ob-label{width:80px;font-size:10px;color:var(--gray);flex-shrink:0}
+.ob-bar{flex:1;height:18px;border-radius:3px;position:relative;overflow:hidden}
+.ob-fill{height:100%;border-radius:3px;display:flex;align-items:center;padding-left:8px;font-size:10px;font-weight:700;color:var(--navy);transition:width 1.2s}
+.ob-val{width:60px;font-family:monospace;font-size:10px;text-align:right}
+
+/* Biohack matrix */
+.bh-rows{display:flex;flex-direction:column;gap:6px}
+.bh-item{display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(0,0,0,0.2);border-radius:6px;cursor:pointer;transition:all .2s}
+.bh-item:hover{background:rgba(26,35,126,0.15)}
+.bh-icon{font-size:16px;width:24px;text-align:center;flex-shrink:0}
+.bh-name{font-size:11px;font-weight:700;color:var(--white);flex:1}
+.bh-bars{display:flex;gap:4px;align-items:center}
+.bh-dot{width:8px;height:8px;border-radius:50%}
+.bh-tag{font-size:9px;padding:2px 6px;border-radius:8px;font-weight:700}
+
+/* Quiz */
+.qz-q{font-size:13px;font-weight:700;margin-bottom:10px;color:var(--white)}
+.qz-opts{display:flex;flex-direction:column;gap:6px}
+.qz-opt{padding:8px 12px;background:rgba(0,0,0,0.25);border:1px solid rgba(159,168,218,0.2);border-radius:6px;cursor:pointer;font-size:11px;color:var(--gray);display:flex;gap:8px;transition:all .2s}
+.qz-opt:hover{background:rgba(26,35,126,0.12);color:var(--white)}
+.qz-opt.ok{background:rgba(46,125,50,0.12);border-color:#4CAF50;color:#81C784}
+.qz-opt.ko{background:rgba(183,28,28,0.12);border-color:#F44336;color:#EF9A9A}
+.qz-exp{display:none;margin-top:8px;padding:10px;background:rgba(26,35,126,0.1);border-radius:6px;font-size:11px;color:#C5CAE9;border-left:3px solid var(--gold);line-height:1.5}
+.qz-exp.show{display:block}
+.qz-btn{margin-top:10px;padding:7px 16px;background:var(--ind);color:var(--white);border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+.qz-score{font-size:11px;color:var(--gold);font-family:monospace;margin-top:6px;text-align:right}
+
+footer{text-align:center;padding:16px;font-size:10px;color:var(--gray);border-top:1px solid rgba(159,168,218,0.1);margin-top:10px}
+</style>
+</head>
+<body>
+<header>
+  <div class="tag">// Biohacking 3.0 · Modul 4 · Lecția 4.4</div>
+  <h1>Biohacking-ul somnului</h1>
+  <p>HRV simulator · Loop masurare → actiune · Readiness · OSA screening · Biohack matrix · Quiz</p>
+</header>
+
+<div class="grid">
+
+  <!-- HRV GAUGE -->
+  <div class="card gold">
+    <h2>💓 HRV Simulator — scenarii reale</h2>
+    <div class="gauge-wrap">
+      <div class="gauge-val" id="hrv-val" style="color:#81C784">62</div>
+      <div class="gauge-label">RMSSD nocturn (ms)</div>
+      <div class="gauge-bar"><div class="gauge-fill" id="hrv-fill" style="background:#81C784;width:78%"></div></div>
+      <div style="font-size:10px;color:var(--gray);text-align:center;font-style:italic" id="hrv-msg">Parasimpatic dominant · N3 complet · Recuperare excelenta</div>
+    </div>
+    <div class="gauge-opts">
+      <button class="go active" onclick="setGauge(62,'#81C784','Parasimpatic dominant · N3 complet · Recuperare excelenta',this)">Optim</button>
+      <button class="go" onclick="setGauge(45,'#FFD54F','Perturbator moderat · Monitorizare · Readiness galben',this)">Moderat</button>
+      <button class="go" onclick="setGauge(38,'#FF9800','Alcool / Stres · N3 fragmentat · Recuperare activa',this)">Alcool/Stres</button>
+      <button class="go" onclick="setGauge(28,'#EF5350','Supraantrenament / OSA · Readiness rosu · Stop efort',this)">Critic</button>
+    </div>
+    <div class="cw" style="margin-top:14px"><canvas id="hrvMiniChart"></canvas></div>
+  </div>
+
+  <!-- LOOP ACTIV -->
+  <div class="card">
+    <h2>🔄 Loop-ul biohacking-ului</h2>
+    <div class="loop-grid" id="loop-grid">
+      <div class="lp" onclick="showLoop('masoara',this)">
+        <div class="lp-icon">📊</div>
+        <div class="lp-label">1. Masori</div>
+        <div class="lp-sub">HRV, SpO2, eficienta, calitate subiectiva</div>
+      </div>
+      <div class="lp" onclick="showLoop('interpreti',this)">
+        <div class="lp-icon">🔍</div>
+        <div class="lp-label">2. Interpretezi</div>
+        <div class="lp-sub">Trend 7 zile vs. baseline personal</div>
+      </div>
+      <div class="lp" onclick="showLoop('intervii',this)">
+        <div class="lp-icon">⚙️</div>
+        <div class="lp-label">3. Intervii</div>
+        <div class="lp-sub">Temperatura, supliment, NSDR, sauna</div>
+      </div>
+      <div class="lp" onclick="showLoop('remasori',this)">
+        <div class="lp-icon">📈</div>
+        <div class="lp-label">4. Remasori</div>
+        <div class="lp-sub">Minimum 14 nopti pentru a trage concluzii</div>
+      </div>
+      <div class="lp-detail" id="loop-detail"></div>
+    </div>
+  </div>
+
+  <!-- READINESS -->
+  <div class="card">
+    <h2>🎯 Readiness Score — click pe nivel</h2>
+    <div class="rm-wrap">
+      <div class="rm-row" style="background:rgba(46,125,50,0.08)" onclick="toggleRm(this,'rm1')">
+        <div class="rm-circle" style="background:rgba(46,125,50,0.2);color:#81C784;border-color:#4CAF50">≥85</div>
+        <div class="rm-body">
+          <div class="rm-score" style="color:#81C784">🟢 Optimal — Antrenament intens permis</div>
+          <div class="rm-action">HRV ≥ +10% vs. baseline · Fereastra maxima</div>
+          <div class="rm-expand" id="rm1">Output cognitiv maxim. Antrenament de forta sau intensitate inalta. Sesiuni creative importante. Negocieri, prezentari. Corpul este complet recuperat — valorifica fereastra.</div>
+        </div>
+      </div>
+      <div class="rm-row" style="background:rgba(249,168,37,0.06)" onclick="toggleRm(this,'rm2')">
+        <div class="rm-circle" style="background:rgba(249,168,37,0.15);color:#FFD54F;border-color:#FFA000">70-84</div>
+        <div class="rm-body">
+          <div class="rm-score" style="color:#FFD54F">🟡 Normal — Activitate moderata</div>
+          <div class="rm-action">HRV aproape de baseline · Standard</div>
+          <div class="rm-expand" id="rm2">Activitate fizica la 70–80% din maxim. Munca cognitiva normala. Evita efort supramaximal sau sesiuni la limita. Igiena somn impecabila seara.</div>
+        </div>
+      </div>
+      <div class="rm-row" style="background:rgba(183,28,28,0.06)" onclick="toggleRm(this,'rm3')">
+        <div class="rm-circle" style="background:rgba(183,28,28,0.15);color:#EF9A9A;border-color:#B71C1C">&lt;70</div>
+        <div class="rm-body">
+          <div class="rm-score" style="color:#EF9A9A">🔴 Recuperare activa obligatorie</div>
+          <div class="rm-action">HRV &lt; -10% baseline · Stop efort</div>
+          <div class="rm-expand" id="rm3">NU forta antrenamentul. Vei adanci depletia si vei extinde recuperarea. NSDR 20 min, plimbare usoara, stretching, hidratare, somn prelungit cu 60–90 min. Alcool interzis.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HRV TREND CHART -->
+  <div class="card">
+    <h2>📈 HRV Trend 30 zile — exemplu</h2>
+    <div class="cw"><canvas id="trendChart"></canvas></div>
+    <div style="font-size:10px;color:var(--gray);margin-top:6px;font-style:italic">Evenimentele marcate: alcool (↓), infectie subclinica (↓), recuperare reusita (↑). Linia de baza = media rulanta 7 zile.</div>
+  </div>
+
+  <!-- OSA SCREENING -->
+  <div class="card">
+    <h2>😮‍💨 OSA Screening — indicatori</h2>
+    <div class="osa-bars" id="osa-bars">
+      <div class="ob"><div class="ob-label">Normal</div><div class="ob-bar"><div class="ob-fill" style="background:#4CAF50;width:0" data-w="20%">AHI &lt;5</div></div><div class="ob-val" style="color:#81C784">SpO2 ≥90%</div></div>
+      <div class="ob"><div class="ob-label">OSA Usor</div><div class="ob-bar"><div class="ob-fill" style="background:#FFA000;width:0" data-w="40%">AHI 5–15</div></div><div class="ob-val" style="color:#FFD54F">SpO2 88–90%</div></div>
+      <div class="ob"><div class="ob-label">OSA Moderat</div><div class="ob-bar"><div class="ob-fill" style="background:#E65100;width:0" data-w="65%">AHI 15–30</div></div><div class="ob-val" style="color:#FFAB40">SpO2 85–88%</div></div>
+      <div class="ob"><div class="ob-label">OSA Sever</div><div class="ob-bar"><div class="ob-fill" style="background:#B71C1C;width:0" data-w="90%">AHI &gt;30</div></div><div class="ob-val" style="color:#EF9A9A">SpO2 &lt;85%</div></div>
+    </div>
+    <div style="margin-top:12px;padding:8px 10px;background:rgba(183,28,28,0.08);border-radius:6px;border-left:3px solid var(--red);font-size:10px;color:#FFCDD2;line-height:1.5">
+      <strong>Screening primar:</strong> Pulsoximetru nocturn (~40 RON). SpO2 &lt; 90% recurent → somnolog. STOP-BANG: ≥3 din 8 criterii = risc moderat. <strong>Niciun supliment nu trateaza OSA.</strong>
+    </div>
+  </div>
+
+  <!-- BIOHACK MATRIX -->
+  <div class="card">
+    <h2>🧪 Biohack matrix — eficacitate & evidenta</h2>
+    <div class="bh-rows">
+      <div class="bh-item"><div class="bh-icon">☀️</div><div class="bh-name">Lumina matinala 10–15 min</div><div class="bh-bars"><div class="bh-dot" style="background:#4CAF50"></div><div class="bh-dot" style="background:#4CAF50"></div><div class="bh-dot" style="background:#4CAF50"></div><div class="bh-dot" style="background:#4CAF50"></div><div class="bh-dot" style="background:#4CAF50"></div></div><span class="bh-tag" style="background:rgba(46,125,50,0.2);color:#81C784">NIVEL I</span></div>
+      <div class="bh-item"><div class="bh-icon">❄️</div><div class="bh-name">Camera 17–19°C</div><div class="bh-bars"><div class="bh-dot" style="background:#4CAF50"></div><div class="bh-dot" style="background:#4CAF50"></div><div class="bh-dot" style="background:#4CAF50"></div><div class="bh-dot" style="background:#4CAF50"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div></div><span class="bh-tag" style="background:rgba(46,125,50,0.2);color:#81C784">NIVEL I</span></div>
+      <div class="bh-item"><div class="bh-icon">🕶</div><div class="bh-name">Ochelari blue-light 2h pre-somn</div><div class="bh-bars"><div class="bh-dot" style="background:#4CAF50"></div><div class="bh-dot" style="background:#4CAF50"></div><div class="bh-dot" style="background:#4CAF50"></div><div class="bh-dot" style="background:#4CAF50"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div></div><span class="bh-tag" style="background:rgba(46,125,50,0.2);color:#81C784">NIVEL I</span></div>
+      <div class="bh-item"><div class="bh-icon">🧖</div><div class="bh-name">Sauna 15–20 min (cu 2–4h pre)</div><div class="bh-bars"><div class="bh-dot" style="background:#FFA000"></div><div class="bh-dot" style="background:#FFA000"></div><div class="bh-dot" style="background:#FFA000"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div></div><span class="bh-tag" style="background:rgba(249,168,37,0.15);color:#FFD54F">NIVEL II</span></div>
+      <div class="bh-item"><div class="bh-icon">🎵</div><div class="bh-name">Pink/White noise (50–70 dB)</div><div class="bh-bars"><div class="bh-dot" style="background:#FFA000"></div><div class="bh-dot" style="background:#FFA000"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div></div><span class="bh-tag" style="background:rgba(249,168,37,0.15);color:#FFD54F">NIVEL II</span></div>
+      <div class="bh-item"><div class="bh-icon">🔴</div><div class="bh-name">Red light therapy pre-somn</div><div class="bh-bars"><div class="bh-dot" style="background:#78909C"></div><div class="bh-dot" style="background:#78909C"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div></div><span class="bh-tag" style="background:rgba(120,144,156,0.15);color:#90A4AE">NIVEL III</span></div>
+      <div class="bh-item"><div class="bh-icon">🌿</div><div class="bh-name">Grounding/Earthing</div><div class="bh-bars"><div class="bh-dot" style="background:#78909C"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div><div class="bh-dot" style="background:rgba(255,255,255,0.15)"></div></div><span class="bh-tag" style="background:rgba(120,144,156,0.1);color:#78909C">NIVEL IV</span></div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="card wide">
+    <h2>🎯 Quiz — HRV, trackere si recuperare</h2>
+    <div id="quiz-container"></div>
+  </div>
+
+</div>
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Infografic educativ · Nu substituie consultul medical</footer>
+
+<script>
+// ── HRV GAUGE ─────────────────────────────────────────────────────────────
+let miniChartInst=null;
+function setGauge(val,color,msg,btn){
+  document.querySelectorAll('.go').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('hrv-val').style.color=color;
+  document.getElementById('hrv-val').textContent=val;
+  document.getElementById('hrv-fill').style.width=(val/80*100)+'%';
+  document.getElementById('hrv-fill').style.background=color;
+  document.getElementById('hrv-msg').textContent=msg;
+  // mini trend
+  const noise=()=>Math.round((Math.random()-0.5)*8);
+  const base=Array.from({length:8},()=>val+noise());
+  const ctx=document.getElementById('hrvMiniChart').getContext('2d');
+  if(miniChartInst)miniChartInst.destroy();
+  miniChartInst=new Chart(ctx,{
+    type:'line',data:{
+      labels:['L','M','M','J','V','S','D','L'],
+      datasets:[{data:base,borderColor:color,backgroundColor:color+'20',fill:true,pointRadius:3,borderWidth:2,tension:0.4}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(159,168,218,0.05)'}},
+        y:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(159,168,218,0.05)'},title:{display:true,text:'RMSSD',color:'#9FA8DA',font:{size:9}}}}}
+  });
+}
+setGauge(62,'#81C784','Parasimpatic dominant · N3 complet · Recuperare excelenta',document.querySelector('.go'));
+
+// ── LOOP ──────────────────────────────────────────────────────────────────
+const loopData={
+  masoara:{text:'Masori zilnic: HRV nocturn (tracker sau HRV4Training 30 sec dimineata), SpO2 medie nocturna, eficienta somnului, calitate subiectiva 1-10, ora adormire/trezire. Campul 17 din jurnalul BH 3.0.'},
+  interpreti:{text:'Nu interpretezi o noapte — interpretezi trendul pe 7 zile. HRV scazut cu > 10% fata de media personala pe 7 zile = semnal. SpO2 < 90% recurent = somnolog. Eficienta < 75% = fragmentare.'},
+  intervii:{text:'Pe baza datelor alegi interventia: temperatura camera (17-19°C), NSDR 20 min, sauna cu 2-4h pre-somn, supliment lipsit, ora schimbata. O singura variabila modificata — N=1 strict.'},
+  remasori:{text:'Minimum 14 nopti dupa interventie pentru a evalua efectul. Somnul are variabilitate mare noapte la noapte — concluziile la 1-2 zile sunt invalide. Trendul saptamanal este unitatea de masura.'},
+};
+function showLoop(key,el){
+  const d=document.getElementById('loop-detail');
+  if(d.classList.contains('show')&&d.dataset.key===key){d.classList.remove('show');document.querySelectorAll('.lp').forEach(l=>l.style.borderColor='');return;}
+  d.textContent=loopData[key];d.dataset.key=key;d.classList.add('show');
+  document.querySelectorAll('.lp').forEach(l=>l.style.borderColor='');
+  el.style.borderColor='var(--indll)';
+}
+
+// ── READINESS ─────────────────────────────────────────────────────────────
+function toggleRm(row,id){
+  const el=document.getElementById(id);
+  el.classList.toggle('show');
+}
+
+// ── TREND CHART ───────────────────────────────────────────────────────────
+const days=Array.from({length:30},(_,i)=>`Z${i+1}`);
+const trend=[58,60,62,65,63,61,59,57,52,48,45,50,55,60,62,64,65,63,60,55,45,40,42,48,55,58,60,62,64,65];
+const baseline=trend.map((_,i,a)=>{const sl=a.slice(Math.max(0,i-6),i+1);return Math.round(sl.reduce((s,v)=>s+v,0)/sl.length);});
+const events=[{x:8,label:'Alcool'},{x:19,label:'Infectie'},{x:21,label:'OSA suspect'}];
+new Chart(document.getElementById('trendChart').getContext('2d'),{
+  type:'line',
+  data:{labels:days,datasets:[
+    {label:'HRV Nocturn (RMSSD)',data:trend,borderColor:'rgba(57,73,171,0.8)',backgroundColor:'rgba(57,73,171,0.1)',fill:true,pointRadius:3,borderWidth:2,tension:0.3,
+      pointBackgroundColor:trend.map((_,i)=>[8,19,20,21].includes(i)?'#EF5350':'rgba(57,73,171,0.8)'),
+      pointRadius:trend.map((_,i)=>[8,19,20,21].includes(i)?6:3)},
+    {label:'Baseline 7 zile',data:baseline,borderColor:'rgba(249,168,37,0.6)',backgroundColor:'transparent',borderDash:[4,4],pointRadius:0,borderWidth:1.5},
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{
+      x:{ticks:{color:'#78909C',font:{size:9},maxTicksLimit:10},grid:{color:'rgba(159,168,218,0.05)'}},
+      y:{min:30,max:75,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(159,168,218,0.06)'},title:{display:true,text:'ms',color:'#9FA8DA',font:{size:9}}}
+    }
+  }
+});
+
+// ── OSA BARS ──────────────────────────────────────────────────────────────
+const obs2=new IntersectionObserver(e=>{
+  e.forEach(x=>{
+    if(x.isIntersecting){
+      document.querySelectorAll('#osa-bars .ob-fill').forEach((b,i)=>{
+        setTimeout(()=>{b.style.width=b.dataset.w;},i*200+100);
+      });
+      obs2.disconnect();
+    }
+  });
+},{threshold:0.2});
+const ob=document.getElementById('osa-bars');
+if(ob)obs2.observe(ob);
+
+// ── QUIZ ─────────────────────────────────────────────────────────────────
+const qs=[
+  {q:"Ce reprezinta o scadere de 10% a HRV fata de baseline-ul personal pe 7 zile?",opts:["O variatie normala si ignorabila","Semnal de alarma — recuperare activa necesara","Indicator ca antrenamentul trebuie intensificat","Eroare de masurare a tracker-ului"],ans:1,exp:"Trendul pe 7 zile este unitatea operationala. O scadere de >10% fata de media personala pe 7 zile — independent de valoarea absoluta — indica perturbarea SNA si necesita recuperare activa, nu efort suplimentar."},
+  {q:"Ce este NSDR si care este efectul sau principal?",opts:["Non-Sleep Deep Rest — recuperare neurala comparabila cu napul, fara sleep inertia","Un tip de meditatie pentru adormire mai rapida","Protocol de suplimentare pentru somn profund","Tehnica de respiratie pentru scaderea cortizolului"],ans:0,exp:"NSDR (Non-Sleep Deep Rest) este un protocol de relaxare profunda (Yoga Nidra modificat) de 10–20 min. Kjaer 2002: dopamina +65%. Produce recuperare neurala comparabila cu un power nap de 20 min — dar fara sleep inertia la trezire."},
+  {q:"Care tracker are cea mai buna acuratete pentru HRV nocturn si temperatura?",opts:["Apple Watch Ultra","Garmin Fenix","Oura Ring Gen3","Muse S (EEG)"],ans:2,exp:"Oura Ring Gen3 este cel mai validat tracker consumer pentru HRV nocturn, temperatura corporala periferica si SpO2 nocturn. Muse S masoara EEG real dar nu HRV. PSG clinica ramane gold standard."},
+  {q:"Cand este contraindicat immersia in apa rece (cold plunge)?",opts:["Dimineata la trezire","Inainte de antrenament","Seara, pre-somn","La pranz"],ans:2,exp:"Cold plunge seara produce eliberare de adrenalina si norepinefrina — simpaticul activat contraindica adormirea si calitatea N3. Optim dimineata: amplifica cortizol CAR, dopamina si vigoarea fara a afecta somnul nocturn."},
+  {q:"Ce valoare SpO2 nocturna indica necesitatea evaluarii pentru apnee in somn?",opts:["Sub 98%","Sub 95%","Sub 90% recurent","Sub 85% o singura data"],ans:2,exp:"SpO2 < 90% recurent sau media nocturna < 95% sunt indicatii pentru trimitere la somnolog si poligrafie respiratorie sau PSG. Un pulsoximetru de 40 RON poate efectua screeningul. STOP-BANG ≥ 3 = risc moderat-sever OSA."},
+];
+let qi=0,score=0;
+function renderQ(){
+  const c=document.getElementById('quiz-container');
+  if(qi>=qs.length){
+    c.innerHTML=`<div style="text-align:center;padding:18px"><div style="font-size:40px;font-weight:700;color:var(--gold)">${score}/${qs.length}</div><div style="font-size:13px;color:var(--indll);margin-top:6px">${score===qs.length?'Excelent! Biohacking-ul somnului stapanit.':score>=3?'Bine — revizuieste sectiunile cu greseli.':'Reia materialul — bazele sunt critice.'}</div><button class="qz-btn" onclick="qi=0;score=0;renderQ()" style="margin-top:12px">Restart</button></div>`;
+    return;
+  }
+  const q=qs[qi];
+  c.innerHTML=`<div class="qz-q">${qi+1}/${qs.length}. ${q.q}</div>
+    <div class="qz-opts">${q.opts.map((o,i)=>`<div class="qz-opt" id="qo-${i}" onclick="ans(${i})"><span>○</span>${o}</div>`).join('')}</div>
+    <div class="qz-exp" id="qz-exp">${q.exp}</div>
+    <div class="qz-score" id="qz-sc"></div>
+    <button class="qz-btn" id="qz-btn" style="display:none" onclick="qi++;renderQ()">Urmatoarea →</button>`;
+}
+function ans(sel){
+  const q=qs[qi];
+  if(document.getElementById('qz-btn').style.display!=='none')return;
+  if(sel===q.ans)score++;
+  q.opts.forEach((_,i)=>{
+    const el=document.getElementById(`qo-${i}`);
+    if(i===q.ans){el.classList.add('ok');el.querySelector('span').textContent='✓';}
+    else if(i===sel&&sel!==q.ans){el.classList.add('ko');el.querySelector('span').textContent='✗';}
+  });
+  document.getElementById('qz-exp').classList.add('show');
+  document.getElementById('qz-sc').textContent=`Scor: ${score}/${qi+1}`;
+  document.getElementById('qz-btn').style.display='inline-block';
+}
+renderQ();
+</script>
+</body>
+</html>

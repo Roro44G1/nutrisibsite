@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>L5.2 — Igiena cognitivă | BH 3.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --tel:#004D40;--tell:#00695C;--teld:#002B24;--telll:#80CBC4;
+  --gold:#F9A825;--navy:#050E1E;--navy2:#030E0C;
+  --white:#E0F2F1;--gray:#78909C;
+  --grn:#1B5E20;--red:#B71C1C;--amber:#F57C00;--ocn:#01579B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'Syne',sans-serif;line-height:1.6}
+#pb{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--tell),var(--gold));width:0%;z-index:100}
+nav{position:sticky;top:0;background:rgba(5,14,30,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(128,203,196,0.15);z-index:50;padding:0 24px}
+.ni{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold)}
+.nl{display:flex;gap:18px}
+.nl a{font-size:11px;letter-spacing:2px;color:var(--gray);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nl a:hover,.nl a.active{color:var(--telll)}
+.hero{background:linear-gradient(135deg,var(--teld) 0%,var(--navy2) 60%);padding:70px 24px 50px;text-align:center;border-bottom:1px solid rgba(128,203,196,0.2);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(0,105,92,0.2) 0%,transparent 70%)}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;position:relative}
+.hero h1{font-size:clamp(26px,5vw,46px);font-weight:800;line-height:1.1;margin-bottom:16px;position:relative}
+.hero h1 span{color:var(--telll)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gray);font-style:italic;max-width:640px;margin:0 auto 28px;position:relative}
+.chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+.chip{background:rgba(0,77,64,0.22);border:1px solid rgba(128,203,196,0.3);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:var(--telll)}
+.main{max-width:1100px;margin:0 auto;padding:40px 24px}
+section{margin-bottom:60px;scroll-margin-top:70px}
+.stag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--telll);text-transform:uppercase;margin-bottom:8px}
+h2{font-size:clamp(22px,3vw,30px);font-weight:700;margin-bottom:20px}
+h3{font-size:17px;font-weight:600;color:var(--telll);margin:24px 0 10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:48px}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(128,203,196,0.15);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--tell)}
+.card.g::before{background:var(--gold)}
+.cv{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;color:var(--gold);line-height:1}
+.cu{font-size:11px;color:var(--gray);letter-spacing:1px;margin:4px 0}
+.cl{font-size:12px;color:var(--white);font-weight:600}
+
+/* Baterie cognitiva */
+.battery-sim{display:flex;flex-direction:column;gap:6px}
+.bat-row{display:flex;align-items:center;gap:10px}
+.bat-time{width:60px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold)}
+.bat-bar{flex:1;height:22px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;position:relative}
+.bat-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:9px;font-weight:700;color:var(--navy);transition:width 1.4s}
+.bat-pct{width:40px;font-family:'JetBrains Mono',monospace;font-size:10px;text-align:right;color:var(--telll)}
+
+/* Protocol table */
+.tw{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--teld);color:var(--gold);padding:10px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+td{padding:9px 12px;border-bottom:1px solid rgba(128,203,196,0.1);color:var(--white);vertical-align:top;line-height:1.5}
+tr:nth-child(even) td{background:rgba(0,77,64,0.04)}
+tr:hover td{background:rgba(0,77,64,0.08)}
+td:first-child{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);font-weight:700}
+
+.info-box{background:rgba(0,77,64,0.08);border:1px solid rgba(128,203,196,0.2);border-left:4px solid var(--tell);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.warn-box{background:rgba(249,168,37,0.07);border:1px solid rgba(249,168,37,0.25);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.danger-box{background:rgba(183,28,28,0.08);border:1px solid rgba(183,28,28,0.3);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+
+/* Focus protocols */
+.fp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.fp-card{background:rgba(255,255,255,0.03);border:1px solid rgba(128,203,196,0.15);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s}
+.fp-card:hover,.fp-card.open{background:rgba(0,77,64,0.1);border-color:rgba(128,203,196,0.35)}
+.fp-name{font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px}
+.fp-struct{font-size:11px;color:var(--telll);margin-bottom:4px;font-family:'JetBrains Mono',monospace}
+.fp-detail{display:none;font-size:11px;color:rgba(224,242,241,0.75);line-height:1.6;margin-top:8px;padding-top:8px;border-top:1px solid rgba(128,203,196,0.15)}
+.fp-detail.show{display:block}
+
+/* Checklist digital detox */
+.chk-items{display:flex;flex-direction:column;gap:6px}
+.chk-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(128,203,196,0.12);border-radius:8px}
+.chk-box{width:20px;height:20px;border-radius:4px;border:2px solid;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:11px;font-weight:700}
+.chk-label{font-size:12px;font-weight:600;color:var(--white);margin-bottom:2px}
+.chk-sub{font-size:10px;color:var(--gray);line-height:1.4}
+.chk-pri{padding:2px 8px;border-radius:8px;font-size:9px;font-weight:700;letter-spacing:0.5px;margin-left:auto;flex-shrink:0}
+
+.cw{height:220px;position:relative;margin:16px 0}
+footer{text-align:center;padding:32px 24px;border-top:1px solid rgba(128,203,196,0.1);font-size:11px;color:var(--gray)}
+</style>
+</head>
+<body>
+<div id="pb"></div>
+<nav>
+  <div class="ni">
+    <div class="nb">// BH 3.0 · M5 · L5.2</div>
+    <div class="nl">
+      <a href="#atentie">Atenție</a>
+      <a href="#deepwork">Deep Work</a>
+      <a href="#multitasking">Multitasking</a>
+      <a href="#protocoale">Protocoale</a>
+      <a href="#detox">Digital detox</a>
+      <a href="#zilnic">Zi optimă</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// Modul 5 · Lecția 5.2</div>
+  <h1>Igiena <span>cognitivă</span></h1>
+  <p class="hero-sub">Focus blocks · Deep work · Multitasking demitificat · Digital detox · Mediu fizic · Protocolul zilei optime</p>
+  <div class="chips">
+    <div class="chip">23 min refocus</div>
+    <div class="chip">4h deep work max</div>
+    <div class="chip">-40% multitasking</div>
+    <div class="chip">90 min BRAC</div>
+    <div class="chip">CO2 &lt; 1000 ppm</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="cards">
+    <div class="card g"><div class="cv">23 min</div><div class="cu">refocus după o întrerupere</div><div class="cl">Mark 2008, UCI — costul oricărei distrageri</div></div>
+    <div class="card"><div class="cv">4h</div><div class="cu">plafonul de deep work</div><div class="cl">Newport 2016 — maxim neurobiologic pentru experți</div></div>
+    <div class="card"><div class="cv">-40%</div><div class="cu">productivitate prin multitasking</div><div class="cl">APA 2006 — nu eficienta, ci iluzia ei</div></div>
+    <div class="card"><div class="cv">90 min</div><div class="cu">bloc optim de focus</div><div class="cl">BRAC Kleitman — ciclul ultradian cognitiv</div></div>
+    <div class="card g"><div class="cv">10 min</div><div class="cu">meditatie zilnica</div><div class="cl">Jha 2010 — atentie selectiva si WM imbunatatite sub stres</div></div>
+  </div>
+
+  <!-- ATENTIE -->
+  <section id="atentie">
+    <div class="stag">// 01</div>
+    <h2>Atenția — resursă limitată și epuizabilă</h2>
+    <div class="info-box"><strong style="color:var(--telll)">Model mecanic:</strong> Atenția cognitivă este guvernata de rezervele prefrontale, nivelul de adenozina, glucoza disponibila și starea SNA. Nu este voința — este chimie. Se epuizează intraday și se regenerează prin somn, pauze active și nutriție.</div>
+    <h3>Bateria cognitivă — descărcare pe parcursul zilei</h3>
+    <div class="battery-sim" id="bat-sim">
+      <div class="bat-row"><div class="bat-time">Trezire</div><div class="bat-bar"><div class="bat-fill" style="background:rgba(27,94,50,0.85);width:0" data-w="100%">Peak cognitiv</div></div><div class="bat-pct">100%</div></div>
+      <div class="bat-row"><div class="bat-time">08:00</div><div class="bat-bar"><div class="bat-fill" style="background:rgba(27,94,50,0.8);width:0" data-w="95%">Deep work #1</div></div><div class="bat-pct">95%</div></div>
+      <div class="bat-row"><div class="bat-time">10:00</div><div class="bat-bar"><div class="bat-fill" style="background:rgba(0,105,92,0.7);width:0" data-w="80%">Deep work #2</div></div><div class="bat-pct">80%</div></div>
+      <div class="bat-row"><div class="bat-time">12:00</div><div class="bat-bar"><div class="bat-fill" style="background:rgba(0,105,92,0.6);width:0" data-w="62%">Shallow/admin</div></div><div class="bat-pct">62%</div></div>
+      <div class="bat-row"><div class="bat-time">14:00</div><div class="bat-bar"><div class="bat-fill" style="background:rgba(249,168,37,0.6);width:0" data-w="45%">Post nap →</div></div><div class="bat-pct">45%</div></div>
+      <div class="bat-row"><div class="bat-time">15:30</div><div class="bat-bar"><div class="bat-fill" style="background:rgba(249,168,37,0.5);width:0" data-w="65%">Nap recovery ↑</div></div><div class="bat-pct">65%</div></div>
+      <div class="bat-row"><div class="bat-time">17:00</div><div class="bat-bar"><div class="bat-fill" style="background:rgba(245,124,0,0.5);width:0" data-w="38%">Shallow tasks</div></div><div class="bat-pct">38%</div></div>
+      <div class="bat-row"><div class="bat-time">19:00</div><div class="bat-bar"><div class="bat-fill" style="background:rgba(183,28,28,0.5);width:0" data-w="20%">Decizii slabe</div></div><div class="bat-pct">20%</div></div>
+    </div>
+    <div class="warn-box" style="margin-top:14px"><strong style="color:var(--gold)">Regula operativă Baumeister 1998:</strong> Sarcinile cognitive importante dimineata. Email, admin, sedinte rutinare — dupa pranz. Decision fatigue este real — nu moral, ci neurobiologic.</div>
+  </section>
+
+  <!-- DEEP WORK -->
+  <section id="deepwork">
+    <div class="stag">// 02</div>
+    <h2>Deep work — definitie si neurobiologie</h2>
+    <div class="info-box"><strong style="color:var(--telll)">Newport 2016:</strong> Activitate profesionala executata in concentrare fara distrageri, care impinge capacitatile cognitive la limita, creeaza valoare noua si este dificil de replicat. Opusul shallow work — nu ca efort, ci ca tip de procesare.</div>
+    <div class="tw" style="margin-top:16px">
+      <table>
+        <thead><tr><th>Caracteristica</th><th>Shallow Work</th><th>Deep Work</th></tr></thead>
+        <tbody>
+          <tr><td>Stare cognitiva</td><td>Distras, fragmentat, reactiv</td><td>Concentrat, imersiv, intentional</td></tr>
+          <tr><td>Output neuronal</td><td>Procesare superficiala; fara LTP semnificativ</td><td>Consolidare LTP; sinaptogeneza; expertiza ireversibila</td></tr>
+          <tr><td>Exemplu tipic</td><td>Email, sedinte, notificari, admin</td><td>Scriere analitica, programare complexa, creatie</td></tr>
+          <tr><td>Valoare economica</td><td>Scazuta — usor de automatizat</td><td>Inalta — greu de replicat</td></tr>
+          <tr><td>Plafonul zilnic</td><td>Nelimitat (obositor dar nu epuizant neural)</td><td>1–2h incepatori · 4h experti antrenati</td></tr>
+          <tr><td>Impact BDNF</td><td>Nesemnificativ</td><td>Stimuleaza neuroplasticitate si sinaptogeneza</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cw"><canvas id="deepChart"></canvas></div>
+  </section>
+
+  <!-- MULTITASKING -->
+  <section id="multitasking">
+    <div class="stag">// 03</div>
+    <h2>Multitasking — demontarea mitului</h2>
+    <div class="danger-box"><strong>Multitasking-ul nu există neuronal.</strong> Creierul comuta rapid între sarcini — cu un cost de 23 min refocus per comutare (Mark 2008) și -40% productivitate globala (APA 2006). Eficienta perceputa este iluzie.</div>
+    <div class="cw"><canvas id="mtChart"></canvas></div>
+    <div class="tw" style="margin-top:16px">
+      <table>
+        <thead><tr><th>Mecanism</th><th>Studiu/Sursa</th><th>Impact</th><th>Protocol anti-MT</th></tr></thead>
+        <tbody>
+          <tr><td>Task-switching cost</td><td>Meyer & Kieras 1997; APA 2006</td><td>-40% productivitate globala prin comutare frecventa</td><td>Single-tasking deliberat; o singura fereastra deschisa</td></tr>
+          <tr><td>Refocus time</td><td>Mark 2008, UC Irvine</td><td>23 min medie pentru refocus complet dupa intrerupere</td><td>Telefon in alta camera; notificari oprite; alarma la 90 min</td></tr>
+          <tr><td>Attention residue</td><td>Leroy 2009</td><td>Atentia ramasa pe sarcina anterioara degradeaza noua sarcina</td><td>Inchiderea explicita a sarcinii inainte de comutare</td></tr>
+          <tr><td>Notificari nevazute</td><td>Stothart 2015</td><td>Buzz-ul telefonului fragmenteaza atentia chiar nevazut</td><td>Telefon in alta camera fizica, nu pe silentios</td></tr>
+          <tr><td>Heavy media multitaskers</td><td>Ophir 2009, PNAS</td><td>Performanta mai slaba la filtrare, comutare, WM</td><td>Digital diet; single-media sessions</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PROTOCOALE FOCUS -->
+  <section id="protocoale">
+    <div class="stag">// 04</div>
+    <h2>Protocoale de focus — alege tipologia ta</h2>
+    <div class="fp-grid">
+      <div class="fp-card" onclick="toggleFP(this)">
+        <div class="fp-name">🍅 Pomodoro (Cirillo 1987)</div>
+        <div class="fp-struct">25 min + 5 min × 4 → 30 min</div>
+        <div class="fp-detail">Ideal pentru incepatori și sarcini cu deadline. Reduce procrastinarea prin „fac doar 25 de minute". Limitare: prea scurt pentru flow profund — 25 min nu ajunge la starea de imersie. Upgrade dupa 4–6 saptamani la Newport Blocks.</div>
+      </div>
+      <div class="fp-card" onclick="toggleFP(this)">
+        <div class="fp-name">🌊 Newport Focus Blocks</div>
+        <div class="fp-struct">90 min deep work + 20 min recuperare</div>
+        <div class="fp-detail">Analog BRAC ultradian (L5.1). Ideal pentru experti si sarcini complexe. Necesita antrenament progresiv: incepi cu 45 min, ajungi la 90 min in 4–6 saptamani. Cel mai compatibil cu biologia cognitiva.</div>
+      </div>
+      <div class="fp-card" onclick="toggleFP(this)">
+        <div class="fp-name">📅 Time Blocking (Newport)</div>
+        <div class="fp-struct">Ziua planificata in blocuri in avans</div>
+        <div class="fp-detail">Fiecare ora din zi este alocata unei activitati in avans (seara precedenta sau dimineata). Elimina deciziile reactive si shallow work infiltrat. Necesita recalibrare la perturbari. Puternic pentru freelanceri si manageri autonomi.</div>
+      </div>
+      <div class="fp-card" onclick="toggleFP(this)">
+        <div class="fp-name">🎯 MIT — Most Important Task</div>
+        <div class="fp-struct">3 sarcini critice identificate → atacate dimineata</div>
+        <div class="fp-detail">Low-friction, nu necesita restructurare completa a zilei. Seara identifici 3 MIT-uri. Dimineata, prima actiune: atacarea MIT #1. Nu email, nu social media, nu news. Simplu dar eficace.</div>
+      </div>
+      <div class="fp-card" onclick="toggleFP(this)">
+        <div class="fp-name">🔮 Deep Work Ritual (Newport)</div>
+        <div class="fp-struct">Loc fix + ora fixa + ritual start + blocuri</div>
+        <div class="fp-detail">Conditionarea contextuala: creierul asociaza loc+ora cu starea de focus. Ritual de start (cafea/muzica/checklist/alarma) semnalizeaza inceperea. Cel mai puternic pe termen lung. Necesita mediu de viata relativ controlabil.</div>
+      </div>
+      <div class="fp-card" onclick="toggleFP(this)">
+        <div class="fp-name">🧘 Mindfulness + Single-tasking</div>
+        <div class="fp-struct">10 min meditatie + practica deliberata focus</div>
+        <div class="fp-detail">Jha 2010 (Royal Navy): 8 saptamani × 10 min/zi → atentie selectiva si memoria de lucru semnificativ imbunatatite sub stres. Complementar oricarui alt protocol. Antreneaza capacitatea neurala de focus ca muschi.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIGITAL DETOX -->
+  <section id="detox">
+    <div class="stag">// 05</div>
+    <h2>Digital detox și mediul fizic cognitiv</h2>
+    <div class="info-box"><strong style="color:var(--telll)">Principiu:</strong> Mediul digital este proiectat adversarial cognitiv — fiecare notificare este un mecanism de întrerupere intentional. Igiena cognitiva înseamna re-proiectarea mediului în favoarea ta.</div>
+    <h3>Checklist digital detox — bifează implementat</h3>
+    <div class="chk-items" id="chk-items">
+      <div class="chk-row"><div class="chk-box" style="border-color:var(--red)" onclick="toggleChk(this)"></div><div style="flex:1"><div class="chk-label">Telefon în altă cameră în blocurile de focus</div><div class="chk-sub">Nu pe silentios — în altă cameră fizică. Buzz-ul nevăzut fragmentează (Stothart 2015)</div></div><span class="chk-pri" style="background:rgba(183,28,28,0.2);color:#EF9A9A">CRITICĂ</span></div>
+      <div class="chk-row"><div class="chk-box" style="border-color:var(--red)" onclick="toggleChk(this)"></div><div style="flex:1"><div class="chk-label">Notificări oprite în blocul de focus</div><div class="chk-sub">DO NOT DISTURB cu excepții stricte (urgente reale)</div></div><span class="chk-pri" style="background:rgba(183,28,28,0.2);color:#EF9A9A">CRITICĂ</span></div>
+      <div class="chk-row"><div class="chk-box" style="border-color:var(--amber)" onclick="toggleChk(this)"></div><div style="flex:1"><div class="chk-label">Email verificat de 2–3 ori/zi în ferestre alocate</div><div class="chk-sub">Nu reactiv. Mark 2012: batching email -26% sarcina cognitiva</div></div><span class="chk-pri" style="background:rgba(245,124,0,0.15);color:#FFAB40">ÎNALTĂ</span></div>
+      <div class="chk-row"><div class="chk-box" style="border-color:var(--amber)" onclick="toggleChk(this)"></div><div style="flex:1"><div class="chk-label">Social media: app timer < 1h total/zi</div><div class="chk-sub">Design adictiv intentional — timer strict, nu vointa</div></div><span class="chk-pri" style="background:rgba(245,124,0,0.15);color:#FFAB40">ÎNALTĂ</span></div>
+      <div class="chk-row"><div class="chk-box" style="border-color:var(--amber)" onclick="toggleChk(this)"></div><div style="flex:1"><div class="chk-label">O singură fereastră/tab în blocul de focus</div><div class="chk-sub">Browser cu o singura fereastra; alte aplicatii inchise</div></div><span class="chk-pri" style="background:rgba(245,124,0,0.15);color:#FFAB40">ÎNALTĂ</span></div>
+      <div class="chk-row"><div class="chk-box" style="border-color:var(--tell)" onclick="toggleChk(this)"></div><div style="flex:1"><div class="chk-label">News: o dată/zi, seara, max 15–20 min</div><div class="chk-sub">News creste anxietatea; nu adauga valoare decizionala relevanta</div></div><span class="chk-pri" style="background:rgba(0,105,92,0.2);color:var(--telll)">MEDIE</span></div>
+      <div class="chk-row"><div class="chk-box" style="border-color:var(--tell)" onclick="toggleChk(this)"></div><div style="flex:1"><div class="chk-label">Lectură profundă 20–30 min/zi (carte fizică)</div><div class="chk-sub">Antrenarea atentiei sustinute vs. fragmentarea digitala (Wolf 2018)</div></div><span class="chk-pri" style="background:rgba(0,105,92,0.2);color:var(--telll)">MEDIE</span></div>
+      <div class="chk-row"><div class="chk-box" style="border-color:var(--tell)" onclick="toggleChk(this)"></div><div style="flex:1"><div class="chk-label">Brain dump seara (task-uri incomplete externalizate)</div><div class="chk-sub">Reduce attention residue nocturn; imbunatateste somnul</div></div><span class="chk-pri" style="background:rgba(0,105,92,0.2);color:var(--telll)">MEDIE</span></div>
+    </div>
+    <div style="margin-top:10px;padding:10px 14px;background:rgba(0,77,64,0.08);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--telll)" id="chk-score">Implementat: 0 / 8</div>
+
+    <h3>Mediul fizic cognitiv — parametri optimi</h3>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Factor</th><th>Optim</th><th>Impact la deviere</th><th>Solutie</th></tr></thead>
+        <tbody>
+          <tr><td>Temperatura</td><td>21–22°C</td><td>Sub 18°C sau peste 25°C → -8–10% performanta (Seppanen 2006)</td><td>Termostat; ventilator; geam partial</td></tr>
+          <tr><td>Lumina</td><td>> 500 lux, 4000–5000K</td><td>Lumina slaba → somnolenta; lumina galbena → stare de relaxare (nu focus)</td><td>Lumina naturala preferata; lampa de birou alba</td></tr>
+          <tr><td>Zgomot</td><td>< 50 dB sau 60–70 dB ambient</td><td>Conversatii > 70 dB fragmenteaza atentia selectiva</td><td>Casti active noise-cancelling; muzica instrumentala</td></tr>
+          <tr><td>CO2</td><td>< 1000 ppm</td><td>> 1000 ppm → -15% cognitie (Allen 2016, Harvard)</td><td>Fereastra deschisa; ventilatie activa; senzor CO2 optional</td></tr>
+          <tr><td>Muzica</td><td>Instrumentala, 60–70 dB</td><td>Versuri in lb. materna fragmenteaza procesarea lingvistica</td><td>Lo-fi, classical, ambient fara versuri</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ZIUA OPTIMA -->
+  <section id="zilnic">
+    <div class="stag">// 06</div>
+    <h2>Ziua optimă — protocolul cognitiv integrat</h2>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Interval</th><th>Activitate</th><th>Mecanism</th><th>Tip</th></tr></thead>
+        <tbody>
+          <tr><td>06:00–07:30</td><td>Rutina matinala: lumina solara, hidratare, miscare usoara, NU telefon 30 min</td><td>Cortizol CAR; BDNF; dopamina matinala; SCN reset</td><td>Igiena somn+cognitiv</td></tr>
+          <tr><td>07:30–08:00</td><td>Cafeina + L-Teanina. Planificarea zilei: 3 MIT + blocuri alocate</td><td>DA+NE; intentionalitate cognitiva; fereastra CAR respectata</td><td>Setup cognitiv</td></tr>
+          <tr><td>08:00–09:30</td><td>BLOC DEEP WORK #1 — sarcina cea mai importanta</td><td>Peak cortizol + catecholamine; WM la maxim; energie maxima</td><td>Deep work</td></tr>
+          <tr><td>09:30–09:50</td><td>Recuperare activa: plimbare, stretching, NSDR 10 min</td><td>DMN activ; integrare; BDNF acut; racire prefrontala</td><td>Recuperare</td></tr>
+          <tr><td>09:50–11:20</td><td>BLOC DEEP WORK #2 — continuare sau sarcina secundara complexa</td><td>Al doilea ciclu ultradian; Ach inca ridicata</td><td>Deep work</td></tr>
+          <tr><td>11:20–13:00</td><td>Email, comunicari, admin (shallow work)</td><td>Energie cognitiva partiala = potrivit low-demand tasks</td><td>Shallow work</td></tr>
+          <tr><td>13:00–14:00</td><td>Pranz proteic + grasimi sanatoase (fara zaharuri, fara alcool)</td><td>Glicemie stabila; triptofan → serotonina; fara crash insulinic</td><td>Nutritie cognitiva</td></tr>
+          <tr><td>14:00–14:20</td><td>Nap 10–20 min sau NSDR</td><td>Adenozina; dopamina +65%; alertness +54%; recuperare neurala</td><td>Recuperare activa</td></tr>
+          <tr><td>14:30–16:00</td><td>BLOC DEEP WORK #3 — sarcini creative sau collaborative</td><td>Post-nap alertness; al treilea ciclu ultradian</td><td>Deep work</td></tr>
+          <tr><td>16:00–17:30</td><td>Shallow tasks, planning ziua urmatoare, brain dump</td><td>Energie scazuta = shallow work; claritate intentioanala seara</td><td>Shallow + Planning</td></tr>
+          <tr><td>17:30+</td><td>Stop lucru. Exercitiu fizic. Deconectare deliberata.</td><td>Boundary cognitiv; BDNF; recuperare SNA; pregatire somn</td><td>Recuperare + BDNF</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cw"><canvas id="zilnicChart"></canvas></div>
+  </section>
+
+</div>
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Biohacking 3.0 — Lecția 5.2 · Conținut educativ exclusiv</footer>
+
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('pb').style.width=Math.min((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100,100)+'%';});
+const secs=document.querySelectorAll('section[id]'),nls=document.querySelectorAll('.nl a');
+window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-80)c=s.id;});nls.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+c));});
+
+// Battery bars
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){document.querySelectorAll('#bat-sim .bat-fill').forEach((b,i)=>{setTimeout(()=>{b.style.width=b.dataset.w;},i*120+100);});obs.disconnect();}});},{threshold:0.2});
+obs.observe(document.getElementById('bat-sim'));
+
+// Focus protocol cards
+function toggleFP(el){el.classList.toggle('open');el.querySelector('.fp-detail').classList.toggle('show');}
+
+// Checklist
+let chkScore=0;
+function toggleChk(box){
+  box.classList.toggle('done');
+  if(box.classList.contains('done')){box.textContent='✓';box.style.background=box.style.borderColor.replace('rgb','rgba').replace(')',',.15)');chkScore++;}
+  else{box.textContent='';box.style.background='';chkScore--;}
+  document.getElementById('chk-score').textContent=`Implementat: ${chkScore} / 8 ${chkScore>=7?'— Protocol complet!':chkScore>=5?'— Bine, continua.':chkScore>=3?'— In progres.':'— Incepe cu cele CRITICE.'}`;
+}
+
+// Deep work output chart
+new Chart(document.getElementById('deepChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['1h focus\nfara bloc','2h cu\n5 intreruperi','90 min\ndeep work','3×90 min\nbloc BRAC'],
+    datasets:[{label:'Output cognitiv relativ (%)',data:[30,45,85,100],backgroundColor:['rgba(183,28,28,0.5)','rgba(245,124,0,0.5)','rgba(0,105,92,0.6)','rgba(27,94,32,0.7)'],borderRadius:6}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(128,203,196,0.05)'}},y:{min:0,max:110,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(128,203,196,0.05)'},title:{display:true,text:'Output (%)',color:'#80CBC4',font:{size:9}}}}}
+});
+
+// Multitasking cost chart
+new Chart(document.getElementById('mtChart').getContext('2d'),{
+  type:'line',
+  data:{
+    labels:Array.from({length:8},(_,i)=>`H${i+1}`),
+    datasets:[
+      {label:'Single-tasking + pauze BRAC',data:[95,90,92,88,80,85,82,80],borderColor:'rgba(0,105,92,0.8)',backgroundColor:'rgba(0,105,92,0.1)',fill:true,pointRadius:3,borderWidth:2,tension:0.3},
+      {label:'Multitasking reactiv (intreruperi frecvente)',data:[60,52,45,38,32,28,24,20],borderColor:'rgba(183,28,28,0.7)',backgroundColor:'rgba(183,28,28,0.07)',fill:true,pointRadius:3,borderWidth:2,tension:0.4,borderDash:[4,4]},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(128,203,196,0.05)'}},y:{min:0,max:110,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(128,203,196,0.05)'},title:{display:true,text:'Calitate output (%)',color:'#80CBC4',font:{size:9}}}}}
+});
+
+// Ziua optima chart
+const zlabels=['06:00','07:30','08:00','09:30','09:50','11:20','13:00','14:00','14:30','16:00','17:30','19:00'];
+const zdata=[60,80,95,80,90,70,60,35,75,55,40,30];
+const zcolors=zdata.map(v=>v>=85?'rgba(27,94,32,0.8)':v>=65?'rgba(0,105,92,0.7)':v>=45?'rgba(245,124,0,0.5)':'rgba(183,28,28,0.4)');
+new Chart(document.getElementById('zilnicChart').getContext('2d'),{
+  type:'bar',
+  data:{labels:zlabels,datasets:[{label:'Energie cognitiva disponibila',data:zdata,backgroundColor:zcolors,borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(128,203,196,0.05)'}},y:{min:0,max:110,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(128,203,196,0.05)'},title:{display:true,text:'Energie cognitiva (%)',color:'#80CBC4',font:{size:9}}}}}
+});
+</script>
+</body>
+</html>
