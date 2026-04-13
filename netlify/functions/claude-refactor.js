@@ -47,18 +47,15 @@ exports.handler = async function(event) {
     });
 
     const responseText = await response.text();
+    
+    // LOG temporar — vezi în Netlify Functions log
+    console.log('STATUS:', response.status);
+    console.log('BODY:', responseText.substring(0, 500));
 
     return {
       statusCode: response.status,
       headers: { ...CORS, 'Content-Type': 'application/json' },
       body: responseText
-    };
-
-  } catch (err) {
-    return {
-      statusCode: 500,
-      headers: { ...CORS, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: { message: err.message } })
     };
   }
 };
