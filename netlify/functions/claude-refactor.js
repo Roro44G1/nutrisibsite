@@ -1,12 +1,10 @@
 exports.handler = async function(event) {
-
-  const CORS = {
+  var CORS = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS'
   };
 
-  // Preflight CORS
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers: CORS, body: '' };
   }
@@ -15,47 +13,51 @@ exports.handler = async function(event) {
     return { statusCode: 405, headers: CORS, body: 'Method Not Allowed' };
   }
 
-  const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-  if (!ANTHROPIC_API_KEY) {
+  var apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
     return {
       statusCode: 500,
-      headers: { ...CORS, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: { message: 'ANTHROPIC_API_KEY lipsă în env vars Netlify' } })
+      headers: CORS,
+      body: JSON.stringify({ error: { message: 'API key lipsa' } })
     };
   }
 
-  let parsedBody;
+  var parsedBody;
   try {
     parsedBody = JSON.parse(event.body);
-  } catch(e) {
+  } catch(e1) {
     return {
       statusCode: 400,
-      headers: { ...CORS, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ error: { message: 'Body invalid JSON' } })
+      headers: CORS,
+      body: JSON.stringify({ error: { message: 'JSON invalid' } })
     };
   }
 
+  var responseText;
+  var responseStatus;
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    var response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
+        'x-api-key': apiKey,
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify(parsedBody)
     });
-
-    const responseText = await response.text();
-    
-    // LOG temporar — vezi în Netlify Functions log
-    console.log('STATUS:', response.status);
-    console.log('BODY:', responseText.substring(0, 500));
-
+    responseStatus = response.status;
+    responseText = await response.text();
+  } catch(e2) {
     return {
-      statusCode: response.status,
-      headers: { ...CORS, 'Content-Type': 'application/json' },
-      body: responseText
+      statusCode: 500,
+      headers: CORS,
+      body: JSON.stringify({ error: { message: e2.message } })
     };
   }
+
+  return {
+    statusCode: responseStatus,
+    headers: CORS,
+    body: responseText
+  };
 };
