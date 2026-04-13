@@ -412,19 +412,98 @@ Astfel totul se adaptează la lățimea lui .container-main.`,
 
   return `Ești un procesor tehnic de fișiere HTML pentru site-ul nutrisib.club.
 
-SARCINA TA ESTE EXCLUSIV TEHNICĂ: restructurezi codul HTML conform regulilor de mai jos.
-NU generezi conținut nou. NU schimbi textul articolelor. NU adaugi comentarii.
-Returnează DOAR codul HTML complet de la <!DOCTYPE html> până la </html>, fără niciun text înainte sau după, fără markdown, fără backtick-uri.
+SARCINA TA: Convertești complet structura și stilul unui articol de blog vechi la standardul vizual NutriSib definit de celos.css.
 
-${activeTexts}
+NU generezi conținut nou. NU schimbi textul, imaginile, tabelele sau listele originale.
+Returnează DOAR codul HTML complet de la <!DOCTYPE html> până la </html>, fără explicații, fără markdown, fără backtick-uri.
 
-━━━ IMPORTANT ━━━
-• Păstrează INTACT tot conținutul textual al articolului.
-• Păstrează toate imaginile, link-urile, tabelele, listele.
-• Păstrează toate id-urile și clasele proprii articolului.
-• Dacă o regulă nu se aplică (ex: nu există nav), sari peste ea fără a crea structuri goale.
-• Asigură-te că HTML-ul rezultat este valid și bine format.
-• Returnează DOAR HTML complet, fără niciun text sau explicație înainte sau după.`;
+STRUCTURA EXACTĂ PE CARE O PRODUCI:
+
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[titlul original]</title>
+    [toate meta tags originale: description, keywords, og:*, author — NEATINSE]
+    <link rel="stylesheet" href="../celos.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        .nav-bar { width: 100%; box-sizing: border-box; }
+        /* Pastreaza DOAR clasele cu prefix unic ale articolului (ex: .zwp-, .ztabs-) */
+        /* Elimina: body{}, header{}, .container{}, .section-wrapper{}, section{}, main{} */
+        /* Inlocuieste variabile locale: #0A2463 cu var(--color-navy), #3E92CC cu var(--color-brand-medium), #1f2937 cu var(--color-text-dark), #4b5563 cu var(--color-text-light), #f8f9fa/#f3f4f6 cu var(--color-pearl), #e5e7eb cu var(--color-border), #C5A021 cu var(--color-gold) */
+    </style>
+</head>
+<body>
+<div class="container-main">
+
+    <header class="nav-bar">
+        <a href="../index.html" class="nav-brand"><img src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="Sigla Nutrisib" class="logo-image" onerror="this.style.display='none'"></a>
+        <div class="nav-links">
+            <a href="../index.html">Acasa</a>
+            <a href="../index.html#povestea">Povestea</a>
+            <a href="../index.html#metoda">Metoda</a>
+            <a href="../blog/index.html" class="active">Blog</a>
+            <a href="../contact.html">Contact</a>
+        </div>
+        <button class="mobile-menu-btn" onclick="const nav=document.querySelector('.nav-links');nav.style.display=(nav.style.display==='flex'?'none':'flex')">☰</button>
+    </header>
+
+    <div class="hero-card">
+        <h1>[titlul principal al articolului — din h1 sau header original]</h1>
+        <p>[subtitlul sau descrierea — din p descriptiv din header sau meta description]</p>
+    </div>
+
+    <div class="art-card" id="[slug-sectiune-1]">
+        <div class="section-anchor-header">
+            <h2>[titlul primei sectiuni — din h3 sau h2 original]</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+        [continut original NEATINS: paragrafe, liste, tabele, imagini, h4, h5]
+    </div>
+
+    <div class="art-card" id="[slug-sectiune-2]">
+        <div class="section-anchor-header">
+            <h2>[titlul sectiunii]</h2>
+            <a href="#" class="back-top">↑ Sus</a>
+        </div>
+        [continut NEATINS]
+    </div>
+
+    [... cate art-card cate sectiuni are articolul original ...]
+
+    <div id="footer-placeholder"></div>
+</div>
+<script>fetch('https://nutrisib.club/footer.html').then(r=>r.text()).then(data=>{const c=document.getElementById('footer-placeholder');if(c)c.innerHTML=data;}).catch(err=>console.error('Footer error:',err));<\/script>
+<script src="https://nutrisib.club/script_protect.js" defer><\/script>
+</body>
+</html>
+
+REGULI DE CONVERSIE:
+
+R1 — WRAPPER: Inveleste tot body-ul in <div class="container-main">. Elimina orice <div class="container"> sau wrapper propriu.
+
+R2 — NAV: Inlocuieste orice header/nav/meniu cu nav-ul standard de mai sus.
+
+R3 — HERO CARD: Converteste <header> cu gradient (titlu+subtitlu) in <div class="hero-card">. Extrage h1 si primul p descriptiv. Elimina header-ul original.
+
+R4 — SECTIUNI: Fiecare <div class="section-wrapper"><section> sau <section> devine:
+<div class="art-card" id="[slug-din-titlu]">
+  <div class="section-anchor-header"><h2>[titlul sectiunii]</h2><a href="#" class="back-top">↑ Sus</a></div>
+  [continut NEATINS]
+</div>
+Elimina: <div class="section-wrapper">, <section>, <main>, orice wrapper de sectiune propriu.
+
+R5 — TITLURI: h3 titlu de sectiune devine h2 in section-anchor-header. h4 si h5 sub-titluri raman NEATINSE in interiorul art-card.
+
+R6 — CSS: Inlocuieste link-urile CSS cu celos.css + Google Fonts. In <style> intern elimina clasele globale (body, header, .container, .section-wrapper, section, main, .nav-bar, .container-main, .hero-card, .btn). Pastreaza DOAR clasele cu prefix unic ale articolului.
+
+R7 — FOOTER: Elimina orice <footer> hardcodat. Adauga footer-placeholder si scripturile standard. Elimina scripturi inline de protectie (contextmenu, keydown, F12).
+
+R8 — CONTINUT NEATINS: Fiecare paragraf, lista, tabel, imagine — 100% neatins. Nu adauga, nu sterge, nu reformula niciun cuvant.
+
+Returnează DOAR HTML complet, fără niciun text sau explicație înainte sau după.`
 }
 
 // ═══════════════════════════════════════════════════════
@@ -580,6 +659,65 @@ function clearAll() {
 }
 
 // ═══════════════════════════════════════════════════════
+// STRIP SELECTIV / REINJECT CSS + JS
+// ─────────────────────────────────────────────────────
+// Logică threshold:
+//   <style>  > 3KB  → strip (clase proprii articol, Claude le păstrează oricum)
+//   <style>  ≤ 3KB  → rămâne la Claude (R7 modifică variabilele)
+//   <script> inline > 2KB → strip (logică JS pură, irelevantă pentru structură)
+//   <script> inline ≤ 2KB → rămâne la Claude (R6 elimină protecțiile)
+//   <script src="..."> orice → rămâne la Claude (R6 le gestionează)
+// ═══════════════════════════════════════════════════════
+
+const STYLE_THRESHOLD  = 3 * 1024;  // 3KB
+const SCRIPT_THRESHOLD = 2 * 1024;  // 2KB
+
+function stripSelective(html) {
+  const stripped_styles  = [];  // blocuri mari scoase
+  const stripped_scripts = [];  // blocuri mari scoase
+  let result = html;
+
+  // ── STYLE blocks ──
+  result = result.replace(/(<style[\s\S]*?<\/style>)/gi, (match) => {
+    if (match.length > STYLE_THRESHOLD) {
+      stripped_styles.push(match);
+      return `<!--STYLE_PH_${stripped_styles.length - 1}-->`;
+    }
+    return match; // mic → rămâne la Claude (R7 îl poate modifica)
+  });
+
+  // ── SCRIPT blocks ──
+  result = result.replace(/(<script[\s\S]*?<\/script>)/gi, (match) => {
+    // Script cu src extern → rămâne la Claude (R6 decide)
+    if (/src\s*=/i.test(match)) return match;
+    // Script inline mare → strip
+    if (match.length > SCRIPT_THRESHOLD) {
+      stripped_scripts.push(match);
+      return `<!--SCRIPT_PH_${stripped_scripts.length - 1}-->`;
+    }
+    return match; // mic → rămâne la Claude (R6 elimină protecțiile)
+  });
+
+  return { stripped: result, styles: stripped_styles, scripts: stripped_scripts };
+}
+
+function reinjectSelective(html, styles, scripts) {
+  let result = html;
+  // Reinjectează style-urile mari la indicele corect
+  styles.forEach((s, i) => {
+    result = result.replace(`<!--STYLE_PH_${i}-->`, s);
+  });
+  // Reinjectează script-urile mari la indicele corect
+  scripts.forEach((s, i) => {
+    result = result.replace(`<!--SCRIPT_PH_${i}-->`, s);
+  });
+  // Curăță orice placeholder rămas (Claude l-a eliminat din greșeală)
+  result = result.replace(/<!--STYLE_PH_\d+-->/g, '');
+  result = result.replace(/<!--SCRIPT_PH_\d+-->/g, '');
+  return result;
+}
+
+// ═══════════════════════════════════════════════════════
 // API CALL
 // ═══════════════════════════════════════════════════════
 async function callAPI(htmlContent, fileName) {
@@ -589,11 +727,25 @@ async function callAPI(htmlContent, fileName) {
   const maxTokens = parseInt(document.getElementById('optTokens').value);
   const timeoutMs = parseInt(document.getElementById('optTimeout').value) * 1000;
 
+  // Strip SELECTIV: blocuri mari (>3KB style, >2KB script inline) → placeholder
+  // Blocuri mici rămân la Claude: R7 modifică variabilele CSS, R6 elimină protecțiile
+  const { stripped, styles, scripts } = stripSelective(htmlContent);
+  const inKB  = (htmlContent.length / 1024).toFixed(1);
+  const outKB = (stripped.length / 1024).toFixed(1);
+  const saved = styles.length + scripts.length;
+  if (saved > 0) {
+    log(`  ↳ Strip selectiv: ${inKB}KB → ${outKB}KB · ${styles.length} style mari + ${scripts.length} script mari păstrate local`, 'info');
+  }
+
+  const placeholderNote = saved > 0
+    ? `\n\nIMPORTANT: Placeholder-ele <!--STYLE_PH_N--> și <!--SCRIPT_PH_N--> (unde N=0,1,2...) reprezintă blocuri CSS/JS mari extrase local — păstrează-le EXACT în poziția lor din output, nu le modifica și nu le elimina.`
+    : '';
+
   const payload = {
     model,
     max_tokens: maxTokens,
     system: systemPrompt,
-    messages: [{ role: 'user', content: `Procesează tehnic fișierul HTML conform regulilor. Fisier: ${fileName}\n\n${htmlContent}` }]
+    messages: [{ role: 'user', content: `Procesează tehnic fișierul HTML conform regulilor. Fisier: ${fileName}${placeholderNote}\n\n${stripped}` }]
   };
 
   const controller = new AbortController();
@@ -658,8 +810,11 @@ async function processOne(idx) {
   log(`⚙ [${idx+1}/${fileList.length}] ${item.name}`, 'info');
 
   try {
-    const text = await readFile(item.file);
-    const result = await callAPI(text, item.name);
+    const rawHtml = await readFile(item.file);
+    const processed = await callAPI(rawHtml, item.name);
+    // Reinjectează blocurile mari (strip selectiv) înapoi în poziția corectă
+    const { styles, scripts } = stripSelective(rawHtml);
+    const result = reinjectSelective(processed, styles, scripts);
     fileList[idx] = { ...fileList[idx], status: 'done', result, error: null };
     log(`✓ ${item.name} (${(result.length/1024).toFixed(1)} KB)`, 'ok');
     doneCount++;
