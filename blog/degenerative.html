@@ -4,244 +4,223 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>O abordare integrată în ameliorarea bolii Alzheimer și a demenței</title>
+    <link rel="stylesheet" href="../celos.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* Se asigură că fontul Inter este încărcat */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-        /* Definirea variabilelor de culoare pentru a fi ușor de modificat */
-        :root {
-            --dark-blue: #0A2463;
-            --medium-blue: #3E92CC;
-            --text-dark: #212529;
-            --text-light: #475569;
-            --bg-light: #f8f9fa;
-            --bg-white: #ffffff;
-            --border-color: #e0e0e0;
-
-            /* Paletă de culori pastelate, foarte pale */
-            --card-pale-blue: #f0f7ff;   /* Albastru foarte pal */
-            --card-pale-green: #effaf5;  /* Verde foarte pal */
-            --card-pale-yellow: #fffcf2; /* Galben foarte pal */
-            --card-pale-red: #fff5f5;    /* Roșu/Roz foarte pal */
-            --card-pale-grey: #f8f9fa;   /* Gri foarte pal */
-            --card-pale-purple: #f9f5ff; /* Mov foarte pal */
-            --card-pale-cyan: #edfcfc;   /* Cyan foarte pal */
+        .nav-bar { width: 100%; box-sizing: border-box; }
+        
+        .ztabs-container {
+            width: 100%;
         }
 
-        /* Stilul general al paginii */
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background-color: var(--bg-light);
-            margin: 0;
-            padding: 2rem;
+        .ztabs-header {
+            display: none;
+        }
+
+        .tab-buttons {
             display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 1.5rem;
+            background-color: var(--color-pearl);
+            border-bottom: 2px solid var(--color-border);
             justify-content: center;
         }
 
-        /* Containerul principal al articolului */
-       .ztabs-container {
-            max-width: 900px;
-            width: 100%;
-            margin: 0 auto;
-            background: var(--bg-white);
-            border-radius: 15px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-       .ztabs-header {
-            background-color: var(--dark-blue);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-        }
-        
-       .ztabs-header h1 {
-            font-size: 2em;
-            font-weight: 700;
-            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-            margin: 0;
-            padding: 0;
-            color: white!important;
-            border: none!important;
-        }
-
-        /* Stiluri pentru sistemul de tab-uri */
-       .tab-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            background-color: #f1f1f1;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-       .tab-link {
-            background-color: inherit;
-            border: none;
-            outline: none;
+        .tab-link {
+            padding: 0.75rem 1.25rem;
+            background-color: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 0.375rem;
             cursor: pointer;
-            padding: 14px 16px;
-            transition: background-color 0.3s, color 0.3s;
-            font-size: 0.9em;
-            font-weight: 600;
-            color: var(--dark-blue);
-            border-bottom: 3px solid transparent;
-            flex-grow: 1;
-            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--color-text-dark);
+            transition: all 0.3s ease;
         }
 
-       .tab-link:hover {
-            background-color: #ddd;
+        .tab-link:hover {
+            background-color: var(--color-brand-medium);
+            color: var(--color-white);
+            border-color: var(--color-brand-medium);
         }
 
-       .tab-link.active {
-            background-color: var(--bg-white);
-            color: var(--dark-blue);
-            border-bottom: 3px solid var(--medium-blue);
+        .tab-link.active {
+            background-color: var(--color-brand-medium);
+            color: var(--color-white);
+            border-color: var(--color-brand-medium);
         }
 
-       .tab-content {
-            display: none; /* Ascunde tab-urile by default */
-            padding: 30px 40px;
-            animation: fadeIn 0.5s;
+        .tab-content {
+            display: none;
+            padding: 0;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .tab-content[style*="block"] {
+            display: block;
         }
 
-        /* Stiluri pentru card-urile de conținut */
-       .zwp-section-title {
-            font-size: 1.8em;
-            color: var(--dark-blue);
-            margin-bottom: 25px;
+        .zwp-section-title {
+            font-size: 1.75rem;
             font-weight: 700;
-            border-bottom: 3px solid var(--medium-blue);
-            padding-bottom: 10px;
-            text-align: center;
+            color: var(--color-navy);
+            margin-bottom: 1.5rem;
+            margin-top: 0;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--color-gold);
         }
 
-       .zwp-card-grid {
+        .zwp-card-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-       .zwp-topic-card {
-            border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            padding: 1.5rem 2rem;
-            border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
+        .zwp-topic-card {
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(10, 36, 99, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-       .zwp-topic-card.bg-pale-blue { background-color: var(--card-pale-blue); }
-       .zwp-topic-card.bg-pale-green { background-color: var(--card-pale-green); }
-       .zwp-topic-card.bg-pale-yellow { background-color: var(--card-pale-yellow); }
-       .zwp-topic-card.bg-pale-red { background-color: var(--card-pale-red); }
-       .zwp-topic-card.bg-pale-grey { background-color: var(--card-pale-grey); }
-       .zwp-topic-card.bg-pale-purple { background-color: var(--card-pale-purple); }
-       .zwp-topic-card.bg-pale-cyan { background-color: var(--card-pale-cyan); }
 
-       .zwp-topic-card h3 {
-            font-size: 1.4em;
-            font-weight: 600;
-            color: var(--dark-blue)!important;
+        .zwp-topic-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(10, 36, 99, 0.15);
+        }
+
+        .zwp-topic-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-navy);
             margin-top: 0;
             margin-bottom: 1rem;
-            border-bottom: 2px solid var(--medium-blue);
-            padding-bottom: 0.5rem;
         }
 
-       .zwp-topic-card h4 {
-            font-size: 1.1em;
-            color: var(--medium-blue)!important;
+        .zwp-topic-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--color-text-dark);
+            margin: 0.5rem 0;
+        }
+
+        .zwp-topic-card ul, .zwp-topic-card ol {
+            margin: 1rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .zwp-topic-card li {
+            margin: 0.5rem 0;
+            color: var(--color-text-dark);
+            line-height: 1.6;
+        }
+
+        .bg-pale-blue {
+            background-color: rgba(62, 146, 204, 0.08);
+            border-left: 4px solid var(--color-brand-medium);
+        }
+
+        .bg-pale-green {
+            background-color: rgba(76, 175, 80, 0.08);
+            border-left: 4px solid #4CAF50;
+        }
+
+        .bg-pale-yellow {
+            background-color: rgba(197, 160, 33, 0.08);
+            border-left: 4px solid var(--color-gold);
+        }
+
+        .bg-pale-cyan {
+            background-color: rgba(0, 188, 212, 0.08);
+            border-left: 4px solid #00BCD4;
+        }
+
+        .bg-pale-purple {
+            background-color: rgba(156, 39, 176, 0.08);
+            border-left: 4px solid #9C27B0;
+        }
+
+        .bg-pale-red {
+            background-color: rgba(244, 67, 54, 0.08);
+            border-left: 4px solid #F44336;
+        }
+
+        .bg-pale-grey {
+            background-color: rgba(158, 158, 158, 0.08);
+            border-left: 4px solid #9E9E9E;
+        }
+
+        .zwp-references-list {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--color-text-dark);
+        }
+
+        .zwp-references-list li {
+            margin-bottom: 1rem;
+        }
+
+        .section-anchor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-anchor-header h2 {
+            flex: 1;
+            margin: 0;
+        }
+
+        .back-top {
+            color: var(--color-brand-medium);
+            text-decoration: none;
             font-weight: 600;
-            margin-top: 1.2rem;
-            margin-bottom: 0.5rem;
-            border: none!important;
-            padding: 0!important;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            margin-left: 1rem;
         }
 
-       .zwp-topic-card p,.zwp-topic-card ul,.zwp-topic-card ol {
-            font-size: 0.95em;
-            color: var(--text-light);
-            text-align: justify;
-            margin-bottom: 10px;
+        .back-top:hover {
+            color: var(--color-navy);
         }
 
-       .zwp-topic-card ul,.zwp-topic-card ol {
-            padding-left: 20px;
-        }
-        
-       .zwp-topic-card li {
-            margin-bottom: 5px;
-        }
-
-       .zwp-topic-card strong {
-            color: var(--dark-blue);
-            font-weight: 600;
-        }
-        
-       .zwp-topic-card em {
-            font-style: italic;
-        }
-        
-       .zwp-topic-card u {
-            text-decoration: underline;
-        }
-
-       .zwp-references-list {
-            list-style-type: none;
-            padding-left: 0;
-            font-size: 0.85em; /* Dimensiune font redusă */
-            column-count: 2; /* Formatare pe două coloane */
-            column-gap: 40px; /* Spațiu între coloane */
-        }
-
-       .zwp-references-list li {
-            margin-bottom: 1em;
-            word-break: break-word;
-            padding-left: 5px;
-            text-indent: -20px;
-            padding-left: 20px;
-        }
-
-       .ztabs-footer {
+        .ztabs-footer {
+            background-color: var(--color-navy);
+            color: var(--color-white);
             text-align: center;
-            padding: 25px 20px;
-            font-size: 0.9em;
-            color: #6c757d;
-            border-top: 1px solid var(--border-color);
-            background-color: var(--bg-light);
+            padding: 1.5rem;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            border-top: 2px solid var(--color-gold);
         }
-        
-        @media (max-width: 768px) {
-            body {
-                padding: 1rem;
-            }
-           .tab-content {
-                padding: 20px;
-            }
-           .zwp-references-list {
-                column-count: 1;
-            }
-           .tab-link {
-                font-size: 0.8em;
-                padding: 12px 8px;
-            }
+
+        .ztabs-footer p {
+            margin: 0;
         }
     </style>
 </head>
 <body>
+<div class="container-main">
+
+    <header class="nav-bar">
+        <a href="../index.html" class="nav-brand"><img src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="Sigla Nutrisib" class="logo-image" onerror="this.style.display='none'"></a>
+        <div class="nav-links">
+            <a href="../index.html">Acasa</a>
+            <a href="../index.html#povestea">Povestea</a>
+            <a href="../index.html#metoda">Metoda</a>
+            <a href="../blog/index.html" class="active">Blog</a>
+            <a href="../contact.html">Contact</a>
+        </div>
+        <button class="mobile-menu-btn" onclick="const nav=document.querySelector('.nav-links');nav.style.display=(nav.style.display==='flex'?'none':'flex')">☰</button>
+    </header>
+
+    <div class="hero-card">
+        <h1>O abordare integrată în ameliorarea bolii Alzheimer și a demenței</h1>
+        <p>O perspectivă holistică care utilizează sinergic proprietățile plantelor medicinale pentru îmbunătățirea calității vieții pacienților cu boala Alzheimer și demență senilă.</p>
+    </div>
 
     <div class="ztabs-container">
-        <header class="ztabs-header">
-            <h1>O abordare integrată în ameliorarea bolii Alzheimer și a demenței</h1>
-        </header>
 
         <div class="tab-buttons">
             <button class="tab-link active" onclick="openTab(event, 'Introducere')">Introducere</button>
@@ -255,245 +234,262 @@
         </div>
 
         <div id="Introducere" class="tab-content" style="display: block;">
-            <h2 class="zwp-section-title">O abordare integrată pentru o calitate a vieții îmbunătățită</h2>
-            <div class="zwp-card-grid">
-                <div class="zwp-topic-card bg-pale-blue">
-                    <h3>🔬 O perspectivă holistică</h3>
-                    <p>O abordare holistică și integrată, care utilizează sinergic proprietățile plantelor medicinale, oferă o perspectivă promițătoare pentru îmbunătățirea calității vieții pacienților cu boala Alzheimer și demență senilă. Deși aceste remedii nu reprezintă un tratament curativ, ele pot modula multiple căi fiziopatologice implicate în neurodegenerare, de la inflamație și stres oxidativ, la echilibrul neurotransmițătorilor și managementul simptomelor comportamentale. Strategia propusă se bazează pe patru piloni fundamentali: nootropicele pentru suport cognitiv direct, nervinele pentru calmarea sistemului nervos, adaptogenii pentru managementul stresului și carminativele pentru susținerea axei intestin-creier.</p>
+            <div class="art-card" id="perspectiva-holistica">
+                <div class="section-anchor-header">
+                    <h2>O abordare integrată pentru o calitate a vieții îmbunătățită</h2>
+                    <a href="#" class="back-top">↑ Sus</a>
+                </div>
+                <div class="zwp-card-grid">
+                    <div class="zwp-topic-card bg-pale-blue">
+                        <h3>🔬 O perspectivă holistică</h3>
+                        <p>O abordare holistică și integrată, care utilizează sinergic proprietățile plantelor medicinale, oferă o perspectivă promițătoare pentru îmbunătățirea calității vieții pacienților cu boala Alzheimer și demență senilă. Deși aceste remedii nu reprezintă un tratament curativ, ele pot modula multiple căi fiziopatologice implicate în neurodegenerare, de la inflamație și stres oxidativ, la echilibrul neurotransmițătorilor și managementul simptomelor comportamentale. Strategia propusă se bazează pe patru piloni fundamentali: nootropicele pentru suport cognitiv direct, nervinele pentru calmarea sistemului nervos, adaptogenii pentru managementul stresului și carminativele pentru susținerea axei intestin-creier.</p>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="Nootropice" class="tab-content">
-            <h2 class="zwp-section-title">Nootropicele: suport direct pentru funcția cognitivă</h2>
-            <div class="zwp-card-grid">
-                <div class="zwp-topic-card bg-pale-green">
-                    <h3>🧠 Mecanisme de acțiune</h3>
-                    <p>Nootropicele, cunoscute și ca neurotrofice, sunt substanțe care vizează direct îmbunătățirea funcțiilor cognitive precum memoria, atenția și concentrarea. Mecanismele lor de acțiune includ optimizarea circulației sanguine cerebrale, modularea neurotransmițătorilor – în special a acetilcolinei – și oferirea de protecție neuronală prin efecte antioxidante.</p>
+            <div class="art-card" id="nootropice-suport">
+                <div class="section-anchor-header">
+                    <h2>Nootropicele: suport direct pentru funcția cognitivă</h2>
+                    <a href="#" class="back-top">↑ Sus</a>
                 </div>
-                <div class="zwp-topic-card bg-pale-yellow">
-                    <h3><em>Ginkgo Biloba</em></h3>
-                    <p>Este una dintre cele mai studiate plante nootropice. Extractul standardizat EGb 761 este recunoscut pentru capacitatea sa de a îmbunătăți fluxul sanguin cerebral și de a proteja neuronii împotriva stresului oxidativ. O meta-analiză a demonstrat că o doză de 240 mg/zi de EGb 761 poate stabiliza sau încetini declinul cognitiv, funcțional și comportamental la pacienții cu demență, în special la cei cu simptome neuropsihiatrice asociate. Mai mult, studiile sugerează că administrarea concomitentă de <em>Ginkgo biloba</em> și donepezil, un inhibitor de colinesterază, poate îmbunătăți rata de eficacitate clinică și memoria vocabularului, indicând un potențial efect sinergic benefic.</p>
-                </div>
-                <div class="zwp-topic-card bg-pale-cyan">
-                    <h3><em>Bacopa Monnieri</em> (Brahmi)</h3>
-                    <p>Este o altă plantă esențială în medicina ayurvedică, recunoscută pentru efectele sale de îmbunătățire a memoriei. Compușii săi activi, bacozidele, au demonstrat în studii preclinice capacitatea de a reduce nivelurile de beta-amiloid și de a proteja celulele împotriva morții celulare induse de acesta. Un studiu clinic pe pacienți vârstnici a arătat că administrarea a 300 mg/zi de extract de <em>Bacopa</em> timp de 12 săptămâni a îmbunătățit memoria de reamintire întârziată și a redus simptomele de depresie și anxietate. Un alt studiu, deși necontrolat, a raportat că 600 mg/zi de extract de <em>Bacopa</em> administrat timp de 6 luni pacienților cu Alzheimer a dus la îmbunătățiri semnificative ale orientării în timp și spațiu, atenției și limbajului. De asemenea, <em>Bacopa</em> exercită un efect inhibitor asupra colinesterazei, mecanism similar cu cel al medicamentelor alopate prescrise în Alzheimer.</p>
-                </div>
-                <div class="zwp-topic-card bg-pale-purple">
-                    <h3>Ciuperca <em>Coama Leului</em> (<em>Hericium erinaceus</em>)</h3>
-                    <p>A atras atenția pentru potențialul său de a stimula sinteza factorului de creștere a nervilor (NGF), o proteină esențială pentru supraviețuirea și regenerarea neuronilor. Compușii activi, hericenonele (din corpul fructifer) și erinacinele (din miceliu), sunt responsabili pentru aceste efecte. Un studiu clinic randomizat pe pacienți cu deficit cognitiv ușor a arătat că administrarea a 3000 mg/zi de pulbere din corpul fructifer timp de 16 săptămâni a îmbunătățit semnificativ funcția cognitivă, evaluată prin Scala de Demență Hasegawa (HDS-R). Deși un alt studiu pe pacienți cu Alzheimer nu a găsit îmbunătățiri cognitive semnificative, a observat beneficii în ceea ce privește activitățile vieții de zi cu zi. Studiile pe animale sunt promițătoare, arătând că extractele de <em>Hericium erinaceus</em> pot reduce plăcile de amiloid și pot îmbunătăți comportamentul în modele de șoareci cu Alzheimer.</p>
+                <div class="zwp-card-grid">
+                    <div class="zwp-topic-card bg-pale-green">
+                        <h3>🧠 Mecanisme de acțiune</h3>
+                        <p>Nootropicele, cunoscute și ca neurotrofice, sunt substanțe care vizează direct îmbunătățirea funcțiilor cognitive precum memoria, atenția și concentrarea. Mecanismele lor de acțiune includ optimizarea circulației sanguine cerebrale, modularea neurotransmițătorilor – în special a acetilcolinei – și oferirea de protecție neuronală prin efecte antioxidante.</p>
+                    </div>
+                    <div class="zwp-topic-card bg-pale-yellow">
+                        <h3><em>Ginkgo Biloba</em></h3>
+                        <p>Este una dintre cele mai studiate plante nootropice. Extractul standardizat EGb 761 este recunoscut pentru capacitatea sa de a îmbunătăți fluxul sanguin cerebral și de a proteja neuronii împotriva stresului oxidativ. O meta-analiză a demonstrat că o doză de 240 mg/zi de EGb 761 poate stabiliza sau încetini declinul cognitiv, funcțional și comportamental la pacienții cu demență, în special la cei cu simptome neuropsihiatrice asociate. Mai mult, studiile sugerează că administrarea concomitentă de <em>Ginkgo biloba</em> și donepezil, un inhibitor de colinesterază, poate îmbunătăți rata de eficacitate clinică și memoria vocabularului, indicând un potențial efect sinergic benefic.</p>
+                    </div>
+                    <div class="zwp-topic-card bg-pale-cyan">
+                        <h3><em>Bacopa Monnieri</em> (Brahmi)</h3>
+                        <p>Este o altă plantă esențială în medicina ayurvedică, recunoscută pentru efectele sale de îmbunătățire a memoriei. Compușii săi activi, bacozidele, au demonstrat în studii preclinice capacitatea de a reduce nivelurile de beta-amiloid și de a proteja celulele împotriva morții celulare induse de acesta. Un studiu clinic pe pacienți vârstnici a arătat că administrarea a 300 mg/zi de extract de <em>Bacopa</em> timp de 12 săptămâni a îmbunătățit memoria de reamintire întârziată și a redus simptomele de depresie și anxietate. Un alt studiu, deși necontrolat, a raportat că 600 mg/zi de extract de <em>Bacopa</em> administrat timp de 6 luni pacienților cu Alzheimer a dus la îmbunătățiri semnificative ale orientării în timp și spațiu, atenției și limbajului. De asemenea, <em>Bacopa</em> exercită un efect inhibitor asupra colinesterazei, mecanism similar cu cel al medicamentelor alopate prescrise în Alzheimer.</p>
+                    </div>
+                    <div class="zwp-topic-card bg-pale-purple">
+                        <h3>Ciuperca <em>Coama Leului</em> (<em>Hericium erinaceus</em>)</h3>
+                        <p>A atras atenția pentru potențialul său de a stimula sinteza factorului de creștere a nervilor (NGF), o proteină esențială pentru supraviețuirea și regenerarea neuronilor. Compușii activi, hericenonele (din corpul fructifer) și erinacinele (din miceliu), sunt responsabili pentru aceste efecte. Un studiu clinic randomizat pe pacienți cu deficit cognitiv ușor a arătat că administrarea a 3000 mg/zi de pulbere din corpul fructifer timp de 16 săptămâni a îmbunătățit semnificativ funcția cognitivă, evaluată prin Scala de Demență Hasegawa (HDS-R). Deși un alt studiu pe pacienți cu Alzheimer nu a găsit îmbunătățiri cognitive semnificative, a observat beneficii în ceea ce privește activitățile vieții de zi cu zi. Studiile pe animale sunt promițătoare, arătând că extractele de <em>Hericium erinaceus</em> pot reduce plăcile de amiloid și pot îmbunătăți comportamentul în modele de șoareci cu Alzheimer.</p>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="Nervine" class="tab-content">
-            <h2 class="zwp-section-title">Nervinele: calmare și echilibru pentru sistemul nervos</h2>
-            <div class="zwp-card-grid">
-                <div class="zwp-topic-card bg-pale-blue">
-                    <h3>🧘‍♀️ Gestionarea simptomelor comportamentale</h3>
-                    <p>Nervinele sunt plante care hrănesc, calmează și susțin sistemul nervos, fiind esențiale pentru gestionarea simptomelor comportamentale și psihologice ale demenței (SCPD), precum agitația, anxietatea și insomnia.</p>
+            <div class="art-card" id="nervine-calmare">
+                <div class="section-anchor-header">
+                    <h2>Nervinele: calmare și echilibru pentru sistemul nervos</h2>
+                    <a href="#" class="back-top">↑ Sus</a>
                 </div>
-                <div class="zwp-topic-card bg-pale-green">
-                    <h3><em>Roinița</em> (<em>Melissa officinalis</em>)</h3>
-                    <p>Este recunoscută pentru proprietățile sale calmante și anxiolitice. Un studiu clinic randomizat, dublu-orb, a evaluat eficacitatea aromaterapiei cu ulei de roiniță pentru agitația la pacienții cu Alzheimer. Deși studiul nu a găsit o superioritate a roiniței față de placebo sau donepezil, a evidențiat o îmbunătățire substanțială în toate cele trei grupuri, subliniind beneficiile non-specifice ale atingerii și interacțiunii umane în managementul agitației. Alte studii sugerează că administrarea orală poate reduce simptomele de depresie și stres. Dozele orale utilizate în studii pentru anxietate și stres variază, dar un studiu clinic a utilizat 200 mg de extract de două ori pe zi.</p>
-                </div>
-                <div class="zwp-topic-card bg-pale-yellow">
-                    <h3><em>Mușețelul</em> (<em>Matricaria recutita</em>)</h3>
-                    <p>Este un remediu tradițional pentru anxietate și insomnie. Studiile clinice au confirmat că extractele de mușețel pot reduce simptomele de anxietate generalizată. Într-un studiu pe termen lung, o doză de 1500 mg/zi de extract de mușețel s-a dovedit sigură și eficientă în reducerea simptomelor la pacienții cu tulburare de anxietate generalizată moderată până la severă. Dozele utilizate în studii variază între 250 mg și 2 grame pe zi.</p>
-                </div>
-                <div class="zwp-topic-card bg-pale-red">
-                    <h3><em>Lavanda</em> (<em>Lavandula angustifolia</em>)</h3>
-                    <p>Este apreciată pentru efectele sale anxiolitice, sedative și de stabilizare a dispoziției. Atât aromaterapia, cât și administrarea orală s-au dovedit eficiente. Un preparat specific de ulei de lavandă, Silexan, administrat în doze de 80-160 mg/zi, a demonstrat eficacitate în reducerea anxietății în mai multe studii clinice. Un studiu pe vârstnici a arătat că un ceai de lavandă (2g de plantă, de două ori pe zi) a redus scorurile de depresie și anxietate după două săptămâni.</p>
+                <div class="zwp-card-grid">
+                    <div class="zwp-topic-card bg-pale-blue">
+                        <h3>🧘‍♀️ Gestionarea simptomelor comportamentale</h3>
+                        <p>Nervinele sunt plante care hrănesc, calmează și susțin sistemul nervos, fiind esențiale pentru gestionarea simptomelor comportamentale și psihologice ale demenței (SCPD), precum agitația, anxietatea și insomnia.</p>
+                    </div>
+                    <div class="zwp-topic-card bg-pale-green">
+                        <h3><em>Roinița</em> (<em>Melissa officinalis</em>)</h3>
+                        <p>Este recunoscută pentru proprietățile sale calmante și anxiolitice. Un studiu clinic randomizat, dublu-orb, a evaluat eficacitatea aromaterapiei cu ulei de roiniță pentru agitația la pacienții cu Alzheimer. Deși studiul nu a găsit o superioritate a roiniței față de placebo sau donepezil, a evidențiat o îmbunătățire substanțială în toate cele trei grupuri, subliniind beneficiile non-specifice ale atingerii și interacțiunii umane în managementul agitației. Alte studii sugerează că administrarea orală poate reduce simptomele de depresie și stres. Dozele orale utilizate în studii pentru anxietate și stres variază, dar un studiu clinic a utilizat 200 mg de extract de două ori pe zi.</p>
+                    </div>
+                    <div class="zwp-topic-card bg-pale-yellow">
+                        <h3><em>Mușețelul</em> (<em>Matricaria recutita</em>)</h3>
+                        <p>Este un remediu tradițional pentru anxietate și insomnie. Studiile clinice au confirmat că extractele de mușețel pot reduce simptomele de anxietate generalizată. Într-un studiu pe termen lung, o doză de 1500 mg/zi de extract de mușețel s-a dovedit sigură și eficientă în reducerea simptomelor la pacienții cu tulburare de anxietate generalizată moderată până la severă. Dozele utilizate în studii variază între 250 mg și 2 grame pe zi.</p>
+                    </div>
+                    <div class="zwp-topic-card bg-pale-red">
+                        <h3><em>Lavanda</em> (<em>Lavandula angustifolia</em>)</h3>
+                        <p>Este apreciată pentru efectele sale anxiolitice, sedative și de stabilizare a dispoziției. Atât aromaterapia, cât și administrarea orală s-au dovedit eficiente. Un preparat specific de ulei de lavandă, Silexan, administrat în doze de 80-160 mg/zi, a demonstrat eficacitate în reducerea anxietății în mai multe studii clinice. Un studiu pe vârstnici a arătat că un ceai de lavandă (2g de plantă, de două ori pe zi) a redus scorurile de depresie și anxietate după două săptămâni.</p>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="Adaptogeni" class="tab-content">
-            <h2 class="zwp-section-title">Adaptogenii: rezistență la stres și neuroprotecție</h2>
-            <div class="zwp-card-grid">
-                <div class="zwp-topic-card bg-pale-cyan">
-                    <h3>🛡️ Protecție împotriva stresului cronic</h3>
-                    <p>Adaptogenii sunt substanțe care ajută organismul să se adapteze la stresul cronic, un factor cunoscut pentru accelerarea proceselor neurodegenerative. Aceștia reglează axa hipotalamus-hipofiză-suprarenale, modulează nivelul de cortizol și oferă efecte neuroprotective.</p>
+            <div class="art-card" id="adaptogeni-protectie">
+                <div class="section-anchor-header">
+                    <h2>Adaptogenii: rezistență la stres și neuroprotecție</h2>
+                    <a href="#" class="back-top">↑ Sus</a>
                 </div>
-                <div class="zwp-topic-card bg-pale-purple">
-                    <h3><em>Ashwagandha</em> (<em>Withania somnifera</em>)</h3>
-                    <p>Este un adaptogen de bază în medicina ayurvedică. Studiile pe animale au produs rezultate remarcabile, arătând că un extract de Ashwagandha, bogat în withanolide și withanozide, a inversat deficitele comportamentale și a eliminat sau redus semnificativ plăcile de beta-amiloid în creierul șoarecilor model pentru Alzheimer. Mecanismul propus este unic, implicând stimularea unei proteine în ficat care ajută la "curățarea" amiloidului din creier prin transportul acestuia în fluxul sanguin pentru eliminare. Studiile pe oameni au confirmat beneficiile cognitive. Doze de 600 mg/zi de extract de rădăcină au îmbunătățit memoria, atenția și viteza de procesare a informațiilor la adulți, inclusiv la cei cu deficit cognitiv ușor.</p>
-                </div>
-                <div class="zwp-topic-card bg-pale-blue">
-                    <h3><em>Rhodiola Rosea</em> (rădăcina de aur)</h3>
-                    <p>Este cunoscută pentru combaterea oboselii mentale și fizice induse de stres. Compușii săi activi, precum salidrozida, au demonstrat efecte neuroprotective și antiinflamatorii în studii preclinice, protejând neuronii de neurotoxicitatea indusă de glutamat și suprimând activarea microgliei. <em>Rhodiola</em> poate modula nivelurile de monoamine (serotonină, dopamină) și are proprietăți antioxidante, contribuind la protecția pe termen lung a creierului. Dozele clinice utilizate pentru oboseală și depresie variază între 200 și 680 mg/zi.</p>
+                <div class="zwp-card-grid">
+                    <div class="zwp-topic-card bg-pale-cyan">
+                        <h3>🛡️ Protecție împotriva stresului cronic</h3>
+                        <p>Adaptogenii sunt substanțe care ajută organismul să se adapteze la stresul cronic, un factor cunoscut pentru accelerarea proceselor neurodegenerative. Aceștia reglează axa hipotalamus-hipofiză-suprarenale, modulează nivelul de cortizol și oferă efecte neuroprotective.</p>
+                    </div>
+                    <div class="zwp-topic-card bg-pale-purple">
+                        <h3><em>Ashwagandha</em> (<em>Withania somnifera</em>)</h3>
+                        <p>Este un adaptogen de bază în medicina ayurvedică. Studiile pe animale au produs rezultate remarcabile, arătând că un extract de Ashwagandha, bogat în withanolide și withanozide, a inversat deficitele comportamentale și a eliminat sau redus semnificativ plăcile de beta-amiloid în creierul șoarecilor model pentru Alzheimer. Mecanismul propus este unic, implicând stimularea unei proteine în ficat care ajută la "curățarea" amiloidului din creier prin transportul acestuia în fluxul sanguin pentru eliminare. Studiile pe oameni au confirmat beneficiile cognitive. Doze de 600 mg/zi de extract de rădăcină au îmbunătățit memoria, atenția și viteza de procesare a informațiilor la adulți, inclusiv la cei cu deficit cognitiv ușor.</p>
+                    </div>
+                    <div class="zwp-topic-card bg-pale-blue">
+                        <h3><em>Rhodiola Rosea</em> (rădăcina de aur)</h3>
+                        <p>Este cunoscută pentru combaterea oboselii mentale și fizice induse de stres. Compușii săi activi, precum salidrozida, au demonstrat efecte neuroprotective și antiinflamatorii în studii preclinice, protejând neuronii de neurotoxicitatea indusă de glutamat și suprimând activarea microgliei. <em>Rhodiola</em> poate modula nivelurile de monoamine (serotonină, dopamină) și are proprietăți antioxidante, contribuind la protecția pe termen lung a creierului. Dozele clinice utilizate pentru oboseală și depresie variază între 200 și 680 mg/zi.</p>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="Carminative" class="tab-content">
-            <h2 class="zwp-section-title">Carminativele: fundația sănătății prin axa intestin-creier</h2>
-            <div class="zwp-card-grid">
-                <div class="zwp-topic-card bg-pale-green">
-                    <h3>🔗 Conexiunea intestin-creier</h3>
-                    <p>Carminativele, plante cu rol digestiv, capătă o relevanță tot mai mare în contextul neurodegenerării prin prisma axei intestin-creier. Un microbiom intestinal dezechilibrat (disbioză) poate contribui la inflamația sistemică și neuroinflamație, un factor cheie în patologia Alzheimer. Produsele microbiene, cum ar fi lipopolizaharidele (LPS), pot traversa o barieră intestinală compromisă, ajungând în circulație și activând celulele imune ale creierului (microglia), exacerbând astfel procesele inflamatorii și patologia tau.</p>
+            <div class="art-card" id="carminative-fundatie">
+                <div class="section-anchor-header">
+                    <h2>Carminativele: fundația sănătății prin axa intestin-creier</h2>
+                    <a href="#" class="back-top">↑ Sus</a>
                 </div>
-                <div class="zwp-topic-card bg-pale-yellow">
-                    <h3><em>Turmericul</em> (<em>Curcuma longa</em>)</h3>
-                    <p>Și în special compusul său activ, curcumina, este un puternic agent antiinflamator și antioxidant. Studiile in vitro arată că curcumina poate inhiba agregarea beta-amiloidului, poate destabiliza fibrilele preformate și poate proteja neuronii de stresul oxidativ. De asemenea, suprimă căile pro-inflamatorii activate de beta-amiloid. O provocare majoră este biodisponibilitatea redusă a curcuminei. Pentru a depăși această limitare, au fost dezvoltate formulări cu biodisponibilitate crescută, cum ar fi BCM-95® sau Meriva® (un fitocomplex cu fosfolipide), care permit atingerea unor concentrații plasmatice mai mari. Dozele utilizate în studiile clinice pentru diverse afecțiuni, inclusiv Alzheimer, variază între 1.000 mg și 4.000 mg/zi.</p>
+                <div class="zwp-card-grid">
+                    <div class="zwp-topic-card bg-pale-green">
+                        <h3>🔗 Conexiunea intestin-creier</h3>
+                        <p>Carminativele, plante cu rol digestiv, capătă o relevanță tot mai mare în contextul neurodegenerării prin prisma axei intestin-creier. Un microbiom intestinal dezechilibrat (disbioză) poate contribui la inflamația sistemică și neuroinflamație, un factor cheie în patologia Alzheimer. Produsele microbiene, cum ar fi lipopolizaharidele (LPS), pot traversa o barieră intestinală compromisă, ajungând în circulație și activând celulele imune ale creierului (microglia), exacerbând astfel procesele inflamatorii și patologia tau.</p>
+                    </div>
+                    <div class="zwp-topic-card bg-pale-yellow">
+                        <h3><em>Turmericul</em> (<em>Curcuma longa</em>)</h3>
+                        <p>Și în special compusul său activ, curcumina, este un puternic agent antiinflamator și antioxidant. Studiile in vitro arată că curcumina poate inhiba agregarea beta-amiloidului, poate destabiliza fibrilele preformate și poate proteja neuronii de stresul oxidativ. De asemenea, suprimă căile pro-inflamatorii activate de beta-amiloid. O provocare majoră este biodisponibilitatea redusă a curcuminei. Pentru a depăși această limitare, au fost dezvoltate formulări cu biodisponibilitate crescută, cum ar fi BCM-95® sau Meriva® (un fitocomplex cu fosfolipide), care permit atingerea unor concentrații plasmatice mai mari. Dozele utilizate în studiile clinice pentru diverse afecțiuni, inclusiv Alzheimer, variază între 1.000 mg și 4.000 mg/zi.</p>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="Perspective" class="tab-content">
-            <h2 class="zwp-section-title">Perspective emergente: ciupercile cu psilocibină</h2>
-            <div class="zwp-card-grid">
-                <div class="zwp-topic-card bg-pale-red">
-                    <h3>🍄 Potențialul terapeutic al psihedelicelor</h3>
-                    <p>Cercetările recente explorează potențialul terapeutic al psihedelicelor, precum psilocibina, pentru simptomele neuropsihiatrice asociate cu bolile neurodegenerative. Depresia și anxietatea sunt frecvente la pacienții cu Alzheimer și pot accelera declinul cognitiv. Psilocibina a demonstrat eficacitate în tratarea depresiei majore și a anxietății la pacienții cu afecțiuni grave. Mecanismele propuse includ <em>îmbunătățirea neuroplasticității</em> (promovarea neurogenezei și a dendritogenezei) și <em>reducerea neuroinflamației</em> prin modularea receptorilor de serotonină 5-HT2A, prezenți și pe celulele imune. Deși promițătoare, cercetarea în acest domeniu este la început, iar limitările includ lipsa studiilor specifice pe pacienți cu Alzheimer, necesitatea stabilirii dozelor optime și considerentele etice și legale.</p>
+            <div class="art-card" id="perspective-psilocibina">
+                <div class="section-anchor-header">
+                    <h2>Perspective emergente: ciupercile cu psilocibină</h2>
+                    <a href="#" class="back-top">↑ Sus</a>
+                </div>
+                <div class="zwp-card-grid">
+                    <div class="zwp-topic-card bg-pale-red">
+                        <h3>🍄 Potențialul terapeutic al psihedelicelor</h3>
+                        <p>Cercetările recente explorează potențialul terapeutic al psihedelicelor, precum psilocibina, pentru simptomele neuropsihiatrice asociate cu bolile neurodegenerative. Depresia și anxietatea sunt frecvente la pacienții cu Alzheimer și pot accelera declinul cognitiv. Psilocibina a demonstrat eficacitate în tratarea depresiei majore și a anxietății la pacienții cu afecțiuni grave. Mecanismele propuse includ <em>îmbunătățirea neuroplasticității</em> (promovarea neurogenezei și a dendritogenezei) și <em>reducerea neuroinflamației</em> prin modularea receptorilor de serotonină 5-HT2A, prezenți și pe celulele imune. Deși promițătoare, cercetarea în acest domeniu este la început, iar limitările includ lipsa studiilor specifice pe pacienți cu Alzheimer, necesitatea stabilirii dozelor optime și considerentele etice și legale.</p>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="Sinergii" class="tab-content">
-            <h2 class="zwp-section-title">Sinergii, posologii și interacțiuni</h2>
-            <div class="zwp-card-grid">
-                <div class="zwp-topic-card bg-pale-blue">
-                    <h3>🤝 O abordare combinată</h3>
-                    <p>O abordare integrată presupune combinarea strategică a acestor remedii pentru a obține un efect sinergic. De exemplu, o formulă ar putea combina un nootropic precum <em>Bacopa</em> sau <em>Ginkgo</em> pentru suport cognitiv, un nervin ca <em>Roinița</em> sau <em>Mușețelul</em> pentru a gestiona agitația, un adaptogen ca <em>Ashwagandha</em> pentru a reduce impactul stresului și <em>Turmeric</em> cu biodisponibilitate crescută pentru a combate neuroinflamația de la nivel sistemic.</p>
+            <div class="art-card" id="sinergii-combinatii">
+                <div class="section-anchor-header">
+                    <h2>Sinergii, posologii și interacțiuni</h2>
+                    <a href="#" class="back-top">↑ Sus</a>
                 </div>
-                <div class="zwp-topic-card bg-pale-red">
-                    <h3>⚠️ Precauții și interacțiuni cu medicația alopată</h3>
-                    <p>Este crucială prudența la administrarea acestor plante, în special la pacienții vârstnici care urmează tratamente multiple.</p>
-                    <ul>
-                        <li><strong><em>Ginkgo Biloba</em></strong>: Poate crește riscul de sângerare și trebuie utilizat cu precauție împreună cu medicamente anticoagulante (ex: warfarina) sau antiplachetare (ex: aspirina, clopidogrel). De asemenea, poate interacționa cu medicamente metabolizate de enzimele citocromului P450 și poate scădea pragul convulsivant, necesitând prudență la asocierea cu inhibitori de colinesterază precum donepezilul, care pot avea un efect similar. Cu toate acestea, unele studii pe animale nu au găsit interacțiuni farmacologice negative între <em>Ginkgo</em> și donepezil.</li>
-                        <li><strong><em>Ashwagandha</em></strong>: Poate interacționa cu medicamente pentru diabet (risc de hipoglicemie), hipertensiune (risc de hipotensiune), imunosupresoare, sedative (crește efectul sedativ) și hormoni tiroidieni. Deși interacțiunea directă cu anticoagulantele este mai puțin documentată, unele surse recomandă prudență din cauza unor posibile efecte antiplachetare aditive.</li>
-                        <li><strong><em>Turmeric (Curcumina)</em></strong>: Poate crește riscul de sângerare la asocierea cu anticoagulante (warfarina) și antiplachetare. Poate interacționa și cu medicamente metabolizate de enzimele CYP3A4.</li>
-                        <li><strong><em>Lavanda și Roinița</em></strong>: Pot potența efectul medicamentelor sedative (ex: benzodiazepine). Roinița poate, de asemenea, interfera cu terapia de substituție hormonală tiroidiană.</li>
-                        <li><strong><em>Bacopa Monnieri</em></strong>: Deși studiile clinice sugerează un profil de siguranță bun, cu efecte adverse predominant gastrointestinale, mecanismul său de inhibare a colinesterazei sugerează o posibilă interacțiune aditivă cu medicamente din aceeași clasă (donepezil, rivastigmină, galantamină). Nu au fost identificate studii specifice care să confirme sau să infirme această interacțiune. Nu există date clare privind interacțiunea cu memantina.</li>
-                    </ul>
-                </div>
-                 <div class="zwp-topic-card bg-pale-grey">
-                    <h3>✅ Concluzie</h3>
-                    <p>În concluzie, utilizarea judicioasă și informată a nootropicelor, nervinelor, adaptogenilor și carminativelor, sub îndrumarea unui specialist, oferă o strategie complexă și multifactorială pentru a susține sănătatea creierului, a gestiona simptomele debilitante și, în cele din urmă, a îmbunătăți semnificativ calitatea vieții persoanelor care se confruntă cu boala Alzheimer și demența.</p>
+                <div class="zwp-card-grid">
+                    <div class="zwp-topic-card bg-pale-blue">
+                        <h3>🤝 O abordare combinată</h3>
+                        <p>O abordare integrată presupune combinarea strategică a acestor remedii pentru a obține un efect sinergic. De exemplu, o formulă ar putea combina un nootropic precum <em>Bacopa</em> sau <em>Ginkgo</em> pentru suport cognitiv, un nervin ca <em>Roinița</em> sau <em>Mușețelul</em> pentru a gestiona agitația, un adaptogen ca <em>Ashwagandha</em> pentru a reduce impactul stresului și <em>Turmeric</em> cu biodisponibilitate crescută pentru a combate neuroinflamația de la nivel sistemic.</p>
+                    </div>
+                    <div class="zwp-topic-card bg-pale-red">
+                        <h3>⚠️ Precauții și interacțiuni cu medicația alopată</h3>
+                        <p>Este crucială prudența la administrarea acestor plante, în special la pacienții vârstnici care urmează tratamente multiple.</p>
+                        <ul>
+                            <li><strong><em>Ginkgo Biloba</em></strong>: Poate crește riscul de sângerare și trebuie utilizat cu precauție împreună cu medicamente anticoagulante (ex: warfarina) sau antiplachetare (ex: aspirina, clopidogrel). De asemenea, poate interacționa cu medicamente metabolizate de enzimele citocromului P450 și poate scădea pragul convulsivant, necesitând prudență la asocierea cu inhibitori de colinesterază precum donepezilul, care pot avea un efect similar. Cu toate acestea, unele studii pe animale nu au găsit interacțiuni farmacologice negative între <em>Ginkgo</em> și donepezil.</li>
+                            <li><strong><em>Ashwagandha</em></strong>: Poate interacționa cu medicamente pentru diabet (risc de hipoglicemie), hipertensiune (risc de hipotensiune), imunosupresoare, sedative (crește efectul sedativ) și hormoni tiroidieni. Deși interacțiunea directă cu anticoagulantele este mai puțin documentată, unele surse recomandă prudență din cauza unor posibile efecte antiplachetare aditive.</li>
+                            <li><strong><em>Turmeric (Curcumina)</em></strong>: Poate crește riscul de sângerare la asocierea cu anticoagulante (warfarina) și antiplachetare. Poate interacționa și cu medicamente metabolizate de enzimele CYP3A4.</li>
+                            <li><strong><em>Lavanda și Roinița</em></strong>: Pot potența efectul medicamentelor sedative (ex: benzodiazepine). Roinița poate, de asemenea, interfera cu terapia de substituție hormonală tiroidiană.</li>
+                            <li><strong><em>Bacopa Monnieri</em></strong>: Deși studiile clinice sugerează un profil de siguranță bun, cu efecte adverse predominant gastrointestinale, mecanismul său de inhibare a colinesterazei sugerează o posibilă interacțiune aditivă cu medicamente din aceeași clasă (donepezil, rivastigmină, galantamină). Nu au fost identificate studii specifice care să confirme sau să infirme această interacțiune. Nu există date clare privind interacțiunea cu memantina.</li>
+                        </ul>
+                    </div>
+                    <div class="zwp-topic-card bg-pale-grey">
+                        <h3>✅ Concluzie</h3>
+                        <p>În concluzie, utilizarea judicioasă și informată a nootropicelor, nervinelor, adaptogenilor și carminativelor, sub îndrumarea unui specialist, oferă o strategie complexă și multifactorială pentru a susține sănătatea creierului, a gestiona simptomele debilitante și, în cele din urmă, a îmbunătăți semnificativ calitatea vieții persoanelor care se confruntă cu boala Alzheimer și demența.</p>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div id="Bibliografie" class="tab-content">
-            <h2 class="zwp-section-title">Bibliografie</h2>
-            <div class="zwp-card-grid">
-                <div class="zwp-topic-card bg-pale-grey">
-                    <h3>📚 Referințe citate</h3>
-                    <ol class="zwp-references-list">
-                        <li>Agüera-Ortiz, L., Hernández-Gallego, J., & Gil-Ruiz, N. (2021). Depression and anxiety in Alzheimer's disease: The role of cognitive-affective processing. <em>Frontiers in Aging Neuroscience, 13</em>, 683441.</li>
-                        <li>An, L. (2016). Clinical efficacy of Ginkgo biloba extract combined with donepezil hydrochloride in the treatment of Alzheimer's disease. <em>Journal of Clinical Rational Drug Use, 9</em>(21), 60-61.</li>
-                        <li>Anghelescu, I. G., Edwards, D., Seifritz, E., & Kasper, S. (2018). Stress management and the role of <em>Rhodiola rosea</em>: a review. <em>International Journal of Psychiatry in Clinical Practice, 22</em>(4), 242–252.</li>
-                        <li>Ashford, J. W., Borson, S., O'Hara, R., Dash, P., Frank, L., Robert, P.,... & Shankle, W. R. (2015). The potential for Kirtan Kriya to prevent Alzheimer's disease. <em>Journal of Alzheimer's Disease, 43</em>(1), 1-13.</li>
-                        <li>Bailly, C., & Gao, J. (2020). Scabronine M, a fungal metabolite from <em>Hericium erinaceus</em>, inhibits NGF-induced neurite outgrowth in PC12 cells. <em>Pharmacological Research, 159</em>, 104958.</li>
-                        <li>Barbhaiya, H. C., Desai, R. P., D'Souza, P. F., & Raj, H. B. (2008). Efficacy and tolerability of bacomind on memory improvement in elderly participants—a double blind placebo controlled study. <em>Journal of Pharmacology and Toxicology, 3</em>(6), 425-434.</li>
-                        <li>Benson, S., Downey, L. A., Stough, C., Wetherell, M., Zangara, A., & Scholey, A. (2014). An acute, double-blind, placebo-controlled cross-over study of 320 mg and 640 mg doses of a special extract of <em>Bacopa monnieri</em> (CDRI 08) on sustained cognitive performance. <em>Phytotherapy Research, 28</em>(4), 551–559.</li>
-                        <li>Brandalise, F., Cesaroni, V., Gregori, A., Repetti, M., Romano, C., Orrù, G.,... & Girometta, C. (2017). Dietary supplementation of <em>Hericium erinaceus</em> increases mossy fiber-CA3 hippocampal neurotransmission and recognition memory in wild-type mice. <em>Evidence-Based Complementary and Alternative Medicine, 2017</em>, 3864340.</li>
-                        <li>Brimson, J. M., Brimson, S. J., & Tencomnao, T. (2021). <em>Bacopa monnieri</em> (L.) Wettst.: A review on its nootropic, neuroprotective, and anti-Alzheimer's disease activities. <em>Chinese Journal of Natural Medicines, 19</em>(1), 1-13.</li>
-                        <li>Burns, A., Perry, E., Holmes, C., Francis, P., Morris, J., Howes, M. J., & Chazot, P. (2011). A double-blind placebo-controlled randomized trial of <em>Melissa officinalis</em> oil and donepezil for the treatment of agitation in Alzheimer's disease. <em>Dementia and Geriatric Cognitive Disorders, 31</em>(2), 158-164.</li>
-                        <li>Chen, C. C., Tzeng, T. T., Chen, C. C., Lee, L. Y., Chen, H. L., & Shiao, Y. J. (2016). Erinacine A-enriched <em>Hericium erinaceus</em> mycelium ameliorates Alzheimer's disease-related pathologies in APPswe/PS1dE9 transgenic mice. <em>Journal of Biomedical Science, 23</em>(1), 49.</li>
-                        <li>Ching, T. H. W., Chan, V. T. C., & Lau, W. K. K. (2023). Psilocybin for the treatment of obsessive-compulsive disorder. <em>Frontiers in Psychiatry, 14</em>, 1111933.</li>
-                        <li>Concerto, C., Infortuna, C., Muscatello, M. R. A., Bruno, A., Zoccali, R., & Chusid, E. (2018). <em>Rhodiola rosea</em> for the treatment of mood disorders: A review of the literature. <em>Journal of Affective Disorders, 241</em>, 293–301.</li>
-                        <li>da Silva, V. T., Rieger, D. K., de Farias, C. B., de-Paris, F., & de Almeida, R. M. M. (2011). Evaluation of the effects of <em>Ginkgo biloba</em> extract (EGb 761) on the pharmacokinetics of donepezil in rats. <em>Planta Medica, 77</em>(14), 1602-1606.</li>
-                        <li>Daws, R. E., Timmermann, C., Giribaldi, B., Sexton, J. D., Wall, M. B., Erritzoe, D.,... & Carhart-Harris, R. L. (2022). Increased global integration and resonant brain dynamics after psilocybin administration. <em>Nature Communications, 13</em>(1), 213.</li>
-                        <li>Donovan, M., Gukasyan, N., Williams, M., & Griffiths, R. R. (2021). The 'breakthrough' designation of psilocybin for treatment-resistant depression. <em>The Lancet Psychiatry, 8</em>(1), 14-15.</li>
-                        <li>Downey, L. A., Kean, J., Nemeh, F., Lau, A., Zangara, A., Lomas, J.,... & Stough, C. (2013). An acute, double-blind, placebo-controlled crossover study of the cognitive and mood effects of a <em>Bacopa monnieri</em> extract (KeenMind®). <em>Phytotherapy Research, 27</em>(9), 1407–1413.</li>
-                        <li>Du, Y., Zhao, Y., & Li, C. (2023). Psilocybin as a promising therapeutic approach for depression. <em>Frontiers in Pharmacology, 14</em>, 1121882.</li>
-                        <li>Feng, S., Li, H., & Liu, Y. (2004). Clinical observation on treatment of senile dementia with Ginkgo biloba extract injection. <em>Chinese Journal of Gerontology, 24</em>(12), 1149-1150.</li>
-                        <li>Gallagher, D., Kiss, A., Lanctôt, K. L., & Herrmann, N. (2018). The temporal relationship between neuropsychiatric symptoms and cognitive decline in Alzheimer's disease. <em>Journal of Alzheimer's disease, 64</em>(3), 859-871.</li>
-                        <li>García-Alberca, J. M., González-Barreda, M., & Mendoza, S. (2022). Efficacy of <em>Ginkgo biloba</em> extract (EGb 761) in the treatment of vascular cognitive impairment: A systematic review and meta-analysis. <em>Journal of Alzheimer's Disease, 89</em>(3), 963-976.</li>
-                        <li>Goodwin, G. M., Aaronson, S. T., Alvarez, O., Arden, P. C., Baker, A., Bennett, J. C.,... & Malievskaia, E. (2022). Single-dose psilocybin for a treatment-resistant episode of major depression. <em>New England Journal of Medicine, 387</em>(18), 1637-1648.</li>
-                        <li>Goswami, S., Saoji, A., Kumar, N., Thawani, V., Tiwari, M., & Thawani, M. (2011). Effect of <em>Bacopa monnieri</em> on cognitive functions in Alzheimer's disease patients. <em>International Journal of Collaborative Research on Internal Medicine & Public Health, 3</em>(4), 285-293.</li>
-                        <li>Griffiths, R. R., Johnson, M. W., Carducci, M. A., Umbricht, A., Richards, W. A., Richards, B. D.,... & Klinedinst, M. A. (2016). Psilocybin produces substantial and sustained decreases in depression and anxiety in patients with life-threatening cancer: A randomized double-blind trial. <em>Journal of Psychopharmacology, 30</em>(12), 1181-1197.</li>
-                        <li>Holcomb, L. A., Dhanasekaran, M., Hitt, A. R., Young, K. A., Riggs, M., & Manyam, B. V. (2006). <em>Bacopa monniera</em> extract reduces amyloid-β levels in PSAPP mice. <em>Journal of Alzheimer's Disease, 9</em>(3), 243-251.</li>
-                        <li>Kesika, P., Suganthy, N., Sivamaruthi, B. S., & Chaiyasut, C. (2021). Role of gut-brain axis, gut microbial composition, and probiotic intervention in Alzheimer's disease. <em>Life Sciences, 264</em>, 118627.</li>
-                        <li>Kongkeaw, C., Dilokthornsakul, P., Phanthong, P., Nathisuwan, S., & Lertsinudom, S. (2014). Meta-analysis of randomized controlled trials on cognitive effects of <em>Bacopa monnieri</em> extract. <em>Journal of Ethnopharmacology, 151</em>(1), 528–535.</li>
-                        <li>Lekomtseva, Y., Zhukova, I., & Wacker, A. (2017). <em>Rhodiola rosea</em> in pharmacy: A review. <em>Phytomedicine, 24</em>, 1-13.</li>
-                        <li>Li, I. C., Lee, L. Y., Tzeng, T. T., Chen, W. P., Chen, Y. P., Shiao, Y. J., & Chen, C. C. (2018). Neurohealth properties of <em>Hericium erinaceus</em> mycelia enriched with erinacines. <em>Behavioural Neurology, 2018</em>, 5802634.</li>
-                        <li>Li, I. C., Chen, Y. L., Lee, L. Y., Chen, W. P., Tsai, Y. T., Chen, C. C., & Chen, C. C. (2020). A randomized, double-blind, placebo-controlled, parallel-group study of the effects of <em>Hericium erinaceus</em> mycelia on mild cognitive impairment. <em>Frontiers in Aging Neuroscience, 12</em>, 155.</li>
-                        <li>Li, X., Li, C., Zhang, X., Li, X., & Wang, J. (2017). Salidroside protects against MPP+-induced neurotoxicity in PC12 cells by inhibiting apoptosis and oxidative stress. <em>Molecular Medicine Reports, 16</em>(5), 6825–6832.</li>
-                        <li>Limpawattana, M., Yang, Y., & Luo, Y. (2008). Protection of <em>Bacopa monnieri</em> extract against amyloid-β-induced cell death in primary cortical culture. <em>Neuroscience Letters, 440</em>(2), 173-177.</li>
-                        <li>Ma, L. (2020). Depression, anxiety and apathy in Alzheimer's disease: A review. <em>Journal of Alzheimer's Disease, 74</em>(4), 1081-1090.</li>
-                        <li>Mao, X., Ou, J., Li, X., & Li, X. (2017). Salidroside attenuates cerebral ischemia/reperfusion-induced apoptosis in rats by activating the PI3K/Akt pathway. <em>Molecular Medicine Reports, 16</em>(5), 7347–7354.</li>
-                        <li>Moreno, F. A., Wiegand, C. B., Tait, M. K., & Delgado, P. L. (2006). Safety, tolerability, and efficacy of psilocybin in 9 patients with obsessive-compulsive disorder. <em>Journal of Clinical Psychiatry, 67</em>(11), 1735-1740.</li>
-                        <li>Mori, K., Inatomi, S., Ouchi, K., Azumi, Y., & Tuchida, T. (2009). Improving effects of the mushroom Yamabushitake (<em>Hericium erinaceus</em>) on mild cognitive impairment: a double-blind placebo-controlled clinical trial. <em>Phytotherapy Research, 23</em>(3), 367-372.</li>
-                        <li>Mori, K., Obara, Y., Hirota, M., Azumi, Y., Kinugasa, S., Inatomi, S., & Nakahata, N. (2008). Nerve growth factor-inducing activity of <em>Hericium erinaceus</em> in 1321N1 human astrocytoma cells. <em>Biological & Pharmaceutical Bulletin, 31</em>(9), 1727-1732.</li>
-                        <li>Nathan, P. J., Tanner, S., Lloyd, J., Harrison, B., Curran, L., Oliver, C., & Stough, C. (2001). Effects of a combined extract of <em>Ginkgo biloba</em> and <em>Bacopa monniera</em> on cognitive function in healthy humans. <em>Human Psychopharmacology: Clinical and Experimental, 16</em>(6), 469-474.</li>
-                        <li>Ng, T. P., Chiam, P. C., Lee, T., Chua, H. C., Lim, L., & Kua, E. H. (2024). Traditional, complementary and integrative medicine for dementia. <em>The Lancet Healthy Longevity, 5</em>(1), e63-e72.</li>
-                        <li>Nkadimeng, S. M., Ntozini, B., & Nkambule, B. B. (2021). The anti-inflammatory and neuroprotective effects of psilocybin. <em>Journal of Inflammation Research, 14</em>, 6747-6759.</li>
-                        <li>Panossian, A., Wikman, G., & Sarris, J. (2010). Rosenroot (<em>Rhodiola rosea</em>): Traditional use, chemical composition, pharmacology and clinical efficacy. <em>Phytomedicine, 17</em>(7), 481–493.</li>
-                        <li>Pase, M. P., Kean, J., Sarris, J., Neale, C., Scholey, A. B., & Stough, C. (2012). The cognitive-enhancing effects of <em>Bacopa monnieri</em>: A systematic review of randomized, controlled human clinical trials. <em>Journal of Alternative and Complementary Medicine, 18</em>(7), 647–652.</li>
-                        <li>Phutrakool, P., & Pongpirul, K. (2022). Traditional and complementary medicine in Alzheimer's disease: A review of systematic reviews. <em>Journal of Alzheimer's Disease, 85</em>(3), 947-961.</li>
-                        <li>Raison, C. L., Gukasyan, N., & Griffiths, R. R. (2023). Psilocybin for major depression. <em>JAMA, 329</em>(16), 1361-1362.</li>
-                        <li>Rastogi, M., Ojha, R., Prabu, P. C., Devi, D. P., Agrawal, A., & Dubey, G. P. (2012). Amelioration of age associated neurocognitive decline by <em>Bacopa monnieri</em> (L.) Wettst. <em>Indian Journal of Experimental Biology, 50</em>(8), 528-538.</li>
-                        <li>Ross, S., Bossis, A., Guss, J., Agin-Liebes, G., Malone, T., Cohen, B.,... & Schmidt, B. L. (2016). Rapid and sustained symptom reduction following psilocybin treatment for anxiety and depression in patients with life-threatening cancer: A randomized controlled trial. <em>Journal of Psychopharmacology, 30</em>(12), 1165-1180.</li>
-                        <li>Sadhu, A., Upadhyay, P., Agrawal, A., Ilango, K., Karmakar, D., Singh, G. P., & Dubey, G. P. (2014). Management of cognitive determinants in Alzheimer's disease: A novel polyherbal formulation. <em>Annals of Neurosciences, 21</em>(4), 135-141.</li>
-                        <li>Saitsu, Y., Nishide, A., Kikushima, K., Shimizu, K., & Ohnuki, K. (2019). Improvement of cognitive functions by oral intake of <em>Hericium erinaceus</em>. <em>Biomedical Research, 40</em>(4), 125-131.</li>
-                        <li>Schindler, E. A. D., Sewell, R. A., Gottschalk, C. H., Luddy, C., Flynn, L. T., Zhu, Y.,... & D'Souza, D. C. (2021). Exploratory controlled study of the persisting effects of psilocybin in cluster headache. <em>Cephalalgia, 41</em>(13), 1357-1367.</li>
-                        <li>Smith, E. E. (2017). Clinical presentations and clinical diagnosis of vascular cognitive impairment. <em>Clinics in Geriatric Medicine, 33</em>(2), 169-181.</li>
-                        <li>Stough, C., Lloyd, J., Clarke, J., Downey, L. A., Hutchison, C. W., Rodgers, T., & Nathan, P. J. (2001). The chronic effects of an extract of <em>Bacopa monniera</em> (Brahmi) on cognitive function in healthy human subjects. <em>Psychopharmacology, 156</em>(4), 481–484.</li>
-                        <li>Tan, M. S., Yu, J. T., Tan, C. C., Wang, H. F., Meng, X. F., Wang, C.,... & Tan, L. (2015). Efficacy and adverse effects of <em>Ginkgo biloba</em> for cognitive impairment and dementia: A systematic review and meta-analysis. <em>Journal of Alzheimer's Disease, 43</em>(2), 589-603.</li>
-                        <li>Tsai, Y. C., Lin, Y. C., Sung, P. J., & Lee, K. F. (2019). Erinacine A-enriched <em>Hericium erinaceus</em> mycelium ameliorates diet-induced metabolic dysfunction in mice. <em>Journal of Agricultural and Food Chemistry, 67</em>(26), 7339-7348.</li>
-                        <li>Tzeng, T. T., Chen, C. C., Lee, L. Y., Chen, C. C., Lee, M. C., & Shiao, Y. J. (2018). Erinacine A-enriched <em>Hericium erinaceus</em> mycelium produces antidepressant-like effects through modulating BDNF/PI3K/Akt/GSK-3β signaling in mice. <em>International Journal of Molecular Sciences, 19</em>(2), 341.</li>
-                        <li>Ventola, C. L. (2010). Current issues in patient education. <em>P & T: a peer-reviewed journal for formulary management, 35</em>(10), 570.</li>
-                        <li>Yamada, K., Goto, S., Yoshikawa, M., & Okamura, H. (1996). Striatal dopamine D1 and D2 receptors are differentially regulated by transient forebrain ischemia in the gerbil. <em>Brain Research, 713</em>(1-2), 130–137.</li>
-                        <li>Yu, F., & Wang, J. (2020). Vascular dementia: A global health problem. <em>Journal of the Neurological Sciences, 416</em>, 117037.</li>
-                        <li>Zhan, M., Sun, H., Liu, Y., & Liu, S. (2021). Efficacy and safety of <em>Ginkgo biloba</em> extract for vascular cognitive impairment: A systematic review and meta-analysis of randomized controlled trials. <em>Evidence-Based Complementary and Alternative Medicine, 2021</em>, 6638128.</li>
-                        <li>Zhang, J., An, S., Hu, W., Teng, M., Wang, X., Qu, Y.,... & Wang, D. (2016). The neuroprotective properties of <em>Hericium erinaceus</em> in glutamate-damaged differentiated PC12 cells and an Alzheimer's disease mouse model. <em>International Journal of Molecular Sciences, 17</em>(11), 1810.</li>
-                        <li>Zhang, C. C., Cao, C. Y., Kubo, M., Harada, K., Yan, X. T., Fukuyama, Y., & Gao, J. M. (2017). Chemical constituents from <em>Hericium erinaceus</em> promote neuronal survival and inhibit inflammation in the hippocampus. <em>Journal of Agricultural and Food Chemistry, 65</em>(31), 6617-6624.</li>
-                        <li>Zhong, H., Xin, H., Wu, L., & Zhu, Y. (2018). Salidroside attenuates high-fat diet-induced cardiac dysfunction and apoptosis in rats. <em>Journal of Cardiovascular Pharmacology, 71</em>(1), 40–47.</li>
-                    </ol>
+            <div class="art-card" id="bibliografie-referinte">
+                <div class="section-anchor-header">
+                    <h2>Bibliografie</h2>
+                    <a href="#" class="back-top">↑ Sus</a>
+                </div>
+                <div class="zwp-card-grid">
+                    <div class="zwp-topic-card bg-pale-grey">
+                        <h3>📚 Referințe citate</h3>
+                        <ol class="zwp-references-list">
+                            <li>Agüera-Ortiz, L., Hernández-Gallego, J., & Gil-Ruiz, N. (2021). Depression and anxiety in Alzheimer's disease: The role of cognitive-affective processing. <em>Frontiers in Aging Neuroscience, 13</em>, 683441.</li>
+                            <li>An, L. (2016). Clinical efficacy of Ginkgo biloba extract combined with donepezil hydrochloride in the treatment of Alzheimer's disease. <em>Journal of Clinical Rational Drug Use, 9</em>(21), 60-61.</li>
+                            <li>Anghelescu, I. G., Edwards, D., Seifritz, E., & Kasper, S. (2018). Stress management and the role of <em>Rhodiola rosea</em>: a review. <em>International Journal of Psychiatry in Clinical Practice, 22</em>(4), 242–252.</li>
+                            <li>Ashford, J. W., Borson, S., O'Hara, R., Dash, P., Frank, L., Robert, P.,... & Shankle, W. R. (2015). The potential for Kirtan Kriya to prevent Alzheimer's disease. <em>Journal of Alzheimer's Disease, 43</em>(1), 1-13.</li>
+                            <li>Bailly, C., & Gao, J. (2020). Scabronine M, a fungal metabolite from <em>Hericium erinaceus</em>, inhibits NGF-induced neurite outgrowth in PC12 cells. <em>Pharmacological Research, 159</em>, 104958.</li>
+                            <li>Barbhaiya, H. C., Desai, R. P., D'Souza, P. F., & Raj, H. B. (2008). Efficacy and tolerability of bacomind on memory improvement in elderly participants—a double blind placebo controlled study. <em>Journal of Pharmacology and Toxicology, 3</em>(6), 425-434.</li>
+                            <li>Benson, S., Downey, L. A., Stough, C., Wetherell, M., Zangara, A., & Scholey, A. (2014). An acute, double-blind, placebo-controlled cross-over study of 320 mg and 640 mg doses of a special extract of <em>Bacopa monnieri</em> (CDRI 08) on sustained cognitive performance. <em>Phytotherapy Research, 28</em>(4), 551–559.</li>
+                            <li>Brandalise, F., Cesaroni, V., Gregori, A., Repetti, M., Romano, C., Orrù, G.,... & Girometta, C. (2017). Dietary supplementation of <em>Hericium erinaceus</em> increases mossy fiber-CA3 hippocampal neurotransmission and recognition memory in wild-type mice. <em>Evidence-Based Complementary and Alternative Medicine, 2017</em>, 3864340.</li>
+                            <li>Brimson, J. M., Brimson, S. J., & Tencomnao, T. (2021). <em>Bacopa monniera</em> (L.) Wettst.: A review on its nootropic, neuroprotective, and anti-Alzheimer's disease activities. <em>Chinese Journal of Natural Medicines, 19</em>(1), 1-13.</li>
+                            <li>Burns, A., Perry, E., Holmes, C., Francis, P., Morris, J., Howes, M. J., & Chazot, P. (2011). A double-blind placebo-controlled randomized trial of <em>Melissa officinalis</em> oil and donepezil for the treatment of agitation in Alzheimer's disease. <em>Dementia and Geriatric Cognitive Disorders, 31</em>(2), 158-164.</li>
+                            <li>Chen, C. C., Tzeng, T. T., Chen, C. C., Lee, L. Y., Chen, H. L., & Shiao, Y. J. (2016). Erinacine A-enriched <em>Hericium erinaceus</em> mycelium ameliorates Alzheimer's disease-related pathologies in APPswe/PS1dE9 transgenic mice. <em>Journal of Biomedical Science, 23</em>(1), 49.</li>
+                            <li>Ching, T. H. W., Chan, V. T. C., & Lau, W. K. K. (2023). Psilocybin for the treatment of obsessive-compulsive disorder. <em>Frontiers in Psychiatry, 14</em>, 1111933.</li>
+                            <li>Concerto, C., Infortuna, C., Muscatello, M. R. A., Bruno, A., Zoccali, R., & Chusid, E. (2018). <em>Rhodiola rosea</em> for the treatment of mood disorders: A review of the literature. <em>Journal of Affective Disorders, 241</em>, 293–301.</li>
+                            <li>da Silva, V. T., Rieger, D. K., de Farias, C. B., de-Paris, F., & de Almeida, R. M. M. (2011). Evaluation of the effects of <em>Ginkgo biloba</em> extract (EGb 761) on the pharmacokinetics of donepezil in rats. <em>Planta Medica, 77</em>(14), 1602-1606.</li>
+                            <li>Daws, R. E., Timmermann, C., Giribaldi, B., Sexton, J. D., Wall, M. B., Erritzoe, D.,... & Carhart-Harris, R. L. (2022). Increased global integration and resonant brain dynamics after psilocybin administration. <em>Nature Communications, 13</em>(1), 213.</li>
+                            <li>Donovan, M., Gukasyan, N., Williams, M., & Griffiths, R. R. (2021). The 'breakthrough' designation of psilocybin for treatment-resistant depression. <em>The Lancet Psychiatry, 8</em>(1), 14-15.</li>
+                            <li>Downey, L. A., Kean, J., Nemeh, F., Lau, A., Zangara, A., Lomas, J.,... & Stough, C. (2013). An acute, double-blind, placebo-controlled crossover study of the cognitive and mood effects of a <em>Bacopa monnieri</em> extract (KeenMind®). <em>Phytotherapy Research, 27</em>(9), 1407–1413.</li>
+                            <li>Du, Y., Zhao, Y., & Li, C. (2023). Psilocybin as a promising therapeutic approach for depression. <em>Frontiers in Pharmacology, 14</em>, 1121882.</li>
+                            <li>Feng, S., Li, H., & Liu, Y. (2004). Clinical observation on treatment of senile dementia with Ginkgo biloba extract injection. <em>Chinese Journal of Gerontology, 24</em>(12), 1149-1150.</li>
+                            <li>Gallagher, D., Kiss, A., Lanctôt, K. L., & Herrmann, N. (2018). The temporal relationship between neuropsychiatric symptoms and cognitive decline in Alzheimer's disease. <em>Journal of Alzheimer's disease, 64</em>(3), 859-871.</li>
+                            <li>García-Alberca, J. M., González-Barreda, M., & Mendoza, S. (2022). Efficacy of <em>Ginkgo biloba</em> extract (EGb 761) in the treatment of vascular cognitive impairment: A systematic review and meta-analysis. <em>Journal of Alzheimer's Disease, 89</em>(3), 963-976.</li>
+                            <li>Goodwin, G. M., Aaronson, S. T., Alvarez, O., Arden, P. C., Baker, A., Bennett, J. C.,... & Malievskaia, E. (2022). Single-dose psilocybin for a treatment-resistant episode of major depression. <em>New England Journal of Medicine, 387</em>(18), 1637-1648.</li>
+                            <li>Goswami, S., Saoji, A., Kumar, N., Thawani, V., Tiwari, M., & Thawani, M. (2011). Effect of <em>Bacopa monnieri</em> on cognitive functions in Alzheimer's disease patients. <em>International Journal of Collaborative Research on Internal Medicine & Public Health, 3</em>(4), 285-293.</li>
+                            <li>Griffiths, R. R., Johnson, M. W., Carducci, M. A., Umbricht, A., Richards, W. A., Richards, B. D.,... & Klinedinst, M. A. (2016). Psilocybin produces substantial and sustained decreases in depression and anxiety in patients with life-threatening cancer: A randomized double-blind trial. <em>Journal of Psychopharmacology, 30</em>(12), 1181-1197.</li>
+                            <li>Holcomb, L. A., Dhanasekaran, M., Hitt, A. R., Young, K. A., Riggs, M., & Manyam, B. V. (2006). <em>Bacopa monniera</em> extract reduces amyloid-β levels in PSAPP mice. <em>Journal of Alzheimer's Disease, 9</em>(3), 243-251.</li>
+                            <li>Kesika, P., Suganthy, N., Sivamaruthi, B. S., & Chaiyasut, C. (2021). Role of gut-brain axis, gut microbial composition, and probiotic intervention in Alzheimer's disease. <em>Life Sciences, 264</em>, 118627.</li>
+                            <li>Kongkeaw, C., Dilokthornsakul, P., Phanthong, P., Nathisuwan, S., & Lertsinudom, S. (2014). Meta-analysis of randomized controlled trials on cognitive effects of <em>Bacopa monnieri</em> extract. <em>Journal of Ethnopharmacology, 151</em>(1), 528–535.</li>
+                            <li>Lekomtseva, Y., Zhukova, I., & Wacker, A. (2017). <em>Rhodiola rosea</em> in pharmacy: A review. <em>Phytomedicine, 24</em>, 1-13.</li>
+                            <li>Li, I. C., Lee, L. Y., Tzeng, T. T., Chen, W. P., Chen, Y. P., Shiao, Y. J., & Chen, C. C. (2018). Neurohealth properties of <em>Hericium erinaceus</em> mycelia enriched with erinacines. <em>Behavioural Neurology, 2018</em>, 5802634.</li>
+                            <li>Li, I. C., Chen, Y. L., Lee, L. Y., Chen, W. P., Tsai, Y. T., Chen, C. C., & Chen, C. C. (2020). A randomized, double-blind, placebo-controlled, parallel-group study of the effects of <em>Hericium erinaceus</em> mycelia on mild cognitive impairment. <em>Frontiers in Aging Neuroscience, 12</em>, 155.</li>
+                            <li>Li, X., Li, C., Zhang, X., Li, X., & Wang, J. (2017). Salidroside protects against MPP+-induced neurotoxicity in PC12 cells by inhibiting apoptosis and oxidative stress. <em>Molecular Medicine Reports, 16</em>(5), 6825–6832.</li>
+                            <li>Limpawattana, M., Yang, Y., & Luo, Y. (2008). Protection of <em>Bacopa monnieri</em> extract against amyloid-β-induced cell death in primary cortical culture. <em>Neuroscience Letters, 440</em>(2), 173-177.</li>
+                            <li>Ma, L. (2020). Depression, anxiety and apathy in Alzheimer's disease: A review. <em>Journal of Alzheimer's Disease, 74</em>(4), 1081-1090.</li>
+                            <li>Mao, X., Ou, J., Li, X., & Li, X. (2017). Salidroside attenuates cerebral ischemia/reperfusion-induced apoptosis in rats by activating the PI3K/Akt pathway. <em>Molecular Medicine Reports, 16</em>(5), 7347–7354.</li>
+                            <li>Moreno, F. A., Wiegand, C. B., Tait, M. K., & Delgado, P. L. (2006). Safety, tolerability, and efficacy of psilocybin in 9 patients with obsessive-compulsive disorder. <em>Journal of Clinical Psychiatry, 67</em>(11), 1735-1740.</li>
+                            <li>Mori, K., Inatomi, S., Ouchi, K., Azumi, Y., & Tuchida, T. (2009). Improving effects of the mushroom Yamabushitake (<em>Hericium erinaceus</em>) on mild cognitive impairment: a double-blind placebo-controlled clinical trial. <em>Phytotherapy Research, 23</em>(3), 367-372.</li>
+                            <li>Mori, K., Obara, Y., Hirota, M., Azumi, Y., Kinugasa, S., Inatomi, S., & Nakahata, N. (2008). Nerve growth factor-inducing activity of <em>Hericium erinaceus</em> in 1321N1 human astrocytoma cells. <em>Biological & Pharmaceutical Bulletin, 31</em>(9), 1727-1732.</li>
+                            <li>Nathan, P. J., Tanner, S., Lloyd, J., Harrison, B., Curran, L., Oliver, C., & Stough, C. (2001). Effects of a combined extract of <em>Ginkgo biloba</em> and <em>Bacopa monniera</em> on cognitive function in healthy humans. <em>Human Psychopharmacology: Clinical and Experimental, 16</em>(6), 469-474.</li>
+                            <li>Ng, T. P., Chiam, P. C., Lee, T., Chua, H. C., Lim, L., & Kua, E. H. (2024). Traditional, complementary and integrative medicine for dementia. <em>The Lancet Healthy Longevity, 5</em>(1), e63-e72.</li>
+                            <li>Nkadimeng, S. M., Ntozini, B., & Nkambule, B. B. (2021). The anti-inflammatory and neuroprotective effects of psilocybin. <em>Journal of Inflammation Research, 14</em>, 6747-6759.</li>
+                            <li>Panossian, A., Wikman, G., & Sarris, J. (2010). Rosenroot (<em>Rhodiola rosea</em>): Traditional use, chemical composition, pharmacology and clinical efficacy. <em>Phytomedicine, 17</em>(7), 481–493.</li>
+                            <li>Pase, M. P., Kean, J., Sarris, J., Neale, C., Scholey, A. B., & Stough, C. (2012). The cognitive-enhancing effects of <em>Bacopa monnieri</em>: A systematic review of randomized, controlled human clinical trials. <em>Journal of Alternative and Complementary Medicine, 18</em>(7), 647–652.</li>
+                            <li>Phutrakool, P., & Pongpirul, K. (2022). Traditional and complementary medicine in Alzheimer's disease: A review of systematic reviews. <em>Journal of Alzheimer's Disease, 85</em>(3), 947-961.</li>
+                            <li>Raison, C. L., Gukasyan, N., & Griffiths, R. R. (2023). Psilocybin for major depression. <em>JAMA, 329</em>(16), 1361-1362.</li>
+                            <li>Rastogi, M., Ojha, R., Prabu, P. C., Devi, D. P., Agrawal, A., & Dubey, G. P. (2012). Amelioration of age associated neurocognitive decline by <em>Bacopa monnieri</em> (L.) Wettst. <em>Indian Journal of Experimental Biology, 50</em>(8), 528-538.</li>
+                            <li>Ross, S., Bossis, A., Guss, J., Agin-Liebes, G., Malone, T., Cohen, B.,... & Schmidt, B. L. (2016). Rapid and sustained symptom reduction following psilocybin treatment for anxiety and depression in patients with life-threatening cancer: A randomized controlled trial. <em>Journal of Psychopharmacology, 30</em>(12), 1165-1180.</li>
+                            <li>Sadhu, A., Upadhyay, P., Agrawal, A., Ilango, K., Karmakar, D., Singh, G. P., & Dubey, G. P. (2014). Management of cognitive determinants in Alzheimer's disease: A novel polyherbal formulation. <em>Annals of Neurosciences, 21</em>(4), 135-141.</li>
+                            <li>Saitsu, Y., Nishide, A., Kikushima, K., Shimizu, K., & Ohnuki, K. (2019). Improvement of cognitive functions by oral intake of <em>Hericium erinaceus</em>. <em>Biomedical Research, 40</em>(4), 125-131.</li>
+                            <li>Schindler, E. A. D., Sewell, R. A., Gottschalk, C. H., Luddy, C., Flynn, L. T., Zhu, Y.,... & D'Souza, D. C. (2021). Exploratory controlled study of the persisting effects of psilocybin in cluster headache. <em>Cephalalgia, 41</em>(13), 1357-1367.</li>
+                            <li>Smith, E. E. (2017). Clinical presentations and clinical diagnosis of vascular cognitive impairment. <em>Clinics in Geriatric Medicine, 33</em>(2), 169-181.</li>
+                            <li>Stough, C., Lloyd, J., Clarke, J., Downey, L. A., Hutchison, C. W., Rodgers, T., & Nathan, P. J. (2001). The chronic effects of an extract of <em>Bacopa monniera</em> (Brahmi) on cognitive function in healthy human subjects. <em>Psychopharmacology, 156</em>(4), 481–484.</li>
+                            <li>Tan, M. S., Yu, J. T., Tan, C. C., Wang, H. F., Meng, X. F., Wang, C.,... & Tan, L. (2015). Efficacy and adverse effects of <em>Ginkgo biloba</em> for cognitive impairment and dementia: A systematic review and meta-analysis. <em>Journal of Alzheimer's Disease, 43</em>(2), 589-603.</li>
+                            <li>Tsai, Y. C., Lin, Y. C., Sung, P. J., & Lee, K. F. (2019). Erinacine A-enriched <em>Hericium erinaceus</em> mycelium ameliorates diet-induced metabolic dysfunction in mice. <em>Journal of Agricultural and Food Chemistry, 67</em>(26), 7339-7348.</li>
+                            <li>Tzeng, T. T., Chen, C. C., Lee, L. Y., Chen, C. C., Lee, M. C., & Shiao, Y. J. (2018). Erinacine A-enriched <em>Hericium erinaceus</em> mycelium produces antidepressant-like effects through modulating BDNF/PI3K/Akt/GSK-3β signaling in mice. <em>International Journal of Molecular Sciences, 19</em>(2), 341.</li>
+                            <li>Ventola, C. L. (2010). Current issues in patient education. <em>P & T: a peer-reviewed journal for formulary management, 35</em>(10), 570.</li>
+                            <li>Yamada, K., Goto, S., Yoshikawa, M., & Okamura, H. (1996). Striatal dopamine D1 and D2 receptors are differentially regulated by transient forebrain ischemia in the gerbil. <em>Brain Research, 713</em>(1-2), 130–137.</li>
+                            <li>Yu, F., & Wang, J. (2020). Vascular dementia: A global health problem. <em>Journal of the Neurological Sciences, 416</em>, 117037.</li>
+                            <li>Zhan, M., Sun, H., Liu, Y., & Liu, S. (2021). Efficacy and safety of <em>Ginkgo biloba</em> extract for vascular cognitive impairment: A systematic review and meta-analysis of randomized controlled trials. <em>Evidence-Based Complementary and Alternative Medicine, 2021</em>, 6638128.</li>
+                            <li>Zhang, J., An, S., Hu, W., Teng, M., Wang, X., Qu, Y.,... & Wang, D. (2016). The neuroprotective properties of <em>Hericium erinaceus</em> in glutamate-damaged differentiated PC12 cells and an Alzheimer's disease mouse model. <em>International Journal of Molecular Sciences, 17</em>(11), 1810.</li>
+                            <li>Zhang, C. C., Cao, C. Y., Kubo, M., Harada, K., Yan, X. T., Fukuyama, Y., & Gao, J. M. (2017). Chemical constituents from <em>Hericium erinaceus</em> promote neuronal survival and inhibit inflammation in the hippocampus. <em>Journal of Agricultural and Food Chemistry, 65</em>(31), 6617-6624.</li>
+                            <li>Zhong, H., Xin, H., Wu, L., & Zhu, Y. (2018). Salidroside attenuates high-fat diet-induced cardiac dysfunction and apoptosis in rats. <em>Journal of Cardiovascular Pharmacology, 71</em>(1), 40–47.</li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <footer class="ztabs-footer">
-            <p>Acest conținut este pur informativ și nu înlocuiește sfatul medical profesionist.</p>
-        </footer>
-
     </div>
 
-    <script>
-        function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tab-link");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.className += " active";
+    <div id="footer-placeholder"></div>
+
+</div>
+
+<script>
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
         }
+        tablinks = document.getElementsByClassName("tab-link");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
 
-        // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
-        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
+<script>fetch('https://nutrisib.club/footer.html').then(r=>r.text()).then(data=>{const c=document.getElementById('footer-placeholder');if(c)c.innerHTML=data;}).catch(err=>console.error('Footer error:',err));</script>
+<script src="https://nutrisib.club/script_protect.js" defer></script>
 
-        document.addEventListener('keydown', function(e) {
-            // Blochează Ctrl+C (Copiere)
-            if (e.ctrlKey && e.key === 'c') {
-                e.preventDefault();
-            }
-            // Blochează Ctrl+U (View Source)
-            if (e.ctrlKey && e.key === 'u') {
-                e.preventDefault();
-            }
-            // Blochează F12 (Developer Tools)
-            if (e.key === 'F12') {
-                e.preventDefault();
-            }
-            // Blochează Ctrl+Shift+I (Developer Tools)
-            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-                e.preventDefault();
-            }
-             // Blochează Ctrl+Shift+J (Developer Tools Console)
-            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
-                e.preventDefault();
-            }
-        });
-
-    </script>
 </body>
 </html>
