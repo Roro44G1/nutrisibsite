@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NutriSib Admin — Panou Leads</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sage: #6B8F71;
+    --sage-dark: #3D5C42;
+    --sage-light: #A8C5A0;
+    --cream: #F7F3EE;
+    --charcoal: #1E1E1E;
+    --text-muted: #6B6B6B;
+    --border: #E5E5E5;
+    --status-nou: #3B82F6;
+    --status-interesat: #10B981;
+    --status-contactat: #F59E0B;
+    --status-neinteresat: #6B7280;
+    --status-client: #8B5CF6;
+    --status-arhivat: #EF4444;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #F0F2F0;
+    color: var(--charcoal);
+    font-size: 14px;
+  }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: var(--sage-dark);
+    color: white;
+    padding: 0 24px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .topbar-logo {
+    font-size: 22px;
+  }
+
+  .topbar-title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  .topbar-sub {
+    font-size: 11px;
+    color: var(--sage-light);
+    font-weight: 300;
+  }
+
+  .topbar-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .badge-total {
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  .btn-refresh {
+    background: rgba(255,255,255,0.12);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    color: white;
+    padding: 7px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-refresh:hover { background: rgba(255,255,255,0.22); }
+
+  /* ── FILTERS ── */
+  .filters-bar {
+    background: white;
+    border-bottom: 1.5px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+  }
+
+  .search-box input {
+    width: 100%;
+    padding: 9px 12px 9px 36px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-box input:focus { border-color: var(--sage); }
+
+  .search-box::before {
+    content: '🔍';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    pointer-events: none;
+  }
+
+  .filter-select {
+    padding: 9px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    cursor: pointer;
+    background: white;
+  }
+
+  /* ── TABLE ── */
+  .table-wrapper {
+    margin: 20px 24px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead {
+    background: #F8FAF8;
+    border-bottom: 2px solid var(--border);
+  }
+
+  th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  th:hover { color: var(--sage-dark); }
+
+  td {
+    padding: 13px 16px;
+    border-bottom: 1px solid #F5F5F5;
+    vertical-align: top;
+    font-size: 13.5px;
+  }
+
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #FAFEFA; }
+
+  .td-name {
+    font-weight: 600;
+    color: var(--charcoal);
+    white-space: nowrap;
+  }
+
+  .td-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--sage);
+    background: rgba(107,143,113,0.08);
+    padding: 2px 7px;
+    border-radius: 4px;
+    display: inline-block;
+  }
+
+  .td-contact a {
+    color: var(--sage-dark);
+    text-decoration: none;
+    display: block;
+    font-size: 13px;
+  }
+
+  .td-contact a:hover { text-decoration: underline; }
+
+  .td-obiectiv {
+    max-width: 160px;
+    color: var(--text-muted);
+    font-size: 12.5px;
+  }
+
+  .urgenta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .urgenta-1, .urgenta-2 { color: #10B981; }
+  .urgenta-3 { color: #F59E0B; }
+  .urgenta-4, .urgenta-5 { color: #EF4444; }
+
+  /* ── STATUS BADGE ── */
+  .status-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .status-Nou { background: #EFF6FF; color: var(--status-nou); }
+  .status-Contactat { background: #FFFBEB; color: var(--status-contactat); }
+  .status-Interesat { background: #ECFDF5; color: var(--status-interesat); }
+  .status-Neinteresat { background: #F3F4F6; color: var(--status-neinteresat); }
+  .status-Client { background: #F5F3FF; color: var(--status-client); }
+  .status-Arhivat { background: #FEF2F2; color: var(--status-arhivat); }
+
+  /* ── INLINE EDIT ── */
+  .admin-field {
+    min-width: 120px;
+  }
+
+  .admin-field select,
+  .admin-field input,
+  .admin-field textarea {
+    width: 100%;
+    border: 1.5px solid transparent;
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    background: transparent;
+    outline: none;
+    transition: all 0.18s;
+    color: var(--charcoal);
+  }
+
+  .admin-field select:hover,
+  .admin-field input:hover,
+  .admin-field textarea:hover {
+    border-color: var(--sage-light);
+    background: white;
+  }
+
+  .admin-field select:focus,
+  .admin-field input:focus,
+  .admin-field textarea:focus {
+    border-color: var(--sage);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(107,143,113,0.1);
+  }
+
+  .admin-field textarea { resize: vertical; min-height: 50px; }
+
+  /* ── SAVE INDICATOR ── */
+  .saving-dot {
+    display: none;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--sage);
+    animation: pulse 0.8s infinite alternate;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+
+  @keyframes pulse { to { opacity: 0.3; transform: scale(0.7); } }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--sage-dark);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    display: none;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    z-index: 999;
+    animation: slideInToast 0.3s ease;
+  }
+
+  @keyframes slideInToast {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    padding: 60px 24px;
+    text-align: center;
+    color: var(--text-muted);
+  }
+
+  .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-state p { font-size: 15px; }
+
+  /* ── LOADING ── */
+  .loading-row td {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+  }
+
+  .loader {
+    display: inline-block;
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: var(--sage);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .table-wrapper { margin: 12px; overflow-x: auto; }
+    .filters-bar { padding: 10px 12px; }
+    .topbar { padding: 0 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CONFIGURARE -->
+<script>
+  // ← pune URL-ul tău Apps Script
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKP6xamXU9DJlod81LEsqEYcb5bYenmUSf1n6rGnJN2fFubZJoiZ47nb53WqgTJxAd5w/exec';
+
+  // Parola de acces panou admin (simplu, local)
+  const ADMIN_PASSWORD = 'nutrisib2026';
+</script>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-logo">🌿</span>
+    <div>
+      <div class="topbar-title">NutriSib Admin</div>
+      <div class="topbar-sub">Panou leads târg</div>
+    </div>
+  </div>
+  <div class="topbar-actions">
+    <span class="badge-total" id="badgeTotal">— leads</span>
+    <button class="btn-refresh" onclick="loadData()">↻ Reîncarcă</button>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters-bar">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Caută după nume, telefon, email…" oninput="filterRows()">
+  </div>
+  <select class="filter-select" id="filterStatus" onchange="filterRows()">
+    <option value="">Toate statusurile</option>
+    <option>Nou</option>
+    <option>Contactat</option>
+    <option>Interesat</option>
+    <option>Neinteresat</option>
+    <option>Client</option>
+    <option>Arhivat</option>
+  </select>
+  <select class="filter-select" id="filterUrgenta" onchange="filterRows()">
+    <option value="">Orice urgență</option>
+    <option value="5">🔥 Urgență 5</option>
+    <option value="4">Urgență 4+</option>
+    <option value="3">Urgență 3+</option>
+  </select>
+</div>
+
+<!-- TABLE -->
+<div class="table-wrapper">
+  <table id="mainTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Data / Ora</th>
+        <th>Nume</th>
+        <th>Contact</th>
+        <th>Obiectiv</th>
+        <th>Interese</th>
+        <th>Urg.</th>
+        <th>Buget</th>
+        <th style="background:#FFF9F0">Status</th>
+        <th style="background:#FFF9F0">Nivel interes</th>
+        <th style="background:#FFF9F0">Recomandare</th>
+        <th style="background:#FFF9F0">Follow-up</th>
+        <th style="background:#FFF9F0">Observații</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <tr class="loading-row">
+        <td colspan="13"><span class="loader"></span><br>Se încarcă datele…</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="toast" id="toast">✓ Salvat</div>
+
+<script>
+let allData = [];
+
+// ── AUTENTIFICARE SIMPLĂ ──
+function checkAuth() {
+  const stored = sessionStorage.getItem('ns_auth');
+  if (stored === ADMIN_PASSWORD) return true;
+
+  const input = prompt('🔐 Parolă admin NutriSib:');
+  if (input === ADMIN_PASSWORD) {
+    sessionStorage.setItem('ns_auth', input);
+    return true;
+  }
+  document.body.innerHTML = '<div style="text-align:center;padding:80px;font-size:18px;color:#999">Acces restricționat.</div>';
+  return false;
+}
+
+// ── CITIRE DATE DIN GOOGLE SHEETS ──
+async function loadData() {
+  if (!checkAuth()) return;
+
+  document.getElementById('tableBody').innerHTML =
+    '<tr class="loading-row"><td colspan="13"><span class="loader"></span></td></tr>';
+
+  try {
+    const res = await fetch(APPS_SCRIPT_URL + '?action=getAll&t=' + Date.now());
+    const json = await res.json();
+    allData = json.data || [];
+    renderTable(allData);
+    document.getElementById('badgeTotal').textContent = allData.length + ' leads';
+  } catch(e) {
+    document.getElementById('tableBody').innerHTML =
+      '<tr class="loading-row"><td colspan="13">⚠️ Eroare la încărcare date. Verifică URL-ul Apps Script.</td></tr>';
+  }
+}
+
+// ── RENDER TABLE ──
+function renderTable(rows) {
+  const tbody = document.getElementById('tableBody');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;padding:48px;color:#999">Nicio înregistrare momentan. Datele apar după prima completare.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map((r, i) => `
+    <tr data-id="${r.id}" data-row="${i}">
+      <td><span class="td-id">${r.id || '—'}</span></td>
+      <td style="font-size:12px;white-space:nowrap;color:#666">${r.data || ''}</td>
+      <td class="td-name">${r.nume || '—'}</td>
+      <td class="td-contact">
+        ${r.tel ? `<a href="tel:${r.tel}">📞 ${r.tel}</a>` : ''}
+        ${r.email ? `<a href="mailto:${r.email}">✉️ ${r.email}</a>` : ''}
+        ${r.varsta ? `<span style="font-size:11px;color:#999">${r.varsta}</span>` : ''}
+      </td>
+      <td class="td-obiectiv">${r.obiectiv || '—'}</td>
+      <td style="font-size:12px;color:#666;max-width:160px">${r.interese || '—'}</td>
+      <td>
+        <span class="urgenta-badge urgenta-${r.urgenta}">
+          ${r.urgenta ? r.urgenta + '/5' : '—'}
+          ${r.urgenta >= 4 ? '🔥' : ''}
+        </span>
+      </td>
+      <td style="font-size:12px;white-space:nowrap">${r.buget || '—'}</td>
+
+      <!-- Coloane Admin -->
+      <td class="admin-field" style="background:#FFFDF7">
+        <select onchange="saveField(this, '${r.id}', 'status')">
+          ${['Nou','Contactat','Interesat','Neinteresat','Client','Arhivat']
+            .map(s => `<option ${r.status===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+        <span class="status-pill status-${r.status || 'Nou'}" style="margin-top:4px;display:inline-block">${r.status||'Nou'}</span>
+      </td>
+      <td class="admin-field" style="background:#FFFDF7">
+        <select onchange="saveField(this, '${r.id}', 'nivel')">
+          ${['','⭐ Scăzut','⭐⭐ Mediu','⭐⭐⭐ Ridicat','⭐⭐⭐⭐ Foarte ridicat']
+            .map(n => `<option ${r.nivel===n?'selected':''}>${n}</option>`).join('')}
+        </select>
+      </td>
+      <td class="admin-field" style="background:#FFFDF7">
+        <input type="text" placeholder="ex. Omega 3, consultanță…" value="${r.recomandare||''}"
+          onblur="saveField(this, '${r.id}', 'recomandare')">
+      </td>
+      <td class="admin-field" style="background:#FFFDF7">
+        <input type="date" value="${r.followup||''}"
+          onchange="saveField(this, '${r.id}', 'followup')">
+      </td>
+      <td class="admin-field" style="background:#FFFDF7">
+        <textarea placeholder="Observații personale…" onblur="saveField(this, '${r.id}', 'observatii')">${r.observatii||''}</textarea>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ── FILTRARE ──
+function filterRows() {
+  const q      = document.getElementById('searchInput').value.toLowerCase();
+  const status = document.getElementById('filterStatus').value;
+  const urgMin = parseInt(document.getElementById('filterUrgenta').value) || 0;
+
+  const filtered = allData.filter(r => {
+    const matchQ = !q ||
+      (r.nume||'').toLowerCase().includes(q) ||
+      (r.tel||'').includes(q) ||
+      (r.email||'').toLowerCase().includes(q);
+    const matchStatus = !status || r.status === status;
+    const matchUrg = !urgMin || parseInt(r.urgenta) >= urgMin;
+    return matchQ && matchStatus && matchUrg;
+  });
+
+  renderTable(filtered);
+}
+
+// ── SALVARE CÂMP ADMIN ──
+async function saveField(el, id, field) {
+  const value = el.value;
+  showToast('Se salvează…');
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'updateAdmin', id, field, value })
+    });
+
+    // Update local data
+    const row = allData.find(r => r.id === id);
+    if (row) row[field] = value;
+
+    showToast('✓ Salvat!');
+  } catch(e) {
+    showToast('⚠️ Eroare salvare');
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => { t.style.display = 'none'; }, 2000);
+}
+
+// ── INIT ──
+window.onload = loadData;
+</script>
+
+</body>
+</html>
