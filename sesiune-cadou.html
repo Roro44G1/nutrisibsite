@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluare Gratuită C.E.L.O.S. — Află ce îți blochează energia și greutatea</title>
+    <meta name="description" content="O sesiune individuală de 30-45 minute în care identificăm blocajele tale biologice și stabilim un plan concret de acțiune. Fără obligații.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="celos.css">
+
+    <style>
+        /* ── Stiluri specifice paginii Sesiune Cadou ── */
+
+        /* Etichetă de specialitate în hero */
+        .hero-badge {
+            display: inline-block;
+            background-color: rgba(197, 160, 33, 0.2);
+            border: 1px solid var(--color-gold);
+            color: var(--color-gold);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.35rem 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.25rem;
+            display: block;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Detalii sesiune (durată, format, preț) */
+        .session-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0 2rem;
+        }
+        .session-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: var(--color-pearl);
+        }
+        .session-meta-icon {
+            color: var(--color-gold);
+            font-size: 1rem;
+        }
+        .session-meta-label {
+            color: rgba(248, 250, 252, 0.7);
+            font-size: 0.78rem;
+        }
+        .session-meta-value {
+            font-weight: 700;
+            color: var(--color-pearl);
+        }
+
+        /* Notă sub CTA hero */
+        .hero-note {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            color: rgba(248, 250, 252, 0.6);
+            margin-top: 0.75rem;
+            text-align: center;
+        }
+
+        /* Secțiune: situații în care ești (grid de 6) */
+        .situations-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        @media (min-width: 640px) {
+            .situations-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (min-width: 1024px) {
+            .situations-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        .situation-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            background-color: var(--color-brand-light);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+        }
+        .situation-check {
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            background-color: var(--color-navy);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.1rem;
+        }
+        .situation-check svg {
+            width: 12px;
+            height: 12px;
+            stroke: white;
+            stroke-width: 2.5;
+            fill: none;
+        }
+        .situation-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: var(--color-text-medium);
+            line-height: 1.5;
+        }
+
+        /* Pași sesiune */
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+            background: white;
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .step-item:hover {
+            transform: translateX(4px);
+            box-shadow: -4px 4px 12px rgba(27, 42, 74, 0.12);
+            border-color: var(--color-navy);
+        }
+        .step-number {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            background-color: var(--color-navy);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+        .step-content {}
+        .step-title {
+            font-family: 'Lora', serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--color-navy);
+            margin: 0 0 0.35rem;
+        }
+        .step-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: var(--color-text-light);
+            margin: 0;
+            line-height: 1.55;
+        }
+        .step-note {
+            margin-top: 1.25rem;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #f0f9ff;
+            border-left: 4px solid var(--color-brand-medium);
+            padding: 1rem 1.25rem;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: var(--color-navy);
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        /* Testimoniale compacte */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        .testimonial-card {
+            background: white;
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .testimonial-quote {
+            font-family: 'Lora', serif;
+            font-size: 0.95rem;
+            color: var(--color-text-medium);
+            line-height: 1.65;
+            font-style: italic;
+            flex-grow: 1;
+        }
+        .testimonial-quote::before {
+            content: '"';
+            font-size: 2rem;
+            color: var(--color-gold);
+            line-height: 0;
+            vertical-align: -0.5rem;
+            margin-right: 0.2rem;
+            font-style: normal;
+        }
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--color-border);
+        }
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--color-navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-pearl);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        .testimonial-name {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            color: var(--color-navy);
+            margin: 0;
+        }
+        .testimonial-role {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            color: var(--color-text-light);
+            margin: 0;
+        }
+
+        /* Secțiunea CTA final — cel mai rău lucru */
+        .worst-case-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e8f4fd 100%);
+            border: 2px solid var(--color-brand-medium);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        .worst-case-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--color-brand-medium);
+            margin-bottom: 0.5rem;
+        }
+        .worst-case-text {
+            font-family: 'Lora', serif;
+            font-size: 1rem;
+            color: var(--color-navy);
+            line-height: 1.65;
+            margin: 0;
+        }
+        .worst-case-text strong {
+            color: var(--color-brand-medium);
+        }
+
+        /* Urgency chip */
+        .urgency-chip {
+            display: inline-block;
+            background-color: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #b91c1c;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 0.3rem 0.85rem;
+            border-radius: 4px;
+            margin-top: 0.75rem;
+        }
+
+        /* Separator vizual */
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--color-border);
+            margin: 0 0 1.5rem;
+        }
+
+        /* Bio compact în CTA */
+        .bio-compact {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            background-color: rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .bio-avatar-placeholder {
+            flex-shrink: 0;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(197, 160, 33, 0.3);
+            border: 2px solid var(--color-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--color-gold);
+        }
+        .bio-text h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--color-pearl) !important;
+            margin: 0 0 0.2rem;
+        }
+        .bio-text p {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            color: rgba(248, 250, 252, 0.7) !important;
+            margin: 0;
+            text-align: left !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-main">
+
+    <!-- ══════════════════════════════════════════════
+         NAV BAR
+    ══════════════════════════════════════════════ -->
+    <nav class="nav-bar">
+        <a href="index.html" class="nav-brand">
+            <span style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:1.2rem; color:var(--color-navy); letter-spacing:0.02em;">NUTRISIB</span>
+        </a>
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">Acasă</a>
+            <a href="despre.html">Despre mine</a>
+            <a href="oferta.html">Metoda C.E.L.O.S.</a>
+            <a href="testimoniale.html">Rezultate</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <button class="mobile-menu-btn" onclick="document.getElementById('navLinks').style.display = document.getElementById('navLinks').style.display === 'flex' ? 'none' : 'flex'" aria-label="Meniu">☰</button>
+    </nav>
+
+    <!-- ══════════════════════════════════════════════
+         SECȚIUNEA 1 — HERO
+    ══════════════════════════════════════════════ -->
+    <section class="hero-card">
+        <span class="hero-badge">Evaluare Gratuită C.E.L.O.S.</span>
+
+        <h1 class="hero-title">Află ce îți blochează<br>energia și greutatea,<br>în 30 de minute</h1>
+
+        <p class="hero-subtitle">
+            O sesiune individuală, gratuită, în care analizăm împreună situația ta reală și stabilim exact de unde să începi. Primești un plan de acțiune personalizat pe care îl poți aplica imediat.
+        </p>
+
+        <div class="session-meta">
+            <div class="session-meta-item">
+                <span class="session-meta-icon">⏱</span>
+                <div>
+                    <div class="session-meta-label">DURATĂ</div>
+                    <div class="session-meta-value">30–45 minute</div>
+                </div>
+            </div>
+            <div class="session-meta-item">
+                <span class="session-meta-icon">📍</span>
+                <div>
+                    <div class="session-meta-label">FORMAT</div>
+                    <div class="session-meta-value">Online (Zoom) sau în Sibiu</div>
+                </div>
+            </div>
+            <div class="session-meta-item">
+                <span class="session-meta-icon">✦</span>
+                <div>
+                    <div class="session-meta-label">PREȚ</div>
+                    <div class="session-meta-value">Gratuit</div>
+                </div>
+            </div>
+        </div>
+
+        <a href="https://tinyurl.com/ProgramareServicii" class="btn-pearl btn" target="_blank" rel="noopener" style="font-size:1rem; padding:0.85rem 2.5rem;">
+            Programează Evaluarea Gratuită
+        </a>
+        <p class="hero-note">Sesiunea este individuală, confidențială și fără nicio obligație. · Locuri limitate lunar.</p>
+    </section>
+
+    <!-- ══════════════════════════════════════════════
+         SECȚIUNEA 2 — PENTRU CINE ESTE
+    ══════════════════════════════════════════════ -->
+    <section class="content-card">
+        <h2 class="section-title">Programează dacă te regăsești<br>în cel puțin una din aceste situații</h2>
+
+        <div class="situations-grid">
+
+            <div class="situation-item">
+                <div class="situation-check">
+                    <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+                </div>
+                <p class="situation-text">Ai încercat diete, aplicații de calorii și suplimente de pe internet și nimic nu a funcționat pe termen lung.</p>
+            </div>
+
+            <div class="situation-item">
+                <div class="situation-check">
+                    <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+                </div>
+                <p class="situation-text">Simți că oboseala de după prânz și ceața mentală îți afectează deciziile și productivitatea la muncă.</p>
+            </div>
+
+            <div class="situation-item">
+                <div class="situation-check">
+                    <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+                </div>
+                <p class="situation-text">Ai greutate fluctuantă și ești sătul de ciclul yo-yo: slăbești o lună, recuperezi totul în două săptămâni.</p>
+            </div>
+
+            <div class="situation-item">
+                <div class="situation-check">
+                    <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+                </div>
+                <p class="situation-text">Ești copleșit de sfaturi contradictorii despre nutriție și nu știi de unde să începi concret.</p>
+            </div>
+
+            <div class="situation-item">
+                <div class="situation-check">
+                    <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+                </div>
+                <p class="situation-text">Îți dorești un plan bazat pe date reale despre corpul tău, nu pe liste generice copiate de pe internet.</p>
+            </div>
+
+            <div class="situation-item">
+                <div class="situation-check">
+                    <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+                </div>
+                <p class="situation-text">Ai program haotic — călătorii, cine de business, stres — și ai nevoie de un sistem care să se adapteze vieții tale.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════
+         SECȚIUNEA 3 — CUM DECURGE SESIUNEA
+    ══════════════════════════════════════════════ -->
+    <section class="content-card">
+        <h2 class="section-title">Cum decurge evaluarea ta gratuită</h2>
+        <p class="section-desc">Patru pași clari, fără surprize. Fiecare minut are un scop precis.</p>
+
+        <div class="steps-container">
+
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3 class="step-title">Ascult și analizez situația ta</h3>
+                    <p class="step-desc">Îmi spui cum arată zilele tale, ce ai încercat până acum și ce te frustrează cel mai tare. Ascult cu atenție, fără judecată.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3 class="step-title">Identific ce te blochează</h3>
+                    <p class="step-desc">Pe baza a ce îmi spui, identific cele 1–2 blocaje principale care îți sabotează energia, greutatea sau claritatea mentală.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3 class="step-title">Îți dau un plan concret</h3>
+                    <p class="step-desc">Primești primele 3 priorități de acțiune personalizate pe care le poți aplica imediat, indiferent dacă lucrăm împreună sau nu.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3 class="step-title">Tu decizi dacă mergem mai departe</h3>
+                    <p class="step-desc">Vedem împreună dacă Metoda C.E.L.O.S. e potrivită pentru situația ta. Dacă da, îți explic opțiunile. Dacă nu, pleci cu planul primit.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <p class="step-note">Fără vânzare agresivă. Fără presiune. Pleci cu claritate și un plan concret, indiferent de decizia ta.</p>
+
+        <div style="text-align:center; margin-top:2rem;">
+            <a href="https://tinyurl.com/ProgramareServicii" class="btn btn-primary" target="_blank" rel="noopener" style="font-size:1rem; padding:0.85rem 2.5rem;">
+                Programează Evaluarea Gratuită
+            </a>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════
+         SECȚIUNEA 4 — EXPERT
+    ══════════════════════════════════════════════ -->
+    <section class="content-card">
+        <h2 class="section-title">Cine te va ghida în această evaluare</h2>
+        <hr class="section-divider">
+
+        <div class="split-container">
+            <div style="flex:0 0 auto; text-align:center;">
+                <!-- Placeholder foto până la primirea fotografiilor profesionale -->
+                <div style="width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg, var(--color-navy), #3E92CC); display:flex; align-items:center; justify-content:center; margin:0 auto; border:3px solid var(--color-gold); box-shadow:0 8px 24px rgba(27,42,74,0.25);">
+                    <span style="font-family:'Montserrat',sans-serif; font-size:2rem; font-weight:800; color:white;">RP</span>
+                </div>
+                <p style="font-family:'Montserrat',sans-serif; font-weight:800; font-size:1rem; color:var(--color-navy); margin:0.75rem 0 0.2rem;">dr.ing. Radu Pascu</p>
+                <p style="font-family:'Inter',sans-serif; font-size:0.8rem; color:var(--color-text-light); margin:0;">Sibiu, România</p>
+            </div>
+
+            <div class="text-column">
+                <p>Sunt dr.ing. Radu Pascu, specialist în nutriție științifică și optimizare metabolică. Am 8 ani de experiență în consultanța de nutriție și peste 25 de ani în managementul sistemelor complexe.</p>
+                <p>Am creat Metoda C.E.L.O.S. după propria experiență: am eliminat 50 de kilograme aplicând gândirea de inginer asupra propriei biologii. Acum ajut profesioniști din IT, management, juridic și medical să-și recapete energia, greutatea și claritatea mentală.</p>
+                <p>Ofer această evaluare gratuită pentru un motiv simplu: vreau să vezi cu ochii tăi ce pot face datele reale despre corpul tău. Dacă e potrivire, mergem mai departe. Dacă nu, pleci cu un plan pe care îl poți aplica singur.</p>
+
+                <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1rem;">
+                    <span style="background:var(--color-brand-light); border:1px solid var(--color-border); border-radius:4px; padding:0.3rem 0.75rem; font-size:0.78rem; font-weight:600; color:var(--color-navy); font-family:'Inter',sans-serif;">Doctor Inginer</span>
+                    <span style="background:var(--color-brand-light); border:1px solid var(--color-border); border-radius:4px; padding:0.3rem 0.75rem; font-size:0.78rem; font-weight:600; color:var(--color-navy); font-family:'Inter',sans-serif;">CMC — SUA</span>
+                    <span style="background:var(--color-brand-light); border:1px solid var(--color-border); border-radius:4px; padding:0.3rem 0.75rem; font-size:0.78rem; font-weight:600; color:var(--color-navy); font-family:'Inter',sans-serif;">Nutriție Științifică</span>
+                    <span style="background:var(--color-brand-light); border:1px solid var(--color-border); border-radius:4px; padding:0.3rem 0.75rem; font-size:0.78rem; font-weight:600; color:var(--color-navy); font-family:'Inter',sans-serif;">Biorezonanță</span>
+                    <span style="background:var(--color-brand-light); border:1px solid var(--color-border); border-radius:4px; padding:0.3rem 0.75rem; font-size:0.78rem; font-weight:600; color:var(--color-navy); font-family:'Inter',sans-serif;">8 cărți publicate</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════
+         SECȚIUNEA 5 — TESTIMONIALE
+    ══════════════════════════════════════════════ -->
+    <section class="content-card">
+        <h2 class="section-title">Ce spun oamenii care au lucrat cu mine</h2>
+
+        <div class="testimonials-grid">
+
+            <div class="testimonial-card">
+                <p class="testimonial-quote">E prima dată în 10 ani când am slăbit și nu m-am gândit să trișez. Nu mi s-a dat o dietă, ci un sistem care are logică.</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">AM</div>
+                    <div>
+                        <p class="testimonial-name">Andrei M.</p>
+                        <p class="testimonial-role">CEO Startup Tech</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <p class="testimonial-quote">Radu a văzut în 30 de minute ce medicii mei n-au văzut în 2 ani. Totul s-a rezolvat cu suplimente de calitate și eliminarea unui aliment.</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">IT</div>
+                    <div>
+                        <p class="testimonial-name">Ioana T.</p>
+                        <p class="testimonial-role">Project Manager IT, Amsterdam</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <p class="testimonial-quote">Sunt avocat. Cer dovezi, nu promisiuni. Am văzut datele înainte și după. Nu există altă concluzie logică: sistemul funcționează.</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">MP</div>
+                    <div>
+                        <p class="testimonial-name">Mihai P.</p>
+                        <p class="testimonial-role">Avocat Senior</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="testimonial-card">
+                <p class="testimonial-quote">Acum dorm 7 ore, am energie pentru copii după 8 ore de muncă și nu mai am nevoie de 3 cafele ca să funcționez.</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">ED</div>
+                    <div>
+                        <p class="testimonial-name">Elena D.</p>
+                        <p class="testimonial-role">Director Marketing</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════
+         SECȚIUNEA 6 — CTA FINAL
+    ══════════════════════════════════════════════ -->
+    <section class="cta-card">
+        <div class="bio-compact">
+            <div class="bio-avatar-placeholder">RP</div>
+            <div class="bio-text">
+                <h4>dr.ing. Radu Pascu</h4>
+                <p>Specialist în Nutriție Științifică · Metoda C.E.L.O.S. · Sibiu</p>
+            </div>
+        </div>
+
+        <h3>Nu mai amâna claritatea de care ai nevoie.</h3>
+
+        <div class="worst-case-box">
+            <p class="worst-case-label">Cel mai rău lucru care se poate întâmpla</p>
+            <p class="worst-case-text">Pleci după sesiune cu o imagine clară a ce te blochează și <strong>un plan concret pe care îl poți aplica de mâine</strong>, chiar dacă nu lucrăm împreună după aceea. Cel mai bun lucru? Începi o transformare care îți schimbă energia, greutatea și claritatea mentală.</p>
+        </div>
+
+        <a href="https://tinyurl.com/ProgramareServicii" class="btn-pearl btn" target="_blank" rel="noopener" style="font-size:1.05rem; padding:0.95rem 2.75rem;">
+            Programează Evaluarea Gratuită Acum
+        </a>
+
+        <span class="urgency-chip">Locuri limitate lunar · Programările se fac în ordinea înscrierilor</span>
+
+        <p style="font-size:0.8rem; color:rgba(248,250,252,0.6); margin-top:1.25rem; margin-bottom:0;">
+            📞 <a href="tel:0723274206" style="color:rgba(248,250,252,0.75); text-decoration:none;">0723-274.206</a> &nbsp;·&nbsp;
+            💬 <a href="https://wa.me/40723274206?text=EVALUARE" style="color:rgba(248,250,252,0.75); text-decoration:none;" target="_blank" rel="noopener">Trimite mesaj WhatsApp</a>
+            &nbsp;·&nbsp; Online (Zoom) sau fizic, în Sibiu
+        </p>
+    </section>
+
+    <!-- ══════════════════════════════════════════════
+         FOOTER
+    ══════════════════════════════════════════════ -->
+    <footer style="background-color:var(--color-footer-bg); color:var(--color-footer-text); text-align:center; padding:1.5rem 1rem; border-radius:var(--radius-card); margin-bottom:1rem; font-size:0.85rem;">
+        <div style="display:flex; justify-content:center; gap:1.5rem; margin-bottom:0.75rem; flex-wrap:wrap;">
+            <a href="https://www.facebook.com/NutrisibClub" style="color:var(--color-footer-text); text-decoration:none;" target="_blank" rel="noopener">Facebook</a>
+            <a href="https://www.instagram.com/rvpascu" style="color:var(--color-footer-text); text-decoration:none;" target="_blank" rel="noopener">Instagram</a>
+            <a href="https://www.linkedin.com/in/radu-pascu-310818380/" style="color:var(--color-footer-text); text-decoration:none;" target="_blank" rel="noopener">LinkedIn</a>
+            <a href="https://www.tiktok.com/@raduvpascu" style="color:var(--color-footer-text); text-decoration:none;" target="_blank" rel="noopener">TikTok</a>
+        </div>
+        <p style="color:var(--color-footer-text); margin:0 0 0.25rem;">© 2026 dr.ing. Radu Pascu · NUTRISIB · Metoda C.E.L.O.S.™</p>
+        <p style="color:var(--color-footer-text); margin:0; font-size:0.78rem; opacity:0.7;">Sibiu, România · <a href="mailto:rv.pascu@gmail.com" style="color:var(--color-footer-text);">rv.pascu@gmail.com</a> · 0723-274.206</p>
+    </footer>
+
+</div><!-- /.container-main -->
+
+<script>
+    // Mobile menu toggle
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.getElementById('navLinks');
+    if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', () => {
+            const isOpen = navLinks.style.display === 'flex';
+            navLinks.style.display = isOpen ? 'none' : 'flex';
+        });
+    }
+</script>
+
+</body>
+</html>
