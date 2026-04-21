@@ -299,7 +299,7 @@
         <div class="form-success" id="formSuccess">
             <div class="form-success-icon">✅</div>
             <h3>Programare înregistrată!</h3>
-            <p>Îți mulțumesc. Te contactez în maxim 24 de ore la numărul furnizat pentru a stabili data și ora sesiunii.<br><br>Dacă preferi contact direct:<br>📞 <strong>0770-276.406</strong> &nbsp;·&nbsp; 💬 <a href="https://wa.me/40723274206?text=EVALUARE" target="_blank" rel="noopener" style="color:var(--color-brand-medium);">WhatsApp</a></p>
+            <p>Îți mulțumesc. Te contactez în maxim 24 de ore la numărul furnizat pentru a stabili data și ora sesiunii.<br><br>Dacă preferi contact direct:<br>📞 <strong>0723-274.206</strong> &nbsp;·&nbsp; 💬 <a href="https://wa.me/40723274206?text=EVALUARE" target="_blank" rel="noopener" style="color:var(--color-brand-medium);">WhatsApp</a></p>
         </div>
     </section>
 
@@ -393,7 +393,7 @@ if (mobileBtn && navMenu) {
    din deployment-ul scriptului nutrisib_apps_script_v4.js
    ══════════════════════════════════════════════ */
 
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKP6xamXU9DJlod81LEsqEYcb5bYenmUSf1n6rGnJN2fFubZJoiZ47nb53WqgTJxAd5w/exec';
+const GOOGLE_SCRIPT_URL = 'INLOCUIESTE_CU_URL_WEB_APP';
 
 const form       = document.getElementById('evaluareForm');
 const successBox = document.getElementById('formSuccess');
@@ -427,12 +427,13 @@ form?.addEventListener('submit', async function(e) {
 
     try {
         if (GOOGLE_SCRIPT_URL !== 'INLOCUIESTE_CU_URL_WEB_APP') {
+            const formBody = Object.entries(payload)
+                .map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v||''))
+                .join('&');
+
             await fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: Object.entries(payload)
-                    .map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v||''))
-                    .join('&'),
+                body: formBody,
                 mode: 'no-cors'
             });
         }
