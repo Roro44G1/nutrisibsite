@@ -99,6 +99,7 @@ body { font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text); back
 .source-dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
 .dot-targ     { background:#C5A021; }
 .dot-evaluari { background:#3E92CC; }
+.dot-complete { background:#7C3AED; }
 
 /* ── TABLE ── */
 .table-container { padding:16px 20px; overflow:auto; -webkit-overflow-scrolling:touch; }
@@ -122,6 +123,20 @@ col.c-obs      { width:200px; }
 
 /* Coloane EVALUĂRI */
 .tbl-eval  { min-width:1060px; }
+
+/* Coloane EVALUĂRI COMPLETE */
+.tbl-complete { min-width:1200px; }
+col.ec-id       { width:80px; }
+col.ec-data     { width:115px; }
+col.ec-nume     { width:145px; }
+col.ec-contact  { width:170px; }
+col.ec-bio      { width:160px; }
+col.ec-sanatate { width:200px; }
+col.ec-prioritate { width:180px; }
+col.ec-motivatie  { width:80px; }
+col.ec-status   { width:130px; }
+col.ec-followup { width:115px; }
+col.ec-obs      { width:190px; }
 col.e-id       { width:80px; }
 col.e-data     { width:115px; }
 col.e-nume     { width:145px; }
@@ -147,6 +162,9 @@ th.admin-start { background:var(--navy-light); border-left:2px solid var(--gold)
 /* Header albastru pentru evaluări */
 .tbl-eval thead th { background:var(--navy2); }
 .tbl-eval th.admin-start { background:#1a3a6a; }
+/* Header violet pentru evaluări complete */
+.tbl-complete thead th { background:#4c1d95; }
+.tbl-complete th.admin-start { background:#5b21b6; border-left-color:#C5A021; }
 
 td { padding:10px; border-bottom:1px solid #F1F5F9; vertical-align:middle; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 tr:hover td { background:#F0F6FF !important; }
@@ -180,6 +198,10 @@ tr:hover td.admin-col { background:#FFF8DC !important; }
 td.admin-col-eval { background:var(--admin-bg2) !important; }
 td.admin-col-eval:first-of-type { border-left:2px solid #3E92CC; }
 tr:hover td.admin-col-eval { background:#E0ECFF !important; }
+/* Admin complete */
+td.admin-col-comp { background:#faf5ff !important; }
+td.admin-col-comp:first-of-type { border-left:2px solid #7C3AED; }
+tr:hover td.admin-col-comp { background:#ede9fe !important; }
 
 .ie-select,.ie-input,.ie-date,.ie-textarea {
   width:100%; border:1px solid transparent; border-radius:4px;
@@ -232,10 +254,10 @@ tr:hover td.admin-col-eval { background:#E0ECFF !important; }
   // ════════════════════════════════════════════════════
   // CONFIGURARE — înlocuiește cu URL-ul tău Apps Script v4
   // ════════════════════════════════════════════════════
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKP6xamXU9DJlod81LEsqEYcb5bYenmUSf1n6rGnJN2fFubZJoiZ47nb53WqgTJxAd5w/exec';
+  const APPS_SCRIPT_URL = 'INLOCUIESTE_CU_URL_WEB_APP_V4';
   const ADMIN_PASSWORD  = '2026';
 
-  let currentSource = 'targ'; // 'targ' | 'evaluari'
+  let currentSource = 'targ'; // 'targ' | 'evaluari' | 'complete'
   let allData = [];
 </script>
 
@@ -313,7 +335,9 @@ function switchSource(src) {
   currentSource = src;
   document.getElementById('btnTarg').classList.toggle('active', src === 'targ');
   document.getElementById('btnEvaluari').classList.toggle('active', src === 'evaluari');
-  document.getElementById('mainTable').className = src === 'targ' ? 'tbl-targ' : 'tbl-eval';
+  document.getElementById('btnComplete').classList.toggle('active', src === 'complete');
+  const cls = src === 'targ' ? 'tbl-targ' : src === 'evaluari' ? 'tbl-eval' : 'tbl-complete';
+  document.getElementById('mainTable').className = cls;
   updateFiltersForSource(src);
   loadData();
 }
@@ -333,7 +357,7 @@ function updateFiltersForSource(src) {
       <option value="4">Urgență ≥ 4</option>
       <option value="3">Urgență ≥ 3</option>`;
     extraSel.title = 'Filtru urgență';
-  } else {
+  } else if (src === 'evaluari') {
     statusSel.innerHTML = `
       <option value="">Toate statusurile</option>
       <option>Nou</option><option>Contactat</option><option>Programat</option>
@@ -341,9 +365,24 @@ function updateFiltersForSource(src) {
     extraSel.innerHTML = `
       <option value="">Orice format</option>
       <option value="Online (Zoom)">Online (Zoom)</option>
-      <option value="Fizic în Sibiu">Fizic în Sibiu</option>
+      <option value="Fizic in Sibiu">Fizic in Sibiu</option>
       <option value="Oricare">Oricare</option>`;
     extraSel.title = 'Filtru format';
+  } else {
+    // complete
+    statusSel.innerHTML = `
+      <option value="">Toate statusurile</option>
+      <option>Nou</option><option>Contactat</option><option>Programat</option>
+      <option>Finalizat</option><option>Client</option><option>Arhivat</option>`;
+    extraSel.innerHTML = `
+      <option value="">Orice prioritate</option>
+      <option>Energie si vitalitate</option>
+      <option>Slabit sustenabil</option>
+      <option>Crestere masa musculara</option>
+      <option>Claritate mentala / concentrare</option>
+      <option>Imbunatatire analize medicale</option>
+      <option>Longevitate sanatoasa</option>`;
+    extraSel.title = 'Filtru prioritate';
   }
 }
 
@@ -353,7 +392,7 @@ function updateFiltersForSource(src) {
 async function loadData() {
   if (!checkAuth()) return;
 
-  const cols = currentSource === 'targ' ? 13 : 11;
+  const cols = currentSource === 'targ' ? 13 : currentSource === 'evaluari' ? 11 : 11;
   document.getElementById('tableBody').innerHTML =
     `<tr class="state-row"><td colspan="${cols}"><span class="spinner"></span>Se încarcă…</td></tr>`;
   renderHeader(currentSource);
@@ -367,7 +406,8 @@ async function loadData() {
     filterRows();
     document.getElementById('badgeTotal').textContent = allData.length + ' intrări';
     document.getElementById('topbarSub').textContent =
-      currentSource === 'targ' ? 'Participanți Târg' : 'Evaluări Gratuite';
+      currentSource === 'targ' ? 'Participanti Targ' :
+      currentSource === 'evaluari' ? 'Evaluari Gratuite' : 'Evaluari Complete';
   } catch(e) {
     document.getElementById('tableBody').innerHTML =
       `<tr class="state-row"><td colspan="13">⚠️ Eroare la încărcare. Verifică URL-ul Apps Script.</td></tr>`;
@@ -444,7 +484,9 @@ function filterRows() {
     if (q) {
       const searchable = currentSource === 'targ'
         ? [r.nume,r.tel,r.email,r.mesaj,r.obiectiv]
-        : [r.nume,r.tel,r.email,r.mesaj,r.problema];
+        : currentSource === 'evaluari'
+        ? [r.nume,r.tel,r.email,r.mesaj,r.problema]
+        : [r.nume,r.tel,r.email,r.sanatate,r.prioritate];
       if (!searchable.some(v => (v||'').toLowerCase().includes(q))) return false;
     }
     const rStatus = r.status || 'Nou';
@@ -453,8 +495,10 @@ function filterRows() {
     if (extra) {
       if (currentSource === 'targ') {
         if (parseInt(r.urgenta) < parseInt(extra)) return false;
-      } else {
+      } else if (currentSource === 'evaluari') {
         if (!r.format.toLowerCase().includes(extra.toLowerCase())) return false;
+      } else {
+        if (extra && !(r.prioritate||'').toLowerCase().includes(extra.toLowerCase())) return false;
       }
     }
     return true;
@@ -476,7 +520,10 @@ function renderTable(rows) {
     tbody.innerHTML = `<tr class="state-row"><td colspan="${cols}">Nicio înregistrare. Datele apar după prima completare a formularului.</td></tr>`;
     return;
   }
-  tbody.innerHTML = rows.map(r => currentSource === 'targ' ? rowTarg(r) : rowEval(r)).join('');
+  tbody.innerHTML = rows.map(r =>
+    currentSource === 'targ' ? rowTarg(r) :
+    currentSource === 'evaluari' ? rowEval(r) : rowComplete(r)
+  ).join('');
 }
 
 // ── ROW TÂRG ──
@@ -572,6 +619,49 @@ function rowEval(r) {
   </tr>`;
 }
 
+// ── ROW EVALUARE COMPLETA ──
+function rowComplete(r) {
+  const statusVal = r.status || 'Nou';
+  const ac = 'admin-col-comp';
+  const mot = parseInt(r.motivatie) || 0;
+  const motColor = mot >= 8 ? '#15803d' : mot >= 5 ? '#D97706' : '#DC2626';
+
+  return `<tr data-id="${r.id}">
+    <td><span class="cell-id" style="background:rgba(124,58,237,0.1);color:#4c1d95">${r.id||'—'}</span></td>
+    <td style="font-size:11px;color:var(--muted)">${(r.data||'').replace(' ','<br>')}</td>
+    <td class="cell-name">${esc(r.nume)||'—'}</td>
+    <td class="cell-contact">
+      ${r.tel   ? `<a href="tel:${r.tel}">📞 ${r.tel}</a>` : ''}
+      ${r.email ? `<a href="mailto:${r.email}" title="${esc(r.email)}">✉️ ${shortEmail(r.email)}</a>` : ''}
+      ${r.ocupatie ? `<span style="font-size:10px;color:var(--muted)">${r.ocupatie}</span>` : ''}
+    </td>
+    <td style="font-size:11px;white-space:normal;line-height:1.4">
+      ${r.sex||''} · ${r.varsta||''}
+      ${r.imc ? `<br><strong style="color:#4c1d95">IMC ${r.imc}</strong> <span style="font-size:10px;color:var(--muted)">${r.imc_label||''}</span>` : ''}
+      ${r.rmb ? `<br><span style="font-size:10px;color:var(--muted)">RMB ${r.rmb} kcal</span>` : ''}
+    </td>
+    <td style="font-size:10px;color:var(--muted);white-space:normal;line-height:1.35">${esc(r.sanatate)||'—'}</td>
+    <td style="font-size:11px;white-space:normal;line-height:1.3;color:#374151">${esc(r.prioritate)||'—'}</td>
+    <td><span style="font-weight:800;font-size:12px;color:${motColor}">${mot||'—'}</span></td>
+
+    <td class="${ac}">
+      <select class="ie-select" onchange="saveField(this,'${r.id}','status','complete');updatePill(this)">
+        ${['Nou','Contactat','Programat','Finalizat','Client','Arhivat']
+          .map(s=>`<option ${statusVal===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+      <span class="s-pill s-${statusVal}" style="margin-top:2px;display:block">${statusVal}</span>
+    </td>
+    <td class="${ac}">
+      <input class="ie-date" type="date" value="${r.followup||''}"
+        onchange="saveField(this,'${r.id}','followup','complete')">
+    </td>
+    <td class="${ac}">
+      <textarea class="ie-textarea" placeholder="Observatii…"
+        onblur="saveField(this,'${r.id}','observatii','complete')">${esc(r.observatii)||''}</textarea>
+    </td>
+  </tr>`;
+}
+
 // ═══════════════════════════════════════════════════════
 // SAVE FIELD
 // ═══════════════════════════════════════════════════════
@@ -616,9 +706,12 @@ function updatePill(sel) {
 function exportCSV() {
   if (!allData.length) { showToast('⚠️ Nicio dată de exportat'); return; }
 
-  const isTarg = currentSource === 'targ';
-  const keys   = isTarg
+  const isTarg     = currentSource === 'targ';
+  const isComplete = currentSource === 'complete';
+  const keys = isTarg
     ? ['id','data','nume','tel','email','varsta','obiectiv','interese','urgenta','buget','mesaj','status','nivel','recomandare','followup','observatii','convertit']
+    : isComplete
+    ? ['id','data','nume','tel','email','varsta','sex','ocupatie','imc','imc_label','rmb','sanatate','prioritate','motivatie','status','followup','observatii','convertit']
     : ['id','data','nume','tel','email','varsta','format','problema','mesaj','status','prioritate','followup','observatii','convertit'];
 
   const header = keys.join(',');
