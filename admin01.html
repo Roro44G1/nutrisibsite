@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NutriSib Admin — Leads Târg</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0A2363;
+  --navy-light: #2A3F6F;
+  --gold: #C5A021;
+  --gold-light: #FFF8E0;
+  --pearl: #F8FAFC;
+  --white: #ffffff;
+  --border: #E2E8F0;
+  --text: #1E2A3A;
+  --muted: #64748B;
+  --admin-bg: #FFFDF5;
+  
+  
+  --s-nou: #2563EB;
+  --s-contactat: #D97706;
+  --s-interesat: #059669;
+  --s-neinteresat: #6B7280;
+  --s-client: #7C3AED;
+  --s-arhivat: #DC2626;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--pearl);
+  min-height: 100vh;
+}
+
+/* ──  TOPBAR ── */
+.topbar {
+  background: var(--navy);
+  height: 56px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(10,35,99,0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.topbar-logo {
+  height: 32px;
+  width: auto;
+}
+
+.topbar-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255,255,255,0.2);
+}
+
+.topbar-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+}
+
+.topbar-sub {
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 1px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.badge {
+  background: rgba(197,160,33,0.2);
+  border: 1px solid rgba(197,160,33,0.4);
+  color: #F5D060;
+  border-radius: 16px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'DM Mono', monospace;
+}
+
+.btn-topbar {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.btn-topbar:hover { background: rgba(255,255,255,0.2); }
+
+/* ── FILTER BAR ── */
+.filterbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 160px;
+  max-width: 280px;
+}
+
+.search-wrap input {
+  width: 100%;
+  padding: 7px 10px 7px 28px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  outline: none;
+}
+.search-wrap input:focus { border-color: var(--navy); }
+
+.search-wrap::before {
+  content: '🔍';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  pointer-events: none;
+}
+
+.flt-select {
+  padding: 7px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  background: var(--white);
+  outline: none;
+  cursor: pointer;
+}
+.flt-select:focus { border-color: var(--navy); }
+
+/* ── TABLE WRAPPER — KEY FIX ── */
+.table-container {
+  padding: 16px 20px;
+  /* FORCE scroll pe toate device-urile */
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-card {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(10,35,99,0.07);
+  overflow: hidden;
+  /* FORCE min-width = table va fi întotdeauna scrollabil pe ecrane mici */
+  min-width: 1200px;
+}
+
+/* ── TABLE ── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Lățimi fixe pentru toate coloanele */
+col.c-id       { width: 70px; }
+col.c-data     { width: 110px; }
+col.c-nume     { width: 140px; }
+col.c-contact  { width: 160px; }
+col.c-obiectiv { width: 180px; }
+col.c-interese { width: 160px; }
+col.c-urg      { width: 60px; }
+col.c-buget    { width: 120px; }
+/* Admin cols */
+col.c-status   { width: 140px; }
+col.c-nivel    { width: 140px; }
+col.c-rec      { width: 180px; }
+col.c-followup { width: 120px; }
+col.c-obs      { width: 200px; }
+
+thead th {
+  background: var(--navy);
+  color: rgba(255,255,255,0.8);
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+th.admin-start {
+  background: var(--navy-light);
+  border-left: 2px solid var(--gold);
+  color: #F5D060;
+}
+
+td {
+  padding: 10px 10px;
+  border-bottom: 1px solid #F1F5F9;
+  vertical-align: middle;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+tr:hover td { background: #F0F6FF !important; }
+
+.cell-id {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--navy);
+  background: rgba(10,35,99,0.08);
+  padding: 2px 6px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.cell-name { font-weight: 600; }
+
+.cell-contact a {
+  display: block;
+  color: var(--navy);
+  text-decoration: none;
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cell-contact a:hover { text-decoration: underline; }
+
+.urgenta-badge {
+  font-weight: 700;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+}
+.urg-1, .urg-2 { color: #059669; }
+.urg-3         { color: #D97706; }
+.urg-4, .urg-5 { color: #DC2626; }
+
+/* ── STATUS PILLS ── */
+.s-pill {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.s-Nou          { background:#EFF6FF; color:var(--s-nou); }
+.s-Contactat    { background:#FFFBEB; color:var(--s-contactat); }
+.s-Interesat    { background:#ECFDF5; color:var(--s-interesat); }
+.s-Neinteresat  { background:#F3F4F6; color:var(--s-neinteresat); }
+.s-Client       { background:#F5F3FF; color:var(--s-client); }
+.s-Arhivat      { background:#FEF2F2; color:var(--s-arhivat); }
+
+/* ── ADMIN COLUMNS ── */
+td.admin-col {
+  background: var(--admin-bg) !important;
+}
+td.admin-col:first-of-type {
+  border-left: 2px solid var(--gold);
+}
+tr:hover td.admin-col { background: #FFF8DC !important; }
+
+.ie-select, .ie-input, .ie-date, .ie-textarea {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 11px;
+  background: transparent;
+  outline: none;
+  transition: all 0.15s;
+}
+.ie-select:hover, .ie-input:hover, .ie-date:hover, .ie-textarea:hover {
+  border-color: #D4D4AA;
+  background: #FFFEF7;
+}
+.ie-select:focus, .ie-input:focus, .ie-date:focus, .ie-textarea:focus {
+  border-color: var(--gold);
+  background: var(--white);
+  box-shadow: 0 0 0 2px rgba(197,160,33,0.15);
+}
+.ie-textarea {
+  resize: vertical;
+  min-height: 36px;
+}
+
+/* ── LOADING / EMPTY ── */
+.state-row td {
+  text-align: center;
+  padding: 40px;
+  color: var(--muted);
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--navy);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  background: var(--navy);
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  display: none;
+  box-shadow: 0 6px 20px rgba(10,35,99,0.3);
+  z-index: 999;
+  border-left: 3px solid var(--gold);
+}
+
+/* ── RESPONSIVE FIXES ── */
+@media (max-width: 1024px) {
+  .filterbar { padding: 8px 12px; }
+  .table-container { padding: 12px; }
+  .topbar { padding: 0 12px; }
+  
+  /* Forțează scroll orizontal pe tablete */
+  .table-container {
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .topbar-logo { height: 26px; }
+  .badge { font-size: 10px; padding: 2px 8px; }
+  .btn-topbar { font-size: 10px; padding: 5px 8px; }
+  
+  /* Mobile: absolut sigur că scrollează */
+  .table-container {
+    padding: 8px;
+    overflow-x: scroll !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  
+  .table-card {
+    min-width: 1200px !important;
+  }
+  
+  /* Scrollbar vizibil pe mobil */
+  .table-container::-webkit-scrollbar {
+    height: 8px;
+    background: #f1f1f1;
+  }
+  .table-container::-webkit-scrollbar-thumb {
+    background: var(--navy);
+    border-radius: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .filterbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .search-wrap { max-width: none; }
+}
+</style>
+</head>
+<body>
+
+<script>
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKP6xamXU9DJlod81LEsqEYcb5bYenmUSf1n6rGnJN2fFubZJoiZ47nb53WqgTJxAd5w/exec';
+  const ADMIN_PASSWORD = '2026';
+</script>
+
+<!-- ── TOPBAR ── actualizat-->
+<div class="topbar">
+  <div class="topbar-brand">
+    <img class="topbar-logo" src="../imagini/logo_navy.png" alt="NutriSib">
+    <div class="topbar-divider"></div>
+    <div>
+      <div class="topbar-label">NutriSib Admin — Leads Târg</div>
+      <div class="topbar-sub">nutrisib.club</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="badge" id="badgeTotal">— leads</span>
+    <button class="btn-topbar" onclick="loadData()">↻ Reîncarcă</button>
+    <button class="btn-topbar" onclick="exportCSV()">📊 Export</button>
+  </div>
+</div>
+
+<!-- ── FILTERS ── -->
+<div class="filterbar">
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="Caută nume, telefon, email…" oninput="filterRows()">
+  </div>
+  
+  <select class="flt-select" id="filterStatus" onchange="filterRows()">
+    <option value="">Toate statusurile</option>
+    <option>Nou</option>
+    <option>Contactat</option>
+    <option>Interesat</option>
+    <option>Neinteresat</option>
+    <option>Client</option>
+    <option>Arhivat</option>
+  </select>
+
+  <select class="flt-select" id="filterUrgenta" onchange="filterRows()">
+    <option value="">Orice urgență</option>
+    <option value="5">🔥 Urgență 5</option>
+    <option value="4">Urgență ≥ 4</option>
+    <option value="3">Urgență ≥ 3</option>
+  </select>
+
+  <select class="flt-select" id="filterObiectiv" onchange="filterRows()">
+    <option value="">Orice obiectiv</option>
+    <option>Slăbire / Remodelare corporală</option>
+    <option>Energie și vitalitate</option>
+    <option>Detoxifiere / Curățare</option>
+    <option>Digestie și confort intestinal</option>
+    <option>Imunitate</option>
+    <option>Stres / Somn / Relaxare</option>
+    <option>Dureri articulare / musculare</option>
+    <option>Nutriție sportivă</option>
+    <option>Sănătate hormonală</option>
+	<option>Longevitate / Biohacking</option>
+  </select>
+</div>
+
+<!-- ── TABLE ── -->
+<div class="table-container">
+  <div class="table-card">
+    <table>
+      <colgroup>
+        <col class="c-id">
+        <col class="c-data">
+        <col class="c-nume">
+        <col class="c-contact">
+        <col class="c-obiectiv">
+        <col class="c-interese">
+        <col class="c-urg">
+        <col class="c-buget">
+        <col class="c-status">
+        <col class="c-nivel">
+        <col class="c-rec">
+        <col class="c-followup">
+        <col class="c-obs">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Data / Ora</th>
+          <th>Nume</th>
+          <th>Contact</th>
+          <th>Obiectiv</th>
+          <th>Interese</th>
+          <th>Urg</th>
+          <th>Buget</th>
+          <th class="admin-start">Status</th>
+          <th>Nivel interes</th>
+          <th>Recomandare</th>
+          <th>Follow-up</th>
+          <th>Observații</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+        <tr class="state-row">
+          <td colspan="13"><span class="spinner"></span>Se încarcă datele…</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let allData = [];
+
+/* ── AUTH ── */
+function checkAuth() {
+  if (sessionStorage.getItem('ns_auth') === ADMIN_PASSWORD) return true;
+  const input = prompt('🔐 Parolă admin NutriSib:');
+  if (input === ADMIN_PASSWORD) {
+    sessionStorage.setItem('ns_auth', input);
+    return true;
+  }
+  document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-size:18px;color:#64748B">Acces restricționat.</div>';
+  return false;
+}
+
+/* ── LOAD DATA ── */
+async function loadData() {
+  if (!checkAuth()) return;
+  
+  document.getElementById('tableBody').innerHTML = 
+    '<tr class="state-row"><td colspan="13"><span class="spinner"></span>Se încarcă…</td></tr>';
+    
+  try {
+    const res = await fetch(APPS_SCRIPT_URL + '?action=getAll&t=' + Date.now());
+    const json = await res.json();
+    allData = json.data || [];
+    filterRows();
+    document.getElementById('badgeTotal').textContent = allData.length + ' leads';
+  } catch(e) {
+    document.getElementById('tableBody').innerHTML =
+      '<tr class="state-row"><td colspan="13">⚠️ Eroare la încărcare. Verifică URL-ul Apps Script.</td></tr>';
+  }
+}
+
+/* ── FILTER ── */
+function filterRows() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const status = document.getElementById('filterStatus').value;
+  const urgMin = parseInt(document.getElementById('filterUrgenta').value) || 0;
+  const obiect = document.getElementById('filterObiectiv').value;
+
+  let rows = allData.filter(r => {
+    if (q && ![(r.nume||''),(r.tel||''),(r.email||''),(r.mesaj||'')]
+               .some(v => v.toLowerCase().includes(q))) return false;
+    if (status && (r.status||'Nou') !== status) return false;
+    if (urgMin && parseInt(r.urgenta) < urgMin) return false;
+    if (obiect && r.obiectiv !== obiect) return false;
+    return true;
+  });
+
+  // Sort by date desc
+  rows.sort((a,b) => (b.data||'').localeCompare(a.data||''));
+  renderTable(rows);
+}
+
+/* ── RENDER ── */
+function renderTable(rows) {
+  const tbody = document.getElementById('tableBody');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr class="state-row"><td colspan="13">Nicio înregistrare. Datele apar după prima completare.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map(r => {
+    const statusVal = r.status || 'Nou';
+    const urg = parseInt(r.urgenta) || 0;
+
+    return `<tr data-id="${r.id}">
+      <td><span class="cell-id">${r.id||'—'}</span></td>
+      <td style="font-size:11px;color:var(--muted)">${(r.data||'').replace(' ','<br>')}</td>
+      <td class="cell-name">${esc(r.nume)||'—'}</td>
+      <td class="cell-contact">
+        ${r.tel ? `<a href="tel:${r.tel}">📞 ${r.tel}</a>` : ''}
+        ${r.email ? `<a href="mailto:${r.email}" title="${r.email}">✉️ ${shortEmail(r.email)}</a>` : ''}
+        ${r.varsta ? `<span style="font-size:10px;color:var(--muted);${r.tel||r.email?'display:block':''}">${r.varsta}</span>` : ''}
+      </td>
+      <td style="font-size:11px;white-space:normal;line-height:1.3">${esc(r.obiectiv)||'—'}</td>
+      <td style="font-size:10px;color:var(--muted);white-space:normal;line-height:1.3">${esc(r.interese)||'—'}</td>
+      <td><span class="urgenta-badge urg-${urg}">${urg||'—'}${urg>=4?' 🔥':''}</span></td>
+      <td style="font-size:11px">${esc(r.buget)||'—'}</td>
+
+      <td class="admin-col">
+        <select class="ie-select" onchange="saveField(this,'${r.id}','status');updatePill(this)">
+          ${['Nou','Contactat','Interesat','Neinteresat','Client','Arhivat']
+            .map(s => `<option ${statusVal===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+        <span class="s-pill s-${statusVal}" style="margin-top:2px;display:block">${statusVal}</span>
+      </td>
+      <td class="admin-col">
+        <select class="ie-select" onchange="saveField(this,'${r.id}','nivel')">
+          ${['','⭐ Scăzut','⭐⭐ Mediu','⭐⭐⭐ Ridicat','⭐⭐⭐⭐ Foarte ridicat']
+            .map(n => `<option ${(r.nivel||'')===n?'selected':''}>${n}</option>`).join('')}
+        </select>
+      </td>
+      <td class="admin-col">
+        <input class="ie-input" type="text" value="${esc(r.recomandare)||''}"
+          placeholder="Omega 3, consultanță…"
+          onblur="saveField(this,'${r.id}','recomandare')">
+      </td>
+      <td class="admin-col">
+        <input class="ie-date" type="date" value="${r.followup||''}"
+          onchange="saveField(this,'${r.id}','followup')">
+      </td>
+      <td class="admin-col">
+        <textarea class="ie-textarea"
+          placeholder="Observații…"
+          onblur="saveField(this,'${r.id}','observatii')">${esc(r.observatii)||''}</textarea>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── SAVE FIELD ── */
+async function saveField(el, id, field) {
+  showToast('Se salvează…');
+  try {
+    const formBody = `action=updateAdmin&id=${encodeURIComponent(id)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(el.value)}`;
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formBody
+    });
+    
+    const row = allData.find(r => r.id === id);
+    if (row) row[field] = el.value;
+    showToast('✓ Salvat!');
+  } catch(e) {
+    showToast('⚠️ Eroare salvare');
+  }
+}
+
+/* ── UPDATE PILL ── */
+function updatePill(sel) {
+  const pill = sel.parentElement.querySelector('.s-pill');
+  if (!pill) return;
+  pill.className = 's-pill s-' + sel.value;
+  pill.textContent = sel.value;
+}
+
+/* ── EXPORT CSV ── */
+function exportCSV() {
+  const headers = ['ID','Data','Nume','Telefon','Email','Varsta','Obiectiv','Interese','Urgenta','Buget','Mesaj','Status','Nivel','Recomandare','Followup','Observatii'];
+  const rows = allData.map(r => [
+    r.id, r.data, r.nume, r.tel, r.email, r.varsta,
+    r.obiectiv, r.interese, r.urgenta, r.buget, r.mesaj,
+    r.status, r.nivel, r.recomandare, r.followup, r.observatii
+  ].map(v => '"' + (v||'').toString().replace(/"/g,'""') + '"').join(','));
+
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'nutrisib_leads_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✓ CSV exportat!');
+}
+
+/* ── UTILS ── */
+function esc(s) {
+  if (!s) return '';
+  return s.toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function shortEmail(e) {
+  if (!e || e.length <= 20) return e;
+  return e.slice(0,8) + '…' + e.slice(e.lastIndexOf('@'));
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(window._tt);
+  window._tt = setTimeout(() => { t.style.display = 'none'; }, 2000);
+}
+
+window.onload = loadData;
+</script>
+
+</body>
+</html>
