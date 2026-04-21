@@ -1,0 +1,35 @@
+name: Indexare Supabase Săptămânală
+
+on:
+  schedule:
+    # In fiecare luni la 08:00 UTC (10:00 ora Romaniei)
+    - cron: '0 8 * * 1'
+  # Permite rulare manuala din GitHub
+  workflow_dispatch:
+
+jobs:
+  indexare:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cloneaza repo-ul
+        uses: actions/checkout@v4
+        with:
+          ref: main  # indexeaza branch-ul principal
+
+      - name: Instaleaza Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instaleaza dependinte
+        run: |
+          pip install anthropic beautifulsoup4 supabase
+
+      - name: Ruleaza agentul de indexare
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: |
+          python agent_supabase_ci.py
