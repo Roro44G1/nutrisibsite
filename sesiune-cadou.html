@@ -388,7 +388,9 @@ if (mobileBtn && navMenu) {
 }
 
 /* ══════════════════════════════════════════════
-   FORMULAR → GOOGLE SHEETS
+   CONFIGURARE (o singură dată):
+   Înlocuiește INLOCUIESTE_CU_URL_WEB_APP cu URL-ul
+   din deployment-ul scriptului nutrisib_apps_script_v4.js
    ══════════════════════════════════════════════ */
 
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKP6xamXU9DJlod81LEsqEYcb5bYenmUSf1n6rGnJN2fFubZJoiZ47nb53WqgTJxAd5w/exec';
@@ -417,16 +419,20 @@ form?.addEventListener('submit', async function(e) {
     const fd = new FormData(form);
     const payload = {};
     fd.forEach((v, k) => payload[k] = v);
-    payload.GDPR = 'Da';
+    payload.GDPR   = 'Da';
+    payload.source = 'evaluare'; // ← rutare corectă spre sheet Evaluari_Gratuite
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Se trimite...';
 
     try {
-        if (GOOGLE_SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbzKP6xamXU9DJlod81LEsqEYcb5bYenmUSf1n6rGnJN2fFubZJoiZ47nb53WqgTJxAd5w/exec') {
+        if (GOOGLE_SCRIPT_URL !== 'INLOCUIESTE_CU_URL_WEB_APP') {
             await fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                body: JSON.stringify(payload),
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: Object.entries(payload)
+                    .map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v||''))
+                    .join('&'),
                 mode: 'no-cors'
             });
         }
