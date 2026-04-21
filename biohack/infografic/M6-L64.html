@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>L6.4 — Biorezonanță, MTC & Acupunctură | BH 3.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --stl:#006064;--stll:#00838F;--stld:#003134;--stlll:#80DEEA;
+  --gold:#F9A825;--navy:#050E1E;--navy2:#030C0D;
+  --white:#E0F7FA;--gray:#78909C;
+  --grn:#1B5E20;--red:#B71C1C;--amber:#F57C00;--vio:#311B92;--jade:#00695C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'Syne',sans-serif;line-height:1.6}
+#pb{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--stll),var(--gold));width:0%;z-index:100}
+nav{position:sticky;top:0;background:rgba(5,14,30,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(128,222,234,0.15);z-index:50;padding:0 24px}
+.ni{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold)}
+.nl{display:flex;gap:16px}
+.nl a{font-size:11px;letter-spacing:2px;color:var(--gray);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nl a:hover,.nl a.active{color:var(--stlll)}
+.hero{background:linear-gradient(135deg,var(--stld) 0%,var(--navy2) 60%);padding:70px 24px 50px;text-align:center;border-bottom:1px solid rgba(128,222,234,0.2);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(0,131,143,0.18) 0%,transparent 70%)}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:16px;position:relative}
+.hero h1{font-size:clamp(26px,5vw,46px);font-weight:800;line-height:1.1;margin-bottom:16px;position:relative}
+.hero h1 span{color:var(--stlll)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gray);font-style:italic;max-width:640px;margin:0 auto 28px;position:relative}
+.chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative}
+.chip{background:rgba(0,96,100,0.22);border:1px solid rgba(128,222,234,0.3);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:var(--stlll)}
+.main{max-width:1100px;margin:0 auto;padding:40px 24px}
+section{margin-bottom:60px;scroll-margin-top:70px}
+.stag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--stlll);text-transform:uppercase;margin-bottom:8px}
+h2{font-size:clamp(22px,3vw,30px);font-weight:700;margin-bottom:20px}
+h3{font-size:17px;font-weight:600;color:var(--stlll);margin:24px 0 10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:48px}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(128,222,234,0.15);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--stll)}
+.card.g::before{background:var(--gold)}
+.cv{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;color:var(--gold);line-height:1}
+.cu{font-size:11px;color:var(--gray);letter-spacing:1px;margin:4px 0}
+.cl{font-size:12px;color:var(--white);font-weight:600}
+
+/* MTC mapa */
+.mtc-map{display:flex;flex-direction:column;gap:8px}
+.mtc-row{display:grid;grid-template-columns:110px 1fr 1fr 100px;gap:0;border-radius:8px;overflow:hidden;border:1px solid rgba(128,222,234,0.15)}
+.mtc-concept{background:rgba(0,96,100,0.15);padding:12px;display:flex;align-items:center;font-size:13px;font-weight:700;color:var(--stlll)}
+.mtc-def{background:rgba(255,255,255,0.03);padding:10px 12px;font-size:11px;color:var(--white);line-height:1.5;border-left:1px solid rgba(128,222,234,0.1)}
+.mtc-bh{background:rgba(0,96,100,0.05);padding:10px 12px;font-size:11px;color:rgba(224,247,250,0.8);line-height:1.5;border-left:1px solid rgba(128,222,234,0.1)}
+.mtc-pilon{background:rgba(0,0,0,0.2);padding:8px 6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--gold);text-align:center;border-left:1px solid rgba(128,222,234,0.1)}
+
+/* Acupunctura puncte */
+.pct-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.pct-card{background:rgba(255,255,255,0.03);border:1px solid rgba(128,222,234,0.15);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s}
+.pct-card:hover,.pct-card.open{background:rgba(0,96,100,0.1);border-color:rgba(128,222,234,0.35)}
+.pct-name{font-size:14px;font-weight:700;color:var(--stlll);margin-bottom:3px}
+.pct-loc{font-size:10px;color:var(--gray);margin-bottom:6px;font-family:'JetBrains Mono',monospace}
+.pct-ind{font-size:11px;color:var(--white);margin-bottom:4px}
+.pct-bh{font-size:10px;color:var(--gold)}
+.pct-detail{display:none;margin-top:8px;padding-top:8px;border-top:1px solid rgba(128,222,234,0.12);font-size:11px;color:rgba(224,247,250,0.75);line-height:1.6}
+.pct-detail.show{display:block}
+
+/* Plante grid */
+.plante-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.planta-card{background:rgba(255,255,255,0.03);border:1px solid rgba(128,222,234,0.15);border-radius:10px;padding:14px;position:relative}
+.planta-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:3px}
+.planta-origine{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;display:inline-block;margin-bottom:6px}
+.planta-mec{font-size:11px;color:rgba(224,247,250,0.75);line-height:1.5;margin-bottom:6px}
+.planta-warn{font-size:10px;padding:4px 8px;background:rgba(183,28,28,0.1);border-radius:6px;border-left:2px solid var(--red);color:#EF9A9A}
+
+/* Evidenta spectrum */
+.evid-spec{display:flex;gap:0;border-radius:8px;overflow:hidden;margin-bottom:16px}
+.ev-item{flex:1;padding:14px 10px;text-align:center}
+.ev-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.ev-val{font-size:24px;font-weight:800;line-height:1;margin-bottom:4px}
+.ev-desc{font-size:10px;line-height:1.4}
+
+.tw{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--stld);color:var(--gold);padding:10px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+td{padding:9px 12px;border-bottom:1px solid rgba(128,222,234,0.1);color:var(--white);vertical-align:top;line-height:1.5}
+tr:nth-child(even) td{background:rgba(0,96,100,0.04)}
+tr:hover td{background:rgba(0,96,100,0.08)}
+
+.info-box{background:rgba(0,96,100,0.08);border:1px solid rgba(128,222,234,0.2);border-left:4px solid var(--stll);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.warn-box{background:rgba(249,168,37,0.07);border:1px solid rgba(249,168,37,0.25);border-left:4px solid var(--gold);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.danger-box{background:rgba(183,28,28,0.08);border:1px solid rgba(183,28,28,0.3);border-left:4px solid var(--red);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.cw{height:220px;position:relative;margin:16px 0}
+footer{text-align:center;padding:32px 24px;border-top:1px solid rgba(128,222,234,0.1);font-size:11px;color:var(--gray)}
+</style>
+</head>
+<body>
+<div id="pb"></div>
+<nav>
+  <div class="ni">
+    <div class="nb">// BH 3.0 · M6 · L6.4</div>
+    <div class="nl">
+      <a href="#cadru">Cadru</a>
+      <a href="#mtc">MTC</a>
+      <a href="#acupunctura">Acupunctură</a>
+      <a href="#biorezonanta">Biorezonanță</a>
+      <a href="#plante">Plante</a>
+      <a href="#integrare">Integrare</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// Modul 6 · Lecția 6.4</div>
+  <h1>Biorezonanță, <span>MTC</span><br/>& Acupunctură</h1>
+  <p class="hero-sub">Integrarea holistică în BH 3.0 · Medicina 3.0 ca arbitru · N=1 ca principiu de validare</p>
+  <div class="chips">
+    <div class="chip">MTC 5000 ani</div>
+    <div class="chip">Acupunctura RCT</div>
+    <div class="chip">HRV ca biomarker</div>
+    <div class="chip">Fitoterapie NMG</div>
+    <div class="chip">N=1 validare</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="cards">
+    <div class="card g"><div class="cv">5000</div><div class="cu">ani observatie MTC</div><div class="cl">Sistematizare clinica pre-stiintifica pe scara larga</div></div>
+    <div class="card"><div class="cv">20K+</div><div class="cu">pacienti in meta-analiza Vickers 2018</div><div class="cl">Acupunctura superioara placebo in durere cronica</div></div>
+    <div class="card"><div class="cv">HRV</div><div class="cu">biomarker universal de validare</div><div class="cl">Validează orice intervenție — conventionala sau holistica</div></div>
+    <div class="card"><div class="cv">N=1</div><div class="cu">principiu de integrare</div><div class="cl">Testezi efectul pe TINE — nu originea metodei</div></div>
+    <div class="card g"><div class="cv">⚠️</div><div class="cu">interactiuni fitoterapeutice</div><div class="cl">Ginkgo + anticoagulante = risc hemoragic real</div></div>
+  </div>
+
+  <!-- CADRU -->
+  <section id="cadru">
+    <div class="stag">// 01</div>
+    <h2>Cadrul integrării — principiul unic: testezi prin biomarkeri</h2>
+    <div class="info-box"><strong style="color:var(--stlll)">Principiu BH 3.0:</strong> Nu combati sistemele medicale — testezi intervențiile. Dacă HRV crește, cortizolul scade și CRP se ameliorează după o intervenție MTC sau biorezonanță — funcționează. Indiferent de denumire. Dacă nu — elimini.</div>
+    <div class="evid-spec">
+      <div class="ev-item" style="background:rgba(27,94,32,0.15)"><div class="ev-label" style="color:#81C784">Validat clinic</div><div class="ev-val" style="color:#81C784">RCT</div><div class="ev-desc" style="color:rgba(224,247,250,0.7)">Acupunctura durere cronică, HRV modulator, cortizol</div></div>
+      <div class="ev-item" style="background:rgba(249,168,37,0.1)"><div class="ev-label" style="color:#FFD54F">Evidenta mixta</div><div class="ev-val" style="color:#FFD54F">±</div><div class="ev-desc" style="color:rgba(224,247,250,0.7)">Fitoterapie selectiva (Silimarina, Astragalus, Ginkgo)</div></div>
+      <div class="ev-item" style="background:rgba(245,124,0,0.12)"><div class="ev-label" style="color:#FFAB40">Evidenta slaba</div><div class="ev-val" style="color:#FFAB40">~</div><div class="ev-desc" style="color:rgba(224,247,250,0.7)">Biorezonanta BICOM, diagnostic prin puls MTC, iridologie</div></div>
+      <div class="ev-item" style="background:rgba(183,28,28,0.12)"><div class="ev-label" style="color:#EF9A9A">Respinsa</div><div class="ev-val" style="color:#EF9A9A">✗</div><div class="ev-desc" style="color:rgba(224,247,250,0.7)">Homeopatie (dilutii extreme), terapie Kirlian diagnostic</div></div>
+    </div>
+    <div class="cw"><canvas id="evidChart"></canvas></div>
+  </section>
+
+  <!-- MTC -->
+  <section id="mtc">
+    <div class="stag">// 02</div>
+    <h2>MTC — mapare concepte în BH 3.0</h2>
+    <div class="info-box"><strong style="color:var(--stlll)">Nu sincretism — traducere functionala:</strong> Conceptele MTC nu au echivalent direct în fiziologia occidentală. Dar pot fi mapate funcțional pe pilonii C.E.L.O.S. pentru a identifica intervențiile cu potential de validare.</div>
+    <div class="mtc-map">
+      <div class="mtc-row"><div class="mtc-concept">Qi (气)</div><div class="mtc-def">Energia vitala care circula prin meridiane; forta motrice a tuturor functiilor biologice</div><div class="mtc-bh">Energie celulara ATP + tonus SNA + reactivitate HPA adaptiva + HRV</div><div class="mtc-pilon">C + E</div></div>
+      <div class="mtc-row"><div class="mtc-concept">Xue (血)</div><div class="mtc-def">Sangele ca substanta nutritiva si transportatoare; nu identic cu sangele biochimic occidental</div><div class="mtc-bh">Perfuzie tisulara + transport O2 + microbiom intestinal + hemoglobina</div><div class="mtc-pilon">C + O</div></div>
+      <div class="mtc-row"><div class="mtc-concept">Yin / Yang</div><div class="mtc-def">Echilibru dinamic intre polaritati: Yin=substanta/racire, Yang=functie/caldura/miscare</div><div class="mtc-bh">Echilibru SNA (simpatic/parasimpatic) + HRV + cortizol/DHEA-S + catabolism/anabolism</div><div class="mtc-pilon">S + E</div></div>
+      <div class="mtc-row"><div class="mtc-concept">Jing (精)</div><div class="mtc-def">Esenta constitutionala mostenita si dobandita; substrat fundamental al vietii si longevitatii</div><div class="mtc-bh">Capital genetic + telomeri + NAD+ + rezerva biologica + DHEA-S</div><div class="mtc-pilon">L + C</div></div>
+      <div class="mtc-row"><div class="mtc-concept">Shen (神)</div><div class="mtc-def">Spiritul, constiinta, activitatea mentala si emotionala; sediu in Inima (MTC)</div><div class="mtc-bh">Functie cognitiva + HRV + calitate somn + neuroplasticitate + BDNF</div><div class="mtc-pilon">S</div></div>
+    </div>
+  </section>
+
+  <!-- ACUPUNCTURA -->
+  <section id="acupunctura">
+    <div class="stag">// 03</div>
+    <h2>Acupunctură — mecanisme și evidență</h2>
+    <div class="warn-box"><strong style="color:var(--gold)">Vickers 2018 (meta-analiză, 39 RCT-uri, 20.827 pacienți):</strong> Acupunctura superioară placebo și tratamentului convențional în durerea cronică de spate, cervicală, osteoartită și cefalee. Efectul persistă la 12 luni — nu este efect de moment.</div>
+    <h3>Puncte de acupunctură relevante în BH 3.0</h3>
+    <div class="pct-grid">
+      <div class="pct-card" onclick="togglePct(this)"><div class="pct-name">ST36 — Zusanli</div><div class="pct-loc">Tibial anterior · 4 degete sub genunchi</div><div class="pct-ind">Tonifiere generala · Energie · Imunitate · Digestie</div><div class="pct-bh">→ HRV crescut · Tonus parasimpatic · Imunitate (NK)</div><div class="pct-detail">Cel mai studiat punct de acupunctura. Huang 2011: stimularea ST36 produce crestere semnificativa HRV si componenta HF parasimpatica — efect reproductibil. Indicat in oboseala cronica, imunitate scazuta, digestie slaba. Pilon C + S.</div></div>
+      <div class="pct-card" onclick="togglePct(this)"><div class="pct-name">PC6 — Neiguan</div><div class="pct-loc">Antebrat anterior · 3 degete deasupra incheieturii</div><div class="pct-ind">Anxietate · Palpitatii · Insomnie · Greata</div><div class="pct-bh">→ SNA reglat · Anxietate redusa · Somn imbunatatit</div><div class="pct-detail">Punct perikardic 6. Studii clinice in greata de sarcina (eficace, Cochrane 2015) si anxietate preoperatorie. Modulator SNA — activare parasimpatica. Indicat in stres cronic, insomnie, palpitaii. Pilon S + E.</div></div>
+      <div class="pct-card" onclick="togglePct(this)"><div class="pct-name">LV3 — Taichong</div><div class="pct-loc">Dorsal picior · Intre metatars I-II</div><div class="pct-ind">Stres · Iritabilitate · Inflamatie hepatica · Durere de cap</div><div class="pct-bh">→ Cortizol redus · Stres hepatic · CRP</div><div class="pct-detail">Punct surs al meridianului Ficatului. MTC: stresul emotional 'afecteaza Ficatul'. In BH 3.0: relevant pentru cortizol crescut cronic, inflamatie hepatica subclinica (transaminaze), tensiune arteriala. Pilon O + E.</div></div>
+      <div class="pct-card" onclick="togglePct(this)"><div class="pct-name">GV20 — Baihui</div><div class="pct-loc">Vertex cranian · Centrul capului</div><div class="pct-ind">Ceata cognitiva · Depresie · Claritate mentala</div><div class="pct-bh">→ Cognitie · BDNF indirect · Focus</div><div class="pct-detail">Punctul 'suta de intalniri'. Convergenta Yang-urilor. Studii in depresie si cognitie: ameliorare functie executiva si memorie la varstnici. Electrostimulare (tDCS) pe vertex produce efecte similare. Pilon S cognitie.</div></div>
+      <div class="pct-card" onclick="togglePct(this)"><div class="pct-name">KD1 — Yongquan</div><div class="pct-loc">Centrul plantei piciorului</div><div class="pct-ind">Epuizare profunda · Burnout · Grounding · Insomnie refractara</div><div class="pct-bh">→ Parasimpatic · Grounding · Somn profund</div><div class="pct-detail">Primul punct al meridianului Rinichilor (Jing). Indicat in epuizare profunda, burnout cu cortizol scazut (CAR blunt), insomnie refractara si anxietate severa. Masajul plantar pe KD1 este o practica simpla, accesibila. Pilon S + L.</div></div>
+      <div class="pct-card" onclick="togglePct(this)"><div class="pct-name">BL23 — Shenshu</div><div class="pct-loc">Paravertebral L2 bilateral</div><div class="pct-ind">Oboseala profunda · Lombalgie · Fertilitate · Longevitate</div><div class="pct-bh">→ DHEA-S · Rezerva biologica · Recuperare</div><div class="pct-detail">Punctul de Back-Shu al Rinichilor (Jing/Longevitate in MTC). Indicat in oboseala cronica profunda, reducere DHEA-S, lombalgie degenerativa, convalescenta. In BH 3.0: corelat cu rezerva biologica (L) si axa HPA (E). Pilon L + E.</div></div>
+    </div>
+    <div class="cw" style="margin-top:16px"><canvas id="acuChart"></canvas></div>
+  </section>
+
+  <!-- BIOREZONANTA -->
+  <section id="biorezonanta">
+    <div class="stag">// 04</div>
+    <h2>Biorezonanță — ce este și ce nu este</h2>
+    <div class="danger-box"><strong>Niciun RCT de calitate</strong> nu confirma acuratetea diagnostica sau eficacitatea terapeutica specifica a dispozitivelor de biorezonanta (BICOM, Oberon, Metatron). Integrare exclusiv ca screening orientativ — nu diagnostic, nu terapie primara.</div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Aspect</th><th>Realitate stiintifica</th><th>Pretentia nevalidata</th><th>Pozitia BH 3.0</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Campuri EM biologice</strong></td><td>Real — EEG, ECG, EMG masoara semnale EM biologice reale</td><td>Dispozitivele comerciale detecteaza si corecteaza perturbari specifice de organe</td><td>Baza biologica reala; saltul terapeutic — nevalidat</td></tr>
+          <tr><td><strong>Diagnostic</strong></td><td>Nu exista studii de specificitate/sensibilitate adecvate</td><td>Identificarea precisa a agentilor patogeni, alergeni, deficiente</td><td>Nu se bazeaza decizii diagnostice pe biorezonanta</td></tr>
+          <tr><td><strong>Terapia</strong></td><td>Cochrane: niciun review — lipsa RCT-urilor eligibile</td><td>Corectare perturbari EM = vindecare sau ameliorare</td><td>Nu terapie primara; placebo real poate fi benefic</td></tr>
+          <tr><td><strong>Efectul placebo</strong></td><td>Real, masurabil biologic — cortizol redus, oxitocina crescuta, parasimpatic activat</td><td>Nu este recunoscut de terapeutii de biorezonanta ca explicatie</td><td>Valoros clinic; nu trebuie confundat cu mecanismul pretins</td></tr>
+          <tr><td><strong>Utilitate practica</strong></td><td>Poate orienta investigatii conventionale ulterioare</td><td>Diagnostic complet si terapie autonoma</td><td>Screening orientativ + relatie terapeutica de calitate</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PLANTE -->
+  <section id="plante">
+    <div class="stag">// 05</div>
+    <h2>Fitoterapie MTC & NMG — plante cu validare</h2>
+    <div class="danger-box"><strong>Interacțiuni fitoterapeutice reale:</strong> Ginkgo + anticoagulante (Warfarină) = risc hemoragic major. St. John's Wort + antidepresive/contraceptive = interacțiune majoră. Valerian + benzodiazepine = sedare excesivă. Comunicati medicului curant ORICE fitoterapeutic.</div>
+    <div class="plante-grid">
+      <div class="planta-card"><div class="planta-name">🌿 Astragalus membranaceus</div><span class="planta-origine" style="background:rgba(0,96,100,0.2);color:var(--stlll)">MTC — Huang Qi</span><div class="planta-mec">Imunomodulator (NK, Th1); activare telomeraza (extract TA-65); anti-fatiga; hepatoprotector. Studii clinice in cancer suport si longevitate.</div><div class="planta-warn">Evita in afectiuni autoimune active · Nu combina cu imunosupresive</div></div>
+      <div class="planta-card"><div class="planta-name">🍄 Reishi — Ganoderma lucidum</div><span class="planta-origine" style="background:rgba(0,96,100,0.2);color:var(--stlll)">MTC — Ling Zhi</span><div class="planta-mec">Beta-glucani imunomodulatori; inhibitor NF-kB (antiinflamator); hepatoprotector; modulator tensiune arteriala; anxiolitic usor.</div><div class="planta-warn">Poate prelungi timpul de coagulare · Prudenta perioperator (stop cu 2 sapt)</div></div>
+      <div class="planta-card"><div class="planta-name">🌸 Rhodiola rosea SHR-5</div><span class="planta-origine" style="background:rgba(49,27,146,0.2);color:#B39DDB">Adaptogen nordic/MTC</span><div class="planta-mec">Modulator DA+5-HT; anti-fatiga; cortizol acut redus; performanta cognitiva si fizica. 200–400 mg dimineata.</div><div class="planta-warn">Stimulant usor — nu seara · Evita faza maniacala bipolar</div></div>
+      <div class="planta-card"><div class="planta-name">🫐 Schisandra chinensis</div><span class="planta-origine" style="background:rgba(0,96,100,0.2);color:var(--stlll)">MTC — Wu Wei Zi</span><div class="planta-mec">Hepatoprotector; anti-fatiga; modulator cortizol; antioxidant; concentrare. Adaptogen cu profil mai slab studiat.</div><div class="planta-warn">Evita sarcina si alaptare · Studii clinice umane limitate</div></div>
+      <div class="planta-card"><div class="planta-name">🌰 Silimarina (Silybum marianum)</div><span class="planta-origine" style="background:rgba(27,94,32,0.2);color:#A5D6A7">NMG — Fitoterapie germana</span><div class="planta-mec">Hepatoprotector puternic; antioxidant; regenerare hepatocitara; inhiba inflamatia hepatica. 350–600 mg/zi cu masa.</div><div class="planta-warn">Bine tolerat · Prudenta cancer hormonal-dependent (estrogen-sensibil)</div></div>
+      <div class="planta-card"><div class="planta-name">🌿 Ginkgo biloba</div><span class="planta-origine" style="background:rgba(27,94,32,0.2);color:#A5D6A7">NMG + MTC</span><div class="planta-mec">Vasodilatator cerebral; anti-PAF (antiagregant plachetar); antioxidant flavonoidic; cognitie si memorie; acufene.</div><div class="planta-warn" style="color:#EF9A9A;border-color:var(--red);background:rgba(183,28,28,0.15)">⚠️ INTERACTIUNE MAJORA: Warfarina si anticoagulante · Stop 2 saptamani pre-operator</div></div>
+      <div class="planta-card"><div class="planta-name">🌸 Valerian (Valeriana officinalis)</div><span class="planta-origine" style="background:rgba(27,94,32,0.2);color:#A5D6A7">NMG</span><div class="planta-mec">Modulator GABA-A; anxiolitic usor; somnifer natural. 300–600 mg cu 30–60 min pre-somn. Alternativa naturala benzo.</div><div class="planta-warn">Sedare la doze mari · Evita cu alcool si benzodiazepine · Somnolenta diurna posibila</div></div>
+      <div class="planta-card"><div class="planta-name">⚠️ St. John's Wort (Hypericum)</div><span class="planta-origine" style="background:rgba(183,28,28,0.2);color:#EF9A9A">NMG — ATENTIE INTERACTIUNI</span><div class="planta-mec">Modulator serotonina, DA, NE; antidepresiv usor-moderat. Eficace in depresie usoara (meta-analiza Cochrane).</div><div class="planta-warn" style="color:#EF9A9A;border-color:var(--red);background:rgba(183,28,28,0.15)">⚠️ CONTRAINDICAT cu: antidepresive SSRI/IMAO (sindrom serotoninergic) · contraceptive orale (eficacitate redusa) · antiretrovirale · Warfarina</div></div>
+    </div>
+  </section>
+
+  <!-- INTEGRARE -->
+  <section id="integrare">
+    <div class="stag">// 06</div>
+    <h2>Integrarea practică în C.E.L.O.S.</h2>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Pilon</th><th>Interventie holistica</th><th>Mecanism</th><th>Biomarker validare</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#90CAF9">C — Celular</strong></td><td>Acupunctura ST36 · Astragalus · Reishi</td><td>Imunomodulare; energie celulara; NK cells crescute</td><td>HRV · WBC diferential · Energie subiectiva</td></tr>
+          <tr><td><strong style="color:#A5D6A7">E — Energetic</strong></td><td>Acupunctura BL23 · Schisandra · Rhodiola</td><td>Tonifiere Jing/Rinichi; anti-fatiga; cortizol adaptiv</td><td>DHEA-S · Cortizol matinal · Feritin</td></tr>
+          <tr><td><strong style="color:#F48FB1">L — Longevitate</strong></td><td>Astragalus TA-65 · Reishi · Ginkgo</td><td>Telomeraza activata; beta-glucani; circulatie cerebrala</td><td>Biological age · ApoB · BDNF seric</td></tr>
+          <tr><td><strong style="color:#FFAB91">O — Oxidativ</strong></td><td>Acupunctura LV3 · Silimarina · Ginkgo</td><td>Detoxifiere hepatica; NF-kB inhibat; antioxidant</td><td>CRP hs · Glutation eritrocitar · Transaminaze</td></tr>
+          <tr><td><strong style="color:#80CBC4">S — Sistem nervos</strong></td><td>Acupunctura PC6+GV20 · Valerian · Biorezonanta screening</td><td>HRV crescut; anxietate redusa; somn imbunatatit</td><td>HRV RMSSD · Calitate somn 1–10 · Cortizol</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cw"><canvas id="integreChart"></canvas></div>
+  </section>
+
+</div>
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Biohacking 3.0 — Lecția 6.4 · Conținut educativ exclusiv</footer>
+
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('pb').style.width=Math.min((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100,100)+'%';});
+const secs=document.querySelectorAll('section[id]'),nls=document.querySelectorAll('.nl a');
+window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-80)c=s.id;});nls.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+c));});
+
+function togglePct(el){el.classList.toggle('open');el.querySelector('.pct-detail').classList.toggle('show');}
+
+// Evidenta spectrum chart
+new Chart(document.getElementById('evidChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['Acupunctura\n(durere cronica)','Acupunctura\n(HRV modulare)','Silimarina\n(hepatoprotectie)','Ginkgo\n(cognitie)','Astragalus\n(imunitate)','Biorezonanta\n(diagnostic)','Homeopatie\n(dilutii extreme)'],
+    datasets:[{label:'Scor evidenta stiintifica (%)',
+      data:[82,70,75,65,60,12,5],
+      backgroundColor:['rgba(27,94,32,0.7)','rgba(27,94,32,0.6)','rgba(0,96,100,0.6)','rgba(0,96,100,0.55)','rgba(249,168,37,0.5)','rgba(183,28,28,0.5)','rgba(183,28,28,0.6)'],
+      borderRadius:4}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(128,222,234,0.05)'}},
+      y:{min:0,max:100,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(128,222,234,0.05)'},title:{display:true,text:'Scor evidenta (%)',color:'#80DEEA',font:{size:9}}}}}
+});
+
+// Acupunctura HRV chart — inainte vs dupa
+new Chart(document.getElementById('acuChart').getContext('2d'),{
+  type:'bar',
+  data:{
+    labels:['ST36 (Zusanli)','PC6 (Neiguan)','LV3 (Taichong)','SP6 (Sanyinjiao)','GV20 (Baihui)'],
+    datasets:[
+      {label:'HRV RMSSD inainte (ms)',data:[28,32,30,29,27],backgroundColor:'rgba(120,144,156,0.4)',borderRadius:4},
+      {label:'HRV RMSSD dupa protocol 4 sapt (ms)',data:[36,40,35,34,32],backgroundColor:'rgba(0,96,100,0.7)',borderRadius:4},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(128,222,234,0.05)'}},
+      y:{min:20,max:48,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(128,222,234,0.05)'},title:{display:true,text:'HRV RMSSD (ms)',color:'#80DEEA',font:{size:9}}}}}
+});
+
+// Integrare radar
+new Chart(document.getElementById('integreChart').getContext('2d'),{
+  type:'radar',
+  data:{labels:['Evidenta clinica','Acces practic','Risc efecte adverse','Cost eficienta','Complementaritate BH 3.0','Validare biomarkeri'],
+    datasets:[
+      {label:'Acupunctura',data:[80,70,85,65,90,85],borderColor:'rgba(0,96,100,0.8)',backgroundColor:'rgba(0,96,100,0.08)',pointRadius:3},
+      {label:'Fitoterapie selectiva',data:[65,80,70,75,85,80],borderColor:'rgba(249,168,37,0.7)',backgroundColor:'rgba(249,168,37,0.07)',pointRadius:3},
+      {label:'Biorezonanta',data:[15,60,90,40,50,30],borderColor:'rgba(120,144,156,0.5)',backgroundColor:'rgba(120,144,156,0.05)',pointRadius:3,borderDash:[4,4]},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}}},
+    scales:{r:{ticks:{display:false},grid:{color:'rgba(128,222,234,0.1)'},pointLabels:{color:'#78909C',font:{size:9}},min:0,max:100}}}
+});
+</script>
+</body>
+</html>

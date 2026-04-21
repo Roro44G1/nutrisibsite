@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Infografic Final L6.5 — BH 3.0 C.E.L.O.S.</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--vio:#311B92;--viol:#4527A0;--viod:#1A0B5A;--violl:#B39DDB;--gold:#F9A825;--navy:#050E1E;--navy2:#08050F;--white:#EDE7F6;--gray:#78909C;--c:#01579B;--e:#1B5E20;--l:#880E4F;--o:#E65100;--sx:#004D40;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--navy);font-family:'Segoe UI',system-ui,sans-serif;color:var(--white)}
+header{background:linear-gradient(135deg,var(--viod),var(--navy2));padding:26px;text-align:center;border-bottom:3px solid var(--gold)}
+header .tag{font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+header h1{font-size:clamp(20px,4.5vw,32px);font-weight:800}
+header .celos-row{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.cc{padding:6px 14px;border-radius:18px;font-size:11px;font-weight:700;border:1px solid}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px;padding:14px;max-width:1200px;margin:0 auto}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(179,157,219,0.2);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--viol)}
+.card.gold::before{background:var(--gold)}
+.card.wide{grid-column:1/-1}
+.card h2{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:700}
+.cw{position:relative;height:200px}
+.cwt{position:relative;height:240px}
+
+/* Score tracker */
+.score-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.score-item{text-align:center;padding:12px;border-radius:8px;border:2px solid;cursor:pointer;transition:all .2s}
+.score-item:hover{filter:brightness(1.15)}
+.score-letter{font-size:28px;font-weight:900;line-height:1;margin-bottom:4px}
+.score-name{font-size:9px;letter-spacing:1px;text-transform:uppercase;opacity:0.8;margin-bottom:8px}
+.score-bar-wrap{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:3px;transition:width .8s}
+.score-val{font-family:monospace;font-size:11px;font-weight:700;margin-top:4px}
+
+/* Biomarker audit */
+.audit-rows{display:flex;flex-direction:column;gap:5px}
+.ar{display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(0,0,0,0.2);border-radius:6px}
+.ar-name{font-size:10px;flex:1;color:var(--white)}
+.ar-status{font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px}
+.ar-click{font-size:9px;color:var(--gray);cursor:pointer;transition:color .2s}
+.ar-click:hover{color:var(--violl)}
+
+/* Quiz */
+.qz-q{font-size:13px;font-weight:700;margin-bottom:10px;color:var(--white)}
+.qz-opts{display:flex;flex-direction:column;gap:6px}
+.qz-opt{padding:8px 12px;background:rgba(0,0,0,0.25);border:1px solid rgba(179,157,219,0.2);border-radius:6px;cursor:pointer;font-size:11px;color:var(--gray);display:flex;gap:8px;transition:all .2s}
+.qz-opt:hover{background:rgba(49,27,146,0.1);color:var(--white)}
+.qz-opt.ok{background:rgba(27,94,32,0.12);border-color:#4CAF50;color:#81C784}
+.qz-opt.ko{background:rgba(183,28,28,0.12);border-color:#F44336;color:#EF9A9A}
+.qz-exp{display:none;margin-top:8px;padding:10px;background:rgba(49,27,146,0.1);border-radius:6px;font-size:11px;color:#D1C4E9;border-left:3px solid var(--gold);line-height:1.5}
+.qz-exp.show{display:block}
+.qz-btn{margin-top:10px;padding:7px 16px;background:var(--vio);color:var(--white);border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+.qz-score{font-size:11px;color:var(--gold);font-family:monospace;margin-top:6px;text-align:right}
+
+/* Final badge */
+.final-badge{background:linear-gradient(135deg,var(--viod),var(--navy2));border:2px solid var(--gold);border-radius:12px;padding:24px;text-align:center}
+.fb-title{font-size:14px;letter-spacing:3px;color:var(--gold);font-family:monospace;margin-bottom:12px}
+.fb-main{font-size:28px;font-weight:800;color:var(--white);margin-bottom:8px}
+.fb-celos{display:flex;gap:8px;justify-content:center;margin-top:14px}
+.fbc{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:var(--navy)}
+
+footer{text-align:center;padding:20px;font-size:10px;color:var(--gray);border-top:1px solid rgba(179,157,219,0.1);margin-top:10px}
+</style>
+</head>
+<body>
+<header>
+  <div class="tag">// Biohacking 3.0 · Modul 6 · Lecția 6.5 · Integrare Finală</div>
+  <h1>Protocolul complet C.E.L.O.S.</h1>
+  <div class="celos-row">
+    <div class="cc" style="background:rgba(1,87,155,0.2);border-color:rgba(1,87,155,0.5);color:#90CAF9">C — Celular</div>
+    <div class="cc" style="background:rgba(27,94,32,0.2);border-color:rgba(27,94,32,0.5);color:#A5D6A7">E — Energetic</div>
+    <div class="cc" style="background:rgba(136,14,79,0.2);border-color:rgba(136,14,79,0.5);color:#F48FB1">L — Longevitate</div>
+    <div class="cc" style="background:rgba(230,81,0,0.2);border-color:rgba(230,81,0,0.5);color:#FFAB91">O — Oxidativ</div>
+    <div class="cc" style="background:rgba(0,77,64,0.2);border-color:rgba(0,77,64,0.5);color:#80CBC4">S — Sistem nervos</div>
+  </div>
+</header>
+
+<div class="grid">
+
+  <!-- CELOS SCORE -->
+  <div class="card wide gold">
+    <h2>🎯 Score C.E.L.O.S. — evaluare interactivă</h2>
+    <p style="font-size:11px;color:var(--gray);margin-bottom:12px">Click pe fiecare pilon pentru a vedea detalii. Ajustează scorurile bazate pe propriii biomarkeri:</p>
+    <div class="score-grid">
+      <div class="score-item" style="background:rgba(1,87,155,0.08);border-color:rgba(1,87,155,0.35)" onclick="updateScore('c',this)">
+        <div class="score-letter" style="color:#90CAF9">C</div>
+        <div class="score-name" style="color:#90CAF9">Celular</div>
+        <input type="range" min="0" max="100" value="65" style="width:100%;accent-color:#01579B;margin:6px 0" oninput="setScore('c',this.value)">
+        <div class="score-val" id="score-c" style="color:#90CAF9">65%</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="bar-c" style="background:#01579B;width:65%"></div></div>
+      </div>
+      <div class="score-item" style="background:rgba(27,94,32,0.08);border-color:rgba(27,94,32,0.35)" onclick="updateScore('e',this)">
+        <div class="score-letter" style="color:#A5D6A7">E</div>
+        <div class="score-name" style="color:#A5D6A7">Energetic</div>
+        <input type="range" min="0" max="100" value="70" style="width:100%;accent-color:#1B5E20;margin:6px 0" oninput="setScore('e',this.value)">
+        <div class="score-val" id="score-e" style="color:#A5D6A7">70%</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="bar-e" style="background:#1B5E20;width:70%"></div></div>
+      </div>
+      <div class="score-item" style="background:rgba(136,14,79,0.08);border-color:rgba(136,14,79,0.35)" onclick="updateScore('l',this)">
+        <div class="score-letter" style="color:#F48FB1">L</div>
+        <div class="score-name" style="color:#F48FB1">Longevitate</div>
+        <input type="range" min="0" max="100" value="55" style="width:100%;accent-color:#880E4F;margin:6px 0" oninput="setScore('l',this.value)">
+        <div class="score-val" id="score-l" style="color:#F48FB1">55%</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="bar-l" style="background:#880E4F;width:55%"></div></div>
+      </div>
+      <div class="score-item" style="background:rgba(230,81,0,0.08);border-color:rgba(230,81,0,0.35)" onclick="updateScore('o',this)">
+        <div class="score-letter" style="color:#FFAB91">O</div>
+        <div class="score-name" style="color:#FFAB91">Oxidativ</div>
+        <input type="range" min="0" max="100" value="60" style="width:100%;accent-color:#E65100;margin:6px 0" oninput="setScore('o',this.value)">
+        <div class="score-val" id="score-o" style="color:#FFAB91">60%</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="bar-o" style="background:#E65100;width:60%"></div></div>
+      </div>
+      <div class="score-item" style="background:rgba(0,77,64,0.08);border-color:rgba(0,77,64,0.35)" onclick="updateScore('s',this)">
+        <div class="score-letter" style="color:#80CBC4">S</div>
+        <div class="score-name" style="color:#80CBC4">Sist. Nervos</div>
+        <input type="range" min="0" max="100" value="80" style="width:100%;accent-color:#004D40;margin:6px 0" oninput="setScore('s',this.value)">
+        <div class="score-val" id="score-s" style="color:#80CBC4">80%</div>
+        <div class="score-bar-wrap"><div class="score-bar-fill" id="bar-s" style="background:#004D40;width:80%"></div></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:14px;padding:10px;background:rgba(49,27,146,0.1);border-radius:8px">
+      <span style="font-family:monospace;font-size:14px;color:var(--gold)">Score total C.E.L.O.S.: </span>
+      <span style="font-family:monospace;font-size:22px;font-weight:700;color:var(--gold)" id="total-score">66%</span>
+    </div>
+  </div>
+
+  <!-- RADAR -->
+  <div class="card">
+    <h2>📊 Radar C.E.L.O.S. — profilul tău</h2>
+    <div class="cwt"><canvas id="celosRadar"></canvas></div>
+  </div>
+
+  <!-- BIOMARKERI AUDIT -->
+  <div class="card">
+    <h2>🔬 Audit biomarkeri — statusul panelului</h2>
+    <div class="audit-rows" id="audit-rows">
+      <div class="ar"><div class="ar-name">25-OH-D3</div><div class="ar-status" style="background:rgba(27,94,32,0.2);color:#81C784">VERIFICAT</div><div class="ar-click" onclick="setStatus(this,'OPT')">OK</div><div class="ar-click" onclick="setStatus(this,'DEF')">↓</div><div class="ar-click" onclick="setStatus(this,'ND')">?</div></div>
+      <div class="ar"><div class="ar-name">Omega-3 Index</div><div class="ar-status" style="background:rgba(245,124,0,0.15);color:#FFAB40">SUB OPTIM</div><div class="ar-click" onclick="setStatus(this,'OPT')">OK</div><div class="ar-click" onclick="setStatus(this,'DEF')">↓</div><div class="ar-click" onclick="setStatus(this,'ND')">?</div></div>
+      <div class="ar"><div class="ar-name">Homocisteina</div><div class="ar-status" style="background:rgba(27,94,32,0.2);color:#81C784">OPTIM</div><div class="ar-click" onclick="setStatus(this,'OPT')">OK</div><div class="ar-click" onclick="setStatus(this,'DEF')">↓</div><div class="ar-click" onclick="setStatus(this,'ND')">?</div></div>
+      <div class="ar"><div class="ar-name">ApoB</div><div class="ar-status" style="background:rgba(120,144,156,0.2);color:#90A4AE">NEMĂSURAT</div><div class="ar-click" onclick="setStatus(this,'OPT')">OK</div><div class="ar-click" onclick="setStatus(this,'DEF')">↓</div><div class="ar-click" onclick="setStatus(this,'ND')">?</div></div>
+      <div class="ar"><div class="ar-name">HRV nocturn</div><div class="ar-status" style="background:rgba(27,94,32,0.2);color:#81C784">TRACKING</div><div class="ar-click" onclick="setStatus(this,'OPT')">OK</div><div class="ar-click" onclick="setStatus(this,'DEF')">↓</div><div class="ar-click" onclick="setStatus(this,'ND')">?</div></div>
+      <div class="ar"><div class="ar-name">Cortizol + DHEA-S</div><div class="ar-status" style="background:rgba(120,144,156,0.2);color:#90A4AE">NEMĂSURAT</div><div class="ar-click" onclick="setStatus(this,'OPT')">OK</div><div class="ar-click" onclick="setStatus(this,'DEF')">↓</div><div class="ar-click" onclick="setStatus(this,'ND')">?</div></div>
+      <div class="ar"><div class="ar-name">HbA1c</div><div class="ar-status" style="background:rgba(27,94,32,0.2);color:#81C784">OPTIM</div><div class="ar-click" onclick="setStatus(this,'OPT')">OK</div><div class="ar-click" onclick="setStatus(this,'DEF')">↓</div><div class="ar-click" onclick="setStatus(this,'ND')">?</div></div>
+      <div class="ar"><div class="ar-name">CRP hs</div><div class="ar-status" style="background:rgba(27,94,32,0.2);color:#81C784">< 1 mg/L</div><div class="ar-click" onclick="setStatus(this,'OPT')">OK</div><div class="ar-click" onclick="setStatus(this,'DEF')">↓</div><div class="ar-click" onclick="setStatus(this,'ND')">?</div></div>
+    </div>
+  </div>
+
+  <!-- MODULE TIMELINE -->
+  <div class="card">
+    <h2>📅 Modulele BH 3.0 — progres</h2>
+    <div class="cw"><canvas id="progressChart"></canvas></div>
+  </div>
+
+  <!-- QUIZ FINAL -->
+  <div class="card wide">
+    <h2>🏆 Quiz final — Biohacking 3.0 complet</h2>
+    <div id="quiz-container"></div>
+  </div>
+
+  <!-- FINAL BADGE -->
+  <div class="card wide">
+    <div class="final-badge">
+      <div class="fb-title">// BIOHACKING 3.0 · COMPLET</div>
+      <div class="fb-main">6 Module · 30 Lecții · 1 Protocol</div>
+      <p style="font-size:13px;color:var(--violl);font-style:italic;max-width:500px;margin:10px auto;line-height:1.6">"Corpul tău este cel mai complex sistem de inginerie cunoscut. Ai acum arhitectura, instrumentele și datele pentru a-l opera la potențialul său."</p>
+      <div class="fb-celos">
+        <div class="fbc" style="background:#01579B">C</div>
+        <div class="fbc" style="background:#1B5E20">E</div>
+        <div class="fbc" style="background:#880E4F">L</div>
+        <div class="fbc" style="background:#E65100">O</div>
+        <div class="fbc" style="background:#004D40">S</div>
+      </div>
+      <div style="margin-top:16px;font-family:monospace;font-size:10px;color:rgba(179,157,219,0.6);letter-spacing:2px">© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Biohacking 3.0 — Lecția 6.5 · Integrare Finală</footer>
+
+<script>
+// CELOS SCORE
+const scores={c:65,e:70,l:55,o:60,s:80};
+function setScore(key,val){
+  scores[key]=parseInt(val);
+  document.getElementById(`score-${key}`).textContent=val+'%';
+  document.getElementById(`bar-${key}`).style.width=val+'%';
+  const total=Math.round(Object.values(scores).reduce((a,b)=>a+b,0)/5);
+  document.getElementById('total-score').textContent=total+'%';
+  updateRadar();
+}
+function updateScore(key,el){}
+
+// RADAR
+let radarChart=null;
+function buildRadar(){
+  const ctx=document.getElementById('celosRadar').getContext('2d');
+  if(radarChart)radarChart.destroy();
+  radarChart=new Chart(ctx,{type:'radar',
+    data:{labels:['C — Celular','E — Energetic','L — Longevitate','O — Oxidativ','S — Sist. Nervos'],
+      datasets:[
+        {label:'Profilul meu curent',data:[scores.c,scores.e,scores.l,scores.o,scores.s],borderColor:'rgba(249,168,37,0.8)',backgroundColor:'rgba(249,168,37,0.08)',pointRadius:4},
+        {label:'Target optim',data:[90,90,85,88,92],borderColor:'rgba(179,157,219,0.4)',backgroundColor:'rgba(179,157,219,0.04)',pointRadius:2,borderDash:[4,4]},
+      ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}}},
+      scales:{r:{ticks:{display:false},grid:{color:'rgba(179,157,219,0.1)'},pointLabels:{color:'#78909C',font:{size:10}},min:0,max:100}}}
+  });
+}
+function updateRadar(){buildRadar();}
+buildRadar();
+
+// BIOMARKERI STATUS
+function setStatus(btn,status){
+  const row=btn.closest('.ar');
+  const statusEl=row.querySelector('.ar-status');
+  if(status==='OPT'){statusEl.style.background='rgba(27,94,32,0.2)';statusEl.style.color='#81C784';statusEl.textContent='OPTIM';}
+  else if(status==='DEF'){statusEl.style.background='rgba(183,28,28,0.15)';statusEl.style.color='#EF9A9A';statusEl.textContent='DEFICIT';}
+  else{statusEl.style.background='rgba(120,144,156,0.2)';statusEl.style.color='#90A4AE';statusEl.textContent='NEMĂSURAT';}
+}
+
+// MODULE PROGRESS CHART
+new Chart(document.getElementById('progressChart').getContext('2d'),{
+  type:'bar',
+  data:{labels:['M1\nFundamente','M2\nNutritie','M3\nMetabolism','M4\nSomn','M5\nCognitie','M6\nLongevitate'],
+    datasets:[{label:'Lectii completate',data:[5,5,5,5,5,5],backgroundColor:['rgba(1,87,155,0.6)','rgba(27,94,32,0.6)','rgba(136,14,79,0.6)','rgba(13,71,161,0.6)','rgba(49,27,146,0.6)','rgba(249,168,37,0.7)'],borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+    tooltip:{callbacks:{label:ctx=>`${ctx.raw}/5 lecții`}}},
+    scales:{x:{ticks:{color:'#78909C',font:{size:8}},grid:{color:'rgba(179,157,219,0.05)'}},
+      y:{min:0,max:6,ticks:{color:'#78909C',font:{size:9},stepSize:1},grid:{color:'rgba(179,157,219,0.05)'},title:{display:true,text:'Lecții',color:'#B39DDB',font:{size:9}}}}}
+});
+
+// QUIZ FINAL
+const qs=[
+  {q:"Care este ordinea corectă de implementare a pilonilor C.E.L.O.S.?",opts:["L → O → C → E → S","Nu exista o ordine — toti simultan","S (somn) → E (igiena cogn.) → C+L+O (suplimentare) → integrare graduala","C → E → L → O → S in aceasta ordine strict"],ans:2,exp:"Implementarea urmeaza logica modulelor: fundatia este somnul (M4/S) si igiena cognitiva (M5/S). Pe aceasta baza se adauga suplimentarea de baza (C+L), apoi protocolul energetic (E) si anti-oxidativ (O). Ordinea respecta principiul N=1 si construieste layer cu layer."},
+  {q:"Ce reprezinta ApoB și de ce este superior LDL-C ca biomarker cardiovascular?",opts:["Un marker al inflamatiei cronice — superior CRP","Numara particulele aterogene direct — fiecare particula LDL, IDL, VLDL, Lp(a) are un ApoB; LDL-C masoara concentratia de colesterol nu particulele","Un biomarker al functiei renale","Un marker al rezistentei la insulina — superior HbA1c"],ans:1,exp:"Fiecare particula aterogena (LDL, IDL, VLDL, Lp(a)) contine exact o molecula de ApoB. ApoB numara direct particulele — nu colesterolul din ele. Doua persoane pot avea acelasi LDL-C dar ApoB diferit (particule mici/dense vs. mari). ApoB < 70 mg/dL este targetul optim pentru longevitate cardiovasculara (Attia — Medicina 3.0)."},
+  {q:"Câmpul 17 din BH 3.0 contine cate campuri la finalul cursului?",opts:["7 campuri (M4 original)","12 campuri (M4+M5 partial)","18 campuri (M4 complet + M5 complet + M6 biomarkeri)","30 campuri — cate o lectie"],ans:2,exp:"La finalul cursului, Câmpul 17 contine 18 campuri: 7 din M4 (ore somn, HRV, calitate, comportamente, suplimente, biomarkeri somn, biohack aplicat), 6 din M5 (BDNF proxy, calitate cognitiva, cicluri DW, intreruperi, screen time, exercitiu), 3 din M5 L5.3 (cortizol+DHEA-S, CRP hs, stres perceput), adaptogen/protocol aplicat, si biomarkeri longevitate M6."},
+  {q:"Care este principiul fundamental N=1 in BH 3.0?",opts:["Fiecare om este unic — fara protocoale universale","O modificare la un moment dat, minimum 4 saptamani observatie per element, pentru a izola efectul","Toate interventiile sunt individuale si nu pot fi comparate","Nu exista evidenta stiintifica valida la nivel individual"],ans:1,exp:"N=1 (n of one experiment) inseamna ca tu esti propriul tau experiment cel mai bine controlat. O singura modificare la un moment dat, minimum 4 saptamani (ideal 8–12 saptamani) de observatie, masori inainte si dupa. Astfel poti atribui efectul observat interventiei specifice — nu altei variabile confundatoare schimbate simultan."},
+  {q:"Care este distincia critica dintre stresul acut (eustres) si stresul cronic (distres) din perspectiva BDNF?",opts:["Ambele reduc BDNF — diferenta este doar in intensitate","Eustresul creste BDNF (adaptogen) pe termen lung; distresul suprima BDNF si atrofiaza hipocampul (McEwen 1999)","Distresul creste BDNF ca mecanism compensator","BDNF nu este afectat de stres — depinde exclusiv de exercitiu"],ans:1,exp:"Eustresul (scurt, controlabil, cu sens) produce adaptare: BDNF crescut, neuroplasticitate, rezistenta. Distresul cronic produce cortizol cronic crescut care suprima BDNF si atrofiaza hipocampul (McEwen 1999). Exercitiu aerob (eustres fizic) = +200% BDNF. Stres cronic emotional = BDNF suprima progresiv. Distinctia este clinica, nu semantica."},
+];
+let qi=0,score=0;
+function renderQ(){
+  const c=document.getElementById('quiz-container');
+  if(qi>=qs.length){
+    const pct=Math.round(score/qs.length*100);
+    c.innerHTML=`<div style="text-align:center;padding:24px"><div style="font-size:52px;font-weight:800;color:var(--gold)">${score}/${qs.length}</div><div style="font-size:24px;font-weight:700;color:var(--violl);margin-top:4px">${pct}%</div><div style="font-size:14px;color:var(--white);margin-top:12px;line-height:1.6">${pct===100?'🎓 Perfect! Biohacking 3.0 complet și mastered. Sistem operational.':pct>=80?'🌟 Excelent! Baze solide. Revizuieste 1–2 concepte.':pct>=60?'✅ Bine — continua practica si revizuieste lectiile corespunzatoare.':'📚 Reia modulele cu raspunsuri gresite — bazele sunt critice.'}</div><button class="qz-btn" onclick="qi=0;score=0;renderQ()" style="margin-top:16px">Restart quiz final</button></div>`;
+    return;
+  }
+  const q=qs[qi];
+  c.innerHTML=`<div class="qz-q">${qi+1}/${qs.length}. ${q.q}</div><div class="qz-opts">${q.opts.map((o,i)=>`<div class="qz-opt" id="qo-${i}" onclick="ans(${i})"><span>○</span>${o}</div>`).join('')}</div><div class="qz-exp" id="qz-exp">${q.exp}</div><div class="qz-score" id="qz-sc"></div><button class="qz-btn" id="qz-btn" style="display:none" onclick="qi++;renderQ()">Urmatoarea →</button>`;
+}
+function ans(sel){
+  const q=qs[qi];if(document.getElementById('qz-btn').style.display!=='none')return;
+  if(sel===q.ans)score++;
+  q.opts.forEach((_,i)=>{const el=document.getElementById(`qo-${i}`);if(i===q.ans){el.classList.add('ok');el.querySelector('span').textContent='✓';}else if(i===sel&&sel!==q.ans){el.classList.add('ko');el.querySelector('span').textContent='✗';}});
+  document.getElementById('qz-exp').classList.add('show');document.getElementById('qz-sc').textContent=`Scor: ${score}/${qi+1}`;document.getElementById('qz-btn').style.display='inline-block';
+}
+renderQ();
+</script>
+</body>
+</html>

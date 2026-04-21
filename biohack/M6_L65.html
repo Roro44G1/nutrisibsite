@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>L6.5 — Integrare finală BH 3.0 | C.E.L.O.S.</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --vio:#311B92;--viol:#4527A0;--viod:#1A0B5A;--violl:#B39DDB;
+  --gold:#F9A825;--navy:#050E1E;--navy2:#08050F;
+  --white:#EDE7F6;--gray:#78909C;
+  --c:#01579B;--e:#1B5E20;--l:#880E4F;--o:#E65100;--sx:#004D40;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'Syne',sans-serif;line-height:1.6}
+#pb{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--viol),var(--gold));width:0%;z-index:100}
+nav{position:sticky;top:0;background:rgba(5,14,30,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(179,157,219,0.15);z-index:50;padding:0 24px}
+.ni{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
+.nb{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--gold)}
+.nl{display:flex;gap:16px}
+.nl a{font-size:11px;letter-spacing:1.5px;color:var(--gray);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nl a:hover,.nl a.active{color:var(--violl)}
+
+.hero{background:linear-gradient(135deg,var(--viod) 0%,var(--navy2) 50%,#050E1E 100%);padding:80px 24px 60px;text-align:center;border-bottom:2px solid var(--gold);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(69,39,160,0.25) 0%,transparent 65%)}
+.hero-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:14px;position:relative}
+.hero h1{font-size:clamp(28px,6vw,56px);font-weight:800;line-height:1.05;margin-bottom:18px;position:relative}
+.hero h1 span{color:var(--gold)}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gray);font-style:italic;max-width:700px;margin:0 auto 32px;position:relative}
+.celos-chips{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
+.cc{padding:8px 18px;border-radius:24px;font-size:12px;font-weight:700;letter-spacing:1px;border:1px solid}
+
+.main{max-width:1200px;margin:0 auto;padding:48px 24px}
+section{margin-bottom:72px;scroll-margin-top:70px}
+.stag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--violl);text-transform:uppercase;margin-bottom:8px}
+h2{font-size:clamp(24px,3.5vw,36px);font-weight:800;margin-bottom:24px}
+h3{font-size:18px;font-weight:700;color:var(--violl);margin:28px 0 12px}
+
+/* CELOS cards */
+.celos-grid{display:flex;flex-direction:column;gap:10px}
+.celos-card{display:grid;grid-template-columns:60px 160px 1fr 1fr 1fr;gap:0;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all .3s}
+.celos-card:hover{filter:brightness(1.08)}
+.celos-letter{display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;color:var(--navy)}
+.celos-name{display:flex;align-items:center;padding:14px;font-size:13px;font-weight:700}
+.celos-cell{padding:12px 14px;border-left:1px solid rgba(255,255,255,0.06);font-size:11px;line-height:1.55}
+.celos-cell strong{display:block;font-size:10px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;opacity:0.7}
+.celos-detail{display:none;grid-column:1/-1;padding:14px 18px;background:rgba(0,0,0,0.25);font-size:11px;color:rgba(237,231,246,0.8);line-height:1.7;border-top:1px solid rgba(255,255,255,0.06)}
+.celos-detail.show{display:block;animation:fi .3s}
+@keyframes fi{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* Modules grid */
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.mod-card{background:rgba(255,255,255,0.04);border:1px solid rgba(179,157,219,0.15);border-radius:10px;padding:18px;position:relative;overflow:hidden}
+.mod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px}
+.mod-num{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--gold);margin-bottom:6px}
+.mod-title{font-size:15px;font-weight:700;color:var(--white);margin-bottom:8px}
+.mod-keys{font-size:11px;color:var(--gray);line-height:1.5;margin-bottom:8px}
+.mod-kpi{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--violl)}
+
+/* Timeline zilnica */
+.tl-wrap{display:flex;flex-direction:column;gap:0;position:relative}
+.tl-wrap::before{content:'';position:absolute;left:32px;top:0;bottom:0;width:2px;background:rgba(179,157,219,0.15)}
+.tl-item{display:flex;gap:14px;padding:8px 0}
+.tl-dot{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;flex-shrink:0;border:2px solid;z-index:1;text-align:center;line-height:1.2}
+.tl-card{flex:1;padding:10px 14px;border-radius:8px;border:1px solid rgba(179,157,219,0.1);background:rgba(255,255,255,0.03)}
+.tl-time{font-size:11px;font-weight:700;margin-bottom:3px}
+.tl-act{font-size:12px;color:var(--white);font-weight:600;margin-bottom:2px}
+.tl-pillar{font-size:9px;font-weight:700;letter-spacing:1px}
+
+/* Biomarkeri table */
+.tw{overflow-x:auto;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--viod);color:var(--gold);padding:10px 12px;text-align:left;font-size:11px;letter-spacing:1px;text-transform:uppercase}
+td{padding:9px 12px;border-bottom:1px solid rgba(179,157,219,0.1);color:var(--white);vertical-align:top;line-height:1.5}
+tr:nth-child(even) td{background:rgba(49,27,146,0.04)}
+tr:hover td{background:rgba(49,27,146,0.08)}
+
+/* Roadmap */
+.roadmap{display:flex;flex-direction:column;gap:8px}
+.rm-item{display:flex;gap:12px;padding:14px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(179,157,219,0.12)}
+.rm-luna{min-width:60px;text-align:center}
+.rm-num{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--gold);line-height:1}
+.rm-label{font-size:9px;color:var(--gray);letter-spacing:1px;text-transform:uppercase}
+.rm-body{flex:1}
+.rm-focus{font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px}
+.rm-actions{font-size:11px;color:rgba(237,231,246,0.75);line-height:1.5}
+.rm-kpi{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);margin-top:4px}
+
+/* Completion */
+.finale{background:linear-gradient(135deg,var(--viod) 0%,var(--navy2) 100%);border:2px solid var(--gold);border-radius:16px;padding:40px;text-align:center;margin-top:40px}
+.finale-tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:16px}
+.finale-title{font-size:clamp(24px,4vw,42px);font-weight:800;color:var(--white);margin-bottom:16px}
+.finale-quote{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--violl);font-style:italic;max-width:600px;margin:0 auto 24px;line-height:1.6}
+.finale-celos{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.fc{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:var(--navy)}
+
+.info-box{background:rgba(49,27,146,0.08);border:1px solid rgba(179,157,219,0.2);border-left:4px solid var(--viol);border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:14px;font-size:13px;color:var(--white);line-height:1.6}
+.cw{height:220px;position:relative;margin:16px 0}
+footer{text-align:center;padding:40px 24px;border-top:1px solid rgba(179,157,219,0.1);font-size:12px;color:var(--gray)}
+</style>
+</head>
+<body>
+<div id="pb"></div>
+<nav>
+  <div class="ni">
+    <div class="nb">// BH 3.0 · M6 · L6.5 · FINAL</div>
+    <div class="nl">
+      <a href="#celos">C.E.L.O.S.</a>
+      <a href="#module">Module</a>
+      <a href="#zilnic">Protocol zilnic</a>
+      <a href="#biomarkeri">Biomarkeri</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#final">Final</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">// Modul 6 · Lecția 6.5 · Integrare Finală</div>
+  <h1>Biohacking <span>3.0</span><br/>Protocolul complet</h1>
+  <p class="hero-sub">6 module · 30 lecții · 1 sistem operational coerent · Roadmap 12 luni · Dashboard Câmpul 17 complet</p>
+  <div class="celos-chips">
+    <div class="cc" style="background:rgba(1,87,155,0.2);border-color:rgba(1,87,155,0.5);color:#90CAF9">C — Celular</div>
+    <div class="cc" style="background:rgba(27,94,32,0.2);border-color:rgba(27,94,32,0.5);color:#A5D6A7">E — Energetic</div>
+    <div class="cc" style="background:rgba(136,14,79,0.2);border-color:rgba(136,14,79,0.5);color:#F48FB1">L — Longevitate</div>
+    <div class="cc" style="background:rgba(230,81,0,0.2);border-color:rgba(230,81,0,0.5);color:#FFAB91">O — Oxidativ</div>
+    <div class="cc" style="background:rgba(0,77,64,0.2);border-color:rgba(0,77,64,0.5);color:#80CBC4">S — Sistem nervos</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- CELOS -->
+  <section id="celos">
+    <div class="stag">// 01</div>
+    <h2>Sistemul C.E.L.O.S. — arhitectura integrată</h2>
+    <div class="info-box"><strong style="color:var(--violl)">Principiu:</strong> C.E.L.O.S. nu este un checklist — este un sistem de operare. Fiecare pilon este interdependent. Nu optimizezi S dacă O este inflamat. Nu optimizezi L dacă C este compromis. Sistemul este holistic.</div>
+    <div class="celos-grid">
+      <div class="celos-card" onclick="toggleCELOS(this)" style="border-color:rgba(1,87,155,0.3)">
+        <div class="celos-letter" style="background:#01579B;color:white">C</div>
+        <div class="celos-name" style="background:rgba(1,87,155,0.08);color:#90CAF9">Celular</div>
+        <div class="celos-cell" style="background:rgba(1,87,155,0.04)"><strong>Obiectiv</strong>Funcție mitocondrială; biogeneză; ATP maxim</div>
+        <div class="celos-cell" style="background:rgba(1,87,155,0.04)"><strong>Suplimente</strong>CoQ10 ubiquinol 200–400 mg · Mg glicinat · D3+K2 · NMN 500 mg</div>
+        <div class="celos-cell" style="background:rgba(1,87,155,0.04)"><strong>Biomarkeri</strong>CoQ10 plasmatic · 25-OH-D3 · Mg eritrocitar</div>
+        <div class="celos-detail">Mitocondria produce 95% din ATP-ul celular prin lanțul respirator. CoQ10 este coenzima critică în complexele III și IV. Declinul CoQ10 cu vârsta (și prin statine) este direct responsabil de reducerea energiei celulare. NMN/NR susțin NAD+ — cofactor esențial sirtuinelor (SIRT1-7) și PARP. Magneziu este cofactor în 300+ reactii enzimatice incluzând sinteza ATP. Vitamina D3 actioneaza pe receptori nucleari in toate tesuturile — imunitate, metabolism, musculatura.</div>
+      </div>
+      <div class="celos-card" onclick="toggleCELOS(this)" style="border-color:rgba(27,94,32,0.3)">
+        <div class="celos-letter" style="background:#1B5E20;color:white">E</div>
+        <div class="celos-name" style="background:rgba(27,94,32,0.08);color:#A5D6A7">Energetic</div>
+        <div class="celos-cell" style="background:rgba(27,94,32,0.04)"><strong>Obiectiv</strong>Metabolism energetic; tiroida; fier; cortizol adaptiv</div>
+        <div class="celos-cell" style="background:rgba(27,94,32,0.04)"><strong>Suplimente</strong>Complex B metilat · Ashwagandha KSM-66 · Fier bisglicinat (dacă deficit)</div>
+        <div class="celos-cell" style="background:rgba(27,94,32,0.04)"><strong>Biomarkeri</strong>TSH + FT3 · Feritin 50–150 · Cortizol · HbA1c</div>
+        <div class="celos-detail">Metabolismul energetic include axa tiroidiană (TSH/FT3), metabolismul fierului (feritin, transferrină), metabolismul glucozei (HbA1c, insulina bazală) și răspunsul la stres (cortizol, DHEA-S). Complexul B metilat (forme active: metilcobalamina, 5-MTHF, P-5-P) este esențial pentru sinteza de energie, metilare și conversie neurotransmitatori. Hipotiroidismul subclinic (TSH 2–5) produce fatiga, ceata cognitiva, depresie — adesea sub-diagnosticat.</div>
+      </div>
+      <div class="celos-card" onclick="toggleCELOS(this)" style="border-color:rgba(136,14,79,0.3)">
+        <div class="celos-letter" style="background:#880E4F;color:white">L</div>
+        <div class="celos-name" style="background:rgba(136,14,79,0.08);color:#F48FB1">Longevitate</div>
+        <div class="celos-cell" style="background:rgba(136,14,79,0.04)"><strong>Obiectiv</strong>Anti-aging; protecție ADN; ApoB/Lp(a); telomeri</div>
+        <div class="celos-cell" style="background:rgba(136,14,79,0.04)"><strong>Suplimente</strong>Omega-3 rTG ≥ 2g EPA+DHA · NMN 500 mg · Astaxantina 12 mg · Resveratrol 500 mg</div>
+        <div class="celos-cell" style="background:rgba(136,14,79,0.04)"><strong>Biomarkeri</strong>ApoB < 70 mg/dL · Lp(a) · HbA1c · IGF-1 · Biological age</div>
+        <div class="celos-detail">Pilonul L adresează cauzele fundamentale ale îmbătrânirii: acumularea moleculară (AGEs, cross-links), disfuncția mitocondrială (NAD+, sirtuine), inflamația cronică (inflammaging), scurtarea telomerilor și rezistența la insulina. ApoB este cel mai predictiv biomarker cardiovascular — superior LDL-C. Lp(a) este determinat genetic — măsurat o singură dată; dacă > 50 mg/dL → target LDL agresiv. NMN/NR restaurează NAD+ — declinul progresiv al NAD+ cu vârsta este unul din mecanismele centrale ale îmbătrânirii.</div>
+      </div>
+      <div class="celos-card" onclick="toggleCELOS(this)" style="border-color:rgba(230,81,0,0.3)">
+        <div class="celos-letter" style="background:#E65100;color:white">O</div>
+        <div class="celos-name" style="background:rgba(230,81,0,0.08);color:#FFAB91">Oxidativ</div>
+        <div class="celos-cell" style="background:rgba(230,81,0,0.04)"><strong>Obiectiv</strong>Stres oxidativ; inflamație; gestionarea ROS</div>
+        <div class="celos-cell" style="background:rgba(230,81,0,0.04)"><strong>Suplimente</strong>Vit C tamponată 1–2g · Curcumina fitosomală 500 mg · NAC 600 mg · Glutation liposomal</div>
+        <div class="celos-cell" style="background:rgba(230,81,0,0.04)"><strong>Biomarkeri</strong>CRP hs < 1 mg/L · 8-OHdG · Glutation eritrocitar</div>
+        <div class="celos-detail">ROS (reactive oxygen species) în cantități mici sunt esențiale (semnalizare celulara). Excesul cronic produce inflammaging — inflamație cronică de grad scăzut care accelerează toate procesele degenerative. NAC (N-acetil-cisteina) este precursorul glutationului — cel mai important antioxidant endogen. Curcumina fitosomală (biodisponibilitate 29× superioară curcuminei standard) inhibă NF-kB — factorul de transcripție central al inflamației. CRP hs < 1 mg/L este targetul optim pentru longevitate.</div>
+      </div>
+      <div class="celos-card" onclick="toggleCELOS(this)" style="border-color:rgba(0,77,64,0.3)">
+        <div class="celos-letter" style="background:#004D40;color:white">S</div>
+        <div class="celos-name" style="background:rgba(0,77,64,0.08);color:#80CBC4">Sistem nervos</div>
+        <div class="celos-cell" style="background:rgba(0,77,64,0.04)"><strong>Obiectiv</strong>Cogniție; somn; intestin-creier; neuroplasticitate</div>
+        <div class="celos-cell" style="background:rgba(0,77,64,0.04)"><strong>Suplimente</strong>Mg L-Treonat 1000–2000 mg · L-Teanina 200 mg · Melatonina 0.3 mg · Omega-3 DHA ≥ 1g</div>
+        <div class="celos-cell" style="background:rgba(0,77,64,0.04)"><strong>Biomarkeri</strong>Homocisteina < 7 · Omega-3 Index ≥ 8% · HRV · BDNF proxy</div>
+        <div class="celos-detail">Pilonul S integrează somnul (M4), cogniția (M5) și axa intestin-creier. Sistemul nervos este integratorul tuturor celorlalte sisteme — HRV reflectă starea tuturor pilonilor simultan. Homocisteina > 10 µmol/L este neurotoxică (distruge mielina, atrofiază hipocampul) și kardiotoxică — urgenta nutritionala prioritara. Magneziu L-Treonat este singura formă care traversează BBB în cantitate semnificativă — suport direct pentru densitatea sinaptică (Liu 2010, Neuron).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE -->
+  <section id="module">
+    <div class="stag">// 02</div>
+    <h2>Cele 6 module — sinteza</h2>
+    <div class="modules-grid">
+      <div class="mod-card" style="border-color:rgba(1,87,155,0.25)"><div style="height:4px;background:#01579B;position:absolute;top:0;left:0;right:0;border-radius:10px 10px 0 0"></div><div class="mod-num">MODUL 1</div><div class="mod-title">Fundamentele BH 3.0</div><div class="mod-keys">Medicina 3.0 · Biomarkeri · C.E.L.O.S. arhitectura · Nutrigenomics · Microbiom · Evaluare initiala</div><div class="mod-kpi">KPI: Panelul de baza complet; intelegerea sistemului</div></div>
+      <div class="mod-card" style="border-color:rgba(27,94,32,0.25)"><div style="height:4px;background:#1B5E20;position:absolute;top:0;left:0;right:0;border-radius:10px 10px 0 0"></div><div class="mod-num">MODUL 2</div><div class="mod-title">Nutriția funcțională</div><div class="mod-keys">Macronutrienti · Micronutrienti · Omega-3 · D3+K2 · Mg · Suplimentarea de baza C.E.L.O.S.</div><div class="mod-kpi">KPI: D3 50–80 ng/mL; Omega-3 Index ≥ 8%; Mg eritrocitar OK</div></div>
+      <div class="mod-card" style="border-color:rgba(136,14,79,0.25)"><div style="height:4px;background:#880E4F;position:absolute;top:0;left:0;right:0;border-radius:10px 10px 0 0"></div><div class="mod-num">MODUL 3</div><div class="mod-title">Metabolismul energetic</div><div class="mod-keys">Mitocondrii · CoQ10 · AMPK · Sirtuine · NAD+ · NMN/NR · Senolitice · HIIT mitocondrial</div><div class="mod-kpi">KPI: CoQ10 plasmatic; HbA1c < 5.5%; feritin optim</div></div>
+      <div class="mod-card" style="border-color:rgba(13,71,161,0.25)"><div style="height:4px;background:#0D47A1;position:absolute;top:0;left:0;right:0;border-radius:10px 10px 0 0"></div><div class="mod-num">MODUL 4</div><div class="mod-title">Somnul — fundatia</div><div class="mod-keys">Arhitectura somn · Igiena · Suplimentare · HRV · Trackere · NSDR · OSA screening</div><div class="mod-kpi">KPI: HRV nocturn; N3% 20–25%; eficienta ≥ 85%; SpO2 ≥ 95%</div></div>
+      <div class="mod-card" style="border-color:rgba(49,27,146,0.25)"><div style="height:4px;background:#311B92;position:absolute;top:0;left:0;right:0;border-radius:10px 10px 0 0"></div><div class="mod-num">MODUL 5</div><div class="mod-title">Cogniție si stres</div><div class="mod-keys">BDNF · Neuroplasticitate · Deep work · Axa HPA · Adaptogeni · Cortizol · Ciclu ultradian</div><div class="mod-kpi">KPI: Cortizol matinal; DHEA-S; homocisteina < 7; cicluri DW/zi</div></div>
+      <div class="mod-card" style="border-color:rgba(179,157,219,0.25)"><div style="height:4px;background:linear-gradient(90deg,#311B92,var(--gold));position:absolute;top:0;left:0;right:0;border-radius:10px 10px 0 0"></div><div class="mod-num">MODUL 6</div><div class="mod-title">Longevitate si integrare</div><div class="mod-keys">Hallmarks of aging · NMN/NR · MTC · Acupunctura · Biorezonanta · Integrare C.E.L.O.S.</div><div class="mod-kpi">KPI: ApoB < 70; Lp(a); hs-CRP; biological age vs. chronological</div></div>
+    </div>
+    <div class="cw" style="margin-top:24px"><canvas id="modulesChart"></canvas></div>
+  </section>
+
+  <!-- PROTOCOL ZILNIC -->
+  <section id="zilnic">
+    <div class="stag">// 03</div>
+    <h2>Protocolul zilnic integrat — timeline complet</h2>
+    <div class="info-box"><strong style="color:var(--violl)">Regula de aur:</strong> Fiecare acțiune servește unui pilon C.E.L.O.S. și unui modul specific. Consistența bate intensitatea — 300 de zile corecte > 30 de zile perfecte.</div>
+    <div class="tl-wrap">
+      <div class="tl-item"><div class="tl-dot" style="background:rgba(249,168,37,0.15);border-color:var(--gold);color:var(--gold)">05:45</div><div class="tl-card"><div class="tl-time" style="color:var(--gold)">Trezire fixă ±30 min · Nu telefon 30 min · 500 ml apă</div><div class="tl-act">Ancora circadiana; CAR neinhibat; rehidratare</div><div class="tl-pillar" style="color:#80CBC4">S — Somn / Circadian · M4 L4.2</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:rgba(249,168,37,0.12);border-color:#FFD54F;color:#FFD54F">06:00</div><div class="tl-card"><div class="tl-time" style="color:#FFD54F">Lumina solară 10–15 min · Respiratie 4-7-8 × 3</div><div class="tl-act">Reset SCN; cortizol CAR; modulare HPA</div><div class="tl-pillar" style="color:#A5D6A7">S + E · M4 L4.2 + M5 L5.3</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:rgba(1,87,155,0.15);border-color:#90CAF9;color:#90CAF9">06:30</div><div class="tl-card"><div class="tl-time" style="color:#90CAF9">Suplimente dimineata: D3+K2 · CoQ10 · Mg · NMN · Complex B</div><div class="tl-act">Fereastra CAR; absorbtie optimă; biodisponibilitate maxima</div><div class="tl-pillar" style="color:#90CAF9">C + L + E · M2 + M3</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:rgba(27,94,32,0.15);border-color:#81C784;color:#81C784">07:00</div><div class="tl-card"><div class="tl-time" style="color:#81C784">Mic dejun proteic + grăsimi · Omega-3 rTG cu masă</div><div class="tl-act">Glicemie stabila; Omega-3 biodisponibilitate; insulina controlată</div><div class="tl-pillar" style="color:#FFAB91">L + O · M2</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:rgba(0,77,64,0.15);border-color:#80CBC4;color:#80CBC4">07:30</div><div class="tl-card"><div class="tl-time" style="color:#80CBC4">Prima cafea + L-Teanina 200 mg (după 90 min CAR)</div><div class="tl-act">DA+NE; focus; cafeina dupa fereastra CAR</div><div class="tl-pillar" style="color:#80CBC4">S — Cognitie · M5 L5.2</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:rgba(49,27,146,0.15);border-color:var(--violl);color:var(--violl)">08:00</div><div class="tl-card"><div class="tl-time" style="color:var(--violl)">BLOC DEEP WORK #1 · 90 min · Telefon în altă cameră</div><div class="tl-act">Neuroplasticitate; LTP; peak energie cognitiva</div><div class="tl-pillar" style="color:var(--violl)">S — Cognitie · M5 L5.2</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:rgba(27,94,32,0.15);border-color:#A5D6A7;color:#A5D6A7">11:00</div><div class="tl-card"><div class="tl-time" style="color:#A5D6A7">Exercitiu aerob 30–45 min · 60–70% FCmax</div><div class="tl-act">BDNF +200%; cortizol metabolizat; biogeneza mitocondrială</div><div class="tl-pillar" style="color:#A5D6A7">C + E + S · M3 + M5 L5.1</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:rgba(230,81,0,0.12);border-color:#FFAB91;color:#FFAB91">13:00</div><div class="tl-card"><div class="tl-time" style="color:#FFAB91">Pranz proteic · Curcumina fitosomala cu masă</div><div class="tl-act">Anti-inflamator; insulina stabila; NF-kB inhibat</div><div class="tl-pillar" style="color:#FFAB91">O + L · M2 + M3</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:rgba(0,77,64,0.12);border-color:#80CBC4;color:#80CBC4">14:00</div><div class="tl-card"><div class="tl-time" style="color:#80CBC4">Nap 10–20 min sau NSDR (dacă readiness < 70)</div><div class="tl-act">Adenozina; dopamina +65%; recuperare neurala; alertness</div><div class="tl-pillar" style="color:#80CBC4">S · M4 L4.4</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:rgba(136,14,79,0.15);border-color:#F48FB1;color:#F48FB1">19:00</div><div class="tl-card"><div class="tl-time" style="color:#F48FB1">Cina proteică ușoară · Ashwagandha KSM-66 cu masă</div><div class="tl-act">Digestie finalizata inainte de somn; cortizol redus pre-somn</div><div class="tl-pillar" style="color:#A5D6A7">E + O · M5 L5.3</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:rgba(49,27,146,0.12);border-color:var(--violl);color:var(--violl)">22:00</div><div class="tl-card"><div class="tl-time" style="color:var(--violl)">Mg L-Treonat 1000 mg + L-Teanina + Apigenina · Melatonina 0.3 mg + Glicina 3g</div><div class="tl-act">BBB; GABA; semnal circadian; termoregulare N3</div><div class="tl-pillar" style="color:#80CBC4">S — Suplimentare · M4 L4.3</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="background:rgba(5,14,30,0.5);border-color:rgba(179,157,219,0.3);color:rgba(179,157,219,0.5)">23:00</div><div class="tl-card"><div class="tl-time" style="color:rgba(179,157,219,0.7)">Culcare · Intuneric < 1 lux · Telefon avion · Câmpul 17</div><div class="tl-act">Melatonina peak; N3 maxim; sistem glimfatic; loop inchis</div><div class="tl-pillar" style="color:rgba(179,157,219,0.6)">S + C · M4 L4.1</div></div></div>
+    </div>
+  </section>
+
+  <!-- BIOMARKERI -->
+  <section id="biomarkeri">
+    <div class="stag">// 04</div>
+    <h2>Panelul complet de biomarkeri BH 3.0</h2>
+    <div class="cw"><canvas id="bioChart"></canvas></div>
+    <div class="tw" style="margin-top:16px">
+      <table>
+        <thead><tr><th>Biomarker</th><th>Tinta optimă</th><th>Pilon</th><th>Frecventa</th></tr></thead>
+        <tbody>
+          <tr><td><strong>CoQ10 plasmatic</strong></td><td>0.8–1.5 µg/mL</td><td style="color:#90CAF9">C</td><td>Semestrial</td></tr>
+          <tr><td><strong>25-OH-Vitamina D3</strong></td><td>50–80 ng/mL</td><td style="color:#90CAF9">C + L</td><td>Trimestrial → semestrial</td></tr>
+          <tr><td><strong>Mg eritrocitar</strong></td><td>4.2–6.8 mg/dL</td><td style="color:#90CAF9">C + S</td><td>Semestrial</td></tr>
+          <tr><td><strong>TSH + FT3</strong></td><td>TSH 0.5–2.0; FT3 normal</td><td style="color:#A5D6A7">E</td><td>Anual</td></tr>
+          <tr><td><strong>Feritin + Fe</strong></td><td>Feritin 50–150 ng/mL</td><td style="color:#A5D6A7">E</td><td>Anual</td></tr>
+          <tr><td><strong>Cortizol matinal + DHEA-S</strong></td><td>Cortizol 15–25 µg/dL; DHEA-S specific</td><td style="color:#A5D6A7">E + Stres</td><td>La 6 luni</td></tr>
+          <tr><td><strong>HbA1c + Insulina bazala</strong></td><td>HbA1c < 5.5%; Insulina < 5 µUI/mL</td><td style="color:#A5D6A7">E + L</td><td>Trimestrial</td></tr>
+          <tr><td><strong>ApoB</strong></td><td>< 70 mg/dL (optim)</td><td style="color:#F48FB1">L</td><td>Trimestrial initial</td></tr>
+          <tr><td><strong>Lp(a)</strong></td><td>< 50 mg/dL</td><td style="color:#F48FB1">L</td><td>O singura data</td></tr>
+          <tr><td><strong>IGF-1</strong></td><td>Specific varstei</td><td style="color:#F48FB1">L</td><td>Anual</td></tr>
+          <tr><td><strong>CRP hs</strong></td><td>< 1 mg/L optim</td><td style="color:#FFAB91">O</td><td>Trimestrial</td></tr>
+          <tr><td><strong>Homocisteina</strong></td><td>< 7 µmol/L</td><td style="color:#FFAB91">O + S</td><td>Anual</td></tr>
+          <tr><td><strong>Glutation eritrocitar</strong></td><td>> 1.5 mmol/L</td><td style="color:#FFAB91">O</td><td>Semestrial</td></tr>
+          <tr><td><strong>Omega-3 Index</strong></td><td>≥ 8% eritrocitar</td><td style="color:#80CBC4">S</td><td>La 3–6 luni cu supl.</td></tr>
+          <tr><td><strong>HRV RMSSD nocturn</strong></td><td>Trend stabil; -10% = alarmă</td><td style="color:#80CBC4">S + E</td><td>Zilnic (tracker)</td></tr>
+          <tr><td><strong>B12 activă (HoloTC)</strong></td><td>≥ 70 pmol/L</td><td style="color:#80CBC4">S</td><td>Anual</td></tr>
+          <tr><td><strong>BDNF seric</strong></td><td>15–30 ng/mL</td><td style="color:#80CBC4">S</td><td>La 6 luni (specializat)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section id="roadmap">
+    <div class="stag">// 05</div>
+    <h2>Roadmap 12 luni — implementare N=1</h2>
+    <div class="info-box"><strong style="color:var(--violl)">Regula N=1:</strong> O modificare la un moment dat. Minimum 4 săptămâni per element nou. Nu schimbi 10 lucruri simultan — nu vei ști niciodată ce a funcționat. Fiecare luna adaugă un strat după consolidarea celui precedent.</div>
+    <div class="roadmap">
+      <div class="rm-item"><div class="rm-luna"><div class="rm-num">1–2</div><div class="rm-label">LUNI</div></div><div class="rm-body"><div class="rm-focus">Fundatia: somn + lumina matinala</div><div class="rm-actions">Orar somn ±30 min 7/7 · Lumina solara 10 min · Ultima cafea < 13:00 · Câmpul 17 zilnic</div><div class="rm-kpi">Panel de baza initial: TOATE sistemele (baseline complet)</div></div></div>
+      <div class="rm-item"><div class="rm-luna"><div class="rm-num">3–4</div><div class="rm-label">LUNI</div></div><div class="rm-body"><div class="rm-focus">Supliment de baza M4 + M2</div><div class="rm-actions">Mg L-Treonat + L-Teanina + Melatonina 0.3 mg · D3+K2 5000 UI · Omega-3 rTG 2g/zi</div><div class="rm-kpi">Control: 25-OH-D3 · Omega-3 Index · HRV trend 30 zile</div></div></div>
+      <div class="rm-item"><div class="rm-luna"><div class="rm-num">5–6</div><div class="rm-label">LUNI</div></div><div class="rm-body"><div class="rm-focus">Cognitie + stres — M5</div><div class="rm-actions">Deep work 3 cicluri/zi · Ashwagandha KSM-66 300–600 mg seara · Meditatie 10 min/zi</div><div class="rm-kpi">Control: Cortizol matinal · DHEA-S · Calitate focus subiectiv</div></div></div>
+      <div class="rm-item"><div class="rm-luna"><div class="rm-num">7–8</div><div class="rm-label">LUNI</div></div><div class="rm-body"><div class="rm-focus">Celular + energie — M3</div><div class="rm-actions">CoQ10 ubiquinol 200–400 mg · Complex B metilat · NAC 600 mg · Exercitiu aerob 4×/sapt</div><div class="rm-kpi">Control: CoQ10 plasmatic · Feritin · TSH+FT3 · HbA1c</div></div></div>
+      <div class="rm-item"><div class="rm-luna"><div class="rm-num">9–10</div><div class="rm-label">LUNI</div></div><div class="rm-body"><div class="rm-focus">Longevitate + oxidativ — M6 + M3</div><div class="rm-actions">NMN 500 mg dimineata · Astaxantina 12 mg · Curcumina fitosomala 500 mg · Resveratrol 500 mg</div><div class="rm-kpi">Control: ApoB · Lp(a) · IGF-1 · CRP hs · Glutation eritrocitar</div></div></div>
+      <div class="rm-item" style="border-color:rgba(249,168,37,0.3);background:rgba(249,168,37,0.04)"><div class="rm-luna"><div class="rm-num" style="color:var(--gold)">11–12</div><div class="rm-label">LUNI</div></div><div class="rm-body"><div class="rm-focus" style="color:var(--gold)">Audit complet + fine-tuning</div><div class="rm-actions">Re-testare panel complet. Compara cu baseline luna 1. Elimina ce nu produce efect masurabil. Fine-tuning bazat pe date proprii.</div><div class="rm-kpi" style="color:var(--gold)">Toate biomarkerii comparativ luna 1 vs. 12 · Biological age recalculat</div></div></div>
+    </div>
+    <div class="cw"><canvas id="roadmapChart"></canvas></div>
+  </section>
+
+  <!-- FINAL -->
+  <section id="final">
+    <div class="finale">
+      <div class="finale-tag">// Biohacking 3.0 · Complet</div>
+      <div class="finale-title">6 Module · 30 Lecții<br/><span style="color:var(--gold)">1 Sistem</span></div>
+      <div class="finale-quote">"Corpul tău este cel mai complex sistem de inginerie cunoscut. Ai acum arhitectura, instrumentele și datele pentru a-l opera la potențialul său. Folosește-le."</div>
+      <div class="finale-celos">
+        <div class="fc" style="background:#01579B">C</div>
+        <div class="fc" style="background:#1B5E20">E</div>
+        <div class="fc" style="background:#880E4F">L</div>
+        <div class="fc" style="background:#E65100">O</div>
+        <div class="fc" style="background:#004D40">S</div>
+      </div>
+      <div style="margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--violl);letter-spacing:2px">© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu</div>
+    </div>
+  </section>
+
+</div>
+<footer>© 2026 NUTRISIB · dr.ing. Radu Pascu · Sibiu · Biohacking 3.0 — Lecția 6.5 · Integrare Finală · Uz educativ exclusiv</footer>
+
+<script>
+window.addEventListener('scroll',()=>{document.getElementById('pb').style.width=Math.min((window.scrollY/(document.body.scrollHeight-window.innerHeight))*100,100)+'%';});
+const secs=document.querySelectorAll('section[id]'),nls=document.querySelectorAll('.nl a');
+window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-80)c=s.id;});nls.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+c));});
+function toggleCELOS(el){el.querySelector('.celos-detail').classList.toggle('show');}
+
+// Modules radar
+new Chart(document.getElementById('modulesChart').getContext('2d'),{
+  type:'radar',
+  data:{labels:['Celular (C)','Energetic (E)','Longevitate (L)','Oxidativ (O)','Sistem Nervos (S)','Integrare'],
+    datasets:[
+      {label:'Acoperire M1–M3',data:[75,80,70,65,45,50],borderColor:'rgba(27,94,32,0.7)',backgroundColor:'rgba(27,94,32,0.08)',pointRadius:3},
+      {label:'Acoperire M1–M6 complet',data:[95,92,90,88,95,100],borderColor:'rgba(249,168,37,0.8)',backgroundColor:'rgba(249,168,37,0.08)',pointRadius:3},
+    ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#78909C',font:{size:10},boxWidth:8}}},
+    scales:{r:{ticks:{display:false},grid:{color:'rgba(179,157,219,0.1)'},pointLabels:{color:'#78909C',font:{size:10}},min:0,max:100}}}
+});
+
+// Biomarkeri donut
+new Chart(document.getElementById('bioChart').getContext('2d'),{
+  type:'doughnut',
+  data:{labels:['C — Celular (3)','E — Energetic (4)','L — Longevitate (3)','O — Oxidativ (3)','S — Sistem nervos (4)'],
+    datasets:[{data:[3,4,3,3,4],backgroundColor:['rgba(1,87,155,0.7)','rgba(27,94,32,0.7)','rgba(136,14,79,0.7)','rgba(230,81,0,0.7)','rgba(0,77,64,0.7)'],borderWidth:2,borderColor:'rgba(5,14,30,0.8)'}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#78909C',font:{size:10},boxWidth:10}},title:{display:true,text:'17 biomarkeri activi — distribuție per pilon C.E.L.O.S.',color:'#78909C',font:{size:10}}}}
+});
+
+// Roadmap progress chart
+new Chart(document.getElementById('roadmapChart').getContext('2d'),{
+  type:'bar',
+  data:{labels:['L1–2\nSomn','L3–4\nSupl. baza','L5–6\nCognitie','L7–8\nCelular','L9–10\nLongevitate','L11–12\nAudit'],
+    datasets:[
+      {label:'C — Celular',data:[20,45,50,95,100,100],backgroundColor:'rgba(1,87,155,0.6)',stack:'s'},
+      {label:'E — Energetic',data:[30,40,75,90,95,100],backgroundColor:'rgba(27,94,32,0.6)',stack:'s'},
+      {label:'L — Longevitate',data:[10,30,35,45,90,100],backgroundColor:'rgba(136,14,79,0.6)',stack:'s'},
+      {label:'O — Oxidativ',data:[15,35,40,60,90,100],backgroundColor:'rgba(230,81,0,0.6)',stack:'s'},
+      {label:'S — Sistem nervos',data:[60,80,95,95,100,100],backgroundColor:'rgba(0,77,64,0.6)',stack:'s'},
+    ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#78909C',font:{size:9},boxWidth:8}},tooltip:{backgroundColor:'rgba(5,14,30,0.95)'}},
+    scales:{x:{ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(179,157,219,0.05)'},stacked:true},
+      y:{min:0,max:500,ticks:{color:'#78909C',font:{size:9}},grid:{color:'rgba(179,157,219,0.05)'},stacked:true,title:{display:true,text:'Score acumulat C.E.L.O.S.',color:'#B39DDB',font:{size:9}}}}}
+});
+</script>
+</body>
+</html>
