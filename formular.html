@@ -160,6 +160,9 @@ textarea{resize:none;line-height:1.55;}
 .success-card h2{font-family:'Montserrat',sans-serif;color:#15803d;font-size:1.35rem;margin-bottom:.4rem;}
 .success-card p{font-size:.88rem;color:#166534;line-height:1.6;}
 
+.flux-card-change{display:none;margin-top:.5rem;font-size:.72rem;color:var(--blue);cursor:pointer;text-decoration:underline;background:none;border:none;padding:0;font-family:'Inter',sans-serif;}
+.flux-card.active .flux-card-change{display:inline-block;}
+
 /* ── FLUX HIDDEN ── */
 .flux{display:none;}
 .flux.on{display:block;}
@@ -182,7 +185,7 @@ textarea{resize:none;line-height:1.55;}
 
 <!-- HERO -->
 <div class="hero">
-  <img class="hero-logo" src="https://nutrisib.club/logo/logo_alb.png" alt="NutriSib" onerror="this.style.display='none'">
+  <img class="hero-logo" src="https://nutrisib.club/logo/logo_navy.png" alt="NutriSib" onerror="this.style.display='none'">
   <div class="hero-title">Formular NutriSib</div>
   <div class="hero-sub">dr.ing. Radu Pascu · Sibiu</div>
   <div class="hero-body">Alege tipul de formular potrivit situației tale. Datele sunt confidențiale și utilizate exclusiv în scopul contactării tale.</div>
@@ -199,6 +202,7 @@ textarea{resize:none;line-height:1.55;}
         <div class="flux-card-title">Participare eveniment / târg</div>
         <div class="flux-card-desc">Te-ai întâlnit cu NutriSib la un eveniment sau târg și vrei să rămâi în legătură. Completează datele și te contactăm cu o ofertă personalizată.</div>
         <span class="flux-badge targ">Târg / Evenimente</span>
+        <button class="flux-card-change" onclick="resetFlux(event)">↩ Schimbă opțiunea</button>
       </div>
     </div>
 
@@ -208,6 +212,7 @@ textarea{resize:none;line-height:1.55;}
         <div class="flux-card-title">Programare evaluare gratuită</div>
         <div class="flux-card-desc">Programează o sesiune gratuită de 30-45 minute în care identificăm ce îți blochează energia și greutatea. Fără obligații.</div>
         <span class="flux-badge gratuit">Gratuit · Zoom sau Sibiu</span>
+        <button class="flux-card-change" onclick="resetFlux(event)">↩ Schimbă opțiunea</button>
       </div>
     </div>
 
@@ -217,6 +222,7 @@ textarea{resize:none;line-height:1.55;}
         <div class="flux-card-title">Evaluare C.E.L.O.S. completă</div>
         <div class="flux-card-desc">Formular detaliat de pregătire pentru sesiunea ta C.E.L.O.S. Include calcule biologice automate (IMC, RMB, RMA). Vei primi un raport PDF pe email.</div>
         <span class="flux-badge complet">Raport PDF automat</span>
+        <button class="flux-card-change" onclick="resetFlux(event)">↩ Schimbă opțiunea</button>
       </div>
     </div>
 
@@ -697,10 +703,12 @@ textarea{resize:none;line-height:1.55;}
 // ════════════════════════════════════════════════════════════
 // CONFIGURARE — un singur loc pentru tot
 // ════════════════════════════════════════════════════════════
-emailjs.init('SBw3NiEakE4gCuM82');
 const EJS_SERVICE  = 'service_nutrisib';
-const EJS_TEMPLATE = 'template_evaluare'; // un singur template
+const EJS_TEMPLATE = 'template_evaluare';
 const SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbzKP6xamXU9DJlod81LEsqEYcb5bYenmUSf1n6rGnJN2fFubZJoiZ47nb53WqgTJxAd5w/exec';
+window.addEventListener('load', function() {
+  try { emailjs.init('SBw3NiEakE4gCuM82'); } catch(e) { console.warn('EmailJS init failed:', e); }
+});
 
 // ════════════════════════════════════════════════════════════
 // SELECTOR FLUX
@@ -710,20 +718,37 @@ let bioCalc = {};
 
 function selectFlux(flux) {
   currentFlux = flux;
-  // Ascunde selector, afiseaza formularul
-  document.getElementById('fluxSelector').style.display = 'none';
-  document.querySelectorAll('.flux').forEach(f => f.classList.remove('on'));
-  const map = {targ:'fluxTarg', evaluare:'fluxEvaluare', complet:'fluxComplet'};
-  document.getElementById(map[flux])?.classList.add('on');
-  // Highlight card
+  // Highlight card activ și restrânge lista de carduri
   document.querySelectorAll('.flux-card').forEach(c => c.classList.remove('active'));
   const cmap = {targ:'cardTarg', evaluare:'cardEvaluare', complet:'cardComplet'};
   document.getElementById(cmap[flux])?.classList.add('active');
-  window.scrollTo({top:0, behavior:'smooth'});
+  // Ascunde celelalte carduri, lasă-l vizibil pe cel selectat
+  document.querySelectorAll('.flux-card').forEach(c => {
+    c.style.display = c.classList.contains('active') ? 'flex' : 'none';
+  });
+  // Afișează formularul corespunzător
+  document.querySelectorAll('.flux').forEach(f => f.classList.remove('on'));
+  const map = {targ:'fluxTarg', evaluare:'fluxEvaluare', complet:'fluxComplet'};
+  const targetFlux = document.getElementById(map[flux]);
+  targetFlux?.classList.add('on');
+  // Scroll la formular
+  setTimeout(() => {
+    targetFlux?.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 50);
 }
 
-// ════════════════════════════════════════════════════════════
-// CALCULE BIOLOGICE (Flux 3)
+function resetFlux(e) {
+  e.stopPropagation();
+  currentFlux = null;
+  // Reafișează toate cardurile
+  document.querySelectorAll('.flux-card').forEach(c => {
+    c.style.display = 'flex';
+    c.classList.remove('active');
+  });
+  // Ascunde formularul
+  document.querySelectorAll('.flux').forEach(f => f.classList.remove('on'));
+  document.getElementById('fluxSelector')?.scrollIntoView({behavior:'smooth', block:'start'});
+}
 // ════════════════════════════════════════════════════════════
 function calcBio() {
   const g   = parseFloat(document.getElementById('c_greutate')?.value);
