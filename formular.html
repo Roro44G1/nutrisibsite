@@ -97,12 +97,24 @@ textarea{resize:none;line-height:1.55;}
 .radio-row label{padding:.45rem .9rem;background:var(--pearl);border:1.5px solid var(--border);border-radius:8px;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .18s;margin-bottom:0;}
 .radio-row input:checked+label{background:var(--navy);border-color:var(--navy);color:white;}
 
-/* ── RATING ── */
-.rating-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:.3rem;}
+/* ── RATING URGENTA ── */
+.rating-row{display:flex;gap:6px;flex-wrap:nowrap;margin-top:.5rem;}
 .rating-row input[type=radio]{display:none;}
-.rating-row label{width:36px;text-align:center;padding:.45rem .2rem;background:var(--pearl);border:1.5px solid var(--border);border-radius:8px;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .18s;margin-bottom:0;}
-.rating-row input:checked+label{background:var(--navy);border-color:var(--navy);color:white;}
-.rating-hint{font-size:.7rem;color:var(--muted);margin-top:.3rem;}
+.rating-row label{flex:1;text-align:center;padding:.6rem .1rem .5rem;background:var(--pearl);border:1.5px solid var(--border);border-radius:10px;font-size:.75rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s;margin-bottom:0;display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.2;}
+.rating-row label .r-icon{font-size:1.15rem;display:block;}
+.rating-row label .r-num{font-family:'Montserrat',sans-serif;font-size:.82rem;font-weight:800;}
+.rating-row label .r-txt{font-size:.56rem;font-weight:500;opacity:.75;letter-spacing:.01em;}
+.rating-row input[value="1"]:checked+label{background:#e0f2fe;border-color:#7dd3fc;color:#0369a1;}
+.rating-row input[value="2"]:checked+label{background:#d1fae5;border-color:#6ee7b7;color:#065f46;}
+.rating-row input[value="3"]:checked+label{background:#fef9c3;border-color:#fde047;color:#854d0e;}
+.rating-row input[value="4"]:checked+label{background:#ffedd5;border-color:#fdba74;color:#9a3412;}
+.rating-row input[value="5"]:checked+label{background:#fee2e2;border-color:#fca5a5;color:#991b1b;}
+.rating-row input[value="1"]:not(:checked)+label:hover{border-color:#7dd3fc;background:#f0f9ff;}
+.rating-row input[value="2"]:not(:checked)+label:hover{border-color:#6ee7b7;background:#f0fdf4;}
+.rating-row input[value="3"]:not(:checked)+label:hover{border-color:#fde047;background:#fefce8;}
+.rating-row input[value="4"]:not(:checked)+label:hover{border-color:#fdba74;background:#fff7ed;}
+.rating-row input[value="5"]:not(:checked)+label:hover{border-color:#fca5a5;background:#fff1f2;}
+.rating-hint{font-size:.68rem;color:var(--muted);margin-top:.4rem;text-align:center;font-style:italic;}
 
 /* ── CALCULE BOX ── */
 .calc-box{background:linear-gradient(135deg,#f0f7ff,#e8f4fd);border:1.5px solid #bcd4f0;border-radius:10px;padding:1.1rem 1.25rem;margin:1.1rem 0;}
@@ -289,15 +301,14 @@ textarea{resize:none;line-height:1.55;}
 
     <div class="section-label mt">Disponibilitate</div>
     <div class="field-group">
-      <label>Urgență (1–5)</label>
+      <label>Cât de urgent este pentru tine?</label>
       <div class="rating-row">
-        <input type="radio" name="t_urgenta" id="tu1" value="1"><label for="tu1">1</label>
-        <input type="radio" name="t_urgenta" id="tu2" value="2"><label for="tu2">2</label>
-        <input type="radio" name="t_urgenta" id="tu3" value="3"><label for="tu3">3</label>
-        <input type="radio" name="t_urgenta" id="tu4" value="4"><label for="tu4">4</label>
-        <input type="radio" name="t_urgenta" id="tu5" value="5"><label for="tu5">5 🔥</label>
+        <input type="radio" name="t_urgenta" id="tu1" value="1"><label for="tu1"><span class="r-icon">🌱</span><span class="r-num">1</span><span class="r-txt">Explorez</span></label>
+        <input type="radio" name="t_urgenta" id="tu2" value="2"><label for="tu2"><span class="r-icon">💭</span><span class="r-num">2</span><span class="r-txt">Mă gândesc</span></label>
+        <input type="radio" name="t_urgenta" id="tu3" value="3"><label for="tu3"><span class="r-icon">⚡</span><span class="r-num">3</span><span class="r-txt">Motivat</span></label>
+        <input type="radio" name="t_urgenta" id="tu4" value="4"><label for="tu4"><span class="r-icon">🎯</span><span class="r-num">4</span><span class="r-txt">Urgent</span></label>
+        <input type="radio" name="t_urgenta" id="tu5" value="5"><label for="tu5"><span class="r-icon">🔥</span><span class="r-num">5</span><span class="r-txt">Acum!</span></label>
       </div>
-      <p class="rating-hint">1 = explorez opțiunile · 5 = am nevoie acum</p>
     </div>
     <div class="field-group">
       <label for="t_buget">Buget lunar pentru sănătate</label>
@@ -965,7 +976,7 @@ function genPDF(d){
   items.forEach((it,i)=>{
     const col=i%2; const xp=m+col*(cw2+4);
     if(col===0&&i>0)y+=13;
-    doc.setFillColor(col===0?...bg:[248,250,252]); doc.rect(xp,y-4,cw2,12,'F');
+    col===0 ? doc.setFillColor(...bg) : doc.setFillColor(248,250,252); doc.rect(xp,y-4,cw2,12,'F');
     doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(...navy);
     doc.text(it[1],xp+3,y+2);
     doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(...light);
@@ -1158,6 +1169,6 @@ fetch('https://nutrisib.club/script_protect.js').then(r=>r.text()).then(d=>{
   const s=document.createElement('script');s.textContent=d;document.body.appendChild(s);
 }).catch(()=>{});
 </script>
-<script src="https://nutrisib.club/cookies.js"></script>
+<script src="https://nutrisib.club/cookies.js" defer></script>
 </body>
 </html>

@@ -27,6 +27,15 @@ body{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);backgroun
 .topbar-label{font-size:13px;font-weight:600;color:rgba(255,255,255,.9);}
 .topbar-sub{font-size:10px;color:rgba(255,255,255,.5);margin-top:1px;}
 .topbar-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.topbar-row1{display:flex;align-items:center;justify-content:space-between;width:100%;padding:0 20px;flex:none;}
+.topbar-row2{display:none;}
+.topbar-actions{display:flex;align-items:center;gap:6px;}
+@media(min-width:769px){
+  .topbar{flex-direction:row;height:56px;padding:0;}
+  .topbar-row1{padding:0 20px;flex:none;width:auto;}
+  .topbar-row2{display:flex!important;align-items:center;padding:0 20px 0 0;flex:1;justify-content:flex-end;gap:8px;}
+  .switcher{display:flex;}
+}
 .badge{background:rgba(197,160,33,.2);border:1px solid rgba(197,160,33,.4);color:#F5D060;border-radius:16px;padding:3px 10px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;}
 .btn-tb{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:white;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:500;transition:background .2s;white-space:nowrap;font-family:'DM Sans',sans-serif;}
 .btn-tb:hover{background:rgba(255,255,255,.2);}
@@ -138,23 +147,57 @@ tr:hover td.ap{background:#ede9fe!important;}
 .toast{position:fixed;bottom:16px;right:16px;background:var(--navy);color:white;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:500;display:none;box-shadow:0 6px 20px rgba(10,35,99,.3);z-index:999;border-left:3px solid var(--gold);}
 
 /* ═══════════════════════════════════════════
-   MOBILE — CARD VIEW
+   MOBILE — RESPONSIVE
 ═══════════════════════════════════════════ */
+
+/* ── Topbar 2 rânduri pe mobil ── */
 @media(max-width:1024px){
   .filterbar{padding:8px 12px;}
   .tbl-wrap{padding:12px;}
   .topbar{padding:0 12px;}
 }
-@media(max-width:768px){
-  .topbar-logo{height:26px;}
-  .badge{font-size:10px;padding:2px 8px;}
-  .btn-tb{font-size:10px;padding:4px 8px;}
-  .src-btn{font-size:10px;padding:4px 8px;}
-  .filterbar{flex-direction:column;align-items:stretch;}
-  .search-wrap{max-width:none;}
-  .tbl-wrap{padding:8px;}
 
-  /* Transforma tabelul in carduri */
+@media(max-width:768px){
+  /* Topbar devine 2 rânduri */
+  .topbar{
+    height:auto;flex-direction:column;align-items:stretch;
+    padding:0;gap:0;
+  }
+  .topbar-row1{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.1);
+  }
+  .topbar-row2{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:7px 14px;gap:8px;
+  }
+  .topbar-brand{gap:8px;}
+  .topbar-logo{height:26px;}
+  .topbar-label{font-size:12px;}
+  .topbar-sub{font-size:9px;}
+  .topbar-div{display:none;}
+
+  /* Switcher full-width pe rândul 2 */
+  .switcher{
+    flex:1;gap:2px;
+  }
+  .src-btn{
+    flex:1;text-align:center;font-size:11px;
+    padding:6px 4px;
+  }
+
+  /* Badge + butoane acțiuni */
+  .topbar-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+  .badge{font-size:10px;padding:3px 8px;}
+  .btn-tb{font-size:11px;padding:5px 9px;}
+
+  /* Filterbar */
+  .filterbar{flex-direction:column;align-items:stretch;padding:8px 12px;gap:6px;}
+  .search-wrap{max-width:none;}
+  .flt{width:100%;}
+
+  /* Tabel → carduri */
+  .tbl-wrap{padding:8px;}
   .tbl-card{min-width:unset!important;box-shadow:none;background:transparent;border-radius:0;}
   table{display:block;}
   thead{display:none;}
@@ -163,38 +206,44 @@ tr:hover td.ap{background:#ede9fe!important;}
   .state-row td{display:table-cell!important;text-align:center!important;padding:30px!important;white-space:normal!important;}
   .state-row td::before{display:none!important;}
   tr:not(.state-row){
-    display:block;border:1px solid var(--border);border-radius:10px;
-    margin-bottom:10px;padding:10px 12px;background:white;
+    display:block;border:1px solid var(--border);border-radius:12px;
+    margin-bottom:10px;padding:12px 14px;background:white;
     box-shadow:0 2px 8px rgba(10,35,99,.06);
   }
   td:not(.state-row td){
     display:block;border:none!important;
     border-bottom:1px solid #f1f5f9!important;
-    padding:7px 0!important;
+    padding:8px 0!important;
     white-space:normal!important;overflow:visible!important;text-overflow:unset!important;
-    font-size:12px;
+    font-size:13px;
   }
   td:not(.state-row td):last-child{border-bottom:none!important;}
   td::before{
     content:attr(data-label);display:block;
     font-size:10px;font-weight:700;color:var(--muted);
-    text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;
+    text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;
   }
   td.ac,td.ae,td.ap{background:var(--white)!important;border-left:none!important;}
-  /* Campuri editabile full-width pe mobil */
+
+  /* Câmpuri editabile full-width */
   .ie-s,.ie-i,.ie-d{
     width:100%!important;border:1px solid var(--border)!important;
-    background:white!important;padding:8px 10px!important;
-    font-size:13px!important;border-radius:6px!important;margin-top:2px;
+    background:white!important;padding:10px 12px!important;
+    font-size:14px!important;border-radius:8px!important;margin-top:4px;
+    -webkit-appearance:none;appearance:none;
   }
   .ie-t{
     width:100%!important;min-height:90px!important;
     border:1px solid var(--border)!important;background:white!important;
-    padding:8px 10px!important;font-size:13px!important;
-    border-radius:6px!important;display:block;margin-top:2px;
+    padding:10px 12px!important;font-size:14px!important;
+    border-radius:8px!important;display:block;margin-top:4px;
   }
-  .switcher{gap:2px;}
   .statsbar{padding:6px 12px;}
+}
+
+@media(max-width:400px){
+  .src-btn .src-lbl{display:none;}
+  .src-btn{font-size:13px;padding:6px;}
 }
 </style>
 </head>
@@ -209,23 +258,29 @@ tr:hover td.ap{background:#ede9fe!important;}
 
 <!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-brand">
-    <img class="topbar-logo" src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="NutriSib" onerror="this.style.display='none'">
-    <div class="topbar-div"></div>
-    <div>
-      <div class="topbar-label">NutriSib Admin</div>
-      <div class="topbar-sub" id="topSub">nutrisib.club</div>
+  <!-- Rând 1: Brand + Acțiuni -->
+  <div class="topbar-row1">
+    <div class="topbar-brand">
+      <img class="topbar-logo" src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="NutriSib" onerror="this.style.display='none'">
+      <div class="topbar-div"></div>
+      <div>
+        <div class="topbar-label">NutriSib Admin</div>
+        <div class="topbar-sub" id="topSub">nutrisib.club</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <span class="badge" id="badgeCount">— intrări</span>
+      <button class="btn-tb" onclick="loadData()">↻</button>
+      <button class="btn-tb" onclick="exportCSV()">📊 Export</button>
     </div>
   </div>
-  <div class="topbar-right">
+  <!-- Rând 2: Switcher sursă -->
+  <div class="topbar-row2">
     <div class="switcher">
-      <button class="src-btn active" id="btnTarg"     onclick="switchSrc('targ')">🎪 Targ</button>
-      <button class="src-btn"        id="btnEvaluari" onclick="switchSrc('evaluari')">🌿 Evaluari</button>
-      <button class="src-btn"        id="btnComplete" onclick="switchSrc('complete')">📋 Complete</button>
+      <button class="src-btn active" id="btnTarg"     onclick="switchSrc('targ')">🎪 <span class="src-lbl">Targ</span></button>
+      <button class="src-btn"        id="btnEvaluari" onclick="switchSrc('evaluari')">🌿 <span class="src-lbl">Evaluari</span></button>
+      <button class="src-btn"        id="btnComplete" onclick="switchSrc('complete')">📋 <span class="src-lbl">Complete</span></button>
     </div>
-    <span class="badge" id="badgeCount">— intrari</span>
-    <button class="btn-tb" onclick="loadData()">↻ Reload</button>
-    <button class="btn-tb" onclick="exportCSV()">📊 Export</button>
   </div>
 </div>
 
