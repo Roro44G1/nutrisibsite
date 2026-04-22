@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Lora:ital,wght@0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <style>
@@ -651,20 +652,15 @@ textarea{resize:none;line-height:1.55;}
       <textarea id="c_incercari" rows="2" placeholder="ex: Keto 3 luni, post intermitent, nutriționist..."></textarea>
     </div>
     <div class="field-group">
-      <label>Nivel motivație (1–10) <span class="req">*</span></label>
+      <label>Cât ești de motivat să schimbi ceva acum? <span class="req">*</span></label>
       <div class="rating-row">
-        <input type="radio" name="c_motivatie" id="cm1"  value="1"><label for="cm1">1</label>
-        <input type="radio" name="c_motivatie" id="cm2"  value="2"><label for="cm2">2</label>
-        <input type="radio" name="c_motivatie" id="cm3"  value="3"><label for="cm3">3</label>
-        <input type="radio" name="c_motivatie" id="cm4"  value="4"><label for="cm4">4</label>
-        <input type="radio" name="c_motivatie" id="cm5"  value="5"><label for="cm5">5</label>
-        <input type="radio" name="c_motivatie" id="cm6"  value="6"><label for="cm6">6</label>
-        <input type="radio" name="c_motivatie" id="cm7"  value="7"><label for="cm7">7</label>
-        <input type="radio" name="c_motivatie" id="cm8"  value="8"><label for="cm8">8</label>
-        <input type="radio" name="c_motivatie" id="cm9"  value="9"><label for="cm9">9</label>
-        <input type="radio" name="c_motivatie" id="cm10" value="10"><label for="cm10">10</label>
+        <input type="radio" name="c_motivatie" id="cm1" value="1"><label for="cm1"><span class="r-icon">😴</span><span class="r-num">1</span><span class="r-txt">Deloc</span></label>
+        <input type="radio" name="c_motivatie" id="cm2" value="2"><label for="cm2"><span class="r-icon">🤔</span><span class="r-num">2</span><span class="r-txt">Puțin</span></label>
+        <input type="radio" name="c_motivatie" id="cm3" value="3"><label for="cm3"><span class="r-icon">💪</span><span class="r-num">3</span><span class="r-txt">Motivat</span></label>
+        <input type="radio" name="c_motivatie" id="cm4" value="4"><label for="cm4"><span class="r-icon">🎯</span><span class="r-num">4</span><span class="r-txt">Foarte</span></label>
+        <input type="radio" name="c_motivatie" id="cm5" value="5"><label for="cm5"><span class="r-icon">🔥</span><span class="r-num">5</span><span class="r-txt">Total!</span></label>
       </div>
-      <p class="rating-hint">1 = deloc motivat · 10 = foarte motivat</p>
+      <p class="rating-hint">1 = nu sunt pregătit · 5 = vreau să încep chiar acum</p>
     </div>
     <div class="field-group">
       <label for="c_mesaj">Orice altceva vrei să știu</label>
@@ -924,100 +920,154 @@ function colectComplet(){
 // ════════════════════════════════════════════════════════════
 // GENERARE PDF (Flux 3)
 // ════════════════════════════════════════════════════════════
-function genPDF(d){
-  const {jsPDF}=window.jspdf;
-  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
-  const pw=210,m=18,cw=pw-m*2;
-  const navy=[27,42,74],gold=[197,160,33],light=[74,85,99],bg=[240,247,255],white=[255,255,255];
-  let y=0;
+async function genPDF(d){
+  const {jsPDF} = window.jspdf;
 
-  // Header
-  doc.setFillColor(...navy); doc.rect(0,0,pw,42,'F');
-  doc.setFont('helvetica','bold'); doc.setFontSize(20); doc.setTextColor(...white);
-  doc.text('NUTRISIB',m,16);
-  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...gold);
-  doc.text('Arhitectura biologica | nutrisib.club',m,22);
-  doc.setFontSize(13); doc.setFont('helvetica','bold'); doc.setTextColor(...white);
-  doc.text('Raport Evaluare C.E.L.O.S.',m,32);
-  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(180,195,220);
-  doc.text('Data: '+new Date().toLocaleDateString('ro-RO',{day:'2-digit',month:'long',year:'numeric'}),pw-m,32,{align:'right'});
-  y=50;
+  // Construim un div HTML cu Inter font - diacritice perfecte
+  const container = document.createElement('div');
+  container.style.cssText = [
+    'position:fixed','top:-9999px','left:-9999px',
+    'width:794px','background:white',
+    "font-family:'Inter',sans-serif",'font-size:13px',
+    'color:#1e2a3a','line-height:1.5','padding:0'
+  ].join(';');
 
-  const sec=(t,yp)=>{
-    doc.setFillColor(...navy); doc.rect(m,yp,cw,7,'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...white);
-    doc.text(t.toUpperCase(),m+3,yp+5); return yp+12;
-  };
-  const row=(lbl,v,yp,hl)=>{
-    if(hl){doc.setFillColor(...bg);doc.rect(m,yp-4,cw,7,'F');}
-    doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...light);
-    doc.text(lbl+':',m+2,yp);
-    doc.setFont('helvetica','normal'); doc.setTextColor(31,41,55);
-    const lines=doc.splitTextToSize(String(v||'—'),cw-58);
-    doc.text(lines,m+58,yp);
-    return yp+(lines.length>1?lines.length*4.5+2:6);
-  };
+  const navy = '#1B2A4A', gold = '#C5A021', light = '#64748B',
+        bg1  = '#F0F7FF', bg2  = '#F8FAFC', white = '#FFFFFF';
 
-  y=sec('1. Date personale',y);
-  y=row('Nume',d.Nume,y,false); y=row('Email',d.Email,y,true);
-  y=row('Telefon',d.Telefon,y,false); y=row('Ocupatie',d.Ocupatie,y,true);
-  y=row('Sex',d.Sex,y,false); y=row('Varsta',d.Varsta+' ani',y,true);
-  y=row('Inaltime',d.Inaltime+' cm',y,false); y=row('Greutate',d.Greutate+' kg',y,true);
-  y+=4;
+  const ro = s => s || '—'; // Inter suporta toate diacriticele
 
-  y=sec('2. Indicatori biologici',y);
-  const items=[
-    ['IMC',d.IMC+' kg/m2',d.IMC_label],['RMB',d.RMB+' kcal/zi','Mifflin-St Jeor'],
-    ['RMA',d.RMA+' kcal/zi','cu factor activitate'],['CMA',d.CMA+' kcal/zi','mentinere'],
-    ['PGC',d.PGC+' %','Deurenberg'],['MG',d.MG+' kg',''],
-    ['MM',d.MM+' kg',''],['Greutate ideala',d.Greutate_ideala+' kg','IMC tinta 21-22'],
-  ];
-  const cw2=(cw-4)/2;
-  items.forEach((it,i)=>{
-    const col=i%2; const xp=m+col*(cw2+4);
-    if(col===0&&i>0)y+=13;
-    col===0 ? doc.setFillColor(...bg) : doc.setFillColor(248,250,252); doc.rect(xp,y-4,cw2,12,'F');
-    doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(...navy);
-    doc.text(it[1],xp+3,y+2);
-    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(...light);
-    doc.text(it[0],xp+3,y-1);
-    if(it[2]){doc.setFontSize(6.5);doc.setTextColor(100,120,150);doc.text(it[2],xp+3,y+6);}
+  const secHTML = t => `
+    <div style="background:${navy};padding:7px 16px;margin-top:12px">
+      <span style="font-weight:700;font-size:10px;letter-spacing:.08em;
+                   text-transform:uppercase;color:${white}">${ro(t)}</span>
+    </div>`;
+
+  const rowHTML = (lbl, v, alt) => `
+    <div style="display:flex;padding:6px 16px;background:${alt ? bg1 : white};
+                border-bottom:1px solid #f1f5f9">
+      <span style="width:170px;flex-shrink:0;font-weight:600;font-size:11px;
+                   color:${light}">${ro(lbl)}</span>
+      <span style="font-size:12px;color:#1e2a3a;flex:1">${ro(v)}</span>
+    </div>`;
+
+  const bioCard = (lbl, val, sub, hl) => `
+    <div style="flex:1;background:${hl ? '#E8F2FF' : bg2};
+                border:${hl ? '1px solid '+navy : '1px solid #e5e7eb'};
+                border-radius:8px;padding:10px 12px;min-width:0">
+      <div style="font-size:10px;color:${light};margin-bottom:3px">${ro(lbl)}</div>
+      <div style="font-weight:700;font-size:14px;color:${navy}">${ro(val)}</div>
+      ${sub ? `<div style="font-size:9px;color:${light};margin-top:2px">${ro(sub)}</div>` : ''}
+    </div>`;
+
+  const now = new Date().toLocaleDateString('ro-RO',{day:'2-digit',month:'long',year:'numeric'});
+
+  container.innerHTML = `
+    <!-- HEADER -->
+    <div style="background:${navy};padding:18px 16px 16px">
+      <div style="font-weight:800;font-size:20px;color:${white};letter-spacing:.02em">NUTRISIB</div>
+      <div style="font-size:9px;color:${gold};margin-top:2px">Arhitectura biologica | nutrisib.club</div>
+      <div style="margin-top:8px;display:flex;justify-content:space-between;align-items:flex-end">
+        <div style="font-weight:700;font-size:13px;color:${white}">Raport Evaluare C.E.L.O.S.</div>
+        <div style="font-size:9px;color:#b4c5e0">Data: ${now}</div>
+      </div>
+    </div>
+    <div style="height:3px;background:${gold}"></div>
+
+    <!-- 1. DATE PERSONALE -->
+    ${secHTML('1. Date personale')}
+    ${rowHTML('Nume', d.Nume, false)}
+    ${rowHTML('Email', d.Email, true)}
+    ${rowHTML('Telefon', d.Telefon, false)}
+    ${rowHTML('Ocupatie', d.Ocupatie, true)}
+    ${rowHTML('Sex', d.Sex, false)}
+    ${rowHTML('Varsta', d.Varsta + ' ani', true)}
+    ${rowHTML('Inaltime', d.Inaltime + ' cm', false)}
+    ${rowHTML('Greutate', d.Greutate + ' kg', true)}
+
+    <!-- 2. INDICATORI BIOLOGICI -->
+    ${secHTML('2. Indicatori biologici')}
+    <div style="padding:12px 16px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      ${bioCard('IMC', d.IMC+' kg/m²', d.IMC_label, true)}
+      ${bioCard('RMB', d.RMB+' kcal/zi', 'Mifflin-St Jeor', false)}
+      ${bioCard('RMA', d.RMA+' kcal/zi', 'factor activitate', false)}
+      ${bioCard('CMA', d.CMA+' kcal/zi', 'mentinere', false)}
+      ${bioCard('PGC', d.PGC+' %', 'Deurenberg', false)}
+      ${bioCard('Masa grasime', d.MG+' kg', '', false)}
+      ${bioCard('Masa musculara', d.MM+' kg', '', false)}
+      ${bioCard('Greutate ideala', d.Greutate_ideala+' kg', 'IMC țintă 21–22', true)}
+    </div>
+    <div style="padding:4px 16px 8px;font-size:9px;color:${light};font-style:italic">
+      * Valori orientative. Nu constituie diagnostic medical.
+    </div>
+
+    <!-- 3. SANATATE ACTUALA -->
+    ${secHTML('3. Sănătate actuală')}
+    ${rowHTML('Simptome / condiții', d.Sanatate_actuala, false)}
+    ${rowHTML('Tratament', d.Tratament, true)}
+    ${d.Medicamente && d.Medicamente !== '—' ? rowHTML('Medicamente', d.Medicamente, false) : ''}
+    ${rowHTML('Intoleranțe', d.Intolerante, true)}
+
+    <!-- 4. STIL DE VIATA -->
+    ${secHTML('4. Stil de viață')}
+    ${rowHTML('Activitate fizică', d.Activitate_fizica, false)}
+    ${rowHTML('Obiceiuri alimentare', d.Obiceiuri_alimentare, true)}
+    ${rowHTML('Suplimente', d.Suplimente, false)}
+
+    <!-- 5. OBIECTIVE SI MOTIVATIE -->
+    ${secHTML('5. Obiective și motivație')}
+    ${rowHTML('Obiective', d.Obiective, false)}
+    ${rowHTML('Prioritate #1', d.Prioritate, true)}
+    ${rowHTML('De ce este important', d.De_ce_important, false)}
+    ${d.Incercari_anterioare && d.Incercari_anterioare !== '—' ? rowHTML('Încercări anterioare', d.Incercari_anterioare, true) : ''}
+    ${rowHTML('Motivație', d.Motivatie + '/5', false)}
+    ${d.Mesaj_liber && d.Mesaj_liber !== '—' ? rowHTML('Mesaj suplimentar', d.Mesaj_liber, true) : ''}
+
+    <!-- FOOTER -->
+    <div style="background:${navy};padding:8px 16px;margin-top:16px;
+                display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:8px;color:${white}">
+        NutriSib — dr.ing. Radu Pascu | nutrisib.club | rv.pascu@gmail.com | 0723-274.206
+      </span>
+    </div>`;
+
+  document.body.appendChild(container);
+
+  // Captura HTML → canvas → PDF
+  const canvas = await html2canvas(container, {
+    scale: 2, useCORS: true, logging: false,
+    width: 794, windowWidth: 794
   });
-  y+=22;
-  doc.setFontSize(6.5);doc.setTextColor(...light);
-  doc.text('* Valori orientative. Nu constituie diagnostic medical.',m,y); y+=8;
+  document.body.removeChild(container);
 
-  if(y>220){doc.addPage();y=20;}
-  y=sec('3. Sanatate actuala',y);
-  y=row('Simptome/conditii',d.Sanatate_actuala,y,false);
-  y=row('Tratament',d.Tratament,y,true);
-  if(d.Medicamente&&d.Medicamente!=='—')y=row('Medicamente',d.Medicamente,y,false);
-  y=row('Intolerante',d.Intolerante,y,true); y+=4;
+  const imgData = canvas.toDataURL('image/jpeg', 0.95);
+  const doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
+  const pageW = 210, pageH = 297;
+  const imgH = (canvas.height * pageW) / canvas.width;
 
-  if(y>220){doc.addPage();y=20;}
-  y=sec('4. Stil de viata',y);
-  y=row('Activitate fizica',d.Activitate_fizica,y,false);
-  y=row('Obiceiuri alimentare',d.Obiceiuri_alimentare,y,true);
-  y=row('Suplimente',d.Suplimente,y,false); y+=4;
+  let posY = 0;
+  let remaining = imgH;
+  let firstPage = true;
 
-  if(y>200){doc.addPage();y=20;}
-  y=sec('5. Obiective si motivatie',y);
-  y=row('Obiective',d.Obiective,y,false);
-  y=row('Prioritate #1',d.Prioritate,y,true);
-  y=row('De ce este important',d.De_ce_important,y,false);
-  if(d.Incercari_anterioare&&d.Incercari_anterioare!=='—')y=row('Incercari anterioare',d.Incercari_anterioare,y,true);
-  y=row('Motivatie',d.Motivatie+'/10',y,false);
-  if(d.Mesaj_liber&&d.Mesaj_liber!=='—')y=row('Mesaj',d.Mesaj_liber,y,true);
+  while(remaining > 0){
+    if(!firstPage) doc.addPage();
+    const sliceH = Math.min(remaining, pageH);
+    const srcY = (imgH - remaining) * (canvas.height / imgH);
+    const srcH = sliceH * (canvas.height / imgH);
 
-  // Footer pe fiecare pagina
-  const pages=doc.internal.getNumberOfPages();
-  for(let i=1;i<=pages;i++){
-    doc.setPage(i);
-    doc.setFillColor(...navy); doc.rect(0,287,pw,10,'F');
-    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(...white);
-    doc.text('NutriSib — dr.ing. Radu Pascu | nutrisib.club | rv.pascu@gmail.com | 0723-274.206',m,293);
-    doc.text('Pagina '+i+' din '+pages,pw-m,293,{align:'right'});
+    // Cream canvas pentru fiecare pagina
+    const pageCanvas = document.createElement('canvas');
+    pageCanvas.width = canvas.width;
+    pageCanvas.height = srcH;
+    const ctx = pageCanvas.getContext('2d');
+    ctx.drawImage(canvas, 0, srcY, canvas.width, srcH, 0, 0, canvas.width, srcH);
+    const pageImg = pageCanvas.toDataURL('image/jpeg', 0.95);
+    doc.addImage(pageImg, 'JPEG', 0, 0, pageW, sliceH);
+
+    remaining -= pageH;
+    firstPage = false;
   }
+
   return doc;
 }
 
@@ -1073,7 +1123,7 @@ async function submitFlux(flux){
     const formBody=Object.entries(data)
       .map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(v||''))
       .join('&');
-    await fetch(SCRIPT_URL,{method:'POST',body:formBody,mode:'no-cors'});
+    await fetch(SCRIPT_URL,{method:'POST',body:formBody,mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'}});
 
     // ── 2. EmailJS — feedback catre client si copie admin ──
     let ejsParams={};
@@ -1133,7 +1183,7 @@ async function submitFlux(flux){
       };
       // Genereaza si descarca PDF
       btn.textContent='Se genereaza PDF-ul...';
-      const doc=genPDF(data);
+      const doc=await genPDF(data);
       doc.save('Evaluare_CELOS_'+(data.Nume||'').replace(/\s+/g,'_')+'.pdf');
     }
 
@@ -1160,11 +1210,7 @@ async function submitFlux(flux){
   }
 }
 
-// ── Footer inject ──
-fetch('https://nutrisib.club/footer.html').then(r=>r.text()).then(d=>{
-  const f=document.createElement('div');f.innerHTML=d;
-  document.querySelector('.page').appendChild(f);
-}).catch(()=>{});
+// ── Footer inject — dezactivat (footer incompatibil cu pagina formular) ──
 fetch('https://nutrisib.club/script_protect.js').then(r=>r.text()).then(d=>{
   const s=document.createElement('script');s.textContent=d;document.body.appendChild(s);
 }).catch(()=>{});
