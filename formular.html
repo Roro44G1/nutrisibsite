@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>NutriSib — Formular</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Lora:ital,wght@0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<style>
+:root {
+  --navy:   #1B2A4A;
+  --gold:   #C5A021;
+  --pearl:  #F8FAFC;
+  --blue:   #3E92CC;
+  --border: #e5e7eb;
+  --text:   #1f2937;
+  --muted:  #6b7280;
+  --radius: 12px;
+  --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--pearl);font-family:'Inter',sans-serif;color:var(--text);min-height:100vh;padding:1rem;}
+
+.page{max-width:520px;margin:0 auto;}
+
+/* ── NAVBAR ── */
+.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+.nav-brand{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.nav-brand img{height:38px;width:auto;}
+.nav-brand-text{display:flex;flex-direction:column;line-height:1.1;}
+.nav-brand-name{font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:800;color:var(--navy);}
+.nav-brand-tag{font-size:0.58rem;color:var(--blue);font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
+.nav-back{font-size:0.78rem;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:4px;}
+.nav-back:hover{color:var(--navy);}
+
+/* ── HERO ── */
+.hero{background:var(--navy);color:white;text-align:center;padding:1.75rem 1.5rem 2rem;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:1.25rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(197,160,33,0.07);pointer-events:none;}
+.hero-logo{height:52px;width:auto;margin-bottom:1rem;position:relative;z-index:1;}
+.hero-title{font-family:'Montserrat',sans-serif;font-size:clamp(1.2rem,5vw,1.55rem);font-weight:800;line-height:1.2;color:var(--pearl);text-transform:uppercase;letter-spacing:.03em;margin-bottom:.4rem;position:relative;z-index:1;}
+.hero-sub{font-family:'Lora',serif;font-size:.9rem;font-style:italic;color:var(--gold);margin-bottom:.5rem;position:relative;z-index:1;}
+.hero-body{font-size:.82rem;color:rgba(248,250,252,.72);line-height:1.6;max-width:340px;margin:0 auto;position:relative;z-index:1;}
+
+/* ── SELECTOR FLUX ── */
+.flux-selector{margin-bottom:1.25rem;}
+.flux-title{font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);border-left:4px solid var(--gold);padding-left:.6rem;margin-bottom:.85rem;}
+.flux-cards{display:flex;flex-direction:column;gap:.65rem;}
+.flux-card{display:flex;align-items:flex-start;gap:1rem;background:white;border:2px solid var(--border);border-radius:10px;padding:1rem 1.1rem;cursor:pointer;transition:all .18s;text-align:left;}
+.flux-card:hover{border-color:var(--navy);box-shadow:0 4px 12px rgba(27,42,74,.1);}
+.flux-card.active{border-color:var(--navy);background:#f0f4ff;}
+.flux-card-icon{font-size:1.75rem;flex-shrink:0;margin-top:.05rem;}
+.flux-card-title{font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:800;color:var(--navy);margin-bottom:.2rem;}
+.flux-card-desc{font-size:.75rem;color:var(--muted);line-height:1.45;}
+.flux-badge{display:inline-block;margin-top:.35rem;padding:.18rem .6rem;border-radius:10px;font-size:.65rem;font-weight:700;}
+.flux-badge.gratuit{background:#dcfce7;color:#15803d;}
+.flux-badge.targ{background:#fef9c3;color:#854d0e;}
+.flux-badge.complet{background:#ede9fe;color:#4c1d95;}
+
+/* ── CARD FORMULAR ── */
+.card{background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:1.5rem;margin-bottom:1.25rem;overflow:hidden;}
+.section-label{font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);border-left:4px solid var(--gold);padding-left:.6rem;margin-bottom:1.1rem;}
+.section-label.mt{margin-top:1.25rem;}
+
+.field-group{margin-bottom:1rem;}
+label{display:block;font-size:.78rem;font-weight:600;color:#374151;margin-bottom:.35rem;letter-spacing:.01em;}
+label .req{color:var(--gold);margin-left:2px;}
+input[type=text],input[type=tel],input[type=email],input[type=number],select,textarea{
+  width:100%;padding:.7rem .9rem;border:1.5px solid var(--border);border-radius:8px;
+  font-family:'Inter',sans-serif;font-size:.92rem;color:var(--text);background:var(--pearl);
+  outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(27,42,74,.1);background:white;}
+input.calc{background:#f0f7ff;border-color:#bcd4f0;color:var(--navy);font-weight:700;cursor:default;}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231B2A4A' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer;}
+textarea{resize:none;line-height:1.55;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;}
+@media(max-width:420px){.grid2{grid-template-columns:1fr;}}
+.field-note{font-size:.72rem;color:var(--muted);margin-top:.25rem;font-style:italic;}
+
+/* ── CHECKBOXES ── */
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:.3rem;}
+@media(max-width:380px){.check-grid{grid-template-columns:1fr;}}
+.check-item input[type=checkbox]{display:none;}
+.check-item label{display:block;padding:.5rem .75rem;background:var(--pearl);border:1.5px solid var(--border);border-radius:8px;font-size:.78rem;font-weight:500;color:#374151;cursor:pointer;transition:all .18s;line-height:1.3;margin-bottom:0;}
+.check-item label::before{content:'○  ';color:#CBD5E1;}
+.check-item input:checked+label{background:#eaf2f8;border-color:var(--navy);color:var(--navy);font-weight:600;}
+.check-item input:checked+label::before{content:'✓  ';color:var(--gold);}
+
+/* ── RADIO PILLS ── */
+.radio-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:.3rem;}
+.radio-row input[type=radio]{display:none;}
+.radio-row label{padding:.45rem .9rem;background:var(--pearl);border:1.5px solid var(--border);border-radius:8px;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .18s;margin-bottom:0;}
+.radio-row input:checked+label{background:var(--navy);border-color:var(--navy);color:white;}
+
+/* ── RATING ── */
+.rating-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:.3rem;}
+.rating-row input[type=radio]{display:none;}
+.rating-row label{width:36px;text-align:center;padding:.45rem .2rem;background:var(--pearl);border:1.5px solid var(--border);border-radius:8px;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer;transition:all .18s;margin-bottom:0;}
+.rating-row input:checked+label{background:var(--navy);border-color:var(--navy);color:white;}
+.rating-hint{font-size:.7rem;color:var(--muted);margin-top:.3rem;}
+
+/* ── CALCULE BOX ── */
+.calc-box{background:linear-gradient(135deg,#f0f7ff,#e8f4fd);border:1.5px solid #bcd4f0;border-radius:10px;padding:1.1rem 1.25rem;margin:1.1rem 0;}
+.calc-box-title{font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);margin-bottom:.85rem;display:flex;align-items:center;gap:.4rem;}
+.calc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;}
+@media(max-width:400px){.calc-grid{grid-template-columns:1fr;}}
+.calc-item{background:white;border-radius:8px;padding:.65rem .9rem;border:1px solid #dde8f5;}
+.calc-item.hl{background:var(--navy);border-color:var(--navy);}
+.calc-label{font-size:.65rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.2rem;}
+.calc-item.hl .calc-label{color:rgba(255,255,255,.6);}
+.calc-val{font-family:'Montserrat',sans-serif;font-size:1.05rem;font-weight:800;color:var(--navy);}
+.calc-item.hl .calc-val{color:var(--gold);}
+.calc-unit{font-size:.68rem;color:var(--muted);margin-left:2px;}
+.calc-item.hl .calc-unit{color:rgba(255,255,255,.45);}
+.imc-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.7rem;font-weight:700;margin-left:6px;}
+.imc-sub{background:#dbeafe;color:#1d4ed8;}
+.imc-normal{background:#dcfce7;color:#15803d;}
+.imc-supra{background:#fef9c3;color:#854d0e;}
+.imc-obez1{background:#fee2e2;color:#b91c1c;}
+.imc-obez2{background:#fecaca;color:#991b1b;}
+.imc-obez3{background:#fca5a5;color:#7f1d1d;}
+.calc-note{font-size:.65rem;color:var(--muted);margin-top:.6rem;font-style:italic;}
+
+/* ── CONDITIONAL ── */
+.cond{display:none;margin-top:.7rem;animation:fadeIn .2s ease;}
+.cond.on{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* ── GDPR ── */
+.gdpr-block{background:#f9fafb;border:1.5px solid var(--border);border-radius:8px;padding:1rem;margin-top:.5rem;}
+.gdpr-row{display:flex;align-items:flex-start;gap:.6rem;margin-bottom:.6rem;}
+.gdpr-row:last-child{margin-bottom:0;}
+.gdpr-row input[type=checkbox]{flex-shrink:0;margin-top:.2rem;accent-color:var(--navy);width:15px;height:15px;cursor:pointer;}
+.gdpr-text{font-size:.76rem;color:var(--muted);line-height:1.5;}
+.gdpr-text a{color:var(--blue);}
+
+/* ── PROGRESS ── */
+.progress-wrap{margin-bottom:1rem;}
+.progress-label{font-size:.7rem;font-weight:600;color:var(--muted);display:flex;justify-content:space-between;margin-bottom:.25rem;}
+.progress-bg{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--navy);border-radius:2px;transition:width .4s ease;width:0%;}
+
+/* ── SUBMIT ── */
+.btn-submit{width:100%;padding:.9rem;background:var(--navy);color:white;font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:800;border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 0 #051336;transition:all .15s;letter-spacing:.02em;}
+.btn-submit:hover{transform:translateY(-1px);box-shadow:0 5px 0 #051336;background:#243a62;}
+.btn-submit:active{transform:translateY(3px);box-shadow:0 1px 0 #051336;}
+.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.submit-note{font-size:.74rem;color:var(--muted);text-align:center;margin-top:.6rem;}
+.error-msg{display:none;background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:.75rem 1rem;font-size:.82rem;color:#b91c1c;margin-top:.75rem;}
+
+/* ── SUCCES ── */
+.success-card{display:none;text-align:center;padding:2.5rem 1.5rem;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid #86efac;border-radius:var(--radius);}
+.success-card.on{display:block;}
+.success-icon{font-size:3rem;margin-bottom:.65rem;}
+.success-card h2{font-family:'Montserrat',sans-serif;color:#15803d;font-size:1.35rem;margin-bottom:.4rem;}
+.success-card p{font-size:.88rem;color:#166534;line-height:1.6;}
+
+/* ── FLUX HIDDEN ── */
+.flux{display:none;}
+.flux.on{display:block;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <a href="index.html" class="nav-brand">
+    <img src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="NutriSib" onerror="this.style.display='none'">
+    <div class="nav-brand-text">
+      <span class="nav-brand-name">NutriSib</span>
+      <span class="nav-brand-tag">Arhitectura biologica</span>
+    </div>
+  </a>
+  <a href="index.html" class="nav-back">← Înapoi la site</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <img class="hero-logo" src="https://nutrisib.club/logo/logo_alb.png" alt="NutriSib" onerror="this.style.display='none'">
+  <div class="hero-title">Formular NutriSib</div>
+  <div class="hero-sub">dr.ing. Radu Pascu · Sibiu</div>
+  <div class="hero-body">Alege tipul de formular potrivit situației tale. Datele sunt confidențiale și utilizate exclusiv în scopul contactării tale.</div>
+</div>
+
+<!-- SELECTOR FLUX -->
+<div class="flux-selector" id="fluxSelector">
+  <div class="flux-title">Ce dorești să faci?</div>
+  <div class="flux-cards">
+
+    <div class="flux-card" id="cardTarg" onclick="selectFlux('targ')">
+      <div class="flux-card-icon">🎪</div>
+      <div>
+        <div class="flux-card-title">Participare eveniment / târg</div>
+        <div class="flux-card-desc">Te-ai întâlnit cu NutriSib la un eveniment sau târg și vrei să rămâi în legătură. Completează datele și te contactăm cu o ofertă personalizată.</div>
+        <span class="flux-badge targ">Târg / Evenimente</span>
+      </div>
+    </div>
+
+    <div class="flux-card" id="cardEvaluare" onclick="selectFlux('evaluare')">
+      <div class="flux-card-icon">🌿</div>
+      <div>
+        <div class="flux-card-title">Programare evaluare gratuită</div>
+        <div class="flux-card-desc">Programează o sesiune gratuită de 30-45 minute în care identificăm ce îți blochează energia și greutatea. Fără obligații.</div>
+        <span class="flux-badge gratuit">Gratuit · Zoom sau Sibiu</span>
+      </div>
+    </div>
+
+    <div class="flux-card" id="cardComplet" onclick="selectFlux('complet')">
+      <div class="flux-card-icon">📋</div>
+      <div>
+        <div class="flux-card-title">Evaluare C.E.L.O.S. completă</div>
+        <div class="flux-card-desc">Formular detaliat de pregătire pentru sesiunea ta C.E.L.O.S. Include calcule biologice automate (IMC, RMB, RMA). Vei primi un raport PDF pe email.</div>
+        <span class="flux-badge complet">Raport PDF automat</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     FLUX 1: TARG
+════════════════════════════════════════════════ -->
+<div class="flux" id="fluxTarg">
+  <div class="card">
+    <div class="section-label">Date de contact</div>
+    <div class="field-group">
+      <label for="t_nume">Prenume și nume <span class="req">*</span></label>
+      <input type="text" id="t_nume" name="t_nume" placeholder="ex: Maria Popescu" autocomplete="name">
+    </div>
+    <div class="grid2">
+      <div class="field-group">
+        <label for="t_tel">Telefon <span class="req">*</span></label>
+        <input type="tel" id="t_tel" name="t_tel" placeholder="07xx xxx xxx" autocomplete="tel">
+      </div>
+      <div class="field-group">
+        <label for="t_email">Email</label>
+        <input type="email" id="t_email" name="t_email" placeholder="adresa@email.com" autocomplete="email">
+      </div>
+    </div>
+    <div class="field-group">
+      <label for="t_varsta">Vârstă</label>
+      <select id="t_varsta" name="t_varsta">
+        <option value="">— selectează —</option>
+        <option>18–25 ani</option><option>26–35 ani</option><option>36–45 ani</option>
+        <option>46–55 ani</option><option>56–65 ani</option><option>Peste 65 ani</option>
+      </select>
+    </div>
+
+    <div class="section-label mt">Obiectivele tale de sănătate</div>
+    <div class="field-group">
+      <label for="t_obiectiv">Obiectivul principal <span class="req">*</span></label>
+      <select id="t_obiectiv" name="t_obiectiv">
+        <option value="">— selectează —</option>
+        <option>Controlul greutății</option>
+        <option>Energie și vitalitate</option>
+        <option>Detoxifiere / Curățare</option>
+        <option>Digestie și confort intestinal</option>
+        <option>Imunitate</option>
+        <option>Stres / Somn / Relaxare</option>
+        <option>Dureri articulare / musculare</option>
+        <option>Nutriție sportivă</option>
+        <option>Sănătate hormonală</option>
+        <option>Longevitate sănătoasă</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label>Domenii de interes</label>
+      <div class="check-grid">
+        <div class="check-item"><input type="checkbox" id="ti1" value="Suplimente premium"><label for="ti1">Suplimente premium</label></div>
+        <div class="check-item"><input type="checkbox" id="ti2" value="Terapii alternative"><label for="ti2">Terapii alternative</label></div>
+        <div class="check-item"><input type="checkbox" id="ti3" value="Nutriție / Dietă"><label for="ti3">Nutriție / Dietă</label></div>
+        <div class="check-item"><input type="checkbox" id="ti4" value="Fitness / Mișcare"><label for="ti4">Fitness / Mișcare</label></div>
+        <div class="check-item"><input type="checkbox" id="ti5" value="Biohacking"><label for="ti5">Biohacking</label></div>
+        <div class="check-item"><input type="checkbox" id="ti6" value="Consultație complexă"><label for="ti6">Consultație complexă</label></div>
+      </div>
+    </div>
+
+    <div class="section-label mt">Disponibilitate</div>
+    <div class="field-group">
+      <label>Urgență (1–5)</label>
+      <div class="rating-row">
+        <input type="radio" name="t_urgenta" id="tu1" value="1"><label for="tu1">1</label>
+        <input type="radio" name="t_urgenta" id="tu2" value="2"><label for="tu2">2</label>
+        <input type="radio" name="t_urgenta" id="tu3" value="3"><label for="tu3">3</label>
+        <input type="radio" name="t_urgenta" id="tu4" value="4"><label for="tu4">4</label>
+        <input type="radio" name="t_urgenta" id="tu5" value="5"><label for="tu5">5 🔥</label>
+      </div>
+      <p class="rating-hint">1 = explorez opțiunile · 5 = am nevoie acum</p>
+    </div>
+    <div class="field-group">
+      <label for="t_buget">Buget lunar pentru sănătate</label>
+      <select id="t_buget">
+        <option value="">— selectează —</option>
+        <option>Sub 100 lei</option><option>100–250 lei</option>
+        <option>250–500 lei</option><option>500–1000 lei</option><option>Peste 1000 lei</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label for="t_mesaj">Observații / întrebări</label>
+      <textarea id="t_mesaj" rows="3" placeholder="Descrie pe scurt situația sau ce anume cauți…"></textarea>
+    </div>
+
+    <div class="gdpr-block">
+      <div class="gdpr-row">
+        <input type="checkbox" id="t_gdpr">
+        <span class="gdpr-text">Sunt de acord cu prelucrarea datelor mele personale în scopul contactării ulterioare, conform <a href="https://nutrisib.club/acord_RO.html" target="_blank">Politicii de confidențialitate</a> NutriSib. <strong>*</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Completare</span><span id="t_pct">0%</span></div>
+      <div class="progress-bg"><div class="progress-fill" id="t_fill"></div></div>
+    </div>
+    <button class="btn-submit" id="t_btn" onclick="submitFlux('targ')">Trimite formularul</button>
+    <div class="error-msg" id="t_err">Te rugăm să completezi câmpurile obligatorii (*) și să accepți prelucrarea datelor.</div>
+    <p class="submit-note">🔒 Date confidențiale · Te contactăm în cel mai scurt timp</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     FLUX 2: EVALUARE GRATUITA
+════════════════════════════════════════════════ -->
+<div class="flux" id="fluxEvaluare">
+  <div class="card">
+    <div class="section-label">Date de contact</div>
+    <div class="grid2">
+      <div class="field-group">
+        <label for="e_nume">Prenume și nume <span class="req">*</span></label>
+        <input type="text" id="e_nume" placeholder="ex: Maria Popescu" autocomplete="name">
+      </div>
+      <div class="field-group">
+        <label for="e_tel">Telefon <span class="req">*</span></label>
+        <input type="tel" id="e_tel" placeholder="07xx xxx xxx" autocomplete="tel">
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field-group">
+        <label for="e_email">Email <span class="req">*</span></label>
+        <input type="email" id="e_email" placeholder="adresa@email.com" autocomplete="email">
+      </div>
+      <div class="field-group">
+        <label for="e_varsta">Vârstă</label>
+        <input type="number" id="e_varsta" placeholder="ex: 42" min="18" max="99">
+      </div>
+    </div>
+    <div class="field-group">
+      <label>Format preferat <span class="req">*</span></label>
+      <div class="radio-row">
+        <input type="radio" name="e_format" id="ef1" value="Online (Zoom)"><label for="ef1">🖥 Online (Zoom)</label>
+        <input type="radio" name="e_format" id="ef2" value="Fizic în Sibiu"><label for="ef2">📍 Fizic în Sibiu</label>
+        <input type="radio" name="e_format" id="ef3" value="Oricare variantă"><label for="ef3">✓ Oricare</label>
+      </div>
+    </div>
+    <div class="field-group">
+      <label for="e_problema">Ce te preocupă cel mai mult? <span class="req">*</span></label>
+      <select id="e_problema">
+        <option value="" disabled selected>— Alege principalul motiv —</option>
+        <option>Oboseală și energie scăzută</option>
+        <option>Greutate fluctuantă / efect yo-yo</option>
+        <option>Ceață mentală / concentrare slabă</option>
+        <option>Markeri biologici în afara parametrilor</option>
+        <option>Lipsă de somn / recuperare slabă</option>
+        <option>Nu știu de unde să încep</option>
+        <option>Altceva</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label for="e_mesaj">Câteva cuvinte despre situația ta</label>
+      <textarea id="e_mesaj" rows="3" placeholder="Ex: Am încercat keto 3 luni, am slăbit 8 kg și le-am recuperat..."></textarea>
+    </div>
+    <div class="gdpr-block">
+      <div class="gdpr-row">
+        <input type="checkbox" id="e_gdpr">
+        <span class="gdpr-text">Sunt de acord cu prelucrarea datelor personale în scopul programării sesiunii de evaluare, conform <a href="https://nutrisib.club/acord_RO.html" target="_blank">Politicii de confidențialitate</a>. <strong>*</strong></span>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <button class="btn-submit" id="e_btn" onclick="submitFlux('evaluare')">Programează Evaluarea Gratuită</button>
+    <div class="error-msg" id="e_err">Te rugăm să completezi câmpurile obligatorii (*) și să accepți prelucrarea datelor.</div>
+    <p class="submit-note">🔒 Sesiune individuală, confidențială, fără obligații · Locuri limitate lunar</p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     FLUX 3: EVALUARE COMPLETA
+════════════════════════════════════════════════ -->
+<div class="flux" id="fluxComplet">
+  <div class="card">
+    <div class="section-label">1. Date personale</div>
+    <div class="grid2">
+      <div class="field-group">
+        <label for="c_nume">Prenume și nume <span class="req">*</span></label>
+        <input type="text" id="c_nume" placeholder="ex: Maria Popescu" autocomplete="name">
+      </div>
+      <div class="field-group">
+        <label for="c_email">Email <span class="req">*</span></label>
+        <input type="email" id="c_email" placeholder="adresa@email.com" autocomplete="email">
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field-group">
+        <label for="c_tel">Telefon <span class="req">*</span></label>
+        <input type="tel" id="c_tel" placeholder="07xx xxx xxx" autocomplete="tel">
+      </div>
+      <div class="field-group">
+        <label for="c_ocupatie">Ocupație</label>
+        <input type="text" id="c_ocupatie" placeholder="ex: Manager, IT, Medic...">
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field-group">
+        <label>Sex <span class="req">*</span></label>
+        <div class="radio-row" style="margin-top:.5rem">
+          <input type="radio" name="c_sex" id="cs_m" value="Masculin" onchange="calcBio()"><label for="cs_m">Masculin</label>
+          <input type="radio" name="c_sex" id="cs_f" value="Feminin"  onchange="calcBio()"><label for="cs_f">Feminin</label>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="c_varsta">Vârstă (ani) <span class="req">*</span></label>
+        <input type="number" id="c_varsta" placeholder="ex: 42" min="18" max="99" oninput="calcBio()">
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="field-group">
+        <label for="c_inaltime">Înălțime (cm) <span class="req">*</span></label>
+        <input type="number" id="c_inaltime" placeholder="ex: 172" min="140" max="220" oninput="calcBio()">
+      </div>
+      <div class="field-group">
+        <label for="c_greutate">Greutate (kg) <span class="req">*</span></label>
+        <input type="number" id="c_greutate" placeholder="ex: 85" min="40" max="250" oninput="calcBio()">
+      </div>
+    </div>
+    <div class="field-group">
+      <label for="c_activitate">Nivel activitate fizică <span class="req">*</span></label>
+      <select id="c_activitate" onchange="calcBio()">
+        <option value="" disabled selected>— Alege —</option>
+        <option value="1.2">Sedentar (fără sport, birou)</option>
+        <option value="1.375">Ușor activ (1–2x/săptămână)</option>
+        <option value="1.55">Moderat activ (3–4x/săptămână)</option>
+        <option value="1.725">Activ (5–6x/săptămână)</option>
+        <option value="1.9">Foarte activ (zilnic / muncă fizică)</option>
+      </select>
+    </div>
+
+    <!-- CALCULE BIOLOGICE -->
+    <div class="calc-box" id="calcBox" style="display:none">
+      <div class="calc-box-title">⚡ Indicatori biologici calculați automat</div>
+      <div class="calc-grid">
+        <div class="calc-item hl">
+          <div class="calc-label">IMC</div>
+          <div class="calc-val"><span id="c_imc">—</span><span class="calc-unit">kg/m²</span><span id="c_imc_badge" class="imc-badge"></span></div>
+        </div>
+        <div class="calc-item">
+          <div class="calc-label">RMB — Rata metabolică bazală</div>
+          <div class="calc-val"><span id="c_rmb">—</span><span class="calc-unit">kcal/zi</span></div>
+        </div>
+        <div class="calc-item">
+          <div class="calc-label">RMA — Rata metabolică activă</div>
+          <div class="calc-val"><span id="c_rma">—</span><span class="calc-unit">kcal/zi</span></div>
+        </div>
+        <div class="calc-item">
+          <div class="calc-label">CMA — Calorii menținere</div>
+          <div class="calc-val"><span id="c_cma">—</span><span class="calc-unit">kcal/zi</span></div>
+        </div>
+        <div class="calc-item">
+          <div class="calc-label">PGC — % grăsime corporală</div>
+          <div class="calc-val"><span id="c_pgc">—</span><span class="calc-unit">%</span></div>
+        </div>
+        <div class="calc-item">
+          <div class="calc-label">MG — Masă grăsime</div>
+          <div class="calc-val"><span id="c_mg">—</span><span class="calc-unit">kg</span></div>
+        </div>
+        <div class="calc-item">
+          <div class="calc-label">MM — Masă musculară est.</div>
+          <div class="calc-val"><span id="c_mm">—</span><span class="calc-unit">kg</span></div>
+        </div>
+        <div class="calc-item">
+          <div class="calc-label">Greutate ideală estimată</div>
+          <div class="calc-val"><span id="c_gideal">—</span><span class="calc-unit">kg</span></div>
+        </div>
+      </div>
+      <p class="calc-note">* Formula Mifflin-St Jeor + Deurenberg. Valori orientative — nu constituie diagnostic medical.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">2. Stare de sănătate actuală</div>
+    <div class="field-group">
+      <label>Cu ce te confrunți în prezent?</label>
+      <div class="check-grid">
+        <div class="check-item"><input type="checkbox" id="cs01" value="Oboseală/Lipsă energie"><label for="cs01">Oboseală / Lipsă energie</label></div>
+        <div class="check-item"><input type="checkbox" id="cs02" value="Disconfort digestiv"><label for="cs02">Disconfort digestiv</label></div>
+        <div class="check-item"><input type="checkbox" id="cs03" value="Insomnie/Somn slab"><label for="cs03">Insomnie / Somn slab</label></div>
+        <div class="check-item"><input type="checkbox" id="cs04" value="Hipertensiune"><label for="cs04">Hipertensiune</label></div>
+        <div class="check-item"><input type="checkbox" id="cs05" value="Colesterol crescut"><label for="cs05">Colesterol crescut</label></div>
+        <div class="check-item"><input type="checkbox" id="cs06" value="Trigliceride crescute"><label for="cs06">Trigliceride crescute</label></div>
+        <div class="check-item"><input type="checkbox" id="cs07" value="Glicemie crescută"><label for="cs07">Glicemie crescută</label></div>
+        <div class="check-item"><input type="checkbox" id="cs08" value="Rezistență la insulină"><label for="cs08">Rezistență la insulină</label></div>
+        <div class="check-item"><input type="checkbox" id="cs09" value="Diabet"><label for="cs09">Diabet</label></div>
+        <div class="check-item"><input type="checkbox" id="cs10" value="Probleme tiroidă"><label for="cs10">Probleme tiroidă</label></div>
+        <div class="check-item"><input type="checkbox" id="cs11" value="Reflux esofagian"><label for="cs11">Reflux esofagian</label></div>
+        <div class="check-item"><input type="checkbox" id="cs12" value="Colon iritabil"><label for="cs12">Colon iritabil</label></div>
+        <div class="check-item"><input type="checkbox" id="cs13" value="Retenție lichide"><label for="cs13">Retenție lichide</label></div>
+        <div class="check-item"><input type="checkbox" id="cs14" value="Dureri articulare/musculare"><label for="cs14">Dureri articulare / musculare</label></div>
+        <div class="check-item"><input type="checkbox" id="cs15" value="Acid uric crescut"><label for="cs15">Acid uric crescut</label></div>
+        <div class="check-item"><input type="checkbox" id="cs16" value="Anemie"><label for="cs16">Anemie</label></div>
+        <div class="check-item"><input type="checkbox" id="cs17" value="Anxietate/Stres cronic"><label for="cs17">Anxietate / Stres cronic</label></div>
+        <div class="check-item"><input type="checkbox" id="cs18" value="Surplus de greutate"><label for="cs18">Surplus de greutate</label></div>
+        <div class="check-item"><input type="checkbox" id="cs19" value="Deficit de greutate"><label for="cs19">Deficit de greutate</label></div>
+        <div class="check-item"><input type="checkbox" id="cs20" value="Probleme dermatologice"><label for="cs20">Probleme dermatologice</label></div>
+      </div>
+    </div>
+    <div class="field-group">
+      <label>Urmezi tratament medicamentos? <span class="req">*</span></label>
+      <div class="radio-row">
+        <input type="radio" name="c_tratament" id="ct_da" value="Da" onchange="tog('cond_trat',true)"><label for="ct_da">Da</label>
+        <input type="radio" name="c_tratament" id="ct_nu" value="Nu" onchange="tog('cond_trat',false)"><label for="ct_nu">Nu</label>
+      </div>
+      <div class="cond" id="cond_trat">
+        <textarea id="c_medicamente" rows="2" placeholder="Ce medicamente administrezi? (nume, doze dacă știi)"></textarea>
+      </div>
+    </div>
+    <div class="field-group">
+      <label>Intoleranțe / alergii alimentare?</label>
+      <div class="radio-row">
+        <input type="radio" name="c_intolerante" id="ci_da" value="Da"       onchange="tog('cond_int',true)"><label for="ci_da">Da</label>
+        <input type="radio" name="c_intolerante" id="ci_nu" value="Nu"       onchange="tog('cond_int',false)"><label for="ci_nu">Nu</label>
+        <input type="radio" name="c_intolerante" id="ci_ns" value="Nu știu"  onchange="tog('cond_int',false)"><label for="ci_ns">Nu știu</label>
+      </div>
+      <div class="cond" id="cond_int">
+        <textarea id="c_intolerante_det" rows="2" placeholder="Descrie intoleranțele / alergiile alimentare"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">3. Stil de viață și alimentație</div>
+    <div class="field-group">
+      <label>Obiceiuri alimentare zilnice</label>
+      <div class="check-grid">
+        <div class="check-item"><input type="checkbox" id="co01" value="Mânânc mic dejun" onchange="togMdejun()"><label for="co01">Mănânc mic dejun</label></div>
+        <div class="check-item"><input type="checkbox" id="co02" value="Mănânc prânz"><label for="co02">Mănânc prânz</label></div>
+        <div class="check-item"><input type="checkbox" id="co03" value="Mănânc cină"><label for="co03">Mănânc cină</label></div>
+        <div class="check-item"><input type="checkbox" id="co04" value="Gustări între mese"><label for="co04">Gustări între mese</label></div>
+        <div class="check-item"><input type="checkbox" id="co05" value="Beau minim 2L apă/zi"><label for="co05">Beau minim 2L apă/zi</label></div>
+        <div class="check-item"><input type="checkbox" id="co06" value="Consum cafea"><label for="co06">Consum cafea</label></div>
+        <div class="check-item"><input type="checkbox" id="co07" value="Consum dulciuri frecvent"><label for="co07">Consum dulciuri frecvent</label></div>
+        <div class="check-item"><input type="checkbox" id="co08" value="Consum alcool"><label for="co08">Consum alcool</label></div>
+        <div class="check-item"><input type="checkbox" id="co09" value="Fast food / ultra-procesate"><label for="co09">Fast food / ultra-procesate</label></div>
+        <div class="check-item"><input type="checkbox" id="co10" value="Fumez"><label for="co10">Fumez</label></div>
+      </div>
+    </div>
+
+    <!-- Mic dejun — conditional -->
+    <div class="cond" id="cond_mdejun">
+      <div class="field-group">
+        <label for="c_mdej_ora">La ce oră iei micul dejun?</label>
+        <input type="text" id="c_mdej_ora" placeholder="ex: 07:30">
+      </div>
+      <div class="field-group">
+        <label for="c_mdej_ce">În ce constă micul dejun tipic?</label>
+        <textarea id="c_mdej_ce" rows="2" placeholder="ex: Cafea cu lapte, 2 ouă, pâine toast..."></textarea>
+      </div>
+    </div>
+
+    <!-- Fara mic dejun — conditional -->
+    <div class="cond" id="cond_fara_mdejun">
+      <div class="field-group">
+        <label>De ce nu iei micul dejun?</label>
+        <div class="check-grid">
+          <div class="check-item"><input type="checkbox" id="cfm1" value="Lipsă de timp"><label for="cfm1">Lipsă de timp</label></div>
+          <div class="check-item"><input type="checkbox" id="cfm2" value="Nu mi-e foame dimineața"><label for="cfm2">Nu mi-e foame dimineața</label></div>
+          <div class="check-item"><input type="checkbox" id="cfm3" value="Să nu mă îngraș"><label for="cfm3">Să nu mă îngraș</label></div>
+          <div class="check-item"><input type="checkbox" id="cfm4" value="Obișnuință"><label for="cfm4">Obișnuință</label></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label for="c_suplimente">Suplimente alimentare actuale</label>
+      <textarea id="c_suplimente" rows="2" placeholder="ex: Vitamina D3, Omega-3, Magneziu... sau Nu iau"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">4. Obiective și motivație</div>
+    <div class="field-group">
+      <label>Obiective principale</label>
+      <div class="check-grid">
+        <div class="check-item"><input type="checkbox" id="obj01" value="Mai multă energie zilnică"><label for="obj01">Mai multă energie zilnică</label></div>
+        <div class="check-item"><input type="checkbox" id="obj02" value="Slăbit sustenabil"><label for="obj02">Slăbit sustenabil</label></div>
+        <div class="check-item"><input type="checkbox" id="obj03" value="Creștere masă musculară"><label for="obj03">Creștere masă musculară</label></div>
+        <div class="check-item"><input type="checkbox" id="obj04" value="Creștere în greutate sănătoasă"><label for="obj04">Creștere în greutate sănătoasă</label></div>
+        <div class="check-item"><input type="checkbox" id="obj05" value="Claritate mentală"><label for="obj05">Claritate mentală</label></div>
+        <div class="check-item"><input type="checkbox" id="obj06" value="Somn mai bun"><label for="obj06">Somn mai bun</label></div>
+        <div class="check-item"><input type="checkbox" id="obj07" value="Imunitate mai bună"><label for="obj07">Imunitate mai bună</label></div>
+        <div class="check-item"><input type="checkbox" id="obj08" value="Îmbunătățire analize medicale"><label for="obj08">Îmbunătățire analize medicale</label></div>
+        <div class="check-item"><input type="checkbox" id="obj09" value="Nutriție sportivă"><label for="obj09">Nutriție sportivă</label></div>
+        <div class="check-item"><input type="checkbox" id="obj10" value="Longevitate sănătoasă"><label for="obj10">Longevitate sănătoasă</label></div>
+      </div>
+    </div>
+    <div class="field-group">
+      <label for="c_prioritate">Prioritatea #1 <span class="req">*</span></label>
+      <select id="c_prioritate">
+        <option value="" disabled selected>— Alege —</option>
+        <option>Energie și vitalitate</option>
+        <option>Slăbit sustenabil</option>
+        <option>Creștere masă musculară</option>
+        <option>Creștere în greutate sănătoasă</option>
+        <option>Claritate mentală / concentrare</option>
+        <option>Somn și recuperare</option>
+        <option>Îmbunătățire analize medicale</option>
+        <option>Digestie și confort intestinal</option>
+        <option>Imunitate</option>
+        <option>Sănătate hormonală</option>
+        <option>Longevitate sănătoasă</option>
+      </select>
+    </div>
+    <div class="field-group">
+      <label for="c_de_ce">De ce este important pentru tine? <span class="req">*</span></label>
+      <textarea id="c_de_ce" rows="3" placeholder="Ce se schimbă în viața ta dacă rezolvi asta?"></textarea>
+    </div>
+    <div class="field-group">
+      <label for="c_incercari">Ce ai mai încercat și nu a funcționat?</label>
+      <textarea id="c_incercari" rows="2" placeholder="ex: Keto 3 luni, post intermitent, nutriționist..."></textarea>
+    </div>
+    <div class="field-group">
+      <label>Nivel motivație (1–10) <span class="req">*</span></label>
+      <div class="rating-row">
+        <input type="radio" name="c_motivatie" id="cm1"  value="1"><label for="cm1">1</label>
+        <input type="radio" name="c_motivatie" id="cm2"  value="2"><label for="cm2">2</label>
+        <input type="radio" name="c_motivatie" id="cm3"  value="3"><label for="cm3">3</label>
+        <input type="radio" name="c_motivatie" id="cm4"  value="4"><label for="cm4">4</label>
+        <input type="radio" name="c_motivatie" id="cm5"  value="5"><label for="cm5">5</label>
+        <input type="radio" name="c_motivatie" id="cm6"  value="6"><label for="cm6">6</label>
+        <input type="radio" name="c_motivatie" id="cm7"  value="7"><label for="cm7">7</label>
+        <input type="radio" name="c_motivatie" id="cm8"  value="8"><label for="cm8">8</label>
+        <input type="radio" name="c_motivatie" id="cm9"  value="9"><label for="cm9">9</label>
+        <input type="radio" name="c_motivatie" id="cm10" value="10"><label for="cm10">10</label>
+      </div>
+      <p class="rating-hint">1 = deloc motivat · 10 = foarte motivat</p>
+    </div>
+    <div class="field-group">
+      <label for="c_mesaj">Orice altceva vrei să știu</label>
+      <textarea id="c_mesaj" rows="3" placeholder="Context suplimentar, întrebări specifice..."></textarea>
+    </div>
+
+    <div class="gdpr-block">
+      <div class="gdpr-row">
+        <input type="checkbox" id="c_gdpr1">
+        <span class="gdpr-text">Sunt de acord cu prelucrarea datelor de sănătate furnizate pentru realizarea evaluării biologice. <strong>*</strong></span>
+      </div>
+      <div class="gdpr-row">
+        <input type="checkbox" id="c_gdpr2">
+        <span class="gdpr-text">Sunt de acord să primesc informații despre sesiuni și programe NutriSib prin WhatsApp / email.</span>
+      </div>
+      <div class="gdpr-row">
+        <input type="checkbox" id="c_gdpr3">
+        <span class="gdpr-text">Sunt de acord ca rezultatele mele (anonimizate) să fie folosite ca studiu de caz, cu acord explicit ulterior.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Completare</span><span id="c_pct">0%</span></div>
+      <div class="progress-bg"><div class="progress-fill" id="c_fill"></div></div>
+    </div>
+    <button class="btn-submit" id="c_btn" onclick="submitFlux('complet')">
+      Generează raportul și trimite evaluarea
+    </button>
+    <div class="error-msg" id="c_err">Te rugăm să completezi câmpurile obligatorii (*) și să accepți GDPR.</div>
+    <p class="submit-note">📄 Vei primi pe email un raport PDF cu indicatorii biologici calculați</p>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-card" id="successCard">
+  <div class="success-icon">✅</div>
+  <h2>Mulțumim!</h2>
+  <p id="successMsg">Datele tale au fost înregistrate. Te contactăm în cel mai scurt timp.</p>
+  <p style="margin-top:.75rem;font-size:.8rem;">Vizitează <a href="https://nutrisib.club" style="color:#3E92CC;font-weight:600">nutrisib.club</a> pentru mai multe resurse.</p>
+</div>
+
+</div><!-- /.page -->
+
+<script>
+// ════════════════════════════════════════════════════════════
+// CONFIGURARE — un singur loc pentru tot
+// ════════════════════════════════════════════════════════════
+emailjs.init('SBw3NiEakE4gCuM82');
+const EJS_SERVICE  = 'service_nutrisib';
+const EJS_TEMPLATE = 'template_evaluare'; // un singur template
+const SCRIPT_URL   = 'https://script.google.com/macros/s/AKfycbzKP6xamXU9DJlod81LEsqEYcb5bYenmUSf1n6rGnJN2fFubZJoiZ47nb53WqgTJxAd5w/exec';
+
+// ════════════════════════════════════════════════════════════
+// SELECTOR FLUX
+// ════════════════════════════════════════════════════════════
+let currentFlux = null;
+let bioCalc = {};
+
+function selectFlux(flux) {
+  currentFlux = flux;
+  // Ascunde selector, afiseaza formularul
+  document.getElementById('fluxSelector').style.display = 'none';
+  document.querySelectorAll('.flux').forEach(f => f.classList.remove('on'));
+  const map = {targ:'fluxTarg', evaluare:'fluxEvaluare', complet:'fluxComplet'};
+  document.getElementById(map[flux])?.classList.add('on');
+  // Highlight card
+  document.querySelectorAll('.flux-card').forEach(c => c.classList.remove('active'));
+  const cmap = {targ:'cardTarg', evaluare:'cardEvaluare', complet:'cardComplet'};
+  document.getElementById(cmap[flux])?.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ════════════════════════════════════════════════════════════
+// CALCULE BIOLOGICE (Flux 3)
+// ════════════════════════════════════════════════════════════
+function calcBio() {
+  const g   = parseFloat(document.getElementById('c_greutate')?.value);
+  const h   = parseFloat(document.getElementById('c_inaltime')?.value);
+  const v   = parseFloat(document.getElementById('c_varsta')?.value);
+  const sex = document.querySelector('input[name="c_sex"]:checked')?.value;
+  const af  = parseFloat(document.getElementById('c_activitate')?.value);
+  const box = document.getElementById('calcBox');
+
+  if (!g||!h||!v||!sex||isNaN(af)){if(box)box.style.display='none'; return;}
+
+  const hm  = h/100;
+  const imc = +(g/(hm*hm)).toFixed(1);
+
+  let imcLabel='', imcClass='';
+  if(imc<18.5){imcLabel='Subponderal';imcClass='imc-sub';}
+  else if(imc<25){imcLabel='Normal';imcClass='imc-normal';}
+  else if(imc<30){imcLabel='Supraponderal';imcClass='imc-supra';}
+  else if(imc<35){imcLabel='Obezitate gr.1';imcClass='imc-obez1';}
+  else if(imc<40){imcLabel='Obezitate gr.2';imcClass='imc-obez2';}
+  else{imcLabel='Obezitate gr.3';imcClass='imc-obez3';}
+
+  const rmb = Math.round(sex==='Masculin'
+    ? (g*10)+(h*6.25)-(5*v)+5
+    : (g*10)+(h*6.25)-(5*v)-161);
+  const rma = Math.round(rmb*af);
+  const cma = rma;
+  const pgc = +Math.max(5,Math.min(60,(1.20*imc+0.23*v-10.8*(sex==='Masculin'?1:0)-5.4))).toFixed(1);
+  const mg  = +(g*pgc/100).toFixed(1);
+  const mm  = +(g-mg).toFixed(1);
+  const gi  = Math.round((sex==='Masculin'?22:21)*hm*hm);
+
+  document.getElementById('c_imc').textContent=imc;
+  const badge=document.getElementById('c_imc_badge');
+  badge.textContent=imcLabel; badge.className='imc-badge '+imcClass;
+  document.getElementById('c_rmb').textContent=rmb;
+  document.getElementById('c_rma').textContent=rma;
+  document.getElementById('c_cma').textContent=cma;
+  document.getElementById('c_pgc').textContent=pgc;
+  document.getElementById('c_mg').textContent=mg;
+  document.getElementById('c_mm').textContent=mm;
+  document.getElementById('c_gideal').textContent=gi;
+  box.style.display='block';
+
+  bioCalc={imc,imcLabel,rmb,rma,cma,pgc,mg,mm,gi,g,h,v,sex,af};
+  updateProgress();
+}
+
+// ════════════════════════════════════════════════════════════
+// CÂMPURI CONDIȚIONALE
+// ════════════════════════════════════════════════════════════
+function tog(id, show){ document.getElementById(id)?.classList.toggle('on', show); }
+
+function togMdejun(){
+  const checked = document.getElementById('co01')?.checked;
+  tog('cond_mdejun', checked);
+  tog('cond_fara_mdejun', !checked);
+}
+
+// ════════════════════════════════════════════════════════════
+// PROGRESS (Flux 3)
+// ════════════════════════════════════════════════════════════
+function updateProgress(){
+  const req=['c_nume','c_email','c_tel','c_varsta','c_greutate','c_inaltime','c_prioritate','c_de_ce'];
+  const reqRadio=['c_sex','c_tratament','c_motivatie'];
+  let filled=0, total=req.length+reqRadio.length+1;
+  req.forEach(id=>{if(document.getElementById(id)?.value?.trim())filled++;});
+  reqRadio.forEach(n=>{if(document.querySelector(`[name="${n}"]:checked`))filled++;});
+  if(document.getElementById('c_gdpr1')?.checked)filled++;
+  const pct=Math.round(filled/total*100);
+  const fill=document.getElementById('c_fill');
+  const pctEl=document.getElementById('c_pct');
+  if(fill)fill.style.width=pct+'%';
+  if(pctEl)pctEl.textContent=pct+'%';
+}
+document.addEventListener('change', e=>{if(currentFlux==='complet')updateProgress();});
+document.addEventListener('input',  e=>{if(currentFlux==='complet')updateProgress();});
+
+// ════════════════════════════════════════════════════════════
+// COLECTARE DATE
+// ════════════════════════════════════════════════════════════
+function checks(ids){ return ids.map(id=>document.getElementById(id)).filter(el=>el?.checked).map(el=>el.value).join(', ') || '—'; }
+function val(id){ return document.getElementById(id)?.value?.trim()||'—'; }
+function radio(name){ return document.querySelector(`[name="${name}"]:checked`)?.value||'—'; }
+
+function colectTarg(){
+  const interese = ['ti1','ti2','ti3','ti4','ti5','ti6'];
+  return {
+    source:'targ',
+    nume:    val('t_nume'),
+    tel:     val('t_tel'),
+    email:   val('t_email'),
+    varsta:  val('t_varsta'),
+    obiectiv:val('t_obiectiv'),
+    interese:checks(interese),
+    urgenta: radio('t_urgenta'),
+    buget:   val('t_buget'),
+    mesaj:   val('t_mesaj')
+  };
+}
+
+function colectEvaluare(){
+  return {
+    source:'evaluare',
+    Nume:   val('e_nume'),
+    Telefon:val('e_tel'),
+    Email:  val('e_email'),
+    Varsta: val('e_varsta'),
+    Format: radio('e_format'),
+    Problema_principala: val('e_problema'),
+    Mesaj:  val('e_mesaj')
+  };
+}
+
+function colectComplet(){
+  const sanatate = ['cs01','cs02','cs03','cs04','cs05','cs06','cs07','cs08','cs09','cs10','cs11','cs12','cs13','cs14','cs15','cs16','cs17','cs18','cs19','cs20'];
+  const obiceiuri= ['co01','co02','co03','co04','co05','co06','co07','co08','co09','co10'];
+  const obiective= ['obj01','obj02','obj03','obj04','obj05','obj06','obj07','obj08','obj09','obj10'];
+  const faraMd   = ['cfm1','cfm2','cfm3','cfm4'];
+  return {
+    source:           'evaluare_completa',
+    Nume:             val('c_nume'),
+    Email:            val('c_email'),
+    Telefon:          val('c_tel'),
+    Ocupatie:         val('c_ocupatie'),
+    Sex:              radio('c_sex'),
+    Varsta:           val('c_varsta'),
+    Inaltime:         val('c_inaltime'),
+    Greutate:         val('c_greutate'),
+    Activitate_fizica:document.getElementById('c_activitate')?.options[document.getElementById('c_activitate')?.selectedIndex]?.text||'—',
+    Sanatate_actuala: checks(sanatate),
+    Tratament:        radio('c_tratament'),
+    Medicamente:      val('c_medicamente'),
+    Intolerante:      radio('c_intolerante'),
+    Intolerante_detalii: val('c_intolerante_det'),
+    Obiceiuri_alimentare: checks(obiceiuri),
+    Fara_mdejun_motiv:    checks(faraMd),
+    Mic_dejun_ora:    val('c_mdej_ora'),
+    Mic_dejun_continut: val('c_mdej_ce'),
+    Suplimente:       val('c_suplimente'),
+    Obiective:        checks(obiective),
+    Prioritate:       val('c_prioritate'),
+    De_ce_important:  val('c_de_ce'),
+    Incercari_anterioare: val('c_incercari'),
+    Motivatie:        radio('c_motivatie'),
+    Mesaj_liber:      val('c_mesaj'),
+    GDPR_evaluare:    document.getElementById('c_gdpr1')?.checked?'Da':'Nu',
+    GDPR_comunicare:  document.getElementById('c_gdpr2')?.checked?'Da':'Nu',
+    GDPR_testimonial: document.getElementById('c_gdpr3')?.checked?'Da':'Nu',
+    IMC:       bioCalc.imc   ||'',
+    IMC_label: bioCalc.imcLabel||'',
+    RMB:       bioCalc.rmb   ||'',
+    RMA:       bioCalc.rma   ||'',
+    CMA:       bioCalc.cma   ||'',
+    PGC:       bioCalc.pgc   ||'',
+    MG:        bioCalc.mg    ||'',
+    MM:        bioCalc.mm    ||'',
+    Greutate_ideala: bioCalc.gi||''
+  };
+}
+
+// ════════════════════════════════════════════════════════════
+// GENERARE PDF (Flux 3)
+// ════════════════════════════════════════════════════════════
+function genPDF(d){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const pw=210,m=18,cw=pw-m*2;
+  const navy=[27,42,74],gold=[197,160,33],light=[74,85,99],bg=[240,247,255],white=[255,255,255];
+  let y=0;
+
+  // Header
+  doc.setFillColor(...navy); doc.rect(0,0,pw,42,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(20); doc.setTextColor(...white);
+  doc.text('NUTRISIB',m,16);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(...gold);
+  doc.text('Arhitectura biologica | nutrisib.club',m,22);
+  doc.setFontSize(13); doc.setFont('helvetica','bold'); doc.setTextColor(...white);
+  doc.text('Raport Evaluare C.E.L.O.S.',m,32);
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(180,195,220);
+  doc.text('Data: '+new Date().toLocaleDateString('ro-RO',{day:'2-digit',month:'long',year:'numeric'}),pw-m,32,{align:'right'});
+  y=50;
+
+  const sec=(t,yp)=>{
+    doc.setFillColor(...navy); doc.rect(m,yp,cw,7,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(...white);
+    doc.text(t.toUpperCase(),m+3,yp+5); return yp+12;
+  };
+  const row=(lbl,v,yp,hl)=>{
+    if(hl){doc.setFillColor(...bg);doc.rect(m,yp-4,cw,7,'F');}
+    doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(...light);
+    doc.text(lbl+':',m+2,yp);
+    doc.setFont('helvetica','normal'); doc.setTextColor(31,41,55);
+    const lines=doc.splitTextToSize(String(v||'—'),cw-58);
+    doc.text(lines,m+58,yp);
+    return yp+(lines.length>1?lines.length*4.5+2:6);
+  };
+
+  y=sec('1. Date personale',y);
+  y=row('Nume',d.Nume,y,false); y=row('Email',d.Email,y,true);
+  y=row('Telefon',d.Telefon,y,false); y=row('Ocupatie',d.Ocupatie,y,true);
+  y=row('Sex',d.Sex,y,false); y=row('Varsta',d.Varsta+' ani',y,true);
+  y=row('Inaltime',d.Inaltime+' cm',y,false); y=row('Greutate',d.Greutate+' kg',y,true);
+  y+=4;
+
+  y=sec('2. Indicatori biologici',y);
+  const items=[
+    ['IMC',d.IMC+' kg/m2',d.IMC_label],['RMB',d.RMB+' kcal/zi','Mifflin-St Jeor'],
+    ['RMA',d.RMA+' kcal/zi','cu factor activitate'],['CMA',d.CMA+' kcal/zi','mentinere'],
+    ['PGC',d.PGC+' %','Deurenberg'],['MG',d.MG+' kg',''],
+    ['MM',d.MM+' kg',''],['Greutate ideala',d.Greutate_ideala+' kg','IMC tinta 21-22'],
+  ];
+  const cw2=(cw-4)/2;
+  items.forEach((it,i)=>{
+    const col=i%2; const xp=m+col*(cw2+4);
+    if(col===0&&i>0)y+=13;
+    doc.setFillColor(col===0?...bg:[248,250,252]); doc.rect(xp,y-4,cw2,12,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(...navy);
+    doc.text(it[1],xp+3,y+2);
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(...light);
+    doc.text(it[0],xp+3,y-1);
+    if(it[2]){doc.setFontSize(6.5);doc.setTextColor(100,120,150);doc.text(it[2],xp+3,y+6);}
+  });
+  y+=22;
+  doc.setFontSize(6.5);doc.setTextColor(...light);
+  doc.text('* Valori orientative. Nu constituie diagnostic medical.',m,y); y+=8;
+
+  if(y>220){doc.addPage();y=20;}
+  y=sec('3. Sanatate actuala',y);
+  y=row('Simptome/conditii',d.Sanatate_actuala,y,false);
+  y=row('Tratament',d.Tratament,y,true);
+  if(d.Medicamente&&d.Medicamente!=='—')y=row('Medicamente',d.Medicamente,y,false);
+  y=row('Intolerante',d.Intolerante,y,true); y+=4;
+
+  if(y>220){doc.addPage();y=20;}
+  y=sec('4. Stil de viata',y);
+  y=row('Activitate fizica',d.Activitate_fizica,y,false);
+  y=row('Obiceiuri alimentare',d.Obiceiuri_alimentare,y,true);
+  y=row('Suplimente',d.Suplimente,y,false); y+=4;
+
+  if(y>200){doc.addPage();y=20;}
+  y=sec('5. Obiective si motivatie',y);
+  y=row('Obiective',d.Obiective,y,false);
+  y=row('Prioritate #1',d.Prioritate,y,true);
+  y=row('De ce este important',d.De_ce_important,y,false);
+  if(d.Incercari_anterioare&&d.Incercari_anterioare!=='—')y=row('Incercari anterioare',d.Incercari_anterioare,y,true);
+  y=row('Motivatie',d.Motivatie+'/10',y,false);
+  if(d.Mesaj_liber&&d.Mesaj_liber!=='—')y=row('Mesaj',d.Mesaj_liber,y,true);
+
+  // Footer pe fiecare pagina
+  const pages=doc.internal.getNumberOfPages();
+  for(let i=1;i<=pages;i++){
+    doc.setPage(i);
+    doc.setFillColor(...navy); doc.rect(0,287,pw,10,'F');
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(...white);
+    doc.text('NutriSib — dr.ing. Radu Pascu | nutrisib.club | rv.pascu@gmail.com | 0723-274.206',m,293);
+    doc.text('Pagina '+i+' din '+pages,pw-m,293,{align:'right'});
+  }
+  return doc;
+}
+
+// ════════════════════════════════════════════════════════════
+// SUBMIT CENTRAL
+// ════════════════════════════════════════════════════════════
+async function submitFlux(flux){
+  const btnId={targ:'t_btn',evaluare:'e_btn',complet:'c_btn'}[flux];
+  const errId={targ:'t_err',evaluare:'e_err',complet:'c_err'}[flux];
+  const btn=document.getElementById(btnId);
+  const err=document.getElementById(errId);
+
+  // ── Validare ──
+  let ok=true;
+  if(flux==='targ'){
+    if(!val('t_nume')||val('t_nume')==='—')ok=false;
+    if(!val('t_tel')||val('t_tel')==='—')ok=false;
+    if(!val('t_obiectiv')||val('t_obiectiv')==='—')ok=false;
+    if(!document.getElementById('t_gdpr')?.checked)ok=false;
+  } else if(flux==='evaluare'){
+    if(!val('e_nume')||val('e_nume')==='—')ok=false;
+    if(!val('e_tel')||val('e_tel')==='—')ok=false;
+    if(!val('e_email')||val('e_email')==='—')ok=false;
+    if(!radio('e_format')||radio('e_format')==='—')ok=false;
+    if(!val('e_problema')||val('e_problema')==='—')ok=false;
+    if(!document.getElementById('e_gdpr')?.checked)ok=false;
+  } else {
+    if(!val('c_nume')||val('c_nume')==='—')ok=false;
+    if(!val('c_email')||val('c_email')==='—')ok=false;
+    if(!val('c_tel')||val('c_tel')==='—')ok=false;
+    if(!radio('c_sex')||radio('c_sex')==='—')ok=false;
+    if(!val('c_varsta')||val('c_varsta')==='—')ok=false;
+    if(!val('c_inaltime')||val('c_inaltime')==='—')ok=false;
+    if(!val('c_greutate')||val('c_greutate')==='—')ok=false;
+    if(!radio('c_tratament')||radio('c_tratament')==='—')ok=false;
+    if(!val('c_prioritate')||val('c_prioritate')==='—')ok=false;
+    if(!val('c_de_ce')||val('c_de_ce')==='—')ok=false;
+    if(!radio('c_motivatie')||radio('c_motivatie')==='—')ok=false;
+    if(!document.getElementById('c_gdpr1')?.checked)ok=false;
+    if(!bioCalc.imc){ alert('Completează vârsta, înălțimea, greutatea și activitatea fizică pentru a calcula indicatorii biologici.'); return; }
+  }
+
+  if(!ok){ err.style.display='block'; err.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  err.style.display='none';
+
+  btn.disabled=true;
+  btn.textContent='Se trimite...';
+
+  try {
+    const data = flux==='targ' ? colectTarg() : flux==='evaluare' ? colectEvaluare() : colectComplet();
+
+    // ── 1. Salvare in Google Sheet ──
+    const formBody=Object.entries(data)
+      .map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(v||''))
+      .join('&');
+    await fetch(SCRIPT_URL,{method:'POST',body:formBody,mode:'no-cors'});
+
+    // ── 2. EmailJS — feedback catre client si copie admin ──
+    let ejsParams={};
+
+    if(flux==='targ'){
+      ejsParams={
+        tip_formular: 'Participare Targ / Eveniment',
+        to_email:     data.email||'',
+        to_name:      data.nume,
+        reply_to:     'nutrisib.club@gmail.com',
+        rezumat_date: [
+          'Obiectiv: '+data.obiectiv,
+          'Interese: '+data.interese,
+          'Urgenta: '+data.urgenta+'/5',
+          'Buget: '+data.buget,
+          'Mesaj: '+data.mesaj
+        ].join('\n'),
+        mesaj_client: 'Datele tale au fost inregistrate. Te contactam in cel mai scurt timp cu o propunere personalizata.',
+        data_trimitere: new Date().toLocaleDateString('ro-RO')
+      };
+    } else if(flux==='evaluare'){
+      ejsParams={
+        tip_formular: 'Programare Evaluare Gratuita',
+        to_email:     data.Email,
+        to_name:      data.Nume,
+        reply_to:     'nutrisib.club@gmail.com',
+        rezumat_date: [
+          'Format dorit: '+data.Format,
+          'Problema principala: '+data.Problema_principala,
+          'Mesaj: '+data.Mesaj
+        ].join('\n'),
+        mesaj_client: 'Programarea ta a fost inregistrata. Te contactez in maxim 24 ore la numarul furnizat pentru a stabili data si ora sesiunii.',
+        data_trimitere: new Date().toLocaleDateString('ro-RO')
+      };
+    } else {
+      ejsParams={
+        tip_formular: 'Evaluare C.E.L.O.S. Completa',
+        to_email:     data.Email,
+        to_name:      data.Nume,
+        reply_to:     'nutrisib.club@gmail.com',
+        rezumat_date: [
+          'IMC: '+data.IMC+' kg/m2 ('+data.IMC_label+')',
+          'RMB: '+data.RMB+' kcal/zi',
+          'RMA: '+data.RMA+' kcal/zi',
+          'CMA: '+data.CMA+' kcal/zi',
+          'PGC: '+data.PGC+'%',
+          'Masa grasime: '+data.MG+' kg',
+          'Masa musculara: '+data.MM+' kg',
+          'Greutate ideala: '+data.Greutate_ideala+' kg',
+          '---',
+          'Sanatate: '+data.Sanatate_actuala,
+          'Prioritate: '+data.Prioritate,
+          'Motivatie: '+data.Motivatie+'/10'
+        ].join('\n'),
+        mesaj_client: 'Evaluarea ta a fost inregistrata si o voi analiza inainte de sesiunea noastra. PDF-ul complet se descarca automat pe dispozitivul tau.',
+        data_trimitere: new Date().toLocaleDateString('ro-RO')
+      };
+      // Genereaza si descarca PDF
+      btn.textContent='Se genereaza PDF-ul...';
+      const doc=genPDF(data);
+      doc.save('Evaluare_CELOS_'+(data.Nume||'').replace(/\s+/g,'_')+'.pdf');
+    }
+
+    await emailjs.send(EJS_SERVICE, EJS_TEMPLATE, ejsParams);
+
+    // ── 3. Succes ──
+    const msgs={
+      targ:'Datele tale au fost inregistrate. Te contactam in cel mai scurt timp cu o propunere personalizata.',
+      evaluare:'Programarea ta a fost inregistrata! Te contactez in maxim 24 ore la numarul furnizat pentru a stabili data si ora sesiunii.\n\nDaca preferi contact direct: 📞 0723-274.206',
+      complet:'Evaluarea a fost trimisa! Ai primit pe email o confirmare cu rezumatul indicatorilor biologici.\nPDF-ul complet a fost descarcat automat pe dispozitivul tau.\n\nO voi analiza inainte de sesiunea noastra.'
+    };
+    document.getElementById('successMsg').textContent=msgs[flux];
+    document.querySelectorAll('.flux').forEach(f=>f.classList.remove('on'));
+    document.getElementById('fluxSelector').style.display='none';
+    document.getElementById('successCard').classList.add('on');
+    window.scrollTo({top:0,behavior:'smooth'});
+
+  } catch(e){
+    console.error(e);
+    btn.disabled=false;
+    btn.textContent=flux==='complet'?'Genereaza raportul si trimite evaluarea':
+                    flux==='evaluare'?'Programeaza Evaluarea Gratuita':'Trimite formularul';
+    alert('A aparut o eroare. Contacteaza-ma direct la 0723-274.206 sau pe WhatsApp.\n\nDetaliu: '+e.message);
+  }
+}
+
+// ── Footer inject ──
+fetch('https://nutrisib.club/footer.html').then(r=>r.text()).then(d=>{
+  const f=document.createElement('div');f.innerHTML=d;
+  document.querySelector('.page').appendChild(f);
+}).catch(()=>{});
+fetch('https://nutrisib.club/script_protect.js').then(r=>r.text()).then(d=>{
+  const s=document.createElement('script');s.textContent=d;document.body.appendChild(s);
+}).catch(()=>{});
+</script>
+<script src="https://nutrisib.club/cookies.js"></script>
+</body>
+</html>
