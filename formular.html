@@ -199,8 +199,8 @@ textarea{resize:none;line-height:1.55;}
 <!-- HERO -->
 <div class="hero">
   <img class="hero-logo" src="https://nutrisib.club/logo/logo_navy.png" alt="NutriSib" onerror="this.style.display='none'">
-  <div class="hero-title">Formular NutriSib</div>
-  <div class="hero-sub">dr.ing. Radu Pascu · Sibiu</div>
+  <div class="hero-title">NUTRISIB - 2026</div>
+  <div class="hero-sub">Sănătate &amp; stil de viață</div>
   <div class="hero-body">Alege tipul de formular potrivit situației tale. Datele sunt confidențiale și utilizate exclusiv în scopul contactării tale.</div>
 </div>
 
@@ -1120,10 +1120,11 @@ async function submitFlux(flux){
     const data = flux==='targ' ? colectTarg() : flux==='evaluare' ? colectEvaluare() : colectComplet();
 
     // ── 1. Salvare in Google Sheet ──
+    // GET evita redirect-ul 302 al Apps Script care cauza dublarea inregistrarilor
     const formBody=Object.entries(data)
       .map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(v||''))
       .join('&');
-    await fetch(SCRIPT_URL,{method:'POST',body:formBody,mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'}});
+    await fetch(SCRIPT_URL+'?'+formBody,{method:'GET',mode:'no-cors'});
 
     // ── 2. EmailJS — feedback catre client si copie admin ──
     let ejsParams={};
