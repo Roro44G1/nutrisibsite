@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>NutriSib — Formular Participanți Târg</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Lora:ital,wght@0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-pearl: #F8FAFC;
+    --color-navy: #0A2363;
+    --color-gold: #C5A021;
+    --color-text-dark: #1f2937;
+    --color-text-medium: #374151;
+    --color-text-light: #4b5563;
+    --color-text-white: #ffffff;
+    --color-brand-medium: #3E92CC;
+    --color-brand-light: #eaf2f8;
+    --color-border: #e5e7eb;
+    --shadow-card: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    --radius-card: 12px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--color-pearl);
+    font-family: 'Inter', sans-serif;
+    color: var(--color-text-dark);
+    min-height: 100vh;
+    padding: 1rem;
+  }
+
+  .page-wrapper {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* ── HERO ──  test aici*/
+  .hero-card {
+    background-color: var(--color-navy);
+    color: var(--color-text-white);
+    text-align: center;
+    padding: 1.75rem 1.5rem 2rem;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 1.25rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(197,160,33,0.07);
+    pointer-events: none;
+  }
+
+  .hero-logo {
+    height: 58px;
+    width: auto;
+    margin-bottom: 1.1rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(1.25rem, 5vw, 1.6rem);
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--color-pearl);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-subtitle {
+    font-family: 'Lora', serif;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--color-gold);
+    margin-bottom: 0.6rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: rgba(248,250,252,0.75);
+    line-height: 1.6;
+    max-width: 320px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── CONTENT CARD ── */
+  .content-card {
+    background-color: #ffffff;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-navy);
+    border-left: 4px solid var(--color-gold);
+    padding-left: 0.6rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .field-group { margin-bottom: 1rem; }
+
+  label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-text-medium);
+    margin-bottom: 0.35rem;
+    letter-spacing: 0.01em;
+  }
+
+  label .req { color: var(--color-gold); margin-left: 2px; }
+
+  input[type="text"], input[type="tel"], input[type="email"], select, textarea {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 1.5px solid var(--color-border);
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.92rem;
+    color: var(--color-text-dark);
+    background: var(--color-pearl);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--color-navy);
+    box-shadow: 0 0 0 3px rgba(10,35,99,0.1);
+    background: #fff;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230A2363' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  textarea { resize: none; line-height: 1.55; }
+
+  /* ── CHECKBOXES ── */
+  .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+  .check-item input[type="checkbox"] { display: none; }
+  .check-item label {
+    display: block;
+    padding: 0.55rem 0.75rem;
+    background: var(--color-pearl);
+    border: 1.5px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-text-medium);
+    cursor: pointer;
+    transition: all 0.18s;
+    line-height: 1.35;
+    margin-bottom: 0;
+  }
+  .check-item label::before { content: '○  '; color: #CBD5E1; }
+  .check-item input:checked + label {
+    background: var(--color-brand-light);
+    border-color: var(--color-navy);
+    color: var(--color-navy);
+    font-weight: 600;
+  }
+  .check-item input:checked + label::before { content: '✓  '; color: var(--color-gold); }
+
+  /* ── RATING ── */
+  .rating-row { display: flex; gap: 7px; }
+  .rating-row input[type="radio"] { display: none; }
+  .rating-row label {
+    flex: 1;
+    text-align: center;
+    padding: 0.55rem 0.4rem;
+    background: var(--color-pearl);
+    border: 1.5px solid var(--color-border);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+    cursor: pointer;
+    transition: all 0.18s;
+    margin-bottom: 0;
+  }
+  .rating-row input[type="radio"]:checked + label {
+    background: var(--color-navy);
+    border-color: var(--color-navy);
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(10,35,99,0.25);
+  }
+  .rating-hint {
+    font-size: 0.72rem;
+    color: var(--color-text-light);
+    margin-top: 5px;
+    font-style: italic;
+  }
+
+  /* ── GDPR ── */
+  .gdpr-block {
+    background: var(--color-brand-light);
+    border-radius: 8px;
+    border: 1px solid #D1E9F7;
+    padding: 1rem;
+    margin-top: 0.5rem;
+  }
+  .gdpr-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .gdpr-row input[type="checkbox"] {
+    width: 18px; height: 18px;
+    min-width: 18px;
+    border: 2px solid var(--color-brand-medium);
+    border-radius: 4px;
+    appearance: none;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.18s;
+    margin-top: 2px;
+  }
+  .gdpr-row input:checked {
+    background: var(--color-navy);
+    border-color: var(--color-navy);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .gdpr-text {
+    font-size: 0.77rem;
+    color: var(--color-text-light);
+    line-height: 1.55;
+  }
+  .gdpr-text a {
+    color: var(--color-brand-medium);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  /* ── BUTTON ── */
+  .btn-gold {
+    display: block;
+    width: 100%;
+    padding: 0.85rem 1.5rem;
+    background: linear-gradient(135deg, #C5A021 0%, #DAB535 100%);
+    color: var(--color-navy);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: all 0.25s;
+    box-shadow: 0 4px 14px rgba(197,160,33,0.35);
+    text-transform: uppercase;
+  }
+  .btn-gold:not(:disabled):hover {
+    box-shadow: 0 6px 20px rgba(197,160,33,0.5);
+    transform: translateY(-1px);
+  }
+  .btn-gold:active { transform: scale(0.98); }
+  .btn-gold:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(10,35,99,0.3);
+    border-top-color: var(--color-navy);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 7px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── ERROR ── */
+  .error-msg {
+    display: none;
+    background: #FEF2F2;
+    border: 1.5px solid #FECACA;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.82rem;
+    color: #B91C1C;
+    margin-top: 0.75rem;
+    text-align: center;
+  }
+
+  /* ── SUCCESS ── */
+  .success-card {
+    display: none;
+    background-color: #ffffff;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 3rem 2rem;
+    text-align: center;
+    animation: fadeUp 0.5s ease;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .success-icon {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--color-navy), var(--color-brand-medium));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    font-size: 32px;
+    box-shadow: 0 8px 28px rgba(10,35,99,0.25);
+  }
+  .success-card h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.4rem;
+    color: var(--color-navy);
+    margin-bottom: 0.75rem;
+  }
+  .success-card p {
+    font-size: 0.88rem;
+    color: var(--color-text-light);
+    line-height: 1.65;
+    max-width: 280px;
+    margin: 0 auto 0.5rem;
+  }
+  .success-logo {
+    height: 40px;
+    width: auto;
+    margin-top: 1.5rem;
+    background: var(--color-navy);
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
+
+  .page-footer {
+    text-align: center;
+    padding: 1rem 0 1.5rem;
+    font-size: 0.72rem;
+    color: var(--color-text-light);
+  }
+  .page-footer a {
+    color: var(--color-brand-medium);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .mt { margin-top: 1.25rem; }
+
+  @media (max-width: 480px) {
+    body { padding: 0.75rem; }
+    .content-card { padding: 1.1rem; }
+    .hero-card { padding: 1.35rem 1rem 1.6rem; }
+    .hero-logo { height: 42px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <div class="hero-card">
+    <img class="hero-logo" src="https://nutrisib.club/imagini/logo_navy.png" alt="NutriSib">
+    <div class="hero-title">Târg de sănătate &amp; stil de viață</div>
+    <div class="hero-subtitle">Completează formularul — primești o recomandare personalizată</div>
+    <p class="hero-text">Datele tale sunt confidențiale și vor fi folosite exclusiv pentru a-ți oferi cea mai bună soluție.</p>
+	
+  </div>
+
+  <div class="content-card" id="formCard">
+
+    <div class="section-label">Date de contact</div>
+
+    <div class="field-group">
+      <label>Nume și prenume <span class="req">*</span></label>
+      <input type="text" id="f_nume" placeholder="ex. Maria Ionescu" autocomplete="name">
+    </div>
+
+    <div class="field-group">
+      <label>Telefon <span class="req">*</span></label>
+      <input type="tel" id="f_tel" placeholder="07xx xxx xxx" autocomplete="tel">
+    </div>
+
+    <div class="field-group">
+      <label>Email</label>
+      <input type="email" id="f_email" placeholder="adresa@email.com" autocomplete="email">
+    </div>
+
+    <div class="field-group">
+      <label>Vârstă</label>
+      <select id="f_varsta">
+        <option value="">— selectează —</option>
+        <option>18–25 ani</option>
+        <option>26–35 ani</option>
+        <option>36–45 ani</option>
+        <option>46–55 ani</option>
+        <option>56–65 ani</option>
+        <option>Peste 65 ani</option>
+      </select>
+    </div>
+
+    <div class="section-label mt">Obiectivele tale de sănătate</div>
+
+    <div class="field-group">
+      <label>Obiectivul tău principal <span class="req">*</span></label>
+      <select id="f_obiectiv">
+        <option value="">— selectează —</option>
+        <option>Controlul greutății</option>
+        <option>Energie și vitalitate</option>
+        <option>Detoxifiere / Curățare</option>
+        <option>Digestie și confort intestinal</option>
+        <option>Imunitate</option>
+        <option>Stres / Somn / Relaxare</option>
+        <option>Dureri articulare / musculare</option>
+        <option>Nutriție sportivă</option>
+        <option>Sănătate hormonală</option>
+        <option>Longevitate / Biohacking</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label>Domenii de interes (poți bifa mai multe)</label>
+      <div class="check-grid">
+        <div class="check-item">
+          <input type="checkbox" id="c1" value="Suplimente premium">
+          <label for="c1">Suplimente premium</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="c2" value="Terapii alternative">
+          <label for="c2">Terapii alternative</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="c3" value="Nutriție / Dietă">
+          <label for="c3">Nutriție / Dietă</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="c4" value="Fitness / Mișcare">
+          <label for="c4">Fitness / Mișcare</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="c5" value="Biohacking">
+          <label for="c5">Biohacking</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="c6" value="Consultație complexă">
+          <label for="c6">Consultație complexă</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label mt">Disponibilitate</div>
+
+    <div class="field-group">
+      <label>Cât de urgent cauți o soluție?</label>
+      <div class="rating-row">
+        <input type="radio" name="urgenta" id="u1" value="1"><label for="u1">1</label>
+        <input type="radio" name="urgenta" id="u2" value="2"><label for="u2">2</label>
+        <input type="radio" name="urgenta" id="u3" value="3"><label for="u3">3</label>
+        <input type="radio" name="urgenta" id="u4" value="4"><label for="u4">4</label>
+        <input type="radio" name="urgenta" id="u5" value="5"><label for="u5">5 🔥</label>
+      </div>
+      <p class="rating-hint">1 = explorez opțiunile &nbsp;·&nbsp; 5 = am nevoie acum</p>
+    </div>
+
+    <div class="field-group">
+      <label>Buget lunar aproximativ pentru sănătate</label>
+      <select id="f_buget">
+        <option value="">— selectează —</option>
+        <option>Sub 100 lei</option>
+        <option>100–250 lei</option>
+        <option>250–500 lei</option>
+        <option>500–1000 lei</option>
+        <option>Peste 1000 lei</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label>Întrebări sau observații (opțional)</label>
+      <textarea id="f_mesaj" rows="3" placeholder="Descrie pe scurt situația sau ce anume cauți…"></textarea>
+    </div>
+
+    <div class="mt">
+      <div class="gdpr-block">
+        <div class="gdpr-row">
+          <input type="checkbox" id="gdpr">
+          <span class="gdpr-text">
+            Sunt de acord cu prelucrarea datelor mele personale în scopul contactării ulterioare, conform <a href="https://nutrisib.club/acord_RO.html" target="_blank">Politicii de confidențialitate</a> NutriSib. <strong>*</strong>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt">
+      <button class="btn-gold" id="btnSubmit" onclick="submitForm()">
+        Trimite formularul
+      </button>
+      <div class="error-msg" id="errMsg">
+        Te rugăm să completezi câmpurile obligatorii (*) și să accepți prelucrarea datelor.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="success-card" id="successCard">
+    <div class="success-icon">✓</div>
+    <h2>Mulțumim!</h2>
+    <p>Datele tale au fost înregistrate. Te vom contacta în cel mai scurt timp cu o propunere personalizată.</p>
+    <p style="margin-top:0.5rem">Vizitează <a href="https://nutrisib.club" style="color:#3E92CC;font-weight:600">nutrisib.club</a> pentru mai multe resurse.</p>
+    <img class="success-logo" src="https://nutrisib.club/imagini/logo_navy.png" alt="NutriSib">
+  </div>
+
+  <div class="page-footer">
+    © 2026 NutriSib Health &amp; Lifestyle · <a href="https://nutrisib.club">nutrisib.club</a>
+  </div>
+
+</div>
+
+<script>
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKP6xamXU9DJlod81LEsqEYcb5bYenmUSf1n6rGnJN2fFubZJoiZ47nb53WqgTJxAd5w/exec';
+
+  async function submitForm() {
+    const btn = document.getElementById('btnSubmit');
+    const err = document.getElementById('errMsg');
+
+    const nume     = document.getElementById('f_nume').value.trim();
+    const tel      = document.getElementById('f_tel').value.trim();
+    const email    = document.getElementById('f_email').value.trim();
+    const varsta   = document.getElementById('f_varsta').value;
+    const obiectiv = document.getElementById('f_obiectiv').value;
+    const urgenta  = document.querySelector('input[name="urgenta"]:checked')?.value || '';
+    const buget    = document.getElementById('f_buget').value;
+    const mesaj    = document.getElementById('f_mesaj').value.trim();
+    const gdpr     = document.getElementById('gdpr').checked;
+
+    const interese = [...document.querySelectorAll('.check-item input:checked')]
+                       .map(el => el.value).join(', ');
+
+    if (!nume || !tel || !obiectiv || !gdpr) {
+      err.style.display = 'block';
+      err.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    err.style.display = 'none';
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Se trimite…';
+
+    const payload = { nume, tel, email, varsta, obiectiv, interese, urgenta, buget, mesaj };
+    const formBody = Object.entries(payload)
+      .map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v || ''))
+      .join('&');
+
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formBody
+    }).catch(() => {});
+
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('successCard').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>

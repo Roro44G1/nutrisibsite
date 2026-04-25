@@ -3,503 +3,311 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NutriSib Admin — Leads Târg</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>NutriSib Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy: #0A2363;
-  --navy-light: #2A3F6F;
-  --gold: #C5A021;
-  --gold-light: #FFF8E0;
-  --pearl: #F8FAFC;
-  --white: #ffffff;
-  --border: #E2E8F0;
-  --text: #1E2A3A;
-  --muted: #64748B;
-  --admin-bg: #FFFDF5;
-  
-  
-  --s-nou: #2563EB;
-  --s-contactat: #D97706;
-  --s-interesat: #059669;
-  --s-neinteresat: #6B7280;
-  --s-client: #7C3AED;
-  --s-arhivat: #DC2626;
+  --navy:#0A2363; --navy2:#1B2A4A; --navyL:#2A3F6F;
+  --gold:#C5A021; --goldL:#FFF8E0;
+  --pearl:#F8FAFC; --white:#fff; --border:#E2E8F0;
+  --text:#1E2A3A; --muted:#64748B;
+  --abg:#FFFDF5; --abg2:#F0F4FF; --abg3:#faf5ff;
+  --s-nou:#2563EB; --s-contactat:#D97706; --s-interesat:#059669;
+  --s-programat:#7C3AED; --s-finalizat:#0E7490;
+  --s-neinteresat:#6B7280; --s-client:#15803D; --s-arhivat:#DC2626;
 }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--pearl);min-height:100vh;}
 
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  color: var(--text);
-  background: var(--pearl);
-  min-height: 100vh;
+/* ── TOPBAR ── */
+.topbar{background:var(--navy);height:56px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(10,35,99,.3);position:sticky;top:0;z-index:200;}
+.topbar-brand{display:flex;align-items:center;gap:12px;}
+.topbar-logo{height:30px;width:auto;}
+.topbar-div{width:1px;height:18px;background:rgba(255,255,255,.2);}
+.topbar-label{font-size:13px;font-weight:600;color:rgba(255,255,255,.9);}
+.topbar-sub{font-size:10px;color:rgba(255,255,255,.5);margin-top:1px;}
+.topbar-right{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.topbar-row1{display:flex;align-items:center;justify-content:space-between;width:100%;padding:0 20px;flex:none;}
+.topbar-row2{display:none;}
+.topbar-actions{display:flex;align-items:center;gap:6px;}
+@media(min-width:769px){
+  .topbar{flex-direction:row;height:56px;padding:0;}
+  .topbar-row1{padding:0 20px;flex:none;width:auto;}
+  .topbar-row2{display:flex!important;align-items:center;padding:0 20px 0 0;flex:1;justify-content:flex-end;gap:8px;}
+  .switcher{display:flex;}
 }
+.badge{background:rgba(197,160,33,.2);border:1px solid rgba(197,160,33,.4);color:#F5D060;border-radius:16px;padding:3px 10px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;}
+.btn-tb{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:white;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:500;transition:background .2s;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.btn-tb:hover{background:rgba(255,255,255,.2);}
 
-/* ──  TOPBAR ── */
-.topbar {
-  background: var(--navy);
-  height: 56px;
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 2px 8px rgba(10,35,99,0.3);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.topbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.topbar-logo {
-  height: 32px;
-  width: auto;
-}
-
-.topbar-divider {
-  width: 1px;
-  height: 20px;
-  background: rgba(255,255,255,0.2);
-}
-
-.topbar-label {
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.9);
-}
-
-.topbar-sub {
-  font-size: 10px;
-  color: rgba(255,255,255,0.5);
-  margin-top: 1px;
-}
-
-.topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.badge {
-  background: rgba(197,160,33,0.2);
-  border: 1px solid rgba(197,160,33,0.4);
-  color: #F5D060;
-  border-radius: 16px;
-  padding: 3px 10px;
-  font-size: 11px;
-  font-weight: 600;
-  font-family: 'DM Mono', monospace;
-}
-
-.btn-topbar {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 11px;
-  font-weight: 500;
-  transition: background 0.2s;
-  white-space: nowrap;
-}
-.btn-topbar:hover { background: rgba(255,255,255,0.2); }
+/* ── SOURCE SWITCHER ── */
+.switcher{display:flex;gap:3px;background:rgba(255,255,255,.08);border-radius:8px;padding:3px;}
+.src-btn{padding:5px 12px;border-radius:6px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;transition:all .2s;white-space:nowrap;color:rgba(255,255,255,.6);background:transparent;}
+.src-btn.active{background:var(--gold);color:var(--navy);box-shadow:0 2px 6px rgba(197,160,33,.4);}
+.src-btn:not(.active):hover{color:white;background:rgba(255,255,255,.12);}
 
 /* ── FILTER BAR ── */
-.filterbar {
-  background: var(--white);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 20px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-}
+.filterbar{background:var(--white);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.search-wrap{position:relative;flex:1;min-width:150px;max-width:260px;}
+.search-wrap input{width:100%;padding:7px 10px 7px 28px;border:1px solid var(--border);border-radius:6px;font-size:12px;outline:none;font-family:'DM Sans',sans-serif;}
+.search-wrap input:focus{border-color:var(--navy);}
+.search-wrap::before{content:'🔍';position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:11px;pointer-events:none;}
+.flt{padding:7px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px;background:var(--white);outline:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.flt:focus{border-color:var(--navy);}
 
-.search-wrap {
-  position: relative;
-  flex: 1;
-  min-width: 160px;
-  max-width: 280px;
-}
+/* ── STATS BAR ── */
+.statsbar{display:none;gap:14px;padding:7px 20px;background:#FFFDF5;border-bottom:1px solid #EDE8DA;flex-wrap:wrap;}
+.stat-chip{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--muted);}
+.stat-dot{width:8px;height:8px;border-radius:50%;}
 
-.search-wrap input {
-  width: 100%;
-  padding: 7px 10px 7px 28px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 12px;
-  outline: none;
-}
-.search-wrap input:focus { border-color: var(--navy); }
-
-.search-wrap::before {
-  content: '🔍';
-  position: absolute;
-  left: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 11px;
-  pointer-events: none;
-}
-
-.flt-select {
-  padding: 7px 8px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  font-size: 12px;
-  background: var(--white);
-  outline: none;
-  cursor: pointer;
-}
-.flt-select:focus { border-color: var(--navy); }
-
-/* ── TABLE WRAPPER — KEY FIX ── */
-.table-container {
-  padding: 16px 20px;
-  /* FORCE scroll pe toate device-urile */
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.table-card {
-  background: var(--white);
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(10,35,99,0.07);
-  overflow: hidden;
-  /* FORCE min-width = table va fi întotdeauna scrollabil pe ecrane mici */
-  min-width: 1200px;
-}
+/* ── TABLE CONTAINER ── */
+.tbl-wrap{padding:16px 20px;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;}
+.tbl-wrap::-webkit-scrollbar{height:8px;}
+.tbl-wrap::-webkit-scrollbar-track{background:#f1f5f9;border-radius:4px;}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--navy);border-radius:4px;}
+.tbl-wrap::-webkit-scrollbar-thumb:hover{background:var(--navyL);}
+.tbl-card{background:var(--white);border-radius:12px;box-shadow:0 2px 16px rgba(10,35,99,.07);overflow:visible;}
 
 /* ── TABLE ── */
-table {
-  width: 100%;
-  border-collapse: collapse;
+table{width:100%;border-collapse:collapse;}
+
+/* Coloane Targ */
+.tbl-targ{min-width:1240px;}
+.tbl-targ col.c0{width:72px;}.tbl-targ col.c1{width:108px;}.tbl-targ col.c2{width:140px;}
+.tbl-targ col.c3{width:162px;}.tbl-targ col.c4{width:185px;}.tbl-targ col.c5{width:160px;}
+.tbl-targ col.c6{width:58px;}.tbl-targ col.c7{width:112px;}
+.tbl-targ col.c8{width:138px;}.tbl-targ col.c9{width:132px;}.tbl-targ col.ca{width:172px;}
+.tbl-targ col.cb{width:112px;}.tbl-targ col.cc{width:195px;}
+
+/* Coloane Evaluari */
+.tbl-eval{min-width:1060px;}
+.tbl-eval col.c0{width:78px;}.tbl-eval col.c1{width:112px;}.tbl-eval col.c2{width:142px;}
+.tbl-eval col.c3{width:168px;}.tbl-eval col.c4{width:138px;}.tbl-eval col.c5{width:208px;}
+.tbl-eval col.c6{width:192px;}.tbl-eval col.c7{width:132px;}.tbl-eval col.c8{width:108px;}
+.tbl-eval col.c9{width:112px;}.tbl-eval col.ca{width:190px;}
+
+/* Coloane Complete */
+.tbl-comp{min-width:1100px;}
+.tbl-comp col.c0{width:80px;}.tbl-comp col.c1{width:112px;}.tbl-comp col.c2{width:142px;}
+.tbl-comp col.c3{width:168px;}.tbl-comp col.c4{width:158px;}.tbl-comp col.c5{width:198px;}
+.tbl-comp col.c6{width:175px;}.tbl-comp col.c7{width:78px;}.tbl-comp col.c8{width:128px;}
+.tbl-comp col.c9{width:112px;}.tbl-comp col.ca{width:190px;}
+
+thead th{background:var(--navy);color:rgba(255,255,255,.82);padding:9px 10px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;position:sticky;top:0;z-index:10;}
+.tbl-eval thead th{background:var(--navy2);}
+.tbl-comp thead th{background:#4c1d95;}
+th.adm{background:var(--navyL)!important;border-left:2px solid var(--gold);color:#F5D060;}
+.tbl-comp th.adm{background:#5b21b6!important;}
+
+td{padding:10px;border-bottom:1px solid #F1F5F9;vertical-align:middle;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+tr:hover td{background:#F0F6FF!important;}
+td.ac{background:var(--abg)!important;}
+td.ac:first-of-type{border-left:2px solid var(--gold);}
+tr:hover td.ac{background:#FFF8DC!important;}
+td.ae{background:var(--abg2)!important;}
+td.ae:first-of-type{border-left:2px solid #3E92CC;}
+tr:hover td.ae{background:#E0ECFF!important;}
+td.ap{background:var(--abg3)!important;}
+td.ap:first-of-type{border-left:2px solid #7C3AED;}
+tr:hover td.ap{background:#ede9fe!important;}
+
+.cid{font-family:'DM Mono',monospace;font-size:10px;color:var(--navy);background:rgba(10,35,99,.08);padding:2px 6px;border-radius:3px;display:inline-block;}
+.cid-e{color:#1B2A4A;background:rgba(62,146,204,.1);}
+.cid-c{color:#4c1d95;background:rgba(124,58,237,.1);}
+.cname{font-weight:600;}
+.ccontact a{display:block;color:var(--navy);text-decoration:none;font-size:11px;overflow:hidden;text-overflow:ellipsis;}
+.ccontact a:hover{text-decoration:underline;}
+.ubadge{font-weight:700;font-size:11px;font-family:'DM Mono',monospace;}
+.u1,.u2{color:#059669;}.u3{color:#D97706;}.u4,.u5{color:#DC2626;}
+
+/* Status pills */
+.sp{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap;}
+.s-Nou{background:#EFF6FF;color:var(--s-nou);}
+.s-Contactat{background:#FFFBEB;color:var(--s-contactat);}
+.s-Interesat{background:#ECFDF5;color:var(--s-interesat);}
+.s-Programat{background:#F5F3FF;color:var(--s-programat);}
+.s-Finalizat{background:#ECFEFF;color:var(--s-finalizat);}
+.s-Neinteresat{background:#F3F4F6;color:var(--s-neinteresat);}
+.s-Client{background:#F0FDF4;color:var(--s-client);}
+.s-Arhivat{background:#FEF2F2;color:var(--s-arhivat);}
+
+/* Inline edit */
+.ie-s,.ie-i,.ie-d,.ie-t{width:100%;border:1px solid transparent;border-radius:4px;padding:3px 6px;font-size:11px;background:transparent;outline:none;transition:all .15s;font-family:'DM Sans',sans-serif;}
+.ie-s:hover,.ie-i:hover,.ie-d:hover,.ie-t:hover{border-color:#D4D4AA;background:#FFFEF7;}
+.ie-s:focus,.ie-i:focus,.ie-d:focus,.ie-t:focus{border-color:var(--gold);background:var(--white);box-shadow:0 0 0 2px rgba(197,160,33,.15);}
+.ie-t{resize:vertical;min-height:36px;}
+
+/* Format tag */
+.ftag{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;background:#EFF6FF;color:#2563EB;}
+.ftag-s{background:#ECFDF5;color:#059669;}
+.ftag-o{background:#F3F4F6;color:#374151;}
+
+/* State rows */
+.state-row td{text-align:center;padding:40px;color:var(--muted);}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .6s linear infinite;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* Toast */
+.toast{position:fixed;bottom:16px;right:16px;background:var(--navy);color:white;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:500;display:none;box-shadow:0 6px 20px rgba(10,35,99,.3);z-index:999;border-left:3px solid var(--gold);}
+
+/* ═══════════════════════════════════════════
+   MOBILE — RESPONSIVE
+═══════════════════════════════════════════ */
+
+/* ── Topbar 2 rânduri pe mobil ── */
+@media(max-width:1024px){
+  .filterbar{padding:8px 12px;}
+  .tbl-wrap{padding:12px;}
+  .topbar{padding:0 12px;}
 }
 
-/* Lățimi fixe pentru toate coloanele */
-col.c-id       { width: 70px; }
-col.c-data     { width: 110px; }
-col.c-nume     { width: 140px; }
-col.c-contact  { width: 160px; }
-col.c-obiectiv { width: 180px; }
-col.c-interese { width: 160px; }
-col.c-urg      { width: 60px; }
-col.c-buget    { width: 120px; }
-/* Admin cols */
-col.c-status   { width: 140px; }
-col.c-nivel    { width: 140px; }
-col.c-rec      { width: 180px; }
-col.c-followup { width: 120px; }
-col.c-obs      { width: 200px; }
-
-thead th {
-  background: var(--navy);
-  color: rgba(255,255,255,0.8);
-  padding: 8px 10px;
-  text-align: left;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-th.admin-start {
-  background: var(--navy-light);
-  border-left: 2px solid var(--gold);
-  color: #F5D060;
-}
-
-td {
-  padding: 10px 10px;
-  border-bottom: 1px solid #F1F5F9;
-  vertical-align: middle;
-  font-size: 12px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-tr:hover td { background: #F0F6FF !important; }
-
-.cell-id {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  color: var(--navy);
-  background: rgba(10,35,99,0.08);
-  padding: 2px 6px;
-  border-radius: 3px;
-  display: inline-block;
-}
-
-.cell-name { font-weight: 600; }
-
-.cell-contact a {
-  display: block;
-  color: var(--navy);
-  text-decoration: none;
-  font-size: 11px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.cell-contact a:hover { text-decoration: underline; }
-
-.urgenta-badge {
-  font-weight: 700;
-  font-size: 11px;
-  font-family: 'DM Mono', monospace;
-}
-.urg-1, .urg-2 { color: #059669; }
-.urg-3         { color: #D97706; }
-.urg-4, .urg-5 { color: #DC2626; }
-
-/* ── STATUS PILLS ── */
-.s-pill {
-  display: inline-block;
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-size: 10px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.s-Nou          { background:#EFF6FF; color:var(--s-nou); }
-.s-Contactat    { background:#FFFBEB; color:var(--s-contactat); }
-.s-Interesat    { background:#ECFDF5; color:var(--s-interesat); }
-.s-Neinteresat  { background:#F3F4F6; color:var(--s-neinteresat); }
-.s-Client       { background:#F5F3FF; color:var(--s-client); }
-.s-Arhivat      { background:#FEF2F2; color:var(--s-arhivat); }
-
-/* ── ADMIN COLUMNS ── */
-td.admin-col {
-  background: var(--admin-bg) !important;
-}
-td.admin-col:first-of-type {
-  border-left: 2px solid var(--gold);
-}
-tr:hover td.admin-col { background: #FFF8DC !important; }
-
-.ie-select, .ie-input, .ie-date, .ie-textarea {
-  width: 100%;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  padding: 3px 6px;
-  font-size: 11px;
-  background: transparent;
-  outline: none;
-  transition: all 0.15s;
-}
-.ie-select:hover, .ie-input:hover, .ie-date:hover, .ie-textarea:hover {
-  border-color: #D4D4AA;
-  background: #FFFEF7;
-}
-.ie-select:focus, .ie-input:focus, .ie-date:focus, .ie-textarea:focus {
-  border-color: var(--gold);
-  background: var(--white);
-  box-shadow: 0 0 0 2px rgba(197,160,33,0.15);
-}
-.ie-textarea {
-  resize: vertical;
-  min-height: 36px;
-}
-
-/* ── LOADING / EMPTY ── */
-.state-row td {
-  text-align: center;
-  padding: 40px;
-  color: var(--muted);
-}
-
-.spinner {
-  display: inline-block;
-  width: 16px; height: 16px;
-  border: 2px solid var(--border);
-  border-top-color: var(--navy);
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-  margin-right: 6px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── TOAST ── */
-.toast {
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  background: var(--navy);
-  color: white;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  display: none;
-  box-shadow: 0 6px 20px rgba(10,35,99,0.3);
-  z-index: 999;
-  border-left: 3px solid var(--gold);
-}
-
-/* ── RESPONSIVE FIXES ── */
-@media (max-width: 1024px) {
-  .filterbar { padding: 8px 12px; }
-  .table-container { padding: 12px; }
-  .topbar { padding: 0 12px; }
-  
-  /* Forțează scroll orizontal pe tablete */
-  .table-container {
-    overflow-x: auto !important;
-    overflow-y: auto !important;
+@media(max-width:768px){
+  /* Topbar devine 2 rânduri */
+  .topbar{
+    height:auto;flex-direction:column;align-items:stretch;
+    padding:0;gap:0;
   }
+  .topbar-row1{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.1);
+  }
+  .topbar-row2{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:7px 14px;gap:8px;
+  }
+  .topbar-brand{gap:8px;}
+  .topbar-logo{height:26px;}
+  .topbar-label{font-size:12px;}
+  .topbar-sub{font-size:9px;}
+  .topbar-div{display:none;}
+
+  /* Switcher full-width pe rândul 2 */
+  .switcher{
+    flex:1;gap:2px;
+  }
+  .src-btn{
+    flex:1;text-align:center;font-size:11px;
+    padding:6px 4px;
+  }
+
+  /* Badge + butoane acțiuni */
+  .topbar-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+  .badge{font-size:10px;padding:3px 8px;}
+  .btn-tb{font-size:11px;padding:5px 9px;}
+
+  /* Filterbar */
+  .filterbar{flex-direction:column;align-items:stretch;padding:8px 12px;gap:6px;}
+  .search-wrap{max-width:none;}
+  .flt{width:100%;}
+
+  /* Tabel → carduri */
+  .tbl-wrap{padding:8px;}
+  .tbl-card{min-width:unset!important;box-shadow:none;background:transparent;border-radius:0;}
+  table{display:block;}
+  thead{display:none;}
+  tbody{display:block;}
+  .state-row{display:table!important;width:100%;}
+  .state-row td{display:table-cell!important;text-align:center!important;padding:30px!important;white-space:normal!important;}
+  .state-row td::before{display:none!important;}
+  tr:not(.state-row){
+    display:block;border:1px solid var(--border);border-radius:12px;
+    margin-bottom:10px;padding:12px 14px;background:white;
+    box-shadow:0 2px 8px rgba(10,35,99,.06);
+  }
+  td:not(.state-row td){
+    display:block;border:none!important;
+    border-bottom:1px solid #f1f5f9!important;
+    padding:8px 0!important;
+    white-space:normal!important;overflow:visible!important;text-overflow:unset!important;
+    font-size:13px;
+  }
+  td:not(.state-row td):last-child{border-bottom:none!important;}
+  td::before{
+    content:attr(data-label);display:block;
+    font-size:10px;font-weight:700;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;
+  }
+  td.ac,td.ae,td.ap{background:var(--white)!important;border-left:none!important;}
+
+  /* Câmpuri editabile full-width */
+  .ie-s,.ie-i,.ie-d{
+    width:100%!important;border:1px solid var(--border)!important;
+    background:white!important;padding:10px 12px!important;
+    font-size:14px!important;border-radius:8px!important;margin-top:4px;
+    -webkit-appearance:none;appearance:none;
+  }
+  .ie-t{
+    width:100%!important;min-height:90px!important;
+    border:1px solid var(--border)!important;background:white!important;
+    padding:10px 12px!important;font-size:14px!important;
+    border-radius:8px!important;display:block;margin-top:4px;
+  }
+  .statsbar{padding:6px 12px;}
 }
 
-@media (max-width: 768px) {
-  .topbar-logo { height: 26px; }
-  .badge { font-size: 10px; padding: 2px 8px; }
-  .btn-topbar { font-size: 10px; padding: 5px 8px; }
-  
-  /* Mobile: absolut sigur că scrollează */
-  .table-container {
-    padding: 8px;
-    overflow-x: scroll !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-  }
-  
-  .table-card {
-    min-width: 1200px !important;
-  }
-  
-  /* Scrollbar vizibil pe mobil */
-  .table-container::-webkit-scrollbar {
-    height: 8px;
-    background: #f1f1f1;
-  }
-  .table-container::-webkit-scrollbar-thumb {
-    background: var(--navy);
-    border-radius: 4px;
-  }
-}
-
-@media (max-width: 480px) {
-  .filterbar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 6px;
-  }
-  .search-wrap { max-width: none; }
+@media(max-width:400px){
+  .src-btn .src-lbl{display:none;}
+  .src-btn{font-size:13px;padding:6px;}
 }
 </style>
 </head>
 <body>
 
 <script>
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKP6xamXU9DJlod81LEsqEYcb5bYenmUSf1n6rGnJN2fFubZJoiZ47nb53WqgTJxAd5w/exec';
+  const SCRIPT_URL     = 'https://script.google.com/macros/s/AKfycbzKP6xamXU9DJlod81LEsqEYcb5bYenmUSf1n6rGnJN2fFubZJoiZ47nb53WqgTJxAd5w/exec';
   const ADMIN_PASSWORD = '2026';
+  let src = 'targ'; // 'targ' | 'evaluari' | 'complete'
+  let all = [];
 </script>
 
-<!-- ── TOPBAR ── actualizat-->
+<!-- TOPBAR -->
 <div class="topbar">
-  <div class="topbar-brand">
-    <img class="topbar-logo" src="../imagini/logo_navy.png" alt="NutriSib">
-    <div class="topbar-divider"></div>
-    <div>
-      <div class="topbar-label">NutriSib Admin — Leads Târg</div>
-      <div class="topbar-sub">nutrisib.club</div>
+  <!-- Rând 1: Brand + Acțiuni -->
+  <div class="topbar-row1">
+    <div class="topbar-brand">
+      <img class="topbar-logo" src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="NutriSib" onerror="this.style.display='none'">
+      <div class="topbar-div"></div>
+      <div>
+        <div class="topbar-label">NutriSib Admin</div>
+        <div class="topbar-sub" id="topSub">nutrisib.club</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <span class="badge" id="badgeCount">— intrări</span>
+      <button class="btn-tb" onclick="loadData()">↻</button>
+      <button class="btn-tb" onclick="exportCSV()">📊 Export</button>
     </div>
   </div>
-  <div class="topbar-right">
-    <span class="badge" id="badgeTotal">— leads</span>
-    <button class="btn-topbar" onclick="loadData()">↻ Reîncarcă</button>
-    <button class="btn-topbar" onclick="exportCSV()">📊 Export</button>
+  <!-- Rând 2: Switcher sursă -->
+  <div class="topbar-row2">
+    <div class="switcher">
+      <button class="src-btn active" id="btnTarg"     onclick="switchSrc('targ')">🎪 <span class="src-lbl">Targ</span></button>
+      <button class="src-btn"        id="btnEvaluari" onclick="switchSrc('evaluari')">🌿 <span class="src-lbl">Evaluari</span></button>
+      <button class="src-btn"        id="btnComplete" onclick="switchSrc('complete')">📋 <span class="src-lbl">Complete</span></button>
+    </div>
   </div>
 </div>
 
-<!-- ── FILTERS ── -->
+<!-- FILTER BAR -->
 <div class="filterbar">
   <div class="search-wrap">
-    <input type="text" id="searchInput" placeholder="Caută nume, telefon, email…" oninput="filterRows()">
+    <input type="text" id="qSearch" placeholder="Cauta nume, telefon, email…" oninput="filterRows()">
   </div>
-  
-  <select class="flt-select" id="filterStatus" onchange="filterRows()">
-    <option value="">Toate statusurile</option>
-    <option>Nou</option>
-    <option>Contactat</option>
-    <option>Interesat</option>
-    <option>Neinteresat</option>
-    <option>Client</option>
-    <option>Arhivat</option>
-  </select>
-
-  <select class="flt-select" id="filterUrgenta" onchange="filterRows()">
-    <option value="">Orice urgență</option>
-    <option value="5">🔥 Urgență 5</option>
-    <option value="4">Urgență ≥ 4</option>
-    <option value="3">Urgență ≥ 3</option>
-  </select>
-
-  <select class="flt-select" id="filterObiectiv" onchange="filterRows()">
-    <option value="">Orice obiectiv</option>
-    <option>Slăbire / Remodelare corporală</option>
-    <option>Energie și vitalitate</option>
-    <option>Detoxifiere / Curățare</option>
-    <option>Digestie și confort intestinal</option>
-    <option>Imunitate</option>
-    <option>Stres / Somn / Relaxare</option>
-    <option>Dureri articulare / musculare</option>
-    <option>Nutriție sportivă</option>
-    <option>Sănătate hormonală</option>
-	<option>Longevitate / Biohacking</option>
-  </select>
+  <select class="flt" id="fStatus" onchange="filterRows()"><option value="">Toate statusurile</option></select>
+  <select class="flt" id="fExtra"  onchange="filterRows()"><option value="">—</option></select>
 </div>
 
-<!-- ── TABLE ── -->
-<div class="table-container">
-  <div class="table-card">
-    <table>
-      <colgroup>
-        <col class="c-id">
-        <col class="c-data">
-        <col class="c-nume">
-        <col class="c-contact">
-        <col class="c-obiectiv">
-        <col class="c-interese">
-        <col class="c-urg">
-        <col class="c-buget">
-        <col class="c-status">
-        <col class="c-nivel">
-        <col class="c-rec">
-        <col class="c-followup">
-        <col class="c-obs">
-      </colgroup>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Data / Ora</th>
-          <th>Nume</th>
-          <th>Contact</th>
-          <th>Obiectiv</th>
-          <th>Interese</th>
-          <th>Urg</th>
-          <th>Buget</th>
-          <th class="admin-start">Status</th>
-          <th>Nivel interes</th>
-          <th>Recomandare</th>
-          <th>Follow-up</th>
-          <th>Observații</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody">
-        <tr class="state-row">
-          <td colspan="13"><span class="spinner"></span>Se încarcă datele…</td>
-        </tr>
+<!-- STATS BAR -->
+<div class="statsbar" id="statsBar"></div>
+
+<!-- TABLE -->
+<div class="tbl-wrap">
+  <div class="tbl-card">
+    <table id="mainTable" class="tbl-targ">
+      <colgroup id="colGroup"></colgroup>
+      <thead id="tHead"></thead>
+      <tbody id="tBody">
+        <tr class="state-row"><td colspan="13"><span class="spinner"></span>Verificare autentificare…</td></tr>
       </tbody>
     </table>
   </div>
@@ -508,186 +316,323 @@ tr:hover td.admin-col { background: #FFF8DC !important; }
 <div class="toast" id="toast"></div>
 
 <script>
-let allData = [];
-
-/* ── AUTH ── */
-function checkAuth() {
-  if (sessionStorage.getItem('ns_auth') === ADMIN_PASSWORD) return true;
-  const input = prompt('🔐 Parolă admin NutriSib:');
-  if (input === ADMIN_PASSWORD) {
-    sessionStorage.setItem('ns_auth', input);
-    return true;
-  }
-  document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-size:18px;color:#64748B">Acces restricționat.</div>';
+// ════════════════════════════════════════════════════════
+// AUTH
+// ════════════════════════════════════════════════════════
+function checkAuth(){
+  if(sessionStorage.getItem('ns_auth')===ADMIN_PASSWORD)return true;
+  const p=prompt('🔐 Parola admin NutriSib:');
+  if(p===ADMIN_PASSWORD){sessionStorage.setItem('ns_auth',p);return true;}
+  document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-size:18px;color:#64748B">Acces restrictionat.</div>';
   return false;
 }
 
-/* ── LOAD DATA ── */
-async function loadData() {
-  if (!checkAuth()) return;
-  
-  document.getElementById('tableBody').innerHTML = 
-    '<tr class="state-row"><td colspan="13"><span class="spinner"></span>Se încarcă…</td></tr>';
-    
-  try {
-    const res = await fetch(APPS_SCRIPT_URL + '?action=getAll&t=' + Date.now());
-    const json = await res.json();
-    allData = json.data || [];
-    filterRows();
-    document.getElementById('badgeTotal').textContent = allData.length + ' leads';
-  } catch(e) {
-    document.getElementById('tableBody').innerHTML =
-      '<tr class="state-row"><td colspan="13">⚠️ Eroare la încărcare. Verifică URL-ul Apps Script.</td></tr>';
+// ════════════════════════════════════════════════════════
+// SWITCH SOURCE
+// ════════════════════════════════════════════════════════
+function switchSrc(s){
+  src=s;
+  ['btnTarg','btnEvaluari','btnComplete'].forEach(id=>document.getElementById(id)?.classList.remove('active'));
+  document.getElementById(s==='targ'?'btnTarg':s==='evaluari'?'btnEvaluari':'btnComplete')?.classList.add('active');
+  updateFilters(s);
+  loadData();
+}
+
+function updateFilters(s){
+  const st=document.getElementById('fStatus');
+  const ex=document.getElementById('fExtra');
+  if(s==='targ'){
+    st.innerHTML='<option value="">Toate statusurile</option><option>Nou</option><option>Contactat</option><option>Interesat</option><option>Neinteresat</option><option>Client</option><option>Arhivat</option>';
+    ex.innerHTML='<option value="">Orice urgenta</option><option value="5">🔥 Urgenta 5</option><option value="4">Urgenta ≥ 4</option><option value="3">Urgenta ≥ 3</option>';
+  } else if(s==='evaluari'){
+    st.innerHTML='<option value="">Toate statusurile</option><option>Nou</option><option>Contactat</option><option>Programat</option><option>Finalizat</option><option>Neinteresat</option><option>Client</option><option>Arhivat</option>';
+    ex.innerHTML='<option value="">Orice format</option><option value="Zoom">Online (Zoom)</option><option value="Sibiu">Fizic in Sibiu</option>';
+  } else {
+    st.innerHTML='<option value="">Toate statusurile</option><option>Nou</option><option>Contactat</option><option>Programat</option><option>Finalizat</option><option>Client</option><option>Arhivat</option>';
+    ex.innerHTML='<option value="">Orice prioritate</option><option value="Energie">Energie</option><option value="Slabit">Slabit</option><option value="Masa musculara">Masa musculara</option><option value="Claritate">Claritate mentala</option><option value="Analize">Analize medicale</option>';
   }
 }
 
-/* ── FILTER ── */
-function filterRows() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  const status = document.getElementById('filterStatus').value;
-  const urgMin = parseInt(document.getElementById('filterUrgenta').value) || 0;
-  const obiect = document.getElementById('filterObiectiv').value;
+// ════════════════════════════════════════════════════════
+// LOAD DATA
+// ════════════════════════════════════════════════════════
+async function loadData(){
+  if(!checkAuth())return;
+  const cols=src==='targ'?13:11;
+  document.getElementById('tBody').innerHTML=`<tr class="state-row"><td colspan="${cols}"><span class="spinner"></span>Se incarca…</td></tr>`;
+  renderHeader(src);
+  try{
+    const res=await fetch(SCRIPT_URL+'?action=getAll&sheet='+src+'&t='+Date.now());
+    const json=await res.json();
+    all=json.data||[];
+    renderStats(all);
+    filterRows();
+    document.getElementById('badgeCount').textContent=all.length+' intrari';
+    document.getElementById('topSub').textContent=src==='targ'?'Participanti Targ':src==='evaluari'?'Evaluari Gratuite':'Evaluari Complete';
+  } catch(e){
+    document.getElementById('tBody').innerHTML=`<tr class="state-row"><td colspan="${cols}">⚠️ Eroare la incarcare. Verifica URL-ul Apps Script si deployment-ul.</td></tr>`;
+  }
+}
 
-  let rows = allData.filter(r => {
-    if (q && ![(r.nume||''),(r.tel||''),(r.email||''),(r.mesaj||'')]
-               .some(v => v.toLowerCase().includes(q))) return false;
-    if (status && (r.status||'Nou') !== status) return false;
-    if (urgMin && parseInt(r.urgenta) < urgMin) return false;
-    if (obiect && r.obiectiv !== obiect) return false;
+// ════════════════════════════════════════════════════════
+// RENDER HEADER
+// ════════════════════════════════════════════════════════
+function renderHeader(s){
+  const tbl=document.getElementById('mainTable');
+  const cg=document.getElementById('colGroup');
+  const th=document.getElementById('tHead');
+  if(s==='targ'){
+    tbl.className='tbl-targ';
+    cg.innerHTML='<col class="c0"><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"><col class="c6"><col class="c7"><col class="c8"><col class="c9"><col class="ca"><col class="cb"><col class="cc">';
+    th.innerHTML='<tr><th>ID</th><th>Data/Ora</th><th>Nume</th><th>Contact</th><th>Obiectiv</th><th>Interese</th><th>Urg</th><th>Buget</th><th class="adm">Status</th><th>Nivel</th><th>Recomandare</th><th>Follow-up</th><th>Observatii</th></tr>';
+  } else if(s==='evaluari'){
+    tbl.className='tbl-eval';
+    cg.innerHTML='<col class="c0"><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"><col class="c6"><col class="c7"><col class="c8"><col class="c9"><col class="ca">';
+    th.innerHTML='<tr><th>ID</th><th>Data/Ora</th><th>Nume</th><th>Contact</th><th>Format</th><th>Problema principala</th><th>Mesaj</th><th class="adm">Status</th><th>Prioritate</th><th>Follow-up</th><th>Observatii</th></tr>';
+  } else {
+    tbl.className='tbl-comp';
+    cg.innerHTML='<col class="c0"><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"><col class="c6"><col class="c7"><col class="c8"><col class="c9"><col class="ca">';
+    th.innerHTML='<tr><th>ID</th><th>Data/Ora</th><th>Nume</th><th>Contact</th><th>Date bio</th><th>Sanatate/Simptome</th><th>Prioritate #1</th><th>Mot.</th><th class="adm">Status</th><th>Follow-up</th><th>Observatii</th></tr>';
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// STATS BAR
+// ════════════════════════════════════════════════════════
+function renderStats(data){
+  const bar=document.getElementById('statsBar');
+  if(!data.length){bar.style.display='none';return;}
+  const counts={};
+  data.forEach(r=>{const s=r.status||'Nou';counts[s]=(counts[s]||0)+1;});
+  const colors={Nou:'#2563EB',Contactat:'#D97706',Interesat:'#059669',Programat:'#7C3AED',Finalizat:'#0E7490',Client:'#15803D',Neinteresat:'#6B7280',Arhivat:'#DC2626'};
+  bar.innerHTML=Object.entries(counts).map(([s,n])=>`<div class="stat-chip"><span class="stat-dot" style="background:${colors[s]||'#6B7280'}"></span><span>${s}: <strong>${n}</strong></span></div>`).join('');
+  bar.style.display='flex';
+}
+
+// ════════════════════════════════════════════════════════
+// FILTER
+// ════════════════════════════════════════════════════════
+function filterRows(){
+  const q=document.getElementById('qSearch').value.toLowerCase();
+  const st=document.getElementById('fStatus').value;
+  const ex=document.getElementById('fExtra').value;
+  let rows=all.filter(r=>{
+    if(q){
+      const fields=src==='targ'?[r.nume,r.tel,r.email,r.obiectiv,r.mesaj]:
+                   src==='evaluari'?[r.nume,r.tel,r.email,r.problema,r.mesaj]:
+                   [r.nume,r.tel,r.email,r.sanatate,r.prioritate];
+      if(!fields.some(v=>(v||'').toLowerCase().includes(q)))return false;
+    }
+    if(st&&(r.status||'Nou')!==st)return false;
+    if(ex){
+      if(src==='targ'&&parseInt(r.urgenta)<parseInt(ex))return false;
+      if(src==='evaluari'&&!(r.format||'').includes(ex))return false;
+      if(src==='complete'&&!(r.prioritate||'').includes(ex))return false;
+    }
     return true;
   });
-
-  // Sort by date desc
-  rows.sort((a,b) => (b.data||'').localeCompare(a.data||''));
+  rows.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   renderTable(rows);
+  document.getElementById('badgeCount').textContent=rows.length+'/'+all.length+' intrari';
 }
 
-/* ── RENDER ── */
-function renderTable(rows) {
-  const tbody = document.getElementById('tableBody');
-  if (!rows.length) {
-    tbody.innerHTML = '<tr class="state-row"><td colspan="13">Nicio înregistrare. Datele apar după prima completare.</td></tr>';
+// ════════════════════════════════════════════════════════
+// RENDER TABLE
+// ════════════════════════════════════════════════════════
+function renderTable(rows){
+  const tbody=document.getElementById('tBody');
+  const cols=src==='targ'?13:11;
+  if(!rows.length){
+    tbody.innerHTML=`<tr class="state-row"><td colspan="${cols}">Nicio inregistrare. Datele apar dupa prima completare a formularului.</td></tr>`;
     return;
   }
-
-  tbody.innerHTML = rows.map(r => {
-    const statusVal = r.status || 'Nou';
-    const urg = parseInt(r.urgenta) || 0;
-
-    return `<tr data-id="${r.id}">
-      <td><span class="cell-id">${r.id||'—'}</span></td>
-      <td style="font-size:11px;color:var(--muted)">${(r.data||'').replace(' ','<br>')}</td>
-      <td class="cell-name">${esc(r.nume)||'—'}</td>
-      <td class="cell-contact">
-        ${r.tel ? `<a href="tel:${r.tel}">📞 ${r.tel}</a>` : ''}
-        ${r.email ? `<a href="mailto:${r.email}" title="${r.email}">✉️ ${shortEmail(r.email)}</a>` : ''}
-        ${r.varsta ? `<span style="font-size:10px;color:var(--muted);${r.tel||r.email?'display:block':''}">${r.varsta}</span>` : ''}
-      </td>
-      <td style="font-size:11px;white-space:normal;line-height:1.3">${esc(r.obiectiv)||'—'}</td>
-      <td style="font-size:10px;color:var(--muted);white-space:normal;line-height:1.3">${esc(r.interese)||'—'}</td>
-      <td><span class="urgenta-badge urg-${urg}">${urg||'—'}${urg>=4?' 🔥':''}</span></td>
-      <td style="font-size:11px">${esc(r.buget)||'—'}</td>
-
-      <td class="admin-col">
-        <select class="ie-select" onchange="saveField(this,'${r.id}','status');updatePill(this)">
-          ${['Nou','Contactat','Interesat','Neinteresat','Client','Arhivat']
-            .map(s => `<option ${statusVal===s?'selected':''}>${s}</option>`).join('')}
-        </select>
-        <span class="s-pill s-${statusVal}" style="margin-top:2px;display:block">${statusVal}</span>
-      </td>
-      <td class="admin-col">
-        <select class="ie-select" onchange="saveField(this,'${r.id}','nivel')">
-          ${['','⭐ Scăzut','⭐⭐ Mediu','⭐⭐⭐ Ridicat','⭐⭐⭐⭐ Foarte ridicat']
-            .map(n => `<option ${(r.nivel||'')===n?'selected':''}>${n}</option>`).join('')}
-        </select>
-      </td>
-      <td class="admin-col">
-        <input class="ie-input" type="text" value="${esc(r.recomandare)||''}"
-          placeholder="Omega 3, consultanță…"
-          onblur="saveField(this,'${r.id}','recomandare')">
-      </td>
-      <td class="admin-col">
-        <input class="ie-date" type="date" value="${r.followup||''}"
-          onchange="saveField(this,'${r.id}','followup')">
-      </td>
-      <td class="admin-col">
-        <textarea class="ie-textarea"
-          placeholder="Observații…"
-          onblur="saveField(this,'${r.id}','observatii')">${esc(r.observatii)||''}</textarea>
-      </td>
-    </tr>`;
-  }).join('');
+  tbody.innerHTML=rows.map(r=>src==='targ'?rowTarg(r):src==='evaluari'?rowEval(r):rowComp(r)).join('');
+  addLabels();
 }
 
-/* ── SAVE FIELD ── */
-async function saveField(el, id, field) {
-  showToast('Se salvează…');
-  try {
-    const formBody = `action=updateAdmin&id=${encodeURIComponent(id)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(el.value)}`;
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: formBody
+// ── ROW TARG ──
+function rowTarg(r){
+  const sv=r.status||'Nou',urg=parseInt(r.urgenta)||0;
+  return `<tr data-id="${r.id}">
+    <td data-label="ID"><span class="cid">${r.id||'—'}</span></td>
+    <td data-label="Data" style="font-size:11px;color:var(--muted)">${(r.data||'').replace(' ','<br>')}</td>
+    <td data-label="Nume" class="cname">${esc(r.nume)||'—'}</td>
+    <td data-label="Contact" class="ccontact">
+      ${r.tel?`<a href="tel:${r.tel}">📞 ${r.tel}</a>`:''}
+      ${r.email?`<a href="mailto:${r.email}" title="${esc(r.email)}">✉️ ${shortEmail(r.email)}</a>`:''}
+      ${r.varsta?`<span style="font-size:10px;color:var(--muted)">${r.varsta}</span>`:''}
+    </td>
+    <td data-label="Obiectiv" style="font-size:11px;white-space:normal;line-height:1.35">${esc(r.obiectiv)||'—'}</td>
+    <td data-label="Interese" style="font-size:10px;color:var(--muted);white-space:normal;line-height:1.3">${esc(r.interese)||'—'}</td>
+    <td data-label="Urgenta"><span class="ubadge u${urg}">${urg||'—'}${urg>=4?' 🔥':''}</span></td>
+    <td data-label="Buget" style="font-size:11px">${esc(r.buget)||'—'}</td>
+    <td data-label="Status" class="ac">
+      <select class="ie-s" onchange="saveF(this,'${r.id}','status','targ');updPill(this)">
+        ${['Nou','Contactat','Interesat','Neinteresat','Client','Arhivat'].map(s=>`<option ${sv===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+      <span class="sp s-${sv}" style="margin-top:2px;display:block">${sv}</span>
+    </td>
+    <td data-label="Nivel" class="ac">
+      <select class="ie-s" onchange="saveF(this,'${r.id}','nivel','targ')">
+        ${['','⭐ Scazut','⭐⭐ Mediu','⭐⭐⭐ Ridicat','⭐⭐⭐⭐ Foarte ridicat'].map(n=>`<option ${(r.nivel||'')===n?'selected':''}>${n}</option>`).join('')}
+      </select>
+    </td>
+    <td data-label="Recomandare" class="ac">
+      <input class="ie-i" type="text" value="${esc(r.recomandare)||''}" placeholder="Omega 3, consultanta…" onblur="saveF(this,'${r.id}','recomandare','targ')">
+    </td>
+    <td data-label="Follow-up" class="ac">
+      <input class="ie-d" type="date" value="${r.followup||''}" onchange="saveF(this,'${r.id}','followup','targ')">
+    </td>
+    <td data-label="Observatii" class="ac">
+      <textarea class="ie-t" placeholder="Observatii…" onblur="saveF(this,'${r.id}','observatii','targ')">${esc(r.observatii)||''}</textarea>
+    </td>
+  </tr>`;
+}
+
+// ── ROW EVALUARI ──
+function rowEval(r){
+  const sv=r.status||'Nou';
+  const fmt=r.format||'';
+  const fc=fmt.includes('Sibiu')?'ftag-s':fmt.includes('Oricare')?'ftag-o':'';
+  return `<tr data-id="${r.id}">
+    <td data-label="ID"><span class="cid cid-e">${r.id||'—'}</span></td>
+    <td data-label="Data" style="font-size:11px;color:var(--muted)">${(r.data||'').replace(' ','<br>')}</td>
+    <td data-label="Nume" class="cname">${esc(r.nume)||'—'}</td>
+    <td data-label="Contact" class="ccontact">
+      ${r.tel?`<a href="tel:${r.tel}">📞 ${r.tel}</a>`:''}
+      ${r.email?`<a href="mailto:${r.email}" title="${esc(r.email)}">✉️ ${shortEmail(r.email)}</a>`:''}
+      ${r.varsta?`<span style="font-size:10px;color:var(--muted)">${r.varsta} ani</span>`:''}
+    </td>
+    <td data-label="Format"><span class="ftag ${fc}" style="white-space:normal;font-size:10px">${esc(fmt)||'—'}</span></td>
+    <td data-label="Problema" style="font-size:11px;white-space:normal;line-height:1.35">${esc(r.problema)||'—'}</td>
+    <td data-label="Mesaj" style="font-size:11px;white-space:normal;line-height:1.35;color:var(--muted)">${esc(r.mesaj)||'—'}</td>
+    <td data-label="Status" class="ae">
+      <select class="ie-s" onchange="saveF(this,'${r.id}','status','evaluari');updPill(this)">
+        ${['Nou','Contactat','Programat','Finalizat','Neinteresat','Client','Arhivat'].map(s=>`<option ${sv===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+      <span class="sp s-${sv}" style="margin-top:2px;display:block">${sv}</span>
+    </td>
+    <td data-label="Prioritate" class="ae">
+      <select class="ie-s" onchange="saveF(this,'${r.id}','prioritate','evaluari')">
+        ${['','🟢 Scazuta','🟡 Medie','🟠 Ridicata','🔴 Urgenta'].map(p=>`<option ${(r.prioritate||'')===p?'selected':''}>${p}</option>`).join('')}
+      </select>
+    </td>
+    <td data-label="Follow-up" class="ae">
+      <input class="ie-d" type="date" value="${r.followup||''}" onchange="saveF(this,'${r.id}','followup','evaluari')">
+    </td>
+    <td data-label="Observatii" class="ae">
+      <textarea class="ie-t" placeholder="Observatii…" onblur="saveF(this,'${r.id}','observatii','evaluari')">${esc(r.observatii)||''}</textarea>
+    </td>
+  </tr>`;
+}
+
+// ── ROW COMPLETE ──
+function rowComp(r){
+  const sv=r.status||'Nou';
+  const mot=parseInt(r.motivatie)||0;
+  const mc=mot>=8?'#15803d':mot>=5?'#D97706':'#DC2626';
+  return `<tr data-id="${r.id}">
+    <td data-label="ID"><span class="cid cid-c">${r.id||'—'}</span></td>
+    <td data-label="Data" style="font-size:11px;color:var(--muted)">${(r.data||'').replace(' ','<br>')}</td>
+    <td data-label="Nume" class="cname">${esc(r.nume)||'—'}</td>
+    <td data-label="Contact" class="ccontact">
+      ${r.tel?`<a href="tel:${r.tel}">📞 ${r.tel}</a>`:''}
+      ${r.email?`<a href="mailto:${r.email}" title="${esc(r.email)}">✉️ ${shortEmail(r.email)}</a>`:''}
+      ${r.ocupatie?`<span style="font-size:10px;color:var(--muted)">${r.ocupatie}</span>`:''}
+    </td>
+    <td data-label="Date bio" style="font-size:11px;white-space:normal;line-height:1.4">
+      ${r.sex||''} · ${r.varsta||''} ani
+      ${r.imc?`<br><strong style="color:#4c1d95">IMC ${r.imc}</strong> <span style="font-size:10px;color:var(--muted)">${r.imc_label||''}</span>`:''}
+      ${r.rmb?`<br><span style="font-size:10px;color:var(--muted)">RMB ${r.rmb} kcal</span>`:''}
+    </td>
+    <td data-label="Sanatate" style="font-size:10px;color:var(--muted);white-space:normal;line-height:1.35">${esc(r.sanatate)||'—'}</td>
+    <td data-label="Prioritate" style="font-size:11px;white-space:normal;line-height:1.3">${esc(r.prioritate)||'—'}</td>
+    <td data-label="Motivatie"><span style="font-weight:800;font-size:13px;color:${mc}">${mot||'—'}</span></td>
+    <td data-label="Status" class="ap">
+      <select class="ie-s" onchange="saveF(this,'${r.id}','status','complete');updPill(this)">
+        ${['Nou','Contactat','Programat','Finalizat','Client','Arhivat'].map(s=>`<option ${sv===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+      <span class="sp s-${sv}" style="margin-top:2px;display:block">${sv}</span>
+    </td>
+    <td data-label="Follow-up" class="ap">
+      <input class="ie-d" type="date" value="${r.followup||''}" onchange="saveF(this,'${r.id}','followup','complete')">
+    </td>
+    <td data-label="Observatii" class="ap">
+      <textarea class="ie-t" placeholder="Observatii…" onblur="saveF(this,'${r.id}','observatii','complete')">${esc(r.observatii)||''}</textarea>
+    </td>
+  </tr>`;
+}
+
+// ════════════════════════════════════════════════════════
+// DATA-LABEL pentru card view mobil
+// ════════════════════════════════════════════════════════
+function addLabels(){
+  const headers=[...document.querySelectorAll('#tHead th')].map(h=>h.textContent.trim());
+  document.querySelectorAll('#tBody tr:not(.state-row)').forEach(tr=>{
+    [...tr.querySelectorAll('td')].forEach((td,i)=>{
+      if(headers[i])td.setAttribute('data-label',headers[i]);
     });
-    
-    const row = allData.find(r => r.id === id);
-    if (row) row[field] = el.value;
+  });
+}
+
+// ════════════════════════════════════════════════════════
+// SAVE FIELD → Apps Script
+// ════════════════════════════════════════════════════════
+async function saveF(el,id,field,sheet){
+  showToast('Se salveaza…');
+  try{
+    const body=['action=updateAdmin',
+      'sheet='+encodeURIComponent(sheet),
+      'id='+encodeURIComponent(id),
+      'field='+encodeURIComponent(field),
+      'value='+encodeURIComponent(el.value)].join('&');
+    await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body});
+    const row=all.find(r=>r.id===id);
+    if(row)row[field]=el.value;
     showToast('✓ Salvat!');
-  } catch(e) {
-    showToast('⚠️ Eroare salvare');
-  }
+  } catch(e){ showToast('⚠️ Eroare salvare'); }
 }
 
-/* ── UPDATE PILL ── */
-function updatePill(sel) {
-  const pill = sel.parentElement.querySelector('.s-pill');
-  if (!pill) return;
-  pill.className = 's-pill s-' + sel.value;
-  pill.textContent = sel.value;
+function updPill(sel){
+  const pill=sel.parentElement.querySelector('.sp');
+  if(!pill)return;
+  pill.className='sp s-'+sel.value;
+  pill.textContent=sel.value;
 }
 
-/* ── EXPORT CSV ── */
-function exportCSV() {
-  const headers = ['ID','Data','Nume','Telefon','Email','Varsta','Obiectiv','Interese','Urgenta','Buget','Mesaj','Status','Nivel','Recomandare','Followup','Observatii'];
-  const rows = allData.map(r => [
-    r.id, r.data, r.nume, r.tel, r.email, r.varsta,
-    r.obiectiv, r.interese, r.urgenta, r.buget, r.mesaj,
-    r.status, r.nivel, r.recomandare, r.followup, r.observatii
-  ].map(v => '"' + (v||'').toString().replace(/"/g,'""') + '"').join(','));
-
-  const csv = [headers.join(','), ...rows].join('\n');
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'nutrisib_leads_' + new Date().toISOString().slice(0,10) + '.csv';
+// ════════════════════════════════════════════════════════
+// EXPORT CSV
+// ════════════════════════════════════════════════════════
+function exportCSV(){
+  if(!all.length){showToast('⚠️ Nicio data de exportat');return;}
+  const keys=src==='targ'
+    ?['id','data','nume','tel','email','varsta','obiectiv','interese','urgenta','buget','mesaj','status','nivel','recomandare','followup','observatii','convertit']
+    :src==='evaluari'
+    ?['id','data','nume','tel','email','varsta','format','problema','mesaj','status','prioritate','followup','observatii','convertit']
+    :['id','data','nume','tel','email','varsta','sex','ocupatie','imc','imc_label','rmb','sanatate','prioritate','motivatie','status','followup','observatii','convertit'];
+  const csv='\uFEFF'+[keys.join(','),...all.map(r=>keys.map(k=>'"'+String(r[k]||'').replace(/"/g,'""')+'"').join(','))].join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+  a.download='nutrisib_'+src+'_'+new Date().toISOString().slice(0,10)+'.csv';
   a.click();
-  URL.revokeObjectURL(url);
-  showToast('✓ CSV exportat!');
+  showToast('✓ Export descarcat!');
 }
 
-/* ── UTILS ── */
-function esc(s) {
-  if (!s) return '';
-  return s.toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+// ════════════════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════════════════
+function esc(s){if(!s)return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function shortEmail(e){if(!e||e.length<=22)return e;const[l,d]=e.split('@');return l.slice(0,8)+'…@'+d;}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',2200);}
 
-function shortEmail(e) {
-  if (!e || e.length <= 20) return e;
-  return e.slice(0,8) + '…' + e.slice(e.lastIndexOf('@'));
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.display = 'block';
-  clearTimeout(window._tt);
-  window._tt = setTimeout(() => { t.style.display = 'none'; }, 2000);
-}
-
-window.onload = loadData;
+// ════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{
+  renderHeader('targ');
+  updateFilters('targ');
+  loadData();
+});
 </script>
-
 </body>
 </html>
