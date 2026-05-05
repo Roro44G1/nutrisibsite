@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluare comportament alimentar | NutriSib</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://nutrisib.club/celos.css">
+<style>
+:root{
+  --color-pearl:#F8FAFC;--color-navy:#1B2A4A;--color-gold:#C5A021;
+  --color-text-dark:#1f2937;--color-text-medium:#374151;--color-text-light:#4b5563;
+  --color-brand-medium:#3E92CC;--color-brand-light:#eaf2f8;--color-border:#e5e7eb;
+  --color-accent-red:#ef4444;
+  --shadow-card:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -1px rgba(0,0,0,.06);
+  --radius-card:12px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--color-pearl);color:var(--color-text-dark);line-height:1.6;min-height:100vh;margin:0;padding:1rem;display:block!important}
+.page-wrap{max-width:720px;margin:0 auto;padding-bottom:3rem}
+
+/* Brand */
+.brand-header{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem}
+.brand-logo-img{height:44px;width:auto}
+.brand-logo-fb{width:44px;height:44px;background:var(--color-navy);border-radius:10px;display:none;align-items:center;justify-content:center;flex-shrink:0}
+.brand-logo-fb svg{width:22px;height:22px}
+.brand-name{font-family:'Montserrat',sans-serif;font-size:1.05rem;font-weight:800;color:var(--color-navy)}
+.brand-tagline{font-size:11px;color:var(--color-text-light)}
+
+/* Hero */
+.tfeq-hero{background:var(--color-navy);border-radius:var(--radius-card);padding:1.75rem 2rem;margin-bottom:1.25rem;position:relative;overflow:hidden}
+.tfeq-hero::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 80% at 90% 30%,rgba(62,146,204,.25) 0%,transparent 70%),radial-gradient(ellipse 40% 60% at 5% 80%,rgba(197,160,33,.12) 0%,transparent 60%)}
+.tfeq-hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(62,146,204,.15);border:1px solid rgba(62,146,204,.3);border-radius:50px;padding:3px 12px;margin-bottom:.75rem;font-size:10px;font-weight:700;color:var(--color-brand-medium);text-transform:uppercase;letter-spacing:.1em;font-family:'Inter',sans-serif}
+.tfeq-hero h1{font-family:'Montserrat',sans-serif;font-size:1.55rem;font-weight:900;color:#fff;margin:0 0 .6rem;line-height:1.2}
+.tfeq-hero p{font-family:'Lora',serif;font-size:.9rem;color:rgba(255,255,255,.78);margin:0;line-height:1.6}
+.hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:1rem}
+.hero-badge{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15)}
+
+/* Progress */
+.progress-wrap{margin-bottom:1.5rem}
+.progress-steps{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.progress-step{display:flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:12px;color:#9ca3af;font-weight:500;white-space:nowrap}
+.progress-step.active{color:var(--color-navy)}
+.progress-step.done{color:var(--color-text-light)}
+.step-dot{width:24px;height:24px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;transition:background .3s,color .3s}
+.progress-step.active .step-dot{background:var(--color-navy);color:#fff}
+.progress-step.done .step-dot{background:var(--color-brand-medium);color:#fff}
+.step-sep{flex:1;height:1px;background:var(--color-border)}
+.progress-bar-track{height:4px;background:var(--color-border);border-radius:2px;overflow:hidden}
+.progress-bar-fill{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--color-navy),var(--color-brand-medium));transition:width .5s ease}
+
+/* Steps */
+.step{display:none}
+.step.active{display:block;animation:fadeUp .35s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Card */
+.tfeq-card{background:#fff;border-radius:var(--radius-card);box-shadow:var(--shadow-card);border:1px solid var(--color-border);padding:2rem;margin-bottom:1rem}
+@media(max-width:520px){.tfeq-card{padding:1.25rem 1rem}}
+.card-title{font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:800;color:var(--color-navy);margin:0 0 .3rem}
+.card-subtitle{font-size:.875rem;color:var(--color-text-light);line-height:1.55;margin-bottom:1.5rem}
+
+/* Form */
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.field-row.col1{grid-template-columns:1fr}
+.field-row.col3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:520px){.field-row,.field-row.col3{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:700;color:var(--color-text-medium);text-transform:uppercase;letter-spacing:.05em;font-family:'Inter',sans-serif}
+.field label span{font-weight:400;text-transform:none;color:#9ca3af;letter-spacing:0}
+.field input,.field select{height:42px;padding:0 12px;border:1.5px solid var(--color-border);border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;color:var(--color-text-dark);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px;cursor:pointer}
+.field input:focus,.field select:focus{border-color:var(--color-navy);box-shadow:0 0 0 3px rgba(27,42,74,.1)}
+.field input.err,.field select.err{border-color:var(--color-accent-red)}
+.field-hint{font-size:11px;color:#9ca3af}
+.imc-box{display:none;align-items:center;gap:6px;background:var(--color-brand-light);border:1px solid #c7ddf0;border-radius:6px;padding:6px 12px;margin-top:2px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--color-navy)}
+.imc-box.show{display:inline-flex}
+.imc-val{font-size:15px;font-weight:800;margin:0 3px}
+.imc-hint{font-size:11px;color:#9ca3af;margin-top:3px}
+.gdpr-notice{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:11.5px;color:#166534;line-height:1.55;margin-top:1rem}
+.err-bar{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;color:#b91c1c;margin-bottom:1rem;display:none}
+
+/* Questionnaire */
+.section-sep{display:flex;align-items:center;gap:10px;margin:1.75rem 0 .75rem}
+.section-badge{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.badge-a{background:var(--color-brand-light);color:var(--color-navy)}
+.badge-b{background:#FEF3C7;color:#92400E}
+.badge-c{background:#FCE7F3;color:#9D174D}
+.section-sep-line{flex:1;height:1px;background:var(--color-border)}
+.section-desc-q{font-family:'Inter',sans-serif;font-size:12px;color:#9ca3af;margin:-.25rem 0 .75rem}
+.q-item{background:#fafafa;border:1.5px solid var(--color-border);border-radius:10px;padding:1rem;margin-bottom:8px;transition:border-color .2s,background .2s}
+.q-item.answered{border-color:#1D9E75;background:#f9fefb}
+.q-item.err-q{border-color:var(--color-accent-red);background:#fff5f5}
+.q-text{font-family:'Inter',sans-serif;font-size:14px;color:var(--color-text-medium);line-height:1.5;margin-bottom:.75rem}
+.q-num{font-family:'Montserrat',sans-serif;font-weight:700;color:var(--color-navy);margin-right:5px}
+.options-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+@media(max-width:460px){.options-grid{grid-template-columns:repeat(2,1fr)}}
+.opt-label{cursor:pointer;display:block}
+.opt-label input[type="radio"]{display:none}
+.opt-box{border:1.5px solid var(--color-border);border-radius:7px;padding:7px 4px;text-align:center;font-family:'Inter',sans-serif;font-size:11px;color:var(--color-text-light);line-height:1.3;min-height:40px;display:flex;align-items:center;justify-content:center;background:#fff;user-select:none;transition:border-color .12s,background .12s,box-shadow .12s}
+.opt-label input:checked+.opt-box{background:#e6faf4;border:2px solid #1D9E75;color:#065f46;font-weight:600;box-shadow:0 0 0 2px rgba(29,158,117,.15)}
+.opt-label:hover .opt-box{border-color:var(--color-brand-medium);background:var(--color-brand-light)}
+
+/* Butoane */
+.btn-navy{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 28px;width:100%;background:var(--color-navy);color:#fff;border:none;border-radius:10px;cursor:pointer;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;box-shadow:0 3px 0 #051336;transition:background .15s,transform .1s,box-shadow .1s}
+.btn-navy:hover{background:#243a62;transform:translateY(-1px);box-shadow:0 5px 0 #051336}
+.btn-navy:active{transform:scale(.99);box-shadow:0 1px 0 #051336}
+.btn-gold{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 28px;width:100%;background:var(--color-gold);color:#fff;border:none;border-radius:10px;cursor:pointer;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;box-shadow:0 3px 0 #8a6d12;transition:background .15s,transform .1s}
+.btn-gold:hover{background:#b08e1b;transform:translateY(-1px)}
+.btn-gold:active{transform:scale(.99)}
+.btn-outline{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:42px;padding:0 20px;white-space:nowrap;background:#fff;color:var(--color-text-medium);border:1.5px solid var(--color-border);border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;transition:all .15s}
+.btn-outline:hover{background:var(--color-brand-light);border-color:var(--color-brand-medium);color:var(--color-navy)}
+.btn-row{display:flex;gap:10px;margin-top:1.5rem;align-items:center}
+@media(max-width:420px){.btn-row{flex-direction:column}.btn-outline{width:100%}}
+
+/* === REZULTATE PE ECRAN (client-friendly) === */
+.res-intro{margin-bottom:1.5rem}
+.res-intro-name{font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:800;color:var(--color-navy);margin:0 0 .3rem}
+.res-intro-meta{font-family:'Inter',sans-serif;font-size:12px;color:var(--color-text-light)}
+
+/* Tema card - vizual prietenos */
+.tema-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:1.5rem}
+.tema-card{border-radius:12px;padding:1.25rem 1.5rem;border:1.5px solid transparent;position:relative;overflow:hidden}
+.tema-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:4px 0 0 4px}
+.tema-card.verde{background:#f0fdf9;border-color:#a7f3d0}
+.tema-card.verde::before{background:#1D9E75}
+.tema-card.galben{background:#fffbeb;border-color:#fde68a}
+.tema-card.galben::before{background:#f59e0b}
+.tema-card.rosu{background:#fef2f2;border-color:#fecaca}
+.tema-card.rosu::before{background:#ef4444}
+.tema-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.tema-card.verde .tema-label{color:#065f46}
+.tema-card.galben .tema-label{color:#92400e}
+.tema-card.rosu .tema-label{color:#991b1b}
+.tema-title{font-family:'Lora',serif;font-size:1rem;font-weight:700;color:var(--color-text-dark);margin:0 0 .5rem}
+.tema-text{font-family:'Inter',sans-serif;font-size:13.5px;color:var(--color-text-medium);line-height:1.7;margin:0}
+.tema-icon{position:absolute;top:1rem;right:1.25rem;font-size:1.4rem;opacity:.5}
+
+/* Concluzie integrata */
+.concluzie-box{background:var(--color-navy);border-radius:12px;padding:1.5rem;margin-bottom:1rem;position:relative;overflow:hidden}
+.concluzie-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 80% 20%,rgba(62,146,204,.2) 0%,transparent 70%);pointer-events:none}
+.concluzie-inner{position:relative;z-index:1}
+.concluzie-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-brand-medium);margin-bottom:.5rem}
+.concluzie-text{font-family:'Lora',serif;font-size:.95rem;color:rgba(255,255,255,.9);line-height:1.7;margin:0}
+
+/* Mail status */
+.mail-status{display:flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;font-size:13px;color:var(--color-text-light);margin-top:1rem;padding:10px 14px;background:#f9fafb;border-radius:8px;border:1px solid var(--color-border)}
+.mail-status.sent{color:#059669;background:#f0fdf4;border-color:#bbf7d0}
+.mail-status.error{color:#b91c1c;background:#fef2f2;border-color:#fecaca}
+.mail-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
+.tfeq-divider{border:none;border-top:1px solid var(--color-border);margin:1.5rem 0}
+.confirm-notice{background:var(--color-brand-light);border:1px solid rgba(62,146,204,.3);border-radius:10px;padding:1rem 1.25rem;margin-top:1rem;font-family:'Inter',sans-serif;font-size:13px;color:var(--color-navy);line-height:1.6}
+
+.page-footer{text-align:center;font-family:'Inter',sans-serif;font-size:11px;color:var(--color-text-light);margin-top:2rem;line-height:1.7}
+.page-footer a{color:var(--color-brand-medium)}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<!-- Brand -->
+<div class="brand-header">
+  <img src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="NutriSib" class="brand-logo-img"
+       onerror="this.style.display='none';document.querySelector('.brand-logo-fb').style.display='flex'">
+  <div class="brand-logo-fb">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round">
+      <circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/>
+    </svg>
+  </div>
+  <div>
+    <div class="brand-name">NutriSib</div>
+    <div class="brand-tagline">dr.ing. Radu V. Pascu &mdash; Arhitectura biologica</div>
+  </div>
+</div>
+
+<!-- Hero - fara TFEQ, fara Karlsson -->
+<div class="tfeq-hero">
+  <div class="tfeq-hero-inner">
+    <div class="hero-eyebrow">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Evaluare personalizata
+    </div>
+    <h1>Cum te raportezi la mancare?</h1>
+    <p>Un set de intrebari care ne ajuta sa intelegem impreuna relatia ta cu alimentatia &mdash; ce te impinge sa mananci, ce te opreste si cum iti influenteaza emotiile alegerile alimentare.</p>
+    <div class="hero-badges">
+      <span class="hero-badge">Confidential</span>
+      <span class="hero-badge">5&ndash;8 minute</span>
+      <span class="hero-badge">Fara raspunsuri gresite</span>
+    </div>
+  </div>
+</div>
+
+<!-- Progres -->
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="progress-step active" id="ps1"><div class="step-dot">1</div><span>Date personale</span></div>
+    <div class="step-sep"></div>
+    <div class="progress-step" id="ps2"><div class="step-dot">2</div><span>Intrebari</span></div>
+    <div class="step-sep"></div>
+    <div class="progress-step" id="ps3"><div class="step-dot">3</div><span>Profilul tau</span></div>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progress-fill" style="width:15%"></div>
+  </div>
+</div>
+
+<!-- PASUL 1 -->
+<div class="step active" id="step1">
+  <div class="tfeq-card">
+    <div class="card-title">Cateva date despre tine</div>
+    <div class="card-subtitle">Ne ajuta sa personalizam interpretarea si sa o transmitem consultantului tau NutriSib. Datele sunt confidentiale.</div>
+    <div id="err1" class="err-bar"></div>
+    <div class="field-row col1">
+      <div class="field">
+        <label>Nume si prenume <span>*</span></label>
+        <input type="text" id="f-name" placeholder="ex. Maria Ionescu" autocomplete="name">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Adresa email <span>*</span></label>
+        <input type="email" id="f-email" placeholder="exemplu@email.com" autocomplete="email">
+        <span class="field-hint">Veti primi o confirmare</span>
+      </div>
+      <div class="field">
+        <label>Telefon <span>*</span></label>
+        <input type="tel" id="f-phone" placeholder="+40 7xx xxx xxx" autocomplete="tel">
+        <span class="field-hint">Numarul de contact</span>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Varsta <span>(ani) *</span></label>
+        <input type="number" id="f-age" placeholder="35" min="16" max="99">
+      </div>
+      <div class="field">
+        <label>Sex <span>*</span></label>
+        <select id="f-sex">
+          <option value="">- Selectati -</option>
+          <option value="Feminin">Feminin</option>
+          <option value="Masculin">Masculin</option>
+          <option value="Prefer sa nu precizez">Prefer sa nu precizez</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row col3">
+      <div class="field">
+        <label>Greutate <span>(kg) *</span></label>
+        <input type="number" id="f-weight" placeholder="70" min="30" max="300" step="0.1">
+      </div>
+      <div class="field">
+        <label>Inaltime <span>(cm) *</span></label>
+        <input type="number" id="f-height" placeholder="168" min="100" max="230">
+      </div>
+      <div class="field">
+        <label>IMC</label>
+        <div id="imc-box" class="imc-box">IMC: <span class="imc-val" id="imc-val">-</span><span id="imc-cat" style="font-size:10px;font-weight:400"></span></div>
+        <div class="imc-hint" id="imc-hint">Se calculeaza automat</div>
+      </div>
+    </div>
+    <div class="gdpr-notice">&#128274; Prin continuare confirmati acordul cu utilizarea datelor exclusiv in scop nutritional, conform GDPR. Datele nu vor fi partajate cu terti.</div>
+    <div class="btn-row">
+      <button class="btn-navy" id="btn-step2">
+        Continua la intrebari
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PASUL 2 -->
+<div class="step" id="step2">
+  <div class="tfeq-card">
+    <div class="card-title">Intrebarile</div>
+    <div class="card-subtitle">Cititi fiecare afirmatie si alegeti raspunsul care vi se potriveste cel mai bine. Nu exista raspunsuri corecte sau gresite &mdash; raspundeti spontan. <strong style="color:var(--color-navy)">Toate cele 18 intrebari sunt obligatorii.</strong></div>
+    <div id="err2" class="err-bar"></div>
+    <div class="section-sep">
+      <span class="section-badge badge-a">Partea I &mdash; Obiceiuri constiente</span>
+      <div class="section-sep-line"></div>
+    </div>
+    <p class="section-desc-q">Cat de des va ganditi activ la ceea ce mancati</p>
+    <div id="q-container"></div>
+    <div class="btn-row">
+      <button class="btn-outline" id="btn-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Inapoi
+      </button>
+      <button class="btn-gold" id="btn-calc">
+        Genereaza profilul meu alimentar
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PASUL 3 - REZULTATE CLIENT (prietenos, fara scoruri, fara terminologie) -->
+<div class="step" id="step3">
+  <div class="tfeq-card">
+    <div class="res-intro">
+      <div class="res-intro-name" id="res-name">Profilul tau alimentar</div>
+      <div class="res-intro-meta" id="res-meta"></div>
+    </div>
+
+    <!-- Teme vizuale fara scoruri -->
+    <div class="tema-grid" id="tema-container"></div>
+
+    <!-- Concluzie integrata -->
+    <div class="concluzie-box">
+      <div class="concluzie-inner">
+        <div class="concluzie-label">Ce urmeaza</div>
+        <div class="concluzie-text" id="concluzie-text"></div>
+      </div>
+    </div>
+
+    <hr class="tfeq-divider">
+    <div class="confirm-notice"><strong>&#10003; Evaluarea a fost transmisa.</strong> Consultantul NutriSib a primit toate informatiile si te va contacta in curand pentru consultatie. Intrebari: <strong>nutrisib.club@gmail.com</strong></div>
+    <div class="mail-status" id="mail-status"><div class="mail-dot"></div><span id="mail-txt">Se transmite evaluarea...</span></div>
+    <div class="btn-row" style="margin-top:1.25rem">
+      <button class="btn-outline" id="btn-reset">Completeaza din nou</button>
+      <button class="btn-navy" id="btn-print">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Salveaza / Printeaza
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="page-footer">
+  Instrument de evaluare a comportamentului alimentar &nbsp;&middot;&nbsp;
+  <a href="https://nutrisib.club" target="_blank">NutriSib</a> &nbsp;&middot;&nbsp;
+  Instrument de screening, nu diagnostic clinic<br>
+  &copy; <span id="yr"></span> NutriSib &mdash; dr.ing. Radu V. Pascu
+</div>
+
+</div>
+<script>
+(function(){
+'use strict';
+
+var FORMSPREE = 'https://formspree.io/f/xaqvobzp';
+
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+var ITEMS = [
+  {id:1,  sub:'cr', text:'Manânc mai putin în mod deliberat pentru a-mi controla greutatea.'},
+  {id:2,  sub:'cr', text:'Îmi restrictionez aportul alimentar pentru a-mi controla greutatea.'},
+  {id:3,  sub:'cr', text:'Când am mâncat prea mult, mânânc mai putin decât de obicei în zilele urmatoare.'},
+  {id:4,  sub:'cr', text:'Ma abtin în mod constient la mese pentru a nu ma îngrasa.'},
+  {id:5,  sub:'cr', text:'Mânânc deliberat mai putin pentru a nu deveni mai greu/a.'},
+  {id:6,  sub:'cr', text:'Numar caloriile ca rutina autoimpusa pentru a-mi controla greutatea.'},
+  {id:7,  sub:'ue', text:'Uneori, când încep sa mânânc, pur si simplu nu ma pot opri.'},
+  {id:8,  sub:'ue', text:'Prezenta unei persoane care mânânca ma face adesea suficient de flamând/a încât sa mânânc si eu.'},
+  {id:9,  sub:'ue', text:'Sunt mereu atât de flamând/a încât îmi este greu sa ma opresc înainte sa termin tot din farfurie.'},
+  {id:10, sub:'ue', text:'Când vad un preparat cu adevarat apetisant, devin adesea atât de flamând/a încât trebuie sa mânânc imediat.'},
+  {id:11, sub:'ue', text:'Daca miros o mâncare gustoasa sau vad un aliment delicios, îmi este foarte greu sa ma abtin, chiar daca tocmai am terminat masa.'},
+  {id:12, sub:'ue', text:'Sunt mereu suficient de flamând/a încât as putea mânânca oricând.'},
+  {id:13, sub:'ue', text:'Am o limita pentru cantitatea de mâncare la o masa, dar adesea o depasesc.'},
+  {id:14, sub:'ue', text:'Mânânc atât de mult încât ajung sa ma simt inconfortabil.'},
+  {id:15, sub:'ue', text:'Nu ma opresc din mâncat atâta timp cât mai exista mâncare în farfurie.'},
+  {id:16, sub:'ee', text:'Când ma simt singur/a, ma consolez mâncând.'},
+  {id:17, sub:'ee', text:'Când ma simt anxios/anxioasa, ma trezesc ca mânânc.'},
+  {id:18, sub:'ee', text:'Când ma simt deprimat/a, am tendinta de a mânca în exces.'}
+];
+
+var OPTS = ['Definitiv fals','Preponderent fals','Preponderent adevarat','Definitiv adevarat'];
+
+var BREAKS = {
+  7:  {badge:'badge-b', label:'Partea a II-a — Foame si cantitate', desc:'In ce masura cantitatile consumate sunt influentate de factori din jur'},
+  16: {badge:'badge-c', label:'Partea a III-a — Emotii si mancare', desc:'Cum va influenteaza starile emotionale comportamentul alimentar'}
+};
+
+/* Generare itemi */
+var qc = document.getElementById('q-container');
+ITEMS.forEach(function(item){
+  if(BREAKS[item.id]){
+    var s=BREAKS[item.id], w=document.createElement('div');
+    w.innerHTML='<div class="section-sep"><span class="section-badge '+s.badge+'">'+s.label+'</span><div class="section-sep-line"></div></div><p class="section-desc-q">'+s.desc+'</p>';
+    qc.appendChild(w);
+  }
+  var opts=OPTS.map(function(l,i){return '<label class="opt-label"><input type="radio" name="q'+item.id+'" value="'+(i+1)+'"><div class="opt-box">'+l+'</div></label>';}).join('');
+  var d=document.createElement('div'); d.className='q-item'; d.id='qi-'+item.id;
+  d.innerHTML='<div class="q-text"><span class="q-num">'+item.id+'.</span> '+item.text+'</div><div class="options-grid">'+opts+'</div>';
+  qc.appendChild(d);
+});
+
+document.addEventListener('change',function(e){
+  if(e.target&&e.target.type==='radio'){
+    var qi=document.getElementById('qi-'+e.target.name.replace('q',''));
+    if(qi){qi.classList.add('answered');qi.classList.remove('err-q');}
+  }
+});
+
+/* IMC */
+function calcIMC(){
+  var w=parseFloat(document.getElementById('f-weight').value);
+  var h=parseFloat(document.getElementById('f-height').value);
+  var box=document.getElementById('imc-box'), hint=document.getElementById('imc-hint');
+  if(isNaN(w)||isNaN(h)||w<10||h<50){box.classList.remove('show');hint.style.display='block';return;}
+  var bmi=(w/Math.pow(h/100,2)).toFixed(1);
+  var cat='',col='';
+  if(bmi<18.5){cat='subponderal';col='#d97706';}
+  else if(bmi<25){cat='normal';col='#059669';}
+  else if(bmi<30){cat='supraponderal';col='#d97706';}
+  else if(bmi<35){cat='obezitate gr.I';col='#dc2626';}
+  else if(bmi<40){cat='obezitate gr.II';col='#dc2626';}
+  else{cat='obezitate gr.III';col='#991b1b';}
+  document.getElementById('imc-val').textContent=bmi;
+  var ce=document.getElementById('imc-cat'); ce.textContent=' '+cat; ce.style.color=col;
+  box.classList.add('show'); hint.style.display='none';
+}
+['f-weight','f-height'].forEach(function(id){
+  var el=document.getElementById(id);
+  el.addEventListener('input',calcIMC); el.addEventListener('change',calcIMC);
+});
+
+/* Progres */
+function setProgress(n){
+  var fills={1:15,2:55,3:100};
+  document.getElementById('progress-fill').style.width=fills[n]+'%';
+  [1,2,3].forEach(function(i){document.getElementById('ps'+i).className='progress-step'+(i<n?' done':i===n?' active':'');});
+}
+function showStep(n){
+  [1,2,3].forEach(function(i){document.getElementById('step'+i).classList.remove('active');});
+  document.getElementById('step'+n).classList.add('active');
+  setProgress(n); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* Validare pasul 1 */
+document.getElementById('btn-step2').addEventListener('click',function(){
+  var v={'f-name':document.getElementById('f-name').value.trim(),'f-email':document.getElementById('f-email').value.trim(),'f-phone':document.getElementById('f-phone').value.trim(),'f-age':document.getElementById('f-age').value.trim(),'f-weight':document.getElementById('f-weight').value.trim(),'f-height':document.getElementById('f-height').value.trim(),'f-sex':document.getElementById('f-sex').value};
+  var errEl=document.getElementById('err1');
+  Object.keys(v).forEach(function(id){document.getElementById(id).classList.remove('err');});
+  errEl.style.display='none';
+  var p=[];
+  if(!v['f-name']){p.push('Nume');document.getElementById('f-name').classList.add('err');}
+  if(!v['f-email']){p.push('Email');document.getElementById('f-email').classList.add('err');}
+  else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v['f-email'])){p.push('Email invalid');document.getElementById('f-email').classList.add('err');}
+  if(!v['f-phone']){p.push('Telefon');document.getElementById('f-phone').classList.add('err');}
+  if(!v['f-age']){p.push('Varsta');document.getElementById('f-age').classList.add('err');}
+  if(!v['f-weight']){p.push('Greutate');document.getElementById('f-weight').classList.add('err');}
+  if(!v['f-height']){p.push('Inaltime');document.getElementById('f-height').classList.add('err');}
+  if(!v['f-sex']){p.push('Sex');document.getElementById('f-sex').classList.add('err');}
+  if(p.length>0){errEl.textContent='Va rugam completati: '+p.join(', ')+'.';errEl.style.display='block';errEl.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  showStep(2);
+});
+
+document.getElementById('btn-back').addEventListener('click',function(){showStep(1);});
+
+/* Scoring */
+function getAnswers(){var a={},m=[];ITEMS.forEach(function(it){var s=document.querySelector('input[name="q'+it.id+'"]:checked');if(s)a[it.id]=parseInt(s.value,10);else m.push(it.id);});return{a:a,m:m};}
+function calcScores(a){var cr=0,ue=0,ee=0;ITEMS.forEach(function(it){if(it.sub==='cr')cr+=a[it.id];if(it.sub==='ue')ue+=a[it.id];if(it.sub==='ee')ee+=a[it.id];});return{cr:Math.round(((cr-6)/18)*100),ue:Math.round(((ue-9)/27)*100),ee:Math.round(((ee-3)/9)*100)};}
+function getLevel(score,sub){if(sub==='cr'){if(score<35)return{l:'Scazut',c:'low'};if(score<65)return{l:'Moderat',c:'mid'};return{l:'Ridicat',c:'high'};}if(sub==='ue'){if(score<35)return{l:'Scazut',c:'low'};if(score<60)return{l:'Moderat',c:'mid'};return{l:'Ridicat',c:'high'};}if(score<30)return{l:'Scazut',c:'low'};if(score<60)return{l:'Moderat',c:'mid'};return{l:'Ridicat',c:'high'};}
+
+/* === VERSIUNEA ECRAN (client-friendly, fara scoruri, fara terminologie) === */
+function buildScreenProfile(sc, name){
+  var cr=sc.cr, ue=sc.ue, ee=sc.ee;
+  var crL=getLevel(cr,'cr'), ueL=getLevel(ue,'ue'), eeL=getLevel(ee,'ee');
+  var teme=[];
+
+  /* TEMA 1 - Controlul constient */
+  if(cr<35){
+    teme.push({cls:'verde', icon:'&#129504;', label:'Alimentatie intuitiva', title:'Mananci natural, fara calcule',
+      text:'Nu iti impui reguli stricte legate de mancare si nu iti numeri caloriile. Ai incredere in semnalele corpului tau si te bucuri de mancare fara anxietate. Aceasta spontaneitate este sanatoasa atata timp cat alegerile tale sunt echilibrate in general.'});
+  } else if(cr<65){
+    teme.push({cls:'verde', icon:'&#9878;', label:'Constiinta alimentara', title:'Esti atent/a la ce mananci',
+      text:'Iti pasa de ceea ce pui pe farfurie si uneori iti ajustezi alegerile constient. Aceasta constientizare te ajuta sa mentii o greutate stabila fara sa devina o sursa de stres. Este un profil echilibrat si functional.'});
+  } else {
+    teme.push({cls:'galben', icon:'&#9881;', label:'Control alimentar intens', title:'Te gandesti mult la reguli si restrictii',
+      text:'Ai tendinta de a iti impune reguli stricte: numararea caloriilor, compensarea exceselor, controlul constant al portiilor. Uneori aceasta rigiditate poate obosi si poate duce la cicluri de restrictie urmata de supraalimentatie. Merita sa exploram impreuna un echilibru mai relaxat.'});
+  }
+
+  /* TEMA 2 - Foame si control */
+  if(ue<35){
+    teme.push({cls:'verde', icon:'&#127807;', label:'Echilibru la masa', title:'Te opresti cand esti saturat/a',
+      text:'Rareori mananci mai mult decat iti doresti si nu esti usor influentat/a de mirosuri, privirile altora sau prezenta mancarii. Ai o relatie sanatoasa cu semnalele de foame si satietate ale corpului tau.'});
+  } else if(ue<60){
+    teme.push({cls:'galben', icon:'&#128064;', label:'Sensibilitate la stimuli alimentari', title:'Uneori cantitatile sunt greu de controlat',
+      text:'In anumite contexte &mdash; cand esti la bufet, in companie sau cand mancarea arata deosebit de bine &mdash; este mai greu sa te opresti la timp. Este un pattern comun, mai ales in medii abundente. Vom lucra pe strategii practice pentru aceste situatii.'});
+  } else {
+    teme.push({cls:'rosu', icon:'&#128680;', label:'Dificultati de control al cantitatii', title:'Cantitatile consumate sunt greu de reglat',
+      text:'Ai adesea senzatia ca nu te poti opri odata ce ai inceput sa mananci, sau ca stimulii din jur (mirosuri, aspectul mancarii, prezenta altora) iti declanseaza foamea chiar si cand nu esti flamand/a. Aceasta zona va fi o prioritate in planul nostru de lucru impreuna.'});
+  }
+
+  /* TEMA 3 - Emotii si mancare */
+  if(ee<30){
+    teme.push({cls:'verde', icon:'&#128149;', label:'Echilibru emotional', title:'Emotiile si mancarea sunt separate',
+      text:'Tristetea, anxietatea sau plictiseala nu te fac sa apelezi la mancare pentru confort. Ai gasit alte modalitati de a gestiona disconfortul emotional. Aceasta este o fundatie excelenta pentru orice schimbare alimentara.'});
+  } else if(ee<60){
+    teme.push({cls:'galben', icon:'&#128165;', label:'Mancare si emotii', title:'Uneori mancarea devine un refugiu',
+      text:'In perioadele de stres sau tristete, exista tendinta de a te indrepta spre mancare pentru a te simti mai bine. Nu este o problema clinica, dar intr-un plan alimentar personalizat este important sa identificam aceste momente si sa gasim alternative.'});
+  } else {
+    teme.push({cls:'rosu', icon:'&#128148;', label:'Mancare emotionala semnificativa', title:'Emotiile iti ghideaza adesea alegerile alimentare',
+      text:'Stresul, tristetea si anxietatea sunt factori importanti care iti influenteaza comportamentul alimentar. Mancarea a devenit un instrument de gestionare a emotiilor. Aceasta dimensiune necesita o abordare atenta, care combina nutritia cu strategii comportamentale. Nu esti singur/a in aceasta si exista solutii clare.'});
+  }
+
+  return {teme:teme, crL:crL, ueL:ueL, eeL:eeL};
+}
+
+function buildConcluzieEcran(sc, name){
+  var cr=sc.cr, ue=sc.ue, ee=sc.ee;
+  var flagUrgent = (ue>60 || ee>60);
+  var flagAtentie = (!flagUrgent && (cr>65 || ue>35 || ee>30));
+  if(flagUrgent){
+    return 'Profilul tau alimentar scoate in evidenta cateva zone care merita atentie prioritara in consultatie. '+
+           'Vestea buna: toate aceste pattern-uri se pot schimba cu abordarea potrivita. '+
+           'Consultantul tau NutriSib a primit deja aceasta evaluare si va construi un plan personalizat care tine cont de intreaga imagine &mdash; nu doar de ce mananci, ci si de cum si de ce.';
+  } else if(flagAtentie){
+    return 'Profilul tau alimentar arata un echilibru general rezonabil, cu cateva aspecte pe care le putem optimiza impreuna. '+
+           'Consultantul tau NutriSib va analiza in detaliu aceasta evaluare si iti va propune ajustari specifice contextului tau de viata. '+
+           'Mica imbunatatire a relatiei cu mancarea poate face o diferenta mare pe termen lung.';
+  } else {
+    return 'Profilul tau alimentar indica o relatie echilibrata si sanatoasa cu mancarea. '+
+           'Ai o baza excelenta pe care putem construi impreuna un plan nutritional optimizat, '+
+           'adaptat obiectivelor tale specifice. Consultantul tau NutriSib va folosi aceasta evaluare ca punct de plecare pentru o consultatie personalizata.';
+  }
+}
+
+/* === VERSIUNEA EMAIL (complexa, clinica, in romana, cu interpretari ample) === */
+function buildEmailBody(sc, name, email, phone, age, sex, weight, height, bmi, bmiCat, date, answers){
+  var cr=sc.cr, ue=sc.ue, ee=sc.ee;
+  var crL=getLevel(cr,'cr'), ueL=getLevel(ue,'ue'), eeL=getLevel(ee,'ee');
+
+  var crInterp = {
+    low:
+      'RETINERE COGNITIVA SCAZUTA ('+cr+'/100)\n'+
+      'Clientul nu aplica strategii deliberate si constiente de limitare a aportului caloric. Nu numara calorii, nu isi impune reguli alimentare rigide si nu compenseaza excesele. Aceasta poate reprezenta o alimentatie intuitiva functionala daca semnalele interne de foame si satietate sunt bine calibrate si daca alegerile alimentare sunt intrinsec echilibrate.\n\n'+
+      'INTERPRETARE CLINICA: In absenta unui cadru nutritional structurat, clientul poate oscila intre perioade de alimentatie haparazata si episoade de consum excesiv pasager, fara sa le perceapa ca pe un comportament problematic. Evaluati istoricul ponderal: o greutate stabila pe termen lung in prezenta unui scor CR scazut sugereaza homeostaza reala; fluctuatii frecvente sugereaza dezordine alimentara subclinica.\n\n'+
+      'DIRECTII CONSULTATIE: Explorarea calitativa a tiparelor alimentare saptamanale. Verificarea daca alimentatia intuitiva este cu adevarat functionala sau daca ascunde un dezinteres fata de nutritie. Educatie nutritionala graduala, fara a induce anxietate alimentara.',
+    mid:
+      'RETINERE COGNITIVA MODERATA ('+cr+'/100)\n'+
+      'Clientul manifesta o constiintizare activa a comportamentului alimentar: face alegeri deliberate, isi ajusteaza portiile in anumite situatii si are o relatie constientizata cu mancarea. Acesta este profilul cel mai frecvent asociat cu managementul ponderal functional si cu o relatie sanatoasa cu alimentatia.\n\n'+
+      'INTERPRETARE CLINICA: Retinerea cognitiva moderata este asociata in literatura cu cele mai bune rezultate pe termen lung in managementul greutatii. Clientul exercita control fara a ajunge la rigiditate, ceea ce reduce riscul de cicluri restrictie-dezinhibitie. Totusi, in perioadele de stres sau oboseala, chiar si o retinere moderata se poate prabusi rapid daca nu exista strategii de mentinere.\n\n'+
+      'DIRECTII CONSULTATIE: Consolidarea tiparelor existente. Identificarea contextelor in care controlul cognitiv cedeaza. Construirea unui plan alimentar care sa sustina retinerea moderata fara a o transforma in anxietate.',
+    high:
+      'RETINERE COGNITIVA RIDICATA ('+cr+'/100)\n'+
+      'Clientul exercita un control intens si deliberat asupra alimentatiei: numara calorii, restrictioneaza activ, compenseaza excesele si traieste o relatie marcata de reguli autoimpuse cu mancarea. Desi aceasta abordare poate produce rezultate pe termen scurt, este asociata cu un risc semnificativ de dezinhibitie cognitiva.\n\n'+
+      'INTERPRETARE CLINICA: Retinerea cognitiva ridicata este puternic asociata cu fenomenul "all-or-nothing eating" &mdash; orice deviere de la planul strict este perceputa ca esec si declanseaza supraalimentatie compensatorie. Stresul, oboseala si situatiile sociale cu mancare abundenta reprezinta factori de risc majori. In combinatie cu scoruri UE sau EE ridicate, tabloul sugereaza un ciclu restrictie-supraalimentatie bine instalat.\n\n'+
+      'DIRECTII CONSULTATIE: Flexibilizarea cognitiva fata de mancare. Lucrul pe regula 80/20 si pe conceptul de "suficient de bun". Daca EE este si el ridicat, se recomanda abordare integrativa cu componenta comportamentala sau trimitere catre psiholog.'
+  };
+
+  var ueInterp = {
+    low:
+      'ALIMENTATIE NECONTROLATA SCAZUTA ('+ue+'/100)\n'+
+      'Clientul prezinta o reglare homeostatica functionala a aportului alimentar. Stimulii externi &mdash; disponibilitatea mancarii, mirosurile, prezenta altora la masa, aspectul vizual al preparatelor &mdash; nu supravin sistematic semnalele interne de satietate. Clientul se opreste cand este saturat, indiferent de cantitatea ramasa in farfurie sau de ce mananaca cei din jur.\n\n'+
+      'INTERPRETARE CLINICA: Scorul UE scazut este un predictor puternic al succesului in managementul ponderal pe termen lung. Clientul are capacitatea de a regla autonom portiile, ceea ce inseamna ca interventiile nutritionale pot fi mai permisive si mai focalizate pe calitate decat pe cantitate.\n\n'+
+      'DIRECTII CONSULTATIE: Mentinerea autonomiei alimentare. Educatie privind densitatea calorica si compozitia macronutritiva, fara a impune sisteme rigide de monitorizare.',
+    mid:
+      'ALIMENTATIE NECONTROLATA MODERATA ('+ue+'/100)\n'+
+      'Clientul este partial vulnerabil la stimulii alimentari externi. In anumite contexte &mdash; mese festive, bufete, mesele in companie, prezenta alimentelor palatabile &mdash; exista tendinta de a consuma mai mult decat se intentioneaza. Foamea poate fi declansata perceptual (vazut/mirosit) mai degraba decat fiziologic.\n\n'+
+      'INTERPRETARE CLINICA: Aceasta vulnerabilitate moderata este extrem de comuna in contextul societatii occidentale, cu medii alimentare hiperstimulatoare. Cheia nu este suprimarea raspunsului la stimuli (imposibil neurobiologic), ci restructurarea mediului alimentar si a tiparelor comportamentale la masa. Viteza de mâncare, marimea portiilor servite, distractiile in timpul mesei (ecrane) sunt vectori importanti de interventie.\n\n'+
+      'DIRECTII CONSULTATIE: Strategii de "environment design" &mdash; restructurarea mediului alimentar acasa si la serviciu. Tehnici de mindful eating. Planificarea anticipata a meselor festive si situatiilor cu risc.',
+    high:
+      'ALIMENTATIE NECONTROLATA RIDICATA ('+ue+'/100)\n'+
+      'Clientul prezinta dificultati semnificative si persistente in reglarea cantitatii consumate. Stimulii alimentari externi declanseaza foamea sau craving-ul independent de statusul real de satietate. Episoadele de consum care depasesc intentia se produc frecvent, cu senzatia de incapacitate de a se opri odata ce a inceput masa. Consumul pana la disconfort fizic este frecvent raportat.\n\n'+
+      'INTERPRETARE CLINICA: Un scor UE ridicat sugereaza o dezreglare a circuitelor de recompensa alimentara, cu o sensibilitate crescuta la semnale hedonice (gust, miros, aspect). In termeni neurobiologici, sistemul dopaminergic de anticipare a recompensei este supraactivat de stimulii alimentari de inalta palatabilitate. Aceasta este o caracteristica biologic fundamentata, nu o lipsa de vointa. Fara interventie, tinde sa se agraveze in medii obezogene.\n\n'+
+      'DIRECTII CONSULTATIE: Aceasta dimensiune este prioritara si trebuie adresata explicit. Restructurarea completa a mediului alimentar. Protocoale de management al portiilor (utilizarea farfuriilor mai mici, pre-portionarea). Lucrul pe viteza de mâncare si atentie la semnalele de satietate. Daca scorul depaseste 75/100, evaluati criteriile pentru binge eating disorder.'
+  };
+
+  var eeInterp = {
+    low:
+      'ALIMENTATIE EMOTIONALA SCAZUTA ('+ee+'/100)\n'+
+      'Starile emotionale negative &mdash; tristetea, anxietatea, singuratatea, plictiseala, frustarea &mdash; nu declanseaza in mod semnificativ comportamentul alimentar. Clientul a dezvoltat (constient sau nu) alte mecanisme de reglare emotionala si nu foloseste mancarea ca instrument primar de consolare sau alinare.\n\n'+
+      'INTERPRETARE CLINICA: Aceasta este una dintre cele mai valoroase caracteristici dintr-o perspectiva nutritional-comportamentala. Absenta alimentatiei emotionale permite interventia nutritionala sa se concentreze exclusiv pe aspecte fiziologice si comportamentale, fara a trebuie sa navigheze complexitatea mecanismelor de coping emotional.\n\n'+
+      'DIRECTII CONSULTATIE: Mentinerea acestui pattern. Educatie preventiva despre alimentatia emotionala, mai ales daca clientul traverseaza o perioada de stres crescut.',
+    mid:
+      'ALIMENTATIE EMOTIONALA MODERATA ('+ee+'/100)\n'+
+      'Clientul prezinta o tendinta moderata de a apela la mancare in momentele de disconfort emotional. In perioadele de stres, tristete sau anxietate crescuta, mancarea devine un mecanism de coping accesibil si rapid. Nu ajunge la nivel de problema clinica, dar are impact direct asupra aderentei la orice plan nutritional, mai ales in perioadele dificile.\n\n'+
+      'INTERPRETARE CLINICA: Alimentatia emotionala moderata este extrem de raspandita si are radacini atat biologice (mancarea bogata in zahar si grasimi activeaza circuite de recompensa care atenuaza temporar distresul emotional) cat si comportamentale (conditionare clasica: emotie negativa -> mancare -> ameliorare temporara -> intarire). Fara adresare explicita, orice plan nutritional va esua sistematic in perioadele de stres.\n\n'+
+      'DIRECTII CONSULTATIE: Identificarea "emotiei trigger" principale (stres, plictiseala, singuratate). Construirea unui meniu de alternative comportamentale pentru fiecare situatie. Educatie despre mecanismul neurobiologic al alimentatiei emotionale, care reduce sentimentul de vinovatie.',
+    high:
+      'ALIMENTATIE EMOTIONALA RIDICATA ('+ee+'/100)\n'+
+      'Stresul, tristetea si anxietatea sunt factori declansatori principali ai comportamentului alimentar la acest client. Mancarea a dobândit o functie regulatorie emotionala puternica: este folosita sistematic pentru a gestiona disconfortul emotional, a reduce tensiunea, a compensa singuratatea sau a face fata anxietatii. Aceasta nu este o lipsa de vointa &mdash; este un mecanism de adaptare invatat, adesea cu radacini inca din copilarie.\n\n'+
+      'INTERPRETARE CLINICA: Un scor EE ridicat este asociat cu cicluri recurente de supraalimentatie in perioadele dificile, urmate de vinovatie si noi restrictii, care amplifica stresul si reinitializeaza ciclul. In combinatie cu retinere cognitiva ridicata, sugereaza un ciclu restrictie-dezinhibitie bine instalat. In combinatie cu scor UE ridicat, tabloul este complex si necesita abordare multidisciplinara.\n\n'+
+      'DIRECTII CONSULTATIE: Aceasta dimensiune trebuie adresata ca PRIORITATE. Este recomandata colaborarea cu un psiholog sau terapeut comportamental. In paralel, lucrul pe identificarea tiparelor emotionale si construirea unui plan de actiune scris pentru momentele de craving emotional. Fara adresarea componentei emotionale, orice interventie nutritionala va fi partial eficienta.'
+  };
+
+  var at = ITEMS.map(function(it,idx){
+    var label = it.sub==='cr'?'Retinere Cognitiva':it.sub==='ue'?'Alimentatie Necontrolata':'Alimentatie Emotionala';
+    return '  Q'+it.id+'. ['+label+']\n  '+it.text+'\n  Raspuns ales: '+OPTS[answers[it.id]-1]+' ('+answers[it.id]+' din 4)';
+  }).join('\n\n');
+
+  var flags=[];
+  if(cr>65) flags.push('retinere cognitiva rigida (risc cicluri restrictie-dezinhibitie)');
+  if(ue>60) flags.push('alimentatie necontrolata semnificativa (risc portii excesive, sensibilitate la stimuli)');
+  if(ee>60) flags.push('alimentatie emotionala marcata (prioritate comportamentala, posibil suport psihologic)');
+
+  var prioritati = flags.length===0
+    ? 'Nu exista zone de risc ridicat. Plan nutritional de optimizare si mentinere.'
+    : 'ZONE PRIORITARE DE ADRESAT IN CONSULTATIE:\n'+flags.map(function(f,i){return '  '+(i+1)+'. '+f;}).join('\n');
+
+  return [
+    '================================================================',
+    'EVALUARE COMPORTAMENT ALIMENTAR - RAPORT COMPLET PENTRU CONSULTANT',
+    '================================================================',
+    '',
+    'CLIENT: '+name.toUpperCase(),
+    'Data evaluarii: '+date,
+    '',
+    '--- DATE PERSONALE ---',
+    'Nume:        '+name,
+    'Email:       '+email,
+    'Telefon:     '+phone,
+    'Varsta:      '+age+' ani',
+    'Sex:         '+sex,
+    'Greutate:    '+weight+' kg',
+    'Inaltime:    '+height+' cm',
+    'IMC:         '+bmi+' kg/m2 ('+bmiCat+')',
+    '',
+    '--- SCORURI (scala 0-100) ---',
+    'Retinere Cognitiva (CR):       '+cr+'/100   ['+crL.l+']',
+    'Alimentatie Necontrolata (UE): '+ue+'/100   ['+ueL.l+']',
+    'Alimentatie Emotionala (EE):   '+ee+'/100   ['+eeL.l+']',
+    '',
+    'Praguri orientative:',
+    '  CR: <35 scazut | 35-65 moderat | >65 ridicat',
+    '  UE: <35 scazut | 35-60 moderat | >60 ridicat',
+    '  EE: <30 scazut | 30-60 moderat | >60 ridicat',
+    '',
+    '================================================================',
+    '                   INTERPRETARE CLINICA DETALIATA',
+    '================================================================',
+    '',
+    crInterp[crL.c],
+    '',
+    '----------------------------------------------------------------',
+    '',
+    ueInterp[ueL.c],
+    '',
+    '----------------------------------------------------------------',
+    '',
+    eeInterp[eeL.c],
+    '',
+    '================================================================',
+    '              SINTEZA SI DIRECTII PENTRU CONSULTATIE',
+    '================================================================',
+    '',
+    prioritati,
+    '',
+    'PROFIL INTEGRAT:',
+    (function(){
+      var p='';
+      if(cr>65 && ee>60) p='Profil RESTRICTIE-COMPENSARE EMOTIONALA: clientul isi impune reguli stricte care cedeaza in momentele de stres, generand supraalimentatie emotionala urmata de noi restrictii. Ciclu autointretinut. Necesita deconstruirea relatiei cu regulile alimentare simultan cu mecanismele de coping emotional.';
+      else if(ue>60 && ee>60) p='Profil PIERDERE DUBLA A CONTROLULUI: atât stimulii externi cat si starile emotionale declanseaza supraalimentatia. Risc crescut de binge eating disorder subclinic. Prioritate maxima, abordare multidisciplinara recomandata.';
+      else if(cr>65 && ue>60) p='Profil CONTROL-DEZCONTROL: restrictia cognitiva ridicata este sistematic compromisa de reactivitatea la stimuli externi. Clientul oscileaza intre perioade de disciplina rigida si pierderi frecvente de control.';
+      else if(cr<35 && ue>60) p='Profil DEZORDINE ALIMENTARA SUBCLINICA: absenta oricarui control constient combinata cu pierderi frecvente de control situational. Sugestiv pentru alimentatie haparazata (grazing) cu episoade de supraalimentatie.';
+      else if(flags.length===0) p='Profil ECHILIBRAT: toate cele trei dimensiuni in zona functionala. Plan nutritional de optimizare si preventie.';
+      else p='Profil MIXT cu zone de atentie moderate. Plan nutritional personalizat cu adresarea explicita a dimensiunilor evidentiate.';
+      return p;
+    })(),
+    '',
+    '================================================================',
+    '                   RASPUNSURI INDIVIDUALE (18/18)',
+    '================================================================',
+    '',
+    at,
+    '',
+    '================================================================',
+    'Instrument: Three-Factor Eating Questionnaire - Revised 18-item (TFEQ-R18)',
+    'Referinta: Karlsson J., et al. (2000). Psychometric properties and factor structure of the Three-Factor Eating Questionnaire (TFEQ) in obese men and women.',
+    'NutriSib - nutrisib.club | nutrisib.club@gmail.com',
+    '================================================================'
+  ].join('\n');
+}
+
+/* Calcul + trimitere */
+document.getElementById('btn-calc').addEventListener('click',function(){
+  var res=getAnswers();
+  var errEl=document.getElementById('err2');
+  if(res.m.length>0){
+    errEl.textContent='Va rugam raspundeti la toate intrebarile. Itemi fara raspuns: '+res.m.join(', ')+'.';
+    errEl.style.display='block';
+    res.m.forEach(function(id){var e=document.getElementById('qi-'+id);if(e)e.classList.add('err-q');});
+    var f=document.getElementById('qi-'+res.m[0]);if(f)f.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  errEl.style.display='none';
+
+  var name=document.getElementById('f-name').value.trim();
+  var email=document.getElementById('f-email').value.trim();
+  var phone=document.getElementById('f-phone').value.trim();
+  var age=document.getElementById('f-age').value.trim();
+  var weight=document.getElementById('f-weight').value.trim();
+  var height=document.getElementById('f-height').value.trim();
+  var sex=document.getElementById('f-sex').value;
+  var bmi=(weight&&height)?(parseFloat(weight)/Math.pow(parseFloat(height)/100,2)).toFixed(1):'N/A';
+  var bmiCat=(function(b){if(isNaN(b))return '';if(b<18.5)return 'Subponderal';if(b<25)return 'Normal';if(b<30)return 'Supraponderal';if(b<35)return 'Obezitate gr.I';if(b<40)return 'Obezitate gr.II';return 'Obezitate gr.III';})(parseFloat(bmi));
+
+  var sc=calcScores(res.a);
+  var date=new Date().toLocaleDateString('ro-RO',{day:'2-digit',month:'long',year:'numeric'});
+
+  /* Afisare ecran - prietenos */
+  document.getElementById('res-name').textContent='Profilul alimentar al '+name;
+  document.getElementById('res-meta').textContent='Evaluat la '+date+' | '+age+' ani | '+sex+' | '+weight+' kg | '+height+' cm | IMC '+bmi+' ('+bmiCat+')';
+
+  var profile=buildScreenProfile(sc, name);
+  var tc=document.getElementById('tema-container'); tc.innerHTML='';
+  profile.teme.forEach(function(t){
+    var d=document.createElement('div'); d.className='tema-card '+t.cls;
+    d.innerHTML='<div class="tema-icon">'+t.icon+'</div><div class="tema-label">'+t.label+'</div><div class="tema-title">'+t.title+'</div><p class="tema-text">'+t.text+'</p>';
+    tc.appendChild(d);
+  });
+
+  document.getElementById('concluzie-text').innerHTML=buildConcluzieEcran(sc, name);
+
+  showStep(3);
+
+  /* Email catre consultant - complex, clinic */
+  var emailBody=buildEmailBody(sc, name, email, phone, age, sex, weight, height, bmi, bmiCat, date, res.a);
+
+  var fd=new FormData();
+  fd.append('_subject','Evaluare comportament alimentar - '+name+' - '+date);
+  fd.append('_replyto',email);
+  fd.append('Nume_client',name);
+  fd.append('Email_client',email);
+  fd.append('Telefon_client',phone);
+  fd.append('Varsta',age+' ani');
+  fd.append('Sex',sex);
+  fd.append('Greutate_kg',weight);
+  fd.append('Inaltime_cm',height);
+  fd.append('IMC',bmi+' kg/m2 ('+bmiCat+')');
+  fd.append('Scor_CR_Retinere_Cognitiva',sc.cr+'/100 ('+getLevel(sc.cr,'cr').l+')');
+  fd.append('Scor_UE_Alimentatie_Necontrolata',sc.ue+'/100 ('+getLevel(sc.ue,'ue').l+')');
+  fd.append('Scor_EE_Alimentatie_Emotionala',sc.ee+'/100 ('+getLevel(sc.ee,'ee').l+')');
+  fd.append('Raport_clinic_complet',emailBody);
+
+  var sEl=document.getElementById('mail-status'), sTxt=document.getElementById('mail-txt');
+  sTxt.textContent='Se transmite evaluarea...'; sEl.className='mail-status';
+
+  fetch(FORMSPREE,{method:'POST',body:fd,headers:{Accept:'application/json'}})
+    .then(function(r){
+      if(r.ok){sEl.className='mail-status sent';sTxt.textContent='Evaluarea a fost transmisa cu succes consultantului NutriSib.';}
+      else{sEl.className='mail-status error';sTxt.textContent='Trimiterea a esuat. Contactati nutrisib.club@gmail.com.';}
+    })
+    .catch(function(){sEl.className='mail-status error';sTxt.textContent='Eroare de conexiune. Salvati pagina (Ctrl+P) pentru arhiva.';});
+});
+
+/* Reset */
+document.getElementById('btn-reset').addEventListener('click',function(){
+  ITEMS.forEach(function(it){
+    document.querySelectorAll('input[name="q'+it.id+'"]').forEach(function(r){r.checked=false;});
+    var qi=document.getElementById('qi-'+it.id); if(qi)qi.classList.remove('answered','err-q');
+  });
+  ['f-name','f-email','f-phone','f-age','f-weight','f-height'].forEach(function(id){var el=document.getElementById(id);el.value='';el.classList.remove('err');});
+  var sx=document.getElementById('f-sex'); sx.value=''; sx.classList.remove('err');
+  document.getElementById('imc-box').classList.remove('show');
+  document.getElementById('imc-hint').style.display='block';
+  document.getElementById('err1').style.display='none';
+  document.getElementById('err2').style.display='none';
+  showStep(1);
+});
+
+document.getElementById('btn-print').addEventListener('click',function(){window.print();});
+
+})();
+</script>
+</body>
+</html>
