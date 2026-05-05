@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Evaluare comportament alimentar — TFEQ-R18 | NutriSib</title>
+<meta name="description" content="Chestionar TFEQ-R18 pentru evaluarea comportamentului alimentar — NutriSib, dr.ing. Radu Pascu, Sibiu.">
+<meta name="robots" content="noindex, nofollow">
+
+<!-- ═══ FONTS ═══ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+
+<!-- ═══ CELOS CSS ═══ -->
+<link rel="stylesheet" href="https://nutrisib.club/celos.css">
+
+<style>
+/* ─────────────────────────────────────────────────────
+   TFEQ-R18 — Stiluri proprii, bazate pe sistemul CELOS
+   ───────────────────────────────────────────────────── */
+
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-pearl);
+  color: var(--color-text-dark);
+  line-height: 1.6;
+  min-height: 100vh;
+  padding: 1rem;
+  margin: 0;
+}
+
+/* ── Layout ── */
+.page-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 0 3rem;
+}
+
+/* ── Brand header ── */
+.brand-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+.brand-logo-img {
+  height: 44px;
+  width: auto;
+}
+.brand-logo-fallback {
+  width: 44px; height: 44px;
+  background: var(--color-navy);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.brand-logo-fallback svg { width: 22px; height: 22px; }
+.brand-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.05rem; font-weight: 800;
+  color: var(--color-navy); letter-spacing: -0.02em;
+}
+.brand-tagline { font-size: 11px; color: var(--color-text-light); margin-top: 1px; }
+
+/* ── Progress ── */
+.progress-wrap { margin-bottom: 1.5rem; }
+.progress-steps {
+  display: flex; gap: 8px; align-items: center; margin-bottom: 8px;
+}
+.progress-step {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; color: #9ca3af; font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+}
+.progress-step.active { color: var(--color-navy); }
+.progress-step.done   { color: var(--color-text-light); }
+.step-dot {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #e5e7eb; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #9ca3af; flex-shrink: 0;
+  transition: background 0.3s, color 0.3s;
+}
+.progress-step.active .step-dot { background: var(--color-navy); color: #fff; }
+.progress-step.done   .step-dot { background: var(--color-brand-medium); color: #fff; }
+.step-sep { flex: 1; height: 1px; background: var(--color-border); }
+.progress-bar-track {
+  height: 4px; background: var(--color-border); border-radius: 2px; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 4px; background: linear-gradient(90deg, var(--color-navy), var(--color-brand-medium));
+  border-radius: 2px; transition: width 0.5s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Card (override) ── */
+.tfeq-card {
+  background: #fff;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border);
+  padding: 2rem;
+  margin-bottom: 1rem;
+}
+@media (max-width: 520px) { .tfeq-card { padding: 1.25rem 1rem; } }
+
+.card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25rem; font-weight: 800;
+  color: var(--color-navy); margin-bottom: 0.3rem;
+  letter-spacing: -0.02em;
+}
+.card-subtitle {
+  font-size: 0.875rem; color: var(--color-text-light);
+  line-height: 1.55; margin-bottom: 1.5rem;
+}
+
+/* ── Hero mini ── */
+.tfeq-hero {
+  background: var(--color-navy);
+  border-radius: var(--radius-card);
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.25rem;
+  position: relative; overflow: hidden;
+}
+.tfeq-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 90% 30%, rgba(62,146,204,0.25) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 60% at 5% 80%, rgba(197,160,33,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+.tfeq-hero-inner { position: relative; z-index: 1; }
+.tfeq-hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(62,146,204,0.15); border: 1px solid rgba(62,146,204,0.3);
+  border-radius: 50px; padding: 3px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 700; color: var(--color-brand-medium);
+  text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem;
+}
+.tfeq-hero h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem; font-weight: 900;
+  color: #fff; margin: 0 0 0.5rem;
+  line-height: 1.15; letter-spacing: -0.03em;
+}
+.tfeq-hero p {
+  font-family: 'Lora', serif;
+  font-size: 0.92rem; color: rgba(255,255,255,0.75);
+  margin: 0; line-height: 1.5;
+}
+.tfeq-hero .hero-badges {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 1rem;
+}
+.hero-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 600;
+  padding: 4px 10px; border-radius: 20px;
+  background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* ── Form fields ── */
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.field-row.full  { grid-template-columns: 1fr; }
+.field-row.three { grid-template-columns: 1fr 1fr 1fr; }
+.field-row.four  { grid-template-columns: 1fr 1fr 1fr 1fr; }
+@media (max-width: 520px) {
+  .field-row, .field-row.three, .field-row.four { grid-template-columns: 1fr; }
+  .field-row.two-mob { grid-template-columns: 1fr 1fr; }
+}
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+  font-size: 12px; font-weight: 600;
+  color: var(--color-text-medium); text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.field label span { font-weight: 400; text-transform: none; color: #9ca3af; letter-spacing: 0; }
+.field input, .field select {
+  height: 42px; padding: 0 12px;
+  border: 1.5px solid var(--color-border); border-radius: 8px;
+  font-size: 14px; font-family: 'Inter', sans-serif;
+  color: var(--color-text-dark); background: #fff;
+  outline: none; transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none; -webkit-appearance: none;
+}
+.field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  padding-right: 34px; cursor: pointer;
+}
+.field input:focus, .field select:focus {
+  border-color: var(--color-navy);
+  box-shadow: 0 0 0 3px rgba(27,42,74,0.1);
+}
+.field input.error-field, .field select.error-field { border-color: var(--color-accent-red); }
+.field-hint { font-size: 11px; color: #9ca3af; }
+
+/* IMC live preview */
+.imc-preview {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--color-brand-light); border: 1px solid #c7ddf0;
+  border-radius: 6px; padding: 6px 12px;
+  font-size: 12px; font-weight: 600; color: var(--color-navy);
+  margin-top: 4px; transition: all 0.3s;
+}
+.imc-preview.hidden { opacity: 0; pointer-events: none; }
+.imc-val { font-size: 15px; font-weight: 800; margin: 0 4px; }
+
+/* ── GDPR notice ── */
+.gdpr-notice {
+  background: #f0fdf4; border: 1px solid #bbf7d0;
+  border-radius: 8px; padding: 10px 14px;
+  font-size: 11.5px; color: #166534;
+  margin-top: 1rem; line-height: 1.55;
+}
+
+/* ── Error bar ── */
+.error-bar {
+  background: #fef2f2; border: 1px solid #fecaca;
+  border-radius: 8px; padding: 10px 14px;
+  font-size: 13px; color: #b91c1c;
+  margin-bottom: 1rem; display: none;
+}
+
+/* ── Questionnaire items ── */
+.section-sep {
+  display: flex; align-items: center; gap: 10px;
+  margin: 1.75rem 0 0.75rem;
+}
+.section-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
+  text-transform: uppercase; padding: 3px 10px;
+  border-radius: 20px; white-space: nowrap;
+}
+.badge-cr { background: var(--color-brand-light); color: var(--color-navy); }
+.badge-ue { background: #FEF3C7; color: #92400E; }
+.badge-ee { background: #FCE7F3; color: #9D174D; }
+.section-sep-line { flex: 1; height: 1px; background: var(--color-border); }
+.section-desc-q {
+  font-size: 12px; color: #9ca3af;
+  font-family: 'Inter', sans-serif;
+  margin-top: -0.25rem; margin-bottom: 0.75rem;
+}
+
+.q-item {
+  background: #fafafa; border: 1.5px solid var(--color-border);
+  border-radius: 10px; padding: 1rem; margin-bottom: 8px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.q-item.answered {
+  border-color: #1D9E75;
+  background: #f9fefb;
+}
+.q-item.unanswered-error {
+  border-color: var(--color-accent-red);
+  background: #fff5f5;
+}
+.q-text {
+  font-size: 14px; color: var(--color-text-medium);
+  line-height: 1.5; margin-bottom: 0.75rem;
+  font-family: 'Inter', sans-serif;
+}
+.q-num {
+  font-weight: 700; color: var(--color-navy);
+  margin-right: 5px; font-family: 'Montserrat', sans-serif;
+}
+.options-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+}
+@media (max-width: 460px) {
+  .options-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.opt-label { cursor: pointer; display: block; }
+.opt-label input[type="radio"] { display: none; }
+.opt-box {
+  border: 1.5px solid var(--color-border); border-radius: 7px;
+  padding: 7px 4px; text-align: center;
+  font-size: 11px; color: var(--color-text-light);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.3; min-height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.12s; background: #fff; user-select: none;
+}
+.opt-label input:checked + .opt-box {
+  background: #e6faf4;
+  border-color: #1D9E75 !important;
+  border-width: 2px;
+  color: #065f46; font-weight: 600;
+  box-shadow: 0 0 0 2px rgba(29,158,117,0.15);
+}
+.opt-label:hover .opt-box {
+  border-color: var(--color-brand-medium);
+  background: var(--color-brand-light);
+}
+
+/* ── Buttons ── */
+.btn-tfeq-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 46px; padding: 0 28px;
+  background: var(--color-navy); color: #fff;
+  border: none; border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+  width: 100%; letter-spacing: -0.01em;
+  box-shadow: 0 3px 0 #051336;
+}
+.btn-tfeq-primary:hover {
+  background: #243a62;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 0 #051336;
+}
+.btn-tfeq-primary:active { transform: scale(0.99); box-shadow: 0 1px 0 #051336; }
+.btn-tfeq-primary:disabled { background: #9ca3af; cursor: not-allowed; box-shadow: none; }
+
+.btn-tfeq-gold {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 46px; padding: 0 28px;
+  background: var(--color-gold); color: #fff;
+  border: none; border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  width: 100%; letter-spacing: -0.01em;
+  box-shadow: 0 3px 0 #8a6d12;
+}
+.btn-tfeq-gold:hover { background: #b08e1b; transform: translateY(-1px); }
+.btn-tfeq-gold:active { transform: scale(0.99); }
+
+.btn-tfeq-secondary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 42px; padding: 0 20px;
+  background: #fff; color: var(--color-text-medium);
+  border: 1.5px solid var(--color-border); border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  transition: all 0.15s; white-space: nowrap;
+}
+.btn-tfeq-secondary:hover { background: var(--color-brand-light); border-color: var(--color-brand-medium); color: var(--color-navy); }
+.btn-row { display: flex; gap: 10px; margin-top: 1.5rem; align-items: center; }
+@media (max-width: 420px) { .btn-row { flex-direction: column; } .btn-tfeq-secondary { width: 100%; } }
+
+/* ── Results ── */
+.results-header {
+  display: flex; align-items: flex-start; gap: 14px; margin-bottom: 1.5rem;
+}
+.results-icon {
+  width: 48px; height: 48px;
+  background: var(--color-brand-light);
+  border: 2px solid rgba(62,146,204,0.3);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.results-icon svg { width: 24px; height: 24px; }
+.results-heading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.15rem; font-weight: 800;
+  color: var(--color-navy); letter-spacing: -0.02em;
+}
+.results-meta {
+  font-size: 12px; color: var(--color-text-light);
+  margin-top: 3px; line-height: 1.5;
+}
+
+.scores-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem; }
+@media (max-width: 460px) { .scores-grid { grid-template-columns: 1fr; } }
+
+.score-card {
+  border-radius: 12px; padding: 1rem; border: 1.5px solid transparent;
+}
+.score-card.cr { background: #f0fdf9; border-color: #a7f3d0; }
+.score-card.ue { background: #fffbeb; border-color: #fde68a; }
+.score-card.ee { background: #fdf2f8; border-color: #fbcfe8; }
+
+.sc-subscala {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.score-card.cr .sc-subscala { color: #065f46; }
+.score-card.ue .sc-subscala { color: #92400e; }
+.score-card.ee .sc-subscala { color: #831843; }
+.sc-name {
+  font-size: 11px; color: var(--color-text-medium);
+  margin: 3px 0 8px; line-height: 1.3; font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+.sc-score {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2rem; font-weight: 800; letter-spacing: -0.04em;
+}
+.score-card.cr .sc-score { color: #065f46; }
+.score-card.ue .sc-score { color: #92400e; }
+.score-card.ee .sc-score { color: #831843; }
+.sc-max { font-size: 13px; color: #9ca3af; font-weight: 400; }
+.sc-bar-wrap { height: 5px; background: rgba(0,0,0,0.08); border-radius: 3px; margin: 10px 0 6px; overflow: hidden; }
+.sc-bar-fill { height: 5px; border-radius: 3px; transition: width 0.9s cubic-bezier(.25,.8,.25,1); }
+.score-card.cr .sc-bar-fill { background: linear-gradient(90deg, #059669, #1D9E75); }
+.score-card.ue .sc-bar-fill { background: linear-gradient(90deg, #d97706, #f59e0b); }
+.score-card.ee .sc-bar-fill { background: linear-gradient(90deg, #db2777, #ec4899); }
+.sc-nivel {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 700;
+}
+.score-card.cr .sc-nivel { color: #065f46; }
+.score-card.ue .sc-nivel { color: #92400e; }
+.score-card.ee .sc-nivel { color: #831843; }
+
+/* Interpretation blocks */
+.interp-block {
+  border-radius: 10px; border: 1px solid var(--color-border);
+  padding: 1rem 1.25rem; margin-bottom: 8px;
+}
+.interp-block-title {
+  font-family: 'Lora', serif;
+  font-size: 13px; font-weight: 700; color: var(--color-text-dark);
+  margin-bottom: 5px;
+}
+.interp-block p {
+  font-size: 13px; color: var(--color-text-medium);
+  line-height: 1.65; margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+.interp-block.highlight { background: #f0fdf4; border-color: #bbf7d0; }
+.interp-block.warning   { background: #fffbeb; border-color: #fde68a; }
+.interp-block.alert     { background: #fef2f2; border-color: #fecaca; }
+
+/* Mail status */
+.mail-status {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--color-text-light);
+  margin-top: 1rem; padding: 10px 14px;
+  background: #f9fafb; border-radius: 8px;
+  border: 1px solid var(--color-border);
+  font-family: 'Inter', sans-serif;
+}
+.mail-status.sent  { color: #059669; background: #f0fdf4; border-color: #bbf7d0; }
+.mail-status.error { color: #b91c1c; background: #fef2f2; border-color: #fecaca; }
+.mail-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+
+/* ── Steps visibility ── */
+.step { display: none; }
+.step.active { display: block; }
+.fade-in { animation: tfeqFadeIn 0.35s ease; }
+@keyframes tfeqFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── Footer ── */
+.page-footer {
+  text-align: center; font-size: 11px;
+  color: var(--color-text-light);
+  font-family: 'Inter', sans-serif;
+  margin-top: 2rem; line-height: 1.7;
+}
+.page-footer a { color: var(--color-brand-medium); }
+
+/* ── Divider ── */
+.tfeq-divider {
+  border: none; border-top: 1px solid var(--color-border);
+  margin: 1.5rem 0;
+}
+
+/* Confirmation section (step 3 bottom) */
+.confirm-notice {
+  background: var(--color-brand-light);
+  border: 1px solid rgba(62,146,204,0.3);
+  border-radius: 10px; padding: 1rem 1.25rem;
+  margin-top: 1rem;
+  font-size: 13px; color: var(--color-navy);
+  font-family: 'Inter', sans-serif; line-height: 1.6;
+}
+.confirm-notice strong { font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- ── Brand Header ── -->
+  <div class="brand-header">
+    <img src="https://nutrisib.club/logo/logo_navy_pearl.png"
+         alt="NutriSib"
+         class="brand-logo-img"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+    <div class="brand-logo-fallback" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+        <path d="M8 12h8M12 8v8"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-name">NutriSib</div>
+      <div class="brand-tagline">dr.ing. Radu V. Pascu — Arhitectură biologică</div>
+    </div>
+  </div>
+
+  <!-- ── Hero Card ── -->
+  <div class="tfeq-hero">
+    <div class="tfeq-hero-inner">
+      <div class="tfeq-hero-eyebrow">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Instrument de evaluare
+      </div>
+      <h1>TFEQ-R18</h1>
+      <p>Three-Factor Eating Questionnaire — evaluarea comportamentului alimentar pe trei dimensiuni: reținere cognitivă, alimentație necontrolată și alimentație emoțională.</p>
+      <div class="hero-badges">
+        <span class="hero-badge">18 itemi</span>
+        <span class="hero-badge">3 subscale</span>
+        <span class="hero-badge">Karlsson et al., 2000</span>
+        <span class="hero-badge">5–8 minute</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Progress ── -->
+  <div class="progress-wrap">
+    <div class="progress-steps">
+      <div class="progress-step active" id="ps1">
+        <div class="step-dot">1</div>
+        <span>Date personale</span>
+      </div>
+      <div class="step-sep"></div>
+      <div class="progress-step" id="ps2">
+        <div class="step-dot">2</div>
+        <span>Chestionar</span>
+      </div>
+      <div class="step-sep"></div>
+      <div class="progress-step" id="ps3">
+        <div class="step-dot">3</div>
+        <span>Rezultate</span>
+      </div>
+    </div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progress-fill" style="width:15%"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- PASUL 1 — Date personale                       -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="step active fade-in" id="step1">
+    <div class="tfeq-card">
+      <div class="card-title">Date personale</div>
+      <div class="card-subtitle">
+        Aceste informații ne permit să personalizăm interpretarea și să îl notificăm pe consultantul tău NutriSib.
+        Datele sunt confidențiale, utilizate exclusiv în scop de evaluare nutrițională.
+      </div>
+
+      <div id="error-bar-1" class="error-bar">Vă rugăm completați toate câmpurile obligatorii marcate cu *</div>
+
+      <!-- Nume -->
+      <div class="field-row full">
+        <div class="field">
+          <label>Nume și prenume <span>*</span></label>
+          <input type="text" id="f-name" placeholder="ex. Maria Ionescu" autocomplete="name">
+        </div>
+      </div>
+
+      <!-- Email + Telefon -->
+      <div class="field-row">
+        <div class="field">
+          <label>Adresă email <span>*</span></label>
+          <input type="email" id="f-email" placeholder="exemplu@email.com" autocomplete="email">
+          <span class="field-hint">Veți primi o confirmare de completare</span>
+        </div>
+        <div class="field">
+          <label>Telefon <span>*</span></label>
+          <input type="tel" id="f-phone" placeholder="+40 7xx xxx xxx" autocomplete="tel">
+          <span class="field-hint">Numărul dvs. de contact</span>
+        </div>
+      </div>
+
+      <!-- Vârstă + Sex -->
+      <div class="field-row">
+        <div class="field">
+          <label>Vârstă <span>(ani) *</span></label>
+          <input type="number" id="f-age" placeholder="35" min="16" max="99">
+        </div>
+        <div class="field">
+          <label>Sex <span>*</span></label>
+          <select id="f-sex">
+            <option value="">— Selectați —</option>
+            <option value="Feminin">Feminin</option>
+            <option value="Masculin">Masculin</option>
+            <option value="Prefer să nu precizez">Prefer să nu precizez</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Greutate + Înălțime + IMC live -->
+      <div class="field-row three" style="margin-bottom:6px">
+        <div class="field">
+          <label>Greutate <span>(kg) *</span></label>
+          <input type="number" id="f-weight" placeholder="70" min="30" max="300" step="0.1" oninput="updateIMC()">
+        </div>
+        <div class="field">
+          <label>Înălțime <span>(cm) *</span></label>
+          <input type="number" id="f-height" placeholder="168" min="120" max="220" oninput="updateIMC()">
+        </div>
+        <div class="field">
+          <label>IMC calculat</label>
+          <div style="padding-top:4px">
+            <div class="imc-preview hidden" id="imc-preview">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              IMC: <span class="imc-val" id="imc-val">—</span>
+              <span id="imc-cat" style="font-size:10px;font-weight:400;color:var(--color-text-light)"></span>
+            </div>
+            <div style="font-size:11px;color:#9ca3af;margin-top:3px" id="imc-hint">Se calculează automat</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gdpr-notice">
+        🔒 Prin continuare confirmați că sunteți de acord cu utilizarea acestor date exclusiv în scopul evaluării nutriționale, în conformitate cu GDPR. Datele nu vor fi utilizate în scop comercial și nu vor fi partajate cu terți.
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-tfeq-primary" onclick="goToStep2()">
+          Continuă la chestionar
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- PASUL 2 — Chestionar TFEQ-R18                  -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="step" id="step2">
+    <div class="tfeq-card fade-in">
+      <div class="card-title">Chestionar TFEQ-R18</div>
+      <div class="card-subtitle">
+        Citiți fiecare afirmație și selectați răspunsul care vă descrie cel mai bine.
+        Nu există răspunsuri corecte sau greșite — alegeți spontan, fără a analiza prea mult.
+        <strong style="color:var(--color-navy)">Toate cele 18 întrebări sunt obligatorii.</strong>
+      </div>
+
+      <div id="error-bar-2" class="error-bar"></div>
+
+      <!-- Secțiunea A → itemi CR -->
+      <div class="section-sep">
+        <span class="section-badge badge-cr">Secțiunea A — Reținere cognitivă</span>
+        <div class="section-sep-line"></div>
+      </div>
+      <p class="section-desc-q">Afirmații despre controlul conștient și deliberat al alimentației</p>
+
+      <div id="q-container"></div>
+
+      <div class="btn-row">
+        <button class="btn-tfeq-secondary" onclick="goToStep1()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Înapoi
+        </button>
+        <button class="btn-tfeq-gold" onclick="calcAndSubmit()">
+          Calculează profilul alimentar
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- PASUL 3 — Rezultate                            -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="step" id="step3">
+    <div class="tfeq-card fade-in">
+
+      <div class="results-header">
+        <div class="results-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--color-navy)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div>
+          <div class="results-heading" id="res-heading">Profilul tău alimentar</div>
+          <div class="results-meta" id="res-meta"></div>
+        </div>
+      </div>
+
+      <!-- Score cards -->
+      <div class="scores-grid">
+        <div class="score-card cr">
+          <div class="sc-subscala">Subscala CR</div>
+          <div class="sc-name">Reținere cognitivă</div>
+          <div><span class="sc-score" id="sc-cr">0</span><span class="sc-max">/100</span></div>
+          <div class="sc-bar-wrap"><div class="sc-bar-fill" id="bar-cr" style="width:0%"></div></div>
+          <div class="sc-nivel" id="nivel-cr"></div>
+        </div>
+        <div class="score-card ue">
+          <div class="sc-subscala">Subscala UE</div>
+          <div class="sc-name">Alimentație necontrolată</div>
+          <div><span class="sc-score" id="sc-ue">0</span><span class="sc-max">/100</span></div>
+          <div class="sc-bar-wrap"><div class="sc-bar-fill" id="bar-ue" style="width:0%"></div></div>
+          <div class="sc-nivel" id="nivel-ue"></div>
+        </div>
+        <div class="score-card ee">
+          <div class="sc-subscala">Subscala EE</div>
+          <div class="sc-name">Alimentație emoțională</div>
+          <div><span class="sc-score" id="sc-ee">0</span><span class="sc-max">/100</span></div>
+          <div class="sc-bar-wrap"><div class="sc-bar-fill" id="bar-ee" style="width:0%"></div></div>
+          <div class="sc-nivel" id="nivel-ee"></div>
+        </div>
+      </div>
+
+      <!-- Interpretări -->
+      <div id="interp-container"></div>
+
+      <hr class="tfeq-divider">
+
+      <!-- Confirmare trimitere -->
+      <div class="confirm-notice" id="confirm-notice">
+        <strong>✓ Chestionar finalizat.</strong> Consultantul tău NutriSib a primit evaluarea și te va contacta în curând pentru a programa consultația personalizată. Pentru orice întrebare: <strong>nutrisib.club@gmail.com</strong>
+      </div>
+
+      <!-- Mail status -->
+      <div class="mail-status" id="mail-status">
+        <div class="mail-dot"></div>
+        <span id="mail-status-text">Se transmite evaluarea…</span>
+      </div>
+
+      <div class="btn-row" style="margin-top:1.25rem">
+        <button class="btn-tfeq-secondary" onclick="resetAll()">Completează din nou</button>
+        <button class="btn-tfeq-primary" onclick="window.print()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Salvează / Printează
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Footer ── -->
+  <div class="page-footer">
+    TFEQ-R18 — Karlsson et al. (2000) &nbsp;·&nbsp;
+    Adaptat și utilizat de <a href="https://nutrisib.club" target="_blank">NutriSib</a> &nbsp;·&nbsp;
+    Instrument de screening, nu diagnostic clinic<br>
+    © <span id="yr"></span> NutriSib — dr.ing. Radu V. Pascu &nbsp;·&nbsp; Toate drepturile rezervate
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   CONFIGURARE
+   ════════════════════════════════════════════════════════════ */
+
+const FORMSPREE_CONSULTANT = "https://formspree.io/f/xaqvobzp";
+
+/* ════════════════════════════════════════════════════════════ */
+
+document.getElementById("yr").textContent = new Date().getFullYear();
+
+/* ── Itemi TFEQ-R18 ── */
+const ITEMS = [
+  // CR — Cognitive Restraint (6 itemi, Q1–Q6)
+  {id:1,  sub:"cr", text:"Mănânc mai puțin în mod deliberat pentru a-mi controla greutatea."},
+  {id:2,  sub:"cr", text:"Îmi restricționez aportul alimentar pentru a-mi controla greutatea."},
+  {id:3,  sub:"cr", text:"Când am mâncat prea mult, mănânc mai puțin decât de obicei în zilele următoare."},
+  {id:4,  sub:"cr", text:"Mă abțin în mod conștient la mese pentru a nu mă îngrășa."},
+  {id:5,  sub:"cr", text:"Mănânc deliberat mai puțin pentru a nu deveni mai greu/ă."},
+  {id:6,  sub:"cr", text:"Număr caloriile ca rutină autoimpusă pentru a-mi controla greutatea."},
+  // UE — Uncontrolled Eating (9 itemi, Q7–Q15)
+  {id:7,  sub:"ue", text:"Uneori, când încep să mănânc, pur și simplu nu mă pot opri."},
+  {id:8,  sub:"ue", text:"Prezența unei persoane care mănâncă mă face adesea suficient de flămând/ă încât să mănânc și eu."},
+  {id:9,  sub:"ue", text:"Sunt mereu atât de flămând/ă încât îmi este greu să mă opresc înainte să termin tot din farfurie."},
+  {id:10, sub:"ue", text:"Când văd un preparat cu adevărat apetisant, devin adesea atât de flămând/ă încât trebuie să mănânc imediat."},
+  {id:11, sub:"ue", text:"Dacă miros o mâncare gustoasă sau văd un aliment delicios, îmi este foarte greu să mă abțin, chiar dacă tocmai am terminat masa."},
+  {id:12, sub:"ue", text:"Sunt mereu suficient de flămând/ă încât aș putea mânca oricând."},
+  {id:13, sub:"ue", text:"Am o limită pentru cantitatea de mâncare la o masă, dar adesea o depășesc."},
+  {id:14, sub:"ue", text:"Mănânc atât de mult încât ajung să mă simt inconfortabil."},
+  {id:15, sub:"ue", text:"Nu mă opresc din mâncat atâta timp cât mai există mâncare în farfurie."},
+  // EE — Emotional Eating (3 itemi, Q16–Q18)
+  {id:16, sub:"ee", text:"Când mă simt singur/ă, mă consolez mâncând."},
+  {id:17, sub:"ee", text:"Când mă simt anxios/anxioasă, mă trezesc că mănânc."},
+  {id:18, sub:"ee", text:"Când mă simt deprimat/ă, am tendința de a mânca în exces."}
+];
+
+const OPT_LABELS = [
+  "Definitiv fals",
+  "Preponderent fals",
+  "Preponderent adevărat",
+  "Definitiv adevărat"
+];
+
+/* ── Generare chestionar ── */
+const container = document.getElementById("q-container");
+const sectionBreaks = {
+  7:  {badge:"badge-ue", label:"Secțiunea B — Alimentație necontrolată", desc:"Afirmații despre controlul cantității consumate și reacția la stimuli alimentari"},
+  16: {badge:"badge-ee", label:"Secțiunea C — Alimentație emoțională", desc:"Afirmații despre relația dintre stările emoționale și comportamentul alimentar"}
+};
+
+ITEMS.forEach(item => {
+  if(sectionBreaks[item.id]){
+    const s = sectionBreaks[item.id];
+    container.insertAdjacentHTML("beforeend",
+      `<div class="section-sep">
+         <span class="section-badge ${s.badge}">${s.label}</span>
+         <div class="section-sep-line"></div>
+       </div>
+       <p class="section-desc-q">${s.desc}</p>`
+    );
+  }
+  const opts = OPT_LABELS.map((l,i)=>
+    `<label class="opt-label">
+       <input type="radio" name="q${item.id}" value="${i+1}">
+       <div class="opt-box">${l}</div>
+     </label>`
+  ).join("");
+  const div = document.createElement("div");
+  div.className = "q-item";
+  div.id = `qi-${item.id}`;
+  div.innerHTML = `<div class="q-text"><span class="q-num">${item.id}.</span>${item.text}</div><div class="options-grid">${opts}</div>`;
+  container.appendChild(div);
+});
+
+/* ── Marcare răspunsuri (border verde) ── */
+document.addEventListener("change", e => {
+  if(e.target.type === "radio"){
+    const qid = e.target.name.replace("q","");
+    const el = document.getElementById(`qi-${qid}`);
+    if(el){ el.classList.add("answered"); el.classList.remove("unanswered-error"); }
+  }
+});
+
+/* ── IMC live ── */
+function updateIMC(){
+  const w = parseFloat(document.getElementById("f-weight").value);
+  const h = parseFloat(document.getElementById("f-height").value);
+  const preview = document.getElementById("imc-preview");
+  const hint    = document.getElementById("imc-hint");
+  if(!w || !h || h < 100){ preview.classList.add("hidden"); hint.style.display="block"; return; }
+  const bmi = (w / Math.pow(h/100, 2)).toFixed(1);
+  let cat = "", col = "";
+  if(bmi < 18.5)      { cat = "subponderal";    col="#d97706"; }
+  else if(bmi < 25)   { cat = "normal";          col="#059669"; }
+  else if(bmi < 30)   { cat = "supraponderal";   col="#d97706"; }
+  else if(bmi < 35)   { cat = "obezitate gr.I";  col="#dc2626"; }
+  else if(bmi < 40)   { cat = "obezitate gr.II"; col="#dc2626"; }
+  else                { cat = "obezitate gr.III"; col="#991b1b"; }
+  document.getElementById("imc-val").textContent = bmi;
+  const catEl = document.getElementById("imc-cat");
+  catEl.textContent = cat;
+  catEl.style.color = col;
+  preview.classList.remove("hidden");
+  hint.style.display = "none";
+}
+
+/* ── Progres & navigare pași ── */
+function setProgress(step){
+  const fills = {1:15, 2:55, 3:100};
+  document.getElementById("progress-fill").style.width = fills[step]+"%";
+  [1,2,3].forEach(n=>{
+    const el = document.getElementById("ps"+n);
+    el.className = "progress-step" + (n<step?" done": n===step?" active":"");
+  });
+}
+
+function showStep(n){
+  document.querySelectorAll(".step").forEach(el=>{
+    el.classList.remove("active");
+    el.classList.remove("fade-in");
+  });
+  const target = document.getElementById("step"+n);
+  target.classList.add("active");
+  void target.offsetWidth; // reflow pentru animație
+  target.classList.add("fade-in");
+  setProgress(n);
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function goToStep1(){ showStep(1); }
+
+function goToStep2(){
+  const name  = document.getElementById("f-name").value.trim();
+  const email = document.getElementById("f-email").value.trim();
+  const phone = document.getElementById("f-phone").value.trim();
+  const age   = document.getElementById("f-age").value.trim();
+  const w     = document.getElementById("f-weight").value.trim();
+  const h     = document.getElementById("f-height").value.trim();
+  const sex   = document.getElementById("f-sex").value;
+  const err   = document.getElementById("error-bar-1");
+  const ids   = ["f-name","f-email","f-phone","f-age","f-weight","f-height","f-sex"];
+
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  let ok = name && email && emailOk && phone && age && w && h && sex;
+
+  if(!ok){
+    err.textContent = !emailOk && email
+      ? "Adresa de email nu pare validă. Verificați formatul (ex. maria@email.com)."
+      : "Vă rugăm completați toate câmpurile obligatorii marcate cu *";
+    err.style.display = "block";
+    ids.forEach(id=>{
+      const el=document.getElementById(id);
+      if(!el.value.trim()) el.classList.add("error-field");
+    });
+    if(!emailOk) document.getElementById("f-email").classList.add("error-field");
+    return;
+  }
+  err.style.display = "none";
+  ids.forEach(id=>document.getElementById(id).classList.remove("error-field"));
+  showStep(2);
+}
+
+/* ── Calcul scoruri TFEQ-R18 ──
+   Formulă Karlsson et al. (2000):
+   Scor subscală = ((sumă_itemi − min_posibil) / range_posibil) × 100
+   CR : 6 itemi (Q1–Q6),  raw 6–24,  formula ((raw-6)/18)*100
+   UE : 9 itemi (Q7–Q15), raw 9–36,  formula ((raw-9)/27)*100
+   EE : 3 itemi (Q16–18), raw 3–12,  formula ((raw-3)/9)*100
+*/
+function getAnswers(){
+  const answers = {};
+  const missing = [];
+  ITEMS.forEach(item=>{
+    const sel = document.querySelector(`input[name="q${item.id}"]:checked`);
+    if(sel) answers[item.id] = parseInt(sel.value);
+    else missing.push(item.id);
+  });
+  return {answers, missing};
+}
+
+function calcScores(answers){
+  const rawCR = ITEMS.filter(i=>i.sub==="cr").reduce((s,i)=>s+answers[i.id],0);
+  const rawUE = ITEMS.filter(i=>i.sub==="ue").reduce((s,i)=>s+answers[i.id],0);
+  const rawEE = ITEMS.filter(i=>i.sub==="ee").reduce((s,i)=>s+answers[i.id],0);
+  return {
+    cr: Math.round(((rawCR - 6) / 18) * 100),   // 0–100
+    ue: Math.round(((rawUE - 9) / 27) * 100),   // 0–100
+    ee: Math.round(((rawEE - 3) / 9)  * 100)    // 0–100
+  };
+}
+
+/*
+  Praguri (tertile orientative):
+  CR: <35 scăzut | 35–65 moderat | >65 ridicat
+  UE: <35 scăzut | 35–60 moderat | >60 ridicat
+  EE: <30 scăzut | 30–60 moderat | >60 ridicat
+*/
+function getLevel(score, sub){
+  if(sub==="cr"){
+    if(score<35) return {label:"Scăzut",  cls:"low"};
+    if(score<65) return {label:"Moderat", cls:"mid"};
+    return               {label:"Ridicat", cls:"high"};
+  }
+  if(sub==="ue"){
+    if(score<35) return {label:"Scăzut",  cls:"low"};
+    if(score<60) return {label:"Moderat", cls:"mid"};
+    return               {label:"Ridicat", cls:"high"};
+  }
+  // EE
+  if(score<30) return {label:"Scăzut",  cls:"low"};
+  if(score<60) return {label:"Moderat", cls:"mid"};
+  return               {label:"Ridicat", cls:"high"};
+}
+
+function buildInterpretations(scores, clientName){
+  const {cr,ue,ee} = scores;
+  const crL = getLevel(cr,"cr"), ueL = getLevel(ue,"ue"), eeL = getLevel(ee,"ee");
+  const blocks = [];
+
+  const crTexts = {
+    low:  "Reținerea cognitivă scăzută sugerează că nu sunt aplicate strategii deliberate de limitare a aportului caloric. Aceasta poate fi neutră dacă alimentația intuitivă este bine calibrată, sau poate reflecta o abordare dezordonată în absența altor semnale reglatorii.",
+    mid:  "Nivelul moderat de reținere cognitivă indică o conștientizare a cantității consumate, fără a deveni restrictivă. Acesta este adesea cel mai funcțional profil — controlul există, dar nu domină relația cu mâncarea.",
+    high: "Reținerea cognitivă ridicată reflectă un control strict și deliberat al alimentației. Funcțional când este flexibil, poate deveni problematic dacă rigiditatea conduce la cicluri restrict–supraalimentație (fenomenul „disinhibition") sau dacă este asociat cu anxietate alimentară."
+  };
+  blocks.push({
+    cls:   cr>65 ? "warning" : "highlight",
+    title: `Reținere cognitivă (CR) — ${crL.label} · ${cr}/100`,
+    text:  crTexts[crL.cls]
+  });
+
+  const ueTexts = {
+    low:  "Controlul asupra cantității consumate este bun. Nu există tendința de a depăși limitele la masă ca răspuns la stimuli externi (miros, aspect vizual al alimentelor, prezența altora). Acesta este un indicator pozitiv al reglării homeostice a aportului.",
+    mid:  "Există situații în care stimulii externi sau foamea accentuată duc la depășirea intenției de consum. Pattern-ul este gestionabil, dar merită monitorizat — mediile alimentare „obezogene" (bufet, socializare cu alimente prezente) pot amplifica scorurile UE.",
+    high: "Scorul ridicat la alimentație necontrolată semnalează dificultăți semnificative în reglarea cantității consumate. Factorii externi (disponibilitatea alimentelor, stimulii senzoriali) supravin semnalele interne de sațietate. Este o zonă prioritară de lucru în cadrul consultației nutriționale."
+  };
+  blocks.push({
+    cls:   ue>60 ? "alert" : ue>35 ? "warning" : "highlight",
+    title: `Alimentație necontrolată (UE) — ${ueL.label} · ${ue}/100`,
+    text:  ueTexts[ueL.cls]
+  });
+
+  const eeTexts = {
+    low:  "Stările emoționale negative (anxietate, tristețe, singurătate) nu declanșează în mod semnificativ comportamentul alimentar. Relația afectiv–alimentar este bine delimitată — un aspect important al sănătății metabolice psihologice.",
+    mid:  "Există o tendință moderată de a apela la mâncare în momentele de disconfort emoțional. Nu este o problemă clinică, dar merită adresată în contextul unui plan nutrițional individualizat, mai ales în perioade de stres crescut.",
+    high: "Alimentația emoțională marcată indică că stresul, tristețea sau anxietatea sunt factori declanșatori principali ai comportamentului alimentar. Această dimensiune este puternic asociată cu dificultăți în menținerea greutății și necesită abordare integrativă (nutrițional + comportamental)."
+  };
+  blocks.push({
+    cls:   ee>60 ? "alert" : ee>30 ? "warning" : "highlight",
+    title: `Alimentație emoțională (EE) — ${eeL.label} · ${ee}/100`,
+    text:  eeTexts[eeL.cls]
+  });
+
+  // Sumarul general
+  let summary = `Profilul TFEQ-R18 al ${clientName} indică: `;
+  const flags = [];
+  if(cr>65) flags.push("reținere cognitivă rigidă care poate genera cicluri restrictive");
+  if(ue>60) flags.push("pierdere frecventă a controlului alimentar în prezența stimulilor externi");
+  if(ee>60) flags.push("alimentație emoțională semnificativă ce necesită strategie comportamentală");
+
+  if(flags.length===0)
+    summary += "un echilibru general bun al comportamentului alimentar. Se recomandă menținerea pattern-urilor actuale și monitorizare periodică.";
+  else
+    summary += flags.join("; ") + ". Aceste aspecte vor fi abordate prioritar în cadrul consultației de nutriție personalizată NutriSib.";
+
+  blocks.push({cls:"highlight", title:"Recomandare generală", text: summary});
+  return blocks;
+}
+
+/* ── Calcul & trimitere ── */
+function calcAndSubmit(){
+  const {answers, missing} = getAnswers();
+  const errBar = document.getElementById("error-bar-2");
+
+  if(missing.length > 0){
+    errBar.textContent = `Vă rugăm răspundeți la toate întrebările. Itemi fără răspuns: ${missing.join(", ")}.`;
+    errBar.style.display = "block";
+    missing.forEach(id=>{
+      const el = document.getElementById(`qi-${id}`);
+      if(el) el.classList.add("unanswered-error");
+    });
+    document.getElementById(`qi-${missing[0]}`).scrollIntoView({behavior:"smooth", block:"center"});
+    return;
+  }
+  errBar.style.display = "none";
+
+  // Date personale
+  const name   = document.getElementById("f-name").value.trim();
+  const email  = document.getElementById("f-email").value.trim();
+  const phone  = document.getElementById("f-phone").value.trim();
+  const age    = document.getElementById("f-age").value.trim();
+  const weight = document.getElementById("f-weight").value.trim();
+  const height = document.getElementById("f-height").value.trim();
+  const sex    = document.getElementById("f-sex").value;
+
+  const bmi    = weight && height
+    ? (parseFloat(weight) / Math.pow(parseFloat(height)/100, 2)).toFixed(1)
+    : "N/A";
+
+  const scores = calcScores(answers);
+  const crL  = getLevel(scores.cr,"cr").label;
+  const ueL  = getLevel(scores.ue,"ue").label;
+  const eeL  = getLevel(scores.ee,"ee").label;
+  const date = new Date().toLocaleDateString("ro-RO",{day:"2-digit",month:"long",year:"numeric"});
+
+  // Afișare rezultate (UI)
+  document.getElementById("res-heading").textContent = `Profilul alimentar — ${name}`;
+  document.getElementById("res-meta").textContent =
+    `Evaluat la ${date} · Vârstă ${age} ani · ${sex} · ${weight} kg · ${height} cm · IMC ${bmi} kg/m²`;
+
+  document.getElementById("sc-cr").textContent = scores.cr;
+  document.getElementById("sc-ue").textContent = scores.ue;
+  document.getElementById("sc-ee").textContent = scores.ee;
+  document.getElementById("nivel-cr").textContent = crL;
+  document.getElementById("nivel-ue").textContent = ueL;
+  document.getElementById("nivel-ee").textContent = eeL;
+
+  showStep(3);
+  setTimeout(()=>{
+    document.getElementById("bar-cr").style.width = scores.cr + "%";
+    document.getElementById("bar-ue").style.width = scores.ue + "%";
+    document.getElementById("bar-ee").style.width = scores.ee + "%";
+  }, 200);
+
+  const interpContainer = document.getElementById("interp-container");
+  interpContainer.innerHTML = "";
+  buildInterpretations(scores, name).forEach(b=>{
+    const div = document.createElement("div");
+    div.className = `interp-block ${b.cls}`;
+    div.innerHTML = `<div class="interp-block-title">${b.title}</div><p>${b.text}</p>`;
+    interpContainer.appendChild(div);
+  });
+
+  // ── Construire email complet pentru CONSULTANT ──
+  const answersText = ITEMS.map(item=>
+    `  Q${item.id}. [${item.sub.toUpperCase()}] ${item.text}\n     → Răspuns ales: ${OPT_LABELS[answers[item.id]-1]} (${answers[item.id]}/4)`
+  ).join("\n\n");
+
+  const interpretations = buildInterpretations(scores, name);
+  const interpText = interpretations.map(b=>`▸ ${b.title}\n${b.text}`).join("\n\n");
+
+  const imcCategory = (() => {
+    const b = parseFloat(bmi);
+    if(isNaN(b)) return "";
+    if(b<18.5)  return "Subponderal";
+    if(b<25)    return "Normal";
+    if(b<30)    return "Supraponderal";
+    if(b<35)    return "Obezitate gr.I";
+    if(b<40)    return "Obezitate gr.II";
+    return "Obezitate gr.III";
+  })();
+
+  const consultantEmailBody = `
+EVALUARE TFEQ-R18 — ${name.toUpperCase()}
+Data: ${date}
+══════════════════════════════════════════════
+
+DATE PERSONALE
+Nume:       ${name}
+Email:      ${email}
+Telefon:    ${phone}
+Vârstă:     ${age} ani
+Sex:        ${sex}
+Greutate:   ${weight} kg
+Înălțime:   ${height} cm
+IMC:        ${bmi} kg/m² (${imcCategory})
+
+══════════════════════════════════════════════
+SCORURI TFEQ-R18
+
+Reținere cognitivă (CR):       ${scores.cr}/100 — ${crL}
+Alimentație necontrolată (UE): ${scores.ue}/100 — ${ueL}
+Alimentație emoțională (EE):   ${scores.ee}/100 — ${eeL}
+
+══════════════════════════════════════════════
+INTERPRETARE PE SUBSCALE
+
+${interpText}
+
+══════════════════════════════════════════════
+RĂSPUNSURI INDIVIDUALE (toate cele 18 itemi)
+
+${answersText}
+
+══════════════════════════════════════════════
+Instrument: TFEQ-R18 (Karlsson et al., 2000)
+Scor normalizat 0–100 per subscală
+Generat de: NutriSib — nutrisib.club
+Contact: nutrisib.club@gmail.com
+  `.trim();
+
+  const statusEl  = document.getElementById("mail-status");
+  const statusTxt = document.getElementById("mail-status-text");
+
+  // ── Trimitere raport complet la nutrisib.club@gmail.com ──
+  const fd = new FormData();
+  fd.append("_subject",        `TFEQ-R18 — ${name} — ${date}`);
+  fd.append("_replyto",        email);
+  fd.append("Nume_client",     name);
+  fd.append("Email_client",    email);
+  fd.append("Telefon_client",  phone);
+  fd.append("Varsta",          age + " ani");
+  fd.append("Sex",             sex);
+  fd.append("Greutate_kg",     weight);
+  fd.append("Inaltime_cm",     height);
+  fd.append("IMC",             `${bmi} kg/m² (${imcCategory})`);
+  fd.append("Scor_CR",         `${scores.cr}/100 (${crL})`);
+  fd.append("Scor_UE",         `${scores.ue}/100 (${ueL})`);
+  fd.append("Scor_EE",         `${scores.ee}/100 (${eeL})`);
+  fd.append("Raport_complet",  consultantEmailBody);
+
+  statusTxt.textContent = "Se transmite evaluarea…";
+  statusEl.className = "mail-status";
+
+  fetch(FORMSPREE_CONSULTANT, {method:"POST", body:fd, headers:{Accept:"application/json"}})
+  .then(r => {
+    if(r.ok){
+      statusEl.className = "mail-status sent";
+      statusTxt.textContent = "✓ Evaluarea a fost transmisă cu succes consultantului NutriSib.";
+    } else {
+      statusEl.className = "mail-status error";
+      statusTxt.textContent = "Trimiterea a eșuat. Salvați pagina (Ctrl+P) sau contactați direct nutrisib.club@gmail.com.";
+    }
+  })
+  .catch(()=>{
+    statusEl.className = "mail-status error";
+    statusTxt.textContent = "Nu s-a putut conecta la serviciul de email. Salvați pagina pentru arhivă.";
+  });
+}
+
+/* ── Reset ── */
+function resetAll(){
+  document.querySelectorAll("input[type=radio]").forEach(r=>r.checked=false);
+  document.querySelectorAll(".q-item").forEach(el=>el.classList.remove("answered","unanswered-error"));
+  ["f-name","f-email","f-phone","f-age","f-weight","f-height"].forEach(id=>{
+    document.getElementById(id).value="";
+    document.getElementById(id).classList.remove("error-field");
+  });
+  document.getElementById("f-sex").value="";
+  document.getElementById("f-sex").classList.remove("error-field");
+  document.getElementById("imc-preview").classList.add("hidden");
+  document.getElementById("imc-hint").style.display="block";
+  document.getElementById("error-bar-1").style.display="none";
+  document.getElementById("error-bar-2").style.display="none";
+  showStep(1);
+}
+</script>
+</body>
+</html>
