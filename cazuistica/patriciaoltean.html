@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Protocolul C.E.L.O.S. — Oltean Patricia. Arhitectură metabolică avansată, reducere ponderală, remineralizare osoasă, chelare metale grele, plan nutrițional 30 zile, protocol nutraceutic integrat Herbalife, FitLine, LR.">
+    <meta name="author" content="dr.ing. Radu Pascu — NUTRISIB">
+    <title>Protocolul C.E.L.O.S. — Oltean Patricia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js">
+    </script>
+    <style>
+        :root {
+            --color-accent-red: #dc2626;
+            --color-accent-red-light: #fef2f2;
+            --color-accent-amber: #d97706;
+            --color-accent-amber-light: #fffbeb;
+            --color-accent-green: #059669;
+            --color-accent-green-light: #ecfdf5;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 1.5rem auto;
+            height: 320px;
+            max-height: 380px;
+        }
+        .tab-bar-wrap {
+            position: relative;
+            background: white;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-card);
+            margin-bottom: 1.5rem;
+        }
+        .tab-bar {
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-brand-medium) #e5e7eb;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .tab-bar::-webkit-scrollbar {
+            height: 4px;
+        }
+        .tab-bar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .tab-bar::-webkit-scrollbar-thumb {
+            background: var(--color-brand-medium);
+            border-radius: 4px;
+        }
+        .tab-nav {
+            display: flex;
+            min-width: max-content;
+            padding: 0 4px;
+        }
+        .tab-btn {
+            padding: .9rem 1.25rem;
+            font-size: .78rem;
+            font-weight: 700;
+            font-family: 'Inter', sans-serif;
+            color: var(--color-text-light);
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            cursor: pointer;
+            border: none;
+            border-bottom: 3px solid transparent;
+            background: none;
+            transition: all .2s;
+            white-space: nowrap;
+            position: relative;
+            z-index: 1;
+        }
+        .tab-btn:hover {
+            color: var(--color-navy);
+            background: var(--color-brand-light);
+        }
+        .tab-btn.active {
+            color: var(--color-navy);
+            border-bottom-color: var(--color-navy);
+            background: var(--color-brand-light);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .bio-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .bio-table {
+            min-width: 500px;
+            border-collapse: collapse;
+        }
+        .art-card {
+            background: white;
+            border-radius: var(--radius-card);
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-card);
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .art-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-navy);
+            margin: 0 0 .75rem 0;
+            padding-bottom: .5rem;
+            border-bottom: 2px solid var(--color-brand-light);
+        }
+        .art-card h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: .93rem;
+            font-weight: 700;
+            color: var(--color-brand-medium);
+            margin: 1rem 0 .4rem 0;
+        }
+        .art-card p {
+            font-size: .91rem;
+            color: var(--color-text-medium);
+            line-height: 1.7;
+            margin-bottom: .7rem;
+        }
+        .art-card ul {
+            padding-left: 1.4rem;
+            margin: .4rem 0 .75rem 0;
+        }
+        .art-card li {
+            font-size: .88rem;
+            color: var(--color-text-medium);
+            line-height: 1.65;
+            margin-bottom: .4rem;
+        }
+        .art-card strong {
+            color: var(--color-navy);
+        }
+        .section-anchor-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .6rem 1rem;
+            border-left: 5px solid var(--color-navy);
+            background: var(--color-pearl);
+            border-radius: 0 var(--radius-card) var(--radius-card) 0;
+            margin-bottom: 1rem;
+        }
+        .section-anchor-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--color-navy);
+            margin: 0;
+        }
+        .scale-wrap {
+            display: inline-flex;
+            gap: 2px;
+            align-items: center;
+        }
+        .scale-box {
+            width: 13px;
+            height: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 700;
+            border-radius: 2px;
+            color: white;
+        }
+        .s-plus {
+            background: #e53e3e;
+        }
+        .s-minus {
+            background: var(--color-gold);
+        }
+        .s-null {
+            background: var(--color-border);
+        }
+        .s-green {
+            background: #059669;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .75rem;
+            margin-bottom: .75rem;
+        }
+        .stat-item {
+            background: var(--color-brand-light);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: .85rem 1rem;
+        }
+        .stat-item-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: .35rem;
+            font-weight: 600;
+            font-size: .85rem;
+            color: var(--color-navy);
+            gap: .5rem;
+            flex-wrap: wrap;
+        }
+        .stat-item p {
+            font-size: .82rem;
+            color: var(--color-text-medium);
+            line-height: 1.5;
+            margin: 0;
+        }
+        .method-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .75rem;
+        }
+        .card-inner-gray {
+            background: var(--color-pearl);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: .85rem 1rem;
+        }
+        .card-icon {
+            font-size: 1.5rem;
+            margin-bottom: .3rem;
+            line-height: 1;
+        }
+        .card-inner-title {
+            font-weight: 700;
+            color: var(--color-navy);
+            font-size: .9rem;
+            margin-bottom: .25rem;
+        }
+        .card-inner-text {
+            font-size: .83rem;
+            color: var(--color-text-medium);
+            line-height: 1.55;
+        }
+        .dual-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .75rem;
+        }
+        .note-box {
+            background: #fffbeb;
+            border-left: 4px solid var(--color-gold);
+            padding: .6rem .9rem;
+            border-radius: 0 8px 8px 0;
+            font-size: .84rem;
+            color: #78350f;
+            margin: .75rem 0;
+        }
+        .highlight-box {
+            background: #ecfdf5;
+            border-left: 4px solid #059669;
+            padding: .75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            font-size: .87rem;
+            color: #064e3b;
+            margin: .75rem 0;
+        }
+        .alert-box {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+            padding: .65rem 1rem;
+            border-radius: 0 8px 8px 0;
+            font-size: .84rem;
+            color: #7f1d1d;
+            margin: .75rem 0;
+        }
+        .quote-box {
+            background: var(--color-pearl);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: .75rem 0;
+        }
+        .quote-text {
+            font-family: 'Lora', serif;
+            font-size: .91rem;
+            color: var(--color-text-medium);
+            line-height: 1.75;
+            margin: 0;
+        }
+        .tcm-block {
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-card);
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+        }
+        .tcm-block-header {
+            padding: .75rem 1.1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: .9rem;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+        .tcm-block-body {
+            padding: 1rem 1.1rem;
+        }
+        .tcm-sub {
+            background: var(--color-pearl);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: .75rem 1rem;
+            margin-bottom: .65rem;
+        }
+        .tcm-sub h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: .84rem;
+            font-weight: 700;
+            color: var(--color-navy);
+            margin: 0 0 .35rem 0;
+        }
+        .tcm-sub ul {
+            padding-left: 1.25rem;
+            margin: .2rem 0 0 0;
+        }
+        .tcm-sub li {
+            font-size: .83rem;
+            color: var(--color-text-medium);
+            line-height: 1.6;
+            margin-bottom: .2rem;
+        }
+        .tcm-sub.red {
+            background: #fef2f2;
+            border-color: #fca5a5;
+        }
+        .tcm-sub.red h4 {
+            color: #dc2626;
+        }
+        .tcm-sub.yellow {
+            background: #fffbeb;
+            border-color: #fde68a;
+        }
+        .tcm-sub.yellow h4 {
+            color: #b45309;
+        }
+        .tcm-sub.green {
+            background: #ecfdf5;
+            border-color: #86efac;
+        }
+        .tcm-sub.green h4 {
+            color: #059669;
+        }
+        .meal-block {
+            border-left: 4px solid var(--color-navy);
+            background: white;
+            border: 1px solid var(--color-border);
+            border-left-width: 4px;
+            border-radius: 0 8px 8px 0;
+            padding: .85rem 1rem;
+            margin-bottom: .65rem;
+        }
+        .meal-block h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: .87rem;
+            font-weight: 700;
+            color: var(--color-navy);
+            margin: 0 0 .35rem 0;
+        }
+        .meal-block p {
+            font-size: .86rem;
+            color: var(--color-text-medium);
+            line-height: 1.6;
+            margin: .2rem 0;
+        }
+        .suppl-brand-badge {
+            display: inline-block;
+            padding: .15rem .6rem;
+            border-radius: 20px;
+            font-size: .65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            margin-bottom: .4rem;
+        }
+        .suppl-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: .96rem;
+            font-weight: 800;
+            color: var(--color-navy);
+            margin-bottom: .3rem;
+        }
+        .suppl-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .35rem;
+            margin: .3rem 0 .6rem 0;
+        }
+        .suppl-tag {
+            font-size: .71rem;
+            font-weight: 700;
+            padding: .15rem .5rem;
+            border-radius: 4px;
+        }
+        #daySelector {
+            font-family: 'Inter', sans-serif;
+            font-size: .88rem;
+            padding: .5rem .85rem;
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            color: var(--color-navy);
+            font-weight: 600;
+            cursor: pointer;
+            background: white;
+        }
+        #daySelector:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        @media(max-width:768px) {
+            .container-main {
+                padding: 0 .5rem;
+            }
+            .stat-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .method-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .dual-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .tab-btn {
+                padding: .7rem .85rem;
+                font-size: .7rem;
+            }
+            .art-card {
+                padding: .9rem .85rem;
+            }
+            .bio-table {
+                font-size: .78rem;
+            }
+        }
+        @media(max-width:480px) {
+            .tab-btn {
+                padding: .6rem .7rem;
+                font-size: .66rem;
+            }
+            .art-card {
+                padding: .75rem .7rem;
+            }
+            .bio-table {
+                font-size: .72rem;
+                min-width: 400px;
+            }
+        }
+        .accent-color {
+            color: #dc2626;
+        }
+        .accent-border {
+            border-color: #dc2626;
+        }
+    </style>
+</head>
+<body id="top">
+
+    <!-- ═══════════════════════════════════════ HERO ═══════════════════════════════════════ -->
+    <div style="background:linear-gradient(135deg,#0c1a35 0%,#1B2A4A 50%,#17334f 100%);padding:2.25rem 1.5rem 3rem;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-50px;right:-50px;width:320px;height:320px;background:radial-gradient(circle,rgba(220,38,38,.15) 0%,transparent 70%);border-radius:50%;"></div>
+        <div style="position:absolute;bottom:-60px;left:-20px;width:240px;height:240px;background:radial-gradient(circle,rgba(5,150,105,.1) 0%,transparent 70%);border-radius:50%;"></div>
+        <div class="container-main" style="position:relative;z-index:1;">
+            <div style="display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:.25rem .9rem;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#C5A021;margin-bottom:1rem;">
+                ⚡ Protocolul C.E.L.O.S. · Evaluare 28.04.2026 · NUTRISIB
+            </div>
+            <h1 style="font-family:'Montserrat',sans-serif;font-size:2rem;font-weight:900;color:white;line-height:1.12;margin-bottom:.3rem;">Oltean Patricia</h1>
+            <p style="font-family:'Lora',serif;font-style:italic;font-size:.88rem;color:rgba(255,255,255,.6);margin-bottom:1.5rem;">
+                Inversare metabolică · Remineralizare osoasă · Chelare metale grele · Suport cardiovascular · Medicină 3.0 + MTC + Biorezonanță
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:.65rem;margin-bottom:1.5rem;">
+                <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:.6rem 1rem;min-width:105px;">
+                    <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.55);font-weight:700;">Greutate</div>
+                    <div style="font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:800;color:#fbbf24;">66,1 kg</div>
+                    <div style="font-size:.68rem;color:rgba(255,255,255,.5);">⇒ Obiectiv 55–57 kg</div>
+                </div>
+                <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:.6rem 1rem;min-width:105px;">
+                    <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.55);font-weight:700;">IMC</div>
+                    <div style="font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:800;color:#fbbf24;">25,2 kg/m²</div>
+                    <div style="font-size:.68rem;color:rgba(255,255,255,.5);">supraponderal (↑25)</div>
+                </div>
+                <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:.6rem 1rem;min-width:105px;">
+                    <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.55);font-weight:700;">Grăsime corporală</div>
+                    <div style="font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:800;color:#fca5a5;">34,8% (23,0 kg)</div>
+                    <div style="font-size:.68rem;color:rgba(255,255,255,.5);">obezitate (↑32%)</div>
+                </div>
+                <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:.6rem 1rem;min-width:105px;">
+                    <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.55);font-weight:700;">Masă musculară</div>
+                    <div style="font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:800;color:#6ee7b7;">40,9 kg (61,8%)</div>
+                    <div style="font-size:.68rem;color:rgba(255,255,255,.5);">de protejat integral</div>
+                </div>
+                <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:.6rem 1rem;min-width:105px;">
+                    <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.55);font-weight:700;">BMR / TDEE</div>
+                    <div style="font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:800;color:white;">1.296 / 1.879</div>
+                    <div style="font-size:.68rem;color:rgba(255,255,255,.5);">kcal/zi · PAL 1,45</div>
+                </div>
+                <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:.6rem 1rem;min-width:105px;">
+                    <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.55);font-weight:700;">Vârstă metabolică</div>
+                    <div style="font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:800;color:#6ee7b7;">49 ani</div>
+                    <div style="font-size:.68rem;color:rgba(255,255,255,.5);">sub vârsta reală</div>
+                </div>
+                <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:.6rem 1rem;min-width:105px;">
+                    <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.55);font-weight:700;">Masă osoasă</div>
+                    <div style="font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:800;color:#fca5a5;">2,2 kg</div>
+                    <div style="font-size:.68rem;color:rgba(255,255,255,.5);">↓ osteoporoză severă</div>
+                </div>
+                <div style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:.6rem 1rem;min-width:105px;">
+                    <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.55);font-weight:700;">Apă corporală</div>
+                    <div style="font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:800;color:#fbbf24;">45,1% (29,8 kg)</div>
+                    <div style="font-size:.68rem;color:rgba(255,255,255,.5);">sub optim (52–60%)</div>
+                </div>
+            </div>
+            <div style="background:rgba(220,38,38,.18);border:1px solid rgba(220,38,38,.35);border-radius:10px;padding:.65rem 1rem;font-size:.83rem;color:#fca5a5;display:flex;align-items:flex-start;gap:.6rem;">
+                ⚠️ <span><strong style="color:#fecaca;">Alertă clinică multiplă:</strong> Obezitate (34,8% grăsime), risc cardiovascular sever (vâscozitate 71,5, grăsimi 1,88), sindrom metabolic (glicemie 8,03, insulină 2,42), steatoză hepatică (0,57), osteoporoză severă (colagen osos 3,44), metale grele (Pb 0,98, Hg 0,68, As 1,27). Intervenție nutrițională și nutraceutică urgentă, complexă, multi-sistemică.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-main">
+        <!-- ═══════════════════════════════════════ TAB BAR ═══════════════════════════════════════ -->
+        <div class="tab-bar-wrap">
+            <div class="tab-bar">
+                <div class="tab-nav">
+                    <button class="tab-btn active" onclick="openTab('analiza',this)">01 · Analiză BIA și Biorezonanță</button>
+                    <button class="tab-btn" onclick="openTab('filozofie',this)">02 · Paradigmă și Mecanisme</button>
+                    <button class="tab-btn" onclick="openTab('nutraceutice',this)">03 · Protocol Nutraceutic</button>
+                    <button class="tab-btn" onclick="openTab('nutritional',this)">04 · Plan Nutrițional 30 Zile</button>
+                    <button class="tab-btn" onclick="openTab('meridiane',this)">05 · MTC · Meridiane · Biorezonanță</button>
+                    <button class="tab-btn" onclick="openTab('biomarkeri',this)">06 · Biomarkeri & KPI</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════ TAB 1: ANALIZA BIA & BIOREZONANTA ═══════════════════════════════════════ -->
+        <div id="analiza" class="tab-content active">
+            <div class="section-anchor-header"><h2>Raport evaluare BIA — Tanita BC-1000 · 28.04.2026, ora 17:05</h2></div>
+            <div class="art-card">
+                <h3>A. Vectorii biologici de presiune — Profil compoziție corporală</h3>
+                <p>Interpretarea datelor BIA prin scala de presiune biologică. <span style="background:#e53e3e;color:white;padding:1px 5px;border-radius:3px;font-size:.78rem;font-weight:700;">+ + + +</span> = suprasolicitare / exces. <span style="background:#d97706;color:white;padding:1px 5px;border-radius:3px;font-size:.78rem;font-weight:700;">− − − −</span> = deficit critic.</p>
+                <div class="stat-grid">
+                    <div class="stat-item"><div class="stat-item-head"><span>Statut ponderal (IMC 25,2)</span><div class="scale-wrap"><div class="scale-box s-plus">+</div><div class="scale-box s-plus">+</div><div class="scale-box s-null"></div><div class="scale-box s-null"></div><div class="scale-box s-null"></div></div></div><p>IMC plasează-o în zona de supraponderalitate. Excesul de țesut adipos crește rezistența la insulină și inflamația sistemică.</p></div>
+                    <div class="stat-item"><div class="stat-item-head"><span>Grăsime corporală (34,8%)</span><div class="scale-wrap"><div class="scale-box s-plus">+</div><div class="scale-box s-plus">+</div><div class="scale-box s-plus">+</div><div class="scale-box s-plus">+</div><div class="scale-box s-null"></div></div></div><p><strong>Obezitate.</strong> 34,8% depășește cu mult pragul de 32%. Țesutul adipos, în special cel visceral (Nivel 7), acționează ca un organ endocrin pro-inflamator, secretând citokine care blochează lipoliza și agravează rezistența la insulină.</p></div>
+                    <div class="stat-item"><div class="stat-item-head"><span>Grăsime viscerală (Nivel 7)</span><div class="scale-wrap"><div class="scale-box s-plus">+</div><div class="scale-box s-plus">+</div><div class="scale-box s-plus">+</div><div class="scale-box s-null"></div><div class="scale-box s-null"></div></div></div><p>Nivel 7 din 9 maxim pentru „acceptabil", dar la limită. Aceasta este grăsimea metabolic activă din jurul organelor, direct corelată cu steatoza hepatică și rezistența la insulină.</p></div>
+                    <div class="stat-item"><div class="stat-item-head"><span>Masă musculară (40,9 kg)</span><div class="scale-wrap"><div class="scale-box s-green">✓</div><div class="scale-box s-green">✓</div><div class="scale-box s-green">✓</div><div class="scale-box s-green">✓</div><div class="scale-box s-null"></div></div></div><p><strong>Bine dezvoltată.</strong> Reprezintă 61,8% din greutate. Este activul metabolic principal. Pierderea ei ar prăbuși BMR-ul. Obiectiv: 0 kg pierdere permisă.</p></div>
+                    <div class="stat-item"><div class="stat-item-head"><span>Masă osoasă (2,2 kg)</span><div class="scale-wrap"><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-null"></div><div class="scale-box s-null"></div><div class="scale-box s-null"></div></div></div><p>Limita inferioară pentru 162 cm. Corelat cu gradul de osteoporoză 0,639 și colagenul osos 3,44, indică o demineralizare activă. Fără intervenție, riscul de fractură crește exponențial.</p></div>
+                    <div class="stat-item"><div class="stat-item-head"><span>Apă corporală (45,1%)</span><div class="scale-wrap"><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-null"></div><div class="scale-box s-null"></div><div class="scale-box s-null"></div></div></div><p><strong>Deshidratare cronică.</strong> Sub optimul de 52–60%. Blochează lipoliza (arderea grăsimilor) și concentrează toxinele. Hidratarea cu 2,5 L/zi este obligatorie.</p></div>
+                    <div class="stat-item"><div class="stat-item-head"><span>Vârsta metabolică (49 ani)</span><div class="scale-wrap"><div class="scale-box s-green">✓</div><div class="scale-box s-green">✓</div><div class="scale-box s-green">✓</div><div class="scale-box s-null"></div><div class="scale-box s-null"></div></div></div><p>Cu 6 ani sub vârsta cronologică. Indică o reziliență mitocondrială bună, un teren biologic încă receptiv la intervenție. O oportunitate majoră.</p></div>
+                </div>
+
+                <h3>B. Tabel complet parametri BIA</h3>
+                <div class="bio-table-wrap"><table class="bio-table" style="width:100%;border-collapse:collapse;font-size:.85rem;">
+                    <thead><tr style="background:var(--color-navy);color:white;"><th style="padding:.6rem .9rem;text-align:left;border-radius:6px 0 0 0;font-family:'Montserrat',sans-serif;">Parametru</th><th style="padding:.6rem .9rem;text-align:center;font-weight:700;">Valoare</th><th style="padding:.6rem .9rem;text-align:center;font-weight:700;">Referință (F, 55 ani)</th><th style="padding:.6rem .9rem;text-align:center;font-weight:700;">Status</th><th style="padding:.6rem .9rem;font-weight:700;border-radius:0 6px 0 0;">Mecanism clinic</th></tr></thead>
+                    <tbody>
+                        <tr style="background:white;"><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);font-weight:600;color:var(--color-navy);">Greutate corporală</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;font-weight:700;color:#d97706;">66,1 kg</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;color:var(--color-text-light);">50–65 kg</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;"><span style="background:#fef2f2;color:#dc2626;padding:.1rem .45rem;border-radius:4px;font-size:.72rem;font-weight:700;">↑ Exces</span></td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);font-size:.83rem;color:var(--color-text-medium);">Necesită pierdere de masă grasă ~10,8 kg.</td></tr>
+                        <tr style="background:var(--color-brand-light);"><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);font-weight:600;color:var(--color-navy);">IMC (kg/m²)</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;font-weight:700;color:#dc2626;">25,2</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;color:var(--color-text-light);">18,5–24,9</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;"><span style="background:#fef2f2;color:#dc2626;padding:.1rem .45rem;border-radius:4px;font-size:.72rem;font-weight:700;">Supraponderal</span></td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);font-size:.83rem;color:var(--color-text-medium);">Risc metabolic și cardiovascular crescut.</td></tr>
+                        <tr style="background:white;"><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);font-weight:600;color:var(--color-navy);">Grăsime corporală</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;font-weight:700;color:#dc2626;">34,8% (23,0 kg)</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;color:var(--color-text-light);">17–24%</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;"><span style="background:#fee2e2;color:#7f1d1d;padding:.1rem .45rem;border-radius:4px;font-size:.72rem;font-weight:700;">Obezitate</span></td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);font-size:.83rem;color:var(--color-text-medium);">Țesut adipos pro-inflamator. Țintă: reducere cu 10,8 kg.</td></tr>
+                        <tr style="background:var(--color-brand-light);"><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);font-weight:600;color:var(--color-navy);">Masă musculară totală</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;font-weight:700;color:#059669;">40,9 kg (61,8%)</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;color:var(--color-text-light);">45–55%</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;"><span style="background:#d1fae5;color:#064e3b;padding:.1rem .45rem;border-radius:4px;font-size:.72rem;font-weight:700;">✓ Excepțional</span></td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);font-size:.83rem;color:var(--color-text-medium);">Activ metabolic #1. Protejat prin proteină ≥80 g/zi.</td></tr>
+                        <tr style="background:white;"><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);font-weight:600;color:var(--color-navy);">Masă osoasă</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;font-weight:700;color:#d97706;">2,2 kg</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;color:var(--color-text-light);">2,3–2,8 kg</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;"><span style="background:#fffbeb;color:#d97706;padding:.1rem .45rem;border-radius:4px;font-size:.72rem;font-weight:700;">↓ Limită</span></td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);font-size:.83rem;color:var(--color-text-medium);">Risc osteoporoză. Remineralizare urgentă.</td></tr>
+                        <tr style="background:var(--color-brand-light);"><td style="padding:.55rem .8rem;font-weight:600;color:var(--color-navy);">Apă corporală (TBW)</td><td style="padding:.55rem .8rem;text-align:center;font-weight:700;color:#d97706;">29,8 kg (45,1%)</td><td style="padding:.55rem .8rem;text-align:center;color:var(--color-text-light);">52–60%</td><td style="padding:.55rem .8rem;text-align:center;"><span style="background:#fffbeb;color:#d97706;padding:.1rem .45rem;border-radius:4px;font-size:.72rem;font-weight:700;">↓ Deshidratare</span></td><td style="padding:.55rem .8rem;font-size:.83rem;color:var(--color-text-medium);">Afectează lipoliza și eliminarea toxinelor.</td></tr>
+                        <tr style="background:white;"><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);font-weight:600;color:var(--color-navy);">BMR</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;font-weight:700;">1.296 kcal/zi</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;color:var(--color-text-light);">1.200–1.500</td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);text-align:center;"><span style="background:#dbeafe;color:#1e3a8a;padding:.1rem .45rem;border-radius:4px;font-size:.72rem;font-weight:700;">Referință</span></td><td style="padding:.55rem .8rem;border-bottom:1px solid var(--color-border);font-size:.83rem;color:var(--color-text-medium);">TDEE = 1.879 kcal. Plan la ~1.100 kcal/zi.</td></tr>
+                        <tr style="background:var(--color-brand-light);"><td style="padding:.55rem .8rem;font-weight:600;color:var(--color-navy);">Vârstă metabolică</td><td style="padding:.55rem .8rem;text-align:center;font-weight:700;color:#059669;">49 ani</td><td style="padding:.55rem .8rem;text-align:center;color:var(--color-text-light);">≤ 55 ani</td><td style="padding:.55rem .8rem;text-align:center;"><span style="background:#d1fae5;color:#064e3b;padding:.1rem .45rem;border-radius:4px;font-size:.72rem;font-weight:700;">✓ Bun</span></td><td style="padding:.55rem .8rem;font-size:.83rem;color:var(--color-text-medium);">Reziliență metabolică peste medie.</td></tr>
+                    </tbody></table></div>
+                    <div class="highlight-box">🌿 <strong>Oportunitate terapeutică:</strong> Vârsta metabolică mai mică decât cea cronologică arată că, sub stratul de inflamație și grăsime, celulele Patriciei încă funcționează eficient. Acesta este principalul argument că inversarea sindromului metabolic este posibilă și probabilă în 6–12 luni.</div>
+            </div>
+
+            <div class="section-anchor-header" style="border-left-color:#7c3aed;margin-top:.5rem;"><h2>C. Biorezonanță — Analiza bioelectrică vectorială și câmpurile de frecvență</h2></div>
+            <div class="art-card">
+                <h3>C1. Parametri biofizici derivați din BIA — Vectorul bioelectric (BIVA)</h3>
+                <div class="stat-grid">
+                    <div class="stat-item"><div class="stat-item-head"><span>Unghiul de fază (Phase Angle α)</span><div class="scale-wrap"><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-null"></div><div class="scale-box s-null"></div><div class="scale-box s-null"></div></div></div><p><strong>Estimat: 5,1–5,4°</strong> (normal >5,5°). Un unghi de fază ușor scăzut reflectă o proporție mai mare de apă extracelulară (inflamație) și membrane celulare mai puțin integre, compatibil cu inflamația cronică de grad scăzut.</p></div>
+                    <div class="stat-item"><div class="stat-item-head"><span>Reactanța celulară (Xc)</span><div class="scale-wrap"><div class="scale-box s-minus">−</div><div class="scale-box s-null"></div><div class="scale-box s-null"></div><div class="scale-box s-null"></div><div class="scale-box s-null"></div></div></div><p><strong>Estimat: 55–60 Ω.</strong> Reactanța ușor scăzută indică o capacitanță membranară redusă. Omega-3 din protocol va fi esențial pentru a restabili fluiditatea și integritatea membranelor.</p></div>
+                </div>
+
+                <h3>C2. Analiza câmpurilor de biorezonanță — Frecvențe biologice specifice extinse</h3>
+                <p>Biorezonanța prin câmp biofotonic (aparate MORA, BICOM, EDUCTOR) identifică perturbări ale frecvențelor proprii organelor. Fiecare celulă și organ rezonează cu frecvențe specifice. Perturbările preced simptomele clinice. <strong>Pentru Patricia, tabloul biorezonanței indică o dublă problemă: un metabolism "fals încet" (blocat de inflamație și toxine) și o structură osoasă profund deficitară.</strong></p>
+                <div class="stat-grid">
+                    <div class="stat-item" style="border-left:3px solid #e53e3e;"><div class="stat-item-head"><span>🔴 Frecvențe ovariene / Axa HPO (290–320 kHz)</span><div class="scale-wrap"><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-null"></div><div class="scale-box s-null"></div></div></div><p><strong>Perturbare semnificativă.</strong> La 55 de ani, menopauza reduce drastic emisia biofotonică ovariană. Factorii de mai jos (toxicitate, acidoză, stres) agravează această reducere. <strong>BIO-protocol:</strong> inversare terapie pe 290–320 kHz + adaptogeni (Maca, Rhodiola).</p></div>
+                    <div class="stat-item" style="border-left:3px solid #d97706;"><div class="stat-item-head"><span>🟡 Frecvențe osoase piezoelectrice (1.100–1.300 Hz)</span><div class="scale-wrap"><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-null"></div></div></div><p><strong>Perturbare MODERAT-SEVERĂ.</strong> Masa osoasă de 2,2 kg și colagenul osos 3,44 (normal 6,2–8,6) sugerează că activitatea piezoelectrică a osului (generată la compresie mecanică) este mult diminuată. <strong>Colagenul hidrolizat + Vitamina C + D3 + K2 + exerciții cu impact (mers alert) restabilesc această frecvență.</strong></p></div>
+                    <div class="stat-item" style="border-left:3px solid #059669;"><div class="stat-item-head"><span>🟢 Frecvențe musculare (sarcomere contractile — 200 Hz)</span><div class="scale-wrap"><div class="scale-box s-green">✓</div><div class="scale-box s-green">✓</div><div class="scale-box s-green">✓</div><div class="scale-box s-null"></div><div class="scale-box s-null"></div></div></div><p><strong>Status bun.</strong> 40,9 kg masă musculară confirmă frecvențe de contracție sarcometrică normale. <strong>Exercițiile de forță moderate (40–60% RM) mențin această frecvență și susțin stocarea glicogenului.</strong></p></div>
+                    <div class="stat-item" style="border-left:3px solid #3E92CC;"><div class="stat-item-head"><span>🔵 Frecvențe mitocondriale (ATP-synthase — 38,5 MHz)</span><div class="scale-wrap"><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-null"></div><div class="scale-box s-null"></div><div class="scale-box s-null"></div></div></div><p><strong>Perturbare ușoară.</strong> Vârsta metabolică este bună, dar deficitul de CoQ10 (0,52) și magneziu (0,42) frânează producția optimă de ATP. <strong>Cell Activator (Herbalife) și Q10 Plus (FitLine) sunt vectorii de ameliorare direcți.</strong></p></div>
+                    <div class="stat-item" style="border-left:3px solid #e53e3e;"><div class="stat-item-head"><span>🟠 Frecvențe endocrine pancreatice (Insulină — 1.500 Hz)</span><div class="scale-wrap"><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-null"></div><div class="scale-box s-null"></div></div></div><p><strong>Perturbare semnificativă.</strong> Insulina 2,42 (scăzută) + Glicemia 8,03 (crescută) = pancreas epuizat + rezistență periferică. Semnalul biofotonic al insulinei este haotic. <strong>Cromul (ProBalance, Basics)</strong> crește sensibilitatea receptorilor la insulină.</p></div>
+                    <div class="stat-item" style="border-left:3px solid #059669;"><div class="stat-item-head"><span>🟢 Frecvențe intestinale (peristaltism — 0,1–0,3 Hz)</span><div class="scale-wrap"><div class="scale-box s-green">✓</div><div class="scale-box s-green">✓</div><div class="scale-box s-null"></div><div class="scale-box s-null"></div><div class="scale-box s-null"></div></div></div><p><strong>Status acceptabil</strong>, dar peristaltismul subțire 124,8 (normal 133–140) indică o motilitate ușor redusă. <strong>Aloe Vera (polizaharide) modulează frecvența la optimul de 0,15–0,25 Hz</strong> pentru absorbție maximă.</p></div>
+                    <div class="stat-item" style="border-left:3px solid #e53e3e;"><div class="stat-item-head"><span>🔴 Frecvențe de detoxifiere hepatică (faza I CYP450 — 45–55 MHz)</span><div class="scale-wrap"><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-minus">−</div><div class="scale-box s-null"></div></div></div><p><strong>Perturbare SEVERĂ.</strong> Grăsimea hepatică 0,57 + metalele grele (Pb 0,98, Hg 0,68, As 1,27) suprasolicită masiv calea CYP450. Ficatul nu mai detoxifică eficient, iar toxinele recirculă entero-hepatic. <strong>BIO-protocol:</strong> stimulare detoxifiere + Chlorella (chelează metale grele) + NAC (precursor glutation).</p></div>
+                    <div class="stat-item" style="border-left:3px solid #7c3aed;"><div class="stat-item-head"><span>🟣 Frecvențe suprarenale (cortizol — 7–9 Hz)</span><div class="scale-wrap"><div class="scale-box s-minus">−</div><div class="scale-box s-null"></div><div class="scale-box s-null"></div><div class="scale-box s-null"></div><div class="scale-box s-null"></div></div></div><p><strong>Ușor perturbate.</strong> Indexul secreției suprarenale 1,98 (sub 2,41) indică o insuficiență corticosuprarenaliană ușoară, posibil din epuizare cronică. <strong>Adaptogeni (Rhodiola, Ashwagandha) + Vitamina C + B5 + Mg.</strong></p></div>
+                </div>
+            </div>
+        </div>
+        <!-- /tab analiza -->
+
+        <!-- ═══════════════════════════════════════ TAB 2: FILOZOFIE & MECANISME ═══════════════════════════════════════ -->
+        <div id="filozofie" class="tab-content">
+            <div class="section-anchor-header" style="border-left-color:var(--color-brand-medium)"><h2>De la "Foc Mocnit" și "Apă Stătută" la Claritate Metabolică</h2></div>
+            <div class="art-card">
+                <h3>Paradigma Medicina 3.0 — Cazul "Furnalului Blocat"</h3>
+                <p>Corpul Patriciei nu este un motor uzat, ci un furnal extrem de eficient (vârsta metabolică 49 de ani) care a fost înecat cu un combustibil prost (zahăr, grăsimi proaste) și ale cărui țevi de eșapament s-au înfundat (ficat gras, constipație, deshidratare). Focul încă arde (BMR 1296 kcal), dar fumul (toxinele, inflamația) nu mai iese, asfixiind sistemul.</p>
+                <div class="alert-box">
+                    <strong>Cele Trei "Erori de Sistem" fundamentale:</strong><br>
+                    1. <strong>Intoxicație sistemică autoîntreținută:</strong> Ficatul gras (0,57) și metalele grele blochează detoxifierea, ceea ce duce la acumulare de grăsimi în sânge (1,88) și vâscozitate (71,5), care la rândul lor îneacă organele.<br>
+                    2. <strong>Foamea celulară ascunsă:</strong> Deși Patricia mănâncă, celulele ei sunt înfometate. Rezistența la insulină blochează intrarea glucozei în celule, iar absorbția intestinală compromisă (2,55) oprește intrarea micronutrienților. Astfel, creierul cere mâncare (pofta de dulce), dar corpul nu se hrănește.<br>
+                    3. <strong>"Furtul" mineral din oase:</strong> pH-ul acid (2,99) determină organismul să extragă calciu și magneziu din oase pentru a-și neutraliza aciditatea. Nu are sens să bei calciu dacă nu stingi incendiul metabolic care dizolvă oasele.
+                </div>
+                <p><strong>Soluția C.E.L.O.S. este să deblocheze sistemul, nu să-l pedepsească.</strong> Începem prin a potoli "focul" inflamator (Omega-3, antioxidanți), curățăm "țevile" (Liver Support, Aloe Vera), furnizăm "combustibil" curat (proteine, carbohidrați complecși) și dăm sistemului "scânteia" de care are nevoie (CoQ10, minerale, vitamine). Surplusul de greutate nu este inamicul, ci un simplu simptom al unui metabolism sufocat.</p>
+                <div class="chart-container" style="height:280px;"><canvas id="caloricChart"></canvas></div>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════ TAB 3: PROTOCOL NUTRACEUTIC ═══════════════════════════════════════ -->
+        <div id="nutraceutice" class="tab-content">
+            <div class="section-anchor-header" style="border-left-color:var(--color-gold)"><h2>Protocol nutraceutic complet — Herbalife · FitLine · LR Health & Beauty</h2></div>
+            <div class="art-card">
+                <p>Protocolul este calibrat pe cele patru urgențe ale Patriciei: <strong>(1) inflamația sistemică și stresul oxidativ</strong>, <strong>(2) steatoza hepatică și toxicitatea cu metale grele</strong>, <strong>(3) malabsorbția și disbioza intestinală</strong>, <strong>(4) osteoporoza și demineralizarea severă</strong>.</p>
+                <div class="note-box">⏱️ <strong>Regula de aur:</strong> Respectarea strictă a orelor de administrare este esențială. Fiecare nutraceutic are o fereastră metabolică optimă.</div>
+            </div>
+
+            <div class="section-anchor-header" style="border-left-color:#e53e3e;margin-top:.5rem;"><h2>🔴 Herbalife Nutrition — Suport caloric funcțional, micronutriție și energie</h2></div>
+            <div class="art-card">
+                <div style="border:1px solid #fca5a5;border-radius:var(--radius-card);padding:1.1rem 1.25rem;margin-bottom:1rem;background:#fff5f5;">
+                    <span class="suppl-brand-badge" style="background:#fee2e2;color:#dc2626;">Herbalife · Core Nutrition</span>
+                    <div class="suppl-name">Formula 1 Nutritional Shake Mix — 2 linguri/porție + apă/lapte vegetal</div>
+                    <div class="suppl-tags"><span class="suppl-tag" style="background:#fee2e2;color:#7f1d1d;">1 porție/zi (dimineața)</span><span class="suppl-tag" style="background:#d1fae5;color:#064e3b;">~220 kcal/porție (cu apa)</span><span class="suppl-tag" style="background:#dbeafe;color:#1e3a8a;">18g proteină · 23 vitamine & minerale</span></div>
+                    <p style="font-size:.87rem;color:var(--color-text-medium);line-height:1.65;margin:0;"><strong>Rolul în protocolul Patriciei:</strong> Injecție calculată de proteină curată, fibre și micronutrienți, cu un aport caloric minim și indice glicemic scăzut. Este "masa de siguranță" care elimină fricțiunea decizională matinală și stabilizează glicemia până la prânz.</p>
+                </div>
+                <div style="border:1px solid #fca5a5;border-radius:var(--radius-card);padding:1.1rem 1.25rem;margin-bottom:1rem;background:#fff5f5;">
+                    <span class="suppl-brand-badge" style="background:#fee2e2;color:#dc2626;">Herbalife · Protein</span>
+                    <div class="suppl-name">PDM (Protein Drink Mix) — Pudră proteică neutră</div>
+                    <div class="suppl-tags"><span class="suppl-tag" style="background:#fee2e2;color:#7f1d1d;">2 linguri/zi (dimineața, în shake)</span><span class="suppl-tag" style="background:#d1fae5;color:#064e3b;">+10g proteină</span></div>
+                    <p style="font-size:.87rem;color:var(--color-text-medium);line-height:1.65;margin:0;"><strong>Rolul în protocolul Patriciei:</strong> Boost proteic fără a adăuga carbohidrați sau grăsimi. Leucina stimulează sinteza proteică musculară, esențială pentru conservarea masei musculare (40,9 kg) în timpul deficitului caloric.</p>
+                </div>
+                <div style="border:1px solid #fca5a5;border-radius:var(--radius-card);padding:1.1rem 1.25rem;margin-bottom:1rem;background:#fff5f5;">
+                    <span class="suppl-brand-badge" style="background:#fee2e2;color:#dc2626;">Herbalife · Wellness</span>
+                    <div class="suppl-name">Cell Activator — CoQ10 · Acid alfa-lipoic · Complex B</div>
+                    <div class="suppl-tags"><span class="suppl-tag" style="background:#fee2e2;color:#7f1d1d;">2 capsule dimineața</span><span class="suppl-tag" style="background:#d1fae5;color:#064e3b;">Cu shake-ul Formula 1</span></div>
+                    <p style="font-size:.87rem;color:var(--color-text-medium);line-height:1.65;margin:0;"><strong>Rolul în protocolul Patriciei:</strong> Coenzima Q10 (0,52, deficit major) este esențială pentru producția de ATP mitocondrial. Acidul alfa-lipoic (ALA) crește sensibilitatea la insulină și acționează ca un chelator (slab) al metalelor grele. Complexul B susține metabolismul energetic.</p>
+                </div>
+                <div style="border:1px solid #fca5a5;border-radius:var(--radius-card);padding:1.1rem 1.25rem;background:#fff5f5;">
+                    <span class="suppl-brand-badge" style="background:#fee2e2;color:#dc2626;">Herbalife · Wellness</span>
+                    <div class="suppl-name">Omega-3 Fish Oil — 1.000 mg TG · 3 capsule/zi</div>
+                    <div class="suppl-tags"><span class="suppl-tag" style="background:#fee2e2;color:#7f1d1d;">3 capsule cu mesele principale</span><span class="suppl-tag" style="background:#d1fae5;color:#064e3b;">EPA 180mg + DHA 120mg/capsulă = 900mg EPA+DHA/zi</span></div>
+                    <p style="font-size:.87rem;color:var(--color-text-medium);line-height:1.65;margin:0;"><strong>Rolul în protocolul Patriciei:</strong> EPA / DHA sunt antiinflamatorii puternice la nivel endotelial, reducând vâscozitatea sângelui (71,5) și trigliceridele (2,969). Sunt esențiale pentru refacerea membranelor celulare deteriorate de inflamația sistemică.</p>
+                </div>
+            </div>
+
+            <div class="section-anchor-header" style="border-left-color:#0ea5e9;margin-top:.5rem;"><h2>🔵 FitLine — Micronutriție premium NTC, oxigenare și detoxifiere</h2></div>
+            <div class="art-card">
+                <div style="border:1px solid #7dd3fc;border-radius:var(--radius-card);padding:1.1rem 1.25rem;margin-bottom:1rem;background:#f0f9ff;">
+                    <span class="suppl-brand-badge" style="background:#dbeafe;color:#0284c7;">FitLine · Energy</span>
+                    <div class="suppl-name">Activize Oxyplus — Complex energizant, antioxidant și biostimulant</div>
+                    <div class="suppl-tags"><span class="suppl-tag" style="background:#dbeafe;color:#1e3a8a;">1 stick dimineața, pe stomacul gol</span><span class="suppl-tag" style="background:#d1fae5;color:#064e3b;">OPC · Vitamina C · Complex B · Beta-glucan</span></div>
+                    <p style="font-size:.87rem;color:var(--color-text-medium);line-height:1.65;margin:0;"><strong>Rolul în protocolul Patriciei:</strong> OPC (oligoproantocianidine) sunt antioxidanți de 20 de ori mai puternici decât vitamina C. Protejează pereții vasculari, reducând cristalele de colesterol (70,4) și îmbunătățind elasticitatea vasculară (1,64). Beta-glucanul are efect prebiotic, susținând microbiomul intestinal (coef. bacterii 1,175). Vitamina C este cofactor obligatoriu pentru sinteza colagenului (osos 3,44).</p>
+                </div>
+                <div style="border:1px solid #7dd3fc;border-radius:var(--radius-card);padding:1.1rem 1.25rem;margin-bottom:1rem;background:#f0f9ff;">
+                    <span class="suppl-brand-badge" style="background:#dbeafe;color:#0284c7;">FitLine · Recovery</span>
+                    <div class="suppl-name">Restorate — Remineralizare nocturnă alcalinizantă</div>
+                    <div class="suppl-tags"><span class="suppl-tag" style="background:#dbeafe;color:#1e3a8a;">1 stick seara, înainte de culcare</span><span class="suppl-tag" style="background:#d1fae5;color:#064e3b;">Mg glicinat · Ca citrat · K · Na · Bicarbonat</span></div>
+                    <p style="font-size:.87rem;color:var(--color-text-medium);line-height:1.65;margin:0;"><strong>Rolul în protocolul Patriciei:</strong> Formula electrolitică alcalinizantă critică pentru corectarea pH-ului acid (2,99) și remineralizarea osoasă. Magneziul glicinat (0,42, deficit) relaxează musculatura vasculară (rezistența vasculară 1,66) și susține osteoblastele.</p>
+                </div>
+                <div style="border:1px solid #7dd3fc;border-radius:var(--radius-card);padding:1.1rem 1.25rem;background:#f0f9ff;">
+                    <span class="suppl-brand-badge" style="background:#dbeafe;color:#0284c7;">FitLine · Immunity</span>
+                    <div class="suppl-name">PowerCocktail — Adaptogeni și imunomodulare fitochimici</div>
+                    <div class="suppl-tags"><span class="suppl-tag" style="background:#dbeafe;color:#1e3a8a;">1 plic după-amiaza</span><span class="suppl-tag" style="background:#d1fae5;color:#064e3b;">Vit. A · C · E · Se · Zn · fitochimice concentrate</span></div>
+                    <p style="font-size:.87rem;color:var(--color-text-medium);line-height:1.65;margin:0;"><strong>Rolul în protocolul Patriciei:</strong> Vitamina A susține integritatea mucoasei intestinale, grav compromisă de malabsorbția cronică. Zincul și seleniul susțin funcția tiroidiană și sinteza glutationului (detoxifiere). Vitamina C accelerează vindecarea endotelială și sinteza de colagen.</p>
+                </div>
+            </div>
+
+            <div class="section-anchor-header" style="border-left-color:#059669;margin-top:.5rem;"><h2>🟢 LR Health & Beauty — Sănătate structurală, digestivă, vitaminizare și detoxifiere</h2></div>
+            <div class="art-card">
+                <div style="border:1px solid #86efac;border-radius:var(--radius-card);padding:1.1rem 1.25rem;margin-bottom:1rem;background:#f0fdf4;">
+                    <span class="suppl-brand-badge" style="background:#d1fae5;color:#059669;">LR · LIFETAKT</span>
+                    <div class="suppl-name">Vita Active — Vitamine lichide din 21 concentrate de fructe și legume</div>
+                    <div class="suppl-tags"><span class="suppl-tag" style="background:#d1fae5;color:#064e3b;">5 ml/zi (1 linguriță) — dimineața cu breakfast</span><span class="suppl-tag" style="background:#dbeafe;color:#1e3a8a;">10 vitamine esențiale · 21 fitochimice concentrate · D3, E, B1-B12</span><span class="suppl-tag" style="background:#fef3c7;color:#78350f;">Fără coloranți · Fără conservanți</span></div>
+                    <p style="font-size:.87rem;color:var(--color-text-medium);line-height:1.65;margin:.35rem 0 .45rem;"><strong>Compoziție (per 5 ml):</strong> Amestec de sucuri concentrate din 21 surse — struguri roșii, mere, vișine, soc, coacăze negre, măceșe, căpșuni, mure, morcovi, porumbe, afine, aronia, prune, coacăze roșii, cătină albă, lămâie, piersică, caise, zmeură (2 varietăți) + dextroză + concentrat roșii + lecitină din floarea-soarelui.</p>
+                    <p style="font-size:.87rem;color:var(--color-text-medium);line-height:1.65;margin:0;"><strong>Rolul în protocolul Patriciei:</strong> Vita Active este soluția pentru malabsorbția severă. Forma lichidă, cu biodisponibilitate de peste 80%, ocolește bariera intestinală compromisă (absorbție 2,55) și livrează direct vitaminele esențiale. Antocianinele din aronia și coacăze protejează endoteliul vascular. Flavonoidele din măceșe și cătină susțin sinteza de colagen endogen. <strong>Adresează direct deficitele de B6 (0,679), Vitamina C (3,545), Vitamina D3 (4,578).</strong></p>
+                </div>
+                <div style="border:1px solid #86efac;border-radius:var(--radius-card);padding:1.1rem 1.25rem;margin-bottom:1rem;background:#f0fdf4;">
+                    <span class="suppl-brand-badge" style="background:#d1fae5;color:#059669;">LR · LIFETAKT</span>
+                    <div class="suppl-name">Aloe Vera Sivera — Siliciu structural și detoxifiere endotelială</div>
+                    <div class="suppl-tags"><span class="suppl-tag" style="background:#d1fae5;color:#064e3b;">3 x 30 ml/zi · înainte de mese</span><span class="suppl-tag" style="background:#dbeafe;color:#1e3a8a;">Siliciu biodisponibil · Urzică · Acemannan</span></div>
+                    <p style="font-size:.87rem;color:var(--color-text-medium);line-height:1.65;margin:0;"><strong>Rolul în protocolul Patriciei:</strong> Siliciul este "cimentul" elastic al pereților vasculari (elasticitate scăzută 1,64) și al matricei osoase. Curăță micro-vilozitățile intestinale și crește absorbția tuturor celorlalte nutraceutice. Efect hepatoprotector blând — susține detoxifierea de primă fază a ficatului.</p>
+                </div>
+                <div style="border:1px solid #86efac;border-radius:var(--radius-card);padding:1.1rem 1.25rem;margin-bottom:1rem;background:#f0fdf4;">
+                    <span class="suppl-brand-badge" style="background:#d1fae5;color:#059669;">LR · LIFETAKT</span>
+                    <div class="suppl-name">ProBalance — Buffering pH și remineralizare osoasă</div>
+                    <div class="suppl-tags"><span class="suppl-tag" style="background:#d1fae5;color:#064e3b;">3 x 4 tablete/zi · la 1h după mese</span><span class="suppl-tag" style="background:#dbeafe;color:#1e3a8a;">Ca citrat · Mg · K · Na · Zn · Cu · Mn · Se · Cr</span></div>
+                    <p style="font-size:.87rem;color:var(--color-text-medium);line-height:1.65;margin:0;"><strong>Rolul în protocolul Patriciei:</strong> Formula tampon care neutralizează acidoza sistemică (pH 2,99). Citratul de calciu (absorbție 45%) + Vitamina D3 din protocol asigură depunerea calciului în os (masă osoasă 2,2 kg). Cromul (150% VNR) crește sensibilitatea la insulină. <strong>Adresează deficitele: Mg 0,42, K 0,46, Cu 0,136, Zn 0,88.</strong></p>
+                </div>
+                <div style="border:1px solid #86efac;border-radius:var(--radius-card);padding:1.1rem 1.25rem;margin-bottom:1rem;background:#f0fdf4;">
+                    <span class="suppl-brand-badge" style="background:#d1fae5;color:#059669;">LR · LIFETAKT</span>
+                    <div class="suppl-name">Collagen Elixir — Colagen hidrolizat tip I+III + Vitamina C + Biotină</div>
+                    <div class="suppl-tags"><span class="suppl-tag" style="background:#d1fae5;color:#064e3b;">1 flacon (50ml) seara, pre-somn</span><span class="suppl-tag" style="background:#dbeafe;color:#1e3a8a;">5.000 mg colagen · Vit. C 80mg · Biotină 150µg</span></div>
+                    <p style="font-size:.87rem;color:var(--color-text-medium);line-height:1.65;margin:0;"><strong>Rolul în protocolul Patriciei:</strong> <strong>Urgență structurală #1.</strong> Colagen osos 3,44 (normal 6,2–8,6), colagen muscular 4,46, colagen piele 2,96. Administrat cu Vitamina C (cofactor obligatoriu), peptidele de colagen (2-5 kDa) sunt direcționate preferențial spre os, cartilaj și piele. Seara, în fereastra de activitate maximă a GH nocturn, sinteza colagenului osos este optimă.</p>
+                </div>
+                <div style="border:1px solid #86efac;border-radius:var(--radius-card);padding:1.1rem 1.25rem;background:#f0fdf4;">
+                    <span class="suppl-brand-badge" style="background:#d1fae5;color:#059669;">LR · LIFETAKT</span>
+                    <div class="suppl-name">Liver Support — Detoxifiere și regenerare hepatică</div>
+                    <div class="suppl-tags"><span class="suppl-tag" style="background:#d1fae5;color:#064e3b;">2 capsule/zi · la prânz, în timpul mesei</span><span class="suppl-tag" style="background:#dbeafe;color:#1e3a8a;">Silimarină · Chlorella · Pelin</span></div>
+                    <p style="font-size:.87rem;color:var(--color-text-medium);line-height:1.65;margin:0;"><strong>Rolul în protocolul Patriciei:</strong> Silimarina stabilizează membranele hepatocitelor și reduce grăsimea din ficat (0,57). Chlorella (alga verde) leagă metalele grele (Pb 0,98, Hg 0,68, As 1,27) din intestin și previne recircularea lor hepatică. Esențial pentru detoxifierea de fază I și II.</p>
+                </div>
+            </div>
+
+            <div class="section-anchor-header" style="border-left-color:var(--color-navy);margin-top:.5rem;"><h2>Schema zilnică de administrare — Protocol integrat complet Patricia Oltean</h2></div>
+            <div class="art-card">
+                <div class="bio-table-wrap"><table class="bio-table" style="width:100%;border-collapse:collapse;font-size:.84rem;">
+                    <thead><tr style="background:var(--color-navy);color:white;"><th style="padding:.55rem .8rem;text-align:left;border-radius:6px 0 0 0;font-family:'Montserrat',sans-serif;">Ora</th><th style="padding:.55rem .8rem;font-weight:700;">Moment</th><th style="padding:.55rem .8rem;font-weight:700;">Produse</th><th style="padding:.55rem .8rem;border-radius:0 6px 0 0;font-weight:700;">Mecanism / Observație</th></tr></thead>
+                    <tbody>
+                        <tr style="background:white;"><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-weight:700;color:var(--color-navy);">07:00</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-weight:600;">Pre-breakfast</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-size:.83rem;">Aloe Vera Sivera LR 30ml + 1 pahar mare de apă (250 ml)</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-size:.81rem;color:var(--color-text-medium);">Pe stomacul gol — refacere mucoasă intestinală și pregătire absorbție.</td></tr>
+                        <tr style="background:var(--color-brand-light);"><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-weight:700;color:var(--color-navy);">07:45</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-weight:600;">Mic Dejun</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-size:.83rem;">Formula 1 (2 linguri) + PDM (2 linguri) în 300 ml apă · Vita Active LR 5ml · Cell Activator 2cps · Activize Oxyplus FitLine 1 stick</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-size:.81rem;color:var(--color-text-medium);">~240 kcal · 25g proteină. Injecție stabilă de energie pentru întreaga dimineață. Oxyplus oxigenează sângele și reduce vâscozitatea.</td></tr>
+                        <tr style="background:white;"><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-weight:700;color:var(--color-navy);">10:30</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-weight:600;">Gustare 1</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-size:.83rem;">1 măr + 30 ml Aloe Vera Sivera LR + 1 pahar apă</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-size:.81rem;color:var(--color-text-medium);">Menținere sațietate și aport de siliciu. Aloe la gustare crește absorbția.</td></tr>
+                        <tr style="background:var(--color-brand-light);"><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-weight:700;color:var(--color-navy);">13:00</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-weight:600;">Prânz</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-size:.83rem;">Masă solidă (vezi plan nutrițional) · Liver Support LR 2cps · Omega-3 Herbalife 2cps · ProBalance LR 4 tablete</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-size:.81rem;color:var(--color-text-medium);">Liver Support administrat cu grăsimile din prânz pentru absorbția optimă a silimarinei.</td></tr>
+                        <tr style="background:white;"><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-weight:700;color:var(--color-navy);">16:00</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-weight:600;">Gustare 2</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-size:.83rem;">PowerCocktail FitLine 1 plic · 10 migdale · 30 ml Aloe Vera Sivera LR · 1 pahar apă</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-size:.81rem;color:var(--color-text-medium);">Vitamina C + antioxidanți fitochimici. Aloe la gustare menține aportul de siliciu.</td></tr>
+                        <tr style="background:var(--color-brand-light);"><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-weight:700;color:var(--color-navy);">19:00</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-weight:600;">Cină</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-size:.83rem;">Masă solidă ușoară · Omega-3 Herbalife 1cp · ProBalance LR 4 tablete</td><td style="padding:.5rem .7rem;border-bottom:1px solid var(--color-border);font-size:.81rem;color:var(--color-text-medium);">ProBalance neutralizează acizii generați în timpul zilei.</td></tr>
+                        <tr style="background:white;"><td style="padding:.5rem .7rem;font-weight:700;color:var(--color-navy);">21:30</td><td style="padding:.5rem .7rem;font-weight:600;">Pre-somn</td><td style="padding:.5rem .7rem;font-size:.83rem;">Collagen Elixir LR 1 flacon (50ml) · Restorate FitLine 1 stick · ProBalance LR 4 tablete în 200 ml apă caldă</td><td style="padding:.5rem .7rem;font-size:.81rem;color:var(--color-text-medium);">Fereastra nocturnă GH → mineralizare osoasă și sinteză colagen.</td></tr>
+                    </tbody></table></div>
+                <div class="highlight-box"><strong>Bilanț caloric din nutraceutice:</strong> ~350 kcal din shake-uri și suplimente. Total alimentar solid: ~800 kcal. <strong>TOTAL ZILNIC: ~1.150 kcal = deficit de 729 kcal față de TDEE 1.879 kcal.</strong> Aport proteic total: ~85g/zi (1,28 g/kg/zi).</div>
+            </div>
+        </div>
+        <!-- /tab nutraceutice -->
+
+        <!-- ═══════════════════════════════════════ TAB 4: PLAN NUTRITIONAL 30 ZILE ═══════════════════════════════════════ -->
+        <div id="nutritional" class="tab-content">
+            <div class="section-anchor-header" style="border-left-color:#059669"><h2>Plan nutrițional 30 zile — Reconstructie metabolică prin deficit caloric controlat</h2></div>
+            <div class="art-card">
+                <h3>Arhitectura macronutrițională — Calcul precis pentru Patricia</h3>
+                <p><strong>TDEE: 1.879 kcal/zi minus deficit -700 kcal = 1.179 kcal/zi (target ~1.100–1.150 kcal).</strong> Distribuția este optimizată pentru pierdere de grăsime, conservare musculară și stabilizare glicemică.</p>
+                <div class="stat-grid">
+                    <div class="stat-item" style="border-left:4px solid #3E92CC;"><div class="stat-item-head"><span>🥩 Proteine: 80–85 g/zi (~30%)</span></div><p><strong>Rată: 1,2–1,3 g/kg/zi.</strong> Prioritate #1. Distribuite uniform în 4 mese + 2 gustări. Surse prioritare: pește slab, piept de pui, albușuri, brânzeturi slabe, leguminoase. Shake-ul matinal asigură 25g. <strong>Dacă masa musculară scade → creștere la 90g/zi.</strong></p></div>
+                    <div class="stat-item" style="border-left:4px solid #059669;"><div class="stat-item-head"><span>🥑 Grăsimi: 35–38 g/zi (~30%)</span></div><p><strong>Grăsimi bune, antiinflamatorii.</strong> Ulei de măsline extravirgin, pește gras (somon, sardine), avocado, nuci și semințe. <strong>Nicio grăsime trans sau prăjeală.</strong> Grăsimile sunt necesare pentru absorbția vitaminelor liposolubile (D3, K2) și pentru sinteza hormonală.</p></div>
+                    <div class="stat-item" style="border-left:4px solid #f59e0b;"><div class="stat-item-head"><span>🌾 Carbohidrați: 110–115 g/zi (~40%)</span></div><p><strong>Exclusiv complecși și cu indice glicemic scăzut.</strong> Legume verzi, țelină, broccoli, conopidă, quinoa, linte, năut, orez brun. Interzis: pâine albă, paste, orez alb, cartofi prăjiți, dulciuri. <strong>Se evită fructele foarte dulci (struguri, banane coapte); se preferă merele, afinele, căpșunile.</strong></p></div>
+                    <div class="stat-item" style="border-left:4px solid #dc2626;"><div class="stat-item-head"><span>⚡ Total energie: 1.100–1.150 kcal/zi</span></div><p><strong>Deficit efectiv: -730 kcal față de TDEE.</strong> Pierdere ponderală estimată: 0,5–0,8 kg/săptămână. 4 mese + 2 gustări pentru a evita hipoglicemia. <strong>Hidratare obligatorie: 2,5 L apă/zi.</strong></p></div>
+                </div>
+            </div>
+            <div class="art-card" style="background:#f0fdf4;border-left:4px solid #059669;">
+                <h3 style="font-size:1rem;">Alimente prioritare vs. de evitat</h3>
+                <div class="bio-table-wrap"><table class="bio-table" style="width:100%;border-collapse:collapse;font-size:.84rem;">
+                    <thead><tr style="background:var(--color-navy);color:white;"><th style="padding:.5rem .75rem;border-radius:6px 0 0 0;font-family:'Montserrat',sans-serif;">✅ Alimente prioritare</th><th style="padding:.5rem .75rem;font-weight:700;">❌ De limitat/exclus</th><th style="padding:.5rem .75rem;border-radius:0 6px 0 0;font-weight:700;">Raționalul clinic</th></tr></thead>
+                    <tbody>
+                        <tr style="background:white;"><td style="padding:.5rem .75rem;border-bottom:1px solid var(--color-border);color:#059669;font-weight:600;">Pește slab (cod, șalău), somon, sardine</td><td style="padding:.5rem .75rem;border-bottom:1px solid var(--color-border);color:#dc2626;font-weight:600;">Carne grasă, mezeluri, prăjeli</td><td style="padding:.5rem .75rem;border-bottom:1px solid var(--color-border);font-size:.82rem;color:var(--color-text-medium);">Proteine slabe cu Omega-3 antiinflamator. Evitarea grăsimilor saturate și a AGE-urilor.</td></tr>
+                        <tr style="background:var(--color-brand-light);"><td style="padding:.5rem .75rem;border-bottom:1px solid var(--color-border);color:#059669;font-weight:600;">Broccoli, conopidă, varză, spanac</td><td style="padding:.5rem .75rem;border-bottom:1px solid var(--color-border);color:#dc2626;font-weight:600;">Cartofi, orez alb, pâine albă</td><td style="padding:.5rem .75rem;border-bottom:1px solid var(--color-border);font-size:.82rem;color:var(--color-text-medium);">Fibrele și sulforafanul din crucifere susțin detoxifierea hepatică și sațietatea.</td></tr>
+                        <tr style="background:white;"><td style="padding:.5rem .75rem;border-bottom:1px solid var(--color-border);color:#059669;font-weight:600;">Afine, zmeură, căpșuni, măr verde</td><td style="padding:.5rem .75rem;border-bottom:1px solid var(--color-border);color:#dc2626;font-weight:600;">Fructe dulci, sucuri, dulciuri</td><td style="padding:.5rem .75rem;border-bottom:1px solid var(--color-border);font-size:.82rem;color:var(--color-text-medium);">Antioxidanți și indice glicemic scăzut.</td></tr>
+                        <tr style="background:var(--color-brand-light);"><td style="padding:.5rem .75rem;color:#059669;font-weight:600;">Ulei de măsline, avocado, nuci, semințe</td><td style="padding:.5rem .75rem;color:#dc2626;font-weight:600;">Margarină, ulei de palmier</td><td style="padding:.5rem .75rem;font-size:.82rem;color:var(--color-text-medium);">Grăsimi antiinflamatorii, esențiale pentru absorbția vitaminelor liposolubile.</td></tr>
+                    </tbody></table></div>
+            </div>
+            <div class="art-card">
+                <h3>Plan alimentar zilnic detaliat — Navigator 30 de zile</h3>
+                <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;">
+                    <label for="daySelector" style="font-size:.88rem;font-weight:600;color:var(--color-navy);">Selectează ziua:</label>
+                    <select id="daySelector"></select>
+                    <span id="dayLabel" style="font-size:.78rem;color:var(--color-text-light);"></span>
+                </div>
+                <div id="mealPlanOutput"></div>
+            </div>
+        </div>
+        <!-- /tab nutritional -->
+
+        <!-- ═══════════════════════════════════════ TAB 5: MTC MERIDIANE ═══════════════════════════════════════ -->
+        <div id="meridiane" class="tab-content">
+            <div class="section-anchor-header" style="border-left-color:#7c3aed"><h2>Medicina Tradițională Chineză — Analiza completă a meridianelor — Oltean Patricia</h2></div>
+            <div class="art-card">
+                <h3>Diagnosticul energetic TCM global</h3>
+                <p>Sindromul metabolic cu obezitate, steatoză și demineralizare osoasă reprezintă în MTC o puternică <strong>Stagnare a Qi-ului Hepatic (Gan Qi Yu)</strong> combinată cu <strong>Umiditate-Căldură (Shi Re) în Splină și Stomac</strong> și un profund <strong>Deficit de Yin al Rinichilor (Shen Yin Xu)</strong> cu Foc Toxic (metale grele).</p>
+            </div>
+            <div class="tcm-block">
+                <div class="tcm-block-header" style="background:linear-gradient(90deg,#78350f,#d97706);">🌾 Meridianul Splină-Pancreas (足太阴脾经) · Element: Pământ · Ore: 09:00–11:00</div>
+                <div class="tcm-block-body">
+                    <div class="tcm-sub red"><h4>Dezechilibru specific: Umiditate-Căldură (Shi Re)</h4><ul><li>Absorbție deficitară (2,55), balonare, retenție de fluide, edeme ușoare.</li><li><strong>Intervenție TCM:</strong> Acupunctură SP9 (Yin Ling Quan) pentru drenarea umidității, ST40 (Feng Long) pentru căldură, CV12 (Zhong Wan) pentru tonifierea funcției de transformare. Evitarea alimentelor reci (salate, băuturi ghețate) care agravează umiditatea.</li></ul></div>
+                </div></div>
+            <div class="tcm-block">
+                <div class="tcm-block-header" style="background:linear-gradient(90deg,#14532d,#16a34a);">🌿 Meridianul Ficat (足厥阴肝经) · Element: Lemn · Ore: 01:00–03:00</div>
+                <div class="tcm-block-body">
+                    <div class="tcm-sub red"><h4>Dezechilibru specific: Stagnare Qi Hepatic (Gan Qi Yu) + Foc Toxic</h4><ul><li>Steatoză hepatică (0,57), grăsimi în sânge (1,88), metale grele (Pb, As, Hg), iritabilitate, treziri nocturne.</li><li><strong>Intervenție TCM:</strong> Acupunctură LV3 (Tai Chong) pentru mișcarea Qi-ului, LV14 (Qi Men) pentru stagnare hepatică, GB34 (Yang Ling Quan) pentru Vezica Biliară. <strong>Plante amare (Păpădie, Armurariu)</strong> pentru curățarea ficatului.</li></ul></div>
+                </div></div>
+            <div class="tcm-block">
+                <div class="tcm-block-header" style="background:linear-gradient(90deg,#1e3a8a,#2563eb);">💧 Meridianul Rinichi (足少阴肾经) · Element: Apă · Ore: 17:00–19:00</div>
+                <div class="tcm-block-body">
+                    <div class="tcm-sub red"><h4>Dezechilibru specific: Deficiență de Yin și Jing Renal</h4><ul><li>Osteoporoză (grad 0,639), densitate non-minerală 0,186, oboseală cronică, dureri lombare, acufene, pH acid (2,99).</li><li><strong>Intervenție TCM:</strong> Acupunctură KD3 (Tai Xi), KD6 (Zhao Hai), CV4 (Guan Yuan — MOXA), GV4 (Ming Men — MOXA), BL23 (Shen Shu). <strong>Alimentație:</strong> supe de oase, fasole neagră, alge, susan negru.</li></ul></div>
+                </div></div>
+        </div>
+        <!-- /tab meridiane -->
+
+        <!-- ═══════════════════════════════════════ TAB 6: BIOMARKERI & KPI ═══════════════════════════════════════ -->
+        <div id="biomarkeri" class="tab-content">
+            <div class="section-anchor-header" style="border-left-color:var(--color-brand-medium)"><h2>A. Dashboard KPI — Evoluție estimată pe 24 săptămâni</h2></div>
+            <div class="art-card">
+                <div class="bio-table-wrap"><table class="bio-table" style="width:100%;border-collapse:collapse;font-size:.84rem;">
+                    <thead><tr style="background:var(--color-navy);color:white;"><th style="padding:.5rem .8rem;text-align:left;border-radius:6px 0 0 0;">KPI</th><th style="padding:.5rem .8rem;text-align:center;">Start</th><th style="padding:.5rem .8rem;text-align:center;">S8</th><th style="padding:.5rem .8rem;text-align:center;">S16</th><th style="padding:.5rem .8rem;text-align:center;border-radius:0 6px 0 0;">S24 (Țintă)</th></tr></thead>
+                    <tbody>
+                        <tr style="background:white;"><td style="padding:.5rem .8rem;font-weight:600;color:var(--color-navy);">Greutate (kg)</td><td style="padding:.5rem .8rem;text-align:center;font-weight:700;color:#d97706;">66,1</td><td style="padding:.5rem .8rem;text-align:center;">62,0</td><td style="padding:.5rem .8rem;text-align:center;">58,5</td><td style="padding:.5rem .8rem;text-align:center;font-weight:700;color:#059669;">55–57</td></tr>
+                        <tr style="background:var(--color-brand-light);"><td style="padding:.5rem .8rem;font-weight:600;color:var(--color-navy);">IMC (kg/m²)</td><td style="padding:.5rem .8rem;text-align:center;font-weight:700;color:#dc2626;">25,2</td><td style="padding:.5rem .8rem;text-align:center;">23,6</td><td style="padding:.5rem .8rem;text-align:center;">22,3</td><td style="padding:.5rem .8rem;text-align:center;font-weight:700;color:#059669;">21–22</td></tr>
+                        <tr style="background:white;"><td style="padding:.5rem .8rem;font-weight:600;color:var(--color-navy);">Grăsime corp. (%)</td><td style="padding:.5rem .8rem;text-align:center;font-weight:700;color:#dc2626;">34,8%</td><td style="padding:.5rem .8rem;text-align:center;">30,0%</td><td style="padding:.5rem .8rem;text-align:center;">26,0%</td><td style="padding:.5rem .8rem;text-align:center;font-weight:700;color:#059669;">24–28%</td></tr>
+                        <tr style="background:var(--color-brand-light);"><td style="padding:.5rem .8rem;font-weight:600;color:var(--color-navy);">Masă musculară (kg)</td><td style="padding:.5rem .8rem;text-align:center;font-weight:700;color:#059669;">40,9</td><td style="padding:.5rem .8rem;text-align:center;color:#059669;">40,5</td><td style="padding:.5rem .8rem;text-align:center;color:#059669;">40,2</td><td style="padding:.5rem .8rem;text-align:center;font-weight:700;color:#059669;">≥39,5</td></tr>
+                        <tr style="background:white;"><td style="padding:.5rem .8rem;font-weight:600;color:var(--color-navy);">Masă osoasă (kg)</td><td style="padding:.5rem .8rem;text-align:center;font-weight:700;color:#d97706;">2,2</td><td style="padding:.5rem .8rem;text-align:center;">2,2</td><td style="padding:.5rem .8rem;text-align:center;">2,25</td><td style="padding:.5rem .8rem;text-align:center;font-weight:700;color:#059669;">≥2,3</td></tr>
+                    </tbody></table></div>
+                <div class="chart-container" style="height:260px;max-width:640px;"><canvas id="progressChart"></canvas></div>
+            </div>
+
+            <div class="section-anchor-header" style="border-left-color:#e53e3e"><h2>B. Analize de laborator recomandate — Start + Monitorizare</h2></div>
+            <div class="art-card">
+                <div class="bio-table-wrap"><table class="bio-table" style="width:100%;border-collapse:collapse;font-size:.84rem;">
+                    <thead><tr style="background:var(--color-navy);color:white;"><th style="padding:.5rem .8rem;text-align:left;border-radius:6px 0 0 0;">Biomarker</th><th style="padding:.5rem .8rem;">Valoare optimă M3.0</th><th style="padding:.5rem .8rem;">De ce contează pentru Patricia</th><th style="padding:.5rem .8rem;border-radius:0 6px 0 0;">Când</th></tr></thead>
+                    <tbody>
+                        <tr style="background:white;"><td style="padding:.5rem .8rem;font-weight:700;color:var(--color-navy);">HbA1c (hemoglobina glicată)</td><td style="padding:.5rem .8rem;">< 5,7%</td><td style="padding:.5rem .8rem;font-size:.82rem;">Marker al glicemiei medii pe 3 luni. <strong>Glicemia actuală echivalentă ~130–140 mg/dL.</strong></td><td style="padding:.5rem .8rem;">Start + S12 + S24</td></tr>
+                        <tr style="background:var(--color-brand-light);"><td style="padding:.5rem .8rem;font-weight:700;color:var(--color-navy);">Profil lipidic complet (LDL, HDL, TG)</td><td style="padding:.5rem .8rem;">LDL < 100 · HDL > 50 · TG < 150</td><td style="padding:.5rem .8rem;font-size:.82rem;"><strong>Trigliceride 2.969 +++, grăsimi în sânge 1,88 +++.</strong></td><td style="padding:.5rem .8rem;">Start + S12 + S24</td></tr>
+                        <tr style="background:white;"><td style="padding:.5rem .8rem;font-weight:700;color:var(--color-navy);">ALT, AST, GGT</td><td style="padding:.5rem .8rem;">< 30 U/L</td><td style="padding:.5rem .8rem;font-size:.82rem;">Steatoză hepatică (0,57). Suport Hepatic LR + pierdere ponderală.</td><td style="padding:.5rem .8rem;">Start + S12</td></tr>
+                        <tr style="background:var(--color-brand-light);"><td style="padding:.5rem .8rem;font-weight:700;color:var(--color-navy);">Vitamina D3 (25-OH)</td><td style="padding:.5rem .8rem;">40–60 ng/mL</td><td style="padding:.5rem .8rem;font-size:.82rem;">Esențială pentru absorbția calciului. <strong>Valoare biorezonanță: 4,578 (scăzut).</strong></td><td style="padding:.5rem .8rem;">Start + S24</td></tr>
+                        <tr style="background:white;"><td style="padding:.5rem .8rem;font-weight:700;color:var(--color-navy);">Panel metale grele (Pb, Hg, As, Cd)</td><td style="padding:.5rem .8rem;">Pb < 0,64 · Hg < 0,34 · As < 0,62</td><td style="padding:.5rem .8rem;font-size:.82rem;"><strong>Pb 0,98, Hg 0,68, As 1,27 — TOATE PESTE LIMITĂ.</strong> URGENT.</td><td style="padding:.5rem .8rem;">Start + S24</td></tr>
+                    </tbody></table></div>
+            </div>
+
+            <div class="art-card" style="border-left:4px solid var(--color-gold);">
+                <h3>Nota clinică finală — dr.ing. Radu Pascu</h3>
+                <div class="quote-box">
+                    <p class="quote-text" style="font-style:normal;font-size:.88rem;line-height:1.8;">
+                        Patricia Oltean se prezintă la 55 de ani cu un teren biologic care, sub stratul de inflamație și grăsime, este încă tânăr (vârsta metabolică 49 ani) și puternic (masa musculară 61,8%). Avem de-a face cu un sistem care a fost înecat, nu uzat. Obezitatea, steatoza, hiperglicemia și osteoporoza nu sunt boli separate, ci fațete ale aceleiași disfuncții sistemice: un metabolism înfundat, toxic, acid și inflamat.<br><br>
+                        Strategia este să desfundăm sistemul: curățăm ficatul (Liver Support, Aloe Vera), stingem inflamația sistemică (Omega-3, Activize Oxyplus), alcalinizăm mediul intern (ProBalance, Restorate) și hrănim celulele cu micronutrienți biodisponibili (Vita Active, PowerCocktail). Facem toate acestea în timp ce forțăm ușor, dar sigur, corpul să-și consume propria grăsime ca energie (deficit caloric de -700 kcal/zi, fără a sacrifica mușchiul).<br><br>
+                        <strong>Maraton, nu sprint. Deficit -700 kcal/zi, BIA lunar, panel metabolic la 12 săptămâni, metale grele la 24 săptămâni. Hidratarea cu 2,5 L/zi este la fel de importantă ca și suplimentele. Această reconstrucție va dura, dar datele arată că este perfect posibilă.</strong>
+                    </p>
+                </div>
+                <div style="display:flex;justify-content:flex-end;margin-top:.75rem;"><div style="text-align:right;"><p style="font-family:'Montserrat',sans-serif;font-size:.8rem;font-weight:800;color:var(--color-navy);margin:0;">dr.ing. Radu Pascu</p><p style="font-size:.72rem;color:var(--color-text-light);margin:0;">NUTRISIB · Sibiu · 2026</p><p style="font-size:.7rem;color:var(--color-text-light);margin:.1rem 0 0;">Medicină 3.0 · Biohacking · Nutriție Funcțională · MTC · Biorezonanță</p></div></div>
+            </div>
+        </div>
+        <!-- /tab biomarkeri -->
+
+    </div><!-- /container-main -->
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        function openTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+            if (tabId === 'filozofie') setTimeout(renderCaloricChart, 80);
+            if (tabId === 'biomarkeri') setTimeout(renderProgressChart, 80);
+        }
+
+        const modelDays = [
+            { type: 'Luni', kcal: 1130, b: { t: 'Shake Herbalife F1 (2 linguri) + PDM (2 linguri) în apă', k: 220 }, s1: { t: '1 măr mic + 5 migdale', k: 90 }, l: { t: '150g piept de pui la grătar + salată mare (salată verde, roșii, castraveți) + 1 linguriță ulei de măsline', k: 310 }, s2: { t: '100g brânză cottage light + 50g afine', k: 120 }, d: { t: 'Supă cremă de broccoli (300ml) fără smântână', k: 90 }, m: { c: 108, p: 82, g: 36 } },
+            { type: 'Marți', kcal: 1150, b: { t: 'Shake Herbalife F1 + PDM', k: 220 }, s1: { t: '1 ou fiert tare + 1 castravete', k: 80 }, l: { t: '150g pește alb (cod/șalău) la abur + 100g orez brun fiert + legume la abur', k: 350 }, s2: { t: '1 iaurt grecesc 2% (150g) + 1 linguriță semințe de in măcinate', k: 150 }, d: { t: 'Salată de ton (100g ton în suc propriu) cu rucola, lămâie, 1 linguriță ulei măsline', k: 200 }, m: { c: 112, p: 85, g: 38 } },
+            { type: 'Miercuri', kcal: 1110, b: { t: 'Shake Herbalife F1 + PDM', k: 220 }, s1: { t: '1 pară mică + 1 ceai verde', k: 70 }, l: { t: '150g piept curcan la cuptor + 150g broccoli la abur + 1 felie pâine integrală prăjită', k: 320 }, s2: { t: '50g brânză de vaci slabă + 1 linguriță semințe chia', k: 100 }, d: { t: '150g fasole verde păstăi fiartă + 30g tofu la grătar', k: 150 }, m: { c: 105, p: 80, g: 35 } },
+            { type: 'Joi', kcal: 1140, b: { t: 'Shake Herbalife F1 + PDM', k: 220 }, s1: { t: '100g căpșuni + 10 nuci', k: 110 }, l: { t: '120g somon la cuptor + 100g quinoa fiartă + sparanghel la abur', k: 380 }, s2: { t: '1 ceașcă ceai de ghimbir + 1 biscuite integral uscat', k: 60 }, d: { t: 'Supă clară de pui (300ml) cu tăiței de dovlecel și pătrunjel', k: 120 }, m: { c: 110, p: 83, g: 37 } },
+            { type: 'Vineri', kcal: 1090, b: { t: 'Shake Herbalife F1 + PDM', k: 220 }, s1: { t: '1 măr verde + 1 pahar mare de apă cu lămâie', k: 80 }, l: { t: '150g piept pui la grătar + 200g sote de ciuperci și ardei gras cu usturoi', k: 270 }, s2: { t: '150g iaurt grecesc 2% + 1 linguriță fulgi de ovăz', k: 140 }, d: { t: '100g sardine în suc propriu + 5 măsline + salată verde', k: 200 }, m: { c: 100, p: 84, g: 34 } },
+            { type: 'Sâmbătă', kcal: 1160, b: { t: 'Shake Herbalife F1 + PDM', k: 220 }, s1: { t: '50g brânză cottage + 50g zmeură', k: 120 }, l: { t: 'Supa cremă de linte roșie (250g linte, morcov, țelină, fără ulei) + 1 felie pâine secară', k: 330 }, s2: { t: '1 măr mic copt cu scorțișoară', k: 90 }, d: { t: '100g creveți la tigaie cu usturoi și pătrunjel + 1 felie pâine integrală', k: 220 }, m: { c: 118, p: 82, g: 35 } },
+            { type: 'Duminică', kcal: 1100, b: { t: 'Shake Herbalife F1 + PDM', k: 220 }, s1: { t: '1 portocală mică + 10 fistic', k: 100 }, l: { t: 'Omletă din 2 albușuri + 1 ou întreg + spanac și ciuperci (gătite fără ulei)', k: 240 }, s2: { t: '100g brânză de vaci + 1 linguriță miere crudă', k: 120 }, d: { t: '150g varză călită cu 1 linguriță ulei măsline și 30g tofu afumat', k: 160 }, m: { c: 106, p: 82, g: 36 } }
+        ];
+        const allDays = Array.from({ length: 30 }, (_, i) => ({ ...modelDays[i % 7], day: i + 1 }));
+        const sel = document.getElementById('daySelector');
+        if (sel) {
+            allDays.forEach(d => { const o = document.createElement('option');
+                o.value = d.day;
+                o.textContent = 'Ziua ' + d.day + ' - ' + d.type;
+                sel.appendChild(o); });
+        }
+
+        function macroBar(m) { const tot = m.c * 4 + m.p * 4 + m.g * 9, cp = (m.c * 4 / tot * 100).toFixed(1), pp = (m.p * 4 / tot * 100).toFixed(
+                1), gp = (m.g * 9 / tot * 100).toFixed(1);
+            return '<div style="background:rgba(255,255,255,.15);border-radius:4px;height:10px;display:flex;overflow:hidden;margin:.35rem 0;"><div style="width:' +
+                cp + '%;background:#3E92CC;height:100%;"></div><div style="width:' + pp + '%;background:#4ade80;height:100%;"></div><div style="width:' +
+                gp + '%;background:#C5A021;height:100%;"></div></div>'; }
+
+        function displayDay(n) {
+            const d = allDays[n - 1];
+            const lbl = document.getElementById('dayLabel');
+            if (lbl) lbl.textContent = d.type;
+            const out = document.getElementById('mealPlanOutput');
+            if (!out) return;
+            out.innerHTML =
+                '<div class="meal-block" style="border-left-color:#f59e0b;"><h4>Mic dejun - Ora 07:45</h4><p>' + d.b.t +
+                '</p><p style="font-size:.79rem;color:var(--color-text-light);">~' + d.b.k + ' kcal</p></div>' +
+                '<div class="meal-block" style="border-left-color:#3E92CC;"><h4>Gustare 1 - Ora 10:30</h4><p>' + d.s1.t +
+                '</p><p style="font-size:.79rem;color:var(--color-text-light);">~' + d.s1.k + ' kcal</p></div>' +
+                '<div class="meal-block" style="border-left-color:#059669;"><h4>Prânz - Ora 13:00</h4><p>' + d.l.t +
+                '</p><p style="font-size:.79rem;color:var(--color-text-light);">~' + d.l.k + ' kcal</p></div>' +
+                '<div class="meal-block" style="border-left-color:#1B2A4A;"><h4>Gustare 2 - Ora 16:00</h4><p>' + d.s2.t +
+                '</p><p style="font-size:.79rem;color:var(--color-text-light);">~' + d.s2.k + ' kcal</p></div>' +
+                '<div class="meal-block" style="border-left-color:#C5A021;"><h4>Cină - Ora 19:00</h4><p>' + d.d.t +
+                '</p><p style="font-size:.79rem;color:var(--color-text-light);">~' + d.d.k + ' kcal</p></div>' +
+                '<div style="background:var(--color-navy);border-radius:8px;padding:.75rem 1rem;margin-top:.5rem;"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.3rem;margin-bottom:.4rem;"><span style="font-size:.8rem;color:rgba(255,255,255,.7);">Total zilnic: <strong style="color:white;">' +
+                d.kcal + ' kcal</strong></span><span style="font-size:.72rem;color:rgba(255,255,255,.5);">Deficit: <strong style="color:#fca5a5;">-' +
+                (1879 - d.kcal) + ' kcal</strong> vs TDEE</span></div>' + macroBar(d.m) +
+                '<div style="display:flex;gap:1.5rem;margin-top:.4rem;flex-wrap:wrap;"><span style="font-size:.78rem;color:#3E92CC;">Carbohidrați: <strong>' +
+                d.m.c + 'g</strong></span><span style="font-size:.78rem;color:#4ade80;">Proteine: <strong>' + d.m.p +
+                'g</strong></span><span style="font-size:.78rem;color:#C5A021;">Grăsimi: <strong>' + d.m.g + 'g</strong></span></div></div>';
+        }
+        if (sel) {
+            sel.addEventListener('change', e => displayDay(parseInt(e.target.value)));
+            displayDay(1);
+        }
+
+        let caloricDone = false,
+            progressDone = false;
+        const chartBase = { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { font: { family: 'Inter',
+                            size: 11 } } } } };
+
+        function renderCaloricChart() {
+            if (caloricDone) return;
+            const el = document.getElementById('caloricChart');
+            if (!el) return;
+            new Chart(el.getContext('2d'), { type: 'bar', data: { labels: ['BMR (repaus)', 'TDEE (actual)',
+                    'Ținta (-700 kcal)'
+                ], datasets: [{ label: 'kcal/zi', data: [1296, 1879, 1180], backgroundColor: ['#1B2A4A',
+                        '#f59e0b', '#059669'
+                    ], borderRadius: 6 }] }, options: { ...chartBase, scales: { y: { beginAtZero: true,
+                        grid: { color: '#f1f5f9' }, ticks: { font: { family: 'Inter' } } }, x: { grid: { display: false },
+                        ticks: { font: { family: 'Inter', weight: '600' } } } } } });
+            caloricDone = true;
+        }
+
+        function renderProgressChart() {
+            if (progressDone) return;
+            const el = document.getElementById('progressChart');
+            if (!el) return;
+            new Chart(el.getContext('2d'), { type: 'line', data: { labels: ['Start', 'S8', 'S16', 'S24'],
+                datasets: [
+                    { label: 'Greutate (kg)', data: [66.1, 62.0, 58.5, 56.0], borderColor: '#059669',
+                        backgroundColor: 'rgba(5,150,105,.1)', fill: true, tension: .4, pointRadius: 5,
+                        pointBackgroundColor: '#059669' },
+                    { label: 'Grasime corp. (%)', data: [34.8, 30.0, 26.0, 25.0], borderColor: '#f59e0b',
+                        fill: false, tension: .4, pointRadius: 5, pointBackgroundColor: '#f59e0b' },
+                    { label: 'Masa musculara (kg)', data: [40.9, 40.5, 40.2, 39.8], borderColor: '#3E92CC',
+                        fill: false, tension: .4, pointRadius: 5, pointBackgroundColor: '#3E92CC',
+                        borderDash: [4, 2] }
+                ] }, options: { ...chartBase, scales: { y: { grid: { color: '#f1f5f9' }, ticks: { font: { family: 'Inter' } } },
+                    x: { grid: { display: false }, ticks: { font: { family: 'Inter', weight: '600' } } } } } });
+            progressDone = true;
+        }
+    </script>
+    <script>
+        fetch('https://nutrisib.club/footer.html').then(r => r.text()).then(d => { const c = document.getElementById(
+                'footer-placeholder');
+            if (c) c.innerHTML = d; }).catch(() => { const c = document.getElementById('footer-placeholder');
+            if (c) c.innerHTML =
+                '<div style="background:#1B2A4A;color:rgba(255,255,255,.5);text-align:center;padding:1.5rem;font-size:.75rem;font-family:Inter,sans-serif;margin-top:2rem;">&copy; 2026 NUTRISIB &mdash; dr.ing. Radu Pascu &middot; Sibiu, Rom&acirc;nia &middot; Protocol C.E.L.O.S.<br><span style="font-size:.68rem;display:block;margin-top:.25rem;">Documentul are caracter orientativ si nu &icirc;nlocuieste consultul medical.</span></div>'; });
+    </script>
+</body>
+</html>

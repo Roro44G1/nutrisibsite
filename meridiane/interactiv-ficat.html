@@ -3,19 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grafic Interactiv Meridian Ficat</title>
+    <title>Grafic Interactiv Meridian Ficat – Evaluare și Recomandări</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
-    
     <style>
-        /* Resetare și Stiluri Generale */
-        * {
-            box-sizing: border-box;
-        }
-
+        * { box-sizing: border-box; }
         body {
             background-color: #f8f9fa;
             font-family: 'Inter', sans-serif;
@@ -25,22 +20,17 @@
             flex-direction: column;
             min-height: 100vh;
         }
-
-        /* Containerul principal al paginii */
         .infographic-container {
             flex-grow: 1;
             padding: 2rem 1rem;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Centrează orizontal conținutul */
+            align-items: center;
         }
-        
-        /* Containerul specific al graficului */
         .meridian-section {
             width: 100%;
-            max-width: 700px; /* Lățime maximă aplicată aici pentru uniformitate */
+            max-width: 750px;
         }
-
         h2 {
             font-size: 2em;
             font-weight: 700;
@@ -48,7 +38,6 @@
             margin-bottom: 1.5rem;
             text-align: center;
         }
-
         select {
             margin-bottom: 2rem;
             padding: 0.75rem 1.5rem;
@@ -63,18 +52,14 @@
             transition: all 0.2s ease-in-out;
             width: 100%;
         }
-
         select:hover {
             border-color: #0A2463;
             background-color: #d1eff6;
         }
-
         select:focus {
             outline: none;
             box-shadow: 0 0 0 3px rgba(62, 146, 204, 0.4);
         }
-
-        /* Bara de evaluare */
         .bar-container {
             position: relative;
             width: 100%;
@@ -85,7 +70,6 @@
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
             overflow: hidden;
         }
-
         .segment {
             flex: 1;
             display: flex;
@@ -96,12 +80,10 @@
             font-size: 0.9em;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
         }
-
         .segment.extreme-red    { background-color: #EF4444; }
         .segment.moderate-yellow { background-color: #FACC15; }
         .segment.tendency-blue   { background-color: #3B82F6; }
         .segment.balanced-green  { background-color: #22C55E; }
-
         .arrow {
             position: absolute;
             bottom: 5px;
@@ -115,8 +97,6 @@
             filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
             z-index: 10;
         }
-
-        /* Caseta de informații */
         .info-box {
             background-color: #ffffff;
             border-radius: 1rem;
@@ -126,7 +106,6 @@
             width: 100%;
             border: 1px solid #ddd;
         }
-
         .info-box h3 {
             font-size: 1.4em;
             color: #0A2463;
@@ -136,27 +115,26 @@
             border-bottom: 2px dashed #3E92CC;
             padding-bottom: 0.5rem;
         }
-
         .info-box p {
             font-size: 1.05em;
             margin-bottom: 0.75rem;
             color: #333;
             line-height: 1.6;
         }
-
         .info-box ul {
-            list-style-type: '🔹';
-            padding-left: 1.5rem;
+            list-style-type: none;
+            padding-left: 0;
             font-size: 1em;
             color: #475569;
         }
-
         .info-box li {
             margin-bottom: 0.5rem;
-            padding-left: 0.5rem;
+            padding-left: 1.2em;
+            text-indent: -1.2em;
         }
-        
-        /* Footer */
+        .info-box li::before {
+            content: "🔹 ";
+        }
         .footer-copyright {
             text-align: center;
             padding: 1rem;
@@ -165,27 +143,13 @@
             font-size: 0.9em;
             margin-top: 2rem;
         }
-
-        /* Stiluri responsive pentru ecrane mici */
         @media (max-width: 768px) {
-            h2 {
-                font-size: 1.6em;
-            }
-            .bar-container {
-                height: 35px;
-            }
-            .segment {
-                font-size: 0.7em;
-            }
-            .info-box {
-                padding: 1.2rem;
-            }
-            .info-box h3 {
-                font-size: 1.2em;
-            }
-            .info-box p, .info-box ul {
-                font-size: 0.95em;
-            }
+            h2 { font-size: 1.6em; }
+            .bar-container { height: 35px; }
+            .segment { font-size: 0.7em; }
+            .info-box { padding: 1.2rem; }
+            .info-box h3 { font-size: 1.2em; }
+            .info-box p, .info-box ul { font-size: 0.95em; }
         }
     </style>
 </head>
@@ -218,7 +182,8 @@
             </div>
 
             <div id="infoDisplay-ficat" class="info-box">
-                </div>
+                <!-- Conținut plasat dinamic -->
+            </div>
         </div>
     </div>
 
@@ -230,66 +195,66 @@
         const meridianLiverData = [
             {
                 stare: "Hipofuncție severă",
-                fiziologic: "Epuizare și oboseală continuă din cauza incapacității ficatului de a produce și elibera glicogen. Probleme oculare severe, amețeli, letargie, lipsă totală de putere. Depresie profundă, acumulare masivă de toxine, probleme hepatice severe. Tendință persistentă de a face febră, libido scăzut, impotență, tulburări grave ale prostatei, ochi de culoare galbenă intens (icter), incontinență urinară, vomă și diaree cronică. Tulburări digestive severe, alergii alimentare și de alte tipuri. Blocaj urinar, crampe musculare intense. Îmbolnăvirea severă a țesutului conjunctiv și a articulațiilor/tendoanelor, ten foarte uscat și de culoarea prafului, unghii crăpate/rupte, păr nestrălucitor și fragil.",
-                nutritie: "Nevoie stringentă de intervenție medicală și nutrițională specializată. Dietă strictă, ușor digerabilă, cu accent pe alimente pure, organice, care susțin detoxifierea hepatică (legume verzi, fructe de pădure, alimente amare). Evitarea totală a alcoolului, grăsimilor saturate și alimentelor procesate. Lichide calde, supe de legume.",
-                suplimente: "Suplimente complexe pentru suport hepatic (silimarină, NAC, colină, inozitol), vitamine B, antioxidanți (vitamina C, E, seleniu), probiotice pentru sănătatea intestinală, sub strictă supraveghere medicală.",
-                emotional: "Slăbirea severă a capacității de autodirecționare, comportament extrem de dezechilibrat, lipsa totală a capacității de decizie, iritabilitate acută, preocupare obsesivă cu amănuntele. Teamă paralizantă, predispoziție la blocarea supărărilor, accese de furie incontrolabile. Anxietate severă, deznădejde profundă, dependențe multiple (tutun, alcool, cafea, dulciuri). Incapacitatea de a-și exprima creativitatea, cu sentimente de deznădejde.",
-                relatiiParinti: "Conflict profund și nerezolvat cu influența maternă (Yin), manifestat prin incapacitatea de a 'primi' suport emoțional și de a se 'hrăni' din relații. Tendința de a reține furia și resentimentele, de a se simți copleșit de emoțiile materne sau de lipsa de suport din partea figurii materne. Dificultăți severe în a elibera trecutul și a ierta.",
-                terapie: "Intervenție medicală și psihologică urgentă. Terapie nutrițională strictă. Suport psihologic intens pentru eliberarea furiei și resentimentelor. Meditație de eliberare a emoțiilor stagnante. Terapii energetice (acupunctură, *Qi Gong*) pentru a stimula fluxul hepatic și a restabili echilibrul elementului lemn."
+                fiziologic: "Deficiență majoră de sânge și Yin hepatic. Oboseală profundă, epuizare cronică, slăbiciune musculară. Vederea încețoșată, uscăciune oculară, orbire nocturnă, posibil icter cu ten pământiu-verzui. Unghii crăpate, subțiri, fără luciu, păr fragil și lipsit de vitalitate. Metabolism lent, hipoglicemie, intoleranță la efort. Imunitate scăzută, tendință la infecții și febra. Tulburări digestive severe: diaree cronică, meteorism, absorbție deficitară. La femei: amenoree, infertilitate prin vid de sânge. La bărbați: impotență, scădere marcată a libidoului. Posibile tulburări de coagulare și fragilitate capilară.",
+                nutritie: "Necesită intervenție medicală și nutrițională urgentă. Alimentele trebuie să fie ușor digerabile, calde și gătite (supe, tocănițe, terciuri). Se recomandă: sfeclă roșie, morcovi, spanac (în cantități mici, bine fiert), cereale integrale (orez brun, mei, hrișcă), legume rădăcinoase. Adaugă gustul acru în cantități foarte mici (oțet de mere, lămâie) pentru a tonifica ficatul. Evită complet grăsimile saturate, prăjelile, alcoolul, cafeaua, alimentele reci și crude. Hidratare cu ceaiuri călduțe de ghimbir, lemn dulce, păpădie – sub îndrumare.",
+                suplimente: "Suport hepatic intensiv: Silimarină (armurariu) doze mari, NAC, acid alfa-lipoic, colină și inozitol. Vitamine B complex (în special B12, B6, acid folic), vitamina C, E, seleniu, zinc. Aminoacizi esențiali. Probiotice pentru refacerea florei intestinale. Adaptogeni precum Rhodiola, Schisandra (atenție la dozaj). Administrare doar sub supraveghere medicală; pot fi utile formule tradiționale precum „Xiao Yao San” modificate pentru tonifierea sângelui hepatic.",
+                emotional: "Deficit extrem de Hun (sufletul eteric). Lipsa direcției în viață, deznădejde profundă, depresie majoră, anxietate cronică. Sentiment copleșitor de goliciune interioară. Incapacitate de a lua decizii, de a se bucura. Creativitatea blocată total. Pot apărea dependențe (alcool, dulciuri, tutun) ca tentativă de a compensa lipsa de energie. Vise confuze sau lipsa amintirii viselor.",
+                relatiiParinti: "Relația cu principiul matern (Yin) este profund rănită: lipsa cronică a sentimentului de a fi „hrănit”, acceptat și iubit necondiționat. Incapacitate de a primi sprijin emoțional. Resentimente vechi, neiertare față de mamă sau figurile de îngrijire. Sentiment de abandon interior, care epuizează energia ficatului.",
+                terapie: "Intervenție integrativă: medical, psihologic, nutrițional. Acupunctură pentru tonifierea punctelor LV-8, SP-6, ST-36, CV-4, cu moxibustie. Automasaj zilnic al LV-3 și LV-8. Qi Gong de regenerare a Yin-ului (mișcări lente, respirație profundă). Jurnal de iertare și reconectare cu emoțiile materne. Terapie prin artă pentru deblocarea creativității."
             },
             {
                 stare: "Hipofuncție moderată",
-                fiziologic: "Epuizare și oboseală continuă din cauza producției/eliberării deficitare de glicogen. Probleme oculare, amețeli, letargie, lipsă de putere, depresie. Acumulare de toxine, probleme hepatice moderate. Tendință de a face febră, libido scăzut, posibilă impotență, tulburări prostată, ochi gălbui, incontinență urinară, vomă și diaree. Tulburări digestive, alergii. Crampe musculare. Îmbolnăvirea țesutului conjunctiv și articulațiilor/tendoanelor, ten uscat, unghii crăpate, păr nestrălucitor.",
-                nutritie: "Dietă antiinflamatorie, cu accent pe alimente care susțin funcția hepatică (legume verzi, fructe de pădure, alimente amare). Reducerea alimentelor procesate și a grăsimilor nesănătoase. Hidratare adecvată.",
-                suplimente: "Armurariu, complex de Vitamine B, antioxidanți (vitamina C, E, seleniu), zinc, magneziu, probiotice.",
-                emotional: "Slăbirea capacității de autodirecționare, comportament dezechilibrat, lipsa capacității de decizie, iritabilitate accentuată, preocupare excesivă cu amănuntele. Teamă, predispoziție la blocarea supărărilor, inflăcărare cu accese de furie. Anxietate, deznădejde, dependențe (tutun, alcool, cafea, dulciuri).",
-                relatiiParinti: "Dificultăți în a 'primi' suport emoțional și a se 'hrăni' din relații, o tendință de a reține frustrarea și mânia, de a se simți copleșit de emoțiile materne sau de lipsa de suport din partea figurii materne. Dificultăți în a elibera trecutul.",
-                terapie: "Dietă de suport hepatic. Jurnalism terapeutic pentru explorarea sentimentelor de furie și frustrare. Meditații de iertare și acceptare. Exerciții de *Qi Gong* sau *Tai Chi* pentru a stimula fluxul energetic al ficatului."
+                fiziologic: "Deficiență de sânge hepatic și Qi al ficatului. Oboseală cronică după efort minim, somnolență diurnă. Vedere încețoșată, ochi uscați, sensibili la lumină. Unghii fragile, păr uscat, ten tern. Amețeli la ridicare. Libido scăzut, menstruație întârziată sau puțin abundentă. Digestie lentă, balonare postprandială, scaune moi. Contracturi musculare ușoare, mai ales noaptea. Imunitate ușor scăzută, răceli frecvente.",
+                nutritie: "Dietă caldă, nutritivă, cu accent pe alimente care construiesc sângele: carne slabă (vită, miel, pui), ficat (o dată pe săptămână), ouă, leguminoase (linte, năut), cereale integrale, legume verzi (spanac, broccoli, urzici). Fructe de pădure, struguri negri. Condimente ușor calde (ghimbir, scorțișoară, cardamom). Consum moderat de grăsimi sănătoase (avocado, nuci, semințe de in). Evitarea excesului de dulciuri rafinate care agravează umezeala.",
+                suplimente: "Armurariu standardizat, complex de vitamine B, fier (dacă este necesar sub control medical), vitamina C, magneziu, zinc. Suplimente pe bază de Schisandra și Goji (Lycium) pentru hrănirea sângelui hepatic. Ulei de pește (Omega-3).",
+                emotional: "Sentiment de nesiguranță, anxietate, neîncredere în forțele proprii. Frică de eșec, indecizie, depresie ușoară cu lipsă de entuziasm. Tendința de a se plânge, de a se simți victimă. Vise neliniștite, trezire obosită. Creativitate frânată, lipsa curajului de a începe proiecte.",
+                relatiiParinti: "Pacientul simte că nu a primit suficientă grijă și siguranță din partea mamei (sau figurii materne), ceea ce a condus la o bază energetică fragilă. Poate căuta aprobarea constantă a celorlalți. Dificultăți în a-și afirma nevoile, teama de a fi respins.",
+                terapie: "Dietă de construcție a sângelui. Plimbări în natură, expunere moderată la soare. Masaj al SP-6, LV-8, ST-36. Qi Gong pentru întărirea Yin-ului. Consiliere pentru întărirea stimei de sine și explorarea tiparelor de atașament. Jurnalul recunoștinței și al realizărilor zilnice."
             },
             {
                 stare: "Dezechilibru ușor (Hipofuncție)",
-                fiziologic: "Oboseală ocazională, ușoare probleme oculare, amețeli ușoare, lipsă subtilă de energie. Uneori tendință de a face febră. Ten uscat, unghii fragile. Digestie ușor îngreunată, ocazional balonare sau disconfort. Energiile creative pot fi blocate, poate aparea anxietatea ușoară.",
-                nutritie: "Dietă echilibrată, cu accent pe alimente proaspete, bogate în vitamine și minerale. Consum regulat de alimente care susțin ficatul. Evitarea excesului de alimente grele sau procesate.",
-                suplimente: "Multivitamine/minerale, suport de bază pentru ficat.",
-                emotional: "Ușoară iritabilitate, tendință spre frustrare sau nemulțumire. Uneori dificultăți în a-și exprima emoțiile. Poate fi ușor anxioasă sau deznădăjduită.",
-                relatiiParinti: "Unele tensiuni persistente sau neînțelegeri subtile legate de influența maternă, care pot duce la o presiune internă și la dificultăți în acceptarea lor așa cum sunt.",
-                terapie: "Conștientizarea obiceiurilor alimentare. Practici de mindfulness pentru a reduce iritabilitatea. Exerciții de respirație pentru calmare. Explorarea surselor de 'hrană emoțională'."
+                fiziologic: "Ușoară deficiență de sânge hepatic, cu oboseală ocazională, senzație de „cap gol”, amețeli scurte, vedere ușor încețoșată seara. Piele uscată, unghii striate. Menstruație neregulată (ciclu mai lung, cantitate mică). Somn superficial, trezire ușoară. Digestie bună în general, dar cu momente de balonare.",
+                nutritie: "Adaugă regulat alimente care hrănesc sângele: sfeclă, morcovi, spanac, broccoli, carne de vită slabă, ouă, cereale integrale. Gustări sănătoase cu nuci, semințe de dovleac. Ceaiuri: frunze de zmeur, trifoi roșu. Evită excesul de alimente reci și băuturi carbogazoase.",
+                suplimente: "Multivitamine și minerale de calitate, cu accent pe fier, B12, acid folic, vitamina C. Suplimente pe bază de Goji și Schisandra. Magneziu pentru relaxare musculară și somn.",
+                emotional: "Iritabilitate subtilă, tendință la melancolie, preocupări minore legate de viitor. O ușoară lipsă de motivație, dar păstrează capacitatea de a funcționa. Creativitatea poate fi fluctuantă. Vise puțin agitate.",
+                relatiiParinti: "Ușoară nemulțumire legată de sprijinul primit din partea mamei, care nu e resimțit ca pe deplin satisfăcător. Poate căuta mai multă validare externă decât e necesar.",
+                terapie: "Corecții alimentare simple. Practicarea unui hobby creativ. Masaj de relaxare al punctelor LV-3, SP-6. Respirații abdominale profunde seara. Comunicare asertivă cu familia."
             },
             {
                 stare: "Echilibru",
-                fiziologic: "Ficat funcționează optim, detoxifiere eficientă, energie stabilă și constantă. Piele sănătoasă, unghii puternice, păr strălucitor. Vedere clară, fără probleme oculare. Digestie armonioasă, fără disconfort. Metabolism energetic eficient.",
-                nutritie: "Dietă variată și echilibrată, bogată în alimente integrale, proaspete, cu un bun aport de vitamine și minerale. Accent pe alimente de sezon, care susțin energia lemnului.",
-                suplimente: "Suplimente de întreținere dacă este necesar, conform nevoilor individuale.",
-                emotional: "Bunătate, bunăvoință, compasiune, generozitate. Capacitate de planificare și creativitate. Abilitate de a elabora soluții instantanee și de a analiza perspective bruște. Echilibru emoțional, capacitate de a gestiona stresul, prospețime psihică. Exprimă iubirea și emoțiile liber.",
-                relatiiParinti: "Echilibru între influența maternă (hrănire, acceptare) și autoritatea paternă (structură, direcție), permițând o bună integrare a ambelor aspecte în propria personalitate. Capacitate de a te simți iubit și acceptat.",
-                terapie: "Menținerea obiceiurilor sănătoase. Continuarea practicilor de mindfulness și meditație. Cultivarea recunoștinței și a relațiilor pozitive. Explorarea continuă a sinelui pentru creștere personală."
+                fiziologic: "Flux energetic armonios: Qi-ul hepatic circulă liber, sângele este depozitat și distribuit corect. Energie constantă pe parcursul zilei, somn profund și odihnitor (fără treziri 1-3 AM). Vedere clară, unghii netede și roz, păr strălucitor, ten luminos. Digestie eficientă, tranzit regulat. Menstruație regulată, fără simptome. Flexibilitate fizică și mentală, răspuns imunitar prompt.",
+                nutritie: "Menține o alimentație variată, bogată în legume proaspete, fructe, proteine de calitate, grăsimi sănătoase. Include alimente amare (rucola, radicchio) și acrișoare (lămâie, oțet de mere) pentru stimularea blândă a ficatului. Hidratare optimă. Evită excesele alimentare și alcoolul.",
+                suplimente: "Suplimente de întreținere dacă este cazul: multivitamine, Omega-3, probiotice. Eventual extract de armurariu pentru protecție preventivă în perioadele solicitante (toamnă, primăvară).",
+                emotional: "Stabilitate emoțională, răbdare, bunătate autentică. Capacitate de planificare și decizie; creativitate debordantă. Gestionare optimă a stresului, furia este recunoscută și exprimată sănătos. Hun-ul este ancorat, visurile sunt creative și pline de sens. Sentiment de direcție și scop în viață.",
+                relatiiParinti: "Integrare echilibrată a influențelor materne și paterne; capacitatea de a primi iubire și sprijin, dar și de a stabili limite sănătoase. Relația cu părinții este armonioasă, indiferent de circumstanțe, datorită propriei securități interioare.",
+                terapie: "Păstrează rutinele sănătoase: exerciții fizice moderate, Qi Gong sau yoga. Meditație de menținere a clarității mentale. Continuă auto-cunoașterea. Fii recunoscător pentru echilibrul atins și împărtășește-l cu ceilalți."
             },
             {
                 stare: "Dezechilibru ușor (Hiperfuncție)",
-                fiziologic: "Digestie ușor înrăutățită, senzație ocazională de 'cap greu', tulburări ușoare de vedere, amețeli ocazionale. Uneori hemoroizi, inflamație ușoară a prostatei/ovarelor, tulburări menstruale minore. Tensiune abdominală ușoară, accese ocazionale de furie. Rigiditate ușoară în articulații la mișcare, tensiuni musculare ușoare în cap, umăr, gât.",
-                nutritie: "Dietă echilibrată, cu atenție la alimentele care pot suprasolicita ficatul (grăsimi saturate, alcool). Hidratare adecvată. Consum de alimente care susțin detoxifierea.",
-                suplimente: "Antioxidanți de bază, suport pentru detoxifiere.",
-                emotional: "Ușoară iritabilitate, tendință spre frustrare sau mânie. Uneori dificultăți în a elibera tensiunea. Poate fi ușor obsedată de muncă sau insensibilă. Sentiment de împovărare.",
-                relatiiParinti: "Unele tensiuni persistente sau neînțelegeri subtile legate de influența paternă, care pot duce la o presiune internă și la dificultăți în acceptarea lor așa cum sunt.",
-                terapie: "Reevaluarea obiectivelor și a așteptărilor. Practici de relaxare pentru a reduce frustrarea. Exerciții de conștientizare a emoțiilor. Dialog deschis cu părinții pentru a rezolva tensiunile."
+                fiziologic: "Început de stagnare a Qi-ului hepatic, cu ușoară tendință la căldură. Simptome: disconfort subcostal, balonare, senzație de nod în gât, eructații, ușoară iritabilitate premenstruală. Mușchii gâtului și umerilor ușor tensionați, cefalee tensională ocazională. Somn agitat, trezire în jurul orei 1-3 AM. Scaune alternând constipație/diaree.",
+                nutritie: "Adoptă alimente care fluidizează Qi-ul hepatic: legume cu frunze verzi, ridichi, ceapă, usturoi, ghimbir proaspăt, mentă, turmeric. Include gustul acru și amar. Evită excesele de grăsimi, prăjeli, cafea, alcool, alimente procesate. Mănâncă la ore fixe, fără grabă.",
+                suplimente: "Suport hepatic: armurariu, anghinare, păpădie. Magneziu, complex B. Ceaiuri din plante: mentă, mușețel, flori de tei. Formula tradițională Xiao Yao San (Free and Easy Wanderer) în doze mici, după consultarea unui specialist.",
+                emotional: "Iritabilitate crescută, frustrare ușoară, sentiment de a fi mereu pe fugă. Dificultate în a te detașa de muncă, perfecționism. Emoții refulate care ies la suprafață sub formă de sarcasm sau accese de furie controlată. Vise încărcate, conflicte.",
+                relatiiParinti: "Ușoară tensiune cu autoritatea paternă sau cu figurile care impun reguli. Senzația de a fi constrâns, de a nu avea libertate. Tendința de a se răzvrăti subtil sau de a internaliza presiunea.",
+                terapie: "Introdu exerciții de stretching pentru gât și umeri. Masaj al punctului LV-3 și GB-34. Practică respirația alternativă (nadi shodhana) sau Qi Gong pentru lemn (mișcări laterale). Organizează-ți prioritățile; învață să spui „nu”. Comunică deschis frustrările."
             },
             {
                 stare: "Hiperfuncție moderată",
-                fiziologic: "Digestie înrăutățită, senzație de 'cap greu', tulburări de vedere, amețeli. Hemoroizi, inflamația prostatei/ovarelor, chisturi, tulburări menstruale. Tensiune în abdomen, accese frecvente de furie. Rigiditate dureroasă în articulații la mișcare, tensiuni musculare în cap, umăr, gât, crampe, furnicături, amorțeală. Ten roșu.",
-                nutritie: "Nevoie de alimente care 'răcoresc' și 'drenează' ficatul. Evitarea alcoolului, grăsimilor saturate, alimentelor picante și prăjite. Hidratare adecvată. Dietă antiinflamatorie.",
-                suplimente: "Antioxidanți, plante cu efect hepatoprotector și antiinflamator, suport pentru detoxifiere.",
-                emotional: "Accese de furie, încăpățânare, caracter vulcanic. Sensibilitate crescută la gusturi, sunete, mirosuri. Frustrare, capacitate scăzută de a gândi, sentiment de împovărare, incapacitate de deconectare, planuri imposibil de dus la bun sfârșit. Obsedată de muncă, insensibilă, autodistructivă, rigidă, lucrează fără răbdare, hipersensibilă, ușor perturbată, apetit enorm.",
-                relatiiParinti: "Conflicte deschise sau o rebeliune activă împotriva autorității paterne, ceea ce poate duce la o stare de tensiune internă și la incapacitatea de a integra lecțiile de viață.",
-                terapie: "Tehnici de gestionare a furiei și nerăbdării. Meditații de acceptare și renunțare la control. Terapie pentru a explora relația cu autoritatea paternă. Activități care canalizează energia în mod constructiv."
+                fiziologic: "Stagnare pronunțată a Qi-ului hepatic, care poate genera foc hepatic sau urcarea Yang-ului. Dureri de cap violente (temporale, vertex), amețeli, hipertensiune arterială labilă. Ochi roșii, uscați sau cu presiune. Constipație rebelă, scaune uscate. Greață, gust amar, regurgitări. Menstruație abundentă, cu cheaguri, dismenoree. Tendinite, dureri articulare. Insomnie severă (trezire 1-3 AM), ten roșu, irascibilitate.",
+                nutritie: "Dieta trebuie să răcească și să dreneze. Consumă multe legume crude sau ușor gătite: salată verde, castraveți, țelină, roșii, ridichi, spanac, urzici. Fructe răcoritoare: pepene, pere, mere, grepfrut. Cereale ușoare (orz, mei). Evită complet alcoolul, cafeaua, alimentele picante, grăsimile saturate, carnea roșie în exces, dulciurile concentrate. Bea ceaiuri reci: mentă, crizantemă, păpădie, anghinare.",
+                suplimente: "Plante hepatoprotectoare și de drenaj: armurariu, anghinare, păpădie, turmeric, bupleurum. Suplimente cu magneziu (doze mai mari), Omega-3, probiotice. Formule tradiționale: Long Dan Xie Gan Tang (Gentiana) pentru foc hepatic, sub stricta supraveghere. Evită suplimentele termogene sau energizante.",
+                emotional: "Furie explozivă, nerăbdare extremă, intoleranță la frustrare. Hipercritică, rigiditate mentală, tendința de a domina. Senzație de presiune internă constantă. Comportament „workaholic”, fără odihnă. Vise violente, coșmaruri.",
+                relatiiParinti: "Conflict deschis cu autoritatea paternă sau cu propria nevoie de control. Rebeliune activă, incapacitatea de a accepta regulile. Resentiment profund față de tată sau figurile de autoritate, care se reflectă în toate relațiile ierarhice.",
+                terapie: "Tehnici de management al furiei (terapie cognitiv-comportamentală, sport intens). Meditație de scanare corporală. Masaj punctelor LV-2, LV-3, GB-41, GV-20. Qi Gong de eliberare a lemnului (lovirea ușoară a punctelor). Terapie prin scriere (scrisori de iertare). Stabilește pauze obligatorii și dormi suficient."
             },
             {
                 stare: "Hiperfuncție severă",
-                fiziologic: "Digestie extrem de înrăutățită, senzație constantă de 'cap greu', tulburări severe de vedere, amețeli persistente. Hemoroizi cronici, inflamație severă a prostatei/ovarelor, chisturi recurente, tulburări menstruale grave. Tensiune abdominală intensă, accese incontrolabile de furie. Rigiditate dureroasă severă în articulații la mișcare, tensiuni musculare extreme în cap, umăr, gât, crampe intense, furnicături, amorțeală persistentă. Ten roșu intens, probleme hepatice severe (ciroză, hepatită cronică).",
-                nutritie: "Nevoie stringentă de intervenție medicală și nutrițională specializată. Dietă strictă, care să elimine orice aliment inflamator sau care suprasolicită ficatul. Lichide calde, ceaiuri medicinale, alimente ușoare și pure.",
-                suplimente: "Suplimente complexe pentru suport hepatic, detoxifiere, sub strictă supraveghere medicală. Poate fi necesară terapia intensivă.",
-                emotional: "Accese de furie incontrolabile, încăpățânare extremă, caracter vulcanic distructiv. Sensibilitate exagerată la stimuli. Frustrare cronică, incapacitate totală de a gândi clar, sentiment de împovărare paralizant, incapacitate de deconectare, planuri obsesive și imposibil de realizat. Obsedată de muncă compulsivă, insensibilă, autodistructivă, rigidă, lucrează fără răbdare, hipersensibilă, ușor perturbată, apetit enorm și necontrolat. Stare de furie și amărăciune permanentă.",
-                relatiiParinti: "Refuz total de a se conforma sau de a accepta figura paternă, ducând la un conflict interior devastator, care erodează sentimentul de siguranță și liniște. Poate fi o rebeliune extremă împotriva structurii și autorității, cu consecințe grave asupra sănătății.",
-                terapie: "Intervenție medicală și psihologică urgentă. Terapie intensivă pentru gestionarea furiei și frustrării. Meditații de iertare și acceptare. Lucrul profund cu traumele legate de autoritate și control."
+                fiziologic: "Foc hepatic extrem, Yang în urcare sau vânt hepatic intern. Cefalee fulminantă, vertij, risc de AVC. Hipertensiune severă, epistaxis, vărsături de sânge. Ochi injectați, dureri orbitale, icter. Constipație intensă cu scaune uscate, posibil hemoroizi trombozați. Iritabilitate extremă, insomnie totală. La femei: menoragie, chisturi ovariene complicate. La bărbați: prostatită acută. Convulsii, tremor, rigiditate musculară severă.",
+                nutritie: "Intervenție medicală de urgență; alimentația este strict complementară. Dietă vegetariană ușoară, sucuri proaspete de legume verzi (castravete, țelină, spanac) și fructe (pepene, pere). Evită orice aliment cald, picant, gras, dulce concentrat. Post intermitent sub supraveghere. Hidratare intensă cu ceaiuri răcoritoare.",
+                suplimente: "Nu se administrează fără acordul medicului. Pot fi necesare sedative hepatice și antihipertensive din plante (valeriană, păpădie, crizantemă, bupleurum) combinate cu tratament alopat. Suplimente de magneziu, Omega-3. Evită absolut stimulentele.",
+                emotional: "Furie incontrolabilă, violență verbală/fizică, sentiment de explozie iminentă. Paranoia, anxietate severă. Incapacitate de a gândi rațional, confuzie, halucinații posibile. Comportament autodistructiv. Vise terifiante, coșmaruri recurente, teroare nocturnă.",
+                relatiiParinti: "Refuzul total al autorității, conflict interior devastator. Traume paterne profunde neintegrate, care produc o ruptură interioară. Impuls de distrugere a figurii de autoritate (inclusiv auto-distrugere). Nevoie urgentă de vindecare a relației cu principiul masculin.",
+                terapie: "Tratament medical de urgență (posibil internare). Acupunctură de sedare (puncte LV-2, LV-3, GB-20, GV-20, puncte de sângerare). Terapie psihologică intensivă pentru traume. Qi Gong extrem de blând, sub ghidaj. Izolare temporară de factorii de stres. Sprijin familial structurat."
             }
         ];
 
@@ -303,20 +268,18 @@
             const infoDisplay = document.getElementById(`infoDisplay-${meridianId}`);
             infoDisplay.innerHTML = `
                 <h3>Stare: ${data.stare}</h3>
-                <p><strong>🧬 Fiziologie:</strong> ${data.fiziologic}</p>
-                <p><strong>🥗 Nutriție:</strong> ${data.nutritie}</p>
-                <p><strong>💊 Suplimente:</strong> ${data.suplimente}</p>
-                <p><strong>🧠 Emoțional:</strong> ${data.emotional}</p>
-                <p><strong>👪 Relații cu părinții:</strong> ${data.relatiiParinti}</p>
-                <p><strong>💆 Terapie:</strong> ${data.terapie}</p>
+                <p><strong>🧬 Fiziologie & Simptome:</strong><br>${data.fiziologic}</p>
+                <p><strong>🥗 Nutriție recomandată:</strong><br>${data.nutritie}</p>
+                <p><strong>💊 Suplimente & plante medicinale:</strong><br>${data.suplimente}</p>
+                <p><strong>🧠 Stare emoțională & psihică:</strong><br>${data.emotional}</p>
+                <p><strong>👪 Relația cu părinții (arhetipuri Yin/Yang):</strong><br>${data.relatiiParinti}</p>
+                <p><strong>💆 Terapie & stil de viață:</strong><br>${data.terapie}</p>
             `;
         }
 
         function mutaSageata(meridianId, indexStr) {
             const index = parseInt(indexStr, 10);
             const totalSegments = 7;
-            
-            // Calculează poziția pentru centrul fiecărui segment
             const segmentWidth = 100 / totalSegments;
             const procent = (index * segmentWidth) + (segmentWidth / 2);
             
@@ -324,45 +287,95 @@
             afiseazaInformatii(meridianId, index);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const selectFicat = document.getElementById('select-ficat');
-            
-            if (selectFicat) {
-                // Setează starea inițială la încărcarea paginii
-                mutaSageata('ficat', selectFicat.value);
+       document.addEventListener('DOMContentLoaded', () => {
+    const selectFicat = document.getElementById('select-ficat');
+    const barContainer = document.querySelector('.bar-container');
+    const arrow = document.getElementById('indicator-ficat');
+    let isDragging = false;
 
-                // Adaugă event listener pentru schimbări ulterioare
-                selectFicat.addEventListener('change', (event) => {
-                    mutaSageata('ficat', event.target.value);
-                });
-            }
-        });
+    function updateFromPosition(clientX) {
+        const rect = barContainer.getBoundingClientRect();
+        let x = clientX - rect.left; // poziție relativă
+        const width = rect.width;
+        // Limităm la 0..width
+        x = Math.max(0, Math.min(x, width));
+        const totalSegments = 7;
+        const segmentWidth = width / totalSegments;
+        let index = Math.floor(x / segmentWidth);
+        if (index >= totalSegments) index = totalSegments - 1;
+        // Setăm dropdown și săgeata
+        selectFicat.value = index;
+        const procent = (index * segmentWidth) + (segmentWidth / 2);
+        arrow.style.left = `${(procent / width) * 100}%`;
+        afiseazaInformatii('ficat', index);
+    }
 
-    // Script de securitate pentru a bloca copierea și uneltele de dezvoltator
-        document.addEventListener('contextmenu', event => event.preventDefault()); // Blochează clicul dreapta
+    // Click pe bară
+    barContainer.addEventListener('click', (e) => {
+        if (!isDragging) {
+            updateFromPosition(e.clientX);
+        }
+    });
+
+    // Drag (mouse down + move)
+    barContainer.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        updateFromPosition(e.clientX);
+        e.preventDefault(); // previne selecția textului
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            updateFromPosition(e.clientX);
+        }
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (isDragging) {
+            isDragging = false;
+        }
+    });
+
+    // Suport și pentru touchscreen
+    barContainer.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        updateFromPosition(e.touches[0].clientX);
+        e.preventDefault();
+    });
+
+    document.addEventListener('touchmove', (e) => {
+        if (isDragging) {
+            updateFromPosition(e.touches[0].clientX);
+        }
+    });
+
+    document.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+
+    // Dropdown-ul rămâne funcțional (se actualizează și când e schimbat din dropdown)
+    selectFicat.addEventListener('change', (event) => {
+        const index = parseInt(event.target.value, 10);
+        const totalSegments = 7;
+        const segmentWidth = 100 / totalSegments;
+        const procent = (index * segmentWidth) + (segmentWidth / 2);
+        arrow.style.left = `${procent}%`;
+        afiseazaInformatii('ficat', index);
+    });
+
+    // Inițializare
+    mutaSageata('ficat', selectFicat.value);
+});
+
+        // Securitate anti-copiere
+        document.addEventListener('contextmenu', event => event.preventDefault());
         document.addEventListener('keydown', function(e) {
-            // Blochează Ctrl+C (Copiere)
-            if (e.ctrlKey && e.key === 'c') {
-                e.preventDefault();
-            }
-            // Blochează Ctrl+U (View Source)
-            if (e.ctrlKey && e.key === 'u') {
-                e.preventDefault();
-            }
-            // Blochează F12 (Developer Tools)
-            if (e.key === 'F12') {
-                e.preventDefault();
-            }
-            // Blochează Ctrl+Shift+I (Developer Tools)
-            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-                e.preventDefault();
-            }
-            // Blochează Ctrl+Shift+J (Developer Tools Console)
-            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
-                e.preventDefault();
-            }
+            if (e.ctrlKey && e.key === 'c') { e.preventDefault(); }
+            if (e.ctrlKey && e.key === 'u') { e.preventDefault(); }
+            if (e.key === 'F12') { e.preventDefault(); }
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') { e.preventDefault(); }
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') { e.preventDefault(); }
         });
-        
     </script>
 
 </body>
