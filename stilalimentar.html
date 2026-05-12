@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluare comportament alimentar | NutriSib</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://nutrisib.club/celos.css">
+<style>
+:root{--color-pearl:#F8FAFC;--color-navy:#1B2A4A;--color-gold:#C5A021;--color-text-dark:#1f2937;--color-text-medium:#374151;--color-text-light:#4b5563;--color-brand-medium:#3E92CC;--color-brand-light:#eaf2f8;--color-border:#e5e7eb;--color-accent-red:#ef4444;--shadow-card:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -1px rgba(0,0,0,.06);--radius-card:12px}
+*,*::before,*::after{box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--color-pearl);color:var(--color-text-dark);line-height:1.6;min-height:100vh;margin:0;padding:1rem;display:block!important}
+.page-wrap{max-width:720px;margin:0 auto;padding-bottom:3rem}
+.brand-header{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem}
+.brand-logo-img{height:44px;width:auto}
+.brand-logo-fb{width:44px;height:44px;background:var(--color-navy);border-radius:10px;display:none;align-items:center;justify-content:center;flex-shrink:0}
+.brand-logo-fb svg{width:22px;height:22px}
+.brand-name{font-family:'Montserrat',sans-serif;font-size:1.05rem;font-weight:800;color:var(--color-navy)}
+.brand-tagline{font-size:11px;color:var(--color-text-light)}
+.tfeq-hero{background:var(--color-navy);border-radius:var(--radius-card);padding:1.75rem 2rem;margin-bottom:1.25rem;position:relative;overflow:hidden}
+.tfeq-hero::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 80% at 90% 30%,rgba(62,146,204,.25) 0%,transparent 70%),radial-gradient(ellipse 40% 60% at 5% 80%,rgba(197,160,33,.12) 0%,transparent 60%)}
+.tfeq-hero-inner{position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:6px;background:rgba(62,146,204,.15);border:1px solid rgba(62,146,204,.3);border-radius:50px;padding:3px 12px;margin-bottom:.75rem;font-size:10px;font-weight:700;color:var(--color-brand-medium);text-transform:uppercase;letter-spacing:.1em;font-family:'Inter',sans-serif}
+.tfeq-hero h1{font-family:'Montserrat',sans-serif;font-size:1.55rem;font-weight:900;color:#fff;margin:0 0 .6rem;line-height:1.2}
+.tfeq-hero p{font-family:'Lora',serif;font-size:.9rem;color:rgba(255,255,255,.78);margin:0;line-height:1.6}
+.hero-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:1rem}
+.hero-badge{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15)}
+.progress-wrap{margin-bottom:1.5rem}
+.progress-steps{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.progress-step{display:flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-size:12px;color:#9ca3af;font-weight:500;white-space:nowrap}
+.progress-step.active{color:var(--color-navy)}.progress-step.done{color:var(--color-text-light)}
+.step-dot{width:24px;height:24px;border-radius:50%;background:#e5e7eb;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#9ca3af;flex-shrink:0;transition:background .3s,color .3s}
+.progress-step.active .step-dot{background:var(--color-navy);color:#fff}
+.progress-step.done .step-dot{background:var(--color-brand-medium);color:#fff}
+.step-sep{flex:1;height:1px;background:var(--color-border)}
+.progress-bar-track{height:4px;background:var(--color-border);border-radius:2px;overflow:hidden}
+.progress-bar-fill{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--color-navy),var(--color-brand-medium));transition:width .5s ease}
+.step{display:none}.step.active{display:block;animation:fadeUp .35s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.tfeq-card{background:#fff;border-radius:var(--radius-card);box-shadow:var(--shadow-card);border:1px solid var(--color-border);padding:2rem;margin-bottom:1rem}
+@media(max-width:520px){.tfeq-card{padding:1.25rem 1rem}}
+.card-title{font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:800;color:var(--color-navy);margin:0 0 .3rem}
+.card-subtitle{font-size:.875rem;color:var(--color-text-light);line-height:1.55;margin-bottom:1.5rem}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.field-row.col1{grid-template-columns:1fr}.field-row.col3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:520px){.field-row,.field-row.col3{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:700;color:var(--color-text-medium);text-transform:uppercase;letter-spacing:.05em;font-family:'Inter',sans-serif}
+.field label span{font-weight:400;text-transform:none;color:#9ca3af;letter-spacing:0}
+.field input,.field select{height:42px;padding:0 12px;border:1.5px solid var(--color-border);border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;color:var(--color-text-dark);background:#fff;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px;cursor:pointer}
+.field input:focus,.field select:focus{border-color:var(--color-navy);box-shadow:0 0 0 3px rgba(27,42,74,.1)}
+.field input.err,.field select.err{border-color:var(--color-accent-red)}
+.field-hint{font-size:11px;color:#9ca3af}
+.imc-box{display:none;align-items:center;gap:6px;background:var(--color-brand-light);border:1px solid #c7ddf0;border-radius:6px;padding:6px 12px;margin-top:2px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--color-navy)}
+.imc-box.show{display:inline-flex}.imc-val{font-size:15px;font-weight:800;margin:0 3px}
+.imc-hint{font-size:11px;color:#9ca3af;margin-top:3px}
+.gdpr-notice{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:11.5px;color:#166534;line-height:1.55;margin-top:1rem}
+.err-bar{background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:10px 14px;font-family:'Inter',sans-serif;font-size:13px;color:#b91c1c;margin-bottom:1rem;display:none}
+.section-sep{display:flex;align-items:center;gap:10px;margin:1.75rem 0 .75rem}
+.section-badge{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.badge-a{background:var(--color-brand-light);color:var(--color-navy)}.badge-b{background:#FEF3C7;color:#92400E}.badge-c{background:#FCE7F3;color:#9D174D}
+.section-sep-line{flex:1;height:1px;background:var(--color-border)}
+.section-desc-q{font-family:'Inter',sans-serif;font-size:12px;color:#9ca3af;margin:-.25rem 0 .75rem}
+.q-item{background:#fafafa;border:1.5px solid var(--color-border);border-radius:10px;padding:1rem;margin-bottom:8px;transition:border-color .2s,background .2s}
+.q-item.answered{border-color:#1D9E75;background:#f9fefb}.q-item.err-q{border-color:var(--color-accent-red);background:#fff5f5}
+.q-text{font-family:'Inter',sans-serif;font-size:14px;color:var(--color-text-medium);line-height:1.5;margin-bottom:.75rem}
+.q-num{font-family:'Montserrat',sans-serif;font-weight:700;color:var(--color-navy);margin-right:5px}
+.options-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+@media(max-width:460px){.options-grid{grid-template-columns:repeat(2,1fr)}}
+.opt-label{cursor:pointer;display:block}.opt-label input[type="radio"]{display:none}
+.opt-box{border:1.5px solid var(--color-border);border-radius:7px;padding:7px 4px;text-align:center;font-family:'Inter',sans-serif;font-size:11px;color:var(--color-text-light);line-height:1.3;min-height:40px;display:flex;align-items:center;justify-content:center;background:#fff;user-select:none;transition:border-color .12s,background .12s,box-shadow .12s}
+.opt-label input:checked+.opt-box{background:#e6faf4;border:2px solid #1D9E75;color:#065f46;font-weight:600;box-shadow:0 0 0 2px rgba(29,158,117,.15)}
+.opt-label:hover .opt-box{border-color:var(--color-brand-medium);background:var(--color-brand-light)}
+.btn-navy{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 28px;width:100%;background:var(--color-navy);color:#fff;border:none;border-radius:10px;cursor:pointer;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;box-shadow:0 3px 0 #051336;transition:background .15s,transform .1s,box-shadow .1s}
+.btn-navy:hover{background:#243a62;transform:translateY(-1px);box-shadow:0 5px 0 #051336}.btn-navy:active{transform:scale(.99);box-shadow:0 1px 0 #051336}
+.btn-gold{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 28px;width:100%;background:var(--color-gold);color:#fff;border:none;border-radius:10px;cursor:pointer;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;box-shadow:0 3px 0 #8a6d12;transition:background .15s,transform .1s}
+.btn-gold:hover{background:#b08e1b;transform:translateY(-1px)}.btn-gold:active{transform:scale(.99)}
+.btn-outline{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:42px;padding:0 20px;white-space:nowrap;background:#fff;color:var(--color-text-medium);border:1.5px solid var(--color-border);border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;transition:all .15s}
+.btn-outline:hover{background:var(--color-brand-light);border-color:var(--color-brand-medium);color:var(--color-navy)}
+.btn-row{display:flex;gap:10px;margin-top:1.5rem;align-items:center}
+@media(max-width:420px){.btn-row{flex-direction:column}.btn-outline{width:100%}}
+.res-intro{margin-bottom:1.5rem}
+.res-intro-name{font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:800;color:var(--color-navy);margin:0 0 .3rem}
+.res-intro-meta{font-family:'Inter',sans-serif;font-size:12px;color:var(--color-text-light)}
+.tema-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:1.5rem}
+.tema-card{border-radius:12px;padding:1.25rem 1.5rem 1.25rem 1.75rem;border:1.5px solid transparent;position:relative;overflow:hidden}
+.tema-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%}
+.tema-card.verde{background:#f0fdf9;border-color:#a7f3d0}.tema-card.verde::before{background:#1D9E75}
+.tema-card.galben{background:#fffbeb;border-color:#fde68a}.tema-card.galben::before{background:#f59e0b}
+.tema-card.rosu{background:#fef2f2;border-color:#fecaca}.tema-card.rosu::before{background:#ef4444}
+.tema-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.tema-card.verde .tema-label{color:#065f46}.tema-card.galben .tema-label{color:#92400e}.tema-card.rosu .tema-label{color:#991b1b}
+.tema-title{font-family:'Lora',serif;font-size:1rem;font-weight:700;color:var(--color-text-dark);margin:0 0 .5rem}
+.tema-text{font-family:'Inter',sans-serif;font-size:13.5px;color:var(--color-text-medium);line-height:1.7;margin:0}
+.tema-icon{position:absolute;top:1rem;right:1.25rem;font-size:1.4rem;opacity:.45}
+.concluzie-box{background:var(--color-navy);border-radius:12px;padding:1.5rem;margin-bottom:1rem;position:relative;overflow:hidden}
+.concluzie-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 80% 20%,rgba(62,146,204,.2) 0%,transparent 70%);pointer-events:none}
+.concluzie-inner{position:relative;z-index:1}
+.concluzie-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-brand-medium);margin-bottom:.5rem}
+.concluzie-text{font-family:'Lora',serif;font-size:.95rem;color:rgba(255,255,255,.9);line-height:1.7;margin:0}
+.mail-status{display:flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;font-size:13px;color:var(--color-text-light);margin-top:1rem;padding:10px 14px;background:#f9fafb;border-radius:8px;border:1px solid var(--color-border)}
+.mail-status.sent{color:#059669;background:#f0fdf4;border-color:#bbf7d0}
+.mail-status.error{color:#b91c1c;background:#fef2f2;border-color:#fecaca}
+.mail-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
+.tfeq-divider{border:none;border-top:1px solid var(--color-border);margin:1.5rem 0}
+.confirm-notice{background:var(--color-brand-light);border:1px solid rgba(62,146,204,.3);border-radius:10px;padding:1rem 1.25rem;margin-top:1rem;font-family:'Inter',sans-serif;font-size:13px;color:var(--color-navy);line-height:1.6}
+.page-footer{text-align:center;font-family:'Inter',sans-serif;font-size:11px;color:var(--color-text-light);margin-top:2rem;line-height:1.7}
+.page-footer a{color:var(--color-brand-medium)}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<div class="brand-header">
+  <img src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="NutriSib" class="brand-logo-img"
+       onerror="this.style.display='none';document.querySelector('.brand-logo-fb').style.display='flex'">
+  <div class="brand-logo-fb">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round">
+      <circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/>
+    </svg>
+  </div>
+  <div>
+    <div class="brand-name">NutriSib</div>
+    <div class="brand-tagline">dr.ing. Radu V. Pascu &mdash; Arhitectură biologică</div>
+  </div>
+</div>
+
+<div class="tfeq-hero">
+  <div class="tfeq-hero-inner">
+    <div class="hero-eyebrow">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Evaluare personalizată
+    </div>
+    <h1>Cum te raportezi la mâncare?</h1>
+    <p>Un set de întrebări care ne ajută să ënțelegem împreună relația ta cu alimentația &mdash; ce te împinge să mănânci, ce te oprește și cum îți influențează emoțiile alegerile alimentare.</p>
+    <div class="hero-badges">
+      <span class="hero-badge">Confidențial</span>
+      <span class="hero-badge">5&ndash;8 minute</span>
+      <span class="hero-badge">Fără răspunsuri greșite</span>
+    </div>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="progress-step active" id="ps1"><div class="step-dot">1</div><span>Date personale</span></div>
+    <div class="step-sep"></div>
+    <div class="progress-step" id="ps2"><div class="step-dot">2</div><span>Întrebări</span></div>
+    <div class="step-sep"></div>
+    <div class="progress-step" id="ps3"><div class="step-dot">3</div><span>Profilul tău</span></div>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" id="progress-fill" style="width:15%"></div>
+  </div>
+</div>
+
+<div class="step active" id="step1">
+  <div class="tfeq-card">
+    <div class="card-title">Câteva date despre tine</div>
+    <div class="card-subtitle">Ne ajută să personalizăm interpretarea și să o transmitem consultantului tău NutriSib. Datele sunt confidențiale.</div>
+    <div id="err1" class="err-bar"></div>
+    <div class="field-row col1">
+      <div class="field"><label>Nume și prenume <span>*</span></label><input type="text" id="f-name" placeholder="ex. Maria Ionescu" autocomplete="name"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Adresă email <span>*</span></label><input type="email" id="f-email" placeholder="exemplu@email.com" autocomplete="email"><span class="field-hint">Veți primi o confirmare</span></div>
+      <div class="field"><label>Telefon <span>*</span></label><input type="tel" id="f-phone" placeholder="+40 7xx xxx xxx" autocomplete="tel"><span class="field-hint">Numărul de contact</span></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Vârstă <span>(ani) *</span></label><input type="number" id="f-age" placeholder="35" min="16" max="99"></div>
+      <div class="field"><label>Sex <span>*</span></label>
+        <select id="f-sex">
+          <option value="">&mdash; Selectați &mdash;</option>
+          <option value="Feminin">Feminin</option>
+          <option value="Masculin">Masculin</option>
+          <option value="Prefer să nu precizez">Prefer să nu precizez</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row col3">
+      <div class="field"><label>Greutate <span>(kg) *</span></label><input type="number" id="f-weight" placeholder="70" min="30" max="300" step="0.1"></div>
+      <div class="field"><label>Înălțime <span>(cm) *</span></label><input type="number" id="f-height" placeholder="168" min="100" max="230"></div>
+      <div class="field"><label>IMC calculat</label>
+        <div id="imc-box" class="imc-box">IMC: <span class="imc-val" id="imc-val">&mdash;</span><span id="imc-cat" style="font-size:10px;font-weight:400"></span></div>
+        <div class="imc-hint" id="imc-hint">Se calculează automat</div>
+      </div>
+    </div>
+    <div class="gdpr-notice">&#128274; Prin continuare confirmați acordul cu utilizarea datelor exclusiv în scop nutrițional, conform GDPR. Datele nu vor fi partajate cu terți.</div>
+    <div class="btn-row">
+      <button class="btn-navy" id="btn-step2">Continuă la întrebări <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<div class="step" id="step2">
+  <div class="tfeq-card">
+    <div class="card-title">Întrebările</div>
+    <div class="card-subtitle">Citiți fiecare afirmație și alegeți răspunsul care vi se potrivește cel mai bine. <strong style="color:var(--color-navy)">Toate cele 18 întrebări sunt obligatorii.</strong></div>
+    <div id="err2" class="err-bar"></div>
+    <div class="section-sep"><span class="section-badge badge-a">Partea I &mdash; Obiceiuri conștiente</span><div class="section-sep-line"></div></div>
+    <p class="section-desc-q">Cât de des vă gândiți activ la ceea ce mâncați</p>
+    <div id="q-container"></div>
+    <div class="btn-row">
+      <button class="btn-outline" id="btn-back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Înapoi</button>
+      <button class="btn-gold" id="btn-calc">Generează profilul meu alimentar <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<div class="step" id="step3">
+  <div class="tfeq-card">
+    <div class="res-intro">
+      <div class="res-intro-name" id="res-name">Profilul tău alimentar</div>
+      <div class="res-intro-meta" id="res-meta"></div>
+    </div>
+    <div class="tema-grid" id="tema-container"></div>
+    <div class="concluzie-box">
+      <div class="concluzie-inner">
+        <div class="concluzie-label">Ce urmează</div>
+        <div class="concluzie-text" id="concluzie-text"></div>
+      </div>
+    </div>
+    <hr class="tfeq-divider">
+    <div class="confirm-notice"><strong>&#10003; Evaluarea a fost transmisă.</strong> Consultantul NutriSib a primit toate informațiile și te va contacta în curând. Întrebări: <strong>nutrisib.club@gmail.com</strong></div>
+    <div class="mail-status" id="mail-status"><div class="mail-dot"></div><span id="mail-txt">Se transmite evaluarea&hellip;</span></div>
+    <div class="btn-row" style="margin-top:1.25rem">
+      <button class="btn-outline" id="btn-reset">Completează din nou</button>
+      <button class="btn-navy" id="btn-print"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Salvează / Printează</button>
+    </div>
+  </div>
+</div>
+
+<div class="page-footer">
+  Instrument de evaluare a comportamentului alimentar &nbsp;&middot;&nbsp;
+  <a href="https://nutrisib.club" target="_blank">NutriSib</a> &nbsp;&middot;&nbsp;
+  Instrument de screening, nu diagnostic clinic<br>
+  &copy; <span id="yr"></span> NutriSib &mdash; dr.ing. Radu V. Pascu
+</div>
+</div>
+<script>
+(function(){
+'use strict';
+
+var FORMSPREE = 'https://formspree.io/f/xaqvobzp';
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+var ITEMS = [
+  {id:1,  sub:'cr', text:'M\u0103n\u00e2nc mai pu\u021bin \u00een mod deliberat pentru a-mi controla greutatea.'},
+  {id:2,  sub:'cr', text:'\u00cemmi restric\u021bionez aportul alimentar pentru a-mi controla greutatea.'},
+  {id:3,  sub:'cr', text:'C\u00e2nd am m\u00e2ncat prea mult, m\u0103n\u00e2nc mai pu\u021bin dec\u00e2t de obicei \u00een zilele urm\u0103toare.'},
+  {id:4,  sub:'cr', text:'M\u0103 ab\u021bin \u00een mod con\u0219tient la mese pentru a nu m\u0103 \u00eengr\u0103\u0219a.'},
+  {id:5,  sub:'cr', text:'M\u0103n\u00e2nc deliberat mai pu\u021bin pentru a nu deveni mai greu/\u0103.'},
+  {id:6,  sub:'cr', text:'Num\u0103r caloriile ca rutin\u0103 autoimpus\u0103 pentru a-mi controla greutatea.'},
+  {id:7,  sub:'ue', text:'Uneori, c\u00e2nd \u00eencep s\u0103 m\u0103n\u00e2nc, pur \u0219i simplu nu m\u0103 pot opri.'},
+  {id:8,  sub:'ue', text:'Prezen\u021ba unei persoane care m\u0103n\u00e2nc\u0103 m\u0103 face adesea suficient de fl\u0103m\u00e2nd/\u0103 \u00eenc\u00e2t s\u0103 m\u0103n\u00e2nc \u0219i eu.'},
+  {id:9,  sub:'ue', text:'Sunt mereu at\u00e2t de fl\u0103m\u00e2nd/\u0103 \u00eenc\u00e2t \u00eemi este greu s\u0103 m\u0103 opresc \u00eenainte s\u0103 termin tot din farfurie.'},
+  {id:10, sub:'ue', text:'C\u00e2nd v\u0103d un preparat cu adev\u0103rat apetisant, devin adesea at\u00e2t de fl\u0103m\u00e2nd/\u0103 \u00eenc\u00e2t trebuie s\u0103 m\u0103n\u00e2nc imediat.'},
+  {id:11, sub:'ue', text:'Dac\u0103 miros o m\u00e2ncare gustoas\u0103 sau v\u0103d un aliment delicios, \u00eemi este foarte greu s\u0103 m\u0103 ab\u021bin, chiar dac\u0103 tocmai am terminat masa.'},
+  {id:12, sub:'ue', text:'Sunt mereu suficient de fl\u0103m\u00e2nd/\u0103 \u00eenc\u00e2t a\u0219 putea m\u00e2nca oric\u00e2nd.'},
+  {id:13, sub:'ue', text:'Am o limit\u0103 pentru cantitatea de m\u00e2ncare la o mas\u0103, dar adesea o dep\u0103\u0219esc.'},
+  {id:14, sub:'ue', text:'M\u0103n\u00e2nc at\u00e2t de mult \u00eenc\u00e2t ajung s\u0103 m\u0103 simt inconfortabil.'},
+  {id:15, sub:'ue', text:'Nu m\u0103 opresc din m\u00e2ncat at\u00e2ta timp c\u00e2t mai exist\u0103 m\u00e2ncare \u00een farfurie.'},
+  {id:16, sub:'ee', text:'C\u00e2nd m\u0103 simt singur/\u0103, m\u0103 consolez m\u00e2nc\u00e2nd.'},
+  {id:17, sub:'ee', text:'C\u00e2nd m\u0103 simt anxios/anxioas\u0103, m\u0103 trezesc c\u0103 m\u0103n\u00e2nc.'},
+  {id:18, sub:'ee', text:'C\u00e2nd m\u0103 simt deprimat/\u0103, am tendin\u021ba de a m\u00e2nca \u00een exces.'}
+];
+
+var OPTS = ['Definitiv fals','Preponderent fals','Preponderent adev\u0103rat','Definitiv adev\u0103rat'];
+
+var BREAKS = {
+  7:  {badge:'badge-b', label:'Partea a II-a \u2014 Foame \u0219i cantitate', desc:'\u00cen ce m\u0103sur\u0103 cantit\u0103\u021bile consumate sunt influen\u021bate de factori din jur'},
+  16: {badge:'badge-c', label:'Partea a III-a \u2014 Emo\u021bii \u0219i m\u00e2ncare', desc:'Cum v\u0103 influen\u021beaz\u0103 st\u0103rile emo\u021bionale comportamentul alimentar'}
+};
+
+var qc = document.getElementById('q-container');
+ITEMS.forEach(function(item){
+  if(BREAKS[item.id]){
+    var s=BREAKS[item.id], w=document.createElement('div');
+    w.innerHTML='<div class="section-sep"><span class="section-badge '+s.badge+'">'+s.label+'</span><div class="section-sep-line"></div></div><p class="section-desc-q">'+s.desc+'</p>';
+    qc.appendChild(w);
+  }
+  var opts=OPTS.map(function(l,i){return '<label class="opt-label"><input type="radio" name="q'+item.id+'" value="'+(i+1)+'"><div class="opt-box">'+l+'</div></label>';}).join('');
+  var d=document.createElement('div'); d.className='q-item'; d.id='qi-'+item.id;
+  d.innerHTML='<div class="q-text"><span class="q-num">'+item.id+'.</span> '+item.text+'</div><div class="options-grid">'+opts+'</div>';
+  qc.appendChild(d);
+});
+
+document.addEventListener('change',function(e){
+  if(e.target&&e.target.type==='radio'){
+    var qi=document.getElementById('qi-'+e.target.name.replace('q',''));
+    if(qi){qi.classList.add('answered');qi.classList.remove('err-q');}
+  }
+});
+
+function calcIMC(){
+  var w=parseFloat(document.getElementById('f-weight').value);
+  var h=parseFloat(document.getElementById('f-height').value);
+  var box=document.getElementById('imc-box'), hint=document.getElementById('imc-hint');
+  if(isNaN(w)||isNaN(h)||w<10||h<50){box.classList.remove('show');hint.style.display='block';return;}
+  var bmi=(w/Math.pow(h/100,2)).toFixed(1), cat='', col='';
+  if(bmi<18.5){cat='subponderal';col='#d97706';}
+  else if(bmi<25){cat='normal';col='#059669';}
+  else if(bmi<30){cat='supraponderal';col='#d97706';}
+  else if(bmi<35){cat='obezitate gr.I';col='#dc2626';}
+  else if(bmi<40){cat='obezitate gr.II';col='#dc2626';}
+  else{cat='obezitate gr.III';col='#991b1b';}
+  document.getElementById('imc-val').textContent=bmi;
+  var ce=document.getElementById('imc-cat'); ce.textContent=' '+cat; ce.style.color=col;
+  box.classList.add('show'); hint.style.display='none';
+}
+['f-weight','f-height'].forEach(function(id){
+  var el=document.getElementById(id);
+  el.addEventListener('input',calcIMC);
+  el.addEventListener('change',calcIMC);
+});
+
+function setProgress(n){
+  var fills={1:15,2:55,3:100};
+  document.getElementById('progress-fill').style.width=fills[n]+'%';
+  [1,2,3].forEach(function(i){document.getElementById('ps'+i).className='progress-step'+(i<n?' done':i===n?' active':'');});
+}
+function showStep(n){
+  [1,2,3].forEach(function(i){document.getElementById('step'+i).classList.remove('active');});
+  document.getElementById('step'+n).classList.add('active');
+  setProgress(n); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+document.getElementById('btn-step2').addEventListener('click',function(){
+  var v={
+    name:document.getElementById('f-name').value.trim(),
+    email:document.getElementById('f-email').value.trim(),
+    phone:document.getElementById('f-phone').value.trim(),
+    age:document.getElementById('f-age').value.trim(),
+    weight:document.getElementById('f-weight').value.trim(),
+    height:document.getElementById('f-height').value.trim(),
+    sex:document.getElementById('f-sex').value
+  };
+  var errEl=document.getElementById('err1');
+  ['f-name','f-email','f-phone','f-age','f-weight','f-height','f-sex'].forEach(function(id){document.getElementById(id).classList.remove('err');});
+  errEl.style.display='none';
+  var p=[];
+  if(!v.name){p.push('Nume');document.getElementById('f-name').classList.add('err');}
+  if(!v.email){p.push('Email');document.getElementById('f-email').classList.add('err');}
+  else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)){p.push('Email invalid');document.getElementById('f-email').classList.add('err');}
+  if(!v.phone){p.push('Telefon');document.getElementById('f-phone').classList.add('err');}
+  if(!v.age){p.push('V\u00e2rst\u0103');document.getElementById('f-age').classList.add('err');}
+  if(!v.weight){p.push('Greutate');document.getElementById('f-weight').classList.add('err');}
+  if(!v.height){p.push('\u00cen\u0103l\u021bime');document.getElementById('f-height').classList.add('err');}
+  if(!v.sex){p.push('Sex');document.getElementById('f-sex').classList.add('err');}
+  if(p.length>0){errEl.textContent='V\u0103 rug\u0103m completa\u021bi: '+p.join(', ')+'.';errEl.style.display='block';errEl.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  showStep(2);
+});
+
+document.getElementById('btn-back').addEventListener('click',function(){showStep(1);});
+
+function getAnswers(){
+  var a={},m=[];
+  ITEMS.forEach(function(it){var s=document.querySelector('input[name="q'+it.id+'"]:checked');if(s)a[it.id]=parseInt(s.value,10);else m.push(it.id);});
+  return{a:a,m:m};
+}
+function calcScores(a){
+  var cr=0,ue=0,ee=0;
+  ITEMS.forEach(function(it){if(it.sub==='cr')cr+=a[it.id];if(it.sub==='ue')ue+=a[it.id];if(it.sub==='ee')ee+=a[it.id];});
+  return{cr:Math.round(((cr-6)/18)*100),ue:Math.round(((ue-9)/27)*100),ee:Math.round(((ee-3)/9)*100)};
+}
+function getLevel(score,sub){
+  if(sub==='cr'){if(score<35)return{l:'Sc\u0103zut',c:'low'};if(score<65)return{l:'Moderat',c:'mid'};return{l:'Ridicat',c:'high'};}
+  if(sub==='ue'){if(score<35)return{l:'Sc\u0103zut',c:'low'};if(score<60)return{l:'Moderat',c:'mid'};return{l:'Ridicat',c:'high'};}
+  if(score<30)return{l:'Sc\u0103zut',c:'low'};if(score<60)return{l:'Moderat',c:'mid'};return{l:'Ridicat',c:'high'};
+}
+
+function buildScreenProfile(sc){
+  var cr=sc.cr,ue=sc.ue,ee=sc.ee, teme=[];
+  if(cr<35){teme.push({cls:'verde',icon:'\uD83E\uDDED',label:'Alimenta\u021bie intuitiv\u0103',title:'M\u0103n\u00e2nci natural, f\u0103r\u0103 calcule',text:'Nu \u00ee\u021bi impui reguli stricte legate de m\u00e2ncare \u0219i nu \u00ee\u021bi num\u0103ri caloriile. Ai \u00eencredere \u00een semnalele corpului t\u0103u \u0219i te bucuri de m\u00e2ncare f\u0103r\u0103 anxietate. Aceast\u0103 spontaneitate este s\u0103n\u0103toas\u0103 at\u00e2ta timp c\u00e2t alegerile tale sunt echilibrate \u00een general.'});}
+  else if(cr<65){teme.push({cls:'verde',icon:'\u2696\uFE0F',label:'Con\u0219tiin\u021b\u0103 alimentar\u0103',title:'E\u0219ti atent/\u0103 la ce m\u0103n\u00e2nci',text:'\u00ce\u021bi pas\u0103 de ceea ce pui pe farfurie \u0219i uneori \u00ee\u021bi ajustezi alegerile \u00een mod con\u0219tient. Aceast\u0103 con\u0219tientizare te ajut\u0103 s\u0103 men\u021bii o greutate stabil\u0103 f\u0103r\u0103 s\u0103 devin\u0103 o surs\u0103 de stres. Este un profil echilibrat \u0219i func\u021bional.'});}
+  else{teme.push({cls:'galben',icon:'\u2699\uFE0F',label:'Control alimentar intens',title:'Te g\u00e2nde\u0219ti mult la reguli \u0219i restric\u021bii',text:'Ai tendin\u021ba de a-\u021bi impune reguli stricte: num\u0103rarea caloriilor, compensarea exceselor, controlul constant al por\u021biilor. Uneori aceast\u0103 rigiditate poate obosi \u0219i poate duce la cicluri de restric\u021bie urmate de supraalimenta\u021bie. Merit\u0103 s\u0103 explor\u0103m \u00eempreun\u0103 un echilibru mai relaxat.'});}
+  if(ue<35){teme.push({cls:'verde',icon:'\uD83C\uDF3F',label:'Echilibru la mas\u0103',title:'Te opre\u0219ti c\u00e2nd e\u0219ti s\u0103tul/\u0103',text:'Rareori m\u0103n\u00e2nci mai mult dec\u00e2t \u00ee\u021bi dore\u0219ti \u0219i nu e\u0219ti u\u0219or influen\u021bat/\u0103 de mirosuri, privitul altora sau prezen\u021ba m\u00e2nc\u0103rii. Ai o rela\u021bie s\u0103n\u0103toas\u0103 cu semnalele de foame \u0219i sa\u021bietate ale corpului t\u0103u.'});}
+  else if(ue<60){teme.push({cls:'galben',icon:'\uD83D\uDC40',label:'Sensibilitate la stimuli alimentari',title:'Uneori cantit\u0103\u021bile sunt greu de controlat',text:'\u00cen anumite contexte \u2014 c\u00e2nd e\u0219ti la bufet, \u00een companie sau c\u00e2nd m\u00e2ncarea arat\u0103 deosebit de bine \u2014 este mai greu s\u0103 te opre\u0219ti la timp. Este un tipar comun, mai ales \u00een medii abundente. Vom lucra pe strategii practice pentru aceste situa\u021bii.'});}
+  else{teme.push({cls:'rosu',icon:'\uD83D\uDEA8',label:'Dificult\u0103\u021bi de control al cantit\u0103\u021bii',title:'Cantit\u0103\u021bile consumate sunt greu de reglat',text:'Ai adesea senza\u021bia c\u0103 nu te po\u021bi opri odat\u0103 ce ai \u00eenceput s\u0103 m\u0103n\u00e2nci, sau c\u0103 stimulii din jur \u00ee\u021bi declan\u0219eaz\u0103 foamea chiar \u0219i c\u00e2nd nu e\u0219ti fl\u0103m\u00e2nd/\u0103. Aceast\u0103 zon\u0103 va fi o prioritate \u00een planul nostru de lucru \u00eempreun\u0103.'});}
+  if(ee<30){teme.push({cls:'verde',icon:'\uD83D\uDC9A',label:'Echilibru emo\u021bional',title:'Emo\u021biile \u0219i m\u00e2ncarea sunt separate',text:'Triste\u021bea, anxietatea sau plictiseala nu te fac s\u0103 apelezi la m\u00e2ncare pentru confort. Ai g\u0103sit alte modalit\u0103\u021bi de a gestiona disconfortul emo\u021bional. Aceasta este o funda\u021bie excelent\u0103 pentru orice schimbare alimentar\u0103.'});}
+  else if(ee<60){teme.push({cls:'galben',icon:'\uD83D\uDC9B',label:'M\u00e2ncare \u0219i emo\u021bii',title:'Uneori m\u00e2ncarea devine un refugiu',text:'\u00cen perioadele de stres sau triste\u021be, exist\u0103 tendin\u021ba de a te \u00eendrepta spre m\u00e2ncare pentru a te sim\u021bi mai bine. Nu este o problem\u0103 clinic\u0103, dar \u00een planul alimentar personalizat este important s\u0103 identific\u0103m aceste momente \u0219i s\u0103 g\u0103sim alternative.'});}
+  else{teme.push({cls:'rosu',icon:'\u2764\uFE0F',label:'M\u00e2ncare emo\u021bional\u0103 semnificativ\u0103',title:'Emo\u021biile \u00ee\u021bi ghideaz\u0103 adesea alegerile alimentare',text:'Stresul, triste\u021bea \u0219i anxietatea sunt factori importan\u021bi care \u00ee\u021bi influen\u021beaz\u0103 comportamentul alimentar. M\u00e2ncarea a devenit un instrument de gestionare a emo\u021biilor. Aceast\u0103 dimensiune necesit\u0103 o abordare atent\u0103, care combin\u0103 nutri\u021bia cu strategii comportamentale. Nu e\u0219ti singur/\u0103 \u0219i exist\u0103 solu\u021bii clare.'});}
+  return teme;
+}
+
+function buildConcluzieEcran(sc){
+  var ue=sc.ue,cr=sc.cr,ee=sc.ee;
+  if(ue>60||ee>60){return 'Profilul t\u0103u alimentar scoate \u00een eviden\u021b\u0103 c\u00e2teva zone care merit\u0103 aten\u021bie prioritar\u0103 \u00een consulta\u021bie. Vestea bun\u0103: toate aceste tipare se pot schimba cu abordarea potrivit\u0103. Consultantul t\u0103u NutriSib a primit deja aceast\u0103 evaluare \u0219i va construi un plan personalizat care \u021bine cont de \u00eentreaga imagine \u2014 nu doar de ce m\u0103n\u00e2nci, ci \u0219i de cum \u0219i de ce.';}
+  if(cr>65||ue>35||ee>30){return 'Profilul t\u0103u alimentar arat\u0103 un echilibru general rezonabil, cu c\u00e2teva aspecte pe care le putem optimiza \u00eempreun\u0103. Consultantul t\u0103u NutriSib va analiza \u00een detaliu aceast\u0103 evaluare \u0219i \u00ee\u021bi va propune ajust\u0103ri specifice contextului t\u0103u de via\u021b\u0103.';}
+  return 'Profilul t\u0103u alimentar indic\u0103 o rela\u021bie echilibrat\u0103 \u0219i s\u0103n\u0103toas\u0103 cu m\u00e2ncarea. Ai o baz\u0103 excelent\u0103 pe care putem construi \u00eempreun\u0103 un plan nutri\u021bional optimizat, adaptat obiectivelor tale specifice.';
+}
+
+function buildEmailBody(sc,name,email,phone,age,sex,weight,height,bmi,bmiCat,date,answers){
+  var cr=sc.cr,ue=sc.ue,ee=sc.ee;
+  var crL=getLevel(cr,'cr'),ueL=getLevel(ue,'ue'),eeL=getLevel(ee,'ee');
+  var sep='================================================================\n';
+  var sub='----------------------------------------------------------------\n';
+
+  var crT={
+    low:'RETINERE COGNITIVA SCAZUTA ('+cr+'/100)\n\nClientul nu aplica strategii deliberate de limitare a aportului caloric. Nu numara calorii, nu isi impune reguli alimentare rigide si nu compenseaza excesele. Poate reprezenta alimentatie intuitiva functionala sau dezinteres fata de nutritie.\n\nINTERPRETARE CLINICA: In absenta unui cadru nutritional structurat, clientul poate oscila intre alimentatie haparazata si episoade de consum excesiv. Greutate stabila pe termen lung = homeostaza reala; fluctuatii frecvente = dezordine subclinica.\n\nDIRECTII: Explorarea tiparelor alimentare saptamanale. Educatie nutritionala graduala fara anxietate.',
+    mid:'RETINERE COGNITIVA MODERATA ('+cr+'/100)\n\nClientul manifesta constientizare activa: face alegeri deliberate, isi ajusteaza portiile si are o relatie constientizata cu mancarea. Profilul cel mai frecvent asociat cu managementul ponderal functional pe termen lung.\n\nINTERPRETARE CLINICA: Retinerea moderata este asociata cu cele mai bune rezultate in managementul greutatii. Exercita control fara rigiditate, reducand riscul ciclurilor restrictie-dezinhibitie. In stres insa, controlul poate ceda rapid.\n\nDIRECTII: Consolidarea tiparelor existente. Identificarea contextelor in care controlul cedeaza.',
+    high:'RETINERE COGNITIVA RIDICATA ('+cr+'/100)\n\nClientul exercita control intens: numara calorii, restrictioneaza activ, compenseaza excesele. Risc semnificativ de dezinhibitie cognitiva si ciclu restrictie-supraalimentatie.\n\nINTERPRETARE CLINICA: Puternic asociata cu "all-or-nothing eating" - orice deviere = esec perceput = supraalimentatie compensatorie. Stresul si situatiile sociale cu mancare abundenta sunt factori de risc majori. Cu EE ridicat: ciclu restrictie-dezinhibitie instalat.\n\nDIRECTII: Flexibilizare cognitiva. Regula 80/20. Daca EE ridicat: abordare integrativa nutritional + psihologic.'
+  };
+
+  var ueT={
+    low:'ALIMENTATIE NECONTROLATA SCAZUTA ('+ue+'/100)\n\nClientul prezinta reglare homeostatica functionala. Stimulii externi nu supravin semnalele interne de satietate. Se opreste cand este satiat, indiferent de cantitatea ramasa in farfurie.\n\nINTERPRETARE CLINICA: Predictor puternic al succesului pe termen lung. Capacitatea de a regla autonom portiile permite interventii nutritionale mai permisive, focalizate pe calitate mai mult decat pe cantitate.\n\nDIRECTII: Mentinerea autonomiei alimentare. Educatie privind densitatea calorica fara monitorizare rigida.',
+    mid:'ALIMENTATIE NECONTROLATA MODERATA ('+ue+'/100)\n\nClieltul este partial vulnerabil la stimulii alimentari externi. La bufete, mese festive sau in prezenta alimentelor palatabile exista tendinta de a consuma mai mult decat se intentioneaza.\n\nINTERPRETARE CLINICA: Vulnerabilitate moderata, extrem de comuna in medii hiperstimulatoare. Solutia: restructurarea mediului alimentar (nu suprimarea raspunsului la stimuli). Viteza de mancare, marimea portiilor, ecranele in timpul mesei sunt vectori importanti.\n\nDIRECTII: Environment design. Mindful eating. Planificarea anticipata a meselor cu risc.',
+    high:'ALIMENTATIE NECONTROLATA RIDICATA ('+ue+'/100)\n\nDificultati semnificative in reglarea cantitatii consumate. Stimulii externi declanseaza foamea independent de satietate. Frecvente episoade de consum care depasesc intentia, cu senzatie de imposibilitate de a se opri.\n\nINTERPRETARE CLINICA: Dezreglare a circuitelor de recompensa alimentara. Sistemul dopaminergic supraactivat de stimulii de inalta palatabilitate. Nu este lipsa de vointa - caracteristica biologic fundamentata care se agraveaza in medii obezogene.\n\nDIRECTII: PRIORITATE. Restructurarea mediului alimentar. Protocoale de management al portiilor. Mindful eating. Daca scor > 75/100 evaluati criteriile pentru binge eating disorder.'
+  };
+
+  var eeT={
+    low:'ALIMENTATIE EMOTIONALA SCAZUTA ('+ee+'/100)\n\nStarile emotionale negative nu declanseaza semnificativ comportamentul alimentar. Clientul are alte mecanisme de reglare emotionala si nu foloseste mancarea ca instrument primar de consolare.\n\nINTERPRETARE CLINICA: Una dintre cele mai valoroase caracteristici nutritional-comportamentale. Permite interventiei sa se concentreze pe aspecte fiziologice si comportamentale fara a naviga mecanismele de coping emotional.\n\nDIRECTII: Mentinerea tiparului. Educatie preventiva mai ales in perioadele de stres crescut.',
+    mid:'ALIMENTATIE EMOTIONALA MODERATA ('+ee+'/100)\n\nTendinta moderata de a apela la mancare in momentele de disconfort emotional. In stres, tristete sau anxietate, mancarea devine un mecanism de coping rapid. Impact direct asupra aderentei la planul nutritional in perioadele dificile.\n\nINTERPRETARE CLINICA: Radacini biologice (zahar + grasimi activeaza circuite de recompensa) si comportamentale (conditionare: emotie negativa > mancare > ameliorare > intarire). Fara adresare explicita, planul nutritional va esua sistematic in stres.\n\nDIRECTII: Identificarea emotiei trigger principale. Meniu de alternative comportamentale. Educatie despre mecanismul neurobiologic al alimentatiei emotionale.',
+    high:'ALIMENTATIE EMOTIONALA RIDICATA ('+ee+'/100)\n\nStresul, tristetea si anxietatea sunt factori declansatori principali ai comportamentului alimentar. Mancarea a dobandit functie regulatorie emotionala puternica. Nu este lipsa de vointa - este mecanism de adaptare invatat, adesea cu radacini din copilarie.\n\nINTERPRETARE CLINICA: Cicluri recurente de supraalimentatie in perioade dificile, urmate de vinovatie si noi restrictii. Cu CR ridicat: ciclu restrictie-dezinhibitie instalat. Cu UE ridicat: tablou complex, abordare multidisciplinara necesara.\n\nDIRECTII: PRIORITATE MAXIMA. Colaborare cu psiholog sau terapeut comportamental. Plan de actiune scris pentru momentele de craving emotional.'
+  };
+
+  var flags=[];
+  if(cr>65)flags.push('1. Retinere cognitiva rigida (risc cicluri restrictie-dezinhibitie)');
+  if(ue>60)flags.push('2. Alimentatie necontrolata semnificativa (risc portii excesive, sensibilitate stimuli)');
+  if(ee>60)flags.push('3. Alimentatie emotionala marcata (prioritate comportamentala, posibil suport psihologic)');
+
+  var profilIntegrat;
+  if(cr>65&&ee>60)profilIntegrat='RESTRICTIE-COMPENSARE EMOTIONALA: clientul isi impune reguli stricte care cedeaza in stres, generand supraalimentatie emotionala urmata de noi restrictii. Ciclu autointretinut.';
+  else if(ue>60&&ee>60)profilIntegrat='PIERDERE DUBLA A CONTROLULUI: atat stimulii externi cat si emotiile declanseaza supraalimentatia. Risc binge eating disorder subclinic. Abordare multidisciplinara recomandata.';
+  else if(cr>65&&ue>60)profilIntegrat='CONTROL-DEZCONTROL: restrictia cognitiva ridicata sistematic compromisa de reactivitatea la stimuli externi. Oscilatie intre disciplina rigida si pierderi frecvente de control.';
+  else if(cr<35&&ue>60)profilIntegrat='DEZORDINE SUBCLINICA: absenta controlului constient combinata cu pierderi situationale frecvente. Sugestiv pentru grazing cu episoade de supraalimentatie.';
+  else if(flags.length===0)profilIntegrat='ECHILIBRAT: toate dimensiunile in zona functionala. Plan nutritional de optimizare si preventie.';
+  else profilIntegrat='MIXT cu zone de atentie moderate. Plan nutritional personalizat cu adresarea explicita a dimensiunilor evidentiate.';
+
+  var at=ITEMS.map(function(it){
+    var lbl=it.sub==='cr'?'Retinere Cognitiva':it.sub==='ue'?'Alimentatie Necontrolata':'Alimentatie Emotionala';
+    return 'Q'+it.id+'. ['+lbl+']\n   '+it.text+'\n   Raspuns: '+OPTS[answers[it.id]-1]+' ('+answers[it.id]+'/4)';
+  }).join('\n\n');
+
+  return sep+
+    'EVALUARE COMPORTAMENT ALIMENTAR - RAPORT CONSULTANT\n'+sep+'\n'+
+    'CLIENT: '+name.toUpperCase()+'\nData: '+date+'\n\n'+
+    'DATE PERSONALE\n'+
+    'Nume: '+name+' | Email: '+email+' | Telefon: '+phone+'\n'+
+    'Varsta: '+age+' ani | Sex: '+sex+'\n'+
+    'Greutate: '+weight+' kg | Inaltime: '+height+' cm | IMC: '+bmi+' kg/m2 ('+bmiCat+')\n\n'+
+    sep+
+    'SCORURI (scala 0-100)\n'+
+    'Retinere Cognitiva (CR):       '+cr+'/100 ['+crL.l+']\n'+
+    'Alimentatie Necontrolata (UE): '+ue+'/100 ['+ueL.l+']\n'+
+    'Alimentatie Emotionala (EE):   '+ee+'/100 ['+eeL.l+']\n'+
+    'Praguri: CR <35/35-65/>65 | UE <35/35-60/>60 | EE <30/30-60/>60\n\n'+
+    sep+'INTERPRETARE CLINICA\n'+sep+'\n'+
+    crT[crL.c]+'\n\n'+sub+'\n'+
+    ueT[ueL.c]+'\n\n'+sub+'\n'+
+    eeT[eeL.c]+'\n\n'+
+    sep+'SINTEZA\n'+sep+'\n'+
+    'PROFIL INTEGRAT: '+profilIntegrat+'\n\n'+
+    (flags.length===0?'Nu exista zone de risc ridicat.\n':'ZONE PRIORITARE:\n'+flags.join('\n')+'\n')+'\n'+
+    sep+'RASPUNSURI INDIVIDUALE (18/18)\n'+sep+'\n'+
+    at+'\n\n'+
+    sep+'Instrument: TFEQ-R18 (Karlsson et al., 2000) | NutriSib nutrisib.club\n'+sep;
+}
+
+document.getElementById('btn-calc').addEventListener('click',function(){
+  var res=getAnswers();
+  var errEl=document.getElementById('err2');
+  if(res.m.length>0){
+    errEl.textContent='V\u0103 rug\u0103m r\u0103spunde\u021bi la toate \u00eentreb\u0103rile. Itemi f\u0103r\u0103 r\u0103spuns: '+res.m.join(', ')+'.';
+    errEl.style.display='block';
+    res.m.forEach(function(id){var e=document.getElementById('qi-'+id);if(e)e.classList.add('err-q');});
+    var f=document.getElementById('qi-'+res.m[0]);if(f)f.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  errEl.style.display='none';
+
+  var name=document.getElementById('f-name').value.trim();
+  var email=document.getElementById('f-email').value.trim();
+  var phone=document.getElementById('f-phone').value.trim();
+  var age=document.getElementById('f-age').value.trim();
+  var weight=document.getElementById('f-weight').value.trim();
+  var height=document.getElementById('f-height').value.trim();
+  var sex=document.getElementById('f-sex').value;
+  var bmi=(weight&&height)?(parseFloat(weight)/Math.pow(parseFloat(height)/100,2)).toFixed(1):'N/A';
+  var bmiCat=(function(b){if(isNaN(b))return'';if(b<18.5)return'Subponderal';if(b<25)return'Normal';if(b<30)return'Supraponderal';if(b<35)return'Obezitate gr.I';if(b<40)return'Obezitate gr.II';return'Obezitate gr.III';})(parseFloat(bmi));
+  var sc=calcScores(res.a);
+  var date=new Date().toLocaleDateString('ro-RO',{day:'2-digit',month:'long',year:'numeric'});
+
+  document.getElementById('res-name').textContent='Profilul alimentar al lui '+name;
+  document.getElementById('res-meta').textContent='Evaluat la '+date+' \u00b7 '+age+' ani \u00b7 '+sex+' \u00b7 '+weight+' kg \u00b7 '+height+' cm \u00b7 IMC '+bmi+' ('+bmiCat+')';
+
+  var tc=document.getElementById('tema-container'); tc.innerHTML='';
+  buildScreenProfile(sc).forEach(function(t){
+    var d=document.createElement('div'); d.className='tema-card '+t.cls;
+    d.innerHTML='<div class="tema-icon">'+t.icon+'</div><div class="tema-label">'+t.label+'</div><div class="tema-title">'+t.title+'</div><p class="tema-text">'+t.text+'</p>';
+    tc.appendChild(d);
+  });
+  document.getElementById('concluzie-text').textContent=buildConcluzieEcran(sc);
+  showStep(3);
+
+  var body=buildEmailBody(sc,name,email,phone,age,sex,weight,height,bmi,bmiCat,date,res.a);
+  var crL=getLevel(sc.cr,'cr'),ueL=getLevel(sc.ue,'ue'),eeL=getLevel(sc.ee,'ee');
+  var fd=new FormData();
+  fd.append('_subject','Evaluare comportament alimentar \u2014 '+name+' \u2014 '+date);
+  fd.append('_replyto',email);
+  fd.append('Nume_client',name);
+  fd.append('Email_client',email);
+  fd.append('Telefon_client',phone);
+  fd.append('Varsta',age+' ani');
+  fd.append('Sex',sex);
+  fd.append('Greutate_kg',weight);
+  fd.append('Inaltime_cm',height);
+  fd.append('IMC',bmi+' ('+bmiCat+')');
+  fd.append('Scor_CR',sc.cr+'/100 ('+crL.l+')');
+  fd.append('Scor_UE',sc.ue+'/100 ('+ueL.l+')');
+  fd.append('Scor_EE',sc.ee+'/100 ('+eeL.l+')');
+  fd.append('Raport_complet',body);
+
+  var sEl=document.getElementById('mail-status'),sTxt=document.getElementById('mail-txt');
+  sTxt.textContent='Se transmite evaluarea\u2026'; sEl.className='mail-status';
+  fetch(FORMSPREE,{method:'POST',body:fd,headers:{Accept:'application/json'}})
+    .then(function(r){
+      if(r.ok){sEl.className='mail-status sent';sTxt.textContent='Evaluarea a fost transmis\u0103 cu succes consultantului NutriSib.';}
+      else{sEl.className='mail-status error';sTxt.textContent='Trimiterea a e\u015fuat. Contacta\u021bi nutrisib.club@gmail.com.';}
+    })
+    .catch(function(){sEl.className='mail-status error';sTxt.textContent='Eroare de conexiune. Salva\u021bi pagina (Ctrl+P) pentru arhiv\u0103.';});
+});
+
+document.getElementById('btn-reset').addEventListener('click',function(){
+  ITEMS.forEach(function(it){
+    document.querySelectorAll('input[name="q'+it.id+'"]').forEach(function(r){r.checked=false;});
+    var qi=document.getElementById('qi-'+it.id);if(qi)qi.classList.remove('answered','err-q');
+  });
+  ['f-name','f-email','f-phone','f-age','f-weight','f-height'].forEach(function(id){var el=document.getElementById(id);el.value='';el.classList.remove('err');});
+  document.getElementById('f-sex').value=''; document.getElementById('f-sex').classList.remove('err');
+  document.getElementById('imc-box').classList.remove('show');
+  document.getElementById('imc-hint').style.display='block';
+  document.getElementById('err1').style.display='none';
+  document.getElementById('err2').style.display='none';
+  showStep(1);
+});
+
+document.getElementById('btn-print').addEventListener('click',function(){window.print();});
+
+})();
+</script>
+</body>
+</html>
