@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridianul Ficatului — Ghid complet NutriSib</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --jade:#06D6A0;--jade-dk:#04b384;--jade-gl:rgba(6,214,160,.15);
+  --forest:#065f46;--crimson:#D8315B;--crim-lt:rgba(216,49,91,.12);
+  --gold:#F4C150;--gold-lt:rgba(244,193,80,.12);
+  --ink:#0b1b18;--ink2:#162b24;--ink3:#1e3a2f;
+  --surf:#f0fdf7;--card:#fff;--bord:#c6f0e1;
+  --tm:#1a2e26;--ts:#3d5c4e;--tmu:#6b8f7e;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --r:14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--surf);color:var(--tm);font-family:var(--sans);font-size:15px;line-height:1.7;min-height:100vh}
+
+/* SCROLL BAR */
+#scrollBar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--jade),var(--gold));width:0%;z-index:9999;transition:width .1s linear}
+
+/* HEADER */
+.hdr{background:linear-gradient(135deg,var(--ink) 0%,var(--ink2) 45%,var(--forest) 100%);color:#fff;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 80% 50%,rgba(6,214,160,.12),transparent 70%);pointer-events:none}
+.hdr::after{content:'肝';position:absolute;right:3%;top:50%;transform:translateY(-50%);font-size:clamp(5rem,13vw,11rem);color:rgba(255,255,255,.04);font-family:serif;pointer-events:none;user-select:none}
+.hdr-in{position:relative;max-width:1100px;margin:0 auto;padding:3rem 1.5rem 2.5rem}
+.badge{display:inline-flex;align-items:center;gap:.4rem;background:var(--jade-gl);border:1px solid rgba(6,214,160,.35);color:var(--jade);font-family:var(--mono);font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:.3rem .85rem;border-radius:999px;margin-bottom:.75rem}
+.hdr h1{font-family:var(--serif);font-size:clamp(1.9rem,5vw,3.2rem);font-weight:700;line-height:1.15;color:#fff;margin-bottom:.5rem}
+.hdr h1 span{color:var(--jade)}
+.hdr .sub{font-size:.92rem;color:rgba(255,255,255,.62);max-width:520px;line-height:1.6}
+.meta-row{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.4rem}
+.mpill{display:flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);padding:.4rem .9rem;border-radius:999px;font-size:.78rem;color:rgba(255,255,255,.78)}
+
+/* NAV */
+.nav-wrap{background:var(--ink2);border-bottom:1px solid rgba(6,214,160,.2);position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.25)}
+.nav-in{max-width:1100px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.tbtn{flex-shrink:0;background:none;border:none;border-bottom:2px solid transparent;color:rgba(255,255,255,.5);font-family:var(--sans);font-size:.82rem;font-weight:500;padding:.95rem 1.3rem;cursor:pointer;display:flex;align-items:center;gap:.45rem;white-space:nowrap;transition:color .2s,border-color .2s}
+.tbtn:hover{color:rgba(255,255,255,.85)}
+.tbtn.active{color:var(--jade);border-bottom-color:var(--jade);font-weight:600}
+
+/* CONTENT */
+.main{max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
+.tpanel{display:none}
+.tpanel.active{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* SECTION HEADER */
+.sh{display:flex;align-items:center;gap:.7rem;margin:2.5rem 0 1.1rem}
+.sh:first-child{margin-top:0}
+.snum{background:var(--ink);color:var(--jade);font-family:var(--mono);font-size:.7rem;font-weight:700;width:1.9rem;height:1.9rem;border-radius:50%;display:grid;place-items:center;flex-shrink:0;border:1.5px solid var(--jade)}
+.sh h2{font-family:var(--serif);font-size:1.5rem;font-weight:700;color:var(--forest);line-height:1.3}
+.sdiv{height:1px;background:linear-gradient(to right,var(--jade),transparent);margin:0 0 1.5rem;opacity:.4}
+
+/* CARDS */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.2rem;margin-bottom:1.4rem}
+.card{background:var(--card);border-radius:var(--r);border:1px solid var(--bord);padding:1.4rem 1.6rem;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.card h3{font-family:var(--serif);font-size:1.15rem;font-weight:700;margin-bottom:.7rem;color:var(--forest);display:flex;align-items:center;gap:.5rem}
+.ci{width:1.7rem;height:1.7rem;border-radius:50%;display:grid;place-items:center;font-size:.85rem;flex-shrink:0}
+.card p{color:var(--ts);font-size:.88rem;line-height:1.7}
+.card ul{list-style:none;padding:0}
+.card ul li{color:var(--ts);font-size:.87rem;line-height:1.65;padding:.28rem 0 .28rem 1.3rem;position:relative;border-bottom:1px solid #f0fdf7}
+.card ul li::before{content:'▸';position:absolute;left:0;color:var(--jade);font-size:.72rem;top:.4rem}
+.card ul li b{color:var(--tm)}
+.aj{border-left:3px solid var(--jade)}
+.ar{border-left:3px solid var(--crimson)}
+.ag{border-left:3px solid var(--gold)}
+.ab{border-left:3px solid #3E92CC}
+
+/* CLOCK CARD */
+.clock-card{background:linear-gradient(135deg,var(--ink),var(--ink3));border-radius:var(--r);padding:1.75rem;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.clock-card::after{content:'01:00–03:00';position:absolute;right:1.5rem;bottom:.8rem;font-family:var(--mono);font-size:3rem;color:rgba(255,255,255,.04);pointer-events:none}
+.clock-face{width:100px;height:100px;border-radius:50%;border:2px solid var(--jade);background:var(--jade-gl);display:grid;place-items:center;flex-shrink:0}
+.clock-t{font-family:var(--mono);font-size:1.25rem;font-weight:700;color:var(--jade);text-align:center;line-height:1.3}
+.clock-t small{display:block;font-size:.58rem;opacity:.7;text-transform:uppercase;letter-spacing:.1em}
+.clock-info h4{font-family:var(--serif);font-size:1.2rem;font-weight:700;color:#fff;margin-bottom:.4rem}
+.clock-info p{color:rgba(255,255,255,.68);font-size:.87rem;line-height:1.6}
+
+/* CIRCUIT CARD — orele ficatului */
+.circuit-card{background:linear-gradient(135deg,var(--ink),var(--ink3));border-radius:var(--r);padding:1.6rem 1.75rem;margin-bottom:1.2rem;overflow:hidden;position:relative}
+.circuit-card::before{content:'子午流注';position:absolute;right:1rem;bottom:.5rem;font-size:3.5rem;font-family:serif;color:rgba(255,255,255,.04);pointer-events:none}
+.circ-title{font-family:var(--mono);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--jade);margin-bottom:1.1rem}
+.circ-row{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:.5rem;scrollbar-width:none}
+.circ-row::-webkit-scrollbar{display:none}
+.circ-item{flex-shrink:0;min-width:90px;display:flex;flex-direction:column;align-items:center;position:relative}
+.circ-item:not(:last-child)::after{content:'→';position:absolute;right:-12px;top:22px;color:rgba(255,255,255,.3);font-size:.9rem;z-index:2}
+.circ-dot{width:46px;height:46px;border-radius:50%;border:2px solid;display:grid;place-items:center;font-size:.65rem;font-weight:700;font-family:var(--mono);text-align:center;line-height:1.2;margin-bottom:.4rem;cursor:default}
+.circ-dot.prev{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.5)}
+.circ-dot.current{background:rgba(6,214,160,.2);border-color:var(--jade);color:var(--jade);box-shadow:0 0 12px rgba(6,214,160,.35)}
+.circ-dot.next{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.5)}
+.circ-label{font-size:.68rem;color:rgba(255,255,255,.55);text-align:center;line-height:1.3}
+.circ-label b{display:block;font-size:.62rem;color:rgba(255,255,255,.35);margin-top:.1rem;font-family:var(--mono)}
+.circ-label.cur-lbl{color:rgba(255,255,255,.9)}
+.circ-label.cur-lbl b{color:var(--jade)}
+
+/* ROUTE */
+.route-vis{background:linear-gradient(135deg,var(--ink),var(--ink3));border-radius:var(--r);padding:1.75rem;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.route-vis::before{content:'足厥阴肝经';position:absolute;right:.8rem;bottom:.5rem;font-size:2rem;opacity:.05;font-family:serif;letter-spacing:.1em}
+/* Two-column: image + steps */
+.route-inner{display:grid;grid-template-columns:220px 1fr;gap:2rem;align-items:start}
+@media(max-width:700px){.route-inner{grid-template-columns:1fr}}
+.route-img-wrap{display:flex;flex-direction:column;gap:.6rem}
+.route-img-label{font-family:var(--mono);font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.45)}
+.route-img-frame{position:relative;border-radius:10px;overflow:hidden;border:1px solid rgba(6,214,160,.25);background:rgba(255,255,255,.04)}
+.route-img{width:100%;display:block;border-radius:10px}
+.img-legend{padding:.6rem .7rem;display:flex;flex-direction:column;gap:.3rem;background:rgba(0,0,0,.25)}
+.leg-item{display:flex;align-items:center;gap:.45rem;font-size:.68rem;color:rgba(255,255,255,.65);font-family:var(--mono)}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.rsteps{display:flex;flex-direction:column;gap:0}
+.rstep{display:flex;gap:1rem;align-items:flex-start;position:relative}
+.rstep:not(:last-child)::after{content:'';position:absolute;left:1rem;top:2.1rem;bottom:-1.4rem;width:1px;background:rgba(6,214,160,.25)}
+.rdot{width:2rem;height:2rem;background:var(--jade-gl);border:2px solid var(--jade);border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-size:.68rem;font-weight:700;color:var(--jade);flex-shrink:0;margin-top:.1rem}
+.rbody{padding-bottom:1.4rem}
+.rbody strong{display:block;color:var(--jade);font-size:.78rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem}
+.rbody p{color:rgba(255,255,255,.7);font-size:.86rem;line-height:1.6}
+
+/* HIGHLIGHT BOXES */
+.hbox{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid var(--jade);border-radius:var(--r);padding:1.2rem 1.4rem;margin-bottom:1.2rem;display:flex;gap:1rem;align-items:flex-start}
+.hbox-icon{font-size:1.5rem;flex-shrink:0;margin-top:.1rem}
+.hbox h4{font-family:var(--serif);font-size:1.08rem;font-weight:700;color:var(--forest);margin-bottom:.3rem}
+.hbox p{color:var(--ts);font-size:.87rem;line-height:1.65}
+.wbox{background:var(--crim-lt);border:1.5px solid var(--crimson);border-radius:var(--r);padding:1.2rem 1.4rem;margin-bottom:1.2rem;display:flex;gap:1rem;align-items:flex-start}
+.wbox h4{color:var(--crimson);font-family:var(--serif);font-size:1.08rem;font-weight:700;margin-bottom:.3rem}
+.wbox p{color:#7a1a30;font-size:.87rem}
+
+/* EVALUARE */
+.ev-wrap{background:var(--card);border-radius:var(--r);box-shadow:0 6px 24px rgba(0,0,0,.1);border:1px solid var(--bord);padding:1.75rem;margin-bottom:2rem}
+.ev-wrap h3{font-family:var(--serif);font-size:1.35rem;font-weight:700;color:var(--forest);margin-bottom:.4rem}
+.ev-sub{color:var(--tmu);font-size:.84rem;margin-bottom:1.4rem}
+.bar-labels{display:flex;justify-content:space-between;font-size:.68rem;color:var(--tmu);font-family:var(--mono);margin-bottom:.3rem}
+.bbar{position:relative;width:100%;height:44px;display:flex;border:2px solid var(--ink);border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,.15);overflow:hidden;cursor:pointer;margin-bottom:1.4rem;user-select:none}
+.seg{flex:1;display:flex;justify-content:center;align-items:center;font-weight:700;font-family:var(--mono);color:#fff;font-size:.68rem;text-shadow:1px 1px 3px rgba(0,0,0,.35)}
+.s0{background:#3E92CC}.s1{background:#22C55E}.s2{background:#84cc16}.s3{background:#FACC15}.s4{background:#f97316}.s5{background:#EF4444}.s6{background:#991b1b}
+.barrow{position:absolute;bottom:3px;width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:28px solid var(--ink);transform:translateX(-50%);transition:left .35s cubic-bezier(.34,1.56,.64,1);z-index:10;pointer-events:none;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))}
+.sel-row{display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem}
+.sel-row label{font-size:.82rem;font-weight:600;color:var(--ts);white-space:nowrap}
+select{flex:1;padding:.6rem 1rem;font-family:var(--sans);font-size:.87rem;border:1.5px solid var(--bord);border-radius:8px;background:#fff;color:var(--tm);cursor:pointer;outline:none;transition:border-color .2s,box-shadow .2s}
+select:focus{border-color:var(--jade);box-shadow:0 0 0 3px var(--jade-gl)}
+.rpanel{background:var(--surf);border-radius:var(--r);border:1px solid var(--bord);padding:1.6rem;animation:fadeUp .3s ease}
+.rpanel h3{font-family:var(--serif);font-size:1.25rem;font-weight:700;color:var(--forest);margin-bottom:.9rem;padding-bottom:.5rem;border-bottom:2px dashed var(--jade)}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1rem}
+.ritem{background:#fff;border-radius:10px;border:1px solid var(--bord);padding:.9rem 1.1rem}
+.rlabel{display:flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:700;font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.35rem}
+.ritem p{font-size:.85rem;color:var(--ts);line-height:1.65}
+
+/* PUNCTE TABLE */
+.tscroll{overflow-x:auto;border-radius:var(--r);box-shadow:0 6px 24px rgba(0,0,0,.1);margin-bottom:2rem}
+.ptbl{width:100%;border-collapse:collapse;background:#fff;font-size:.83rem}
+.ptbl thead th{background:var(--ink);color:var(--jade);font-family:var(--mono);font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.9rem 1rem;text-align:left;white-space:nowrap}
+.ptbl tbody tr{border-bottom:1px solid #e8f5ef;transition:background .15s}
+.ptbl tbody tr:last-child{border-bottom:none}
+.ptbl tbody tr:hover td{background:#f0fdf4}
+.ptbl td{padding:.85rem 1rem;vertical-align:top;color:var(--ts);line-height:1.55}
+.ptbl td:first-child{color:var(--tm);font-weight:600;min-width:110px}
+.pcode{font-family:var(--mono);font-size:.78rem;color:var(--jade-dk);display:block;margin-bottom:.1rem}
+.pname{font-size:.85rem;font-style:italic;color:var(--tmu)}
+.cbadge{display:inline-block;background:#dcfce7;color:var(--forest);font-size:.68rem;font-weight:700;font-family:var(--mono);padding:.13rem .55rem;border-radius:999px;margin-top:.2rem;white-space:nowrap}
+.flist{margin:0;padding:0;list-style:none}
+.flist li{padding:.18rem 0 .18rem .85rem;position:relative;font-size:.8rem}
+.flist li::before{content:'▸';position:absolute;left:0;color:var(--jade);font-size:.68rem;top:.28rem}
+.iblock strong{color:var(--tm)}
+
+/* AUTOTERAPIE */
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:1.2rem;margin-bottom:1.4rem}
+.tcard{background:#fff;border-radius:var(--r);border:1px solid var(--bord);padding:1.3rem;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:transform .2s,box-shadow .2s}
+.tcard:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,.1)}
+.ticon{width:2.6rem;height:2.6rem;background:var(--jade-gl);border:1.5px solid var(--jade);border-radius:11px;display:grid;place-items:center;font-size:1.25rem;margin-bottom:.8rem}
+.tcard h4{font-family:var(--serif);font-size:1.02rem;font-weight:700;color:var(--forest);margin-bottom:.45rem}
+.tcard p{color:var(--ts);font-size:.85rem;line-height:1.65}
+
+/* FOOTER */
+footer{background:var(--ink);color:rgba(255,255,255,.42);text-align:center;padding:1.4rem 1rem;font-size:.78rem}
+footer span{color:var(--jade)}
+
+@media(max-width:680px){
+  .hdr-in{padding:2rem 1rem 1.5rem}
+  .main{padding:1.5rem 1rem 3rem}
+  .card,.ev-wrap{padding:1.1rem 1.2rem}
+  .rgrid{grid-template-columns:1fr}
+  .circ-item{min-width:76px}
+}
+</style>
+</head>
+<body>
+
+<div id="scrollBar"></div>
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="badge">🌿 MTC · Biohacking 3.0 · NutriSib</div>
+    <h1>Meridianul <span>ficatului</span><br>足厥阴肝经</h1>
+    <p class="sub">Ghid complet de medicină tradițională chineză — anatomie energetică, puncte acupuncturale, evaluare funcțională și protocoale de autoterapie.</p>
+    <div class="meta-row">
+      <div class="mpill">🌲 Element: Lemn (木)</div>
+      <div class="mpill">🕐 01:00–03:00</div>
+      <div class="mpill">📍 14 puncte LV-1→LV-14</div>
+      <div class="mpill">🧬 Spirit: Hun (魂)</div>
+    </div>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav class="nav-wrap">
+  <div class="nav-in">
+    <button class="tbtn active" data-tab="tab-general">🌿 Generalități &amp; Traseu</button>
+    <button class="tbtn" data-tab="tab-psiho">🧠 Psiho-emoțional</button>
+    <button class="tbtn" data-tab="tab-evaluare">📊 Evaluare funcțională</button>
+    <button class="tbtn" data-tab="tab-puncte">📌 Puncte LV (tabel)</button>
+    <button class="tbtn" data-tab="tab-terapie">🖐 Autoterapie</button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ═══════════════════════ TAB 1 ═══════════════════════ -->
+<div id="tab-general" class="tpanel active">
+
+  <div class="clock-card">
+    <div class="clock-face"><div class="clock-t">01–03<small>A.M.</small></div></div>
+    <div class="clock-info">
+      <h4>Fereastra de detoxifiere hepatică</h4>
+      <p>Ficatul atinge potențialul maxim de regenerare și filtrare a sângelui între <strong style="color:var(--jade)">orele 01:00 și 03:00</strong>. Trezirile repetate în această fereastră sunt un KPI clinic direct al dezechilibrului hepatic.</p>
+    </div>
+  </div>
+
+  <div class="sh"><div class="snum">A</div><h2>Energie, ore &amp; elemente asociate</h2></div>
+  <div class="sdiv"></div>
+
+  <div class="cgrid">
+    <div class="card aj">
+      <h3><span class="ci" style="background:var(--jade-gl);color:var(--jade)">☯</span>Tip energetic</h3>
+      <ul>
+        <li><b>Yin profund — Jueyin (absolut Yin):</b> Nivelul cel mai interior, asociat sângelui, detoxifierii și regenerării profunde.</li>
+        <li><b>Meridian pereche:</b> Vezica biliară (Zu Shaoyang). Ficatul planifică și vizualizează; Vezica biliară decide și acționează.</li>
+        <li><b>Spirit adăpostit:</b> Hun (魂) — sufletul eteric, inspirație, vise, scopul vieții.</li>
+        <li><b>Lichid asociat:</b> Lacrimile — excesul sau deficiența reflectă direct starea hepatică.</li>
+      </ul>
+    </div>
+    <div class="card aj">
+      <h3><span class="ci" style="background:var(--jade-gl);color:var(--jade)">🌲</span>Element Lemn (木)</h3>
+      <ul>
+        <li><b>Direcție:</b> Est &nbsp;|&nbsp; <b>Anotimp:</b> Primăvara</li>
+        <li><b>Climat:</b> Vântul &nbsp;|&nbsp; <b>Culoare:</b> Verde</li>
+        <li><b>Gust:</b> Acru &nbsp;|&nbsp; <b>Sunet:</b> Strigătul</li>
+        <li><b>Emoție:</b> Furia (Nu 怒)</li>
+        <li><b>Țesuturi:</b> Tendoane &amp; ligamente</li>
+        <li><b>Organ de simț:</b> Ochii (deschiderea ficatului)</li>
+      </ul>
+    </div>
+    <div class="card ab">
+      <h3><span class="ci" style="background:#eff6ff;color:#3E92CC">🕐</span>Ceasul organic — 24 h</h3>
+      <ul>
+        <li><b>Inainte — Vezica biliară (GB):</b> 23:00–01:00. Ia decizii, procesează furia; pregătește ficatul pentru regenerare.</li>
+        <li><b>Ficatul (LV): 01:00–03:00.</b> Filtrare maximă, curățare sânge, regenerare tisulară. Somnul profund în această fereastră este esențial.</li>
+        <li><b>Înainte de ficat:</b> Vezica biliară (GB) 23:00–01:00</li>
+        <li><b>După ficat:</b> Plămânii (LU) 03:00–05:00 — preiau energia curățată și o distribuie prin corp la trezire.</li>
+        <li><b>Semnificație clinică:</b> Trezire 01–03 AM = semnal de stagnare Qi sau foc hepatic. Tuse 03–05 AM = conexiunea LV→LU activă.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Circuit complet -->
+  <div class="circuit-card">
+    <div class="circ-title">Circuit energetic — Zi Wu Liu Zhu (子午流注) · Ficatul în fluxul de 24h</div>
+    <div class="circ-row">
+      <div class="circ-item">
+        <div class="circ-dot prev">VB<br>GB</div>
+        <div class="circ-label">Vezica biliară<b>23:00–01:00</b></div>
+      </div>
+      <div class="circ-item">
+        <div class="circ-dot current">LV<br>肝</div>
+        <div class="circ-label cur-lbl">Ficatul<b>01:00–03:00</b></div>
+      </div>
+      <div class="circ-item">
+        <div class="circ-dot next">PL<br>LU</div>
+        <div class="circ-label">Plămânii<b>03:00–05:00</b></div>
+      </div>
+      <div class="circ-item">
+        <div class="circ-dot prev">IG<br>LI</div>
+        <div class="circ-label">Intestin gros<b>05:00–07:00</b></div>
+      </div>
+      <div class="circ-item">
+        <div class="circ-dot prev">ST<br>胃</div>
+        <div class="circ-label">Stomacul<b>07:00–09:00</b></div>
+      </div>
+      <div class="circ-item">
+        <div class="circ-dot prev">SP<br>脾</div>
+        <div class="circ-label">Splina<b>09:00–11:00</b></div>
+      </div>
+      <div class="circ-item">
+        <div class="circ-dot prev">IN<br>HT</div>
+        <div class="circ-label">Inima<b>11:00–13:00</b></div>
+      </div>
+      <div class="circ-item">
+        <div class="circ-dot prev">IS<br>SI</div>
+        <div class="circ-label">Intestin subțire<b>13:00–15:00</b></div>
+      </div>
+      <div class="circ-item">
+        <div class="circ-dot prev">VU<br>BL</div>
+        <div class="circ-label">Vezica urinară<b>15:00–17:00</b></div>
+      </div>
+      <div class="circ-item">
+        <div class="circ-dot prev">RN<br>KD</div>
+        <div class="circ-label">Rinichii<b>17:00–19:00</b></div>
+      </div>
+      <div class="circ-item">
+        <div class="circ-dot prev">PC<br>心包</div>
+        <div class="circ-label">Pericardul<b>19:00–21:00</b></div>
+      </div>
+      <div class="circ-item">
+        <div class="circ-dot prev">TR<br>TW</div>
+        <div class="circ-label">Triple Încălzitor<b>21:00–23:00</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sh"><div class="snum">B</div><h2>Traseu &amp; anatomie energetică</h2></div>
+  <div class="sdiv"></div>
+
+  <div class="route-vis">
+    <div style="color:var(--jade);font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.4rem">Traiect superficial — haluce → creștet · Zu Jueyin (足厥阴)</div>
+    <div class="route-inner">
+
+      <!-- IMAGINEA ANATOMICĂ -->
+      <div class="route-img-wrap">
+        <div class="route-img-label">Harta punctelor — vedere frontală</div>
+        <div class="route-img-frame">
+          <img src="ficat.jpg" alt="Traseul meridianului ficatului — punctele LV-1 la LV-14" class="route-img">
+          <!-- Legendă puncte cheie suprapusă -->
+          <div class="img-legend">
+            <div class="leg-item"><span class="leg-dot" style="background:#EF4444"></span>LV-1–2 Picior</div>
+            <div class="leg-item"><span class="leg-dot" style="background:#f97316"></span>LV-3–4 Gleznă</div>
+            <div class="leg-item"><span class="leg-dot" style="background:#FACC15"></span>LV-5–7 Gambă</div>
+            <div class="leg-item"><span class="leg-dot" style="background:#22C55E"></span>LV-8–12 Coapsă/Inghinal</div>
+            <div class="leg-item"><span class="leg-dot" style="background:var(--jade)"></span>LV-13–14 Trunchi</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAȘII TRASEULUI -->
+      <div class="rsteps">
+        <div class="rstep"><div class="rdot">1</div><div class="rbody"><strong>LV-1 Dadun — picior</strong><p>Start la colțul unghiei halucelui (față laterală), traversează dosul piciorului.</p></div></div>
+        <div class="rstep"><div class="rdot">2</div><div class="rbody"><strong>LV-3 Taichong &amp; SP-6 Sanyinjiao — gambă</strong><p>Trece anterior de maleola internă, urcă pe marginea posterioară a tibiei. Intersectare cu cele trei meridiane Yin ale piciorului la SP-6.</p></div></div>
+        <div class="rstep"><div class="rdot">3</div><div class="rbody"><strong>LV-7–9 — coapsă internă</strong><p>Urcă pe fața internă a coapsei, înconjoară organele genitale externe.</p></div></div>
+        <div class="rstep"><div class="rdot">4</div><div class="rbody"><strong>LV-10–12 — inghinal → abdomen</strong><p>Conectare cu Vasul Concepție (Ren Mai), pătrunde în ficat și vezica biliară.</p></div></div>
+        <div class="rstep"><div class="rdot">5</div><div class="rbody"><strong>LV-13, LV-14 — coaste</strong><p>Iese la suprafață pe coaste, traversează toracele și gâtul, se deschide în ochi.</p></div></div>
+        <div class="rstep"><div class="rdot">6</div><div class="rbody"><strong>GV-20 Baihui — creștet</strong><p>Urcă pe frunte până la vertex, se unește cu Vasul Guvernator (Du Mai). O ramură facială înconjoară buzele.</p></div></div>
+      </div>
+
+    </div><!-- /route-inner -->
+  </div>
+
+  <div class="card ab">
+    <h3><span class="ci" style="background:#eff6ff;color:#3E92CC">🔗</span>Conexiuni interne profunde</h3>
+    <ul>
+      <li><b>Ramura cefalică ascendentă:</b> Ficat → diafragmă → torace → gât → ochi → GV-20. Explică relația directă ficat–vedere, cefalee, vertij.</li>
+      <li><b>Ramura descendentă către plămâni:</b> Închide circuitul marilor meridiane: Ficat → Plămân. Ciclul Qi se reia.</li>
+      <li><b>Conexiuni extraordinare:</b> Ren Mai (abdomen), Du Mai (vertex), SP-6 (nutriție + apărare + echilibru psiho-emoțional).</li>
+    </ul>
+  </div>
+
+  <div class="sh"><div class="snum">C</div><h2>Rol: „Generalul" — funcții fiziologice</h2></div>
+  <div class="sdiv"></div>
+  <div class="cgrid">
+    <div class="card aj"><h3><span class="ci" style="background:var(--jade-gl);color:var(--jade)">🌊</span>Libera circulație a Qi (Shu Xie)</h3><p>Principalul regulator al fluenței energetice sistemice. Controlează digestia, tranzitul, menstruația și stabilitatea emoțională. Stagnarea Qi hepatic = cel mai frecvent pattern patologic.</p></div>
+    <div class="card aj"><h3><span class="ci" style="background:var(--jade-gl);color:var(--jade)">🩸</span>Depozitarea sângelui (Cang Xue)</h3><p>Filtrează sângele în repaus și îl distribuie mușchilor, creierului și ochilor în activitate. Deficiența → oboseală, vedere neclară, crampe, unghii fragile.</p></div>
+    <div class="card aj"><h3><span class="ci" style="background:var(--jade-gl);color:var(--jade)">💪</span>Tendoane &amp; ligamente (Zhu Jin)</h3><p>Energia hepatică hrănește tendoanele, asigurând suplețe articulară. Dezechilibru → rigiditate, tremurături, contracturi, spasme.</p></div>
+    <div class="card aj"><h3><span class="ci" style="background:var(--jade-gl);color:var(--jade)">🔬</span>Detoxifiere &amp; metabolism</h3><p>Filtrează toxinele, metabolizează hormonii și medicamentele, sintetizează proteine plasmatice, stochează glicogen și vitamine, produce bila.</p></div>
+    <div class="card aj"><h3><span class="ci" style="background:var(--jade-gl);color:var(--jade)">👁️</span>Unghii &amp; ochi — fereastra ficatului</h3><p>Unghii striate/sfărâmicioase = deficiență de sânge. Roșeață oculară, uscăciune, vedere neclară = semne directe ale disfuncției hepatice.</p></div>
+    <div class="card aj"><h3><span class="ci" style="background:var(--jade-gl);color:var(--jade)">🎯</span>Planificare &amp; viziune</h3><p>Ficatul susține strategia, anticiparea și proiecția în viitor. Perturbarea produce indecizie, rigiditate mentală sau planuri haotice nefinalizate.</p></div>
+  </div>
+
+  <div class="sh"><div class="snum">D</div><h2>Blocaje &amp; indicații terapeutice</h2></div>
+  <div class="sdiv"></div>
+  <div class="card ar" style="margin-bottom:1.2rem">
+    <h3><span class="ci" style="background:var(--crim-lt);color:var(--crimson)">⚠️</span>Tipare patologice principale</h3>
+    <ul>
+      <li><b>Stagnare de Qi hepatic:</b> Distensie în hipocondru, suspine, nod în gât, SPM cu sâni tensionați, dismenoree, balonare, alternare constipație-diaree, iritabilitate.</li>
+      <li><b>Foc hepatic / căldură:</b> Ochi roșii, cefalee violentă (temporale), gust amar, insomnie cu vise agitate, epistaxis, iritabilitate extremă.</li>
+      <li><b>Deficiență de sânge/Yin hepatic:</b> Vedere neclară, uscăciune oculară, „muște zburătoare", amețeli, unghii fragile, crampe nocturne, menstruații rare.</li>
+      <li><b>Urcarea Yang hepatic:</b> Cefalee pulsantă, vertij, tinitus, hipertensiune, față congestionată, risc AVC.</li>
+      <li><b>Vânt hepatic intern:</b> Tremor, ticuri, convulsii, deviația gurii/ochilor, amorțeli (premergător AVC).</li>
+      <li><b>Pe traiectul meridianului:</b> Dureri inghinale, hernii, afecțiuni genitale, probleme de prostată, artrită de genunchi, dureri lombare.</li>
+    </ul>
+  </div>
+  <div class="card ab">
+    <h3><span class="ci" style="background:#eff6ff;color:#3E92CC">🏥</span>Indicații terapeutice generale</h3>
+    <ul>
+      <li><b>Hepatobiliar:</b> Hepatită, ciroză, colecistită, litiază biliară, icter.</li>
+      <li><b>Ginecologic:</b> SPM, dismenoree, endometrioză, chisturi ovariene, menopauză.</li>
+      <li><b>Andrologie:</b> Prostatită, imotență, ejaculare precoce.</li>
+      <li><b>Dermatologie:</b> Psoriazis, eczeme, prurit, acnee hormonală, urticarie cronică.</li>
+      <li><b>Oftalmologie:</b> Conjunctivită, ochi uscați, glaucom, vedere neclară.</li>
+      <li><b>Psiho-emoțional:</b> Stres cronic, furie reprimată, depresie iritabilă, anxietate, insomnie.</li>
+    </ul>
+  </div>
+
+</div><!-- /tab-general -->
+
+<!-- ═══════════════════════ TAB 2 ═══════════════════════ -->
+<div id="tab-psiho" class="tpanel">
+
+  <div class="hbox"><div class="hbox-icon">魂</div><div><h4>Hun — Spiritul eteric al ficatului</h4><p>Ficatul adăpostește <b>Hun</b>-ul (魂), componenta spirituală care furnizează viziune, inspirație, curaj și direcție în viață. Un Hun bine ancorat = vise clare, creativitate, generozitate. Sânge hepatic insuficient → Hun neliniștit → insomnie, vise haotice, senzație de plutire, lipsă de sens.</p></div></div>
+
+  <div class="sh"><div class="snum">E</div><h2>Atribute psiho-emoționale ale ficatului</h2></div>
+  <div class="sdiv"></div>
+  <div class="cgrid">
+    <div class="card aj">
+      <h3><span class="ci" style="background:var(--jade-gl);color:var(--jade)">✅</span>Atribute pozitive — lemn în armonie</h3>
+      <ul>
+        <li>Bunătate autentică și compasiune</li>
+        <li>Răbdare, capacitate de iertare</li>
+        <li>Planificare flexibilă, adaptabilitate</li>
+        <li>Motivație susținută fără agresivitate</li>
+        <li>Capacitate de a impune limite sănătoase</li>
+        <li>Creativitate, viziune pe termen lung</li>
+      </ul>
+    </div>
+    <div class="card ar">
+      <h3><span class="ci" style="background:var(--crim-lt);color:var(--crimson)">⚠️</span>Atribute negative — lemn în dezechilibru</h3>
+      <ul>
+        <li>Mânie explozivă sau suprimată cronic</li>
+        <li>Nervozitate, intoleranță, rigiditate mentală</li>
+        <li>Tendința de a găsi mereu vinovați</li>
+        <li>Depresie iritabilă, senzația de „nod în gât" emoțional</li>
+        <li>Workaholic compulsiv, incapacitate de odihnă</li>
+        <li>Epuizare profundă — ficatul pierde funcția de rezistență la stres</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sh"><div class="snum">→</div><h2>Manifestări psihice în funcție de tipul energetic</h2></div>
+  <div class="sdiv"></div>
+  <div class="card ab" style="margin-bottom:1rem">
+    <h3><span class="ci" style="background:#eff6ff;color:#3E92CC">↓</span>Deficit de energie (sânge/Yin hepatic insuficient)</h3>
+    <p>Epuizare mentală, lipsă de inițiativă, indecizie, anxietate cu fond depresiv, hipersensibilitate, frică de eșec, somnolență diurnă + insomnie nocturnă cu vise confuze. Persoana se simte „goală", fără resurse. Poate dezvolta dependențe (cafea, alcool, dulciuri) pentru impuls temporar. Deznădejde, lipsă de direcție, timiditate excesivă.</p>
+  </div>
+  <div class="card ar">
+    <h3><span class="ci" style="background:var(--crim-lt);color:var(--crimson)">↑</span>Exces de energie (stagnare Qi, foc hepatic, Yang în urcare)</h3>
+    <p>Iritabilitate marcată, accese de furie, nerăbdare, atitudine dominantă sau conflictuală. Minte hiperactivă, ruminație mentală, dificultăți de relaxare. Insomnie frecventă (01–03 AM). Dureri de cap pulsatile. Comportament rigid, perfecționist, descărcări emoționale explozive.</p>
+  </div>
+
+  <div class="sh" style="margin-top:2rem"><div class="snum">→</div><h2>Dinamica arhetipală: ficatul &amp; relația cu părinții</h2></div>
+  <div class="sdiv"></div>
+  <div class="card ag">
+    <h3><span class="ci" style="background:var(--gold-lt);color:#92600a">👪</span>Relația cu principiul patern &amp; matern (Yin/Yang)</h3>
+    <ul>
+      <li><b>Armonie:</b> Integrare echilibrată, capacitatea de a primi iubire și sprijin, limite sănătoase, relație armonioasă cu figurile de autoritate.</li>
+      <li><b>Dezechilibru ușor:</b> Ușoară tensiune cu autoritatea, senzația de constrângere, lipsă de libertate, răzvrătire subtilă sau internalizarea presiunii.</li>
+      <li><b>Dezechilibru moderat:</b> Conflict deschis cu autoritatea paternă, rebeliune activă, incapacitate de a accepta regulile, resentiment față de figuri ierarhice.</li>
+      <li><b>Dezechilibru sever:</b> Traume paterne profunde neintegrate, impuls de distrugere a figurii de autoritate (inclusiv autodistrugere). Nevoie urgentă de terapie centrată pe relația cu principiul masculin.</li>
+    </ul>
+  </div>
+
+</div><!-- /tab-psiho -->
+
+<!-- ═══════════════════════ TAB 3 ═══════════════════════ -->
+<div id="tab-evaluare" class="tpanel">
+
+  <div class="hbox"><div class="hbox-icon">📊</div><div><h4>Instrument de evaluare a meridianului ficatului</h4><p>Glisați pe bara colorată sau utilizați meniul dropdown pentru a selecta starea energetică a clientului. Profilul complet — fiziologic, nutrițional, emoțional și terapeutic — se afișează imediat. Poate fi utilizat în consultație în timp real.</p></div></div>
+
+  <div class="ev-wrap">
+    <h3>Evaluare energetică — Meridian Ficat (LV)</h3>
+    <p class="ev-sub">Selectați nivelul observat: glisați pe bară, trageți indicatorul sau utilizați meniul.</p>
+    <div class="bar-labels"><span>← Hipofuncție severă</span><span>Echilibru</span><span>Hiperfuncție severă →</span></div>
+    <div class="bbar" id="bbar">
+      <div class="seg s0">HF—</div>
+      <div class="seg s1">HF·</div>
+      <div class="seg s2">D—</div>
+      <div class="seg s3">⚖</div>
+      <div class="seg s4">D+</div>
+      <div class="seg s5">HF+</div>
+      <div class="seg s6">HF++</div>
+      <div class="barrow" id="barrow"></div>
+    </div>
+    <div class="sel-row">
+      <label for="selStare">Selectare manuală:</label>
+      <select id="selStare"></select>
+    </div>
+    <div id="rpanel" class="rpanel"></div>
+  </div>
+
+</div><!-- /tab-evaluare -->
+
+<!-- ═══════════════════════ TAB 4 ═══════════════════════ -->
+<div id="tab-puncte" class="tpanel">
+
+  <div class="hbox"><div class="hbox-icon">📌</div><div><h4>Meridianul ficatului (Zu Jueyin) — 14 puncte LV</h4><p>Tabel complet cu localizare de precizie, categorie energetică, funcții principale și indicații terapeutice detaliate. Include corecții față de sursele clasice și adăugiri clinice moderne.</p></div></div>
+
+  <div class="tscroll">
+   <table class="ptbl">
+    <thead><tr><th>Punct</th><th>Localizare</th><th>Categorie</th><th>Funcții principale</th><th>Indicații detaliate</th></tr></thead>
+    <tbody>
+     <tr>
+      <td><span class="pcode">LV-1</span><strong>Dadun</strong><br><span class="pname">Marele Vârf</span></td>
+      <td>Față laterală a halucelui, la 0,1 cun proximal de unghiul unghiei.</td>
+      <td><span class="cbadge">Jing-izvor (Fântână)</span><br><span class="cbadge" style="background:#fef2f2;color:#991b1b">Punct de sedare</span></td>
+      <td><ul class="flist"><li>Elimină căldura și focul hepatic</li><li>Oprește sângerările uterine</li><li>Calmează mintea și convulsiile</li><li>Reglează Qi în organele genitale</li></ul></td>
+      <td class="iblock"><strong>Genito-urinar:</strong> Hernie inghinală, retenție urinară, enurezis, uretrită.<br><strong>Ginecologic:</strong> Metroragie, hematurie, menstruație neregulată.<br><strong>Neuro-psihic:</strong> Psihoză, epilepsie, convulsii infantile, insomnie cu agitație.</td>
+     </tr>
+     <tr>
+      <td><span class="pcode">LV-2</span><strong>Xingjian</strong><br><span class="pname">Intervalul Mișcării</span></td>
+      <td>Dosul piciorului, spațiul 1–2, proximal de articulațiile metatarsofalangiene.</td>
+      <td><span class="cbadge">Ying-izvor (Pârâu)</span><br><span class="cbadge" style="background:#fef2f2;color:#991b1b">Dispersare căldură</span></td>
+      <td><ul class="flist"><li>Curăță focul hepatic, răcorește sângele</li><li>Drenează umiditate-căldură din Jiao inferior</li><li>Calmează cefaleea și amețelile</li><li>Reglează menstruația</li></ul></td>
+      <td class="iblock"><strong>Oftalmo:</strong> Congestie oculară, ochi roșii, cefalee frontală/temporală.<br><strong>Digestiv:</strong> Vărsături, reflux, diaree/constipație alternante.<br><strong>Ginecologic:</strong> Dismenoree, leucoree abundentă.</td>
+     </tr>
+     <tr>
+      <td><span class="pcode">LV-3</span><strong>Taichong</strong><br><span class="pname">Marele Asalt</span></td>
+      <td>Dosul piciorului, depresiunea distală față de joncțiunea metatarsienelor 1–2 (~1,5 cun proximal de comisura interdigitală).</td>
+      <td><span class="cbadge">Shu-abrupt (Râu)</span><br><span class="cbadge">Yuan-sursă ⭐</span></td>
+      <td><ul class="flist"><li>Fluidizează Qi-ul hepatic (punct principal)</li><li>Calmează Yang-ul hepatic și drenează vântul</li><li>Revigorează circulația sângelui</li><li>Sedare mentală și stabilizare emoțională</li></ul></td>
+      <td class="iblock"><strong>Neurologic:</strong> Cefalee pulsatilă, vertij, HTA, risc AVC.<br><strong>Psiho-emoțional:</strong> Stres, furie, depresie iritabilă, insomnie.<br><strong>Ginecologic:</strong> SPM, dismenoree, tulburări de ciclu.<br><strong>Digestiv:</strong> Distensie abdominală, icter.</td>
+     </tr>
+     <tr>
+      <td><span class="pcode">LV-4</span><strong>Zhongfeng</strong><br><span class="pname">Sigiliul Mijlociu</span></td>
+      <td>1 cun anterior de vârful maleolei interne, în depresiunea pe marginea medială a tendonului tibial anterior.</td>
+      <td><span class="cbadge">Jing-râu (Fluviu)</span></td>
+      <td><ul class="flist"><li>Drenează căldura-umiditate hepato-biliară</li><li>Reglează circulația Qi pe meridian</li><li>Tonifică zona genitală</li></ul></td>
+      <td class="iblock"><strong>Genital:</strong> Hernie, dureri și inflamații genitale.<br><strong>Hepatobiliar:</strong> Icter, durere în hipocondru.</td>
+     </tr>
+     <tr>
+      <td><span class="pcode">LV-5</span><strong>Ligou</strong><br><span class="pname">Canelura de Legătură</span></td>
+      <td>5 cun deasupra maleolei interne, față medială a gambei, marginea posterioară a tibiei.</td>
+      <td><span class="cbadge">Luo-conector</span></td>
+      <td><ul class="flist"><li>Armonizează cuplul Ficat–Vezică biliară</li><li>Elimină umiditate și căldură din Jiao inferior</li><li>Reglează menstruația, tratează pruritul vulvar</li></ul></td>
+      <td class="iblock"><strong>Ginecologic:</strong> Leucoree abundentă, prurit vulvar.<br><strong>Andrologic:</strong> Orhită, epididimită, hernie.<br><strong>Altele:</strong> Afecțiuni ale vezicii biliare prin conexiunea Luo.</td>
+     </tr>
+     <tr>
+      <td><span class="pcode">LV-6</span><strong>Zhongdu</strong><br><span class="pname">Capitala Mijlocie</span></td>
+      <td>7 cun deasupra maleolei interne, față medială a gambei, marginea posterioară a tibiei.</td>
+      <td><span class="cbadge">Xi-fisură ⚡</span></td>
+      <td><ul class="flist"><li>Calmează durerea acută pe meridian</li><li>Întărește ficatul, drenează umiditatea</li><li>Oprește sângerările uterine</li></ul></td>
+      <td class="iblock"><strong>Durere acută:</strong> Durere violentă pe meridian, hernie dureroasă.<br><strong>Ginecologic:</strong> Metroragie bruscă, menstruație abundentă.<br><strong>Digestiv:</strong> Diaree cronică, balonare.</td>
+     </tr>
+     <tr>
+      <td><span class="pcode">LV-7</span><strong>Xiguan</strong><br><span class="pname">Bariera Genunchiului</span></td>
+      <td>1 cun posterior de SP-9, la 2 cun sub condilul medial al tibiei.</td>
+      <td><span class="cbadge">Punct local</span></td>
+      <td><ul class="flist"><li>Elimină obstrucțiile dureroase ale genunchiului</li><li>Calmează durerea pe traiectul meridianului</li></ul></td>
+      <td class="iblock"><strong>Locomotor:</strong> Gonalgie (artroză, traumatisme), rigiditate de genunchi.<br><strong>Obs:</strong> Adjuvant excelent pentru durere de genunchi asociată stagnării Qi hepatic.</td>
+     </tr>
+     <tr>
+      <td><span class="pcode">LV-8</span><strong>Ququan</strong><br><span class="pname">Izvorul Curbat</span></td>
+      <td>Capătul medial al pliului popliteal, între tendoanele semitendinos și semimembranos, la marginea superioară a condilului femural medial.</td>
+      <td><span class="cbadge">He-mare (Vărsare)</span><br><span class="cbadge">Tonifică Yin</span></td>
+      <td><ul class="flist"><li>Tonifică puternic sângele și Yin-ul hepatic</li><li>Întărește ficatul și rinichii</li><li>Elimină umiditate-căldură din organele genitale</li></ul></td>
+      <td class="iblock"><strong>Ginecologic:</strong> Dismenoree, leucoree, prolaps uterin, prurit vulvar.<br><strong>Andrologic:</strong> Emisie involuntară, imotență, tulburări de prostată.<br><strong>Locomotor:</strong> Gonalgie cronică cu lipsă de lubrifiere articulară.</td>
+     </tr>
+     <tr>
+      <td><span class="pcode">LV-9</span><strong>Yinbao</strong><br><span class="pname">Învelișul Yin</span></td>
+      <td>4 cun deasupra epicondilului femural medial, față antero-medială a coapsei.</td>
+      <td><span class="cbadge">Punct local</span></td>
+      <td><ul class="flist"><li>Reglează Qi în Jiao inferior</li><li>Calmează durerile de-a lungul coapsei</li><li>Susține funcția urinară</li></ul></td>
+      <td class="iblock"><strong>Ginecologic:</strong> Menstruație neregulată, dureri abdominale inferioare.<br><strong>Urinar:</strong> Disurie, enurezis.</td>
+     </tr>
+     <tr>
+      <td><span class="pcode">LV-10</span><strong>Wuli</strong><br><span class="pname">Cinci Li</span></td>
+      <td>3 cun sub ST-30 (Qichong), marginea medială a vastului medial.</td>
+      <td><span class="cbadge">Punct local</span></td>
+      <td><ul class="flist"><li>Tonifică energia ficatului și a rinichilor</li><li>Elimină stagnările din abdomenul inferior</li></ul></td>
+      <td class="iblock"><strong>Abdominal:</strong> Meteorism, constipație rebelă.<br><strong>Obs:</strong> Util în durerea pelvică cronică.</td>
+     </tr>
+     <tr>
+      <td><span class="pcode">LV-11</span><strong>Yinlian</strong><br><span class="pname">Unghiul Yin</span></td>
+      <td>2 cun sub ST-30 (Qichong), marginea medială a vastului medial.</td>
+      <td><span class="cbadge">Punct local</span></td>
+      <td><ul class="flist"><li>Eliberează constricția energetică pubiană</li><li>Tratează infertilitatea feminină</li></ul></td>
+      <td class="iblock"><strong>Ginecologic:</strong> Infertilitate prin stagnare Qi și sânge, dureri pelvine.<br><strong>Abdominal:</strong> Hernie.</td>
+     </tr>
+     <tr>
+      <td><span class="pcode">LV-12</span><strong>Jimai</strong><br><span class="pname">Vasul Rapid</span></td>
+      <td>La 2,5 cun lateral de linia mediană anterioară, în pliul inghinal, lateral de artera femurală.</td>
+      <td><span class="cbadge">Punct local</span></td>
+      <td><ul class="flist"><li>Decontracturează zona inghinală</li><li>Reglează Qi hepatic în organele genitale</li></ul></td>
+      <td class="iblock"><strong>Hernie inghinală:</strong> Dureri și tumefiere, hernie scrotală.<br><strong>Genital:</strong> Vulvovaginite, balanite, prurit.</td>
+     </tr>
+     <tr>
+      <td><span class="pcode">LV-13</span><strong>Zhangmen</strong><br><span class="pname">Poarta Strălucirii</span></td>
+      <td>Peretele lateral al abdomenului, sub capătul liber al coastei a 11-a.</td>
+      <td><span class="cbadge">Front-Mu Splină</span><br><span class="cbadge">Întâlnire Splină–Ficat</span></td>
+      <td><ul class="flist"><li>Deblochează stagnarea Qi hepatic și splenic</li><li>Tonifică splina, transformă umiditatea</li><li>Calmează durerile de hipocondru</li></ul></td>
+      <td class="iblock"><strong>Digestiv:</strong> Distensie abdominală, borborigme, diaree, balonare marcantă.<br><strong>Hepatobiliar:</strong> Durere în hipocondru, icter.<br><strong>Obs:</strong> Excelent pentru sindromul de intestin iritabil pe fond de stres.</td>
+     </tr>
+     <tr>
+      <td><span class="pcode">LV-14</span><strong>Qimen</strong><br><span class="pname">Poarta Ciclică</span></td>
+      <td>Spațiul intercostal 6, la 4 cun lateral de linia mediană anterioară (sub mamelon).</td>
+      <td><span class="cbadge">Front-Mu Ficat</span><br><span class="cbadge" style="background:#fef9f2;color:#92600a">⚠ Punct de alarmă</span></td>
+      <td><ul class="flist"><li>Reglează și armonizează meridianul ficatului</li><li>Deschide pieptul, eliberează emoțiile blocate</li><li>Tratează greața, sughițul și refluxul</li></ul></td>
+      <td class="iblock"><strong>Hepatobiliar:</strong> Durere și distensie în piept/hipocondru, hepatită cronică, icter.<br><strong>Digestiv:</strong> Vărsături, sughiț persistent, regurgitare acidă.<br><strong>Ginecologic:</strong> Mastită, sâni tensionați premenstrual.<br><strong>Psiho-emoțional:</strong> „Nod în gât", depresie cu constricție toracică.<br><strong>Obs:</strong> Combinat cu LV-3 = pereche de bază pentru orice tulburare a Lemnului.</td>
+     </tr>
+    </tbody>
+   </table>
+  </div>
+
+</div><!-- /tab-puncte -->
+
+<!-- ═══════════════════════ TAB 5 ═══════════════════════ -->
+<div id="tab-terapie" class="tpanel">
+
+  <div class="hbox"><div class="hbox-icon">🖐</div><div><h4>Protocoale de autoterapie</h4><p>Tehnicile de mai jos pot fi practicate zilnic fără echipament special. Sunt complementare oricărei intervenții clinice și pot fi recomandate clienților ca protocol de acasă.</p></div></div>
+
+  <div class="sh"><div class="snum">F</div><h2>Tehnici de acupresură &amp; autoterapie</h2></div>
+  <div class="sdiv"></div>
+  <div class="tgrid">
+    <div class="tcard"><div class="ticon">🦶</div><h4>Automasaj pe traiect</h4><p>Masați ușor halucele, urcați cu presiune fermă pe dosul piciorului, fața internă a gambei și coapsei, până în inghinal. Continuați pe abdomenul inferior și coastele inferioare. <strong>5–10 min / picior</strong>, seara. Deblochează stagnările și îmbunătățește somnul.</p></div>
+    <div class="tcard"><div class="ticon">⭐</div><h4>LV-3 Taichong — punct esențial</h4><p>Presiune verticală fermă cu policele în adâncitura dintre primele două metatarsiene. <strong>1–2 min / picior, de 2–3 ori pe zi.</strong> Calmează furia, reduce cefaleea de tensiune, scade TA, liniștește mintea.</p></div>
+    <div class="tcard"><div class="ticon">🫁</div><h4>LV-14 Qimen — eliberare emoțională</h4><p>Masaj circular cu degetele mijlocii sub sâni, în spațiul intercostal 6. Respirați adânc. Excelent pentru deblocarea emoțiilor înăbușite, senzația de „nod în gât" și disconfort toracic pe fond de stres.</p></div>
+    <div class="tcard"><div class="ticon">🔄</div><h4>SP-6 + LV-3 — protocol de seară</h4><p>SP-6 la 3 cun deasupra maleolei interne. Asociați automasajul ambelor puncte seara, înainte de culcare. Tonifică sângele și Yin-ul hepatic, ideal în deficiențe și insomnii.</p></div>
+    <div class="tcard"><div class="ticon">🌊</div><h4>Qi Gong — mișcările Lemnului</h4><p>Mișcări laterale lente cu brațele ridicate deasupra capului (imitând creșterea unui arbore). Practicate dimineața față spre Est. Deblochează Qi-ul hepatic, îmbunătățesc flexibilitatea tendinelor și echilibrează emoțiile.</p></div>
+    <div class="tcard"><div class="ticon">🧘</div><h4>Respirația alternativă (Nadi Shodhana)</h4><p>Alternare narină dreaptă/stângă, 5–10 minute dimineața sau în momente de stres acut. Echilibrează Yin/Yang, calmează focul hepatic, reduce TA și iritabilitatea.</p></div>
+    <div class="tcard"><div class="ticon">🥗</div><h4>Nutriție pentru Lemn</h4><p>Gustul acru moderat (lămâie, oțet de mere, grepfrut) tonifică ficatul. Legume verzi, anghinare, pâpădie, ridichi, usturoi fluidizează Qi-ul. Evitați excesele: alcool, prăjeli, cafea, grăsimi saturate — blochează meridianul.</p></div>
+    <div class="tcard"><div class="ticon">🌿</div><h4>Suplimente &amp; fitoterapie hepatică</h4><p><strong>Suport hepatic:</strong> Armurariu (silimarina), anghinare, pâpădie, turmeric, bupleurum. <strong>SNC:</strong> Magneziu, complex B. <strong>Formule clasice:</strong> Xiao Yao San (stagnare Qi), Long Dan Xie Gan Tang (foc hepatic, sub supraveghere). Omega-3, probiotice.</p></div>
+  </div>
+
+  <div class="sh"><div class="snum">→</div><h2>Protocol clinic — combinații de acupunctură</h2></div>
+  <div class="sdiv"></div>
+  <div class="card aj" style="margin-bottom:1.2rem">
+    <h3><span class="ci" style="background:var(--jade-gl);color:var(--jade)">🏥</span>Combinații clinice recomandate</h3>
+    <ul>
+      <li><b>Stagnare Qi:</b> LV-3, LV-14, PC-6 (Neiguan), GB-34 (Yanglingquan) — principala combinație pentru deblocare.</li>
+      <li><b>Foc hepatic:</b> LV-2, LV-3, GB-20 (Fengchi), GV-20 (Baihui) — sedare și răcorire.</li>
+      <li><b>Deficit de sânge/Yin:</b> LV-8, SP-6, ST-36, BL-18 (Ganshu) — tonifiere profundă.</li>
+      <li><b>Yang în urcare / HTA:</b> LV-3 + KD-1 (Yongquan) — dirijare Yang în jos; GB-20, GV-20.</li>
+      <li><b>Vânt hepatic intern:</b> GV-20, LV-3, GB-20, SP-6 — sedare de urgență + LV-2 (punctare).</li>
+    </ul>
+  </div>
+  <div class="card ag" style="margin-bottom:1.2rem">
+    <h3><span class="ci" style="background:var(--gold-lt);color:#92600a">💬</span>Recomandări psiho-comportamentale</h3>
+    <ul>
+      <li><b>Management al furiei:</b> Terapie cognitiv-comportamentală, sport intens, scrisori de iertare.</li>
+      <li><b>Meditație:</b> Scanare corporală pentru deficit; meditație de eliberare pentru exces.</li>
+      <li><b>Organizare:</b> Prioritizare clară, capacitatea de a spune „nu", pauze obligatorii.</li>
+      <li><b>Somn:</b> Culcare înainte de 23:00 pentru a proteja fereastra 01–03 AM de regenerare hepatică.</li>
+      <li><b>Mișcare:</b> Stretching pentru gât și umeri, sport aerobic moderat, yoga Yin pentru meridianul ficatului.</li>
+    </ul>
+  </div>
+  <div class="wbox"><div class="hbox-icon">⚠️</div><div><h4>Indicații de urgență</h4><p>Hiperfuncție severă (Yang extrem, vânt hepatic intern): vertij fulminant, cefalee explozivă, epistaxis sever, convulsii, amorțeli bruște, devierea gurii sau a ochilor necesită evaluare medicală de urgență. Acupunctura și fitoterapia sunt în acest caz strict complementare tratamentului alopat.</p></div></div>
+
+</div><!-- /tab-terapie -->
+
+</main>
+
+<footer>© 2026 <span>dr.ing. Radu Pascu</span> · NutriSib · Sibiu, România &nbsp;|&nbsp; Material educațional — nu înlocuiește consultul medical.</footer>
+
+<script>
+(function() {
+  /* ── SCROLL PROGRESS ── */
+  window.addEventListener('scroll', function() {
+    var d = document.documentElement;
+    var pct = d.scrollTop / (d.scrollHeight - d.clientHeight) * 100;
+    document.getElementById('scrollBar').style.width = pct + '%';
+  });
+
+  /* ── TABS ── */
+  var btns = document.querySelectorAll('.tbtn');
+  var panels = document.querySelectorAll('.tpanel');
+
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = btn.getAttribute('data-tab');
+      panels.forEach(function(p) { p.classList.remove('active'); });
+      btns.forEach(function(b) { b.classList.remove('active'); });
+      document.getElementById(id).classList.add('active');
+      btn.classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+
+  /* ── EVALUARE DATA ── */
+  var optLabels = [
+    'Hipofuncție severă — Deficit Yin/sânge extrem',
+    'Hipofuncție moderată — Deficit Yin/sânge marcat',
+    'Dezechilibru ușor (Hipofuncție) — Deficiență incipientă',
+    'Echilibru — Qi și sânge fluent',
+    'Dezechilibru ușor (Hiperfuncție) — Stagnare incipientă',
+    'Hiperfuncție moderată — Stagnare pronunțată / Foc hepatic',
+    'Hiperfuncție severă — Foc extrem / Yang în urcare'
+  ];
+
+  var edata = [
+    {
+      stare: 'Hipofuncție severă — Deficit Yin/sânge extrem',
+      fiziologic: 'Deficit marcat de sânge și Yin hepatic: vedere extrem de slabă (posibil orbire nocturnă), uscăciune oculară severă, tinitus continuu, amețeli în ortostatism. Piele și unghii fără strălucire, păr cu cădere intensă. Menstruații absente (amenoree). Crampe și spasme musculare nocturne. Tremor fin al mâinilor. Oboseală extremă neasociată cu efort. Insomnie severă cu treziri repetate. Palpitații fără cauză cardiacă.',
+      nutritie: 'Dieta trebuie să construiască și să hrănească sângele: carne de oaie, vită în cantitate moderată, ficat de vită (o dată pe săptămână), ouă, spanac, urzici, sfeclă roșie, morcovi, prune negre, stafide, rodii, smochine. Supe de oase bogate în colagen. Mese regulate, fără sărire de mese, fără post intermitent agresiv.',
+      suplimente: 'Fier + vitamina C (din surse alimentare), acid folic, B12, B6. Suplimente de construire a sângelui: dong quai (Angelica sinensis), goji, jujube (Ziziphus jujuba). Magneziu glicinat. Omega-3. Formula clasică: Si Wu Tang (Four Substance Decoction) sub supervizare specialist.',
+      emotional: 'Stare depresivă profundă, lipsă totală de motivație și direcție, sentimentul de a fi „gol pe dinăuntru". Indecizie paralizantă, incapacitate de a visa sau proiecta viitorul. Lipsă de curaj, frică difuză. Vise confuze, fragmentate sau absente. Sensibilitate extremă la stimuli.',
+      relatiiParinti: 'Carență majoră de hrănire maternă — sentimentul de a nu fi fost primit, iubit, văzut. Dificultate extremă în a primi ajutor sau afecțiune. Tendința de a se autoabandona sau de a se ocupa exclusiv de ceilalți. Nevoie urgentă de integrare a principiului nutritiv matern.',
+      terapie: 'Odihnă absolută, reducerea tuturor activităților consumatoare. Acupunctură de tonifiere (LV-8, SP-6, ST-36, BL-18, BL-20). Moxibustie. Plante tonicorice hepatice și hematopoietice. Psihoterapie centrată pe trauma de abandon sau lipsă de hrănire emoțională. Culcare înainte de 22:00. Evitarea completă a ecranelor după apusul soarelui.'
+    },
+    {
+      stare: 'Hipofuncție moderată — Deficit Yin/sânge marcat',
+      fiziologic: 'Deficiență de sânge hepatic moderată: vedere neclară (mai ales seara), ochi uscați cu senzație de nisip, „muște zburătoare". Piele uscată, unghii striate și sfărâmicioase. Menstruații rare, palid-deschis la culoare. Crampe nocturne la gambă. Oboseală după efort moderat. Insomnie cu trezire ușoară și dificultăți de readormire. Amețeli la schimbarea poziției.',
+      nutritie: 'Dietă de nutriție și construire a sângelui: carne roșie de calitate de 2–3 ori pe săptămână, pește gras (somon, sardine), ouă, legume cu frunze verzi, morcovi, sfeclă, leguminoase (linte, fasole neagră), cereale integrale. Evitați alimentele care seacă umiditatea: cafea în exces, alcool, post prelungit.',
+      suplimente: 'Complex B (B12, B6, folat), Fier (dacă confirmat prin analize), Omega-3, Magneziu. Plante: goji, jujube, dong quai. Vitamina C, vitamina E. Probiotice pentru absorbție optimă a fierului.',
+      emotional: 'Lipsă de inițiativă, oboseală decizională, tendință la izolare. Hipersensibilitate emoțională, plâns la stimuli minori. Vise haotice, emoționale. Dificultăți de concentrare, „ceață mentală". Senzația că nu ai resurse să faci față cerințelor zilnice.',
+      relatiiParinti: 'Dificultate în a primi afecțiune sau recunoaștere. Tendința de a da mereu, fără a cere nimic în schimb. Pattern de supunere sau de „a fi suficient de bun" pentru a merita iubire. Lucru terapeutic: exerciții de receptivitate și exprimare a nevoilor.',
+      terapie: 'Acupunctură de tonifiere: LV-8, SP-6, KD-3, ST-36, BL-18 (Ganshu). Moxibustie pe BL-18 și BL-20. Exerciții ușoare (yoga Yin, tai chi, plimbări). Tehnici de respirație profundă. Psihoterapie suportivă. Somn minim 8 ore, evitarea ecranelor și stimulentelor după ora 20:00.'
+    },
+    {
+      stare: 'Dezechilibru ușor (Hipofuncție) — Deficiență incipientă',
+      fiziologic: 'Primele semne de deficiență de Qi și sânge hepatic: oboseală după-amiaza (13–15:00), ochi ușor obosiți seara, unghii cu ușoară fragilitate. Menstruații cu flux ușor redus. Somnul este relativ bun, dar cu vise dese sau neliniștite. Mici crampe musculare ocazionale.',
+      nutritie: 'Dietă de susținere: include zilnic o sursă de proteine de calitate, legume verzi, fructe cu gust ușor acru (mere, lămâie, grepfrut). Mese regulate, fără sărire. Hidratare bună.',
+      suplimente: 'Magneziu, complex B, Omega-3. Ceai de goji și jujube. Evitați alcoolul și cafeaua în exces.',
+      emotional: 'Ușoară oboseală mentală, dificultăți de concentrare spre sfârșitul zilei. Tendință la îndoiala de sine în perioade de stres. Vise dese, dar nu perturbatoare.',
+      relatiiParinti: 'Relație în general funcțională, cu ușoare dificultăți în a cere ajutor sau a-și exprima nevoile afective. Poate exista o tendință subtilă de a performa pentru a fi iubit.',
+      terapie: 'Automasaj LV-3 și SP-6 seara. Qi Gong sau yoga ușoară de 3 ori pe săptămână. Culcare regulată înainte de 23:00. Reducerea stimulentelor.'
+    },
+    {
+      stare: 'Echilibru — Qi și sânge hepatic fluent',
+      fiziologic: 'Ficat echilibrat: metabolism hormonal optim, vedere clară, unghii sănătoase și rezistente. Tendoane elastice, mobilitate articulară bună. Ciclul menstrual regulat, fără durere sau SPM semnificativ. Somn odihnitor, fără treziri în fereastra 01–03 AM. Energie stabilă pe parcursul zilei. Capacitate bună de detoxifiere — piele clară, digestie regulată.',
+      nutritie: 'Dietă echilibrată: variată, preponderent naturală, în sezon. Include gust acru moderat (lămâie, mere, oțet de mere), legume verzi, proteine de calitate. Evitați excesele de orice natură. Post intermitent ocazional 12–14 ore — benefic.',
+      suplimente: 'Suport de menținere: Magneziu, Omega-3, vitamina D, probiotice. Armurariu și anghinare sezonier (primăvara) pentru curățare hepatică anuală.',
+      emotional: 'Stare emoțională stabilă, capacitate bună de a procesa și elibera emoțiile. Creativitate, motivație, viziune. Capacitate de a stabili limite sănătoase. Somn cu vise clare și memorabile.',
+      relatiiParinti: 'Integrare echilibrată a influențelor materne și paterne. Capacitate de a primi iubire și sprijin, dar și de a stabili limite sănătoase. Relația cu figurile de autoritate este armonioasă datorită securității interioare proprii.',
+      terapie: 'Menținere: exerciții fizice moderate, Qi Gong sau yoga. Meditație de menținere a clarității mentale. Continuarea autocunoașterii. Ficatul sănătos generează generozitate naturală — partajarea echilibrului cu ceilalți.'
+    },
+    {
+      stare: 'Dezechilibru ușor (Hiperfuncție) — Stagnare incipientă',
+      fiziologic: 'Început de stagnare a Qi-ului hepatic, cu ușoară tendință la căldură. Disconfort subcostal, balonare, senzație de nod în gât, eructații, ușoară iritabilitate premenstruală. Mușchii gâtului și umerilor ușor tensionați, cefalee tensională ocazională. Somn agitat, trezire ocazională 01–03 AM. Scaune alternând constipație/diaree.',
+      nutritie: 'Alimente care fluidizează Qi-ul hepatic: legume cu frunze verzi, ridichi, ceapă, usturoi, ghimbir proaspăt, mentă, turmeric. Include gust acru și amar. Evitați excesele de grăsimi, prăjeli, cafea, alcool, alimente procesate. Mese la ore fixe, fără grabă.',
+      suplimente: 'Armurariu, anghinare, pâpădie, magneziu, complex B. Ceaiuri: mentă, mușețel, flori de tei. Formula tradițională Xiao Yao San (Free and Easy Wanderer) în doze mici, după consultarea unui specialist.',
+      emotional: 'Iritabilitate crescută, frustrare ușoară, sentimentul de a fi mereu pe fugă. Dificultate în a te detașa de muncă, perfecționism. Emoții refulate care ies sub formă de sarcasm sau accese de furie controlată. Vise încărcate, conflicte.',
+      relatiiParinti: 'Ușoară tensiune cu autoritatea paternă sau cu figurile care impun reguli. Senzația de a fi constrâns, de a nu avea libertate. Tendința de a se răzvrăti subtil sau de a internaliza presiunea.',
+      terapie: 'Stretching pentru gât și umeri. Masaj pe punctele LV-3 și GB-34. Respirație alternativă (nadi shodhana) sau Qi Gong pentru Lemn. Organizare priorităților, capacitatea de a spune „nu". Comunicare deschisă a frustrărilor.'
+    },
+    {
+      stare: 'Hiperfuncție moderată — Stagnare pronunțată / Foc hepatic',
+      fiziologic: 'Stagnare pronunțată a Qi-ului hepatic generând foc hepatic sau urcare Yang. Dureri de cap violente (temporale, vertex), amețeli, HTA labilă. Ochi roșii, uscați sau cu presiune. Constipație rebelă, scaune uscate. Greață, gust amar, regurgitări. Dismenoree cu cheaguri, tendinite, dureri articulare. Insomnie severă (trezire 01–03 AM), ten roșu, irascibilitate.',
+      nutritie: 'Dietă de răcire și drenaj: legume crude sau ușor gătite (salată, castraveți, țelină, roșii, ridichi, spanac, urzici). Fructe răcoritoare: pepene, pere, mere, grepfrut. Cereale ușoare (orz, mei). Evitați complet: alcool, cafea, picant, grăsimi saturate, carne roșie în exces, dulciuri concentrate. Ceaiuri reci: mentă, crizantemă, pâpădie, anghinare.',
+      suplimente: 'Armurariu, anghinare, pâpădie, turmeric, bupleurum. Magneziu (doze mai mari), Omega-3, probiotice. Formule tradiționale: Long Dan Xie Gan Tang (Gentiana) pentru foc hepatic — strict sub supervizare. Evitați suplimentele termogene sau energizante.',
+      emotional: 'Furie explozivă, nerăbdare extremă, intoleranță la frustrare. Hipercritică, rigiditate mentală, tendința de a domina. Senzație de presiune internă constantă. Comportament workaholic, fără odihnă. Vise violente, coșmaruri.',
+      relatiiParinti: 'Conflict deschis cu autoritatea paternă sau cu propria nevoie de control. Rebeliune activă, incapacitate de a accepta regulile. Resentiment profund față de tată sau figuri de autoritate, reflectat în toate relațiile ierarhice.',
+      terapie: 'Tehnici de management al furiei (TCC, sport intens). Meditație de scanare corporală. Acupresură pe LV-2, LV-3, GB-41, GV-20. Qi Gong de eliberare a Lemnului. Terapie prin scriere — scrisori de iertare. Pauze obligatorii și somn suficient.'
+    },
+    {
+      stare: 'Hiperfuncție severă — Foc extrem / Yang în urcare',
+      fiziologic: 'Foc hepatic extrem, Yang în urcare sau vânt hepatic intern. Cefalee fulminantă, vertij, risc AVC. HTA severă, epistaxis, vărsături de sânge. Ochi injectați, dureri orbitale, icter. Constipație intensă, hemoroizi trombozați posibili. Iritabilitate extremă, insomnie totală. La femei: menoragie, chisturi ovariene complicate. La bărbați: prostatită acută. Convulsii, tremor, rigiditate musculară severă.',
+      nutritie: 'Intervenție medicală de urgență; alimentația este strict complementară. Dietă vegetariană ușoară, sucuri proaspete de legume verzi și fructe. Evitați orice aliment cald, picant, gras, dulce concentrat. Post intermitent strict sub supraveghere. Hidratare intensă cu ceaiuri răcoritoare.',
+      suplimente: 'Nu se administrează fără acordul medicului. Pot fi necesare sedative hepatice din plante (valeriană, pâpădie, crizantemă, bupleurum) combinate cu tratament alopat. Magneziu, Omega-3. Evitați absolut stimulentele.',
+      emotional: 'Furie incontrolabilă, violență verbală/fizică, senzația de explozie iminentă. Paranoia, anxietate severă. Incapacitate de a gândi rațional, confuzie, halucinații posibile. Comportament autodistructiv. Vise terifiante, coșmaruri recurente.',
+      relatiiParinti: 'Refuzul total al autorității, conflict interior devastator. Traume paterne profunde neintegrate care produc o ruptură interioară. Impuls de distrugere a figurii de autoritate (inclusiv autodistrugere). Nevoie urgentă de vindecare a relației cu principiul masculin.',
+      terapie: 'Tratament medical de urgență (posibil internare). Acupunctură de sedare: LV-2, LV-3, GB-20, GV-20, puncte de sângerare. Terapie psihologică intensivă pentru traume. Qi Gong extrem de blând, sub ghidaj. Izolare temporară de factorii de stres. Sprijin familial structurat.'
+    }
+  ];
+
+  var rlabels = [
+    {key:'fiziologic', label:'🧬 Fiziologie & simptome', color:'#065f46'},
+    {key:'nutritie',   label:'🥗 Nutriție recomandată',   color:'#15803d'},
+    {key:'suplimente', label:'💊 Suplimente & fitoterapie',color:'#0284c7'},
+    {key:'emotional',  label:'🧠 Stare emoțională',        color:'#9333ea'},
+    {key:'relatiiParinti',label:'👪 Relația cu părinții', color:'#c2410c'},
+    {key:'terapie',    label:'💆 Terapie & stil de viață', color:'#0f766e'}
+  ];
+
+  /* Populate select */
+  var sel = document.getElementById('selStare');
+  optLabels.forEach(function(lbl, i) {
+    var o = document.createElement('option');
+    o.value = i;
+    o.textContent = lbl;
+    if (i === 3) o.selected = true;
+    sel.appendChild(o);
+  });
+
+  function renderResult(idx) {
+    var d = edata[idx];
+    var items = rlabels.map(function(l) {
+      return '<div class="ritem"><div class="rlabel" style="color:' + l.color + '">' + l.label + '</div><p>' + d[l.key] + '</p></div>';
+    }).join('');
+    document.getElementById('rpanel').innerHTML = '<h3>Stare: ' + d.stare + '</h3><div class="rgrid">' + items + '</div>';
+  }
+
+  /* Bar */
+  var bbar = document.getElementById('bbar');
+  var barrow = document.getElementById('barrow');
+  var dragging = false;
+
+  function posToIdx(clientX) {
+    var r = bbar.getBoundingClientRect();
+    var x = Math.max(0, Math.min(clientX - r.left, r.width));
+    return Math.min(6, Math.floor(x / r.width * 7));
+  }
+
+  function setIdx(idx) {
+    idx = Math.max(0, Math.min(6, idx));
+    barrow.style.left = (idx / 6 * 100) + '%';
+    sel.value = idx;
+    renderResult(idx);
+  }
+
+  bbar.addEventListener('click', function(e) { if (!dragging) setIdx(posToIdx(e.clientX)); });
+  bbar.addEventListener('mousedown', function(e) { dragging = true; setIdx(posToIdx(e.clientX)); e.preventDefault(); });
+  document.addEventListener('mousemove', function(e) { if (dragging) setIdx(posToIdx(e.clientX)); });
+  document.addEventListener('mouseup', function() { dragging = false; });
+  bbar.addEventListener('touchstart', function(e) { dragging = true; setIdx(posToIdx(e.touches[0].clientX)); e.preventDefault(); }, {passive:false});
+  document.addEventListener('touchmove', function(e) { if (dragging) setIdx(posToIdx(e.touches[0].clientX)); });
+  document.addEventListener('touchend', function() { dragging = false; });
+  sel.addEventListener('change', function() { setIdx(parseInt(this.value)); });
+
+  /* Init */
+  setIdx(3);
+
+  /* Anti-copy */
+  document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey && e.key === 'u') || e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J'))) e.preventDefault();
+  });
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafic Interactiv Meridian Plămân – Evaluare și Recomandări</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .infographic-container {
+            flex-grow: 1;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .meridian-section {
+            width: 100%;
+            max-width: 750px;
+        }
+        h2 {
+            font-size: 2em;
+            font-weight: 700;
+            color: #0A2463;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        select {
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #3E92CC;
+            background-color: #e0f2f7;
+            color: #0A2463;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+        }
+        select:hover {
+            border-color: #0A2463;
+            background-color: #d1eff6;
+        }
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(62, 146, 204, 0.4);
+        }
+        .bar-container {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            border: 3px solid #0A2463;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+        .segment {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+        }
+        .segment.extreme-red    { background-color: #EF4444; }
+        .segment.moderate-yellow { background-color: #FACC15; }
+        .segment.tendency-blue   { background-color: #3B82F6; }
+        .segment.balanced-green  { background-color: #22C55E; }
+        .arrow {
+            position: absolute;
+            bottom: 5px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #212529;
+            transform: translateX(-50%);
+            transition: left 0.4s ease-in-out;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            z-index: 10;
+        }
+        .info-box {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+        .info-box h3 {
+            font-size: 1.4em;
+            color: #0A2463;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            border-bottom: 2px dashed #3E92CC;
+            padding-bottom: 0.5rem;
+        }
+        .info-box p {
+            font-size: 1.05em;
+            margin-bottom: 0.75rem;
+            color: #333;
+            line-height: 1.6;
+        }
+        .footer-copyright {
+            text-align: center;
+            padding: 1rem;
+            background-color: #e9ecef;
+            color: #495057;
+            font-size: 0.9em;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            h2 { font-size: 1.6em; }
+            .bar-container { height: 35px; }
+            .segment { font-size: 0.7em; }
+            .info-box { padding: 1.2rem; }
+            .info-box h3 { font-size: 1.2em; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="infographic-container">
+        <div class="meridian-section">
+            <h2>Evaluare interactiva: starea meridianului plaman</h2>
+
+            <select id="select-plaman">
+                <option value="0">Hipofunctie severa</option>
+                <option value="1">Hipofunctie moderata</option>
+                <option value="2">Dezechilibru usor (Hipofunctie)</option>
+                <option value="3" selected>Echilibru</option>
+                <option value="4">Dezechilibru usor (Hiperfunctie)</option>
+                <option value="5">Hiperfunctie moderata</option>
+                <option value="6">Hiperfunctie severa</option>
+            </select>
+
+            <div class="bar-container">
+                <div class="segment extreme-red">---</div>
+                <div class="segment moderate-yellow">--</div>
+                <div class="segment tendency-blue">-</div>
+                <div class="segment balanced-green">=</div>
+                <div class="segment tendency-blue">+</div>
+                <div class="segment moderate-yellow">++</div>
+                <div class="segment extreme-red">+++</div>
+                
+                <div class="arrow" id="indicator-plaman"></div>
+            </div>
+
+            <div id="infoDisplay-plaman" class="info-box"></div>
+        </div>
+    </div>
+
+    <footer class="footer-copyright">
+        <p>Copyright: dr.ing. Radu Pascu - 2025</p>
+    </footer>
+
+    <script>
+        var meridianLungData = [
+            {
+                stare: "Hipofunctie severa",
+                fiziologic: "Deficienta majora de Qi si Yin al Plamanului. Oxigenare extrem de deficitara, hipoxie tisulara, imunitate colapsata. Dispnee de repaus, voce abia soptita, tuse seaca cronica. Ten cadaveric, piele uscata si descuamata. Transpiratii spontane diurne si nocturne abundente. Raceli frecvente, pneumonii recurente. Constipatie atona severa. Sensibilitate extrema la frig si vant, membre reci. Anosmie. Dureri toracice cronice.",
+                nutritie: "Interventie nutritionala urgenta. Supe de oase, piureuri de legume fierte, orez alb bine fiert, oua moi, miere. Ghimbir, scortisoara. Evita lactatele, grasimile reci, crudele. Ceaiuri calde de lemn dulce, ghimbir, salvie.",
+                suplimente: "Vitamina C, D3, Zinc, Seleniu, Quercetina, probiotice. Extracte: Astragalus, Cordyceps, Reishi. Pentru Yin: pere, migdale, susan negru.",
+                emotional: "Tristete profunda, doliu cronic neprocesat, disperare. Incapacitate de a plange sau plans incontrolabil. Voce stinsa. Senzatie de sufocare emotionala.",
+                relatiiParinti: "Ruptura cu mama (Yin). Pierdere, abandon. Sentiment ca nu are dreptul sa ocupe spatiu.",
+                terapie: "Acupunctura: LU-9, LU-7, CV-4, CV-6, BL-13. Moxibustie blanda. Psihoterapie pentru doliu. Qi Gong pentru Metal. Jurnal de iertare."
+            },
+            {
+                stare: "Hipofunctie moderata",
+                fiziologic: "Deficienta de Qi al Plamanului. Oboseala la efort, respiratie superficiala, raceli frecvente. Tuse seaca seara. Piele uscata, ten tern. Transpiratii usoare. Constipatie. Voce slaba.",
+                nutritie: "Carne de pui, curcan, oua, cereale integrale, legume radacinoase, spanac, nuci. Ghimbir, usturoi, miere. Evita lactatele si reci. Ceai de salvie, cimbru.",
+                suplimente: "Vitamina C, D3, Zinc, probiotice. Astragalus, Cordyceps, Reishi. Ulei de susan, seminte de in.",
+                emotional: "Tristete, melancolie. Tendinta de a plange usor. Greutate pe piept. Dificultate in a se desprinde de trecut.",
+                relatiiParinti: "Dificultati in a primi suport de la mama. Sentiment de neiubire.",
+                terapie: "Dieta de sustinere. Masaj LU-9, LU-7. Plimbari in natura. Consiliere pentru doliu."
+            },
+            {
+                stare: "Dezechilibru usor (Hipofunctie)",
+                fiziologic: "Usoara deficienta de Qi. Raceli ocazionale, tuse seaca trecatoare, piele uscata. Oboseala trecatoare. Voce usor slaba.",
+                nutritie: "Ciuperci, ovaz, orez, usturoi, ghimbir, pere coapte, migdale. Ceai de salvie.",
+                suplimente: "Multivitamine, vitamina C, Zinc, probiotice.",
+                emotional: "Usoara melancolie, nostalgie. Oftat. Nevoie de mai multa ordine.",
+                relatiiParinti: "Mici asteptari neimplinite de la mama.",
+                terapie: "Mindfulness. Masaj LU-9. Exercitii de respiratie."
+            },
+            {
+                stare: "Echilibru",
+                fiziologic: "Respiratie profunda, oxigenare optima. Imunitate puternica, piele sanatoasa. Voce clara. Energie constanta.",
+                nutritie: "Dieta variata, bogata in alimente proaspete. Gust iute/picant moderat. Fructe si legume albe.",
+                suplimente: "Multivitamine, probiotice, Omega-3.",
+                emotional: "Dreptate, integritate, stima de sine. Capacitate de a accepta pierderea, de a trai prezentul. Recunostinta.",
+                relatiiParinti: "Relatii echilibrate, sanatoase. Independenta emotionala.",
+                terapie: "Mentine obiceiurile sanatoase. Cultiva recunostinta."
+            },
+            {
+                stare: "Dezechilibru usor (Hiperfunctie)",
+                fiziologic: "Usoara stagnare de Qi sau Vant-Frig. Tuse ocazionala, nas usor infundat, stranut. Dureri de gat. Constipatie usoara.",
+                nutritie: "Ceapa verde, usturoi, ghimbir proaspat, busuioc, menta. Supe calde. Evita lactatele si dulciurile.",
+                suplimente: "Vitamina C, Zinc, ceai de menta sau ghimbir.",
+                emotional: "Usoara iritabilitate, perfectionism, oftat. Dificultate in a lasa de la sine.",
+                relatiiParinti: "Usoara tensiune cu autoritatea paterna.",
+                terapie: "Stretching. Masaj LU-7. Exercitii de respiratie. Organizarea prioritatilor."
+            },
+            {
+                stare: "Hiperfunctie moderata",
+                fiziologic: "Flegma-Umezeala. Tuse productiva, respiratie suieratoare, greutate in piept. Bronsite, sinuzite. Piele cu eruptii, eczeme, acnee. Muschi pectorali tensionati.",
+                nutritie: "Evita lactatele, zaharul, grasimile, prajelile. Multe legume, cereale (orz, hrisca), ghimbir, cardamom. Ceaiuri de cimbru, salvie, papadie.",
+                suplimente: "Magneziu, NAC, bromelaina, quercetina. Pinellia, platycodon. Probiotice.",
+                emotional: "Rigiditate mentala, obsesie pentru curatenie, dificultate de a delega. Tristete mascata sub iritabilitate.",
+                relatiiParinti: "Conflict deschis cu autoritatea paterna, rebeliune.",
+                terapie: "Terapie pentru perfectionism. Sport intens. Masaj LU-5, LU-7. Meditatie de acceptare."
+            },
+            {
+                stare: "Hiperfunctie severa",
+                fiziologic: "Flegma-Foc sau Vant-Caldură sever. Tuse violenta, expectoratie galben-verzuie, hemoptizie. Astm sever, pneumonii. Febra inalta, dureri toracice. Acnee chistica. Constipatie rebela.",
+                nutritie: "Regim strict, vegetarian, racoritor. Sucuri de legume si fructe. Ceaiuri reci de crizantema, papadie, menta.",
+                suplimente: "NAC, quercetina, vitamina C, probiotice. Plante calmante (musetel, salvie).",
+                emotional: "Frustrare extrema, furie, sufocare. Comportament obsesiv-compulsiv. Depresie agitata.",
+                relatiiParinti: "Conflict devastator cu autoritatea paterna. Ruptura interioara.",
+                terapie: "Tratament medical de urgenta. Acupunctura de dispersare (LU-5, LU-10). Consiliere psihologica. Qi Gong pentru Metal."
+            }
+        ];
+
+        // Elemente DOM
+        var selectPlaman = document.getElementById('select-plaman');
+        var barContainer = document.querySelector('.bar-container');
+        var arrow = document.getElementById('indicator-plaman');
+        var isDragging = false;
+
+        // Functia de afisare
+        function afiseazaInformatii(meridianId, index) {
+            var data = meridianLungData[index];
+            if (!data) return;
+            var infoDisplay = document.getElementById('infoDisplay-' + meridianId);
+            infoDisplay.innerHTML = '<h3>Stare: ' + data.stare + '</h3>' +
+                '<p><strong>Fiziologie & Simptome:</strong><br>' + data.fiziologic + '</p>' +
+                '<p><strong>Nutritie recomandata:</strong><br>' + data.nutritie + '</p>' +
+                '<p><strong>Suplimente & plante medicinale:</strong><br>' + data.suplimente + '</p>' +
+                '<p><strong>Stare emotionala & Po:</strong><br>' + data.emotional + '</p>' +
+                '<p><strong>Relatia cu parintii (Metal):</strong><br>' + data.relatiiParinti + '</p>' +
+                '<p><strong>Terapie & stil de viata:</strong><br>' + data.terapie + '</p>';
+        }
+
+        // Functia de actualizare pozitie
+        function updateFromPosition(clientX) {
+            var rect = barContainer.getBoundingClientRect();
+            var x = clientX - rect.left;
+            var width = rect.width;
+            if (x < 0) x = 0;
+            if (x > width) x = width;
+            var totalSegments = 7;
+            var segmentWidth = width / totalSegments;
+            var index = Math.floor(x / segmentWidth);
+            if (index >= totalSegments) index = totalSegments - 1;
+            selectPlaman.value = index;
+            var procent = (index * segmentWidth) + (segmentWidth / 2);
+            arrow.style.left = ((procent / width) * 100) + '%';
+            afiseazaInformatii('plaman', index);
+        }
+
+        // Evenimente mouse
+        barContainer.addEventListener('click', function(e) {
+            if (!isDragging) updateFromPosition(e.clientX);
+        });
+        barContainer.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            updateFromPosition(e.clientX);
+            e.preventDefault();
+        });
+        document.addEventListener('mousemove', function(e) {
+            if (isDragging) updateFromPosition(e.clientX);
+        });
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+        });
+
+        // Eveniment dropdown
+        selectPlaman.addEventListener('change', function() {
+            var index = parseInt(selectPlaman.value, 10);
+            var totalSegments = 7;
+            var segmentWidth = 100 / totalSegments;
+            var procent = (index * segmentWidth) + (segmentWidth / 2);
+            arrow.style.left = procent + '%';
+            afiseazaInformatii('plaman', index);
+        });
+
+        // Initializare
+        var initialIndex = parseInt(selectPlaman.value, 10);
+        var totalSegments = 7;
+        var segmentWidth = 100 / totalSegments;
+        var procentInit = (initialIndex * segmentWidth) + (segmentWidth / 2);
+        arrow.style.left = procentInit + '%';
+        afiseazaInformatii('plaman', initialIndex);
+
+        // Securitate
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'c') e.preventDefault();
+            if (e.ctrlKey && e.key === 'u') e.preventDefault();
+            if (e.key === 'F12') e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') e.preventDefault();
+        });
+    </script>
+
+</body>
+</html>

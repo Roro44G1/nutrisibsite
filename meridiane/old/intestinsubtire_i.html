@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafic Interactiv Meridian Intestin Subțire – Evaluare și Recomandări</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .infographic-container {
+            flex-grow: 1;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .meridian-section {
+            width: 100%;
+            max-width: 750px;
+        }
+        h2 {
+            font-size: 2em;
+            font-weight: 700;
+            color: #0A2463;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        select {
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #3E92CC;
+            background-color: #e0f2f7;
+            color: #0A2463;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+        }
+        select:hover {
+            border-color: #0A2463;
+            background-color: #d1eff6;
+        }
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(62, 146, 204, 0.4);
+        }
+        .bar-container {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            border: 3px solid #0A2463;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+        .segment {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+        }
+        .segment.extreme-red    { background-color: #EF4444; }
+        .segment.moderate-yellow { background-color: #FACC15; }
+        .segment.tendency-blue   { background-color: #3B82F6; }
+        .segment.balanced-green  { background-color: #22C55E; }
+        .arrow {
+            position: absolute;
+            bottom: 5px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #212529;
+            transform: translateX(-50%);
+            transition: left 0.4s ease-in-out;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            z-index: 10;
+        }
+        .info-box {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+        .info-box h3 {
+            font-size: 1.4em;
+            color: #0A2463;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            border-bottom: 2px dashed #3E92CC;
+            padding-bottom: 0.5rem;
+        }
+        .info-box p {
+            font-size: 1.05em;
+            margin-bottom: 0.75rem;
+            color: #333;
+            line-height: 1.6;
+        }
+        .footer-copyright {
+            text-align: center;
+            padding: 1rem;
+            background-color: #e9ecef;
+            color: #495057;
+            font-size: 0.9em;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            h2 { font-size: 1.6em; }
+            .bar-container { height: 35px; }
+            .segment { font-size: 0.7em; }
+            .info-box { padding: 1.2rem; }
+            .info-box h3 { font-size: 1.2em; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="infographic-container">
+        <div class="meridian-section">
+            <h2>Evaluare interactivă: starea meridianului intestin subțire</h2>
+
+            <select id="select-intestin-subtire">
+                <option value="0">Hipofuncție severă</option>
+                <option value="1">Hipofuncție moderată</option>
+                <option value="2">Dezechilibru ușor (Hipofuncție)</option>
+                <option value="3" selected>Echilibru</option>
+                <option value="4">Dezechilibru ușor (Hiperfuncție)</option>
+                <option value="5">Hiperfuncție moderată</option>
+                <option value="6">Hiperfuncție severă</option>
+            </select>
+
+            <div class="bar-container">
+                <div class="segment extreme-red">---</div>
+                <div class="segment moderate-yellow">--</div>
+                <div class="segment tendency-blue">-</div>
+                <div class="segment balanced-green">=</div>
+                <div class="segment tendency-blue">+</div>
+                <div class="segment moderate-yellow">++</div>
+                <div class="segment extreme-red">+++</div>
+                
+                <div class="arrow" id="indicator-intestin-subtire"></div>
+            </div>
+
+            <div id="infoDisplay-intestin-subtire" class="info-box"></div>
+        </div>
+    </div>
+
+    <footer class="footer-copyright">
+        <p>Copyright: dr.ing. Radu Pascu - 2025</p>
+    </footer>
+
+    <script>
+        const meridianSmallIntestineData = [
+            {
+                stare: "Hipofuncție severă",
+                fiziologic: "Deficiență majoră de Qi și Yang, cu malabsorbție severă. Subnutriție, anemie cronică (fier, B12), scădere în greutate, oboseală extremă, intoleranță la majoritatea alimentelor. Diaree cronică nedigerată, balonare dureroasă, senzație constantă de frig abdominal. Dureri cronice lombare și de șold. Tinitus cu tonalitate joasă, hipoacuzie progresivă. Piele palidă, uscată, descuamată. Membre reci, umăr înghețat bilateral. Anxietate și depresie profunde. Incapacitate de a lua decizii simple.",
+                nutritie: "Intervenție medicală și nutrițională urgentă. Alimentație terapeutică: supe de oase concentrată, piureuri de legume fierte, orez alb bine fiert, pește slab, ghimbir, scorțișoară. Mese mici și foarte dese. Evită complet lactatele, glutenul, fibrele insolubile, alimentele reci și crude. Hidratare cu ceai cald de ghimbir și mușețel.",
+                suplimente: "Enzime digestive puternice, probiotice (Lactobacillus, Bifidobacterium), glutamină, zinc-carnosină, fier, B12 (metilcobalamină), vitamina D3, Omega-3. Extract de rădăcină de păpădie. Sub strictă supraveghere medicală.",
+                emotional: "Confuzie mentală profundă, „ceață cerebrală” constantă, incapacitate de a distinge ce este important. Frustrare, autoînvinovățire, depresie, apatie. Sentiment de a fi „gol pe dinăuntru”, de a nu putea asimila nimic bun din viață. Izolare socială.",
+                relatiiParinti: "Traumă profundă legată de incapacitatea de a primi iubirea și grija maternă. Sentiment de respingere, abandon. Dificultate extremă de a se desprinde de trecut. Nevoia disperată de validare, dar incapacitatea de a o accepta.",
+                terapie: "Acupunctură de tonifiere: SI-3, SI-4, ST-25, CV-6 cu moxibustie. Consiliere pentru traume de atașament. Jurnal de claritate. Qi Gong pentru Foc (mișcări blânde, centrare). Meditație ghidată pentru discernământ."
+            },
+            {
+                stare: "Hipofuncție moderată",
+                fiziologic: "Deficiență de Qi cu malabsorbție moderată. Balonare postprandială, scaune inconsistente, alternanță diaree/constipație ușoară. Oboseală după masă, ușoară anemie. Dureri lombare și de umăr recurente. Tinitus intermitent. Piele ternă, ten palid. Răceli frecvente.",
+                nutritie: "Alimente gătite, calde, ușor digerabile. Legume fierte, cereale integrale bine preparate (orez, hrișcă), pește, pui, ouă. Ghimbir, cardamom, turmeric. Mestecare minuțioasă. Evită cruditățile, lactatele, prăjelile.",
+                suplimente: "Enzime digestive, probiotice, fier (dacă e necesar), vitamina B complex, zinc, glutamină.",
+                emotional: "Dificultăți de concentrare, indecizie, ușoară confuzie mentală. Tendință la ruminație obsesivă. Frustrare și autoînvinovățire. Tristețe difuză.",
+                relatiiParinti: "Dificultăți în a accepta ajutorul și afecțiunea mamei. Tendință de a se simți neiubit. Nevoie de aprobare constantă.",
+                terapie: "Dietă ușoară, mese regulate. Masaj SI-3, ST-36. Consiliere pentru stimă de sine. Plimbări relaxante."
+            },
+            {
+                stare: "Dezechilibru ușor (Hipofuncție)",
+                fiziologic: "Ușoare tulburări de digestie, balonare ocazională, disconfort după mese grele sau reci. Oboseală ușoară, tranzit ușor neregulat. Dureri de umăr și gât ocazionale. Tinitus discret.",
+                nutritie: "Alimentație echilibrată, cu accent pe mâncăruri calde și hrănitoare. Include condimente carminative (chimen, anason, fenicul). Mestecare conștientă.",
+                suplimente: "Enzime digestive la nevoie, probiotice, multivitamine.",
+                emotional: "Ușoară dificultate în a tria informațiile, tendință la amânarea deciziilor. Uneori autocritic.",
+                relatiiParinti: "Mici nemulțumiri legate de așteptările familiei, fără conflict deschis.",
+                terapie: "Mindfulness. Masaj SI-3. Organizarea priorităților."
+            },
+            {
+                stare: "Echilibru",
+                fiziologic: "Digestie și absorbție optime. Energie stabilă, imunitate puternică. Scaune regulate, fără disconfort. Umeri relaxați, fără dureri. Auz clar, fără tinitus. Piele sănătoasă, ten luminos. Capacitate excelentă de sinteză și decizie.",
+                nutritie: "Dietă variată, bogată în fibre solubile, proteine de calitate, grăsimi sănătoase. Alimente fermentate, cereale integrale, legume și fructe proaspete. Hidratare optimă.",
+                suplimente: "Probiotice de întreținere, multivitamine, Omega-3. Ceaiuri digestive: mentă, mușețel, fenicul.",
+                emotional: "Claritate mentală, discernământ ascuțit, capacitate de sinteză. Judecată sănătoasă, decizii rapide și corecte. Echilibru emoțional, deschidere către nou, umor bun.",
+                relatiiParinti: "Relații sănătoase, echilibrate. Capacitate de a primi și oferi iubire. Independență emoțională.",
+                terapie: "Menține obiceiurile sănătoase. Continuă creșterea personală. Cultivă recunoștința."
+            },
+            {
+                stare: "Dezechilibru ușor (Hiperfuncție)",
+                fiziologic: "Ușoară agitație interioară, tendință la suprasolicitare. Rigiditate cervicală matinală, mâini și picioare ușor reci. Urinări ușor frecvente, sete ușoară. Tinitus ocazional (tonalitate înaltă). Constipație ușoară intermitentă.",
+                nutritie: "Alimente răcoritoare: castraveți, pepene, pere, spanac. Cereale (orz, mei). Evită cafeina, alcoolul, alimentele picante. Hidratare bună.",
+                suplimente: "Magneziu, probiotice, ceaiuri de păpădie, crizantemă.",
+                emotional: "Neliniște, tendința de a face mai multe lucruri simultan, dificultate în a te relaxa. Caracter hotărât, dar cu ușoară tendință la control.",
+                relatiiParinti: "Ușoară tensiune cu autoritatea paternă, senzația de a fi constrâns de reguli.",
+                terapie: "Exerciții de stretching pentru gât și umeri. Respirație profundă. Masaj SI-3. Pauze regulate."
+            },
+            {
+                stare: "Hiperfuncție moderată",
+                fiziologic: "Căldură sau stagnare de Qi manifestă. Rigiditate cervicală pronunțată, senzație de rece paradoxală în plexul solar, mâini/picioare reci. Circulație deficitară pelvină, urinări frecvente, probleme vezicale. Constipație cronică alternând cu diaree iritabilă. Piele înroșită și dureri tăioase pe traiectul meridianului. Tinitus persistent (suierător).",
+                nutritie: "Dietă antiinflamatorie, cu alimente răcoritoare și drenante. Sucuri de legume, fibre solubile (in, psyllium). Evită carnea roșie, grăsimile saturate, prăjelile, cafeaua, alcoolul.",
+                suplimente: "Magneziu, Omega-3, probiotice, ceaiuri de anghinare, păpădie, armurariu. Extracte calmante (roiniță, valeriană).",
+                emotional: "Agitație marcată, suprasolicitare cronică, „workaholic”. Incapabil de relaxare, mănâncă pe fugă. Obsedat de detalii, critic, iritabil. Tinitusul accentuează neliniștea.",
+                relatiiParinti: "Conflict deschis cu autoritatea paternă, rebeliune, luptă pentru control. Resentimente.",
+                terapie: "Terapie pentru managementul stresului. Sport moderat. Meditație de iertare. Acupresură SI-3, SI-19, GV-20. Stabilirea unor limite stricte de muncă."
+            },
+            {
+                stare: "Hiperfuncție severă",
+                fiziologic: "Foc extrem sau stagnare severă. Rigiditate cervicală blocantă, dureri fulminante de umăr și braț. Circulație pelvină compromisă, cistite recurente, constipație rebelă cu alternanță diareică. Tinitus intens, continuu, cu impact psihic major. Inflamații pe traiectul meridianului. Risc de hernie inghinală. Epuizare prin hiperactivitate.",
+                nutritie: "Intervenție medicală de urgență. Regim strict, vegetarian, răcoritor. Post intermitent sub supraveghere. Ceaiuri medicinale reci: crizantemă, păpădie, bupleurum.",
+                suplimente: "Sub strict control medical. Pot fi necesare antiinflamatoare, sedative din plante (valeriană), probiotice puternice, Omega-3.",
+                emotional: "Agitație extremă, comportament obsesiv-compulsiv, incapacitate totală de relaxare. Claritate mentală distorsionată în obsesie pentru detalii inutile. Iritabilitate explozivă, frustrare cronică, autoînvinovățire severă.",
+                relatiiParinti: "Conflict devastator cu autoritatea paternă, respingere totală a oricărei structuri. Ruptură interioară, comportament auto-distructiv.",
+                terapie: "Tratament medical și psihologic de urgență. Acupunctură de dispersare. Consiliere intensivă pentru traume. Reconstrucția capacității de relaxare și discernământ."
+            }
+        ];
+
+        const selectIntSub = document.getElementById('select-intestin-subtire');
+        const barContainer = document.querySelector('.bar-container');
+        const arrow = document.getElementById('indicator-intestin-subtire');
+        let isDragging = false;
+
+        function afiseazaInformatii(meridianId, index) {
+            let data = meridianSmallIntestineData[index];
+            if (!data) return;
+            const infoDisplay = document.getElementById(`infoDisplay-${meridianId}`);
+            infoDisplay.innerHTML = `
+                <h3>Stare: ${data.stare}</h3>
+                <p><strong>🧬 Fiziologie & Simptome:</strong><br>${data.fiziologic}</p>
+                <p><strong>🥗 Nutriție recomandată:</strong><br>${data.nutritie}</p>
+                <p><strong>💊 Suplimente & plante medicinale:</strong><br>${data.suplimente}</p>
+                <p><strong>🧠 Stare emoțională & Discernământ:</strong><br>${data.emotional}</p>
+                <p><strong>👪 Relația cu părinții (Foc – asimilare):</strong><br>${data.relatiiParinti}</p>
+                <p><strong>💆 Terapie & stil de viață:</strong><br>${data.terapie}</p>
+            `;
+        }
+
+        function updateFromPosition(clientX) {
+            const rect = barContainer.getBoundingClientRect();
+            let x = clientX - rect.left;
+            const width = rect.width;
+            x = Math.max(0, Math.min(x, width));
+            const totalSegments = 7;
+            const segmentWidth = width / totalSegments;
+            let index = Math.floor(x / segmentWidth);
+            if (index >= totalSegments) index = totalSegments - 1;
+            selectIntSub.value = index;
+            const procent = (index * segmentWidth) + (segmentWidth / 2);
+            arrow.style.left = `${(procent / width) * 100}%`;
+            afiseazaInformatii('intestin-subtire', index);
+        }
+
+        barContainer.addEventListener('click', (e) => {
+            if (!isDragging) updateFromPosition(e.clientX);
+        });
+        barContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            updateFromPosition(e.clientX);
+            e.preventDefault();
+        });
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) updateFromPosition(e.clientX);
+        });
+        document.addEventListener('mouseup', () => { isDragging = false; });
+        barContainer.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            updateFromPosition(e.touches[0].clientX);
+            e.preventDefault();
+        });
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging) updateFromPosition(e.touches[0].clientX);
+        });
+        document.addEventListener('touchend', () => { isDragging = false; });
+
+        selectIntSub.addEventListener('change', (event) => {
+            const index = parseInt(event.target.value, 10);
+            const totalSegments = 7;
+            const segmentWidth = 100 / totalSegments;
+            const procent = (index * segmentWidth) + (segmentWidth / 2);
+            arrow.style.left = `${procent}%`;
+            afiseazaInformatii('intestin-subtire', index);
+        });
+
+        // Inițializare
+        const initialIndex = parseInt(selectIntSub.value, 10);
+        const totalSegments = 7;
+        const segmentWidth = 100 / totalSegments;
+        const procentInit = (initialIndex * segmentWidth) + (segmentWidth / 2);
+        arrow.style.left = `${procentInit}%`;
+        afiseazaInformatii('intestin-subtire', initialIndex);
+
+        // Securitate
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'c') e.preventDefault();
+            if (e.ctrlKey && e.key === 'u') e.preventDefault();
+            if (e.key === 'F12') e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') e.preventDefault();
+        });
+    </script>
+
+</body>
+</html>
