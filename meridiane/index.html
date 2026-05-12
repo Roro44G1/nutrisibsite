@@ -1,198 +1,1043 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="ro" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index Meridiane Energetice - Program C.E.L.O.S.</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Index Meridiane Energetice — Program C.E.L.O.S. · NutriSib</title>
+    <meta name="description" content="Harta completă a meridianelor energetice MTC — anatomie, puncte, evaluare și protocoale de autoterapie. Program C.E.L.O.S., dr.ing. Radu Pascu, NutriSib Sibiu.">
+    <meta name="author" content="dr.ing. Radu Pascu - Nutrisib">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Link către fișierul CSS extern -->
-    <link rel="stylesheet" href="style.css">
-    <!-- Link către fișierul JS extern pentru paleta de culori și funcții comune -->
-    <script src="script.js"></script> 
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+
     <style>
-        /* Culoarea de fundal specifică pentru index */
-        body {
-            background-color: #ffffff; /* Alb pentru index */
-        }
-        .meridian-card {
-            /* Background color will be set dynamically by script.js */
-            border-radius: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            padding: 1.5rem;
-            text-align: center;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            border: 1px solid #e0e0e0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            height: 100%; /* Ensure cards have equal height */
-        }
-        .meridian-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-        .meridian-card h3 {
-            font-size: 1.25em; /* text-xl */
-            font-weight: 600;
-            color: #0A2463; /* Dark blue */
-            margin-bottom: 0.75rem;
-        }
-        .meridian-card p {
-            font-size: 0.95em;
-            color: #475569; /* Slate-700 */
-            flex-grow: 1; /* Allow paragraph to take available space */
-        }
-        .meridian-link {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.6rem 1.2rem;
-            background-color: #3E92CC; /* Medium blue */
-            color: white;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            font-weight: 600;
-            transition: background-color 0.2s ease;
-        }
-        .meridian-link:hover {
-            background-color: #0A2463; /* Dark blue on hover */
-        }
+    /* ── Grilă meridiane — 2 coloane fixe ── */
+    .meridiane-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+        margin-top: 0.75rem;
+    }
+    @media (max-width: 560px) {
+        .meridiane-grid { grid-template-columns: 1fr; gap: 0.85rem; }
+    }
+
+    /* ── Sub-separator Yin / Yang în cadrul unui element ── */
+    .sub-separator {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.25rem 0;
+    }
+    .sub-separator-pill {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.68rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.2rem 0.75rem;
+        border-radius: 99px;
+        color: white;
+        white-space: nowrap;
+        opacity: 0.82;
+    }
+    .sub-separator-line {
+        flex: 1;
+        height: 1px;
+        background: var(--color-border);
+        border-radius: 99px;
+    }
+    .pill-yin  { background: #be123c; }
+    .pill-yang { background: #b45309; }
+
+    /* ── Card meridian ── */
+    .merid-card {
+        background: white;
+        border-radius: var(--radius-card);
+        border: 1px solid var(--color-border);
+        box-shadow: var(--shadow-card);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.22s ease, box-shadow 0.22s ease;
+        animation: cardFadeUp 0.4s ease both;
+    }
+    .merid-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(10, 36, 99, 0.13);
+    }
+    @keyframes cardFadeUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Imagine / ilustrație */
+    .merid-img-wrap {
+        width: 100%;
+        height: 140px;
+        overflow: hidden;
+        position: relative;
+        flex-shrink: 0;
+    }
+    .merid-img-wrap svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+        transition: transform 0.4s ease;
+    }
+    .merid-card:hover .merid-img-wrap svg {
+        transform: scale(1.04);
+    }
+
+    /* Badge element */
+    .merid-element-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        font-size: 0.6rem;
+        font-weight: 700;
+        font-family: 'Inter', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        padding: 0.2rem 0.55rem;
+        border-radius: 99px;
+        color: white;
+        backdrop-filter: blur(4px);
+    }
+
+    /* Corp card */
+    .merid-body {
+        padding: 1rem 1.1rem 1.1rem;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+    .merid-top {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+    .merid-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+    .merid-title {
+        font-family: 'Lora', serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--color-navy);
+        margin: 0;
+        line-height: 1.25;
+    }
+    .merid-meta {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        color: var(--color-text-light);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        margin-bottom: 0.5rem;
+    }
+    .merid-desc {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.8rem;
+        color: var(--color-text-light);
+        line-height: 1.55;
+        flex-grow: 1;
+        margin: 0 0 0.85rem;
+    }
+    .merid-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+    .merid-ore {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: var(--color-text-light);
+        background: var(--color-brand-light);
+        padding: 0.18rem 0.55rem;
+        border-radius: 99px;
+        white-space: nowrap;
+    }
+    .merid-link-text {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+        transition: gap 0.2s;
+    }
+    .merid-card:hover .merid-link-text { gap: 0.4rem; }
+
+    /* Accent bordura stanga per element */
+    .el-lemn    { border-left: 3px solid #22c55e; }
+    .el-foc     { border-left: 3px solid #ef4444; }
+    .el-pamant  { border-left: 3px solid #eab308; }
+    .el-metal   { border-left: 3px solid #94a3b8; }
+    .el-apa     { border-left: 3px solid #3b82f6; }
+    .el-special { border-left: 3px solid #a855f7; }
+
+    /* Culori link text per element */
+    .el-lemn   .merid-link-text { color: #15803d; }
+    .el-foc    .merid-link-text { color: #dc2626; }
+    .el-pamant .merid-link-text { color: #a16207; }
+    .el-metal  .merid-link-text { color: #475569; }
+    .el-apa    .merid-link-text { color: #1d4ed8; }
+    .el-special .merid-link-text { color: #7e22ce; }
+
+    /* Badge element culori */
+    .el-lemn   .merid-element-badge { background: rgba(21,128,61,.75); }
+    .el-foc    .merid-element-badge { background: rgba(220,38,38,.75); }
+    .el-pamant .merid-element-badge { background: rgba(161,98,7,.75); }
+    .el-metal  .merid-element-badge { background: rgba(71,85,105,.75); }
+    .el-apa    .merid-element-badge { background: rgba(29,78,216,.75); }
+    .el-special .merid-element-badge { background: rgba(126,34,206,.75); }
+
+    /* Dot culori */
+    .el-lemn   .merid-dot { background: #22c55e; }
+    .el-foc    .merid-dot { background: #ef4444; }
+    .el-pamant .merid-dot { background: #eab308; }
+    .el-metal  .merid-dot { background: #94a3b8; }
+    .el-apa    .merid-dot { background: #3b82f6; }
+    .el-special .merid-dot { background: #a855f7; }
+
+    /* ── Separator secțiune element ── */
+    .element-separator {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 1.75rem 0 0.5rem;
+    }
+    .element-separator-pill {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.3rem 1rem;
+        border-radius: 99px;
+        color: white;
+        white-space: nowrap;
+    }
+    .element-separator-line {
+        flex: 1;
+        height: 2px;
+        background: var(--color-border);
+        border-radius: 99px;
+    }
+    .pill-lemn    { background: #15803d; }
+    .pill-foc     { background: #dc2626; }
+    .pill-pamant  { background: #a16207; }
+    .pill-metal   { background: #475569; }
+    .pill-apa     { background: #1d4ed8; }
+    .pill-special { background: #7e22ce; }
+
+    /* ── Legend ── */
+    .legend-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 1.25rem;
+        padding: 1rem 1.25rem;
+        background: white;
+        border-radius: var(--radius-card);
+        border: 1px solid var(--color-border);
+        box-shadow: var(--shadow-card);
+        margin-bottom: 1.5rem;
+    }
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.75rem;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        color: var(--color-text-medium);
+    }
+    .legend-swatch {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    /* ── Card special funcționalitate ── */
+    .merid-card.special-card {
+        background: var(--color-navy);
+        color: white;
+    }
+    .merid-card.special-card .merid-title { color: var(--color-gold); }
+    .merid-card.special-card .merid-desc  { color: rgba(255,255,255,0.72); }
+    .merid-card.special-card .merid-meta  { color: rgba(255,255,255,0.5); }
+    .merid-card.special-card .merid-ore   { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); }
+    .merid-card.special-card .merid-link-text { color: var(--color-gold); }
     </style>
 </head>
 <body>
-    <div class="infographic-container">
-        <div class="infographic-header">
-            Meridianele energetice: harta vitalității interioare
+
+<div class="container-main">
+
+    <!-- NAV -->
+    <header class="nav-bar">
+        <a href="../index.html" class="nav-brand">
+            <img src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="Sigla NutriSib" class="logo-image" onerror="this.style.display='none'">
+        </a>
+        <div class="nav-links">
+            <a href="../index.html">Acasă</a>
+            <a href="../index.html#metoda">Metoda</a>
+            <a href="../blog/index.html">Blog</a>
+            <a href="index.html" class="active">Meridiane</a>
+            <a href="../contact.html">Contact</a>
         </div>
+        <button class="mobile-menu-btn" onclick="const n=document.querySelector('.nav-links');n.style.display=n.style.display==='flex'?'none':'flex'">☰</button>
+    </header>
 
-        <section class="section">
-            <h2 class="section-title">Explorează căile energiei *Qi* în corpul tău</h2>
-            <div class="section-content">
-                <p class="text-slate-600 mb-8 max-w-full mx-auto text-center">
-                    Meridianele energetice, piloni ai medicinei tradiționale chineze, sunt căi invizibile prin care circulă energia vitală (*Qi*) și sângele (*Xue*) în întregul corp. Ele conectează organele interne, țesuturile și influențează fiecare aspect al sănătății fizice, mentale și emoționale. Descoperă harta complexă a acestor canale și rolul lor crucial în menținerea echilibrului și a bunăstării tale.
-                </p>
-            </div>
-        </section>
+    <main>
 
-        <section class="section">
-            <h2 class="section-title">Meridianele principale și extraordinare</h2>
-            <div class="section-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Meridianul Plămân -->
-                <div class="meridian-card" style="background-color: var(--lung-pale);">
-                    <h3>Meridianul plămân</h3>
-                    <p>Energie Yin, element Metal. Controlează respirația, *Qi*-ul și energia de apărare. Asociat cu tristețea și integritatea.</p>
-                    <a href="plaman_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-                
-                <!-- Meridianul Inimă -->
-                <div class="meridian-card" style="background-color: var(--heart-pale);">
-                    <h3>Meridianul inimă</h3>
-                    <p>Energie Yin, element Foc. Guvernează sângele, conștiința (*Shen*) și emoțiile. Asociat cu bucuria și iubirea.</p>
-                    <a href="inima_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-
-                <!-- Meridianul Pericard -->
-                <div class="meridian-card" style="background-color: var(--pericard-pale);">
-                    <h3>Meridianul pericard</h3>
-                    <p>Energie Yin, element Foc. Protejează inima și controlează circulația și funcția sexuală. Legat de relații și intimitate.</p>
-                    <a href="pericard_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-
-                <!-- Meridianul Splină-Pancreas -->
-                <div class="meridian-card" style="background-color: var(--spleen-pancreas-pale);">
-                    <h3>Meridianul splină-pancreas</h3>
-                    <p>Energie Yin, element Pământ. Transformă și transportă nutrienții, controlează imunitatea și gândirea. Asociat cu grijile și încrederea.</p>
-                    <a href="splinapancreas_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-
-                <!-- Meridianul Ficat -->
-                <div class="meridian-card" style="background-color: var(--liver-pale);">
-                    <h3>Meridianul ficat</h3>
-                    <p>Energie Yin, element Lemn. Asigură fluxul liber al *Qi*-ului și sângelui, detoxifierea și planificarea. Asociat cu furia și bunătatea.</p>
-                    <a href="ficat_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-
-                <!-- Meridianul Rinichi -->
-                <div class="meridian-card" style="background-color: var(--kidney-pale);">
-                    <h3>Meridianul rinichi</h3>
-                    <p>Energie Yin, element Apă. Depozitează energia ancestrală, controlează vitalitatea sexuală și oasele. Asociat cu frica și voința.</p>
-                    <a href="rinichi_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-
-                <!-- Meridianul Intestin Gros -->
-                <div class="meridian-card" style="background-color: var(--large-intestine-pale);">
-                    <h3>Meridianul intestin gros</h3>
-                    <p>Energie Yang, element Metal. Elimină reziduurile și detoxifiază. Asociat cu eliberarea și tristețea.</p>
-                    <a href="intestingros_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-
-                <!-- Meridianul Intestin Subțire -->
-                <div class="meridian-card" style="background-color: var(--small-intestine-pale);">
-                    <h3>Meridianul intestin subțire</h3>
-                    <p>Energie Yang, element Foc. Separa purul de impur, asimilează nutrienții și influențează discernământul.</p>
-                    <a href="intestinsubtire_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-
-                <!-- Meridianul Triplu Încălzitor -->
-                <div class="meridian-card" style="background-color: var(--triple-heater-pale);">
-                    <h3>Meridianul triplu încălzitor</h3>
-                    <p>Energie Yang, element Foc. Coordonare globală a consumului de energie, reglează fluidele și metabolismul.</p>
-                    <a href="treifocare_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-
-                <!-- Meridianul Stomac -->
-                <div class="meridian-card" style="background-color: var(--stomach-pale);">
-                    <h3>Meridianul stomac</h3>
-                    <p>Energie Yang, element Pământ. Primește și digeră alimentele, furnizează energie postnatală. Asociat cu gândirea și acceptarea.</p>
-                    <a href="stomac_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-
-                <!-- Meridianul Vezică Urinară -->
-                <div class="meridian-card" style="background-color: var(--urinary-bladder-pale);">
-                    <h3>Meridianul vezică urinară</h3>
-                    <p>Energie Yang, element Apă. Stochează și elimină urina, legat de sistemul nervos autonom. Asociat cu frica și voința.</p>
-                    <a href="vezicaurinara_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-
-                <!-- Meridianul Vezică Biliară -->
-                <div class="meridian-card" style="background-color: var(--gallbladder-pale);">
-                    <h3>Meridianul vezică biliară</h3>
-                    <p>Energie Yang, element Lemn. Stochează și excretă bila, reglează hotărârea și curajul. Asociat cu decizia și inițiativa.</p>
-                    <a href="vezicabiliara_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-
-                <!-- Meridianul Vas Guvernator -->
-                <div class="meridian-card" style="background-color: var(--governing-vessel-pale);">
-                    <h3>Meridianul vas guvernator</h3>
-                    <p>Meridian extraordinar Yang. Controlează toate meridianele Yang, legat de creativitate, claritate mentală și voință.</p>
-                    <a href="vasguvernator_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-
-                <!-- Meridianul Vas de Concepție -->
-                <div class="meridian-card" style="background-color: var(--conception-vessel-pale);">
-                    <h3>Meridianul vas de concepție</h3>
-                    <p>Meridian extraordinar Yin. Controlează meridianele Yin, legat de regenerare, ciclul menstrual și calm interior.</p>
-                    <a href="vasconceptie_m.html" class="meridian-link">Detalii &raquo;</a>
-                </div>
-
-                 <!-- Index interactiv-->
-                <div class="meridian-card" style="background-color: var(--index-lung-pale);">
-                    <h3>FUNCȚIONALITATE</h3>
-                    <p>Analiza funcționalității meridianelor</p>
-                    <a href="index-i.html" class="meridian-link">Detalii &raquo;</a>
+        <!-- HERO -->
+        <section class="hero-card">
+            <div class="hero-content">
+                <h1 class="hero-title">Meridianele energetice</h1>
+                <p class="hero-subtitle"><em>Harta circulației Qi în organism — anatomie, ore, puncte și protocoale de autoterapie pentru fiecare din cele 14 meridiane principale.</em></p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-num">14</div>
+                        <div class="hero-stat-label">Meridiane</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-num">361+</div>
+                        <div class="hero-stat-label">Puncte acupunctură</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-num">5</div>
+                        <div class="hero-stat-label">Elemente</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-num">MTC</div>
+                        <div class="hero-stat-label">Medicină clasică</div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <footer class="footer-copyright">
-            <p>Copyright: dr.ing. Radu Pascu - 2025-2026</p>
-        </footer>
-    </div>
+        <!-- CONTINUT PRINCIPAL -->
+        <section class="content-card">
+
+            <p class="section-desc">
+                Meridianele energetice sunt căi prin care circulă energia vitală (<em>Qi</em>) și sângele (<em>Xue</em>) în tot corpul. Ele conectează organele interne, țesuturile și influențează fiecare aspect al sănătății fizice, mentale și emoționale. Fiecare meridian își atinge potențialul maxim la o anumită oră din zi — un KPI clinic esențial în evaluare.
+            </p>
+
+            <!-- Legenda elemente -->
+            <div class="legend-bar">
+                <div class="legend-item"><span class="legend-swatch" style="background:#22c55e"></span>Lemn (Ficat · Vezica biliara)</div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#ef4444"></span>Foc (Inimă · Pericard · Int. subțire · Triple Încălzitor)</div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#eab308"></span>Pământ (Splina · Stomac)</div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#94a3b8"></span>Metal (Plămâni · Int. gros)</div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#3b82f6"></span>Apa (Rinichi · Vezica urinara)</div>
+                <div class="legend-item"><span class="legend-swatch" style="background:#a855f7"></span>Extraordinar (Vas Gov. · Vas Concepție)</div>
+            </div>
+
+            <!-- ═══ LEMN ═══ -->
+            <div class="element-separator">
+                <span class="element-separator-pill pill-lemn">Lemn · Primăvară · Est</span>
+                <div class="element-separator-line"></div>
+            </div>
+            <div class="meridiane-grid">
+
+                <!-- Ficat LV -->
+                <a href="ficat.html" class="merid-card el-lemn">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gLV" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#dcfce7"/>
+                                    <stop offset="100%" stop-color="#86efac"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gLV)"/>
+                            <!-- corp stilizat: meridian pe piciorul stang -->
+                            <ellipse cx="100" cy="60" rx="45" ry="38" fill="#bbf7d0" opacity=".7"/>
+                            <ellipse cx="100" cy="60" rx="30" ry="25" fill="#4ade80" opacity=".5"/>
+                            <!-- linie meridian -->
+                            <polyline points="80,130 78,100 82,75 86,55 90,40 95,25 100,15 105,12" fill="none" stroke="#15803d" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="80" cy="130" r="4" fill="#15803d"/>
+                            <circle cx="82" cy="100" r="3.5" fill="#15803d"/>
+                            <circle cx="86" cy="75" r="3.5" fill="#15803d"/>
+                            <circle cx="90" cy="50" r="3.5" fill="#15803d"/>
+                            <circle cx="95" cy="28" r="3.5" fill="#15803d"/>
+                            <circle cx="105" cy="12" r="4" fill="#15803d"/>
+                            <!-- organ -->
+                            <path d="M160 45 Q200 25 240 50 Q255 75 235 95 Q210 115 175 100 Q150 85 160 65 Z" fill="#4ade80" opacity=".6"/>
+                            <path d="M170 55 Q200 42 228 58 Q238 75 222 88 Q200 100 178 90 Q160 78 170 63 Z" fill="#16a34a" opacity=".5"/>
+                            <!-- label -->
+                            <text x="200" y="125" font-family="sans-serif" font-size="11" fill="#15803d" font-weight="700" text-anchor="middle">Ficatul — LV</text>
+                            <text x="200" y="137" font-family="sans-serif" font-size="9" fill="#15803d" text-anchor="middle" opacity=".7">14 puncte · Yin · Jueyin</text>
+                        </svg>
+                        <span class="merid-element-badge">Lemn · Yin</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Meridianul ficatului</h3>
+                        </div>
+                        <div class="merid-meta">LV · 14 puncte · Zu Jueyin</div>
+                        <p class="merid-desc">Asigură fluxul liber al Qi-ului și sângelui, detoxifierea hepatică, planificarea. Spirit: Hun. Asociat furiei și bunătății.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">01:00 – 03:00</span>
+                            <span class="merid-link-text">Deschide <span class="merid-card-arrow">→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Vezica biliara GB -->
+                <a href="vezicabiliara.html" class="merid-card el-lemn">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gGB" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#d9f99d"/>
+                                    <stop offset="100%" stop-color="#86efac"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gGB)"/>
+                            <!-- traseu lateral capat corp -->
+                            <polyline points="240,10 230,22 215,35 200,50 185,65 195,82 205,95 190,112 175,128" fill="none" stroke="#65a30d" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6,3"/>
+                            <circle cx="240" cy="10" r="4" fill="#65a30d"/>
+                            <circle cx="215" cy="35" r="3.5" fill="#65a30d"/>
+                            <circle cx="185" cy="65" r="3.5" fill="#65a30d"/>
+                            <circle cx="205" cy="95" r="3.5" fill="#65a30d"/>
+                            <circle cx="175" cy="128" r="4" fill="#65a30d"/>
+                            <!-- cap stilizat -->
+                            <ellipse cx="80" cy="50" rx="40" ry="42" fill="#bbf7d0" opacity=".6"/>
+                            <ellipse cx="80" cy="50" rx="25" ry="27" fill="#84cc16" opacity=".4"/>
+                            <!-- bile drop -->
+                            <ellipse cx="130" cy="88" rx="16" ry="20" fill="#84cc16" opacity=".55"/>
+                            <ellipse cx="130" cy="85" rx="10" ry="12" fill="#4d7c0f" opacity=".4"/>
+                            <text x="85" y="128" font-family="sans-serif" font-size="11" fill="#3f6212" font-weight="700" text-anchor="middle">Vezica biliara — GB</text>
+                            <text x="85" y="140" font-family="sans-serif" font-size="9" fill="#3f6212" text-anchor="middle" opacity=".7">44 puncte · Yang · Shaoyang</text>
+                        </svg>
+                        <span class="merid-element-badge">Lemn · Yang</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Meridianul vezicii biliare</h3>
+                        </div>
+                        <div class="merid-meta">GB · 44 puncte · Zu Shaoyang</div>
+                        <p class="merid-desc">Stochează și excretă bila, reglează hotărârea și curajul. Pereche cu Ficatul. Asociat deciziei și inițiativei.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">23:00 – 01:00</span>
+                            <span class="merid-link-text">Deschide <span>→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+            </div><!-- /grid lemn -->
+
+            <!-- ═══ FOC ═══ -->
+            <div class="element-separator">
+                <span class="element-separator-pill pill-foc">Foc · Vară · Sud</span>
+                <div class="element-separator-line"></div>
+            </div>
+            <div class="meridiane-grid">
+
+                <!-- sub-separator Yin -->
+                <div class="sub-separator">
+                    <span class="sub-separator-pill pill-yin">Yin · Foc interior</span>
+                    <div class="sub-separator-line"></div>
+                </div>
+
+                <!-- Inima HT -->
+                <a href="inima.html" class="merid-card el-foc">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gHT" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#fee2e2"/>
+                                    <stop offset="100%" stop-color="#fca5a5"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gHT)"/>
+                            <!-- inima -->
+                            <path d="M150 105 C100 75 60 55 65 30 C70 10 100 8 120 25 C132 15 160 5 178 20 C200 38 190 65 150 105 Z" fill="#f87171" opacity=".6"/>
+                            <path d="M150 92 C112 68 80 52 84 34 C87 20 108 18 124 30 C133 22 155 14 168 27 C184 43 175 62 150 92 Z" fill="#ef4444" opacity=".5"/>
+                            <!-- traseu brat -->
+                            <polyline points="50,30 65,45 75,62 80,82 78,105 75,128" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="50" cy="30" r="4" fill="#dc2626"/>
+                            <circle cx="75" cy="62" r="3.5" fill="#dc2626"/>
+                            <circle cx="80" cy="82" r="3.5" fill="#dc2626"/>
+                            <circle cx="75" cy="128" r="4" fill="#dc2626"/>
+                            <text x="220" y="118" font-family="sans-serif" font-size="11" fill="#991b1b" font-weight="700" text-anchor="middle">Inima — HT</text>
+                            <text x="220" y="130" font-family="sans-serif" font-size="9" fill="#991b1b" text-anchor="middle" opacity=".7">9 puncte · Yin · Shaoyin</text>
+                        </svg>
+                        <span class="merid-element-badge">Foc · Yin</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Meridianul inimii</h3>
+                        </div>
+                        <div class="merid-meta">HT · 9 puncte · Shou Shaoyin</div>
+                        <p class="merid-desc">Guvernează sângele, conștiința (Shen) și emoțiile. Asociat cu bucuria și iubirea. Comandantul suprem al organelor.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">11:00 – 13:00</span>
+                            <span class="merid-link-text">Deschide <span>→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Pericard PC -->
+                <a href="pericard.html" class="merid-card el-foc">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gPC" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#ffe4e6"/>
+                                    <stop offset="100%" stop-color="#fda4af"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gPC)"/>
+                            <!-- pericard — inimă învelita -->
+                            <ellipse cx="155" cy="62" rx="52" ry="48" fill="#fca5a5" opacity=".4"/>
+                            <path d="M155 100 C115 72 80 55 84 32 C88 14 115 13 135 28 C143 20 170 12 185 26 C204 44 195 68 155 100 Z" fill="#f43f5e" opacity=".5"/>
+                            <ellipse cx="155" cy="62" rx="38" ry="34" fill="none" stroke="#e11d48" stroke-width="2" stroke-dasharray="5,3" opacity=".6"/>
+                            <!-- traseu brat  -->
+                            <polyline points="55,18 68,32 78,52 82,75 79,100 76,128" fill="none" stroke="#be123c" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="55" cy="18" r="4" fill="#be123c"/>
+                            <circle cx="78" cy="52" r="3.5" fill="#be123c"/>
+                            <circle cx="82" cy="75" r="3.5" fill="#be123c"/>
+                            <circle cx="76" cy="128" r="4" fill="#be123c"/>
+                            <text x="220" y="122" font-family="sans-serif" font-size="11" fill="#881337" font-weight="700" text-anchor="middle">Pericard — PC</text>
+                            <text x="220" y="134" font-family="sans-serif" font-size="9" fill="#881337" text-anchor="middle" opacity=".7">9 puncte · Yin · Jueyin</text>
+                        </svg>
+                        <span class="merid-element-badge">Foc · Yin</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Meridianul pericardului</h3>
+                        </div>
+                        <div class="merid-meta">PC · 9 puncte · Shou Jueyin</div>
+                        <p class="merid-desc">Protejează inima, controlează circulația și funcția sexuală. Legat de relații, intimitate și procesarea emoțională.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">19:00 – 21:00</span>
+                            <span class="merid-link-text">Deschide <span>→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- sub-separator Yang -->
+                <div class="sub-separator">
+                    <span class="sub-separator-pill pill-yang">Yang · Foc exterior</span>
+                    <div class="sub-separator-line"></div>
+                </div>
+
+                <!-- Intestin subtire SI -->
+                <a href="intestinsubtire.html" class="merid-card el-foc">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gSI" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#fff7ed"/>
+                                    <stop offset="100%" stop-color="#fed7aa"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gSI)"/>
+                            <!-- intestin stilizat ondulat -->
+                            <path d="M80 120 Q95 105 110 110 Q130 118 145 105 Q165 88 155 72 Q148 60 160 50 Q175 42 185 52 Q198 65 188 80 Q175 95 185 108 Q195 120 210 118" fill="none" stroke="#ea580c" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M80 120 Q95 100 108 106 Q128 114 143 100 Q160 82 152 67" fill="none" stroke="#fdba74" stroke-width="1.5" stroke-linecap="round" opacity=".7"/>
+                            <!-- brat -->
+                            <polyline points="55,15 62,30 68,50 66,72 60,95 55,120" fill="none" stroke="#c2410c" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="55" cy="15" r="4" fill="#c2410c"/>
+                            <circle cx="68" cy="50" r="3.5" fill="#c2410c"/>
+                            <circle cx="66" cy="72" r="3.5" fill="#c2410c"/>
+                            <circle cx="55" cy="120" r="4" fill="#c2410c"/>
+                            <text x="220" y="50" font-family="sans-serif" font-size="11" fill="#9a3412" font-weight="700" text-anchor="middle">Intestin subțire — SI</text>
+                            <text x="220" y="62" font-family="sans-serif" font-size="9" fill="#9a3412" text-anchor="middle" opacity=".7">19 puncte · Yang · Taiyang</text>
+                        </svg>
+                        <span class="merid-element-badge">Foc · Yang</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Meridianul intestinului subțire</h3>
+                        </div>
+                        <div class="merid-meta">SI · 19 puncte · Shou Taiyang</div>
+                        <p class="merid-desc">Separă purul de impur, asimilează nutrienții și influențează discernământul. Pereche cu Inimă.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">13:00 – 15:00</span>
+                            <span class="merid-link-text">Deschide <span>→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Triple Incalzitor TW -->
+                <a href="tripleincalzitor.html" class="merid-card el-foc">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gTW" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#fff7ed"/>
+                                    <stop offset="100%" stop-color="#fb923c"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gTW)"/>
+                            <!-- 3 zone incalzitoare -->
+                            <rect x="130" y="15" width="100" height="32" rx="8" fill="#fb923c" opacity=".4"/>
+                            <rect x="130" y="54" width="100" height="32" rx="8" fill="#f97316" opacity=".4"/>
+                            <rect x="130" y="93" width="100" height="32" rx="8" fill="#ea580c" opacity=".4"/>
+                            <text x="180" y="36" font-family="sans-serif" font-size="9" fill="#7c2d12" font-weight="700" text-anchor="middle">Jiao superior</text>
+                            <text x="180" y="75" font-family="sans-serif" font-size="9" fill="#7c2d12" font-weight="700" text-anchor="middle">Jiao mediu</text>
+                            <text x="180" y="113" font-family="sans-serif" font-size="9" fill="#7c2d12" font-weight="700" text-anchor="middle">Jiao inferior</text>
+                            <!-- traseu brat -->
+                            <polyline points="60,128 65,108 68,85 66,62 68,38 72,18" fill="none" stroke="#c2410c" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="60" cy="128" r="4" fill="#c2410c"/>
+                            <circle cx="68" cy="85" r="3.5" fill="#c2410c"/>
+                            <circle cx="66" cy="62" r="3.5" fill="#c2410c"/>
+                            <circle cx="72" cy="18" r="4" fill="#c2410c"/>
+                            <text x="85" y="125" font-family="sans-serif" font-size="9" fill="#7c2d12" font-weight="600" text-anchor="middle">TW · 23 p.</text>
+                        </svg>
+                        <span class="merid-element-badge">Foc · Yang</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Meridianul triple încălzitor</h3>
+                        </div>
+                        <div class="merid-meta">TW · 23 puncte · Shou Shaoyang</div>
+                        <p class="merid-desc">Coordonează global consumul de energie, reglează fluidele și metabolismul. Cele 3 Jiao: superior, mediu și inferior.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">21:00 – 23:00</span>
+                            <span class="merid-link-text">Deschide <span>→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+            </div><!-- /grid foc -->
+
+            <!-- ═══ PAMANT ═══ -->
+            <div class="element-separator">
+                <span class="element-separator-pill pill-pamant">Pământ · Sfârșit de sezon · Centru</span>
+                <div class="element-separator-line"></div>
+            </div>
+            <div class="meridiane-grid">
+
+                <!-- Splina SP -->
+                <a href="splina.html" class="merid-card el-pamant">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gSP" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#fffbeb"/>
+                                    <stop offset="100%" stop-color="#fde68a"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gSP)"/>
+                            <!-- splina forma -->
+                            <path d="M175 35 Q215 20 240 45 Q255 65 240 90 Q220 115 190 108 Q160 100 155 78 Q148 55 175 35 Z" fill="#fcd34d" opacity=".55"/>
+                            <path d="M180 45 Q210 32 228 53 Q240 70 228 88 Q212 104 190 98 Q168 90 165 72 Q160 54 180 45 Z" fill="#d97706" opacity=".4"/>
+                            <!-- traseu picioare -->
+                            <polyline points="80,130 82,108 85,88 88,68 86,48 80,28 75,12" fill="none" stroke="#a16207" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="80" cy="130" r="4" fill="#a16207"/>
+                            <circle cx="85" cy="88" r="3.5" fill="#a16207"/>
+                            <circle cx="88" cy="68" r="3.5" fill="#a16207"/>
+                            <circle cx="75" cy="12" r="4" fill="#a16207"/>
+                            <text x="200" y="130" font-family="sans-serif" font-size="10" fill="#78350f" font-weight="700" text-anchor="middle">Splina-Pancreas — SP</text>
+                            <text x="200" y="142" font-family="sans-serif" font-size="9" fill="#78350f" text-anchor="middle" opacity=".7">21 puncte · Yin · Taiyin</text>
+                        </svg>
+                        <span class="merid-element-badge">Pământ · Yin</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Meridianul splinei-pancreas</h3>
+                        </div>
+                        <div class="merid-meta">SP · 21 puncte · Zu Taiyin</div>
+                        <p class="merid-desc">Transformă și transportă nutrienții, controlează imunitatea și gândirea. Asociat cu grijile și încrederea.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">09:00 – 11:00</span>
+                            <span class="merid-link-text">Deschide <span>→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Stomac ST -->
+                <a href="stomac.html" class="merid-card el-pamant">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gST" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#fefce8"/>
+                                    <stop offset="100%" stop-color="#fef08a"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gST)"/>
+                            <!-- stomac forma J -->
+                            <path d="M145 25 Q175 18 195 35 Q215 55 210 80 Q205 108 178 118 Q155 125 140 110 Q120 92 128 68 Q135 45 145 25 Z" fill="#fde047" opacity=".55"/>
+                            <path d="M150 35 Q172 28 186 42 Q200 60 196 80 Q191 103 172 111 Q153 117 142 102 Q128 86 134 67 Q140 48 150 35 Z" fill="#ca8a04" opacity=".4"/>
+                            <!-- traseu fata corp -->
+                            <polyline points="240,12 230,25 218,40 212,58 215,80 220,100 225,120 228,135" fill="none" stroke="#92400e" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="240" cy="12" r="4" fill="#92400e"/>
+                            <circle cx="215" cy="80" r="3.5" fill="#92400e"/>
+                            <circle cx="225" cy="120" r="3.5" fill="#92400e"/>
+                            <circle cx="228" cy="135" r="4" fill="#92400e"/>
+                            <text x="75" y="128" font-family="sans-serif" font-size="11" fill="#78350f" font-weight="700" text-anchor="middle">Stomac — ST</text>
+                            <text x="75" y="140" font-family="sans-serif" font-size="9" fill="#78350f" text-anchor="middle" opacity=".7">45 puncte · Yang · Yangming</text>
+                        </svg>
+                        <span class="merid-element-badge">Pământ · Yang</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Meridianul stomacului</h3>
+                        </div>
+                        <div class="merid-meta">ST · 45 puncte · Zu Yangming</div>
+                        <p class="merid-desc">Primește și digeră alimentele, furnizează energia postnatală. Cel mai lung meridian Yang. Asociat gândirii și acceptării.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">07:00 – 09:00</span>
+                            <span class="merid-link-text">Deschide <span>→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+            </div><!-- /grid pamant -->
+
+            <!-- ═══ METAL ═══ -->
+            <div class="element-separator">
+                <span class="element-separator-pill pill-metal">Metal · Toamnă · Vest</span>
+                <div class="element-separator-line"></div>
+            </div>
+            <div class="meridiane-grid">
+
+                <!-- Plamani LU -->
+                <a href="plamani.html" class="merid-card el-metal">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gLU" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#f8fafc"/>
+                                    <stop offset="100%" stop-color="#cbd5e1"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gLU)"/>
+                            <!-- plamani stilizati -->
+                            <path d="M100 30 Q75 25 62 45 Q48 68 55 92 Q62 112 82 118 Q102 122 112 105 Q120 90 115 68 Q110 48 100 30 Z" fill="#94a3b8" opacity=".45"/>
+                            <path d="M200 30 Q225 25 238 45 Q252 68 245 92 Q238 112 218 118 Q198 122 188 105 Q180 90 185 68 Q190 48 200 30 Z" fill="#94a3b8" opacity=".45"/>
+                            <!-- trahee -->
+                            <line x1="150" y1="10" x2="150" y2="50" stroke="#64748b" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M150 50 Q120 55 112 68" fill="none" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M150 50 Q180 55 188 68" fill="none" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+                            <!-- traseu brat -->
+                            <polyline points="55,128 58,108 60,85 56,62 50,40 45,18" fill="none" stroke="#475569" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="55" cy="128" r="4" fill="#475569"/>
+                            <circle cx="60" cy="85" r="3.5" fill="#475569"/>
+                            <circle cx="50" cy="40" r="3.5" fill="#475569"/>
+                            <circle cx="45" cy="18" r="4" fill="#475569"/>
+                            <text x="150" y="135" font-family="sans-serif" font-size="11" fill="#334155" font-weight="700" text-anchor="middle">Plămâni — LU</text>
+                        </svg>
+                        <span class="merid-element-badge">Metal · Yin</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Meridianul plămânilor</h3>
+                        </div>
+                        <div class="merid-meta">LU · 11 puncte · Shou Taiyin</div>
+                        <p class="merid-desc">Controlează respirația, Qi-ul și energia de apărare (Wei Qi). Asociat cu tristețea și integritatea.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">03:00 – 05:00</span>
+                            <span class="merid-link-text">Deschide <span>→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Intestin gros LI -->
+                <a href="intestingros.html" class="merid-card el-metal">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gLI" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#f1f5f9"/>
+                                    <stop offset="100%" stop-color="#e2e8f0"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gLI)"/>
+                            <!-- colon cadru -->
+                            <path d="M80 25 Q100 18 120 22 Q150 28 165 25 Q190 20 210 30 Q228 42 225 62 Q222 85 210 95 Q195 108 175 105 Q155 100 145 88 Q130 72 138 55 Q148 38 130 32 Q108 26 90 35 Q72 45 78 65 Q85 85 95 100 Q105 115 95 128" fill="none" stroke="#78716c" stroke-width="5" stroke-linecap="round"/>
+                            <!-- traseu brat -->
+                            <polyline points="240,128 238,108 235,85 238,62 242,40 245,18" fill="none" stroke="#44403c" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="240" cy="128" r="4" fill="#44403c"/>
+                            <circle cx="235" cy="85" r="3.5" fill="#44403c"/>
+                            <circle cx="242" cy="40" r="3.5" fill="#44403c"/>
+                            <circle cx="245" cy="18" r="4" fill="#44403c"/>
+                            <text x="115" y="132" font-family="sans-serif" font-size="10" fill="#292524" font-weight="700" text-anchor="middle">Intestin gros — LI</text>
+                            <text x="115" y="144" font-family="sans-serif" font-size="9" fill="#292524" text-anchor="middle" opacity=".7">20 puncte · Yang · Yangming</text>
+                        </svg>
+                        <span class="merid-element-badge">Metal · Yang</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Meridianul intestinului gros</h3>
+                        </div>
+                        <div class="merid-meta">LI · 20 puncte · Shou Yangming</div>
+                        <p class="merid-desc">Elimină reziduurile și detoxifică. Pereche cu Plămânii. Asociat cu eliberarea, tristețea și capacitatea de a lăsa să treacă.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">05:00 – 07:00</span>
+                            <span class="merid-link-text">Deschide <span>→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+            </div><!-- /grid metal -->
+
+            <!-- ═══ APA ═══ -->
+            <div class="element-separator">
+                <span class="element-separator-pill pill-apa">Apă · Iarnă · Nord</span>
+                <div class="element-separator-line"></div>
+            </div>
+            <div class="meridiane-grid">
+
+                <!-- Rinichi KD -->
+                <a href="rinichi.html" class="merid-card el-apa">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gKD" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#eff6ff"/>
+                                    <stop offset="100%" stop-color="#bfdbfe"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gKD)"/>
+                            <!-- rinichi stâng -->
+                            <path d="M90 45 Q75 35 68 50 Q60 68 68 85 Q78 100 92 95 Q108 88 112 72 Q116 55 90 45 Z" fill="#60a5fa" opacity=".55"/>
+                            <!-- rinichi drept -->
+                            <path d="M180 45 Q195 35 202 50 Q210 68 202 85 Q192 100 178 95 Q162 88 158 72 Q154 55 180 45 Z" fill="#60a5fa" opacity=".55"/>
+                            <!-- ureter si vezica -->
+                            <path d="M88 95 Q90 108 100 115 Q120 122 135 120 Q150 118 165 122 Q175 125 172 112 Q178 102 178 95" fill="none" stroke="#2563eb" stroke-width="2" opacity=".6"/>
+                            <ellipse cx="135" cy="125" rx="20" ry="10" fill="#3b82f6" opacity=".35"/>
+                            <!-- traseu picioare -->
+                            <polyline points="230,128 228,108 225,88 228,65 232,42 235,18" fill="none" stroke="#1d4ed8" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="230" cy="128" r="4" fill="#1d4ed8"/>
+                            <circle cx="225" cy="88" r="3.5" fill="#1d4ed8"/>
+                            <circle cx="232" cy="42" r="3.5" fill="#1d4ed8"/>
+                            <circle cx="235" cy="18" r="4" fill="#1d4ed8"/>
+                            <text x="90" y="130" font-family="sans-serif" font-size="11" fill="#1e3a8a" font-weight="700" text-anchor="middle">Rinichi — KD</text>
+                            <text x="90" y="142" font-family="sans-serif" font-size="9" fill="#1e3a8a" text-anchor="middle" opacity=".7">27 puncte · Yin · Shaoyin</text>
+                        </svg>
+                        <span class="merid-element-badge">Apa · Yin</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Meridianul rinichilor</h3>
+                        </div>
+                        <div class="merid-meta">KD · 27 puncte · Zu Shaoyin</div>
+                        <p class="merid-desc">Depozitează energia ancestrală (Jing), controlează vitalitatea sexuală și oasele. Spirit: Zhi (voința). Asociat fricii.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">17:00 – 19:00</span>
+                            <span class="merid-link-text">Deschide <span>→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Vezica urinara BL -->
+                <a href="vezicaurinara.html" class="merid-card el-apa">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gBL" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#dbeafe"/>
+                                    <stop offset="100%" stop-color="#93c5fd"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gBL)"/>
+                            <!-- coloana vertebrala stilizata -->
+                            <line x1="150" y1="8" x2="150" y2="130" stroke="#bfdbfe" stroke-width="8" stroke-linecap="round"/>
+                            <!-- vertebre -->
+                            <rect x="138" y="14" width="24" height="10" rx="3" fill="#93c5fd"/>
+                            <rect x="138" y="30" width="24" height="10" rx="3" fill="#93c5fd"/>
+                            <rect x="138" y="46" width="24" height="10" rx="3" fill="#93c5fd"/>
+                            <rect x="138" y="62" width="24" height="10" rx="3" fill="#93c5fd"/>
+                            <rect x="138" y="78" width="24" height="10" rx="3" fill="#93c5fd"/>
+                            <rect x="138" y="94" width="24" height="10" rx="3" fill="#93c5fd"/>
+                            <!-- traseu: 2 linii paralele pe spate -->
+                            <polyline points="90,10 92,30 90,55 88,80 86,105 82,130" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round"/>
+                            <polyline points="210,10 208,30 210,55 212,80 214,105 218,130" fill="none" stroke="#1d4ed8" stroke-width="2.2" stroke-linecap="round"/>
+                            <!-- vezica -->
+                            <ellipse cx="150" cy="130" rx="22" ry="12" fill="#3b82f6" opacity=".5"/>
+                            <text x="150" y="127" font-family="sans-serif" font-size="8" fill="white" font-weight="700" text-anchor="middle">BL</text>
+                            <text x="150" y="148" font-family="sans-serif" font-size="9" fill="#1e3a8a" font-weight="700" text-anchor="middle">Vezică urinară — 67 p.</text>
+                        </svg>
+                        <span class="merid-element-badge">Apa · Yang</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Meridianul vezicii urinare</h3>
+                        </div>
+                        <div class="merid-meta">BL · 67 puncte · Zu Taiyang</div>
+                        <p class="merid-desc">Cel mai lung meridian — 67 puncte de-a lungul spatelui. Stochează și elimină urina, legat de sistemul nervos autonom și memoria emoțională.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">15:00 – 17:00</span>
+                            <span class="merid-link-text">Deschide <span>→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+            </div><!-- /grid apa -->
+
+            <!-- ═══ EXTRAORDINARE ═══ -->
+            <div class="element-separator">
+                <span class="element-separator-pill pill-special">Meridiane extraordinare</span>
+                <div class="element-separator-line"></div>
+            </div>
+            <div class="meridiane-grid">
+
+                <!-- Vas Guvernator GV -->
+                <a href="vasguvernator.html" class="merid-card el-special">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gGV" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#faf5ff"/>
+                                    <stop offset="100%" stop-color="#e9d5ff"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gGV)"/>
+                            <!-- profil corp: linie posterioara -->
+                            <path d="M150 130 Q148 105 145 85 Q142 65 140 45 Q138 28 142 14" fill="none" stroke="#9333ea" stroke-width="3.5" stroke-linecap="round"/>
+                            <!-- coloana ornamentala -->
+                            <circle cx="143" cy="14" r="5" fill="#9333ea"/>
+                            <circle cx="143" cy="30" r="3.5" fill="#9333ea"/>
+                            <circle cx="143" cy="48" r="3.5" fill="#9333ea"/>
+                            <circle cx="143" cy="65" r="3.5" fill="#9333ea"/>
+                            <circle cx="144" cy="82" r="3.5" fill="#9333ea"/>
+                            <circle cx="146" cy="100" r="3.5" fill="#9333ea"/>
+                            <circle cx="150" cy="118" r="3.5" fill="#9333ea"/>
+                            <!-- cap -->
+                            <ellipse cx="150" cy="105" rx="52" ry="28" fill="#c4b5fd" opacity=".3"/>
+                            <ellipse cx="150" cy="55" rx="28" ry="32" fill="#c4b5fd" opacity=".3"/>
+                            <!-- GV-20 baihui -->
+                            <circle cx="143" cy="14" r="7" fill="none" stroke="#7e22ce" stroke-width="2"/>
+                            <text x="160" y="18" font-family="sans-serif" font-size="9" fill="#7e22ce">GV-20</text>
+                            <!-- GV-4 mingmen -->
+                            <circle cx="144" cy="82" r="6" fill="none" stroke="#7e22ce" stroke-width="2"/>
+                            <text x="158" y="86" font-family="sans-serif" font-size="9" fill="#7e22ce">GV-4</text>
+                            <text x="55" y="128" font-family="sans-serif" font-size="11" fill="#4c1d95" font-weight="700" text-anchor="middle">Vas Guvernator — GV</text>
+                            <text x="55" y="140" font-family="sans-serif" font-size="9" fill="#4c1d95" text-anchor="middle" opacity=".7">28 puncte · Yang · Du Mai</text>
+                        </svg>
+                        <span class="merid-element-badge">Extraordinar · Yang</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Vasul guvernator (Du Mai)</h3>
+                        </div>
+                        <div class="merid-meta">GV · 28 puncte · Du Mai</div>
+                        <p class="merid-desc">Controlează toate meridianele Yang, urcă pe coloană și ajunge la creier. Legat de creativitate, claritate mentală și voința.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">Meridian extraordinar</span>
+                            <span class="merid-link-text">Deschide <span>→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Vas Conceptie CV -->
+                <a href="vasconceptie.html" class="merid-card el-special">
+                    <div class="merid-img-wrap">
+                        <svg viewBox="0 0 300 140" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="gCV" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" stop-color="#fdf4ff"/>
+                                    <stop offset="100%" stop-color="#f0abfc"/>
+                                </linearGradient>
+                            </defs>
+                            <rect width="300" height="140" fill="url(#gCV)"/>
+                            <!-- linie anterioara -->
+                            <path d="M150 8 Q152 30 154 55 Q156 78 157 100 Q158 118 158 132" fill="none" stroke="#a855f7" stroke-width="3.5" stroke-linecap="round"/>
+                            <!-- puncte cheie -->
+                            <circle cx="150" cy="8" r="5" fill="#a855f7"/>
+                            <circle cx="152" cy="28" r="3.5" fill="#a855f7"/>
+                            <circle cx="153" cy="48" r="3.5" fill="#a855f7"/>
+                            <circle cx="155" cy="68" r="3.5" fill="#a855f7"/>
+                            <circle cx="156" cy="88" r="3.5" fill="#a855f7"/>
+                            <circle cx="157" cy="108" r="3.5" fill="#a855f7"/>
+                            <circle cx="158" cy="128" r="5" fill="#a855f7"/>
+                            <!-- corp anterior stilizat -->
+                            <ellipse cx="155" cy="68" rx="55" ry="60" fill="#e879f9" opacity=".12"/>
+                            <!-- CV-4 guanyuan -->
+                            <circle cx="156" cy="88" r="7" fill="none" stroke="#7e22ce" stroke-width="2"/>
+                            <text x="172" y="92" font-family="sans-serif" font-size="9" fill="#7e22ce">CV-4</text>
+                            <!-- CV-17 shanzhong -->
+                            <circle cx="153" cy="48" r="7" fill="none" stroke="#7e22ce" stroke-width="2"/>
+                            <text x="168" y="52" font-family="sans-serif" font-size="9" fill="#7e22ce">CV-17</text>
+                            <text x="60" y="128" font-family="sans-serif" font-size="11" fill="#4a044e" font-weight="700" text-anchor="middle">Vas Conceptie — CV</text>
+                            <text x="60" y="140" font-family="sans-serif" font-size="9" fill="#4a044e" text-anchor="middle" opacity=".7">24 puncte · Yin · Ren Mai</text>
+                        </svg>
+                        <span class="merid-element-badge">Extraordinar · Yin</span>
+                    </div>
+                    <div class="merid-body">
+                        <div class="merid-top">
+                            <div class="merid-dot"></div>
+                            <h3 class="merid-title">Vasul concepției (Ren Mai)</h3>
+                        </div>
+                        <div class="merid-meta">CV · 24 puncte · Ren Mai</div>
+                        <p class="merid-desc">Controlează meridianele Yin, urcă pe linia mediană anterioară. Legat de regenerare, ciclul menstrual și calmul interior.</p>
+                        <div class="merid-footer">
+                            <span class="merid-ore">Meridian extraordinar</span>
+                            <span class="merid-link-text">Deschide <span>→</span></span>
+                        </div>
+                    </div>
+                </a>
+
+
+            </div><!-- /grid special -->
+
+        </section><!-- /content-card -->
+
+        <!-- CTA CARD -->
+        <section class="cta-card">
+            <h3>Explorezi un dezechilibru specific?</h3>
+            <p>Rezervă o evaluare C.E.L.O.S. completă și obține un protocol personalizat bazat pe biorezonanță, acupunctură și nutriție funcțională.</p>
+            <div class="buttons-container">
+                <a href="https://nutrisib.club/contact.html" class="btn-gold">Rezervă evaluare</a>
+                <a href="https://nutrisib.club/blog/index.html" class="btn-pearl">Blog & Articole</a>
+            </div>
+        </section>
+
+        <div id="footer-placeholder"></div>
+
+    </main>
+</div><!-- /container-main -->
+
+<script>
+    // Footer dinamic
+    fetch('https://nutrisib.club/footer.html')
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
+        .then(d => { const c = document.getElementById('footer-placeholder'); if (c) c.innerHTML = d; })
+        .catch(() => {});
+
+    // Animatie staggered carduri
+    const cards = document.querySelectorAll('.merid-card');
+    cards.forEach((c, i) => {
+        c.style.animationDelay = (i * 0.06) + 's';
+    });
+</script>
+<script src="https://nutrisib.club/script_protect.js" defer></script>
 </body>
 </html>

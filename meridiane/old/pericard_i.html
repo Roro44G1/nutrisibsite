@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafic Interactiv Meridian Pericard – Evaluare și Recomandări</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .infographic-container {
+            flex-grow: 1;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .meridian-section {
+            width: 100%;
+            max-width: 750px;
+        }
+        h2 {
+            font-size: 2em;
+            font-weight: 700;
+            color: #0A2463;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        select {
+            margin-bottom: 2rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            border-radius: 0.5rem;
+            border: 2px solid #3E92CC;
+            background-color: #e0f2f7;
+            color: #0A2463;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+        }
+        select:hover {
+            border-color: #0A2463;
+            background-color: #d1eff6;
+        }
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(62, 146, 204, 0.4);
+        }
+        .bar-container {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            border: 3px solid #0A2463;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+        .segment {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.9em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+        }
+        .segment.extreme-red    { background-color: #EF4444; }
+        .segment.moderate-yellow { background-color: #FACC15; }
+        .segment.tendency-blue   { background-color: #3B82F6; }
+        .segment.balanced-green  { background-color: #22C55E; }
+        .arrow {
+            position: absolute;
+            bottom: 5px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #212529;
+            transform: translateX(-50%);
+            transition: left 0.4s ease-in-out;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+            z-index: 10;
+        }
+        .info-box {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+        .info-box h3 {
+            font-size: 1.4em;
+            color: #0A2463;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            border-bottom: 2px dashed #3E92CC;
+            padding-bottom: 0.5rem;
+        }
+        .info-box p {
+            font-size: 1.05em;
+            margin-bottom: 0.75rem;
+            color: #333;
+            line-height: 1.6;
+        }
+        .footer-copyright {
+            text-align: center;
+            padding: 1rem;
+            background-color: #e9ecef;
+            color: #495057;
+            font-size: 0.9em;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            h2 { font-size: 1.6em; }
+            .bar-container { height: 35px; }
+            .segment { font-size: 0.7em; }
+            .info-box { padding: 1.2rem; }
+            .info-box h3 { font-size: 1.2em; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="infographic-container">
+        <div class="meridian-section">
+            <h2>Evaluare interactiva: starea meridianului pericard</h2>
+
+            <select id="select-pericard">
+                <option value="0">Hipofunctie severa</option>
+                <option value="1">Hipofunctie moderata</option>
+                <option value="2">Dezechilibru usor (Hipofunctie)</option>
+                <option value="3" selected>Echilibru</option>
+                <option value="4">Dezechilibru usor (Hiperfunctie)</option>
+                <option value="5">Hiperfunctie moderata</option>
+                <option value="6">Hiperfunctie severa</option>
+            </select>
+
+            <div class="bar-container">
+                <div class="segment extreme-red">---</div>
+                <div class="segment moderate-yellow">--</div>
+                <div class="segment tendency-blue">-</div>
+                <div class="segment balanced-green">=</div>
+                <div class="segment tendency-blue">+</div>
+                <div class="segment moderate-yellow">++</div>
+                <div class="segment extreme-red">+++</div>
+                
+                <div class="arrow" id="indicator-pericard"></div>
+            </div>
+
+            <div id="infoDisplay-pericard" class="info-box"></div>
+        </div>
+    </div>
+
+    <footer class="footer-copyright">
+        <p>Copyright: dr.ing. Radu Pascu - 2025</p>
+    </footer>
+
+    <script>
+        var meridianPericardData = [
+            {
+                stare: "Hipofunctie severa",
+                fiziologic: "Deficiență majoră de Qi și sânge al Pericardului. Palpitații cronice, tahicardie, senzatie constanta de gol in piept, oboseala paralizanta. Insomnie severa, vise confuze. Hipotensiune, ameteli, senzatie de lesin. Lipsa totala a libidoului, disfunctie sexuala majora. Gat uscat cronic, dificultati la inghitire. Anxietate generalizata, atacuri de panica, depresie profunda. Imunitate colapsata.",
+                nutritie: "Supe de oase, carne de vita, miel, ficat (ocazional), oua, leguminoase, spanac, sfecla rosie, cereale integrale calde, ghimbir, scortisoara. Evita alimentele reci, crude, stimulentele. Mese mici si dese, lichide calde.",
+                suplimente: "CoQ10 (ubiquinol), magneziu, Omega-3, fier, B12, acid folic, vitamina D3. Adaptogeni: Rhodiola, Ashwagandha. Paducel (Crataegus), roinita (Melissa), bujor (Paeonia). Supraveghere medicala.",
+                emotional: "Incapacitate profunda de a simti bucurie, de a darui sau primi iubire. Raceala emotionala extrema sau dependenta afectiva disperata. Timiditate extrema, frica de intimitate. Ras fortat, zambet trist. Sentiment de inima franta permanent. Depresie cu anhedonie.",
+                relatiiParinti: "Trauma profunda legata de iubirea si acceptarea materna. Incapacitatea de a primi iubirea, sentiment de nevrednicie. Tendinta de a respinge ajutorul emotional. Blocaj major in a ierta si a se deschide.",
+                terapie: "Acupunctura: PC-6, PC-7, HT-7, CV-14, CV-4. Moxibustie la BL-14, BL-15. Psihoterapie pentru atasament. Jurnal de emotii. Qi Gong pentru deschiderea inimii. Meditatie de compasiune."
+            },
+            {
+                stare: "Hipofunctie moderata",
+                fiziologic: "Deficienta de Qi si sange. Palpitatii la efort, oboseala cronica, senzatie de constrictie toracica usoara. Insomnie cu treziri frecvente, anxietate. Libido scazut. Dificultati usoare de inghitire, senzatie de nod in gat. Ten palid, palme reci si umede.",
+                nutritie: "Carne de pui, curcan, oua, cereale integrale, legume radacinoase, spanac, nuci. Ghimbir, cardamom, sofran. Evita excesul de cafea, zahar, alimente reci.",
+                suplimente: "Magneziu, CoQ10, vitamine B, Omega-3, extract de paducel. Ceaiuri de roinita si lavanda.",
+                emotional: "Dificultati de conectare emotionala, teama de a fi ranit. Tristete difuza, lipsa entuziasmului. Nevoie de validare, dar dificultate in a o accepta. Ras rar, fortat.",
+                relatiiParinti: "Sentiment de neiubire din partea mamei, nevoie de afectiune nespuse. Tendinta de a pastra distanta emotionala.",
+                terapie: "Dieta de sustinere. Masaj PC-6, HT-7. Consiliere de cuplu sau individuala. Exercitii de respiratie profunda."
+            },
+            {
+                stare: "Dezechilibru usor (Hipofunctie)",
+                fiziologic: "Usoare palpitatii ocazionale, oboseala trecatoare, senzatie de gol in piept dupa stres. Somn superficial, usoara anxietate. Raceala usoara a mainilor. Scadere usoara a libidoului.",
+                nutritie: "Include regulat alimente rosii (rosii, ardei, pepene), sofran, scortisoara. Ceaiuri calde de musetel si roinita.",
+                suplimente: "Multivitamine, magneziu, Omega-3.",
+                emotional: "Usoara dificultate in a se deschide emotional, timiditate. Uneori senzatia de a nu fi pe deplin iubit.",
+                relatiiParinti: "Mici asteptari neimplinite de la mama, fara conflict deschis.",
+                terapie: "Mindfulness. Masaj PC-6. Activitati sociale placute."
+            },
+            {
+                stare: "Echilibru",
+                fiziologic: "Functionare optima: Inima protejata, circulatie buna, tensiune arteriala normala. Somn profund, energie constanta. Capacitate excelenta de a gestiona stresul, stabilitate emotionala. Libido sanatos, bucurie de viata.",
+                nutritie: "Dieta echilibrata, bogata in fructe, legume, proteine slabe, grasimi sanatoase. Alimente care bucura inima: fructe de padure, rosii, ardei, sofran, cardamom.",
+                suplimente: "Probiotice de intretinere, multivitamine, Omega-3.",
+                emotional: "Capacitate de a da si primi iubire, compasiune, deschidere, accesibilitate. Inima calda, bucurie autentica, simt al umorului sanatos. Stabilitate in relatii.",
+                relatiiParinti: "Echilibru intre influenta materna si autoritatea paterna. Capacitate de a primi si oferi iubire.",
+                terapie: "Mentine obiceiurile sanatoase. Cultiva recunostinta. Continua cresterea personala. Practica acte de bunatate."
+            },
+            {
+                stare: "Dezechilibru usor (Hiperfunctie)",
+                fiziologic: "Usoara agitatie, palpitatii ocazionale, senzatie de caldura in piept. Palme usor calde si umede. Somn agitat, vise incarcate. Iritabilitate usoara, tendinta de a rade prea tare sau nepotrivit. Libido usor crescut sau fluctuant.",
+                nutritie: "Alimente usor racoritoare: castraveti, pepene, pere, mere, spanac. Evita excesul de cafea, alcool, alimente picante. Ceaiuri de menta, roinita.",
+                suplimente: "Magneziu, ceai de roinita. Probiotice.",
+                emotional: "Nelinitste, tendinta de a fi mereu ocupat, dificultate in relaxare. Ras usor fortat sau exagerat. Usoara tendinta la control in relatii.",
+                relatiiParinti: "Usoara tensiune cu autoritatea paterna, senzatia de a fi constrans de reguli.",
+                terapie: "Exercitii de stretching. Masaj PC-6, PC-8. Respiratie profunda. Organizarea timpului pentru relaxare."
+            },
+            {
+                stare: "Hiperfunctie moderata",
+                fiziologic: "Caldura stagnanta in Pericard. Palpitatii frecvente, senzatie de arsura toracica, hipertensiune labila, agitatie. Insomnie cu vise violente. Ras zgomotos, inadecvat, vorbire excesiva, atentie obsesiva la munca. Palme fierbinti si transpirate. Gat uscat, sete, gust amar. Constipatie. Limba rosie cu varf foarte rosu.",
+                nutritie: "Dieta de racire si drenaj: multe legume verzi, fructe racoritoare (pepene, pere, grepfrut), cereale usoare (orz, mei). Evita total alcoolul, cafeaua, ardeiul iute, grasimile saturate. Ceaiuri de crizantema, papadie, menta.",
+                suplimente: "Magneziu doze mari, Omega-3, extract de paducel, ceai de roinita.",
+                emotional: "Lipsa stapanirii de sine, inflacarare, manie. Ras inadecvat, zambet fortat, vorbire excesiva. Obsedat de munca, insensibil, autodistructiv. Rigiditate, lucreaza fara rabdare, hipersensibilitate, apetit enorm.",
+                relatiiParinti: "Conflict deschis cu autoritatea paterna, rebeliune, lupta pentru control. Resentimente puternice.",
+                terapie: "Managementul furiei. Sport intens. Meditatie de iertare. Acupresura PC-6, PC-3, PC-7, GV-20. Stabilirea unor limite stricte de munca."
+            },
+            {
+                stare: "Hiperfunctie severa",
+                fiziologic: "Foc extrem in Pericard, care poate ataca direct Inima. Palpitatii violente, tahicardie paroxistica, dureri anginoase. Insomnie totala, delir, halucinatii. Comportament maniacal, ras compulsiv incontrolabil, vorbire incoerenta. Hiperpirexie, palme arzatoare, transpiratii profuze. Constipatie rebela, limba rosie-inchisa, rigida. Risc de accident vascular cerebral.",
+                nutritie: "Interventie medicala de urgenta. Regim strict vegetarian, racoritor. Sucuri de legume verzi diluate, ceaiuri sedative (valeriana, roinita). Evita orice stimulent. Post terapeutic sub supraveghere.",
+                suplimente: "Numai sub control medical strict. Pot fi necesare sedative din plante, antiaritmice. Suport hepatic puternic.",
+                emotional: "Manie severa, furie incontrolabila, comportament distructiv. Pierderea contactului cu realitatea, iluzii, paranoia. Ras patologic. Absenta completa a autocontrolului.",
+                relatiiParinti: "Conflict devastator cu autoritatea paterna, respingere totala a oricarei structuri. Ruptura interioara, comportament auto-distructiv.",
+                terapie: "Internare psihiatrica si medicala. Acupunctura de sedare (PC-3, PC-7, PC-8, GV-20). Medicatie. Dupa stabilizare, terapie intensiva pentru traume."
+            }
+        ];
+
+        // Elemente DOM
+        var selectPericard = document.getElementById('select-pericard');
+        var barContainer = document.querySelector('.bar-container');
+        var arrow = document.getElementById('indicator-pericard');
+        var isDragging = false;
+
+        // Functia de afisare
+        function afiseazaInformatii(meridianId, index) {
+            var data = meridianPericardData[index];
+            if (!data) return;
+            var infoDisplay = document.getElementById('infoDisplay-' + meridianId);
+            infoDisplay.innerHTML = '<h3>Stare: ' + data.stare + '</h3>' +
+                '<p><strong>Fiziologie & Simptome:</strong><br>' + data.fiziologic + '</p>' +
+                '<p><strong>Nutritie recomandata:</strong><br>' + data.nutritie + '</p>' +
+                '<p><strong>Suplimente & plante medicinale:</strong><br>' + data.suplimente + '</p>' +
+                '<p><strong>Stare emotionala & Relatii:</strong><br>' + data.emotional + '</p>' +
+                '<p><strong>Relatia cu parintii (Foc):</strong><br>' + data.relatiiParinti + '</p>' +
+                '<p><strong>Terapie & stil de viata:</strong><br>' + data.terapie + '</p>';
+        }
+
+        // Functia de actualizare pozitie
+        function updateFromPosition(clientX) {
+            var rect = barContainer.getBoundingClientRect();
+            var x = clientX - rect.left;
+            var width = rect.width;
+            if (x < 0) x = 0;
+            if (x > width) x = width;
+            var totalSegments = 7;
+            var segmentWidth = width / totalSegments;
+            var index = Math.floor(x / segmentWidth);
+            if (index >= totalSegments) index = totalSegments - 1;
+            selectPericard.value = index;
+            var procent = (index * segmentWidth) + (segmentWidth / 2);
+            arrow.style.left = ((procent / width) * 100) + '%';
+            afiseazaInformatii('pericard', index);
+        }
+
+        // Evenimente mouse
+        barContainer.addEventListener('click', function(e) {
+            if (!isDragging) updateFromPosition(e.clientX);
+        });
+        barContainer.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            updateFromPosition(e.clientX);
+            e.preventDefault();
+        });
+        document.addEventListener('mousemove', function(e) {
+            if (isDragging) updateFromPosition(e.clientX);
+        });
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+        });
+
+        // Eveniment dropdown
+        selectPericard.addEventListener('change', function() {
+            var index = parseInt(selectPericard.value, 10);
+            var totalSegments = 7;
+            var segmentWidth = 100 / totalSegments;
+            var procent = (index * segmentWidth) + (segmentWidth / 2);
+            arrow.style.left = procent + '%';
+            afiseazaInformatii('pericard', index);
+        });
+
+        // Initializare
+        var initialIndex = parseInt(selectPericard.value, 10);
+        var totalSegments = 7;
+        var segmentWidth = 100 / totalSegments;
+        var procentInit = (initialIndex * segmentWidth) + (segmentWidth / 2);
+        arrow.style.left = procentInit + '%';
+        afiseazaInformatii('pericard', initialIndex);
+
+        // Securitate
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'c') e.preventDefault();
+            if (e.ctrlKey && e.key === 'u') e.preventDefault();
+            if (e.key === 'F12') e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') e.preventDefault();
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') e.preventDefault();
+        });
+    </script>
+
+</body>
+</html>
