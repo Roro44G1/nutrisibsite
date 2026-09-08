@@ -9,17 +9,31 @@ import fontkit from "@pdf-lib/fontkit";
 // NU id-ul Payment Link-ului).
 // "blobKey" e numele exact sub care ai urcat fisierul in Netlify Blobs (pasul din README).
 const PRODUCTS = {
-  "price_XXXXXXXXXXXXXXXX": {
+  "price_1UDQjVRwvEzkBobC3syES2F0": {
     blobKey: "analize-medicale.pdf",
     fileName: "Analize Medicale fara Frica - NutriSib.pdf",
     title: "Analize Medicale fără Frică",
   },
-  // exemplu pentru cand adaugi si BIOS aici:
-  // "price_YYYYYYYYYYYYYYYY": {
-  //   blobKey: "bios-faza1.pdf",
-  //   fileName: "BIOS Faza 1 - NutriSib.pdf",
-  //   title: "BIOS — Faza 1: 7 Zile Fara Zgomot",
-  // },
+  "price_1UDQTARwvEzkBobCDlpVBhGv": {
+    blobKey: "BIOS_7_Zile_fara_zgomot.pdf",
+    fileName: "BIOS Faza 1 - 7 Zile Fara Zgomot - NutriSib.pdf",
+    title: "BIOS — Faza 1: 7 Zile Fără Zgomot",
+  },
+  "price_1UDQcXRwvEzkBobCUfLqkqPr": {
+    blobKey: "BIOS_zero_crash.pdf",
+    fileName: "BIOS Faza 2 - Zero Crash la 15.00 - NutriSib.pdf",
+    title: "BIOS — Faza 2: Zero Crash la 15:00",
+  },
+  "price_1UDQdqRwvEzkBobC1qa7QdUc": {
+    blobKey: "BIOS_zero_balonare.pdf",
+    fileName: "BIOS Faza 3 - Zero Balonare dupa Masa - NutriSib.pdf",
+    title: "BIOS — Faza 3: Zero Balonare după Masă",
+  },
+  "price_1UDQgpRwvEzkBobCeBMI47fx": {
+    blobKey: "BIOS_zero_efect.pdf",
+    fileName: "BIOS Faza 4 - Zero Efect Yo-Yo - NutriSib.pdf",
+    title: "BIOS — Faza 4: Zero Efect Yo-Yo",
+  },
 };
 
 const BLOB_STORE_NAME = "nutrisib-files";
