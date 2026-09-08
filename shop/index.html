@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ro" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magazin produse digitale - Nutrisib</title>
+    <meta name="description" content="Descarcă ghiduri practice, kit-uri de transformare corporală și cursuri audio-video dezvoltat de dr.ing. Radu Pascu pentru o viață trăită în deplin echilibru.">
+    <meta name="keywords" content="Nutrisib, produse digitale, ghiduri nutritie, kit redefinire, cursuri video nutritie, dr ing Radu Pascu, CELOS, plan alimentar, longevitate">
+    <meta name="author" content="dr.ing. Radu Pascu - Nutrisib">
+    <link rel="canonical" href="https://nutrisib.club/shop/index.html">
+
+    <!-- SEO & Open Graph Tags -->
+    <meta property="og:title" content="Magazin produse digitale - Nutrisib">
+    <meta property="og:description" content="Ghiduri practice, kit-uri de transformare și cursuri audio-video pentru reingineria sistemului tău biologic.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nutrisib.club/shop/index.html">
+    <meta property="og:image" content="https://nutrisib.club/imagini/logo_alb.png">
+    <meta property="og:site_name" content="Nutrisib - nutriție științifică">
+
+    <!-- Fonturi identice cu celos.css -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Stiluri globale din celos.css -->
+    <link rel="stylesheet" href="https://nutrisib.club/celos.css">
+
+    <style>
+        /* ── Grid produse (2 coloane pe desktop/tabletă, 1 pe mobil) ── */
+        .shop-products-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .shop-products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ── Structură card produs ── */
+        .product-card {
+            background-color: #ffffff;
+            border: 1px solid var(--color-border, #e5e7eb);
+            border-radius: var(--radius-card, 12px);
+            box-shadow: var(--shadow-card, 0 4px 6px -1px rgba(0,0,0,0.1));
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(27, 42, 74, 0.12);
+            border-color: var(--color-brand-medium, #3E92CC);
+        }
+
+        /* ── Header / Imagine card produs ── */
+        .product-image-wrap {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            background-color: var(--color-pearl, #f8fafc);
+            overflow: hidden;
+        }
+
+        .product-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover .product-image-wrap img {
+            transform: scale(1.05);
+        }
+
+        /* Etichete pe imagine */
+        .product-type-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--color-navy, #1B2A4A);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.35rem 0.75rem;
+            border-radius: 99px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .product-format-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--color-navy, #1B2A4A);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* ── Corp card produs ── */
+        .product-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .product-category {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-gold, #C5A021);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.4rem;
+        }
+
+        .product-title {
+            font-family: 'Lora', serif !important;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-navy, #1B2A4A);
+            line-height: 1.3;
+            margin: 0 0 0.75rem 0;
+            border-bottom: none !important;
+            padding-bottom: 0 !important;
+        }
+
+        .product-desc {
+            font-family: 'Inter', sans-serif !important;
+            font-size: 0.9rem;
+            color: var(--color-text-medium, #374151);
+            line-height: 1.55;
+            margin-bottom: 1.25rem !important;
+            text-align: left !important;
+        }
+
+        /* Lista beneficii / ce include */
+        .product-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem 0;
+            flex-grow: 1;
+        }
+
+        .product-features li {
+            position: relative;
+            padding-left: 1.4rem;
+            font-size: 0.85rem;
+            color: var(--color-text-light, #4b5563);
+            margin-bottom: 0.4rem;
+            line-height: 1.4;
+        }
+
+        .product-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--color-gold, #C5A021);
+            font-weight: 800;
+        }
+
+        /* ── Footer card produs (Preț & Buton) ── */
+        .product-footer {
+            border-top: 1px solid var(--color-border, #e5e7eb);
+            padding-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: auto;
+        }
+
+        .product-price-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .product-price-old {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            text-decoration: line-through;
+            line-height: 1;
+            margin-bottom: 0.2rem;
+        }
+
+        .product-price-current {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--color-navy, #1B2A4A);
+            line-height: 1;
+        }
+
+        .product-card.hidden {
+            display: none !important;
+        }
+
+        /* ── Override imagini copertă BIOS (portret, titlu pe 3 rânduri) ── */
+        article[data-cat="bios"] .product-image-wrap { height: 220px; }
+        article[data-cat="bios"] .product-image-wrap img { object-position: left center; }
+    </style>
+</head>
+<body>
+
+<div class="container-main">
+
+    <!-- ===== NAVIGATION BAR ===== -->
+    <header class="nav-bar">
+        <a href="index.html" class="nav-brand">
+            <img src="https://nutrisib.club/logo/logo_navy_pearl.png" alt="Sigla Nutrisib" class="logo-image" onerror="this.style.display='none'">
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Acasă</a>
+            <a href="index.html#povestea">Povestea</a>
+            <a href="index.html#metoda">Metoda</a>
+            <a href="blog/index.html">Blog</a>
+            <a href="magazin.html" class="active">Magazin</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <button class="mobile-menu-btn" onclick="const nav = document.querySelector('.nav-links'); nav.style.display = (nav.style.display === 'flex' ? 'none' : 'flex')">☰</button>
+    </header>
+
+    <main>
+
+        <!-- ===== HERO BANNER ===== -->
+        <section class="hero-card">
+            <div class="hero-content">
+                <h1 class="hero-title">Magazin produse digitale</h1>
+                <p class="hero-subtitle"><em>Ghiduri practice, kit-uri de transformare, cursuri audio-video și resurse premium pentru reingineria sănătății tale.</em></p>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-num">11+</div>
+                        <div class="hero-stat-label">Produse digitale</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-num">100%</div>
+                        <div class="hero-stat-label">Acces instant</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-num">CELOS</div>
+                        <div class="hero-stat-label">Metodologie integrată</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== BARĂ DE FILTRARE CATEGORII ===== -->
+        <section class="content-card" style="padding: 0 0.5rem; margin-bottom: 1.5rem;">
+            <div class="blog-filter-bar">
+                <div class="blog-filter-tabs">
+                    <button class="blog-filter-tab active" data-cat="all">Toate produsele</button>
+                    <button class="blog-filter-tab" data-cat="ghiduri">Ghiduri PDF</button>
+                    <button class="blog-filter-tab" data-cat="kituri">Kit-uri complexe</button>
+                    <button class="blog-filter-tab" data-cat="cursuri">Cursuri audio-video</button>
+                    <button class="blog-filter-tab" data-cat="bios">Seria BIOS</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ZONĂ GRID PRODUSE (2 COLOANE) ===== -->
+        <section class="content-card">
+            <div class="shop-products-grid">
+
+                <!-- PRODUS 1: Ghid PDF -->
+                <article class="product-card" data-cat="ghiduri">
+                    <div class="product-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80&fit=crop" alt="Ghid practic de reinginerie metabolică" loading="lazy">
+                        <span class="product-type-badge">Ghid PDF</span>
+                        <span class="product-format-badge">📄 PDF (45 pag)</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-category">Nutriție &amp; Metabolism</span>
+                        <h3 class="product-title">Ghid practic de reinginerie metabolică</h3>
+                        <p class="product-desc">O hartă pas cu pas pentru înțelegerea flexibilității metabolice, gestionarea insulinei și optimizarea energiei celulare.</p>
+                        <ul class="product-features">
+                            <li>Protocol alimentar structurat pe 4 săptămâni</li>
+                            <li>Listă de cumpărături și combinații sinergice</li>
+                            <li>Fișiere descărcabile și printabile</li>
+                        </ul>
+                        <div class="product-footer">
+                            <div class="product-price-box">
+                                <span class="product-price-old">120 lei</span>
+                                <span class="product-price-current">79 lei</span>
+                            </div>
+                            <a href="#" class="btn btn-primary btn-card">Detalii &amp; Cumpără</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PRODUS 2: Kit Complex -->
+                <article class="product-card" data-cat="kituri">
+                    <div class="product-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80&fit=crop" alt="Kit complet de redefinire corporală CELOS" loading="lazy">
+                        <span class="product-type-badge">Kit complet</span>
+                        <span class="product-format-badge">📦 PDF + Excel + Video</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-category">Transformare corporală</span>
+                        <h3 class="product-title">Kit complet de redefinire corporală CELOS</h3>
+                        <p class="product-desc">Pachetul integrat ce combină principiile nutriționale cu instrumente digitale de monitorizare a compoziției corporale.</p>
+                        <ul class="product-features">
+                            <li>Ghidul de redefinire corporală (format digital)</li>
+                            <li>Planner interactiv de mese și calculator de macronutrienți</li>
+                            <li>Jurnal de monitorizare a parametrilor de bioimpedanță</li>
+                        </ul>
+                        <div class="product-footer">
+                            <div class="product-price-box">
+                                <span class="product-price-old">250 lei</span>
+                                <span class="product-price-current">149 lei</span>
+                            </div>
+                            <a href="#" class="btn btn-primary btn-card">Detalii &amp; Cumpără</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PRODUS 3: Curs Video -->
+                <article class="product-card" data-cat="cursuri">
+                    <div class="product-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=600&q=80&fit=crop" alt="Curs video: Optimizarea somnului și stresului" loading="lazy">
+                        <span class="product-type-badge">Curs Video</span>
+                        <span class="product-format-badge">🎥 6 Module HD</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-category">Longevitate &amp; Stil de viață</span>
+                        <h3 class="product-title">Curs audio-video: Optimizarea somnului și stresului</h3>
+                        <p class="product-desc">Învață cum să decodezi axa HPA, să îți reduci nivelul de cortizol și să obții un somn profund regenerativ.</p>
+                        <ul class="product-features">
+                            <li>Peste 2 ore de conținut video structurat</li>
+                            <li>Ghid de igienă a somnului și protocoale de suplimentare</li>
+                            <li>Acces pe viață în platforma Nutrisib</li>
+                        </ul>
+                        <div class="product-footer">
+                            <div class="product-price-box">
+                                <span class="product-price-old">300 lei</span>
+                                <span class="product-price-current">199 lei</span>
+                            </div>
+                            <a href="#" class="btn btn-primary btn-card">Detalii &amp; Cumpără</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PRODUS 4: Ghid PDF -->
+                <article class="product-card" data-cat="ghiduri">
+                    <div class="product-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80&fit=crop" alt="Ghid de microbiom și sănătate intestinală" loading="lazy">
+                        <span class="product-type-badge">Ghid PDF</span>
+                        <span class="product-format-badge">📄 PDF (38 pag)</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-category">Sănătate digestivă</span>
+                        <h3 class="product-title">Ghid de microbiom și sănătate intestinală</h3>
+                        <p class="product-desc">O analiză holistică a microbiomului intestinal, a permeabilității gastrice și a strategiilor de refacere prin fito-nutrienți.</p>
+                        <ul class="product-features">
+                            <li>Tabel cu alimente probiotice și prebiotice</li>
+                            <li>Protocol de eliminare a alimentelor pro-inflamatorii</li>
+                            <li>Recomandări specifice de tulpini probiotice</li>
+                        </ul>
+                        <div class="product-footer">
+                            <div class="product-price-box">
+                                <span class="product-price-old">110 lei</span>
+                                <span class="product-price-current">69 lei</span>
+                            </div>
+                            <a href="#" class="btn btn-primary btn-card">Detalii &amp; Cumpără</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PRODUS 5: Kit Complex -->
+                <article class="product-card" data-cat="kituri">
+                    <div class="product-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=600&q=80&fit=crop" alt="Kit de micronutrienți și suplimentare inteligentă" loading="lazy">
+                        <span class="product-type-badge">Kit de start</span>
+                        <span class="product-format-badge">📦 Ghid + Tabele PDF</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-category">Suplimente &amp; Micronutrienți</span>
+                        <h3 class="product-title">Kit de micronutrienți și suplimentare inteligentă</h3>
+                        <p class="product-desc">Ghidul complet pentru selectarea, dozarea și sinergia suplimentelor alimentare fără risipă de resurse.</p>
+                        <ul class="product-features">
+                            <li>Harta interacțiunilor dintre minerale și vitamine</li>
+                            <li>Ghid de audit al pieței de suplimente</li>
+                            <li>Matrice de dozare personalizată în funcție de obiective</li>
+                        </ul>
+                        <div class="product-footer">
+                            <div class="product-price-box">
+                                <span class="product-price-old">180 lei</span>
+                                <span class="product-price-current">119 lei</span>
+                            </div>
+                            <a href="#" class="btn btn-primary btn-card">Detalii &amp; Cumpără</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- PRODUS 6: Curs Video -->
+                <article class="product-card" data-cat="cursuri">
+                    <div class="product-image-wrap">
+                        <img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600&q=80&fit=crop" alt="Curs video: Interpretarea analizelor medicale" loading="lazy">
+                        <span class="product-type-badge">Curs Video</span>
+                        <span class="product-format-badge">🎥 4 Module + PDF</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-category">Analize &amp; Diagnostic</span>
+                        <h3 class="product-title">Curs video: Interpretarea analizelor medicale</h3>
+                        <p class="product-desc">Învață să îți citești analizele de sânge din perspectivă funcțională și de prevenție, dincolo de valorile standard de laborator.</p>
+                        <ul class="product-features">
+                            <li>Interpretarea profilului lipidic, glicemic și hepatic</li>
+                            <li>Decodarea biomarkerilor de inflamație (hs-CRP, homocisteină)</li>
+                            <li>Fișă de lucru pentru pregătirea discuției cu medicul</li>
+                        </ul>
+                        <div class="product-footer">
+                            <div class="product-price-box">
+                                <span class="product-price-old">280 lei</span>
+                                <span class="product-price-current">179 lei</span>
+                            </div>
+                            <a href="#" class="btn btn-primary btn-card">Detalii &amp; Cumpără</a>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="product-card" data-cat="bios">
+                    <div class="product-image-wrap">
+                        <img src="https://nutrisib.club/imagini/bios/faza1-banner.png" alt="7 Zile Fără Zgomot — BIOS" loading="lazy">
+                        <span class="product-type-badge">BIOS · Faza 1/4</span>
+                        <span class="product-format-badge">📄 PDF (26 pag)</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-category">Nutriție & Metabolism</span>
+                        <h3 class="product-title">7 Zile Fără Zgomot</h3>
+                        <p class="product-desc">Primul modul al sistemului tău de operare biologic — calibrezi calitatea combustibilului, nu numărul de calorii.</p>
+                        <ul class="product-features">
+                            <li>Cele trei surse de zgomot alimentar</li>
+                            <li>Ordinea mesei schimbă glicemia</li>
+                            <li>Grelina și leptina, explicate</li>
+                        </ul>
+                        <div class="product-footer">
+                            <div class="product-price-box">
+                                <span class="product-price-old">89 lei</span>
+                                <span class="product-price-current">49 lei</span>
+                            </div>
+                            <a href="bios-zgomotul.html" class="btn btn-primary btn-card">Detalii &amp; Cumpără</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="product-card" data-cat="bios">
+                    <div class="product-image-wrap">
+                        <img src="https://nutrisib.club/imagini/bios/faza2-banner.png" alt="Zero Crash la Ora 15:00 — BIOS" loading="lazy">
+                        <span class="product-type-badge">BIOS · Faza 2/4</span>
+                        <span class="product-format-badge">📄 PDF (26 pag)</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-category">Energie & Performanță</span>
+                        <h3 class="product-title">Zero Crash la Ora 15:00</h3>
+                        <p class="product-desc">Al doilea modul — randamentul cu care sistemul tău transformă combustibilul curat în energie reală, susținută, nu doar un vârf urmat de prăbușire.</p>
+                        <ul class="product-features">
+                            <li>Mitocondriile: randament, nu doar combustibil</li>
+                            <li>Cele trei cauze fiziologice ale oboselii</li>
+                            <li>Cofeina, fără crash</li>
+                        </ul>
+                        <div class="product-footer">
+                            <div class="product-price-box">
+                                <span class="product-price-old">119 lei</span>
+                                <span class="product-price-current">69 lei</span>
+                            </div>
+                            <a href="bios-motorul.html" class="btn btn-primary btn-card">Detalii &amp; Cumpără</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="product-card" data-cat="bios">
+                    <div class="product-image-wrap">
+                        <img src="https://nutrisib.club/imagini/bios/faza3-banner.png" alt="Zero Balonare După Masă — BIOS" loading="lazy">
+                        <span class="product-type-badge">BIOS · Faza 3/4</span>
+                        <span class="product-format-badge">📄 PDF (26 pag)</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-category">Sănătate digestivă</span>
+                        <h3 class="product-title">Zero Balonare După Masă</h3>
+                        <p class="product-desc">Al treilea modul — arhitectura celulară, calitatea grăsimilor și sănătatea intestinală, ca fundație a absorbției.</p>
+                        <ul class="product-features">
+                            <li>Omega-3 vs Omega-6</li>
+                            <li>Ficatul și steatoza hepatică</li>
+                            <li>Bariera intestinală: zidul care decide</li>
+                        </ul>
+                        <div class="product-footer">
+                            <div class="product-price-box">
+                                <span class="product-price-old">119 lei</span>
+                                <span class="product-price-current">69 lei</span>
+                            </div>
+                            <a href="bios-structura.html" class="btn btn-primary btn-card">Detalii &amp; Cumpără</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="product-card" data-cat="bios">
+                    <div class="product-image-wrap">
+                        <img src="https://nutrisib.club/imagini/bios/faza4-banner.png" alt="Zero Efect Yo-Yo — BIOS" loading="lazy">
+                        <span class="product-type-badge">BIOS · Faza 4/4</span>
+                        <span class="product-format-badge">📄 PDF (26 pag)</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-category">Sustenabilitate & Longevitate</span>
+                        <h3 class="product-title">Zero Efect Yo-Yo</h3>
+                        <p class="product-desc">Al patrulea și ultimul modul — integrarea completă a Zgomotului, Motorului și Structurii într-un singur sistem care se menține, nu doar funcționează o dată.</p>
+                        <ul class="product-features">
+                            <li>De ce eșuează dietele pe termen lung</li>
+                            <li>Platourile metabolice, documentate</li>
+                            <li>Habit stacking: cum devin automate</li>
+                        </ul>
+                        <div class="product-footer">
+                            <div class="product-price-box">
+                                <span class="product-price-old">139 lei</span>
+                                <span class="product-price-current">79 lei</span>
+                            </div>
+                            <a href="bios-sistemul.html" class="btn btn-primary btn-card">Detalii &amp; Cumpără</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="product-card" data-cat="bios">
+                    <div class="product-image-wrap">
+                        <img src="https://nutrisib.club/imagini/bios/pachet-banner.png" alt="Pachetul Complet BIOS — BIOS" loading="lazy">
+                        <span class="product-type-badge">Pachet complet</span>
+                        <span class="product-format-badge">★ Economie 25%+</span>
+                    </div>
+                    <div class="product-body">
+                        <span class="product-category">Sistem complet · 4 module</span>
+                        <h3 class="product-title">Pachetul Complet BIOS</h3>
+                        <p class="product-desc">Toate cele patru module ale sistemului tău de operare biologic — Zgomotul, Motorul, Structura și Sistemul — la un singur preț, cu economie reală.</p>
+                        <ul class="product-features">
+                            <li>Toate cele 4 module BIOS (104 pagini)</li>
+                            <li>Tabloul de bord integrat + recalibrare trimestrială</li>
+                            <li>Acces instant la toate PDF-urile</li>
+                        </ul>
+                        <div class="product-footer">
+                            <div class="product-price-box">
+                                <span class="product-price-old">466 lei</span>
+                                <span class="product-price-current">199 lei</span>
+                            </div>
+                            <a href="bios-pachet-complet.html" class="btn btn-primary btn-card">Detalii &amp; Cumpără</a>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- Placeholder pentru Footer Global Nutrisib -->
+        <div id="footer-placeholder"></div>
+
+    </main>
+
+</div>
+
+<!-- Script filtrare categorii și încărcare footer -->
+<script>
+    // Script de filtrare tab-uri categorii produse
+    const tabs = document.querySelectorAll('.blog-filter-tab');
+    const products = document.querySelectorAll('.product-card');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            const cat = tab.dataset.cat;
+
+            products.forEach(product => {
+                if (cat === 'all' || product.dataset.cat === cat) {
+                    product.classList.remove('hidden');
+                } else {
+                    product.classList.add('hidden');
+                }
+            });
+        });
+    });
+
+    // Încărcare dinamică footer
+    fetch('https://nutrisib.club/footer.html')
+        .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.text(); })
+        .then(data => {
+            const c = document.getElementById('footer-placeholder');
+            if (c) c.innerHTML = data;
+        })
+        .catch(err => console.error('Footer error:', err));
+</script>
+
+<script src="https://nutrisib.club/script_protect.js" defer></script>
+<script src="https://nutrisib.club/cookies.js"></script>
+
+</body>
+</html>
