@@ -283,13 +283,25 @@
       .asistent-hero { padding: 2rem 1rem 1.5rem; }
       .msg-bubble { max-width: 88%; }
     }
+
+    /* Navigation remains usable on phones and compact tablets. */
+    .ns-assistant-menu {display:none;border:1px solid #bfcdda;border-radius:9px;background:#fff;color:#0a2463;min-width:44px;min-height:44px;font-size:1.35rem;cursor:pointer;}
+    @media(max-width:920px) {
+      .navbar-inner {position:relative;gap:.75rem;padding:.65rem 1rem;}
+      .ns-assistant-menu {display:block;margin-left:auto}
+      .navbar-wrap .nav-links {display:none;position:absolute;top:100%;left:0;right:0;z-index:999;background:#fff;box-shadow:0 12px 20px rgba(10,36,99,.14);border-top:1px solid #e2e8f0;padding:1rem;flex-direction:column;align-items:stretch;gap:0;}
+      .navbar-wrap .nav-links.open {display:flex;}
+      .navbar-wrap .nav-links a {display:block;min-height:44px;padding:.8rem 1rem;}
+    }
+    .ns-assistant-menu:focus-visible {outline:3px solid #3e92cc;outline-offset:2px}
   </style>
 </head>
 <body>
 
 <header class="navbar-wrap"><nav class="navbar-inner">
 <a href="index.html" class="nav-brand" aria-label="NutriSib — pagina principală"><img src="logo/logo_navy_pearl.png" alt="Sigla NutriSib" width="52" height="52"></a>
-<div class="nav-links"><a href="index.html">Acasă</a><a href="servicii.html">Servicii</a><a href="evaluare.html">Evaluare</a><a href="celos.html">Metoda</a><a href="blog/index.html">Blog</a><a href="contact.html">Contact</a><a href="https://tinyurl.com/ProgramareServicii" target="_blank" rel="noopener noreferrer">Programează-te ↗</a></div>
+<button class="ns-assistant-menu" type="button" id="nsAssistantMenu" aria-controls="nsAssistantLinks" aria-expanded="false" aria-label="Deschide meniul">☰</button>
+<div class="nav-links" id="nsAssistantLinks"><a href="index.html">Acasă</a><a href="servicii.html">Servicii</a><a href="evaluare.html">Evaluare</a><a href="celos.html">Metoda</a><a href="blog/index.html">Blog</a><a href="contact.html">Contact</a><a href="https://tinyurl.com/ProgramareServicii" target="_blank" rel="noopener noreferrer">Programează-te ↗</a></div>
 </nav></header>
 
 <div class="asistent-hero">
@@ -479,7 +491,22 @@
     document.getElementById('chatInput').focus();
   }
 </script>
-<script src="https://nutrisib.club/script_protect.js" defer></script>
-<script src="https://nutrisib.club/cookies.js"></script>
+<script>
+const nsAssistantMenu = document.getElementById('nsAssistantMenu');
+const nsAssistantLinks = document.getElementById('nsAssistantLinks');
+nsAssistantMenu.addEventListener('click', () => {
+  const open = nsAssistantLinks.classList.toggle('open');
+  nsAssistantMenu.setAttribute('aria-expanded', String(open));
+  nsAssistantMenu.setAttribute('aria-label', open ? 'Închide meniul' : 'Deschide meniul');
+  nsAssistantMenu.textContent = open ? '×' : '☰';
+});
+nsAssistantLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+  nsAssistantLinks.classList.remove('open');
+  nsAssistantMenu.setAttribute('aria-expanded','false');
+  nsAssistantMenu.textContent = '☰';
+}));
+</script>
+<script src="script_protect.js" defer></script>
+<script src="cookies.js"></script>
 </body>
 </html>
