@@ -1,133 +1,144 @@
-/* NutriSib Construction — one shared hero component on every supported content page.
-   Preserve actual page heading/description and move standalone highlight widgets
-   below the hero. Existing forms, purchase flows and the rest of the page stay put. */
+/* NutriSib construction — canonical two-column hero for every regular page.
+ * Jurnalul de sistem intentionally retains its complete original hero.
+ * Content copied from each page's own heading, eyebrow and KPI statistics.
+ * All navigation, forms and articles outside the hero remain untouched.
+ */
 (() => {
   'use strict';
+  const text = el => (el?.textContent || '').replace(/\s+/g,' ').trim();
+  const make = (tag, className, content) => {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    if (content !== undefined) el.textContent = content;
+    return el;
+  };
+  const FIELDS = [
+    ['C','Calibrare','Evaluare inițială și orientare după obiective'],
+    ['E','Energie','Nutriție și obiceiuri adaptate rutinei'],
+    ['L','Longevitate','Continuitate și stil de viață echilibrat'],
+    ['OS','Optimizare sistemică','Monitorizare și ajustări în timp']
+  ];
 
-  function normalize(text) {
-    return String(text || '').replace(/\s+/g, ' ').trim();
-  }
-
-  function initMasterHero() {
+  function init() {
+    // Exception approved by site owner: never restyle or rebuild Jurnalul de sistem.
+    if (/\/(?:jurnal|jurnal\.html)\/?$/i.test(location.pathname)) return;
     const hero = document.querySelector('.ns-uniform-hero');
     if (!hero || hero.classList.contains('ns-master-hero')) return;
-
-    // Do not rewrite transactional or interactive heroes.
-    if (hero.querySelector('form, input, textarea, select, iframe, [contenteditable]')) return;
-
+    if (hero.querySelector('form,input,textarea,select,iframe,[contenteditable]')) return;
     const heading = hero.querySelector('h1');
     if (!heading) return;
 
-    const stylesheet = document.querySelector('link[href$="site-master-hero.css"]');
-    const stylesheetPath = stylesheet && stylesheet.getAttribute('href') || 'site-master-hero.css';
-    const prefix = stylesheetPath.slice(0, stylesheetPath.lastIndexOf('site-master-hero.css'));
+    const script = document.querySelector('script[src$="site-master-hero.js"]');
+    const src = script ? script.getAttribute('src') : 'site-master-hero.js';
+    const prefix = src.slice(0,src.lastIndexOf('site-master-hero.js'));
 
-    const eyebrowNode = hero.querySelector(
-      '.hero-eyebrow, .pv-hero-eyebrow, .ns-kicker, .journal-meta, .hero-badge'
-    );
-    const eyebrowText = normalize(eyebrowNode && eyebrowNode.textContent)
-      .slice(0, 76) || 'NutriSib · C.E.L.O.S.';
+    const eyebrowNode = hero.querySelector('.hero-eyebrow,.pv-hero-eyebrow,.ns-kicker,.journal-meta,.hero-badge');
+    const eyebrow = text(eyebrowNode).slice(0,82) || 'NUTRISIB · METODA C.E.L.O.S.';
 
-    const leads = [...hero.querySelectorAll(
-      '.hero-sub, .hero-subtitle, .hero-body, .pv-hero-subtitle, .journal-subtitle, .hero-intro'
-    )].filter(el => !el.closest('aside, .hero-kpis, .hero-stats'));
-    if (!leads.length) {
-      const fallback = [...hero.querySelectorAll('p')].find(el =>
-        !el.closest('aside, .hero-kpis, .hero-stats, .ns-hero-actions, .hero-btns')
-        && !el.matches('.ns-kicker, .hero-eyebrow')
-        && normalize(el.textContent).length > 24
+    const leadNodes = [...hero.querySelectorAll(
+      '.hero-sub,.hero-subtitle,.hero-body,.pv-hero-sub,.pv-hero-subtitle,.journal-sub,.journal-subtitle,.hero-intro'
+    )].filter(el => !el.closest('aside,.hero-kpis,.hero-stats,.pv-kpi-bar'));
+    if (!leadNodes.length) {
+      const candidate=[...hero.querySelectorAll('p')].find(el=>
+        !el.closest('aside,.hero-kpis,.hero-stats,.pv-kpi-bar')
+        && !el.matches('.ns-kicker,.hero-eyebrow')
+        && text(el).length>20
       );
-      if (fallback) leads.push(fallback);
+      if(candidate) leadNodes.push(candidate);
     }
-    const leadText = [...new Set(leads.map(el => normalize(el.textContent)))]
-      .join(' ').slice(0, 330) ||
-      normalize(document.querySelector('meta[name="description"]')?.content).slice(0, 260) ||
-      'Descoperă serviciile, resursele și metodologia NutriSib.';
+    const lead = [...new Set(leadNodes.map(text))].join(' ').slice(0,320)
+      || (document.querySelector('meta[name="description"]')?.content||'').slice(0,280)
+      || 'Descoperă evaluările, serviciile și metodologia NutriSib.';
 
-    // Preserve informational content that was formerly embedded in oversized heroes.
-    const selectors = [
-      '.hero-card-side', '.hero-kpis', '.hero-stats', '.celos-card-side',
-      '.pv-hero-visual', '.pv-hero-photo', '.pv-hero-card',
-      '.journal-navigation', '.journal-nav', '.hero-navigation'
-    ];
-    const preserved = [];
-    for (const selector of selectors) {
-      for (const node of hero.querySelectorAll(selector)) {
-        if (!preserved.some(other => other.contains(node)) &&
-            !node.closest('.ns-master-highlights')) {
-          preserved.push(node);
+    // Gather data before replacing legacy markup. IDs of live counters must survive.
+    const originalStats = hero.querySelector('.hero-kpis,.hero-stats,.pv-kpi-bar');
+    const stats = [];
+    if (originalStats) {
+      for (const item of originalStats.children) {
+        const val = item.querySelector('.hero-kpi-num,.hero-stat-num,.pv-kpi-num');
+        const label = item.querySelector('.hero-kpi-label,.hero-stat-label,.pv-kpi-label');
+        if (val && label) {
+          stats.push({valueNode:val,label:text(label)});
         }
       }
     }
+    const sourceSide = hero.querySelector('.hero-card-side,.celos-side-card');
+    const rows = [];
+    if (sourceSide) {
+      for (const item of sourceSide.querySelectorAll('.celos-letter,.celos-item')) {
+        const badge = text(item.querySelector('.celos-badge'));
+        const title = text(item.querySelector('strong'));
+        const subtitle = text(item.querySelector('.celos-letter-text span,.celos-item-text span'));
+        if (badge && title) rows.push([badge,title,subtitle]);
+      }
+    }
 
-    // Reuse the actual h1, retaining semantic IDs and page-specific emphasis.
+    // Keep the page's original h1 and its ID for fragment links/ARIA.
     heading.className = 'ns-master-hero__title';
     heading.removeAttribute('style');
+    const layout = make('div','ns-master-hero__grid');
+    const content = make('div','ns-master-hero__content');
+    content.append(
+      make('p','ns-master-hero__eyebrow',eyebrow),
+      heading,
+      make('p','ns-master-hero__lead',lead)
+    );
 
-    const shell = document.createElement('div');
-    shell.className = 'ns-master-hero__grid';
+    const actions = make('div','ns-master-hero__actions');
+    const service = make('a','ns-master-hero__action ns-master-hero__action--primary','Descoperă serviciile →');
+    service.href=prefix+'servicii.html';
+    const appointment=make('a','ns-master-hero__action ns-master-hero__action--secondary','Programează-te ↗');
+    appointment.href='https://tinyurl.com/ProgramareServicii';
+    appointment.target='_blank';appointment.rel='noopener noreferrer';
+    actions.append(service,appointment);
+    content.append(actions);
 
-    const content = document.createElement('div');
-    content.className = 'ns-master-hero__content';
-
-    const eyebrow = document.createElement('p');
-    eyebrow.className = 'ns-master-hero__eyebrow';
-    eyebrow.textContent = eyebrowText;
-
-    const lead = document.createElement('p');
-    lead.className = 'ns-master-hero__lead';
-    lead.textContent = leadText;
-
-    const actions = document.createElement('div');
-    actions.className = 'ns-master-hero__actions';
-    const services = document.createElement('a');
-    services.className = 'ns-master-hero__action ns-master-hero__action--primary';
-    services.href = prefix + 'servicii.html';
-    services.textContent = 'Descoperă serviciile →';
-
-    const booking = document.createElement('a');
-    booking.className = 'ns-master-hero__action ns-master-hero__action--secondary';
-    booking.href = 'https://tinyurl.com/ProgramareServicii';
-    booking.target = '_blank';
-    booking.rel = 'noopener noreferrer';
-    booking.textContent = 'Programează-te ↗';
-    actions.append(services, booking);
-    content.append(eyebrow, heading, lead, actions);
-
-    const visual = document.createElement('div');
-    visual.className = 'ns-master-hero__visual';
-    visual.setAttribute('aria-hidden', 'true');
-    const ring = document.createElement('div');
-    ring.className = 'ns-master-hero__visual-inner';
-    const mark = document.createElement('div');
-    mark.className = 'ns-master-hero__visual-mark';
-    mark.textContent = 'C.E.L.O.S.';
-    const caption = document.createElement('p');
-    caption.className = 'ns-master-hero__visual-caption';
-    caption.textContent = 'Evaluare · Personalizare · Monitorizare';
-    ring.append(mark, caption);
-    visual.append(ring);
-    shell.append(content, visual);
-
-    hero.replaceChildren(shell);
-    hero.className = 'ns-master-hero';
-    hero.dataset.masterHero = '1';
-
-    if (preserved.length) {
-      const supplement = document.createElement('section');
-      supplement.className = 'ns-master-highlights';
-      supplement.setAttribute('aria-label', 'Elemente-cheie și informații suplimentare');
-      const inner = document.createElement('div');
-      inner.className = 'ns-master-highlights__inner';
-      preserved.forEach(node => inner.appendChild(node));
-      supplement.appendChild(inner);
-      hero.after(supplement);
+    const minis=make('div','ns-master-hero__minis');
+    if (stats.length) {
+      for (const item of stats.slice(0,4)) {
+        const mini=make('div','ns-master-hero__mini');
+        item.valueNode.className='ns-master-hero__mini-value';
+        mini.append(item.valueNode,make('span','ns-master-hero__mini-label',item.label));
+        minis.append(mini);
+      }
+    } else {
+      [
+        ['Evaluare','Pornim de la obiectivele tale'],
+        ['Nutriție','Recomandări practice'],
+        ['Monitorizare','Ajustări în timp'],
+        ['Resurse','Ghiduri și informații utile']
+      ].forEach(([value,label])=>{
+        const mini=make('div','ns-master-hero__mini');
+        mini.append(make('strong','ns-master-hero__mini-value',value),make('span','ns-master-hero__mini-label',label));
+        minis.append(mini);
+      });
     }
+    content.append(minis);
+
+    const visual=make('div','ns-master-hero__visual');
+    const panel=make('aside','ns-master-hero__panel');
+    panel.setAttribute('aria-label','Elementele metodei C.E.L.O.S.');
+    panel.append(make('h2','ns-master-hero__panel-title','Sistemul C.E.L.O.S.™'));
+    const list=make('div','ns-master-hero__panel-list');
+    (rows.length>=4 ? rows.slice(0,4):FIELDS).forEach(([letter,title,detail])=>{
+      const line=make('div','ns-master-hero__panel-item');
+      const body=make('div','ns-master-hero__panel-copy');
+      body.append(make('strong','',title),make('span','',detail));
+      line.append(make('span','ns-master-hero__panel-badge',letter),body);
+      list.append(line);
+    });
+    panel.append(list,make('p','ns-master-hero__panel-foot','Evaluare · Personalizare · Monitorizare'));
+    visual.append(panel);
+    layout.append(content,visual);
+
+    hero.replaceChildren(layout);
+    hero.className='ns-master-hero';
+    hero.dataset.masterHero='1';
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMasterHero, { once: true });
+  if (document.readyState==='loading') {
+    document.addEventListener('DOMContentLoaded',init,{once:true});
   } else {
-    initMasterHero();
+    init();
   }
 })();
