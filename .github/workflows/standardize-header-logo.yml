@@ -1,0 +1,50 @@
+name: Normalize NutriSib header logos (construction)
+
+on:
+  push:
+    branches:
+      - construction
+    paths:
+      - .github/workflows/standardize-header-logo.yml
+      - scripts/standardize_header_logo.py
+      - header-brand.css
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nutrisib-construction-branding
+  cancel-in-progress: false
+
+jobs:
+  normalize-logos:
+    if: github.ref == 'refs/heads/construction'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout construction
+        uses: actions/checkout@v4
+        with:
+          ref: construction
+          fetch-depth: 1
+
+      - name: Normalize logo in site headers
+        run: python3 scripts/standardize_header_logo.py
+
+      - name: Verify whitespace and deterministic transformation
+        run: |
+          git diff --check
+          python3 scripts/standardize_header_logo.py --dry-run | tee /tmp/header-logo-check.txt
+          grep -q 'Normalized header branding: 0 pages' /tmp/header-logo-check.txt
+
+      - name: Commit updated HTML only on construction
+        shell: bash
+        run: |
+          git add -u
+          if git diff --cached --quiet; then
+            echo 'Header branding already standardized.'
+            exit 0
+          fi
+          git -c user.name='NutriSib Construction' -c user.email='actions@users.noreply.github.com' \
+            commit -m 'style(construction): unify header logo height to 52px in HTML pages'
+          git push origin HEAD:construction
