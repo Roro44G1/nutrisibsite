@@ -1,0 +1,47 @@
+name: Uniform NutriSib heroes (construction)
+
+on:
+  push:
+    branches:
+      - construction
+    paths:
+      - .github/workflows/standardize-hero.yml
+      - scripts/standardize_hero.py
+      - hero-uniform.css
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nutrisib-construction-hero
+  cancel-in-progress: false
+
+jobs:
+  unify-hero:
+    if: github.ref == 'refs/heads/construction'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout construction
+        uses: actions/checkout@v4
+        with:
+          ref: construction
+          fetch-depth: 1
+      - name: Normalize hero appearance across HTML pages
+        run: python3 scripts/standardize_hero.py
+      - name: Validate deterministic markup
+        run: |
+          git diff --check
+          python3 scripts/standardize_hero.py --dry-run | tee /tmp/hero-check.txt
+          grep -q 'Unified hero sections: 0 pages' /tmp/hero-check.txt
+      - name: Commit theme integration on construction only
+        shell: bash
+        run: |
+          git add -u
+          if git diff --cached --quiet; then
+            echo 'Hero styling already standardized.'
+            exit 0
+          fi
+          git -c user.name='NutriSib Construction' -c user.email='actions@users.noreply.github.com' \
+            commit -m 'style(construction): apply shared NutriSib hero theme to pages'
+          git push origin HEAD:construction
