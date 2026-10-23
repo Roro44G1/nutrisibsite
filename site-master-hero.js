@@ -86,7 +86,11 @@
 
     const actions = make('div','ns-master-hero__actions');
     const service = make('a','ns-master-hero__action ns-master-hero__action--primary','Descoperă serviciile →');
-    service.href=prefix+'servicii.html';
+    const onServices = /\/(?:servicii|servicii\.html)\/?$/i.test(location.pathname);
+    const onBlog = /\/blog\/(?:index\.html)?$/i.test(location.pathname);
+    service.href=onServices?'#catalog':onBlog?'#blog-search-input':prefix+'servicii.html';
+    if (onServices) service.textContent='Explorează catalogul ↓';
+    if (onBlog) service.textContent='Caută articole →';
     const appointment=make('a','ns-master-hero__action ns-master-hero__action--secondary','Programează-te ↗');
     appointment.href='https://tinyurl.com/ProgramareServicii';
     appointment.target='_blank';appointment.rel='noopener noreferrer';

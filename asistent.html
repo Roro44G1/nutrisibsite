@@ -8,7 +8,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="celos.css" />
   <style>
     :root {
       --navy: #0A2463;
@@ -294,11 +293,14 @@
       .navbar-wrap .nav-links a {display:block;min-height:44px;padding:.8rem 1rem;}
     }
     .ns-assistant-menu:focus-visible {outline:3px solid #3e92cc;outline-offset:2px}
-  </style>
-<link rel="stylesheet" href="header-brand.css">
-<link rel="stylesheet" href="hero-uniform.css">
-<link rel="stylesheet" href="site-master-hero.css">
+    .msg-text { white-space:pre-wrap; overflow-wrap:anywhere; }
+  .ns-chat-actions { display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:.7rem 0;font:400 .82rem/1.5 Inter,sans-serif;color:#52687e; }
+  .ns-chat-reset { cursor:pointer;border:1px solid #b8cbdc;background:#fff;color:#1c2c4e;border-radius:9px;padding:.55rem .9rem;font-weight:700; }
+  .ns-chat-reset:focus-visible {outline:3px solid #3674a8;outline-offset:3px;}
+</style>
 <script defer src="site-master-hero.js"></script>
+<link rel="stylesheet" href="nutrisib-theme.css">
+<script defer src="site-chrome.js"></script>
 </head>
 <body>
 
@@ -319,7 +321,7 @@
 <div class="chat-wrapper">
 
   <div class="chat-box">
-    <div class="chat-messages" id="chatMessages">
+    <div class="chat-messages" id="chatMessages" role="log" aria-label="Conversația NutriSib" aria-live="polite" aria-relevant="additions">
       <div class="msg ai">
         <div class="msg-avatar">N</div>
         <div class="msg-bubble">
@@ -332,6 +334,8 @@
       <textarea
         class="chat-input"
         id="chatInput"
+        maxlength="850"
+        aria-label="Scrie întrebarea către asistentul NutriSib"
         placeholder="Scrie întrebarea ta..."
         rows="1"
         onkeydown="handleKey(event)"
@@ -346,6 +350,7 @@
     </div>
   </div>
 
+  <div class="ns-chat-actions"><button type="button" class="ns-chat-reset" onclick="resetChat()">Conversație nouă</button><span>Nu introduce date medicale sau personale în chat.</span></div>
   <div class="suggestions">
     <span class="suggestions-title">Întrebări frecvente:</span>
     <button class="sug-btn" onclick="askSuggestion(this.textContent)">Ce este metoda C.E.L.O.S.?</button>
@@ -362,7 +367,7 @@
       <p>
         Asistentul oferă informații generale despre nutriție și metoda C.E.L.O.S.
         Pentru un plan personalizat bazat pe datele tale biologice,
-        <a href="#evaluare">programează o evaluare completă →</a>
+        <a href="evaluare.html">programează o evaluare completă →</a>
       </p>
     </div>
   </div>
@@ -371,8 +376,8 @@
 
 <footer class="page-footer">
   <p>© 2026 NutriSib — dr.ing. Radu Pascu |
-    <a href="politica">Politică de confidențialitate</a> |
-    <a href="contact">Contact</a>
+    <a href="politica.html">Politică de confidențialitate</a> |
+    <a href="contact.html">Contact</a>
   </p>
 </footer>
 
@@ -410,26 +415,36 @@
     sendMessage();
   }
 
-  function addMessage(role, text) {
+  function addMessage(role, messageText) {
     const container = document.getElementById('chatMessages');
-    const div = document.createElement('div');
-    div.className = `msg ${role}`;
-
+    const element = document.createElement('div');
+    element.className = 'msg ' + (role === 'ai' ? 'ai' : 'user');
+    const avatar = document.createElement('div');
+    avatar.className = 'msg-avatar';
+    avatar.textContent = role === 'ai' ? 'N' : 'T';
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble';
+    const content = document.createElement('div');
+    content.className = 'msg-text';
+    content.textContent = String(messageText || '');
+    bubble.appendChild(content);
     if (role === 'ai') {
-      div.innerHTML = `
-        <div class="msg-avatar">N</div>
-        <div class="msg-bubble">
-          <div class="msg-text">${text.replace(/\n/g, '<br>')}</div>
-          ${CTA_HTML}
-        </div>`;
-    } else {
-      div.innerHTML = `
-        <div class="msg-avatar">T</div>
-        <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>`;
+      // Only this hard-coded, local template is parsed as HTML. AI output is text.
+      const cta = document.createElement('div');
+      cta.innerHTML = CTA_HTML;
+      bubble.appendChild(cta);
     }
-
-    container.appendChild(div);
+    element.append(avatar, bubble);
+    container.appendChild(element);
     container.scrollTop = container.scrollHeight;
+  }
+
+  function resetChat() {
+    if (isLoading) return;
+    conversationHistory = [];
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = '';
+    addMessage('ai', 'Bună! Cu ce informații te pot ajuta despre serviciile și resursele NutriSib?');
   }
 
   function showTyping() {
@@ -456,44 +471,50 @@
   async function sendMessage() {
     if (isLoading) return;
     const input = document.getElementById('chatInput');
-    const text = input.value.trim();
-    if (!text) return;
-
+    const question = input.value.trim();
+    if (!question) return;
+    if (question.length > 850) { addMessage('ai', 'Întrebarea este prea lungă. Limiteaz-o la 850 de caractere.'); return; }
     input.value = '';
     input.style.height = 'auto';
     isLoading = true;
-    document.getElementById('sendBtn').disabled = true;
-
-    addMessage('user', text);
-    conversationHistory.push({ role: 'user', content: text });
-
+    const button = document.getElementById('sendBtn');
+    button.disabled = true;
+    addMessage('user', question);
+    conversationHistory.push({role:'user',content:question});
+    // Server accepts up to 8 alternating messages per request.
+    conversationHistory = conversationHistory.slice(-7);
     showTyping();
-
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 23000);
     try {
-      const response = await fetch('/.netlify/functions/claude-proxy', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: conversationHistory })
+      const result = await fetch('/.netlify/functions/claude-proxy', {
+        method:'POST',signal:controller.signal,
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({messages:conversationHistory})
       });
-
-      const data = await response.json();
-      removeTyping();
-
-      if (data.response) {
-        addMessage('ai', data.response);
-        conversationHistory.push({ role: 'assistant', content: data.response });
-      } else {
-        addMessage('ai', 'A apărut o eroare. Te rog încearcă din nou.');
+      let data = {};
+      try { data = await result.json(); } catch { /* Handle malformed response. */ }
+      if (!result.ok || typeof data.response !== 'string') {
+        throw new Error(data.error || 'Asistentul nu este disponibil acum.');
       }
-    } catch (err) {
+      addMessage('ai', data.response);
+      conversationHistory.push({role:'assistant',content:data.response.slice(0,1000)});
+      conversationHistory = conversationHistory.slice(-8);
+    } catch(error) {
+      // Do not send the unanswered message again on the next turn.
+      if (conversationHistory[conversationHistory.length-1]?.role === 'user') conversationHistory.pop();
+      addMessage('ai', error.name === 'AbortError'
+        ? 'Răspunsul a durat prea mult. Încearcă din nou.'
+        : (error.message || 'Nu s-a putut procesa întrebarea. Reîncearcă.'));
+    } finally {
+      clearTimeout(timeout);
       removeTyping();
-      addMessage('ai', 'A apărut o eroare. Te rog încearcă din nou.');
+      isLoading = false;
+      button.disabled = false;
+      input.focus();
     }
-
-    isLoading = false;
-    document.getElementById('sendBtn').disabled = false;
-    document.getElementById('chatInput').focus();
   }
+
 </script>
 <script>
 const nsAssistantMenu = document.getElementById('nsAssistantMenu');
