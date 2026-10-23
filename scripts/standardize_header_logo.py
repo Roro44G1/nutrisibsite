@@ -38,7 +38,10 @@ def update_image(tag: str, prefix: str) -> str:
         if expr.search(tag):
             tag = expr.sub(lambda m: m.group(1) + m.group(2) + "52" + m.group(2), tag, count=1)
         else:
-            tag = tag[:-1] + ' ' + attribute + '="52">'
+            if tag.rstrip().endswith("/>"):
+                tag = tag.rstrip()[:-2] + ' ' + attribute + '="52" />'
+            else:
+                tag = tag[:-1] + ' ' + attribute + '="52">'
     return tag
 
 def convert(html: str, prefix: str) -> str:
