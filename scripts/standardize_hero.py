@@ -68,6 +68,8 @@ def main() -> None:
         if not path.is_file() or path.suffix.lower() not in {".html", ".htm"}:
             continue
         relative = path.relative_to(ROOT)
+        if relative.as_posix() == "jurnal.html":
+            continue  # Preserve the original Jurnal hero and header exactly as in main.
         if any(piece in EXCLUDE for piece in relative.parts):
             continue
         try:
