@@ -92,7 +92,7 @@
     if (onServices) service.textContent='Explorează catalogul ↓';
     if (onBlog) service.textContent='Caută articole →';
     const appointment=make('a','ns-master-hero__action ns-master-hero__action--secondary','Programează-te ↗');
-    appointment.href='https://tinyurl.com/ProgramareServicii';
+    appointment.href=prefix+'programare.html';
     appointment.target='_blank';appointment.rel='noopener noreferrer';
     actions.append(service,appointment);
     content.append(actions);
