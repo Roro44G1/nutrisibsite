@@ -48,6 +48,14 @@ def unify(html: str, prefix: str) -> str:
     if "hero-uniform.css" not in html:
         link = '<link rel="stylesheet" href="' + prefix + 'hero-uniform.css">\n'
         html = HEAD_END.sub(lambda m: link + m.group(0), html, count=1)
+    # The canonical hero has one CSS and one DOM shape, not page-specific
+    # hero dimensions. Load after legacy styles so they cannot override it.
+    if "site-master-hero.css" not in html:
+        link = '<link rel="stylesheet" href="' + prefix + 'site-master-hero.css">\n'
+        html = HEAD_END.sub(lambda m: link + m.group(0), html, count=1)
+    if "site-master-hero.js" not in html:
+        script = '<script defer src="' + prefix + 'site-master-hero.js"></script>\n'
+        html = HEAD_END.sub(lambda m: script + m.group(0), html, count=1)
     return html
 
 
