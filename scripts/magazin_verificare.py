@@ -29,7 +29,7 @@ def verifica_lr(s, p):
     if lr_cfg.get('activ'):
         if f'data-mz-buy="{s}"' not in h: bad(f'LR {s}: lipsește butonul de coș')
     else:
-        if 'data-mz-buy' in h or 'noindex' not in h: bad(f'LR {s}: pagina „în curând” are buton de coș sau e indexabilă')
+        if 'data-mz-buy' in h or 'mz-soon-box' not in h: bad(f'LR {s}: pagina „în curând” are buton de coș sau nu are caseta de precomandă')
     ok += 1
 # 1) prețuri produse = coloana 25% rotunjită la cel mai apropiat multiplu de 10
 for s, p in P.items():

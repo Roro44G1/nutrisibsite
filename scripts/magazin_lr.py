@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from magazin_comun import *
 
 # Activare: True după ce facturarea automată e configurată (de la 17.11.2026). Cât e False, paginile LR se văd,
-# dar nu se pot comanda: nu au buton de coș, au noindex, lipsesc din sitemap, iar checkout-ul respinge produsele LR.
+# dar nu se pot comanda: în loc de buton de coș au caseta de precomandă, iar checkout-ul respinge produsele LR.
 LR_ACTIV = False
 TRANSPORT_LR = 25
 
@@ -181,7 +181,7 @@ def hero(eyebrow, titlu, lead):
 
 def pagina(path, title, desc, canon, body, og_img=None, extra='', robots=None, scripts=''):
     """Paginile LR folosesc coșul LR (separat de cel Herbalife): <body data-magazin="lr"> + linkurile „Coș” spre /magazin/lr/cos/."""
-    h = head(title, desc, canon, og_img, extra, robots or (None if LR_ACTIV else 'noindex, follow'))
+    h = head(title, desc, canon, og_img, extra, robots)
     h = h.replace('<body>', '<body data-magazin="lr">', 1).replace('href="/magazin/cos/"', f'href="{BASE}cos/"')
     write(path, h + body + foot(scripts))
 
@@ -190,7 +190,11 @@ def pagina_produs(p, fam):
     variante = fam[p['denumire']]
     title = f"{p['denumire']}{' – ' + p['varianta'] if p['varianta'] else ''} | LR | NutriSib"
     txt = re.sub(r'<[^>]+>', ' ', p['intro'] or (p['tabs'][0][1] if p['tabs'] else '')).replace('&lt;', '<').replace('&gt;', '>')
-    desc = re.sub(r'\s+', ' ', txt).strip()[:300] or f"{p['denumire']} – produs LR Health & Beauty, cod {p['sku']}."
+    desc = re.sub(r'\s+', ' ', txt).strip()[:300]
+    pret_txt = f"{p['pret']:.2f}".replace('.', ',')
+    if len(desc) < 70:  # textul din sursă e prea scurt (seturi) – descriere generată din datele produsului
+        desc = (f"{p['denumire']}{' – ' + p['varianta'] if p['varianta'] else ''} – LR, cod {p['sku']}, "
+                f"preț final {pret_txt} lei. Precomenzi la telefon sau e-mail.")
     cr_html, cr_ld = crumbs([('Magazin', '/magazin/'), ('LR', BASE), (p['cat_label'], f"{BASE}{p['cat']}/"), (p['denumire'], None)])
     disp = 'https://schema.org/InStock' if LR_ACTIV else 'https://schema.org/PreOrder'
     prod_ld = {'@context': 'https://schema.org', '@type': 'Product', 'name': f"{p['denumire']} {p['varianta']}".strip(), 'sku': p['sku'],
@@ -389,11 +393,11 @@ def card_hub(d):
       <p>Gelurile de băut Aloe Vera, suplimentele LR LIFETAKT, LR Health Mission și conceptul Figuactive – {n} produse și variante din gama de sănătate LR.</p></div>
       <div class="mz-store-foot"><div class="mz-store-thumbs">{thumbs}</div><span class="mz-go">Intră în magazin →</span></div>
     </a>'''
-    return f'''<div class="mz-store is-soon" aria-disabled="true">
-      <div><span class="mz-pill gold">În curând</span><h2>LR Health &amp; Beauty</h2>
-      <p>Se deschide în curând. Gelurile de băut Aloe Vera, suplimentele LR LIFETAKT, LR Health Mission și conceptul Figuactive – {n} produse și variante din gama de sănătate LR.</p></div>
-      <div class="mz-store-foot"><div class="mz-store-thumbs">{thumbs}</div><span class="mz-go" style="color:#8a6d0f">Lansare în curând</span></div>
-    </div>'''
+    return f'''<a class="mz-store" href="{BASE}">
+      <div><span class="mz-pill gold">Precomenzi · deschidere în curând</span><h2>LR Health &amp; Beauty</h2>
+      <p>Comenzile online se deschid în curând – până atunci, precomenzi la telefon sau e-mail. Gelurile de băut Aloe Vera, suplimentele LR LIFETAKT, LR Health Mission și conceptul Figuactive – {n} produse și variante din gama de sănătate LR.</p></div>
+      <div class="mz-store-foot"><div class="mz-store-thumbs">{thumbs}</div><span class="mz-go">Vezi catalogul și prețurile →</span></div>
+    </a>'''
 
 
 VECHI_CARD = re.compile(r'<div class="mz-store is-soon" aria-disabled="true">\s*<div><span class="mz-pill">În curând</span><h2>LR Health &amp; Beauty</h2>'
@@ -415,10 +419,10 @@ def integreaza():
     elif VECHI_CARD.search(h): h = VECHI_CARD.sub(lambda m: bloc, h, count=1)
     else: raise SystemExit('Nu găsesc cardul LR în magazin/index.html')
     write(hp, h)
-    # 3) sitemap: paginile LR doar când magazinul e activ
+    # 3) sitemap: catalogul LR e public și înainte de deschiderea comenzilor (ca Herbalife)
     sp = os.path.join(ROOT, 'sitemap-magazin.xml'); x = open(sp, encoding='utf-8').read()
     x = re.sub(r'  <!-- LR -->\n.*?  <!-- /LR -->\n', '', x, flags=re.S)
-    if d['activ']:
+    if True:
         urls = [(BASE, '0.8')] + [(f'{BASE}{c}/', '0.75') for c in d['categorii']] + [(p['url'], '0.7') for p in d['produse']]
         rows = ''.join(f'  <url><loc>{SITE}{u}</loc><lastmod>{d["generat"]}</lastmod><priority>{pr}</priority>'
                        + (f'<image:image><image:loc>{SITE}{d["imagini"][u]}</image:loc></image:image>' if u in d['imagini'] else '') + '</url>\n'

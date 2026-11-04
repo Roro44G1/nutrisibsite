@@ -25,7 +25,16 @@ def write(path, s):
 def jsonld(obj): return '<script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False) + '</script>\n'
 
 # ======================= șabloane comune =======================
+def scurt(t, n=158):
+    """Descrierea pentru motoarele de căutare: max. n caractere, tăiată la cuvânt, cu „…”."""
+    t = re.sub(r'\s+', ' ', t or '').strip()
+    if len(t) <= n: return t
+    t = t[:n - 1].rsplit(' ', 1)[0].rstrip(' ,;:–-')
+    return t + '…'
+
+
 def head(title, desc, canon, og_img=None, extra='', robots=None):
+    desc = scurt(desc)
     return f'''<!DOCTYPE html>
 <html lang="ro">
 <head>
