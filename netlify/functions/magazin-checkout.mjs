@@ -1,4 +1,4 @@
-// NutriSib – inițiere comandă magazin fizic (Herbalife): validează coșul pe server,
+// NutriSib – inițiere comandă magazin fizic (Herbalife sau LR – comenzi separate): validează coșul pe server,
 // salvează comanda în Netlify Blobs și creează sesiunea Stripe Checkout.
 import Stripe from "stripe";
 import { getStore } from "@netlify/blobs";
@@ -10,7 +10,8 @@ async function loadCatalog(origin) {
   const r = await fetch(`${origin}/magazin/catalog.json`);
   if (!r.ok) throw new Error(`catalog HTTP ${r.status}`);
   const d = await r.json();
-  CACHE = { t: Date.now(), bySku: Object.fromEntries(d.produse.map((p) => [p.sku, p])), pk: Object.fromEntries((d.pachete || []).map((p) => [p.id, p])), prag: d.config.prag_vp, transport: d.config.transport };
+  CACHE = { t: Date.now(), bySku: Object.fromEntries(d.produse.map((p) => [p.sku, p])), pk: Object.fromEntries((d.pachete || []).map((p) => [p.id, p])), prag: d.config.prag_vp, transport: d.config.transport,
+    transportLR: d.config.lr?.transport ?? 25 };
   return CACHE;
 }
 const JSON_H = { "Content-Type": "application/json" };
@@ -49,12 +50,19 @@ export default async function handler(req) {
     }
     const p = BY_SKU[key];
     if (!p) return bad("Coșul conține un produs invalid. Reîncarcă pagina coșului.");
+    if (p.inactiv) return bad(`Produsul ${p.denumire} nu poate fi comandat încă. Elimină-l din coș pentru a continua.`);
     lines.push({ sku: p.sku, denumire: p.denumire, varianta: p.varianta, pret: p.pret, vp: p.vp, qty: q, img: p.img_mic, magazin: p.magazin });
   }
   if (!lines.length) return bad("Coșul este gol.");
-  const subtotal = lines.reduce((s, l) => s + l.pret * l.qty, 0);
+  // Sume în bani (întregi): prețurile LR au zecimale (ex. 171,79 lei).
+  const subtotal = lines.reduce((s, l) => s + Math.round(l.pret * 100) * l.qty, 0) / 100;
   const vpTotal = Math.round(lines.reduce((s, l) => s + l.vp * l.qty, 0) * 100) / 100;
-  const transport = vpTotal >= PRAG_VP ? 0 : TRANSPORT;
+  // Coșuri și comenzi separate: o comandă conține produse dintr-un singur magazin (fiecare are coșul lui pe site).
+  const magazine = [...new Set(lines.map((l) => l.magazin || "herbalife"))];
+  if (magazine.length > 1) return bad("Produsele LR și Herbalife se comandă separat, fiecare din coșul magazinului său. Reîncarcă pagina coșului.");
+  const magazin = magazine[0];
+  // Transport: LR are tarif fix pe comandă; Herbalife e gratuit de la PRAG_VP.
+  const transport = magazin === "lr" ? cat.transportLR : vpTotal >= PRAG_VP ? 0 : TRANSPORT;
 
   // ---- date client ----
   const c = body.client || {};
@@ -109,8 +117,8 @@ export default async function handler(req) {
   const now = new Date();
   const id = `NS-${now.toISOString().slice(2, 10).replace(/-/g, "")}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
   const order = {
-    id, creata: now.toISOString(), status: "in_asteptarea_platii", magazin: "herbalife",
-    produse: lines, subtotal, transport, total: subtotal + transport, vp_total: vpTotal,
+    id, creata: now.toISOString(), status: "in_asteptarea_platii", magazin,
+    produse: lines, subtotal, transport, total: Math.round((subtotal + transport) * 100) / 100, vp_total: vpTotal,
     client, firma, cnp, user_id: userId, profil, termeni_acceptati: now.toISOString(),
   };
   const store = getStore({ name: "magazin-comenzi", consistency: "strong" });
@@ -136,14 +144,14 @@ export default async function handler(req) {
       shipping_options: [{
         shipping_rate_data: {
           type: "fixed_amount",
-          fixed_amount: { amount: transport * 100, currency: "ron" },
+          fixed_amount: { amount: Math.round(transport * 100), currency: "ron" },
           display_name: transport ? "Livrare prin curier" : `Livrare gratuită prin curier (${vpTotal} VP)`,
         },
       }],
-      metadata: { magazin: "herbalife", order_id: id, vp_total: String(vpTotal) },
-      payment_intent_data: { description: `Comanda NutriSib ${id}`, metadata: { magazin: "herbalife", order_id: id } },
-      success_url: `${origin}/magazin/comanda-confirmata/?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/magazin/cos/`,
+      metadata: { magazin, order_id: id, vp_total: String(vpTotal) },
+      payment_intent_data: { description: `Comanda NutriSib ${id}`, metadata: { magazin, order_id: id } },
+      success_url: `${origin}/magazin/comanda-confirmata/?session_id={CHECKOUT_SESSION_ID}${magazin === "lr" ? "&magazin=lr" : ""}`,
+      cancel_url: `${origin}${magazin === "lr" ? "/magazin/lr/cos/" : "/magazin/cos/"}`,
     });
     order.stripe_session = session.id;
     await store.setJSON(id, order);
