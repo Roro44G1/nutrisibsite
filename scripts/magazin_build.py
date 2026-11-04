@@ -16,6 +16,7 @@ SITE = 'https://nutrisib.club'
 TODAY = datetime.date.today().isoformat()
 PRAG_VP, TRANSPORT = 125, 25
 VANZATOR = 'PASCU RADU VASILE ÎNTREPRINDERE INDIVIDUALĂ'
+REGCOM = 'F32/667/2017'   # format nou ONRC (14 caractere) doar după ce e emis oficial
 E = lambda s: html.escape(str(s or ''), quote=True)
 
 CATDATA = json.load(open(os.path.join(os.path.dirname(__file__), 'herbalife_categorii.json'), encoding='utf-8'))
@@ -119,7 +120,7 @@ def head(title, desc, canon, og_img=None, extra='', robots=None):
 SHOPFOOT = f'''<section class="content-card">
   <div class="mz-shopfoot">
     <div>
-      <p style="margin:0 0 .4rem"><strong>Magazinul NutriSib</strong> este operat de {VANZATOR}, CUI 38416337, Reg. Com. F32/667/2017.</p>
+      <p style="margin:0 0 .4rem"><strong>Magazinul NutriSib</strong> este operat de {VANZATOR}<br>CUI 38416337 · Nr. Reg. Com. {REGCOM}</p>
       <nav class="mz-legal-nav" aria-label="Informații legale">
         <a href="/magazin/termeni-si-conditii/">Termeni și condiții</a>
         <a href="/magazin/livrare/">Livrare</a>
@@ -159,7 +160,9 @@ def md2html(t, img_nutr=None):
 
 SB_SCRIPTS = ('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>\n'
               '<script src="/magazin/assets/sb-config.js"></script>\n<script src="/magazin/assets/cont.js" defer></script>\n')
+HL_SCRIPTS = '<script src="/magazin/assets/herbalife.js" defer></script>\n'
 def build_page(path, title, desc, canon, body, og_img=None, extra='', robots=None, scripts=''):
+    if '/magazin/herbalife/' in canon: scripts = HL_SCRIPTS + scripts
     write(path, head(title, desc, canon, og_img, extra, robots) + body + foot(scripts))
 
 # ======================= date produse =======================
@@ -181,6 +184,7 @@ def load_products():
                  cat=k, cat_label=lab, subcat=subcat, meta_desc=meta.get('meta_descriere') or '', intro=intro, secs=secs, disc=disc,
                  pret=pr['pret'], vp=pr['vp'], url=f'/magazin/herbalife/{slug}/')
         p['varianta'] = ' · '.join(x for x in [aroma if aroma != 'Original' else '', p['marime']] if x)
+        p['src_ambalaj'] = imgs.get('ambalaj')
         p['img'] = webp(imgs.get('ambalaj'), slug + '-ambalaj', 900, True)
         p['img_mic'] = webp(imgs.get('ambalaj'), slug + '-ambalaj', 420, True)
         p['galerie'] = [x for x in [(p['img'], 'ambalaj'), (webp(imgs.get('preparat'), slug + '-preparat', 1000), 'preparat'),
@@ -271,7 +275,7 @@ def card(nume, vs):
     meta = f'{len(arome)} arome' if len(arome) > 1 else (f'{n} variante' if n > 1 else p0['varianta'])
     text = ' '.join([nume, p0['cat_label'], p0['subcat']] + [v['varianta'] + ' ' + v['sku'] for v in vs])
     return f'''<a class="mz-card" href="{p0['url']}" data-text="{E(text)}">
-  <div class="mz-card-img"><img src="{p0['img_mic']}" alt="{E(nume)}" loading="lazy" width="420" height="420"><span class="mz-card-vp">{vp_fmt(p0['vp'])} VP</span></div>
+  <div class="mz-card-img"><img src="{img_grup(nume, vs) or p0['img_mic']}" alt="{E(nume)}" loading="lazy" width="420" height="420"><span class="mz-card-vp">{vp_fmt(p0['vp'])} VP</span></div>
   <div class="mz-card-body">
     <span class="mz-card-cat">{E(p0['subcat'] or p0['cat_label'])}</span>
     <h3 class="mz-card-title">{E(nume)}</h3>
@@ -280,12 +284,48 @@ def card(nume, vs):
   </div>
 </a>'''
 
+def e_plic(p): return 'plicule' in (p['marime'] or '').lower()
+def nume_card(p): return p['denumire'] + (' – plicuri' if e_plic(p) and any(not e_plic(v) for v in fam[p['denumire']]) else '')
+CARD_FAM = {}
+for p in produse: CARD_FAM.setdefault(nume_card(p), []).append(p)
+for v in CARD_FAM.values(): v.sort(key=lambda p: (p['pret'], p['varianta']))
+
+def img_grup(nume, vs):
+    """Imagine compusă din ambalajele variantelor (etichete RO), pentru cardurile cu mai multe variante."""
+    srcs, seen = [], set()
+    for v in vs:
+        if v['src_ambalaj'] and v['img'] not in seen: seen.add(v['img']); srcs.append(v['src_ambalaj'])
+    if len(srcs) < 2: return None
+    srcs = srcs[:5]
+    slug = re.sub(r'[^a-z0-9]+', '-', nume.lower().translate(str.maketrans('ăâîșşțţ', 'aaisstt'))).strip('-')
+    dst = os.path.join(HL, 'img', f'grup-{slug}-840.webp'); url = f'/magazin/herbalife/img/grup-{slug}-840.webp'
+    if os.path.exists(dst): return url
+    ims = []
+    for f in srcs:
+        im = Image.open(f).convert('RGBA'); bb = im.getchannel('A').point(lambda a: 255 if a > 8 else 0).getbbox()
+        if bb: im = im.crop(bb)
+        ims.append(im)
+    H = 600; ims = [im.resize((round(im.width * H / im.height), H), Image.LANCZOS) for im in ims]
+    n = len(ims); mid = n // 2
+    scale = [0.86 if i != mid else 1.0 for i in range(n)]
+    ims = [im.resize((round(im.width * sc), round(im.height * sc)), Image.LANCZOS) for im, sc in zip(ims, scale)]
+    step = max(im.width for im in ims) * (0.5 if n > 2 else 0.7)
+    W = round(step * (n - 1) + ims[-1].width); Hc = max(im.height for im in ims)
+    canvas = Image.new('RGBA', (W, Hc), (0, 0, 0, 0))
+    order = sorted(range(n), key=lambda i: -abs(i - mid))   # cele din margini în spate, centrul în față
+    for i in order:
+        im = ims[i]; canvas.alpha_composite(im, (round(step * i), Hc - im.height))
+    side = round(max(W, Hc) * 1.08); sq = Image.new('RGBA', (side, side), (0, 0, 0, 0))
+    sq.alpha_composite(canvas, ((side - W) // 2, (side - Hc) // 2)); sq.thumbnail((840, 840), Image.LANCZOS)
+    sq.save(dst + '.part', 'WEBP', quality=84, method=6); os.replace(dst + '.part', dst)
+    return url
+
 def familii_din(skus):
-    """Familiile (denumire -> variante) care au cel puțin un SKU în listă, în ordinea listei."""
+    """Grupurile de card (denumire, separat plicuri) care au cel puțin un SKU în listă, în ordinea listei."""
     out = {}
     for s_ in skus:
         p = BYSKU.get(s_)
-        if p and p['denumire'] not in out: out[p['denumire']] = fam[p['denumire']]
+        if p and nume_card(p) not in out: out[nume_card(p)] = CARD_FAM[nume_card(p)]
     return out
 
 def sectiune_categorie(c, h='h2'):
@@ -313,12 +353,13 @@ cr_html, cr_ld = crumbs([('Magazin', '/magazin/'), ('Herbalife', None)])
 item_ld = {'@context': 'https://schema.org', '@type': 'ItemList', 'name': 'Produse Herbalife – NutriSib', 'numberOfItems': len(fam),
            'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': SITE + vs[0]['url'], 'name': nume} for i, (nume, vs) in enumerate(sorted(fam.items()))]}
 body = f'''<div class="mz-crumbs-wrap">{cr_html}</div>
-<section class="hero-card mz-hero">
+<section class="hero-card mz-hero mz-hero-hl">
   <div class="hero-content">
     <span class="mz-eyebrow">Magazin NutriSib · Herbalife</span>
     <h1 class="hero-title">Herbalife</h1>
-    <p class="mz-lead">Catalogul complet Herbalife România – {len(produse)} produse și variante, cu ambalaj și etichetă în limba română, organizate pe categoriile Herbalife. Prețuri finale, fără costuri ascunse.</p>
+    <p class="mz-lead">Catalogul complet Herbalife România. Prețuri finale, fără costuri ascunse.</p>
   </div>
+  <div class="mz-hero-brand"><img src="/magazin/assets/herbalife-logo.webp" alt="Herbalife" width="640" height="177"></div>
 </section>
 <section class="content-card mz-catalog-top">
   {SHIP}
@@ -331,6 +372,15 @@ body = f'''<div class="mz-crumbs-wrap">{cr_html}</div>
 {chr(10).join(sectiune_categorie(c) for c in CATEGORII)}
 </div>
 <p class="mz-empty content-card">Niciun produs nu corespunde căutării.</p>
+<section class="content-card mz-video">
+  <h2 class="mz-section-title">Herbalife în imagini</h2>
+  <div class="mz-video-facade" data-tiktok="7622323586174356767" data-user="herbalife">
+    <p><strong>Video de pe contul oficial TikTok @herbalife</strong></p>
+    <p class="mz-buy-note">Videoclipul se încarcă de pe TikTok doar dacă apeși butonul de mai jos. TikTok poate seta cookie-uri proprii.</p>
+    <button type="button" class="mz-btn" style="flex:none">▶ Încarcă videoclipul</button>
+    <p class="mz-buy-note"><a href="https://www.tiktok.com/@herbalife/video/7622323586174356767" target="_blank" rel="noopener">Sau deschide-l direct pe TikTok →</a></p>
+  </div>
+</section>
 '''
 build_page(os.path.join(HL, 'index.html'), 'Produse Herbalife – catalog complet România | Magazin NutriSib',
            f'Catalogul complet Herbalife România pe categorii: mic dejun și mese sănătoase, nutriția de bază, gama sport, nutriție externă și altele. {len(produse)} produse cu etichetă în limba română.',
@@ -347,12 +397,13 @@ for c in CATEGORII:
           'mainEntity': {'@type': 'ItemList', 'numberOfItems': len(fams), 'itemListElement': [
               {'@type': 'ListItem', 'position': i + 1, 'url': SITE + vs[0]['url'], 'name': n} for i, (n, vs) in enumerate(fams.items())]}}
     body = f'''<div class="mz-crumbs-wrap">{cr_html}</div>
-<section class="hero-card mz-hero">
+<section class="hero-card mz-hero mz-hero-hl">
   <div class="hero-content">
     <span class="mz-eyebrow">Herbalife · categorie</span>
     <h1 class="hero-title">{E(c['nume'])}</h1>
     <p class="mz-lead">{len(skus)} {'produs' if len(skus) == 1 else 'produse și variante'}{' – ' + E(subs) if subs else ''}.</p>
   </div>
+  <div class="mz-hero-brand"><img src="/magazin/assets/herbalife-logo.webp" alt="Herbalife" width="640" height="177"></div>
 </section>
 <section class="content-card mz-catalog-top">
   {SHIP}
