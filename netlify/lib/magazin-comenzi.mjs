@@ -103,7 +103,7 @@ async function emiteFactura(o) {
   const client = o.firma
     ? { name: o.firma.denumire, vatCode: o.firma.cui, regCom: o.firma.regcom || "", address: o.firma.adresa, isTaxPayer: /^RO/i.test(o.firma.cui), city: o.client.localitate, county: o.client.judet }
     : { name: `${o.client.nume} ${o.client.prenume}`, vatCode: o.cnp || "0000000000000", address: o.client.adresa, isTaxPayer: false, city: o.client.localitate, county: o.client.judet };
-  const products = o.produse.map((l) => ({ name: `${l.denumire}${l.varianta ? " - " + l.varianta : ""}`.slice(0, 250), code: l.cod || l.sku, isDiscount: false, measuringUnitName: "buc",
+  const products = o.produse.map((l) => ({ name: `${l.denumire}${l.varianta ? " - " + l.varianta : ""}`, code: l.sku, isDiscount: false, measuringUnitName: "buc",
     currency: "RON", quantity: l.qty, price: l.pret, isTaxIncluded: true, saveToDb: false, isService: false, ...tax }));
   if (o.transport) products.push({ name: "Transport", code: "TRANSPORT", isDiscount: false, measuringUnitName: "buc", currency: "RON", quantity: 1,
     price: o.transport, isTaxIncluded: true, saveToDb: false, isService: true, ...tax });
