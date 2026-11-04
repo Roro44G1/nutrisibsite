@@ -1,7 +1,7 @@
 # Pagini coș, confirmare și pagini legale – rulat de magazin_build.py (folosește funcțiile de acolo)
 FIRMA = dict(
     denumire=VANZATOR, cui='38416337', regcom='F32/667/2017',
-    adresa=None,                       # TODO: adresa sediului (ex. „Str. ..., nr. ..., Sibiu, jud. Sibiu”)
+    adresa='Str. Podului 44G/1, Sibiu, jud. Sibiu',
     email='nutrisib.club@gmail.com', telefon=None,
 )
 def camp(v, ce): return E(v) if v else f'<mark>[de completat: {ce}]</mark>'
@@ -35,6 +35,7 @@ body = f'''<div class="mz-crumbs-wrap">{crumbs([('Magazin', '/magazin/'), ('Coș
     </aside>
     <section class="content-card mz-co-form">
       <form class="mz-form" data-mz-form novalidate>
+        <div class="mz-account-bar" data-account-bar>Poți comanda și fără cont. <a href="/magazin/cont/">Conectează-te</a> pentru date precompletate și istoricul comenzilor.</div>
         <fieldset>
           <legend>Date de contact și livrare</legend>
           <div class="mz-fields">
@@ -49,6 +50,10 @@ body = f'''<div class="mz-crumbs-wrap">{crumbs([('Magazin', '/magazin/'), ('Coș
         </fieldset>
         <fieldset>
           <legend>Facturare</legend>
+          <div class="mz-fields" data-pf>
+            <div class="mz-field"><label for="f-cnp">CNP (opțional)</label><input id="f-cnp" name="cnp" inputmode="numeric" maxlength="13" pattern="[0-9]{{13}}" title="CNP-ul are 13 cifre" autocomplete="off"></div>
+            <p class="mz-field-note">Completează-l doar dacă vrei ca CNP-ul să apară pe factură. Dacă îl lași gol, factura se emite fără CNP, conform legii. Nu îl salvăm în cont.</p>
+          </div>
           <label class="mz-check"><input type="checkbox" name="pe_firma"> <span>Vreau factură pe firmă (persoană juridică)</span></label>
           <div class="mz-fields" data-firma style="display:none;margin-top:.75rem">
             <div class="mz-field full"><label for="f-firma">Denumirea firmei <span class=req>*</span></label><input id="f-firma" name="firma_denumire" data-req></div>
@@ -71,6 +76,7 @@ body = f'''<div class="mz-crumbs-wrap">{crumbs([('Magazin', '/magazin/'), ('Coș
             <label class="mz-check"><input type="checkbox" name="consimtamant_profil"> <span>Sunt de acord ca {E(VANZATOR)} să prelucreze datele din profilul nutrițional în scopul recomandărilor personalizate, conform <a href="/magazin/confidentialitate/" target="_blank">politicii de confidențialitate</a>.</span></label>
           </details>
         </fieldset>
+        <label class="mz-check" data-save-account style="display:none"><input type="checkbox" name="salveaza_in_cont" checked> <span>Salvează adresa și datele de facturare în contul meu, pentru comenzile viitoare.</span></label>
         <label class="mz-check"><input type="checkbox" name="accept_termeni" required> <span>Am citit și accept <a href="/magazin/termeni-si-conditii/" target="_blank">Termenii și condițiile</a> și <a href="/magazin/confidentialitate/" target="_blank">Politica de confidențialitate</a>. Am luat la cunoștință <a href="/magazin/retur/" target="_blank">dreptul de retragere</a>. <span class=req>*</span></span></label>
         <div class="mz-error" role="alert"></div>
         <button type="submit" class="mz-btn gold" style="width:100%;margin-top:1rem">Continuă spre plată</button>
@@ -80,7 +86,7 @@ body = f'''<div class="mz-crumbs-wrap">{crumbs([('Magazin', '/magazin/'), ('Coș
 </div>
 </div>
 '''
-build_page(os.path.join(OUT, 'cos', 'index.html'), 'Coșul de cumpărături | Magazin NutriSib', 'Coșul de cumpărături NutriSib.', '/magazin/cos/', body, robots='noindex, follow')
+build_page(os.path.join(OUT, 'cos', 'index.html'), 'Coșul de cumpărături | Magazin NutriSib', 'Coșul de cumpărături NutriSib.', '/magazin/cos/', body, robots='noindex, follow', scripts=SB_SCRIPTS)
 
 body = '''<section class="content-card" data-mz-success style="text-align:center;max-width:760px;margin-left:auto;margin-right:auto">
   <span class="mz-eyebrow">Comandă înregistrată</span>
@@ -91,6 +97,64 @@ body = '''<section class="content-card" data-mz-success style="text-align:center
 </section>
 '''
 build_page(os.path.join(OUT, 'comanda-confirmata', 'index.html'), 'Comandă confirmată | Magazin NutriSib', 'Confirmarea comenzii NutriSib.', '/magazin/comanda-confirmata/', body, robots='noindex, nofollow')
+
+body = f'''<div class="mz-crumbs-wrap">{crumbs([('Magazin', '/magazin/'), ('Contul meu', None)])[0]}</div>
+<div data-mz-account>
+<section class="content-card" data-out style="display:none;max-width:620px;margin-left:auto;margin-right:auto">
+  <h1 class="mz-p-title">Contul meu</h1>
+  <p>Introdu adresa de e-mail și îți trimitem un link de conectare – fără parolă. Contul se creează automat la prima conectare.</p>
+  <div data-login data-redirect="/magazin/cont/">
+    <form class="mz-form"><div class="mz-field"><label for="l-email">E-mail</label><input id="l-email" name="email" type="email" required autocomplete="email"></div>
+    <button class="mz-btn" type="submit" style="width:100%;margin-top:.75rem">Trimite-mi linkul de conectare</button></form>
+    <p class="mz-login-msg" role="status" style="display:none"></p>
+  </div>
+  <p class="mz-buy-note">Contul este opțional: poți comanda și fără el. Dacă ai comandat deja fără cont, comenzile făcute cu aceeași adresă de e-mail apar automat în istoric.</p>
+</section>
+<div data-in style="display:none">
+  <section class="content-card">
+    <div class="mz-cat-head"><h1 class="mz-cat-title">Contul meu</h1><span class="mz-cat-count"><span data-email></span> · <button type="button" class="mz-remove" data-logout>Deconectare</button></span></div>
+    <h2 class="mz-section-title">Comenzile mele</h2>
+    <div data-orders><p>Se încarcă…</p></div>
+  </section>
+  <section class="content-card">
+    <form class="mz-form" data-client-form>
+      <fieldset><legend>Date de livrare salvate</legend><div class="mz-fields">
+        {fld('nume', 'Nume', req=False)}{fld('prenume', 'Prenume', req=False)}{fld('telefon', 'Telefon', 'tel', req=False)}
+        <div class="mz-field"><label for="f-judet">Județ</label><select id="f-judet" name="judet">{opt_jud}</select></div>
+        {fld('localitate', 'Localitate', req=False)}{fld('cod_postal', 'Cod poștal', req=False)}
+        {fld('adresa', 'Adresă', req=False, full=True)}
+      </div></fieldset>
+      <fieldset><legend>Date de facturare pe firmă (opțional)</legend><div class="mz-fields">
+        <div class="mz-field full"><label for="c-fd">Denumirea firmei</label><input id="c-fd" name="firma_denumire"></div>
+        <div class="mz-field"><label for="c-fc">CUI / CIF</label><input id="c-fc" name="firma_cui"></div>
+        <div class="mz-field"><label for="c-fr">Nr. Registrul Comerțului</label><input id="c-fr" name="firma_regcom"></div>
+        <div class="mz-field full"><label for="c-fa">Adresa sediului social</label><input id="c-fa" name="firma_adresa"></div>
+      </div></fieldset>
+      <button class="mz-btn" type="submit">Salvează datele</button><p class="mz-form-msg" role="status"></p>
+    </form>
+  </section>
+  <section class="content-card">
+    <form class="mz-form" data-profil-form>
+      <fieldset><legend>Profilul nutrițional (opțional)</legend>
+      <p class="mz-buy-note">Datele de mai jos pot fi considerate date privind sănătatea. Le păstrăm doar cu acordul tău explicit și le poți șterge oricând.</p>
+      <div class="mz-fields">
+        {fld('greutate_actuala', 'Greutate actuală (kg)', 'number', False, extra='min="30" max="300" step="0.1"')}
+        {fld('greutate_dorita', 'Greutate dorită (kg)', 'number', False, extra='min="30" max="300" step="0.1"')}
+        {fld('inaltime', 'Înălțime (cm)', 'number', False, extra='min="100" max="230"')}
+        {fld('an_nastere', 'Anul nașterii', 'number', False, extra=f'min="{cur_year-100}" max="{cur_year-18}"')}
+        <div class="mz-field"><label for="p-sex">Sex</label><select id="p-sex" name="sex"><option value="">–</option><option>Feminin</option><option>Masculin</option></select></div>
+      </div>
+      <label class="mz-check"><input type="checkbox" name="consimtamant"> <span>Sunt de acord ca {E(VANZATOR)} să prelucreze aceste date în scopul recomandărilor personalizate, conform <a href="/magazin/confidentialitate/">politicii de confidențialitate</a>.</span></label>
+      </fieldset>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap"><button class="mz-btn" type="submit" style="flex:none">Salvează profilul</button><button class="mz-btn ghost" type="button" data-profil-delete style="flex:none">Șterge profilul</button></div>
+      <p class="mz-form-msg" role="status"></p>
+    </form>
+  </section>
+  <section class="content-card"><p class="mz-buy-note" style="margin:0">Vrei să îți ștergi contul și toate datele asociate? Scrie-ne la <a href="mailto:{FIRMA['email']}?subject=Stergere%20cont%20magazin">{FIRMA['email']}</a> de pe adresa contului. Facturile emise se păstrează conform legislației contabile.</p></section>
+</div>
+</div>
+'''
+build_page(os.path.join(OUT, 'cont', 'index.html'), 'Contul meu | Magazin NutriSib', 'Contul de client NutriSib: istoricul comenzilor și datele de livrare.', '/magazin/cont/', body, robots='noindex, follow', scripts=SB_SCRIPTS)
 
 def legal(slug, title, desc, inner):
     nav = ' '.join(f'<a href="/magazin/{s}/">{t}</a>' for s, t in [('termeni-si-conditii', 'Termeni și condiții'), ('livrare', 'Livrare'), ('retur', 'Retur'), ('confidentialitate', 'Confidențialitate')])
@@ -110,7 +174,7 @@ legal('termeni-si-conditii', 'Termeni și condiții', 'Termenii și condițiile 
 <h2>2. Produse și informații</h2>
 <p>Descrierile, ingredientele, informațiile nutriționale și imaginile produselor provin de la producător. Imaginile au caracter informativ; alimentele prezentate în imagini sunt ilustrative și nu fac parte din conținutul produsului. Suplimentele alimentare nu înlocuiesc o dietă variată și echilibrată și un stil de viață sănătos. Dacă ai o afecțiune, urmezi un tratament, ești însărcinată sau alăptezi, cere părerea medicului înainte de a consuma suplimente.</p>
 <h2>3. Prețuri</h2>
-<p>Prețurile sunt exprimate în lei (RON) și sunt prețuri finale pentru produs. Costul transportului se afișează separat în coș, înainte de plată: transportul este gratuit pentru comenzile Herbalife care însumează minimum {PRAG_VP} VP (valoarea VP a fiecărui produs este afișată pe pagina lui) și costă {TRANSPORT} lei pentru comenzile sub acest prag. Prețul valabil este cel afișat în momentul plasării comenzii.</p>
+<p>Prețurile sunt exprimate în lei (RON) și sunt prețuri finale pentru produs. Vânzătorul nu este înregistrat în scopuri de TVA, astfel că facturile se emit fără TVA. Costul transportului se afișează separat în coș, înainte de plată: transportul este gratuit pentru comenzile Herbalife care însumează minimum {PRAG_VP} VP (valoarea VP a fiecărui produs este afișată pe pagina lui) și costă {TRANSPORT} lei pentru comenzile sub acest prag. Prețul valabil este cel afișat în momentul plasării comenzii.</p>
 <h2>4. Comanda și încheierea contractului</h2>
 <p>Comanda se plasează din coș, prin completarea datelor de livrare și facturare, acceptarea acestor termeni și plata online. Contractul se consideră încheiat în momentul în care primești pe e-mail confirmarea comenzii. Dacă un produs comandat nu mai este disponibil, te informăm și îți rambursăm integral suma aferentă în cel mult 14 zile.</p>
 <h2>5. Plata</h2>
@@ -176,15 +240,18 @@ legal('confidentialitate', 'Politica de confidențialitate', 'Cum prelucrează m
 <ul>
 <li><strong>Date de comandă și livrare</strong> (nume, prenume, e-mail, telefon, adresă, produse comandate): pentru încheierea și executarea contractului de vânzare – art. 6 alin. (1) lit. b) GDPR.</li>
 <li><strong>Date de facturare</strong> (inclusiv datele firmei, dacă alegi factură pe firmă): pentru emiterea facturii și îndeplinirea obligațiilor fiscale și contabile – art. 6 alin. (1) lit. c) GDPR.</li>
+<li><strong>CNP (opțional)</strong>: numai dacă alegi să îl completezi, pentru a fi trecut pe factură; temeiul este obligația legală de facturare – art. 6 alin. (1) lit. c) GDPR, cu garanțiile prevăzute de Legea nr. 190/2018. Dacă nu îl completezi, factura se emite fără CNP. CNP-ul nu este salvat în contul de client.</li>
+<li><strong>Contul de client (opțional)</strong>: adresa de e-mail, datele de livrare și facturare salvate și istoricul comenzilor, pentru a-ți oferi acces la comenzile tale și precompletarea formularului – art. 6 alin. (1) lit. b) GDPR. Comenzile plasate fără cont cu aceeași adresă de e-mail apar în istoricul contului.</li>
 <li><strong>Date de plată</strong>: plata cu cardul este procesată de Stripe. Noi nu primim și nu stocăm datele cardului; primim doar confirmarea plății.</li>
 <li><strong>Profilul nutrițional opțional</strong> (greutate actuală și dorită, înălțime, anul nașterii, sex): numai dacă îl completezi și îți dai acordul explicit, în scopul recomandărilor nutriționale personalizate. Aceste date pot fi considerate date privind sănătatea; temeiul este consimțământul explicit – art. 9 alin. (2) lit. a) GDPR. Comanda nu depinde de aceste date, iar consimțământul poate fi retras oricând, fără a afecta legalitatea prelucrării anterioare.</li>
 </ul>
 <h2>Cui transmitem datele</h2>
-<p>Datele sunt transmise doar furnizorilor care ne ajută să executăm comanda, în calitate de persoane împuternicite: procesatorul de plăți (Stripe), furnizorul de găzduire a site-ului (Netlify), serviciul de trimitere a e-mailurilor (Resend), aplicația de facturare (SmartBill) și firma de curierat. Unii dintre acești furnizori pot prelucra date în afara Spațiului Economic European, pe baza garanțiilor prevăzute de GDPR (de exemplu, clauze contractuale standard). Profilul nutrițional nu este transmis curierului și nu apare pe factură.</p>
+<p>Datele sunt transmise doar furnizorilor care ne ajută să executăm comanda, în calitate de persoane împuternicite: procesatorul de plăți (Stripe), furnizorul de găzduire a site-ului (Netlify), furnizorul bazei de date pentru conturile de client (Supabase), serviciul de trimitere a e-mailurilor (Resend), aplicația de facturare (SmartBill) și firma de curierat. Unii dintre acești furnizori pot prelucra date în afara Spațiului Economic European, pe baza garanțiilor prevăzute de GDPR (de exemplu, clauze contractuale standard). Profilul nutrițional nu este transmis curierului și nu apare pe factură.</p>
 <h2>Cât timp păstrăm datele</h2>
 <ul>
 <li>datele de comandă și facturare: pe durata prevăzută de legislația fiscală și contabilă;</li>
 <li>profilul nutrițional: până la retragerea consimțământului, dar nu mai mult de 3 ani de la ultima comandă.</li>
+<li>contul de client: până la solicitarea ștergerii contului.</li>
 </ul>
 <h2>Drepturile tale</h2>
 <p>Ai dreptul de acces, rectificare, ștergere, restricționare a prelucrării, portabilitate și opoziție, precum și dreptul de a retrage consimțământul. Pentru exercitarea lor, scrie-ne la <a href="mailto:{FIRMA['email']}">{FIRMA['email']}</a>. Ai, de asemenea, dreptul să depui o plângere la Autoritatea Națională de Supraveghere a Prelucrării Datelor cu Caracter Personal (<a href="https://www.dataprotection.ro" target="_blank" rel="noopener">www.dataprotection.ro</a>).</p>

@@ -53,6 +53,26 @@ export default async function handler(req) {
   if (!/^[0-9+ ]{10,15}$/.test(client.telefon)) return bad("Numărul de telefon nu este valid.");
   if (c.accept_termeni !== true) return bad("Este necesară acceptarea Termenilor și condițiilor.");
 
+  // CNP opțional (persoană fizică): validare format + cifră de control; dacă lipsește, factura se emite fără CNP.
+  let cnp = null;
+  if (c.pe_firma !== true && str(c.cnp, 13)) {
+    cnp = str(c.cnp, 13);
+    const k = "279146358279"; let sum = 0;
+    for (let i = 0; i < 12; i++) sum += Number(cnp[i]) * Number(k[i]);
+    const ctrl = sum % 11 === 10 ? 1 : sum % 11;
+    if (!/^[1-9]\d{12}$/.test(cnp) || ctrl !== Number(cnp[12])) return bad("CNP-ul introdus nu este valid. Corectează-l sau lasă câmpul gol.");
+  }
+
+  // Client conectat (opțional): verificăm tokenul Supabase pe server și legăm comanda de cont.
+  let userId = null;
+  const auth = req.headers.get("authorization") || "";
+  if (auth.startsWith("Bearer ") && process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    try {
+      const u = await fetch(`${process.env.SUPABASE_URL}/auth/v1/user`, { headers: { apikey: process.env.SUPABASE_SERVICE_ROLE_KEY, Authorization: auth } });
+      if (u.ok) userId = (await u.json()).id || null;
+    } catch (e) { console.warn("Verificare token Supabase eșuată:", e.message); }
+  }
+
   let firma = null;
   if (c.pe_firma === true) {
     firma = { denumire: str(c.firma_denumire, 150), cui: str(c.firma_cui, 20).toUpperCase(), regcom: str(c.firma_regcom, 30), adresa: str(c.firma_adresa, 200) };
@@ -76,7 +96,7 @@ export default async function handler(req) {
   const order = {
     id, creata: now.toISOString(), status: "in_asteptarea_platii", magazin: "herbalife",
     produse: lines, subtotal, transport, total: subtotal + transport, vp_total: vpTotal,
-    client, firma, profil, termeni_acceptati: now.toISOString(),
+    client, firma, cnp, user_id: userId, profil, termeni_acceptati: now.toISOString(),
   };
   const store = getStore({ name: "magazin-comenzi", consistency: "strong" });
   await store.setJSON(id, order);
