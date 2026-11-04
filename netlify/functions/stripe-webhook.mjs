@@ -3,6 +3,7 @@ import { getStore } from "@netlify/blobs";
 import { Resend } from "resend";
 import { PDFDocument, rgb } from "pdf-lib";
 import fontkit from "@pdf-lib/fontkit";
+import { handleMagazinOrder } from "../lib/magazin-comenzi.mjs";
 
 // Adaugă aici un rând nou de fiecare dată când mai vinzi un produs nou.
 // "price_XXXX" e Price ID-ul din Stripe (Products -> produsul tau -> sectiunea Pricing,
@@ -68,6 +69,18 @@ export default async function handler(req) {
   }
 
   const session = event.data.object;
+
+  // Comenzile din magazinul fizic (Herbalife etc.) au propriul flux.
+  if (session.metadata?.magazin) {
+    try {
+      await handleMagazinOrder({ session, resend });
+      return new Response("OK", { status: 200 });
+    } catch (err) {
+      console.error("Eroare comanda magazin:", err);
+      return new Response("Internal error", { status: 500 });
+    }
+  }
+
   const customerEmail = session.customer_details?.email;
   const customerName = session.customer_details?.name || "Client NutriSib";
 
