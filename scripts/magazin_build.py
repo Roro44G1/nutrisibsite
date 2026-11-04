@@ -199,8 +199,12 @@ for p in produse: fam.setdefault(p['denumire'], []).append(p)
 for v in fam.values(): v.sort(key=lambda p: (p['pret'], p['varianta']))
 
 os.makedirs(OUT, exist_ok=True)
-json.dump({'generat': TODAY, 'config': {'prag_vp': PRAG_VP, 'transport': TRANSPORT, 'moneda': 'RON'},
-           'produse': [{**{k: p[k] for k in ('sku', 'denumire', 'varianta', 'pret', 'vp', 'url', 'img_mic', 'cat')}, 'magazin': 'herbalife'} for p in produse]},
+# Celelalte magazine (LR, generat de scripts/magazin_lr.py) își păstrează intrările și setările din catalog.
+try: _vechi = json.load(open(os.path.join(OUT, 'catalog.json'), encoding='utf-8'))
+except (OSError, ValueError): _vechi = {'produse': [], 'config': {}}
+json.dump({'generat': TODAY, 'config': {**{k: v for k, v in _vechi.get('config', {}).items() if k.endswith('_lr')}, 'prag_vp': PRAG_VP, 'transport': TRANSPORT, 'moneda': 'RON'},
+           'produse': [{**{k: p[k] for k in ('sku', 'denumire', 'varianta', 'pret', 'vp', 'url', 'img_mic', 'cat')}, 'magazin': 'herbalife'} for p in produse]
+                      + [p for p in _vechi.get('produse', []) if p.get('magazin', 'herbalife') != 'herbalife']},
           open(os.path.join(OUT, 'catalog.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 # ======================= pagini produs =======================
@@ -453,9 +457,9 @@ body = f'''<section class="hero-card mz-hero">
       <div class="mz-store-foot"><span></span><span class="mz-go">Vezi produsele digitale →</span></div>
     </a>
     <div class="mz-store is-soon" aria-disabled="true">
-      <div><span class="mz-pill">În curând</span><h2>LR Health &amp; Beauty</h2>
-      <p>Produsele LR vor fi disponibile în curând.</p></div>
-      <div class="mz-store-foot"><span></span><span class="mz-go" style="opacity:.5">În pregătire</span></div>
+      <div><span class="mz-pill gold">În curând</span><h2>LR Health &amp; Beauty</h2>
+      <p>Se deschide în curând. Geluri de băut Aloe Vera, suplimente alimentare LR Lifetakt și mesele LR Figuactive – 46 de produse din gama LR pentru sănătate.</p></div>
+      <div class="mz-store-foot"><div class="mz-store-thumbs"><img src="/magazin/lr/img/81000-10-420.webp" alt="" loading="lazy"><img src="/magazin/lr/img/80338-698-420.webp" alt="" loading="lazy"><img src="/magazin/lr/img/81241-18-420.webp" alt="" loading="lazy"></div><span class="mz-go" style="color:#8a6d0f">În pregătire</span></div>
     </div>
     <div class="mz-store is-soon" aria-disabled="true">
       <div><span class="mz-pill">În curând</span><h2>FitLine</h2>

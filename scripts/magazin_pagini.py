@@ -4,6 +4,7 @@ FIRMA = dict(
     adresa='Str. Podului 44G/1, Sibiu, jud. Sibiu',
     email='nutrisib.club@gmail.com', telefon=None,
 )
+TRANSPORT_LR = 25   # identic cu scripts/magazin_lr.py
 def camp(v, ce): return E(v) if v else f'<mark>[de completat: {ce}]</mark>'
 ID_FIRMA = (f"<strong>{E(FIRMA['denumire'])}</strong>, cu sediul în {camp(FIRMA['adresa'], 'adresa sediului')}, "
             f"CUI {FIRMA['cui']}, nr. de înregistrare în Registrul Comerțului {FIRMA['regcom']}, "
@@ -21,7 +22,7 @@ body = f'''<div class="mz-crumbs-wrap">{crumbs([('Magazin', '/magazin/'), ('Coș
 <section class="content-card" data-empty style="display:none;text-align:center">
   <h1 class="mz-p-title">Coșul este gol</h1>
   <p>Adaugă produse din magazin și revino aici pentru comandă.</p>
-  <p><a class="mz-btn" style="display:inline-flex;flex:none" href="/magazin/herbalife/">Vezi produsele Herbalife</a></p>
+  <p style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap"><a class="mz-btn" style="display:inline-flex;flex:none" href="/magazin/herbalife/">Vezi produsele Herbalife</a><a class="mz-btn" style="display:inline-flex;flex:none" href="/magazin/lr/">Vezi produsele LR</a></p>
 </section>
 <div class="mz-checkout" data-filled>
     <section class="content-card mz-co-lines">
@@ -170,11 +171,11 @@ def legal(slug, title, desc, inner):
 
 legal('termeni-si-conditii', 'Termeni și condiții', 'Termenii și condițiile de vânzare ale magazinului online NutriSib.', f'''
 <h2>1. Cine vinde</h2>
-<p>Magazinul online de la adresa nutrisib.club/magazin este operat de {ID_FIRMA} („Vânzătorul”). Vânzătorul este distribuitor independent Herbalife și revinde produse originale Herbalife, achiziționate de la Herbalife România.</p>
+<p>Magazinul online de la adresa nutrisib.club/magazin este operat de {ID_FIRMA} („Vânzătorul”). Vânzătorul este distribuitor independent Herbalife și revinde produse originale Herbalife, achiziționate de la Herbalife România. Pentru produsele LR, Vânzătorul este partener independent LR și revinde produse originale LR.</p>
 <h2>2. Produse și informații</h2>
 <p>Descrierile, ingredientele, informațiile nutriționale și imaginile produselor provin de la producător. Imaginile au caracter informativ; alimentele prezentate în imagini sunt ilustrative și nu fac parte din conținutul produsului. Suplimentele alimentare nu înlocuiesc o dietă variată și echilibrată și un stil de viață sănătos. Dacă ai o afecțiune, urmezi un tratament, ești însărcinată sau alăptezi, cere părerea medicului înainte de a consuma suplimente.</p>
 <h2>3. Prețuri</h2>
-<p>Prețurile sunt exprimate în lei (RON) și sunt prețuri finale pentru produs. Vânzătorul nu este înregistrat în scopuri de TVA, astfel că facturile se emit fără TVA. Costul transportului se afișează separat în coș, înainte de plată: transportul este gratuit pentru comenzile Herbalife care însumează minimum {PRAG_VP} VP (valoarea VP a fiecărui produs este afișată pe pagina lui) și costă {TRANSPORT} lei pentru comenzile sub acest prag. Prețul valabil este cel afișat în momentul plasării comenzii.</p>
+<p>Prețurile sunt exprimate în lei (RON) și sunt prețuri finale pentru produs. Vânzătorul nu este înregistrat în scopuri de TVA, astfel că facturile se emit fără TVA. Costul transportului se afișează separat în coș, înainte de plată: transportul este gratuit pentru comenzile Herbalife care însumează minimum {PRAG_VP} VP (valoarea VP a fiecărui produs este afișată pe pagina lui) și costă {TRANSPORT} lei pentru comenzile sub acest prag. Prețul valabil este cel afișat în momentul plasării comenzii. Pentru produsele LR, transportul costă {TRANSPORT_LR} lei pe comandă. Produsele LR și cele Herbalife se comandă separat: fiecare comandă are propriul cost de transport și propria factură.</p>
 <h2>4. Comanda și încheierea contractului</h2>
 <p>Comanda se plasează din coș, prin completarea datelor de livrare și facturare, acceptarea acestor termeni și plata online. Contractul se consideră încheiat în momentul în care primești pe e-mail confirmarea comenzii. Dacă un produs comandat nu mai este disponibil, te informăm și îți rambursăm integral suma aferentă în cel mult 14 zile.</p>
 <h2>5. Plata</h2>
@@ -195,8 +196,11 @@ legal('termeni-si-conditii', 'Termeni și condiții', 'Termenii și condițiile 
 
 legal('livrare', 'Livrare', 'Costuri și condiții de livrare pentru comenzile din magazinul NutriSib.', f'''
 <div class="mz-box"><p style="margin:0"><strong>Transport gratuit</strong> pentru comenzile Herbalife de minimum <strong>{PRAG_VP} VP</strong>. Sub acest prag, transportul costă <strong>{TRANSPORT} lei</strong>.</p></div>
+<div class="mz-box"><p style="margin:0">Pentru produsele <strong>LR</strong>, transportul costă <strong>{TRANSPORT_LR} lei</strong> pe comandă.</p></div>
 <h2>Ce este VP</h2>
 <p>VP (valoarea în volum) este o valoare atribuită de Herbalife fiecărui produs. O găsești pe pagina fiecărui produs și în coș, unde VP-ul produselor se adună automat. Când totalul ajunge la {PRAG_VP} VP, transportul devine gratuit.</p>
+<h2>Comenzi LR și Herbalife</h2>
+<p>Produsele LR și cele Herbalife se comandă separat. Dacă ai în coș produse din ambele magazine, alegi în coș comanda pe care o plasezi; cealaltă rămâne în coș și o poți finaliza separat. Fiecare comandă are propriul cost de transport, propria factură și se livrează în colet separat.</p>
 <h2>Unde livrăm</h2>
 <p>Livrăm prin curier, la adresa indicată în comandă, oriunde în România.</p>
 <h2>Când ajunge comanda</h2>

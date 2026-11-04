@@ -4,7 +4,8 @@
 import { getStore } from "@netlify/blobs";
 import { smartbillActiv, emiteFacturaSB, descarcaFacturaSB, numeFisierFactura, taxaSB } from "./smartbill.mjs";
 
-const lei = (n) => `${Number(n).toLocaleString("ro-RO")} lei`;
+const lei = (n) => { const x = Math.round(Number(n) * 100) / 100; return `${x.toLocaleString("ro-RO", { minimumFractionDigits: x % 1 ? 2 : 0, maximumFractionDigits: 2 })} lei`; };
+const numeMagazin = (o) => (o.magazin === "lr" ? "LR" : "Herbalife");
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
 
 export async function handleMagazinOrder({ session, resend }) {
@@ -82,9 +83,9 @@ export async function handleMagazinOrder({ session, resend }) {
   if (!order.email_nutrisib) {
   await trimiteEmail(resend, {
     from, to: notify, reply_to: order.client.email,
-    subject: `🛒 Comandă nouă ${order.id} – ${lei(order.total)} (${order.vp_total} VP)`,
+    subject: `🛒 Comandă nouă ${numeMagazin(order)} ${order.id} – ${lei(order.total)}${order.magazin === "lr" ? "" : ` (${order.vp_total} VP)`}`,
     html: `<div style="font-family:Arial,sans-serif;color:#1f2937">
-      <h2>Comandă nouă ${order.id}</h2>${tabel}
+      <h2>Comandă nouă ${numeMagazin(order)} ${order.id}</h2>${tabel}
       <p><strong>Client:</strong> ${esc(order.client.nume)} ${esc(order.client.prenume)} · ${esc(order.client.email)} · ${esc(order.client.telefon)}</p>
       <p><strong>Livrare:</strong> ${adresa}</p>
       ${order.client.observatii ? `<p><strong>Observații:</strong> ${esc(order.client.observatii)}</p>` : ""}
@@ -100,7 +101,7 @@ export async function handleMagazinOrder({ session, resend }) {
     await fetch(process.env.GHL_WEBHOOK_URL, {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: order.client.email, phone: order.client.telefon, firstName: order.client.prenume, lastName: order.client.nume,
-        city: order.client.localitate, state: order.client.judet, source: "magazin-nutrisib", tags: ["client-herbalife"],
+        city: order.client.localitate, state: order.client.judet, source: "magazin-nutrisib", tags: [`client-${order.magazin || "herbalife"}`],
         order_id: order.id, total: order.total, vp: order.vp_total, produse: order.produse.map((l) => `${l.qty}x ${l.denumire} ${l.varianta}`).join("; ") }),
     }).then(() => { order.ghl = new Date().toISOString(); }).catch((e) => console.error("GHL:", e.message));
   }
