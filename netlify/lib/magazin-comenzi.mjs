@@ -4,7 +4,7 @@
 import { getStore } from "@netlify/blobs";
 import { smartbillActiv, emiteFacturaSB, descarcaFacturaSB, numeFisierFactura, taxaSB } from "./smartbill.mjs";
 
-const lei = (n) => `${Number(n).toLocaleString("ro-RO")} lei`;
+const lei = (n) => { const x = Math.round(Number(n) * 100) / 100; return `${x.toLocaleString("ro-RO", x % 1 ? { minimumFractionDigits: 2, maximumFractionDigits: 2 } : {})} lei`; };
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
 
 export async function handleMagazinOrder({ session, resend }) {
@@ -82,7 +82,7 @@ export async function handleMagazinOrder({ session, resend }) {
   if (!order.email_nutrisib) {
   await trimiteEmail(resend, {
     from, to: notify, reply_to: order.client.email,
-    subject: `🛒 Comandă nouă ${order.id} – ${lei(order.total)} (${order.vp_total} VP)`,
+    subject: `🛒 Comandă nouă ${order.id} – ${lei(order.total)}${order.vp_total ? ` (${order.vp_total} VP)` : ""}${/lr/.test(order.magazin || "") ? " · LR" : ""}`,
     html: `<div style="font-family:Arial,sans-serif;color:#1f2937">
       <h2>Comandă nouă ${order.id}</h2>${tabel}
       <p><strong>Client:</strong> ${esc(order.client.nume)} ${esc(order.client.prenume)} · ${esc(order.client.email)} · ${esc(order.client.telefon)}</p>
@@ -100,7 +100,7 @@ export async function handleMagazinOrder({ session, resend }) {
     await fetch(process.env.GHL_WEBHOOK_URL, {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: order.client.email, phone: order.client.telefon, firstName: order.client.prenume, lastName: order.client.nume,
-        city: order.client.localitate, state: order.client.judet, source: "magazin-nutrisib", tags: ["client-herbalife"],
+        city: order.client.localitate, state: order.client.judet, source: "magazin-nutrisib", tags: String(order.magazin || "herbalife").split("+").map((m) => `client-${m}`),
         order_id: order.id, total: order.total, vp: order.vp_total, produse: order.produse.map((l) => `${l.qty}x ${l.denumire} ${l.varianta}`).join("; ") }),
     }).then(() => { order.ghl = new Date().toISOString(); }).catch((e) => console.error("GHL:", e.message));
   }
@@ -117,7 +117,7 @@ export async function trimiteEmail(resend, payload) {
 }
 
 function tabelProduse(o) {
-  const rows = o.produse.map((l) => `<tr><td style="padding:6px 8px;border-bottom:1px solid #e5e7eb">${esc(l.denumire)}${l.varianta ? `<br><small>${esc(l.varianta)} · cod ${esc(l.sku)}</small>` : ""}</td><td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:center">${l.qty}</td><td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:right">${lei(l.pret * l.qty)}</td></tr>`).join("");
+  const rows = o.produse.map((l) => `<tr><td style="padding:6px 8px;border-bottom:1px solid #e5e7eb">${esc(l.denumire)}${l.varianta ? `<br><small>${esc(l.varianta)} · cod ${esc(l.sku)}</small>` : ""}</td><td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:center">${l.qty}</td><td style="padding:6px 8px;border-bottom:1px solid #e5e7eb;text-align:right">${lei((Math.round(l.pret * 100) * l.qty) / 100)}</td></tr>`).join("");
   return `<table style="border-collapse:collapse;width:100%;font-size:14px">${rows}
     <tr><td colspan="2" style="padding:6px 8px;text-align:right">Transport</td><td style="padding:6px 8px;text-align:right">${o.transport ? lei(o.transport) : "gratuit"}</td></tr>
     <tr><td colspan="2" style="padding:6px 8px;text-align:right"><strong>Total</strong></td><td style="padding:6px 8px;text-align:right"><strong>${lei(o.total)}</strong></td></tr></table>`;

@@ -2,7 +2,7 @@
 (function () {
   'use strict';
   var KEY = 'nutrisib_cos_v1';
-  var PRAG_VP = 125, TRANSPORT = 25;
+  var PRAG_VP = 125, TRANSPORT = 25, TRANSPORT_LR = 25;   /* suprascrise din catalog.json → config */
   var catalogPromise = null;
 
   function read() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
@@ -16,13 +16,14 @@
   function setQty(sku, qty) { var c = read(); if (qty <= 0) delete c[sku]; else c[sku] = Math.min(99, qty); write(c); }
   function catalog() {
     if (!catalogPromise) catalogPromise = fetch('/magazin/catalog.json', { cache: 'no-cache' }).then(function (r) { return r.json(); })
-      .then(function (d) { var m = {}, pk = {}; d.produse.forEach(function (p) { m[p.sku] = p; }); (d.pachete || []).forEach(function (p) { pk[p.id] = p; }); return { list: d.produse, bySku: m, pk: pk, cfg: d.config }; });
+      .then(function (d) { var m = {}, pk = {}; d.produse.forEach(function (p) { if (!p.inactiv) m[p.sku] = p; });
+        if (d.config) { PRAG_VP = d.config.prag_vp || PRAG_VP; TRANSPORT = d.config.transport || TRANSPORT; if (d.config.lr) TRANSPORT_LR = d.config.lr.transport; } (d.pachete || []).forEach(function (p) { pk[p.id] = p; }); return { list: d.produse, bySku: m, pk: pk, cfg: d.config }; });
     return catalogPromise;
   }
   function pretPachet(s) { var t = Math.floor(s * 95 / 100), x = Math.floor(t / 100) * 100 + 99; while (x > t) x -= 50; return x; }
   /* linie de coș: produs simplu (cheie = SKU) sau pachet (cheie = "PK01:sku,sku,...") */
   function linie(cat, key) {
-    if (key.indexOf(':') < 0) { var p = cat.bySku[key]; return p ? { key: key, nume: p.denumire, meta: (p.varianta || '') + ' · cod ' + p.sku, url: p.url, img: p.img_mic, pret: p.pret, vp: p.vp } : null; }
+    if (key.indexOf(':') < 0) { var p = cat.bySku[key]; return p ? { key: key, nume: p.denumire, meta: (p.varianta ? p.varianta + ' · ' : '') + 'cod ' + p.sku, url: p.url, img: p.img_mic, pret: p.pret, vp: p.vp, magazin: p.magazin } : null; }
     var parts = key.split(':'), pk = cat.pk[parts[0]], skus = parts[1].split(',');
     if (!pk || skus.length !== pk.unitati.length) return null;
     var sum = 0, vp = 0, sub = [];
@@ -30,9 +31,11 @@
       var p2 = cat.bySku[skus[i]]; if (!p2 || pk.unitati[i].optiuni.indexOf(skus[i]) < 0) return null;
       sum += p2.pret; vp += p2.vp; sub.push(p2.denumire + (p2.varianta ? ' – ' + p2.varianta : ''));
     }
-    return { key: key, nume: 'Pachet ' + pk.nume, meta: 'pachet · ' + skus.length + ' produse', url: pk.url, img: pk.img_mic, pret: pretPachet(sum), vp: Math.round(vp * 100) / 100, sub: sub, separat: sum };
+    return { key: key, nume: 'Pachet ' + pk.nume, meta: 'pachet · ' + skus.length + ' produse', url: pk.url, img: pk.img_mic, pret: pretPachet(sum), vp: Math.round(vp * 100) / 100, sub: sub, separat: sum, magazin: 'herbalife' };
   }
-  function lei(n) { return n.toLocaleString('ro-RO') + ' lei'; }
+  /* sumele se calculează în bani (întregi), ca să nu apară erori de rotunjire la prețurile cu zecimale (LR) */
+  function bani(n) { return Math.round(n * 100); }
+  function lei(n) { n = Math.round(n * 100) / 100; return n.toLocaleString('ro-RO', n % 1 ? { minimumFractionDigits: 2, maximumFractionDigits: 2 } : {}) + ' lei'; }
   function vpFmt(n) { return (Math.round(n * 100) / 100).toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
   /* ---- Pagina de produs: cantitate + adaugă ---- */
@@ -140,28 +143,33 @@
     var emptyEl = root.querySelector('[data-empty]'), filledEls = document.querySelectorAll('[data-filled]');
 
     function render(cat) {
-      var c = read(), lines = [], sub = 0, vp = 0;
+      var c = read(), lines = [], sub = 0, vp = 0, areLR = false, areHL = false;
       Object.keys(c).forEach(function (key) {
         var p = linie(cat, key); if (!p) { delete c[key]; return; }
-        var q = c[key]; sub += p.pret * q; vp += p.vp * q; lines.push({ p: p, q: q });
+        var q = c[key]; sub += bani(p.pret) * q; vp += p.vp * q; lines.push({ p: p, q: q });
+        if (p.magazin === 'lr') areLR = true; else areHL = true;
       });
-      var has = lines.length > 0;
+      var has = lines.length > 0; sub = sub / 100; write(c);
       emptyEl.style.display = has ? 'none' : 'block';
       filledEls.forEach(function (e) { e.style.display = has ? '' : 'none'; });
       linesEl.innerHTML = lines.map(function (l) {
         return '<div class="mz-line"><img src="' + l.p.img + '" alt="" loading="lazy">' +
           '<div><a class="mz-line-title" href="' + l.p.url + '">' + esc(l.p.nume) + '</a>' +
-          '<div class="mz-line-meta">' + esc(l.p.meta) + ' · ' + vpFmt(l.p.vp) + ' VP' + (l.p.separat ? ' · <s>' + lei(l.p.separat) + '</s>' : '') + '</div>' +
+          '<div class="mz-line-meta">' + esc(l.p.meta) + (l.p.magazin === 'lr' ? '' : ' · ' + vpFmt(l.p.vp) + ' VP') + (l.p.separat ? ' · <s>' + lei(l.p.separat) + '</s>' : '') + '</div>' +
           (l.p.sub ? '<ul class="mz-line-sub">' + l.p.sub.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : '') +
           '<div class="mz-qty"><button type="button" data-sku="' + esc(l.p.key) + '" data-d="-1" aria-label="Scade">−</button><input type="number" value="' + l.q + '" readonly aria-label="Cantitate"><button type="button" data-sku="' + esc(l.p.key) + '" data-d="1" aria-label="Crește">+</button></div></div>' +
-          '<div class="mz-line-right"><div class="mz-price" style="font-size:1rem">' + lei(l.p.pret * l.q) + '</div><button type="button" class="mz-remove" data-rm="' + esc(l.p.key) + '">Elimină</button></div></div>';
+          '<div class="mz-line-right"><div class="mz-price" style="font-size:1rem">' + lei(bani(l.p.pret) * l.q / 100) + '</div><button type="button" class="mz-remove" data-rm="' + esc(l.p.key) + '">Elimină</button></div></div>';
       }).join('');
-      var free = vp >= PRAG_VP, ship = has ? (free ? 0 : TRANSPORT) : 0, pct = Math.min(100, vp / PRAG_VP * 100);
+      /* transport: produsele LR au tarif fix (o singură livrare și pentru coșurile mixte); doar Herbalife → gratuit de la PRAG_VP */
+      var free = !areLR && vp >= PRAG_VP, ship = has ? (areLR ? TRANSPORT_LR : (free ? 0 : TRANSPORT)) : 0, pct = Math.min(100, vp / PRAG_VP * 100);
+      var vpInfo = areLR
+        ? '<div class="mz-vp-text">Comenzile cu produse LR au transport de <strong>' + lei(TRANSPORT_LR) + '</strong>' + (areHL ? ', o singură livrare pentru tot coșul.' : '.') + '</div>'
+        : '<div class="mz-vp-bar" aria-hidden="true"><i style="width:' + pct + '%"></i></div>' +
+          '<div class="mz-vp-text">' + (free ? '<strong>Transport gratuit</strong> – ai ' + vpFmt(vp) + ' VP.' : 'Ai <strong>' + vpFmt(vp) + ' VP</strong>. Mai ai <strong>' + vpFmt(PRAG_VP - vp) + ' VP</strong> până la transport gratuit (' + PRAG_VP + ' VP).') + '</div>';
       sumEl.innerHTML =
         '<div class="mz-sum-row"><span>Subtotal produse</span><span>' + lei(sub) + '</span></div>' +
         '<div class="mz-sum-row"><span>Transport</span><span>' + (free ? 'Gratuit' : lei(ship)) + '</span></div>' +
-        '<div class="mz-vp-bar" aria-hidden="true"><i style="width:' + pct + '%"></i></div>' +
-        '<div class="mz-vp-text">' + (free ? '<strong>Transport gratuit</strong> – ai ' + vpFmt(vp) + ' VP.' : 'Ai <strong>' + vpFmt(vp) + ' VP</strong>. Mai ai <strong>' + vpFmt(PRAG_VP - vp) + ' VP</strong> până la transport gratuit (' + PRAG_VP + ' VP).') + '</div>' +
+        vpInfo +
         '<div class="mz-sum-row total"><span>Total de plată</span><span>' + lei(sub + ship) + '</span></div>';
       linesEl.querySelectorAll('[data-d]').forEach(function (b) {
         b.addEventListener('click', function () { var s = b.getAttribute('data-sku'); setQty(s, (read()[s] || 0) + (+b.getAttribute('data-d'))); render(cat); });

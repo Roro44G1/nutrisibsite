@@ -13,7 +13,7 @@
   var PROFIL_FIELDS = ['greutate_actuala', 'greutate_dorita', 'inaltime', 'an_nastere', 'sex'];
   function $(s, r) { return (r || document).querySelector(s); }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]; }); }
-  function lei(n) { return Number(n).toLocaleString('ro-RO') + ' lei'; }
+  function lei(n) { n = Math.round(Number(n) * 100) / 100; return n.toLocaleString('ro-RO', n % 1 ? { minimumFractionDigits: 2, maximumFractionDigits: 2 } : {}) + ' lei'; }
   function session() { return sb.auth.getSession().then(function (r) { return r.data.session; }); }
 
   /* ---------- formular de conectare (link magic) ---------- */
@@ -56,7 +56,7 @@
           var f = o.factura ? ' · factura ' + esc(o.factura.serie) + ' ' + esc(o.factura.numar) : '';
           return '<details class="mz-order"><summary><span><strong>' + esc(o.id) + '</strong> · ' + new Date(o.creata).toLocaleDateString('ro-RO') + '</span><span>' + esc(st) + ' · <strong>' + lei(o.total) + '</strong></span></summary>' +
             '<ul>' + (o.produse || []).map(function (l) { return '<li>' + l.qty + ' × ' + esc(l.denumire) + ' ' + esc(l.varianta || '') + ' – ' + lei(l.pret * l.qty) + '</li>'; }).join('') + '</ul>' +
-            '<p class="mz-buy-note">Transport: ' + (Number(o.transport) ? lei(o.transport) : 'gratuit') + ' · ' + esc(o.vp_total) + ' VP' + f + '</p>' +
+            '<p class="mz-buy-note">Transport: ' + (Number(o.transport) ? lei(o.transport) : 'gratuit') + (Number(o.vp_total) ? ' · ' + esc(o.vp_total) + ' VP' : '') + f + '</p>' +
             '<button type="button" class="mz-btn ghost" data-reorder=\'' + esc(JSON.stringify((o.produse || []).map(function (l) { return [l.sku, l.qty]; }))) + '\'>Comandă din nou</button></details>';
         }).join('');
         el.querySelectorAll('[data-reorder]').forEach(function (b) {

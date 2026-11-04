@@ -1,4 +1,5 @@
 # Pagini coș, confirmare și pagini legale – rulat de magazin_build.py (folosește funcțiile de acolo)
+from magazin_lr import TRANSPORT_LR
 FIRMA = dict(
     denumire=VANZATOR, cui='38416337', regcom='F32/667/2017',
     adresa='Str. Podului 44G/1, Sibiu, jud. Sibiu',
@@ -170,11 +171,11 @@ def legal(slug, title, desc, inner):
 
 legal('termeni-si-conditii', 'Termeni și condiții', 'Termenii și condițiile de vânzare ale magazinului online NutriSib.', f'''
 <h2>1. Cine vinde</h2>
-<p>Magazinul online de la adresa nutrisib.club/magazin este operat de {ID_FIRMA} („Vânzătorul”). Vânzătorul este distribuitor independent Herbalife și revinde produse originale Herbalife, achiziționate de la Herbalife România.</p>
+<p>Magazinul online de la adresa nutrisib.club/magazin este operat de {ID_FIRMA} („Vânzătorul”). Vânzătorul este distribuitor independent Herbalife și revinde produse originale Herbalife, achiziționate de la Herbalife România. Pentru produsele LR, Vânzătorul este partener independent LR și revinde produse originale LR Health &amp; Beauty.</p>
 <h2>2. Produse și informații</h2>
 <p>Descrierile, ingredientele, informațiile nutriționale și imaginile produselor provin de la producător. Imaginile au caracter informativ; alimentele prezentate în imagini sunt ilustrative și nu fac parte din conținutul produsului. Suplimentele alimentare nu înlocuiesc o dietă variată și echilibrată și un stil de viață sănătos. Dacă ai o afecțiune, urmezi un tratament, ești însărcinată sau alăptezi, cere părerea medicului înainte de a consuma suplimente.</p>
 <h2>3. Prețuri</h2>
-<p>Prețurile sunt exprimate în lei (RON) și sunt prețuri finale pentru produs. Vânzătorul nu este înregistrat în scopuri de TVA, astfel că facturile se emit fără TVA. Costul transportului se afișează separat în coș, înainte de plată: transportul este gratuit pentru comenzile Herbalife care însumează minimum {PRAG_VP} VP (valoarea VP a fiecărui produs este afișată pe pagina lui) și costă {TRANSPORT} lei pentru comenzile sub acest prag. Prețul valabil este cel afișat în momentul plasării comenzii.</p>
+<p>Prețurile sunt exprimate în lei (RON) și sunt prețuri finale pentru produs. Vânzătorul nu este înregistrat în scopuri de TVA, astfel că facturile se emit fără TVA. Costul transportului se afișează separat în coș, înainte de plată: transportul este gratuit pentru comenzile Herbalife care însumează minimum {PRAG_VP} VP (valoarea VP a fiecărui produs este afișată pe pagina lui) și costă {TRANSPORT} lei pentru comenzile sub acest prag. Pentru comenzile care conțin produse LR, transportul costă {TRANSPORT_LR} lei, indiferent de valoarea comenzii; produsele Herbalife și LR din aceeași comandă se livrează împreună, cu un singur cost de transport. Prețul valabil este cel afișat în momentul plasării comenzii.</p>
 <h2>4. Comanda și încheierea contractului</h2>
 <p>Comanda se plasează din coș, prin completarea datelor de livrare și facturare, acceptarea acestor termeni și plata online. Contractul se consideră încheiat în momentul în care primești pe e-mail confirmarea comenzii. Dacă un produs comandat nu mai este disponibil, te informăm și îți rambursăm integral suma aferentă în cel mult 14 zile.</p>
 <h2>5. Plata</h2>
@@ -194,7 +195,7 @@ legal('termeni-si-conditii', 'Termeni și condiții', 'Termenii și condițiile 
 ''')
 
 legal('livrare', 'Livrare', 'Costuri și condiții de livrare pentru comenzile din magazinul NutriSib.', f'''
-<div class="mz-box"><p style="margin:0"><strong>Transport gratuit</strong> pentru comenzile Herbalife de minimum <strong>{PRAG_VP} VP</strong>. Sub acest prag, transportul costă <strong>{TRANSPORT} lei</strong>.</p></div>
+<div class="mz-box"><p style="margin:0"><strong>Transport gratuit</strong> pentru comenzile Herbalife de minimum <strong>{PRAG_VP} VP</strong>. Sub acest prag, transportul costă <strong>{TRANSPORT} lei</strong>.</p><p style="margin:.5rem 0 0">Pentru comenzile care conțin <strong>produse LR</strong>, transportul costă <strong>{TRANSPORT_LR} lei</strong>, indiferent de valoare. Produsele Herbalife și LR din aceeași comandă se livrează împreună, cu un singur cost de transport.</p></div>
 <h2>Ce este VP</h2>
 <p>VP (valoarea în volum) este o valoare atribuită de Herbalife fiecărui produs. O găsești pe pagina fiecărui produs și în coș, unde VP-ul produselor se adună automat. Când totalul ajunge la {PRAG_VP} VP, transportul devine gratuit.</p>
 <h2>Unde livrăm</h2>
