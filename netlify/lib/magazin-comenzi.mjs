@@ -132,7 +132,7 @@ export async function salveazaInSupabase(o) {
   if (!U || !K) return;
   const row = {
     id: o.id, user_id: o.user_id || null, email: o.client.email, status: o.status, creata: o.creata, platita: o.platita || null,
-    produse: o.produse.map(({ sku, denumire, varianta, pret, vp, qty }) => ({ sku, denumire, varianta, pret, vp, qty })),
+    produse: o.produse.map(({ sku, denumire, varianta, pret, vp, qty, componente }) => ({ sku, denumire, varianta, pret, vp, qty, ...(componente ? { componente } : {}) })),
     subtotal: o.subtotal, transport: o.transport, total: o.total, vp_total: o.vp_total,
     livrare: { nume: o.client.nume, prenume: o.client.prenume, telefon: o.client.telefon, judet: o.client.judet, localitate: o.client.localitate, adresa: o.client.adresa, cod_postal: o.client.cod_postal },
     firma: o.firma || null, factura: o.factura || null,

@@ -290,11 +290,11 @@ CARD_FAM = {}
 for p in produse: CARD_FAM.setdefault(nume_card(p), []).append(p)
 for v in CARD_FAM.values(): v.sort(key=lambda p: (p['pret'], p['varianta']))
 
-def img_grup(nume, vs):
+def img_grup(nume, vs, allow_dup=False):
     """Imagine compusă din ambalajele variantelor (etichete RO), pentru cardurile cu mai multe variante."""
     srcs, seen = [], set()
     for v in vs:
-        if v['src_ambalaj'] and v['img'] not in seen: seen.add(v['img']); srcs.append(v['src_ambalaj'])
+        if v['src_ambalaj'] and (allow_dup or v['img'] not in seen): seen.add(v['img']); srcs.append(v['src_ambalaj'])
     if len(srcs) < 2: return None
     srcs = srcs[:5]
     slug = re.sub(r'[^a-z0-9]+', '-', nume.lower().translate(str.maketrans('ăâîșşțţ', 'aaisstt'))).strip('-')
@@ -328,6 +328,9 @@ def familii_din(skus):
         if p and nume_card(p) not in out: out[nume_card(p)] = CARD_FAM[nume_card(p)]
     return out
 
+BYSKU_ALL = BYSKU
+exec(open(os.path.join(os.path.dirname(__file__), 'magazin_pachete.py'), encoding='utf-8').read())
+
 def sectiune_categorie(c, h='h2'):
     blocks = []
     for sub in c['sub']:
@@ -342,11 +345,11 @@ def sectiune_categorie(c, h='h2'):
 </section>'''
 
 def nav_categorii(activ=None):
-    items = [('/magazin/herbalife/', 'Toate', activ is None)] + [(f'/magazin/herbalife/{c["slug"]}/', c['nume'], activ == c['slug']) for c in CATEGORII]
+    items = [('/magazin/herbalife/', 'Toate', activ is None), ('/magazin/herbalife/pachete/', 'Pachete la ofertă', activ == 'pachete')] + [(f'/magazin/herbalife/{c["slug"]}/', c['nume'], activ == c['slug']) for c in CATEGORII]
     return '<nav class="mz-chips mz-catnav" aria-label="Categorii Herbalife">' + ''.join(
         f'<a class="mz-chip{" active" if a else ""}" href="{u}"{CUR if a else ""}>{E(t)}</a>' for u, t, a in items) + '</nav>'
 
-SHIP = f'<div class="mz-ship-note"><strong>Transport gratuit</strong> pentru comenzile de minimum {PRAG_VP} VP. Fiecare produs afișează valoarea VP, iar coșul o adună automat. Sub prag, transportul costă {TRANSPORT} lei.</div>'
+SHIP = f'<div class="mz-ship-note"><strong>Transport gratuit</strong> pentru comenzile de minimum {PRAG_VP} VP. Fiecare produs afișează valoarea VP, iar coșul o adună automat. Sub prag, transportul costă {TRANSPORT} lei.</div>' + '<p class="mz-offer-link"><a href="/magazin/oferta/">📄 Oferta NutriSib – lista completă de prețuri (cu PDF descărcabil) →</a></p>'
 
 # --- pagina principală a catalogului ---
 cr_html, cr_ld = crumbs([('Magazin', '/magazin/'), ('Herbalife', None)])
@@ -369,6 +372,10 @@ body = f'''<div class="mz-crumbs-wrap">{cr_html}</div>
   </div>
 </section>
 <div data-mz-grid>
+<section class="content-card mz-catsec mz-pk-teaser" id="pachete">
+  <div class="mz-cat-head"><h2 class="mz-cat-title"><a href="/magazin/herbalife/pachete/">Pachete la ofertă</a></h2><span class="mz-cat-count"><a href="/magazin/herbalife/pachete/">Toate cele {len(PACHETE)} pachete →</a></span></div>
+  <div class="mz-grid">{''.join(card_pachet(p) for p in sorted(PACHETE, key=lambda p: -p['economie'])[:4])}</div>
+</section>
 {chr(10).join(sectiune_categorie(c) for c in CATEGORII)}
 </div>
 <p class="mz-empty content-card">Niciun produs nu corespunde căutării.</p>
@@ -416,6 +423,12 @@ for c in CATEGORII:
     build_page(os.path.join(HL, c['slug'], 'index.html'), f"{c['nume']} – Herbalife | Magazin NutriSib", desc,
                f"/magazin/herbalife/{c['slug']}/", body, BYSKU[skus[0]]['img'], cr_ld + jsonld(ld))
 
+build_pachete_pages()
+_cat = json.load(open(os.path.join(OUT, 'catalog.json'), encoding='utf-8'))
+_cat['pachete'] = [{'id': p['id'], 'nume': p['nume'], 'url': p['url'], 'img_mic': img_pachet(p), 'unitati': [{'slot': u, 'eticheta': SLOT[u]['eticheta'], 'optiuni': SLOT[u]['optiuni']} for u in p['unitati']], 'implicit': p['implicit']} for p in PACHETE]
+_cat['config']['reducere_pachet'] = 0.05
+json.dump(_cat, open(os.path.join(OUT, 'catalog.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+
 # ======================= hub /magazin/ =======================
 thumbs = ''.join(f'<img src="{fam[n][0]["img_mic"]}" alt="" loading="lazy">' for n in ('Formula 1 Shake Mix Nutritiv', 'Băutură Concentrată Herbal Aloe Vera', 'Herbalife24® Hydrate') if n in fam)
 cr_html, cr_ld = crumbs([('Acasă', '/'), ('Magazin', None)])
@@ -456,6 +469,7 @@ body = f'''<section class="hero-card mz-hero">
   <div class="mz-principles">
     <div class="mz-principle"><h3>Prețuri finale</h3><p>Prețul afișat este prețul plătit. Transportul este gratuit pentru comenzile Herbalife de minimum {PRAG_VP} VP; sub prag costă {TRANSPORT} lei.</p></div>
     <div class="mz-principle"><h3>Plată securizată</h3><p>Plata cu cardul se face prin Stripe. Datele cardului nu ajung pe serverele NutriSib.</p></div>
+    <div class="mz-principle"><h3>Oferta NutriSib</h3><p>Toate prețurile produselor și pachetelor într-o singură listă, cu link la fiecare produs. <a href="/magazin/oferta/">Vezi oferta</a> sau <a href="/magazin/oferta/oferta-nutrisib-herbalife.pdf">descarcă PDF-ul</a>.</p></div>
     <div class="mz-principle"><h3>Alegere informată</h3><p>Fiecare produs are descrierea, ingredientele și tabelul nutrițional de la producător. Pentru recomandări personalizate, <a href="/evaluare.html">începe evaluarea</a>.</p></div>
   </div>
 </section>
@@ -468,7 +482,7 @@ build_page(os.path.join(OUT, 'index.html'), 'Magazin NutriSib – produse digita
 LEGAL = ['/magazin/termeni-si-conditii/', '/magazin/livrare/', '/magazin/retur/', '/magazin/confidentialitate/']
 byurl = {p['url']: p for p in produse}
 xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n'
-for u, pr in [('/magazin/', '0.8'), ('/magazin/herbalife/', '0.8')] + [(f'/magazin/herbalife/{c["slug"]}/', '0.75') for c in CATEGORII] + [(p['url'], '0.7') for p in produse] + [(u, '0.3') for u in LEGAL]:
+for u, pr in [('/magazin/', '0.8'), ('/magazin/herbalife/', '0.8')] + [(f'/magazin/herbalife/{c["slug"]}/', '0.75') for c in CATEGORII] + [('/magazin/herbalife/pachete/', '0.8')] + [(p['url'], '0.7') for p in PACHETE] + [('/magazin/oferta/', '0.6')] + [(p['url'], '0.7') for p in produse] + [(u, '0.3') for u in LEGAL]:
     img = ''.join(f'<image:image><image:loc>{SITE}{g}</image:loc></image:image>' for g, _ in byurl[u]['galerie']) if u in byurl else ''
     xml += f'  <url><loc>{SITE}{u}</loc><lastmod>{TODAY}</lastmod><priority>{pr}</priority>{img}</url>\n'
 write(os.path.join(ROOT, 'sitemap-magazin.xml'), xml + '</urlset>\n')

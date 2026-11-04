@@ -258,3 +258,41 @@ legal('confidentialitate', 'Politica de confidențialitate', 'Cum prelucrează m
 <h2>Cookie-uri</h2>
 <p>Coșul de cumpărături este salvat local, în browserul tău (localStorage), doar pentru a păstra produsele alese; nu este transmis nicăieri până la plasarea comenzii. Pentru celelalte cookie-uri folosite pe site, vezi bannerul de cookie-uri.</p>
 ''')
+
+# ======================= Oferta NutriSib (centralizator de prețuri) =======================
+DATA_OFERTA = datetime.date.today().strftime('%d.%m.%Y')
+def _vp(v): return f'{v:.2f}'.replace('.', ',')
+rows_pk = ''.join(f'''<tr><td><a href="{SITE}{p['url']}">{E(p['nume'])}</a><div class="mz-of-sub">{E(p['comp_txt'])}</div></td>
+<td class="num"><s>{lei(p['suma'])}</s></td><td class="num"><strong>{lei(p['pret'])}</strong></td><td class="num">−{lei(p['economie'])}<br><small>{str(p['procent']).replace('.', ',')}%</small></td><td class="num">{_vp(p['vp'])}</td></tr>''' for p in PACHETE)
+sec_prod = ''
+for c in CATEGORII:
+    rows = ''
+    for sub in c['sub']:
+        skus = [s_ for s_ in sub['sku'] if s_ in BYSKU]
+        if not skus: continue
+        if sub['nume']: rows += f'<tr class="mz-of-subhead"><td colspan="5">{E(sub["nume"])}</td></tr>'
+        for s_ in skus:
+            p = BYSKU[s_]
+            rows += f'<tr><td class="cod">{p["sku"]}</td><td><a href="{SITE}{p["url"]}">{E(p["denumire"])}</a></td><td>{E(p["varianta"])}</td><td class="num">{_vp(p["vp"])}</td><td class="num"><strong>{lei(p["pret"])}</strong></td></tr>'
+    sec_prod += f'''<h2 class="mz-of-cat">{E(c['nume'])}</h2>
+<table class="mz-of"><thead><tr><th>Cod</th><th>Produs</th><th>Variantă</th><th class="num">VP</th><th class="num">Preț</th></tr></thead><tbody>{rows}</tbody></table>'''
+body = f'''<div class="mz-crumbs-wrap">{crumbs([('Magazin', '/magazin/'), ('Oferta NutriSib', None)])[0]}</div>
+<section class="content-card mz-oferta">
+  <div class="mz-of-head">
+    <div><span class="mz-eyebrow" style="color:#8a6d0f">Oferta NutriSib · Herbalife</span>
+    <h1 class="mz-p-title">Lista de prețuri</h1>
+    <p class="mz-buy-note" style="margin:0">Valabilă de la {DATA_OFERTA}. Prețuri finale, în lei. Transport gratuit pentru comenzile de minimum {PRAG_VP} VP; sub prag, {TRANSPORT} lei. {E(VANZATOR)}, CUI 38416337 – neplătitor de TVA.</p></div>
+    <img src="/magazin/assets/herbalife-logo.webp" alt="Herbalife" class="mz-of-logo">
+  </div>
+  <div class="mz-of-actions no-print">
+    <a class="mz-btn" style="flex:none" href="/magazin/oferta/oferta-nutrisib-herbalife.pdf" download>⬇ Descarcă PDF</a>
+    <button type="button" class="mz-btn ghost" style="flex:none" onclick="window.print()">Tipărește</button>
+  </div>
+  <p class="mz-buy-note">Fiecare denumire este un link către pagina produsului sau a pachetului, unde poți comanda.</p>
+  <h2 class="mz-of-cat">Pachete la ofertă</h2>
+  <table class="mz-of mz-of-pk"><thead><tr><th>Pachet</th><th class="num">Preț separat</th><th class="num">Preț pachet</th><th class="num">Economie</th><th class="num">VP</th></tr></thead><tbody>{rows_pk}</tbody></table>
+  <p class="mz-buy-note">Pentru pachetele cu variante (aromă, tip de Protein Drink Mix), prețul afișat corespunde variantelor implicite; prețul exact apare pe pagina pachetului după alegerea variantelor.</p>
+  {sec_prod}
+</section>
+'''
+build_page(os.path.join(OUT, 'oferta', 'index.html'), 'Oferta NutriSib – lista de prețuri Herbalife', f'Lista completă de prețuri NutriSib pentru produsele și pachetele Herbalife, valabilă de la {DATA_OFERTA}. Descarcă oferta în format PDF.', '/magazin/oferta/', body)
