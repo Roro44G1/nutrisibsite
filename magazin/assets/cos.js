@@ -16,8 +16,21 @@
   function setQty(sku, qty) { var c = read(); if (qty <= 0) delete c[sku]; else c[sku] = Math.min(99, qty); write(c); }
   function catalog() {
     if (!catalogPromise) catalogPromise = fetch('/magazin/catalog.json', { cache: 'no-cache' }).then(function (r) { return r.json(); })
-      .then(function (d) { var m = {}; d.produse.forEach(function (p) { m[p.sku] = p; }); return { list: d.produse, bySku: m, cfg: d.config }; });
+      .then(function (d) { var m = {}, pk = {}; d.produse.forEach(function (p) { m[p.sku] = p; }); (d.pachete || []).forEach(function (p) { pk[p.id] = p; }); return { list: d.produse, bySku: m, pk: pk, cfg: d.config }; });
     return catalogPromise;
+  }
+  function pretPachet(s) { var t = Math.floor(s * 95 / 100), x = Math.floor(t / 100) * 100 + 99; while (x > t) x -= 50; return x; }
+  /* linie de coș: produs simplu (cheie = SKU) sau pachet (cheie = "PK01:sku,sku,...") */
+  function linie(cat, key) {
+    if (key.indexOf(':') < 0) { var p = cat.bySku[key]; return p ? { key: key, nume: p.denumire, meta: (p.varianta || '') + ' · cod ' + p.sku, url: p.url, img: p.img_mic, pret: p.pret, vp: p.vp } : null; }
+    var parts = key.split(':'), pk = cat.pk[parts[0]], skus = parts[1].split(',');
+    if (!pk || skus.length !== pk.unitati.length) return null;
+    var sum = 0, vp = 0, sub = [];
+    for (var i = 0; i < skus.length; i++) {
+      var p2 = cat.bySku[skus[i]]; if (!p2 || pk.unitati[i].optiuni.indexOf(skus[i]) < 0) return null;
+      sum += p2.pret; vp += p2.vp; sub.push(p2.denumire + (p2.varianta ? ' – ' + p2.varianta : ''));
+    }
+    return { key: key, nume: 'Pachet ' + pk.nume, meta: 'pachet · ' + skus.length + ' produse', url: pk.url, img: pk.img_mic, pret: pretPachet(sum), vp: Math.round(vp * 100) / 100, sub: sub, separat: sum };
   }
   function lei(n) { return n.toLocaleString('ro-RO') + ' lei'; }
   function vpFmt(n) { return (Math.round(n * 100) / 100).toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
@@ -33,6 +46,36 @@
     box.querySelector('[data-add]').addEventListener('click', function () {
       add(box.getAttribute('data-mz-buy'), Math.max(1, Math.min(99, +input.value || 1)));
       var ok = box.querySelector('.mz-added'); if (ok) ok.style.display = 'block';
+    });
+  }
+
+  /* ---- Pagina pachetului: alegerea variantelor + preț live ---- */
+  function initPachet() {
+    var box = document.querySelector('[data-mz-pachet]'); if (!box) return;
+    var id = box.getAttribute('data-mz-pachet'), qty = box.querySelector('.mz-qty input');
+    box.querySelectorAll('[data-step]').forEach(function (b) {
+      b.addEventListener('click', function () { qty.value = Math.max(1, Math.min(20, (+qty.value || 1) + (+b.getAttribute('data-step')))); });
+    });
+    catalog().then(function (cat) {
+      function keyNow() { return id + ':' + Array.prototype.map.call(box.querySelectorAll('[data-unit]'), function (el) { return el.value; }).join(','); }
+      function upd() {
+        var l = linie(cat, keyNow()); if (!l) return;
+        box.querySelectorAll('[data-unit]').forEach(function (el) {
+          var i = el.getAttribute('data-unit'), p = cat.bySku[el.value];
+          var img = box.querySelector('[data-img="' + i + '"]'); if (img) img.src = p.img_mic;
+          var a = box.querySelector('[data-link="' + i + '"]'); if (a) a.href = p.url;
+          box.querySelector('[data-price="' + i + '"]').textContent = lei(p.pret);
+        });
+        box.querySelector('[data-sum]').textContent = lei(l.separat);
+        box.querySelector('[data-save]').textContent = lei(l.separat - l.pret) + ' (' + (Math.round((l.separat - l.pret) / l.separat * 1000) / 10).toLocaleString('ro-RO') + '%)';
+        box.querySelector('[data-pret]').textContent = lei(l.pret);
+        box.querySelector('[data-vp]').textContent = vpFmt(l.vp) + ' VP';
+      }
+      box.querySelectorAll('select[data-unit]').forEach(function (s) { s.addEventListener('change', upd); });
+      box.querySelector('[data-add-pk]').addEventListener('click', function () {
+        add(keyNow(), Math.max(1, Math.min(20, +qty.value || 1)));
+        var ok = box.querySelector('.mz-added'); if (ok) ok.style.display = 'block';
+      });
     });
   }
 
@@ -98,19 +141,20 @@
 
     function render(cat) {
       var c = read(), lines = [], sub = 0, vp = 0;
-      Object.keys(c).forEach(function (sku) {
-        var p = cat.bySku[sku]; if (!p) { delete c[sku]; return; }
-        var q = c[sku]; sub += p.pret * q; vp += p.vp * q; lines.push({ p: p, q: q });
+      Object.keys(c).forEach(function (key) {
+        var p = linie(cat, key); if (!p) { delete c[key]; return; }
+        var q = c[key]; sub += p.pret * q; vp += p.vp * q; lines.push({ p: p, q: q });
       });
       var has = lines.length > 0;
       emptyEl.style.display = has ? 'none' : 'block';
       filledEls.forEach(function (e) { e.style.display = has ? '' : 'none'; });
       linesEl.innerHTML = lines.map(function (l) {
-        return '<div class="mz-line"><img src="' + l.p.img_mic + '" alt="" loading="lazy">' +
-          '<div><a class="mz-line-title" href="' + l.p.url + '">' + esc(l.p.denumire) + '</a>' +
-          '<div class="mz-line-meta">' + esc(l.p.varianta || '') + ' · cod ' + l.p.sku + ' · ' + vpFmt(l.p.vp) + ' VP</div>' +
-          '<div class="mz-qty"><button type="button" data-sku="' + l.p.sku + '" data-d="-1" aria-label="Scade">−</button><input type="number" value="' + l.q + '" readonly aria-label="Cantitate"><button type="button" data-sku="' + l.p.sku + '" data-d="1" aria-label="Crește">+</button></div></div>' +
-          '<div class="mz-line-right"><div class="mz-price" style="font-size:1rem">' + lei(l.p.pret * l.q) + '</div><button type="button" class="mz-remove" data-rm="' + l.p.sku + '">Elimină</button></div></div>';
+        return '<div class="mz-line"><img src="' + l.p.img + '" alt="" loading="lazy">' +
+          '<div><a class="mz-line-title" href="' + l.p.url + '">' + esc(l.p.nume) + '</a>' +
+          '<div class="mz-line-meta">' + esc(l.p.meta) + ' · ' + vpFmt(l.p.vp) + ' VP' + (l.p.separat ? ' · <s>' + lei(l.p.separat) + '</s>' : '') + '</div>' +
+          (l.p.sub ? '<ul class="mz-line-sub">' + l.p.sub.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' : '') +
+          '<div class="mz-qty"><button type="button" data-sku="' + esc(l.p.key) + '" data-d="-1" aria-label="Scade">−</button><input type="number" value="' + l.q + '" readonly aria-label="Cantitate"><button type="button" data-sku="' + esc(l.p.key) + '" data-d="1" aria-label="Crește">+</button></div></div>' +
+          '<div class="mz-line-right"><div class="mz-price" style="font-size:1rem">' + lei(l.p.pret * l.q) + '</div><button type="button" class="mz-remove" data-rm="' + esc(l.p.key) + '">Elimină</button></div></div>';
       }).join('');
       var free = vp >= PRAG_VP, ship = has ? (free ? 0 : TRANSPORT) : 0, pct = Math.min(100, vp / PRAG_VP * 100);
       sumEl.innerHTML =
@@ -174,6 +218,6 @@
   function esc(s) { return String(s).replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]; }); }
 
   document.addEventListener('DOMContentLoaded', function () {
-    updateCount(); initBuy(); initGallery(); initTabs(); initCatalog(); initCart(); initSuccess();
+    updateCount(); initBuy(); initPachet(); initGallery(); initTabs(); initCatalog(); initCart(); initSuccess();
   });
 })();

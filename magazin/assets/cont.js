@@ -55,7 +55,7 @@
           var st = o.status === 'platita' ? 'Plătită' : o.status === 'expediata' ? 'Expediată' : o.status === 'livrata' ? 'Livrată' : o.status;
           var f = o.factura ? ' · factura ' + esc(o.factura.serie) + ' ' + esc(o.factura.numar) : '';
           return '<details class="mz-order"><summary><span><strong>' + esc(o.id) + '</strong> · ' + new Date(o.creata).toLocaleDateString('ro-RO') + '</span><span>' + esc(st) + ' · <strong>' + lei(o.total) + '</strong></span></summary>' +
-            '<ul>' + (o.produse || []).map(function (l) { return '<li>' + l.qty + ' × <a href="/magazin/herbalife/">' + esc(l.denumire) + '</a> ' + esc(l.varianta || '') + ' – ' + lei(l.pret * l.qty) + '</li>'; }).join('') + '</ul>' +
+            '<ul>' + (o.produse || []).map(function (l) { return '<li>' + l.qty + ' × ' + esc(l.denumire) + ' ' + esc(l.varianta || '') + ' – ' + lei(l.pret * l.qty) + '</li>'; }).join('') + '</ul>' +
             '<p class="mz-buy-note">Transport: ' + (Number(o.transport) ? lei(o.transport) : 'gratuit') + ' · ' + esc(o.vp_total) + ' VP' + f + '</p>' +
             '<button type="button" class="mz-btn ghost" data-reorder=\'' + esc(JSON.stringify((o.produse || []).map(function (l) { return [l.sku, l.qty]; }))) + '\'>Comandă din nou</button></details>';
         }).join('');
