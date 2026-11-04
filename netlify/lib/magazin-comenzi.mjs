@@ -27,9 +27,13 @@ export async function handleMagazinOrder({ session, resend }) {
     factura = await emiteFactura(order);
     if (factura) {
       order.factura = factura; await store.setJSON(orderId, order);
+      await salveazaInSupabase(order).catch((e) => console.error("Supabase factură:", e.message));
       facturaPdf = await descarcaFactura(factura).catch((e) => { console.error("PDF factură:", e.message); return null; });
     }
   } catch (e) { facturaEroare = e.message; console.error("SmartBill:", e.message); }
+
+  // ---- istoric în contul clientului (Supabase; fără CNP și fără profil nutrițional) ----
+  await salveazaInSupabase(order).catch((e) => console.error("Supabase:", e.message));
 
   // ---- e-mailuri ----
   const from = process.env.FROM_EMAIL || "NutriSib <comenzi@nutrisib.club>";
@@ -98,7 +102,7 @@ async function emiteFactura(o) {
   const tax = SMARTBILL_TAX_NAME ? { taxName: SMARTBILL_TAX_NAME, taxPercentage: Number(SMARTBILL_TAX_PERCENT || 0) } : {};
   const client = o.firma
     ? { name: o.firma.denumire, vatCode: o.firma.cui, regCom: o.firma.regcom || "", address: o.firma.adresa, isTaxPayer: /^RO/i.test(o.firma.cui), city: o.client.localitate, county: o.client.judet }
-    : { name: `${o.client.nume} ${o.client.prenume}`, vatCode: "", address: o.client.adresa, isTaxPayer: false, city: o.client.localitate, county: o.client.judet };
+    : { name: `${o.client.nume} ${o.client.prenume}`, vatCode: o.cnp || "0000000000000", address: o.client.adresa, isTaxPayer: false, city: o.client.localitate, county: o.client.judet };
   const products = o.produse.map((l) => ({ name: `${l.denumire}${l.varianta ? " - " + l.varianta : ""}`, code: l.sku, isDiscount: false, measuringUnitName: "buc",
     currency: "RON", quantity: l.qty, price: l.pret, isTaxIncluded: true, saveToDb: false, isService: false, ...tax }));
   if (o.transport) products.push({ name: "Transport", code: "TRANSPORT", isDiscount: false, measuringUnitName: "buc", currency: "RON", quantity: 1,
@@ -119,4 +123,24 @@ async function descarcaFactura(f) {
   const r = await fetch(u, { headers: { Authorization: sbAuth(), Accept: "application/octet-stream" } });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
   return Buffer.from(await r.arrayBuffer());
+}
+
+// ---------------- Supabase (istoric comenzi) ----------------
+// Variabile de mediu: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY. Dacă lipsesc, pasul e sărit.
+export async function salveazaInSupabase(o) {
+  const { SUPABASE_URL: U, SUPABASE_SERVICE_ROLE_KEY: K } = process.env;
+  if (!U || !K) return;
+  const row = {
+    id: o.id, user_id: o.user_id || null, email: o.client.email, status: o.status, creata: o.creata, platita: o.platita || null,
+    produse: o.produse.map(({ sku, denumire, varianta, pret, vp, qty }) => ({ sku, denumire, varianta, pret, vp, qty })),
+    subtotal: o.subtotal, transport: o.transport, total: o.total, vp_total: o.vp_total,
+    livrare: { nume: o.client.nume, prenume: o.client.prenume, telefon: o.client.telefon, judet: o.client.judet, localitate: o.client.localitate, adresa: o.client.adresa, cod_postal: o.client.cod_postal },
+    firma: o.firma || null, factura: o.factura || null,
+  };
+  const r = await fetch(`${U}/rest/v1/magazin_comenzi?on_conflict=id`, {
+    method: "POST",
+    headers: { apikey: K, Authorization: `Bearer ${K}`, "Content-Type": "application/json", Prefer: "resolution=merge-duplicates,return=minimal" },
+    body: JSON.stringify(row),
+  });
+  if (!r.ok) throw new Error(`HTTP ${r.status} ${await r.text()}`);
 }

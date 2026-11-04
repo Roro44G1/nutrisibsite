@@ -74,6 +74,8 @@
         var ok = (current === 'toate' || c.getAttribute('data-cat') === current) && (!q || norm(c.getAttribute('data-text')).indexOf(q) > -1);
         c.classList.toggle('hidden', !ok); if (ok) shown++;
       });
+      grid.querySelectorAll('.mz-subsec').forEach(function (b) { b.classList.toggle('hidden', !b.querySelector('.mz-card:not(.hidden)')); });
+      grid.querySelectorAll('.mz-catsec').forEach(function (b) { b.classList.toggle('hidden', !b.querySelector('.mz-card:not(.hidden)')); });
       if (empty) empty.style.display = shown ? 'none' : 'block';
     }
     chips.forEach(function (ch) {
@@ -129,6 +131,7 @@
     var firma = form.querySelector('[name=pe_firma]'), firmaBox = form.querySelector('[data-firma]');
     if (firma) firma.addEventListener('change', function () {
       firmaBox.style.display = firma.checked ? '' : 'none';
+      var pf = form.querySelector('[data-pf]'); if (pf) pf.style.display = firma.checked ? 'none' : '';
       firmaBox.querySelectorAll('[data-req]').forEach(function (i) { i.required = firma.checked; });
     });
     var prof = form.querySelector('[data-profil]'), consProf = form.querySelector('[name=consimtamant_profil]');
@@ -143,12 +146,17 @@
       var fd = new FormData(form), data = {};
       fd.forEach(function (v, k) { data[k] = typeof v === 'string' ? v.trim() : v; });
       data.pe_firma = !!(firma && firma.checked);
+      delete data.salveaza_in_cont;
       data.consimtamant_profil = !!consProf.checked;
       data.accept_termeni = !!form.querySelector('[name=accept_termeni]').checked;
       if (!data.consimtamant_profil) ['greutate_actuala', 'greutate_dorita', 'inaltime', 'sex', 'an_nastere'].forEach(function (k) { delete data[k]; });
       var items = Object.keys(c).map(function (s) { return { sku: s, qty: c[s] }; });
       var btn = form.querySelector('[type=submit]'); btn.disabled = true; btn.textContent = 'Se pregătește plata securizată…';
-      fetch('/.netlify/functions/magazin-checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ items: items, client: data }) })
+      var pre = (window.NSAuth && window.NSAuth.beforeCheckout) ? window.NSAuth.beforeCheckout(data).catch(function () { return null; }) : Promise.resolve(null);
+      pre.then(function (token) {
+        var h = { 'Content-Type': 'application/json' }; if (token) h.Authorization = 'Bearer ' + token;
+        return fetch('/.netlify/functions/magazin-checkout', { method: 'POST', headers: h, body: JSON.stringify({ items: items, client: data }) });
+      })
         .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
         .then(function (res) {
           if (res.ok && res.j.url) { location.href = res.j.url; return; }

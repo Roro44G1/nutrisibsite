@@ -31,6 +31,7 @@
     <a href="/blog/">Blog</a>
     <a href="/magazin/" class="active">Magazin</a>
     <a href="/contact.html">Contact</a>
+    <a href="/magazin/cont/">Contul meu</a>
     <a href="/magazin/cos/" class="mz-cart-link" aria-label="Coșul de cumpărături">Coș <span class="mz-cart-count" data-n="0">0</span></a>
   </nav>
   <a href="/magazin/cos/" class="mz-cart-mobile" aria-label="Coșul de cumpărături"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg><span class="mz-cart-count" data-n="0">0</span></a>
@@ -56,6 +57,7 @@
     </aside>
     <section class="content-card mz-co-form">
       <form class="mz-form" data-mz-form novalidate>
+        <div class="mz-account-bar" data-account-bar>Poți comanda și fără cont. <a href="/magazin/cont/">Conectează-te</a> pentru date precompletate și istoricul comenzilor.</div>
         <fieldset>
           <legend>Date de contact și livrare</legend>
           <div class="mz-fields">
@@ -70,6 +72,10 @@
         </fieldset>
         <fieldset>
           <legend>Facturare</legend>
+          <div class="mz-fields" data-pf>
+            <div class="mz-field"><label for="f-cnp">CNP (opțional)</label><input id="f-cnp" name="cnp" inputmode="numeric" maxlength="13" pattern="[0-9]{13}" title="CNP-ul are 13 cifre" autocomplete="off"></div>
+            <p class="mz-field-note">Completează-l doar dacă vrei ca CNP-ul să apară pe factură. Dacă îl lași gol, factura se emite fără CNP, conform legii. Nu îl salvăm în cont.</p>
+          </div>
           <label class="mz-check"><input type="checkbox" name="pe_firma"> <span>Vreau factură pe firmă (persoană juridică)</span></label>
           <div class="mz-fields" data-firma style="display:none;margin-top:.75rem">
             <div class="mz-field full"><label for="f-firma">Denumirea firmei <span class=req>*</span></label><input id="f-firma" name="firma_denumire" data-req></div>
@@ -92,6 +98,7 @@
             <label class="mz-check"><input type="checkbox" name="consimtamant_profil"> <span>Sunt de acord ca PASCU RADU VASILE ÎNTREPRINDERE INDIVIDUALĂ să prelucreze datele din profilul nutrițional în scopul recomandărilor personalizate, conform <a href="/magazin/confidentialitate/" target="_blank">politicii de confidențialitate</a>.</span></label>
           </details>
         </fieldset>
+        <label class="mz-check" data-save-account style="display:none"><input type="checkbox" name="salveaza_in_cont" checked> <span>Salvează adresa și datele de facturare în contul meu, pentru comenzile viitoare.</span></label>
         <label class="mz-check"><input type="checkbox" name="accept_termeni" required> <span>Am citit și accept <a href="/magazin/termeni-si-conditii/" target="_blank">Termenii și condițiile</a> și <a href="/magazin/confidentialitate/" target="_blank">Politica de confidențialitate</a>. Am luat la cunoștință <a href="/magazin/retur/" target="_blank">dreptul de retragere</a>. <span class=req>*</span></span></label>
         <div class="mz-error" role="alert"></div>
         <button type="submit" class="mz-btn gold" style="width:100%;margin-top:1rem">Continuă spre plată</button>
@@ -120,6 +127,9 @@
 <div id="footer-placeholder"></div>
 </div>
 <script src="/magazin/assets/cos.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="/magazin/assets/sb-config.js"></script>
+<script src="/magazin/assets/cont.js" defer></script>
 <script>fetch('/footer.html').then(function(r){return r.ok?r.text():''}).then(function(t){var c=document.getElementById('footer-placeholder');if(c)c.innerHTML=t}).catch(function(){});</script>
 <script src="/cookies.js"></script>
 </body>
