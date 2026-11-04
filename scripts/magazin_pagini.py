@@ -1,7 +1,7 @@
 # Pagini coș, confirmare și pagini legale – rulat de magazin_build.py (folosește funcțiile de acolo)
 FIRMA = dict(
     denumire=VANZATOR, cui='38416337', regcom='F32/667/2017',
-    adresa=None,                       # TODO: adresa sediului (ex. „Str. ..., nr. ..., Sibiu, jud. Sibiu”)
+    adresa='Str. Podului 44G/1, Sibiu, jud. Sibiu',
     email='nutrisib.club@gmail.com', telefon=None,
 )
 def camp(v, ce): return E(v) if v else f'<mark>[de completat: {ce}]</mark>'
@@ -174,7 +174,7 @@ legal('termeni-si-conditii', 'Termeni și condiții', 'Termenii și condițiile 
 <h2>2. Produse și informații</h2>
 <p>Descrierile, ingredientele, informațiile nutriționale și imaginile produselor provin de la producător. Imaginile au caracter informativ; alimentele prezentate în imagini sunt ilustrative și nu fac parte din conținutul produsului. Suplimentele alimentare nu înlocuiesc o dietă variată și echilibrată și un stil de viață sănătos. Dacă ai o afecțiune, urmezi un tratament, ești însărcinată sau alăptezi, cere părerea medicului înainte de a consuma suplimente.</p>
 <h2>3. Prețuri</h2>
-<p>Prețurile sunt exprimate în lei (RON) și sunt prețuri finale pentru produs. Costul transportului se afișează separat în coș, înainte de plată: transportul este gratuit pentru comenzile Herbalife care însumează minimum {PRAG_VP} VP (valoarea VP a fiecărui produs este afișată pe pagina lui) și costă {TRANSPORT} lei pentru comenzile sub acest prag. Prețul valabil este cel afișat în momentul plasării comenzii.</p>
+<p>Prețurile sunt exprimate în lei (RON) și sunt prețuri finale pentru produs. Vânzătorul nu este înregistrat în scopuri de TVA, astfel că facturile se emit fără TVA. Costul transportului se afișează separat în coș, înainte de plată: transportul este gratuit pentru comenzile Herbalife care însumează minimum {PRAG_VP} VP (valoarea VP a fiecărui produs este afișată pe pagina lui) și costă {TRANSPORT} lei pentru comenzile sub acest prag. Prețul valabil este cel afișat în momentul plasării comenzii.</p>
 <h2>4. Comanda și încheierea contractului</h2>
 <p>Comanda se plasează din coș, prin completarea datelor de livrare și facturare, acceptarea acestor termeni și plata online. Contractul se consideră încheiat în momentul în care primești pe e-mail confirmarea comenzii. Dacă un produs comandat nu mai este disponibil, te informăm și îți rambursăm integral suma aferentă în cel mult 14 zile.</p>
 <h2>5. Plata</h2>
