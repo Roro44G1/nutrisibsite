@@ -10,7 +10,7 @@ async function loadCatalog(origin) {
   const r = await fetch(`${origin}/magazin/catalog.json`);
   if (!r.ok) throw new Error(`catalog HTTP ${r.status}`);
   const d = await r.json();
-  CACHE = { t: Date.now(), bySku: Object.fromEntries(d.produse.map((p) => [p.sku, p])), prag: d.config.prag_vp, transport: d.config.transport };
+  CACHE = { t: Date.now(), bySku: Object.fromEntries(d.produse.map((p) => [p.sku, p])), pk: Object.fromEntries((d.pachete || []).map((p) => [p.id, p])), prag: d.config.prag_vp, transport: d.config.transport };
   return CACHE;
 }
 const JSON_H = { "Content-Type": "application/json" };
@@ -31,9 +31,24 @@ export default async function handler(req) {
   const items = Array.isArray(body.items) ? body.items.slice(0, 40) : [];
   const lines = [];
   for (const it of items) {
-    const p = BY_SKU[String(it?.sku || "").toUpperCase()];
+    const key = String(it?.sku || "").toUpperCase();
     const q = Math.floor(Number(it?.qty));
-    if (!p || !(q >= 1 && q <= 99)) return bad("Coșul conține un produs sau o cantitate invalidă. Reîncarcă pagina coșului.");
+    if (!(q >= 1 && q <= 99)) return bad("Coșul conține o cantitate invalidă. Reîncarcă pagina coșului.");
+    if (key.includes(":")) {
+      // pachet: "PK01:SKU,SKU,..." – fiecare SKU trebuie să fie o variantă permisă pentru unitatea respectivă
+      const [id, list] = key.split(":"); const pk = cat.pk[id]; const skus = (list || "").split(",");
+      if (!pk || skus.length !== pk.unitati.length || skus.some((s, i) => !pk.unitati[i].optiuni.includes(s) || !BY_SKU[s]))
+        return bad("Coșul conține un pachet invalid. Reîncarcă pagina coșului.");
+      const comp = skus.map((s) => BY_SKU[s]);
+      const separat = comp.reduce((a, c) => a + c.pret, 0);
+      const t = Math.floor((separat * 95) / 100); let pret = Math.floor(t / 100) * 100 + 99; while (pret > t) pret -= 50;
+      lines.push({ sku: key, cod: id, denumire: `Pachet ${pk.nume}`, varianta: comp.map((c) => `${c.denumire}${c.varianta ? " – " + c.varianta : ""}`).join("; "),
+        pret, pret_separat: separat, vp: Math.round(comp.reduce((a, c) => a + c.vp, 0) * 100) / 100, qty: q, img: pk.img_mic, magazin: "herbalife",
+        componente: comp.map((c) => ({ sku: c.sku, denumire: c.denumire, varianta: c.varianta, pret: c.pret })) });
+      continue;
+    }
+    const p = BY_SKU[key];
+    if (!p) return bad("Coșul conține un produs invalid. Reîncarcă pagina coșului.");
     lines.push({ sku: p.sku, denumire: p.denumire, varianta: p.varianta, pret: p.pret, vp: p.vp, qty: q, img: p.img_mic, magazin: p.magazin });
   }
   if (!lines.length) return bad("Coșul este gol.");
@@ -115,7 +130,7 @@ export default async function handler(req) {
         price_data: {
           currency: "ron",
           unit_amount: Math.round(l.pret * 100),
-          product_data: { name: `${l.denumire}${l.varianta ? " – " + l.varianta : ""}`, metadata: { sku: l.sku } },
+          product_data: { name: `${l.denumire}${l.varianta ? " – " + l.varianta : ""}`.slice(0, 250), metadata: { sku: l.sku.slice(0, 450) } },
         },
       })),
       shipping_options: [{

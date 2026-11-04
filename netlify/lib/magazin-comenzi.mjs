@@ -103,7 +103,7 @@ async function emiteFactura(o) {
   const client = o.firma
     ? { name: o.firma.denumire, vatCode: o.firma.cui, regCom: o.firma.regcom || "", address: o.firma.adresa, isTaxPayer: /^RO/i.test(o.firma.cui), city: o.client.localitate, county: o.client.judet }
     : { name: `${o.client.nume} ${o.client.prenume}`, vatCode: o.cnp || "0000000000000", address: o.client.adresa, isTaxPayer: false, city: o.client.localitate, county: o.client.judet };
-  const products = o.produse.map((l) => ({ name: `${l.denumire}${l.varianta ? " - " + l.varianta : ""}`, code: l.sku, isDiscount: false, measuringUnitName: "buc",
+  const products = o.produse.map((l) => ({ name: `${l.denumire}${l.varianta ? " - " + l.varianta : ""}`.slice(0, 250), code: l.cod || l.sku, isDiscount: false, measuringUnitName: "buc",
     currency: "RON", quantity: l.qty, price: l.pret, isTaxIncluded: true, saveToDb: false, isService: false, ...tax }));
   if (o.transport) products.push({ name: "Transport", code: "TRANSPORT", isDiscount: false, measuringUnitName: "buc", currency: "RON", quantity: 1,
     price: o.transport, isTaxIncluded: true, saveToDb: false, isService: true, ...tax });
@@ -132,7 +132,7 @@ export async function salveazaInSupabase(o) {
   if (!U || !K) return;
   const row = {
     id: o.id, user_id: o.user_id || null, email: o.client.email, status: o.status, creata: o.creata, platita: o.platita || null,
-    produse: o.produse.map(({ sku, denumire, varianta, pret, vp, qty }) => ({ sku, denumire, varianta, pret, vp, qty })),
+    produse: o.produse.map(({ sku, denumire, varianta, pret, vp, qty, componente }) => ({ sku, denumire, varianta, pret, vp, qty, ...(componente ? { componente } : {}) })),
     subtotal: o.subtotal, transport: o.transport, total: o.total, vp_total: o.vp_total,
     livrare: { nume: o.client.nume, prenume: o.client.prenume, telefon: o.client.telefon, judet: o.client.judet, localitate: o.client.localitate, adresa: o.client.adresa, cod_postal: o.client.cod_postal },
     firma: o.firma || null, factura: o.factura || null,
