@@ -45,10 +45,16 @@ def eticheta_optiune(k, opts):
     nume_dif = len({BYSKU_ALL[o]['denumire'] for o in opts}) > 1
     return ((v['denumire'] + ' – ') if nume_dif else '') + (' · '.join(parti) or v['denumire'])
 
+PK_BUY = '''<div class="mz-buy-row">
+          <div class="mz-qty"><button type="button" data-step="-1" aria-label="Scade cantitatea">−</button><input type="number" min="1" max="20" value="1" aria-label="Cantitate"><button type="button" data-step="1" aria-label="Crește cantitatea">+</button></div>
+          <button type="button" class="mz-btn" data-add-pk>Adaugă pachetul în coș</button>
+        </div>
+        <div class="mz-added">Pachetul a fost adăugat. <a href="/magazin/cos/">Vezi coșul →</a></div>'''
+
 def build_pachete_pages():
     pag_ld = lambda p: {'@context': 'https://schema.org', '@type': 'Product', 'name': f"Pachet {p['nume']} – Herbalife", 'sku': p['id'],
         'brand': {'@type': 'Brand', 'name': 'Herbalife'}, 'image': [SITE + img_pachet(p)], 'description': f"Pachet Herbalife: {p['comp_txt']}.",
-        'offers': {'@type': 'Offer', 'url': SITE + p['url'], 'priceCurrency': 'RON', 'price': str(p['pret']), 'availability': 'https://schema.org/InStock',
+        'offers': {'@type': 'Offer', 'url': SITE + p['url'], 'priceCurrency': 'RON', 'price': str(p['pret']), 'availability': DISP_HL,
                    'itemCondition': 'https://schema.org/NewCondition', 'seller': {'@type': 'Organization', 'name': 'NutriSib'}}}
     # --- lista pachetelor ---
     cr_html, cr_ld = crumbs([('Magazin', '/magazin/'), ('Herbalife', '/magazin/herbalife/'), ('Pachete la ofertă', None)])
@@ -101,11 +107,7 @@ def build_pachete_pages():
       <div class="mz-buybox">
         <div class="mz-pk-sum">Preț produse separat: <s data-sum>{lei(p['suma'])}</s> · Economisești <strong data-save>{lei(p['economie'])} ({str(p['procent']).replace('.', ',')}%)</strong></div>
         <div class="mz-price" data-pret>{lei(p['pret'])}</div>
-        <div class="mz-buy-row">
-          <div class="mz-qty"><button type="button" data-step="-1" aria-label="Scade cantitatea">−</button><input type="number" min="1" max="20" value="1" aria-label="Cantitate"><button type="button" data-step="1" aria-label="Crește cantitatea">+</button></div>
-          <button type="button" class="mz-btn" data-add-pk>Adaugă pachetul în coș</button>
-        </div>
-        <div class="mz-added">Pachetul a fost adăugat. <a href="/magazin/cos/">Vezi coșul →</a></div>
+        {PK_BUY if HL_ACTIV else SOON_HL}
         <p class="mz-buy-note">Acest pachet are <strong data-vp>{vp_fmt(p['vp'])} VP</strong>{' – transport gratuit' if p['vp'] >= PRAG_VP else f'. Transport gratuit de la {PRAG_VP} VP pe comandă'}.</p>
       </div>
       <div class="mz-advice">Detaliile fiecărui produs (ingrediente, informații nutriționale, mod de utilizare) le găsești pe pagina lui – apasă pe numele produsului.</div>

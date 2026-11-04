@@ -12,6 +12,9 @@ SRC = os.path.join(ROOT, 'produse', 'herbalife')
 PRICES = os.path.join(SRC, '_scripturi', 'herbalife-preturi-iulie2026.json')
 OUT = os.path.join(ROOT, 'magazin')
 HL = os.path.join(OUT, 'herbalife')
+# Comenzile online Herbalife: False = catalogul se vede, dar nu se poate comanda (precomenzi la telefon/e-mail).
+# Se trece pe True după ce facturarea automată SmartBill funcționează, apoi se rulează din nou build-ul.
+HL_ACTIV = False
 from magazin_comun import *   # SITE, TODAY, PRAG_VP, TRANSPORT, VANZATOR, REGCOM, E, head, foot, crumbs, md2html, lei, …
 
 CATDATA = json.load(open(os.path.join(os.path.dirname(__file__), 'herbalife_categorii.json'), encoding='utf-8'))
@@ -60,6 +63,13 @@ def parse_md(path):
     intro = re.sub(r'^# .*$|^\*.*\*$|^!\[.*$', '', head_, flags=re.M).strip()
     return meta, intro, secs, disc
 
+SOON_HL = precomanda_box('Herbalife', ', cu oferte speciale de deschidere')
+DISP_HL = 'https://schema.org/InStock' if HL_ACTIV else 'https://schema.org/PreOrder'
+BUY_ROW = '''<div class="mz-buy-row">
+          <div class="mz-qty"><button type="button" data-step="-1" aria-label="Scade cantitatea">−</button><input type="number" min="1" max="99" value="1" aria-label="Cantitate"><button type="button" data-step="1" aria-label="Crește cantitatea">+</button></div>
+          <button type="button" class="mz-btn" data-add>Adaugă în coș</button>
+        </div>
+        <div class="mz-added">Produsul a fost adăugat. <a href="/magazin/cos/">Vezi coșul →</a></div>'''
 HL_SCRIPTS = '<script src="/magazin/assets/herbalife.js" defer></script>\n'
 def build_page(path, title, desc, canon, body, og_img=None, extra='', robots=None, scripts=''):
     if '/magazin/herbalife/' in canon: scripts = HL_SCRIPTS + scripts
@@ -99,8 +109,8 @@ for p in produse: fam.setdefault(p['denumire'], []).append(p)
 for v in fam.values(): v.sort(key=lambda p: (p['pret'], p['varianta']))
 
 os.makedirs(OUT, exist_ok=True)
-json.dump({'generat': TODAY, 'config': {'prag_vp': PRAG_VP, 'transport': TRANSPORT, 'moneda': 'RON'},
-           'produse': [{**{k: p[k] for k in ('sku', 'denumire', 'varianta', 'pret', 'vp', 'url', 'img_mic', 'cat')}, 'magazin': 'herbalife'} for p in produse]},
+json.dump({'generat': TODAY, 'config': {'prag_vp': PRAG_VP, 'transport': TRANSPORT, 'moneda': 'RON', 'herbalife': {'activ': HL_ACTIV}},
+           'produse': [{**{k: p[k] for k in ('sku', 'denumire', 'varianta', 'pret', 'vp', 'url', 'img_mic', 'cat')}, 'magazin': 'herbalife', **({} if HL_ACTIV else {'inactiv': True})} for p in produse]},
           open(os.path.join(OUT, 'catalog.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 # ======================= pagini produs =======================
@@ -113,7 +123,7 @@ for p in produse:
                'mpn': p['sku'], 'brand': {'@type': 'Brand', 'name': 'Herbalife'}, 'category': p['cat_label'],
                'image': [SITE + g for g, _ in p['galerie']], 'description': desc,
                'offers': {'@type': 'Offer', 'url': SITE + p['url'], 'priceCurrency': 'RON', 'price': str(p['pret']),
-                          'availability': 'https://schema.org/InStock', 'itemCondition': 'https://schema.org/NewCondition',
+                          'availability': DISP_HL, 'itemCondition': 'https://schema.org/NewCondition',
                           'seller': {'@type': 'Organization', 'name': 'NutriSib'},
                           'shippingDetails': {'@type': 'OfferShippingDetails', 'shippingDestination': {'@type': 'DefinedRegion', 'addressCountry': 'RO'},
                                               'shippingRate': {'@type': 'MonetaryAmount', 'value': str(TRANSPORT), 'currency': 'RON'}},
@@ -143,13 +153,9 @@ for p in produse:
       {f'<p class="mz-p-sub">{E(p["intro"])}</p>' if p['intro'] else ''}
       <div class="mz-p-specs">{specs}</div>
       {var_html}
-      <div class="mz-buybox" data-mz-buy="{p['sku']}">
+      <div class="mz-buybox"{f' data-mz-buy="{p["sku"]}"' if HL_ACTIV else ''}>
         <div class="mz-price">{lei(p['pret'])}</div>
-        <div class="mz-buy-row">
-          <div class="mz-qty"><button type="button" data-step="-1" aria-label="Scade cantitatea">−</button><input type="number" min="1" max="99" value="1" aria-label="Cantitate"><button type="button" data-step="1" aria-label="Crește cantitatea">+</button></div>
-          <button type="button" class="mz-btn" data-add>Adaugă în coș</button>
-        </div>
-        <div class="mz-added">Produsul a fost adăugat. <a href="/magazin/cos/">Vezi coșul →</a></div>
+        {BUY_ROW if HL_ACTIV else SOON_HL}
         <p class="mz-buy-note">Acest produs are <strong>{vp_fmt(p['vp'])} VP</strong>. Transport gratuit pentru comenzile de minimum {PRAG_VP} VP; sub prag, transportul costă {TRANSPORT} lei. <a href="/magazin/livrare/">Detalii livrare</a></p>
       </div>
       <div class="mz-advice">Nu știi dacă produsul ți se potrivește? Alegerea suplimentelor are sens după o evaluare a stilului tău de viață și a obiectivelor. <a href="/evaluare.html">Începe evaluarea NutriSib →</a></div>
@@ -250,6 +256,7 @@ def nav_categorii(activ=None):
         f'<a class="mz-chip{" active" if a else ""}" href="{u}"{CUR if a else ""}>{E(t)}</a>' for u, t, a in items) + '</nav>'
 
 SHIP = f'<div class="mz-ship-note"><strong>Transport gratuit</strong> pentru comenzile de minimum {PRAG_VP} VP. Fiecare produs afișează valoarea VP, iar coșul o adună automat. Sub prag, transportul costă {TRANSPORT} lei.</div>' + '<p class="mz-offer-link"><a href="/magazin/oferta/">📄 Oferta NutriSib – lista completă de prețuri (cu PDF descărcabil) →</a></p>'
+if not HL_ACTIV: SHIP = SHIP.replace('<p class="mz-offer-link">', SOON_HL + '<p class="mz-offer-link">', 1)
 
 # --- pagina principală a catalogului ---
 cr_html, cr_ld = crumbs([('Magazin', '/magazin/'), ('Herbalife', None)])
@@ -342,11 +349,11 @@ body = f'''<section class="hero-card mz-hero">
 <section class="content-card">
   <h2 class="mz-section-title">Alege magazinul</h2>
   <div class="mz-stores">
-    <div class="mz-store is-soon" aria-disabled="true">
-      <div><span class="mz-pill gold">În curând</span><h2>Herbalife</h2>
-      <p>Se deschide în curând, cu oferte speciale de deschidere. Shake-uri Formula 1, proteine, nutriție sportivă H24, suplimente alimentare și îngrijirea pielii – {len(produse)} produse și variante, cu etichetă în limba română.</p></div>
-      <div class="mz-store-foot"><div class="mz-store-thumbs">{thumbs}</div><span class="mz-go" style="color:#8a6d0f">Oferte speciale de deschidere</span></div>
-    </div>
+    <a class="mz-store" href="/magazin/herbalife/">
+      <div><span class="mz-pill gold">{'Disponibil' if HL_ACTIV else 'Precomenzi · deschidere în curând'}</span><h2>Herbalife</h2>
+      <p>{'' if HL_ACTIV else 'Comenzile online se deschid în curând, cu oferte speciale de deschidere – până atunci, precomenzi la telefon sau e-mail. '}Shake-uri Formula 1, proteine, nutriție sportivă H24, suplimente alimentare și îngrijirea pielii – {len(produse)} produse și variante, cu etichetă în limba română.</p></div>
+      <div class="mz-store-foot"><div class="mz-store-thumbs">{thumbs}</div><span class="mz-go">{'Intră în magazin' if HL_ACTIV else 'Vezi catalogul și prețurile'} →</span></div>
+    </a>
     <a class="mz-store" href="/shop/">
       <div><span class="mz-pill">Acces instant</span><h2>NutriSib Digital</h2>
       <p>Ghiduri PDF, seria BIOS și kit-uri de transformare dezvoltate de dr.ing. Radu Pascu, livrate imediat pe email.</p></div>

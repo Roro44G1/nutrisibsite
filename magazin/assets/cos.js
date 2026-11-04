@@ -22,25 +22,33 @@
   function setQty(sku, qty) { var c = read(); if (qty <= 0) delete c[sku]; else c[sku] = Math.min(99, qty); write(c); }
   function catalog() {
     if (!catalogPromise) catalogPromise = fetch('/magazin/catalog.json', { cache: 'no-cache' }).then(function (r) { return r.json(); })
-      .then(function (d) { var m = {}, pk = {}; d.produse.forEach(function (p) { if (!p.inactiv) m[p.sku] = p; });
+      .then(function (d) { var m = {}, pk = {}; d.produse.forEach(function (p) { m[p.sku] = p; });
         if (d.config) { PRAG_VP = d.config.prag_vp || PRAG_VP; TRANSPORT = d.config.transport || TRANSPORT; if (d.config.lr) TRANSPORT_LR = d.config.lr.transport; } (d.pachete || []).forEach(function (p) { pk[p.id] = p; }); return { list: d.produse, bySku: m, pk: pk, cfg: d.config }; });
     return catalogPromise;
   }
   function pretPachet(s) { var t = Math.floor(s * 95 / 100), x = Math.floor(t / 100) * 100 + 99; while (x > t) x -= 50; return x; }
   /* linie de coș: produs simplu (cheie = SKU) sau pachet (cheie = "PK01:sku,sku,...") */
   function linie(cat, key) {
-    if (key.indexOf(':') < 0) { var p = cat.bySku[key]; return p && (p.magazin || 'herbalife') === MAG ? { key: key, nume: p.denumire, meta: (p.varianta ? p.varianta + ' · ' : '') + 'cod ' + p.sku, url: p.url, img: p.img_mic, pret: p.pret, vp: p.vp, magazin: p.magazin } : null; }
+    if (key.indexOf(':') < 0) { var p = cat.bySku[key]; return p && !p.inactiv && (p.magazin || 'herbalife') === MAG ? { key: key, nume: p.denumire, meta: (p.varianta ? p.varianta + ' · ' : '') + 'cod ' + p.sku, url: p.url, img: p.img_mic, pret: p.pret, vp: p.vp, magazin: p.magazin } : null; }
     var parts = key.split(':'), pk = cat.pk[parts[0]], skus = parts[1].split(',');
     if (MAG !== 'herbalife' || !pk || skus.length !== pk.unitati.length) return null;
     var sum = 0, vp = 0, sub = [];
     for (var i = 0; i < skus.length; i++) {
-      var p2 = cat.bySku[skus[i]]; if (!p2 || pk.unitati[i].optiuni.indexOf(skus[i]) < 0) return null;
+      var p2 = cat.bySku[skus[i]]; if (!p2 || p2.inactiv || pk.unitati[i].optiuni.indexOf(skus[i]) < 0) return null;
       sum += p2.pret; vp += p2.vp; sub.push(p2.denumire + (p2.varianta ? ' – ' + p2.varianta : ''));
     }
     return { key: key, nume: 'Pachet ' + pk.nume, meta: 'pachet · ' + skus.length + ' produse', url: pk.url, img: pk.img_mic, pret: pretPachet(sum), vp: Math.round(vp * 100) / 100, sub: sub, separat: sum, magazin: 'herbalife' };
   }
   /* sumele se calculează în bani (întregi), ca să nu apară erori de rotunjire la prețurile cu zecimale (LR) */
   function bani(n) { return Math.round(n * 100); }
+  /* scoate din coș produsele care nu mai pot fi comandate (ex. magazin încă inactiv) */
+  function curata() {
+    catalog().then(function (cat) {
+      var c = read(), ch = false;
+      Object.keys(c).forEach(function (k) { if (!linie(cat, k)) { delete c[k]; ch = true; } });
+      if (ch) write(c);
+    }).catch(function () {});
+  }
   function lei(n) { n = Math.round(n * 100) / 100; return n.toLocaleString('ro-RO', n % 1 ? { minimumFractionDigits: 2, maximumFractionDigits: 2 } : {}) + ' lei'; }
   function vpFmt(n) { return (Math.round(n * 100) / 100).toLocaleString('ro-RO', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
@@ -81,7 +89,7 @@
         box.querySelector('[data-vp]').textContent = vpFmt(l.vp) + ' VP';
       }
       box.querySelectorAll('select[data-unit]').forEach(function (s) { s.addEventListener('change', upd); });
-      box.querySelector('[data-add-pk]').addEventListener('click', function () {
+      var addPk = box.querySelector('[data-add-pk]'); if (addPk) addPk.addEventListener('click', function () {
         add(keyNow(), Math.max(1, Math.min(20, +qty.value || 1)));
         var ok = box.querySelector('.mz-added'); if (ok) ok.style.display = 'block';
       });
@@ -233,6 +241,6 @@
   function esc(s) { return String(s).replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]; }); }
 
   document.addEventListener('DOMContentLoaded', function () {
-    updateCount(); initBuy(); initPachet(); initGallery(); initTabs(); initCatalog(); initCart(); initSuccess();
+    updateCount(); curata(); initBuy(); initPachet(); initGallery(); initTabs(); initCatalog(); initCart(); initSuccess();
   });
 })();

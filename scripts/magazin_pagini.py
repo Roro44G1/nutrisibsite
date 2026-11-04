@@ -3,7 +3,7 @@ from magazin_lr import TRANSPORT_LR
 FIRMA = dict(
     denumire=VANZATOR, cui='38416337', regcom='F32/667/2017',
     adresa='Str. Podului 44G/1, Sibiu, jud. Sibiu',
-    email='nutrisib.club@gmail.com', telefon=None,
+    email='nutrisib.club@gmail.com', telefon=CONTACT_TEL_AFIS,
 )
 def camp(v, ce): return E(v) if v else f'<mark>[de completat: {ce}]</mark>'
 ID_FIRMA = (f"<strong>{E(FIRMA['denumire'])}</strong>, cu sediul în {camp(FIRMA['adresa'], 'adresa sediului')}, "
@@ -209,7 +209,8 @@ body = f'''<div class="mz-crumbs-wrap">{crumbs([('Magazin', '/magazin/'), ('Ofer
   <div class="mz-of-head">
     <div><span class="mz-eyebrow" style="color:#8a6d0f">Oferta NutriSib · Herbalife</span>
     <h1 class="mz-p-title">Lista de prețuri</h1>
-    <p class="mz-buy-note" style="margin:0">Valabilă de la {DATA_OFERTA}. Prețuri finale, în lei. Transport gratuit pentru comenzile de minimum {PRAG_VP} VP; sub prag, {TRANSPORT} lei. {E(VANZATOR)}, CUI 38416337 – neplătitor de TVA.</p></div>
+    <p class="mz-buy-note" style="margin:0">Valabilă de la {DATA_OFERTA}. Prețuri finale, în lei. Transport gratuit pentru comenzile de minimum {PRAG_VP} VP; sub prag, {TRANSPORT} lei. {E(VANZATOR)}, CUI 38416337 – neplătitor de TVA.</p>
+    <p class="mz-buy-note" style="margin:.4rem 0 0"><strong>Precomenzi și informații:</strong> <a href="tel:{CONTACT_TEL}">{CONTACT_TEL_AFIS}</a> · <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a></p></div>
     <img src="/magazin/assets/herbalife-logo.webp" alt="Herbalife" class="mz-of-logo">
   </div>
   <div class="mz-of-actions no-print">

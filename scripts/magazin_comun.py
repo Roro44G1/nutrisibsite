@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
 """Șabloane și constante comune magazinului NutriSib (Herbalife, LR, …).
 Importat de scripts/magazin_build.py (Herbalife) și scripts/magazin_lr.py (LR)."""
-import os, json, html, datetime, markdown
+import os, re, json, html, datetime, markdown
 SITE = 'https://nutrisib.club'
 TODAY = datetime.date.today().isoformat()
 PRAG_VP, TRANSPORT = 125, 25
 VANZATOR = 'PASCU RADU VASILE ÎNTREPRINDERE INDIVIDUALĂ'
+CONTACT_TEL = '+40770276406'; CONTACT_TEL_AFIS = '+40 770 276 406'; CONTACT_EMAIL = 'nutrisib.club@gmail.com'
+def precomanda_box(magazin, deschidere=''):
+    """Caseta afișată cât timp comenzile online pentru un magazin nu sunt deschise."""
+    return (f'<div class="mz-soon-box"><strong>Comenzile online pentru produsele {magazin} se deschid în curând{deschidere}.</strong> '
+            f'Până atunci poți face o <strong>precomandă</strong> sau poți cere informații suplimentare: '
+            f'<span class="mz-contact"><a href="tel:{CONTACT_TEL}">📞 {CONTACT_TEL_AFIS}</a> '
+            f'<a href="mailto:{CONTACT_EMAIL}?subject=Precomand%C4%83%20{magazin}">✉ {CONTACT_EMAIL}</a></span></div>')
 REGCOM = 'F32/667/2017'   # format nou ONRC (14 caractere) doar după ce e emis oficial
 E = lambda s: html.escape(str(s or ''), quote=True)
 
