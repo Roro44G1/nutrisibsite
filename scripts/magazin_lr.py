@@ -190,7 +190,11 @@ def pagina_produs(p, fam):
     variante = fam[p['denumire']]
     title = f"{p['denumire']}{' – ' + p['varianta'] if p['varianta'] else ''} | LR | NutriSib"
     txt = re.sub(r'<[^>]+>', ' ', p['intro'] or (p['tabs'][0][1] if p['tabs'] else '')).replace('&lt;', '<').replace('&gt;', '>')
-    desc = re.sub(r'\s+', ' ', txt).strip()[:300] or f"{p['denumire']} – produs LR Health & Beauty, cod {p['sku']}."
+    desc = re.sub(r'\s+', ' ', txt).strip()[:300]
+    pret_txt = f"{p['pret']:.2f}".replace('.', ',')
+    if len(desc) < 70:  # textul din sursă e prea scurt (seturi) – descriere generată din datele produsului
+        desc = (f"{p['denumire']}{' – ' + p['varianta'] if p['varianta'] else ''} – LR, cod {p['sku']}, "
+                f"preț final {pret_txt} lei. Precomenzi la telefon sau e-mail.")
     cr_html, cr_ld = crumbs([('Magazin', '/magazin/'), ('LR', BASE), (p['cat_label'], f"{BASE}{p['cat']}/"), (p['denumire'], None)])
     disp = 'https://schema.org/InStock' if LR_ACTIV else 'https://schema.org/PreOrder'
     prod_ld = {'@context': 'https://schema.org', '@type': 'Product', 'name': f"{p['denumire']} {p['varianta']}".strip(), 'sku': p['sku'],

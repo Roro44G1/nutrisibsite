@@ -114,10 +114,16 @@ json.dump({'generat': TODAY, 'config': {'prag_vp': PRAG_VP, 'transport': TRANSPO
           open(os.path.join(OUT, 'catalog.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 # ======================= pagini produs =======================
+from collections import Counter
+_DESC_N = Counter(scurt((p['meta_desc'] or p['intro'])[:300]) for p in produse)
 for p in produse:
     variante = fam[p['denumire']]
     title = f"{p['denumire']}{' – ' + p['varianta'] if p['varianta'] else ''} | Herbalife | NutriSib"
     desc = (p['meta_desc'] or p['intro'])[:300]
+    if _DESC_N[scurt(desc)] > 1:  # aceeași descriere la mai multe ambalaje → descrieri unice pentru Google
+        desc = f"{p['varianta'] or p['denumire']}: {desc}"
+    if len(desc) < 70:
+        desc += f". Produs Herbalife cu etichetă în limba română, preț final {p['pret']} lei."
     cr_html, cr_ld = crumbs([('Magazin', '/magazin/'), ('Herbalife', '/magazin/herbalife/'), (p['cat_label'], f'/magazin/herbalife/{p["cat"]}/'), (p['denumire'], None)])
     prod_ld = {'@context': 'https://schema.org', '@type': 'Product', 'name': f"{p['denumire']} {p['varianta']}".strip(), 'sku': p['sku'],
                'mpn': p['sku'], 'brand': {'@type': 'Brand', 'name': 'Herbalife'}, 'category': p['cat_label'],
