@@ -40,6 +40,7 @@ export default async function handler(req) {
       const [id, list] = key.split(":"); const pk = cat.pk[id]; const skus = (list || "").split(",");
       if (!pk || skus.length !== pk.unitati.length || skus.some((s, i) => !pk.unitati[i].optiuni.includes(s) || !BY_SKU[s]))
         return bad("Coșul conține un pachet invalid. Reîncarcă pagina coșului.");
+      if (skus.some((s) => BY_SKU[s].inactiv)) return bad(`Pachetul ${pk.nume} nu poate fi comandat încă. Elimină-l din coș pentru a continua.`);
       const comp = skus.map((s) => BY_SKU[s]);
       const separat = comp.reduce((a, c) => a + c.pret, 0);
       const t = Math.floor((separat * 95) / 100); let pret = Math.floor(t / 100) * 100 + 99; while (pret > t) pret -= 50;

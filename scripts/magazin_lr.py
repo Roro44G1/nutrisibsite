@@ -163,8 +163,7 @@ def incarca():
 
 
 # ---------------- pagini ----------------
-SOON = ('<div class="mz-soon-box"><strong>Comenzile pentru produsele LR se deschid în curând.</strong> '
-        'Poți consulta de pe acum catalogul și prețurile.</div>')
+SOON = precomanda_box('LR')
 SHIP_LR = (f'<div class="mz-ship-note"><strong>Transport: {TRANSPORT_LR} lei</strong> pentru fiecare comandă LR, '
            'livrare prin curier oriunde în România. Produsele LR au coșul lor și se comandă separat de cele Herbalife.</div>')
 
@@ -193,7 +192,7 @@ def pagina_produs(p, fam):
     txt = re.sub(r'<[^>]+>', ' ', p['intro'] or (p['tabs'][0][1] if p['tabs'] else '')).replace('&lt;', '<').replace('&gt;', '>')
     desc = re.sub(r'\s+', ' ', txt).strip()[:300] or f"{p['denumire']} – produs LR Health & Beauty, cod {p['sku']}."
     cr_html, cr_ld = crumbs([('Magazin', '/magazin/'), ('LR', BASE), (p['cat_label'], f"{BASE}{p['cat']}/"), (p['denumire'], None)])
-    disp = 'https://schema.org/InStock' if LR_ACTIV else 'https://schema.org/OutOfStock'
+    disp = 'https://schema.org/InStock' if LR_ACTIV else 'https://schema.org/PreOrder'
     prod_ld = {'@context': 'https://schema.org', '@type': 'Product', 'name': f"{p['denumire']} {p['varianta']}".strip(), 'sku': p['sku'],
                'mpn': p['sku'], 'brand': {'@type': 'Brand', 'name': BRAND}, 'category': p['cat_label'],
                'image': [SITE + p['img']] if p['img'] else [], 'description': desc,
