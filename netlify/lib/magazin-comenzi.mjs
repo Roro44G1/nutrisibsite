@@ -4,6 +4,7 @@
 import { getStore } from "@netlify/blobs";
 import { smartbillActiv, emiteFacturaSB, descarcaFacturaSB, numeFisierFactura, taxaSB } from "./smartbill.mjs";
 
+const numeMagazin = (o) => (o.magazin === "lr" ? "LR" : "Herbalife");
 const lei = (n) => { const x = Math.round(Number(n) * 100) / 100; return `${x.toLocaleString("ro-RO", x % 1 ? { minimumFractionDigits: 2, maximumFractionDigits: 2 } : {})} lei`; };
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
 
@@ -82,9 +83,9 @@ export async function handleMagazinOrder({ session, resend }) {
   if (!order.email_nutrisib) {
   await trimiteEmail(resend, {
     from, to: notify, reply_to: order.client.email,
-    subject: `🛒 Comandă nouă ${order.id} – ${lei(order.total)}${order.vp_total ? ` (${order.vp_total} VP)` : ""}${order.magazin === "lr" ? " · LR" : ""}`,
+    subject: `🛒 Comandă nouă ${numeMagazin(order)} ${order.id} – ${lei(order.total)}${order.vp_total ? ` (${order.vp_total} VP)` : ""}`,
     html: `<div style="font-family:Arial,sans-serif;color:#1f2937">
-      <h2>Comandă nouă ${order.id}</h2>${tabel}
+      <h2>Comandă nouă ${numeMagazin(order)} ${order.id}</h2>${tabel}
       <p><strong>Client:</strong> ${esc(order.client.nume)} ${esc(order.client.prenume)} · ${esc(order.client.email)} · ${esc(order.client.telefon)}</p>
       <p><strong>Livrare:</strong> ${adresa}</p>
       ${order.client.observatii ? `<p><strong>Observații:</strong> ${esc(order.client.observatii)}</p>` : ""}
