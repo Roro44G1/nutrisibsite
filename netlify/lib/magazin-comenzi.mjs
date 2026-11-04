@@ -2,6 +2,7 @@
 // marchează comanda plătită, emite factura în SmartBill (dacă e configurat),
 // trimite e-mailurile (client + NutriSib) și, opțional, contactul în GHL.
 import { getStore } from "@netlify/blobs";
+import { smartbillActiv, emiteFacturaSB, descarcaFacturaSB, numeFisierFactura, taxaSB } from "./smartbill.mjs";
 
 const lei = (n) => `${Number(n).toLocaleString("ro-RO")} lei`;
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
@@ -12,25 +13,42 @@ export async function handleMagazinOrder({ session, resend }) {
   const store = getStore({ name: "magazin-comenzi", consistency: "strong" });
   const order = await store.get(orderId, { type: "json" });
   if (!order) { console.error("Comanda nu există în Blobs:", orderId); return; }
-  if (order.status === "platita") { console.log("Comanda deja procesată:", orderId); return; }
-  if (session.payment_status !== "paid") { console.warn("Sesiune neplătită:", orderId, session.payment_status); return; }
+  if (order.procesata) { console.log("Comanda deja procesată:", orderId); return; }
+  // Comenzi plătite înainte de fluxul pe etape (fără câmpul `etape`): erau deja complet procesate.
+  if (order.status === "platita" && !order.etape) { console.log("Comandă procesată de versiunea anterioară:", orderId); return; }
+  if (session.payment_status !== "paid") { console.warn("Sesiune neplătită încă (se așteaptă confirmarea plății):", orderId, session.payment_status); return; }
 
-  order.status = "platita";
-  order.platita = new Date().toISOString();
-  order.stripe = { session: session.id, payment_intent: session.payment_intent, suma: (session.amount_total || 0) / 100 };
-  if (Math.round(order.stripe.suma * 100) !== Math.round(order.total * 100)) console.warn("Diferență total Stripe vs comandă", orderId, order.stripe.suma, order.total);
-  await store.setJSON(orderId, order);
+  // Fiecare pas e marcat în comandă, ca o reîncercare Stripe să reia doar ce a rămas neterminat.
+  const salveaza = () => store.setJSON(orderId, order);
+  if (order.status !== "platita") {
+    order.status = "platita";
+    order.etape = 1;
+    order.platita = new Date().toISOString();
+    order.stripe = { session: session.id, payment_intent: session.payment_intent, suma: (session.amount_total || 0) / 100 };
+    if (Math.round(order.stripe.suma * 100) !== Math.round(order.total * 100)) console.warn("Diferență total Stripe vs comandă", orderId, order.stripe.suma, order.total);
+    await salveaza();
+  }
 
-  // ---- factură SmartBill ----
-  let factura = null, facturaPdf = null, facturaEroare = null;
-  try {
-    factura = await emiteFactura(order);
-    if (factura) {
-      order.factura = factura; await store.setJSON(orderId, order);
-      await salveazaInSupabase(order).catch((e) => console.error("Supabase factură:", e.message));
-      facturaPdf = await descarcaFactura(factura).catch((e) => { console.error("PDF factură:", e.message); return null; });
+  // ---- factură SmartBill (o singură dată pe comandă) ----
+  let facturaPdf = null, facturaEroare = null;
+  if (!order.factura && smartbillActiv()) {
+    const lacat = await store.setJSON(`lacat-factura/${orderId}`, { t: new Date().toISOString() }, { onlyIfNew: true });
+    if (lacat.modified) {
+      try {
+        order.factura = await emiteFactura(order);
+        await salveaza();
+      } catch (e) {
+        facturaEroare = e.message; console.error("SmartBill:", e.message);
+        await store.delete(`lacat-factura/${orderId}`).catch(() => {});
+      }
+    } else {
+      // O altă livrare a aceluiași eveniment emite deja factura – citim comanda din nou.
+      const recitita = await store.get(orderId, { type: "json" });
+      if (recitita?.factura) order.factura = recitita.factura;
     }
-  } catch (e) { facturaEroare = e.message; console.error("SmartBill:", e.message); }
+  }
+  const factura = order.factura || null;
+  if (factura && !order.email_client) facturaPdf = await descarcaFacturaSB(factura).catch((e) => { console.error("PDF factură:", e.message); return null; });
 
   // ---- istoric în contul clientului (Supabase; fără CNP și fără profil nutrițional) ----
   await salveazaInSupabase(order).catch((e) => console.error("Supabase:", e.message));
@@ -41,7 +59,8 @@ export async function handleMagazinOrder({ session, resend }) {
   const tabel = tabelProduse(order);
   const adresa = `${esc(order.client.adresa)}, ${esc(order.client.localitate)}, jud. ${esc(order.client.judet)}${order.client.cod_postal ? ", " + esc(order.client.cod_postal) : ""}`;
 
-  await resend.emails.send({
+  if (!order.email_client) {
+  await trimiteEmail(resend, {
     from, to: order.client.email, reply_to: notify,
     subject: `Comanda ta NutriSib ${order.id} a fost confirmată`,
     html: `<div style="font-family:Arial,sans-serif;color:#1f2937;max-width:620px">
@@ -49,16 +68,19 @@ export async function handleMagazinOrder({ session, resend }) {
       <p>Am primit plata pentru comanda <strong>${order.id}</strong>. O pregătim pentru livrare și revenim cu detaliile de expediere.</p>
       ${tabel}
       <p><strong>Livrare la:</strong> ${esc(order.client.nume)} ${esc(order.client.prenume)}, ${adresa}, tel. ${esc(order.client.telefon)}</p>
-      ${factura ? `<p>Factura <strong>${esc(factura.serie)} ${esc(factura.numar)}</strong> ${facturaPdf ? "este atașată acestui e-mail" : "îți va fi trimisă separat"}.</p>` : `<p>Factura îți va fi trimisă separat, pe e-mail.</p>`}
+      ${factura && !factura.ciorna ? `<p>Factura <strong>${esc(factura.serie)} ${esc(factura.numar)}</strong> ${facturaPdf ? "este atașată acestui e-mail" : "îți va fi trimisă separat"}.</p>` : `<p>Factura îți va fi trimisă separat, pe e-mail.</p>`}
       <p style="font-size:13px;color:#4b5563">Ai dreptul de retragere în 14 zile de la primire, pentru produsele nedesigilate – vezi <a href="https://nutrisib.club/magazin/retur/">condițiile de retur</a>. Pentru orice întrebare, răspunde la acest e-mail.</p>
       <p>Cu drag,<br>NutriSib</p></div>`,
-    attachments: facturaPdf ? [{ filename: `Factura-${factura.serie}${factura.numar}.pdf`, content: facturaPdf.toString("base64") }] : undefined,
+    attachments: facturaPdf ? [{ filename: numeFisierFactura(factura), content: facturaPdf.toString("base64") }] : undefined,
   });
+  order.email_client = new Date().toISOString(); await salveaza();
+  }
 
   const firma = order.firma ? `<p><strong>Factură pe firmă:</strong> ${esc(order.firma.denumire)}, CUI ${esc(order.firma.cui)}${order.firma.regcom ? ", " + esc(order.firma.regcom) : ""}, ${esc(order.firma.adresa)}</p>` : "";
   const p = order.profil;
   const profil = p ? `<p><strong>Profil nutrițional (cu consimțământ, ${esc(p.consimtamant)}):</strong> greutate ${p.greutate_actuala ?? "–"} kg → ${p.greutate_dorita ?? "–"} kg, înălțime ${p.inaltime ?? "–"} cm, an naștere ${p.an_nastere ?? "–"}${p.varsta ? ` (${p.varsta} ani)` : ""}, sex ${esc(p.sex || "–")}</p>` : "";
-  await resend.emails.send({
+  if (!order.email_nutrisib) {
+  await trimiteEmail(resend, {
     from, to: notify, reply_to: order.client.email,
     subject: `🛒 Comandă nouă ${order.id} – ${lei(order.total)} (${order.vp_total} VP)`,
     html: `<div style="font-family:Arial,sans-serif;color:#1f2937">
@@ -67,20 +89,31 @@ export async function handleMagazinOrder({ session, resend }) {
       <p><strong>Livrare:</strong> ${adresa}</p>
       ${order.client.observatii ? `<p><strong>Observații:</strong> ${esc(order.client.observatii)}</p>` : ""}
       ${firma}${profil}
-      <p><strong>Factură:</strong> ${factura ? `${esc(factura.serie)} ${esc(factura.numar)}` : facturaEroare ? `<span style="color:#b91c1c">NEEMISĂ – eroare SmartBill: ${esc(facturaEroare)}</span>` : "SmartBill neconfigurat – emite manual"}</p>
+      <p><strong>Factură:</strong> ${factura ? (factura.ciorna ? `<span style="color:#b45309">CIORNĂ în SmartBill (mod test SMARTBILL_DRAFT) – șterge-o sau emite-o manual</span>` : `${esc(factura.serie)} ${esc(factura.numar)}`) : facturaEroare ? `<span style="color:#b91c1c">NEEMISĂ – eroare SmartBill: ${esc(facturaEroare)}</span>` : smartbillActiv() ? "în curs de emitere de altă execuție – verifică în SmartBill" : "SmartBill neconfigurat – emite manual"}</p>
       <p style="font-size:12px;color:#6b7280">Stripe: ${esc(session.id)}</p></div>`,
   });
+  order.email_nutrisib = new Date().toISOString(); await salveaza();
+  }
 
   // ---- GHL (opțional; fără date de sănătate) ----
-  if (process.env.GHL_WEBHOOK_URL) {
+  if (process.env.GHL_WEBHOOK_URL && !order.ghl) {
     await fetch(process.env.GHL_WEBHOOK_URL, {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: order.client.email, phone: order.client.telefon, firstName: order.client.prenume, lastName: order.client.nume,
         city: order.client.localitate, state: order.client.judet, source: "magazin-nutrisib", tags: ["client-herbalife"],
         order_id: order.id, total: order.total, vp: order.vp_total, produse: order.produse.map((l) => `${l.qty}x ${l.denumire} ${l.varianta}`).join("; ") }),
-    }).catch((e) => console.error("GHL:", e.message));
+    }).then(() => { order.ghl = new Date().toISOString(); }).catch((e) => console.error("GHL:", e.message));
   }
+  order.procesata = new Date().toISOString();
+  await salveaza();
   console.log("Comandă magazin procesată:", order.id);
+}
+
+// Resend nu aruncă eroare la eșec (întoarce { error }); o transformăm în excepție ca Stripe să reîncerce.
+export async function trimiteEmail(resend, payload) {
+  const r = await resend.emails.send(payload);
+  if (r?.error) throw new Error(`Resend: ${r.error.message || JSON.stringify(r.error)}`);
+  return r?.data;
 }
 
 function tabelProduse(o) {
@@ -90,39 +123,17 @@ function tabelProduse(o) {
     <tr><td colspan="2" style="padding:6px 8px;text-align:right"><strong>Total</strong></td><td style="padding:6px 8px;text-align:right"><strong>${lei(o.total)}</strong></td></tr></table>`;
 }
 
-// ---------------- SmartBill ----------------
-// Variabile de mediu: SMARTBILL_USER (e-mailul contului), SMARTBILL_TOKEN, SMARTBILL_CIF, SMARTBILL_SERIES
-// opțional: SMARTBILL_TAX_NAME + SMARTBILL_TAX_PERCENT (doar dacă firma este plătitoare de TVA)
-const SB = "https://ws.smartbill.ro/SBORO/api";
-const sbAuth = () => "Basic " + Buffer.from(`${process.env.SMARTBILL_USER}:${process.env.SMARTBILL_TOKEN}`).toString("base64");
-
-async function emiteFactura(o) {
-  const { SMARTBILL_USER, SMARTBILL_TOKEN, SMARTBILL_CIF, SMARTBILL_SERIES, SMARTBILL_TAX_NAME, SMARTBILL_TAX_PERCENT } = process.env;
-  if (!SMARTBILL_USER || !SMARTBILL_TOKEN || !SMARTBILL_CIF || !SMARTBILL_SERIES) return null;
-  const tax = SMARTBILL_TAX_NAME ? { taxName: SMARTBILL_TAX_NAME, taxPercentage: Number(SMARTBILL_TAX_PERCENT || 0) } : {};
+// ---------------- SmartBill (vezi ./smartbill.mjs) ----------------
+function emiteFactura(o) {
+  const tax = taxaSB();
   const client = o.firma
-    ? { name: o.firma.denumire, vatCode: o.firma.cui, regCom: o.firma.regcom || "", address: o.firma.adresa, isTaxPayer: /^RO/i.test(o.firma.cui), city: o.client.localitate, county: o.client.judet }
-    : { name: `${o.client.nume} ${o.client.prenume}`, vatCode: o.cnp || "0000000000000", address: o.client.adresa, isTaxPayer: false, city: o.client.localitate, county: o.client.judet };
+    ? { name: o.firma.denumire, vatCode: o.firma.cui, regCom: o.firma.regcom || "", address: o.firma.adresa, isTaxPayer: /^RO/i.test(o.firma.cui), city: o.client.localitate, county: o.client.judet, email: o.client.email }
+    : { name: `${o.client.nume} ${o.client.prenume}`, vatCode: o.cnp || "0000000000000", address: o.client.adresa, isTaxPayer: false, city: o.client.localitate, county: o.client.judet, email: o.client.email };
   const products = o.produse.map((l) => ({ name: `${l.denumire}${l.varianta ? " - " + l.varianta : ""}`, code: l.sku, isDiscount: false, measuringUnitName: "buc",
     currency: "RON", quantity: l.qty, price: l.pret, isTaxIncluded: true, saveToDb: false, isService: false, ...tax }));
   if (o.transport) products.push({ name: "Transport", code: "TRANSPORT", isDiscount: false, measuringUnitName: "buc", currency: "RON", quantity: 1,
     price: o.transport, isTaxIncluded: true, saveToDb: false, isService: true, ...tax });
-  const body = {
-    companyVatCode: SMARTBILL_CIF, seriesName: SMARTBILL_SERIES, issueDate: new Date().toISOString().slice(0, 10), isDraft: false,
-    client: { ...client, country: "Romania", email: o.client.email, saveToDb: false },
-    products, mentions: `Comanda online ${o.id}`, payment: { value: o.total, type: "Card", isCash: false },
-  };
-  const r = await fetch(`${SB}/invoice`, { method: "POST", headers: { Authorization: sbAuth(), "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(body) });
-  const j = await r.json().catch(() => ({}));
-  if (!r.ok || j.errorText) throw new Error(j.errorText || `HTTP ${r.status}`);
-  return { serie: j.series, numar: j.number, url: j.url || null };
-}
-
-async function descarcaFactura(f) {
-  const u = `${SB}/invoice/pdf?cif=${encodeURIComponent(process.env.SMARTBILL_CIF)}&seriesname=${encodeURIComponent(f.serie)}&number=${encodeURIComponent(f.numar)}`;
-  const r = await fetch(u, { headers: { Authorization: sbAuth(), Accept: "application/octet-stream" } });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  return Buffer.from(await r.arrayBuffer());
+  return emiteFacturaSB({ client, products, mentions: `Comanda online ${o.id}`, total: o.total });
 }
 
 // ---------------- Supabase (istoric comenzi) ----------------
