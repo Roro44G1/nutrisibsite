@@ -82,7 +82,7 @@ export async function handleMagazinOrder({ session, resend }) {
   if (!order.email_nutrisib) {
   await trimiteEmail(resend, {
     from, to: notify, reply_to: order.client.email,
-    subject: `🛒 Comandă nouă ${order.id} – ${lei(order.total)}${order.vp_total ? ` (${order.vp_total} VP)` : ""}${/lr/.test(order.magazin || "") ? " · LR" : ""}`,
+    subject: `🛒 Comandă nouă ${order.id} – ${lei(order.total)}${order.vp_total ? ` (${order.vp_total} VP)` : ""}${order.magazin === "lr" ? " · LR" : ""}`,
     html: `<div style="font-family:Arial,sans-serif;color:#1f2937">
       <h2>Comandă nouă ${order.id}</h2>${tabel}
       <p><strong>Client:</strong> ${esc(order.client.nume)} ${esc(order.client.prenume)} · ${esc(order.client.email)} · ${esc(order.client.telefon)}</p>
@@ -100,7 +100,7 @@ export async function handleMagazinOrder({ session, resend }) {
     await fetch(process.env.GHL_WEBHOOK_URL, {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: order.client.email, phone: order.client.telefon, firstName: order.client.prenume, lastName: order.client.nume,
-        city: order.client.localitate, state: order.client.judet, source: "magazin-nutrisib", tags: String(order.magazin || "herbalife").split("+").map((m) => `client-${m}`),
+        city: order.client.localitate, state: order.client.judet, source: "magazin-nutrisib", tags: [`client-${order.magazin || "herbalife"}`],
         order_id: order.id, total: order.total, vp: order.vp_total, produse: order.produse.map((l) => `${l.qty}x ${l.denumire} ${l.varianta}`).join("; ") }),
     }).then(() => { order.ghl = new Date().toISOString(); }).catch((e) => console.error("GHL:", e.message));
   }
@@ -143,7 +143,7 @@ export async function salveazaInSupabase(o) {
   if (!U || !K) return;
   const row = {
     id: o.id, user_id: o.user_id || null, email: o.client.email, status: o.status, creata: o.creata, platita: o.platita || null,
-    produse: o.produse.map(({ sku, denumire, varianta, pret, vp, qty, componente }) => ({ sku, denumire, varianta, pret, vp, qty, ...(componente ? { componente } : {}) })),
+    produse: o.produse.map(({ sku, denumire, varianta, pret, vp, qty, componente, magazin }) => ({ sku, denumire, varianta, pret, vp, qty, ...(componente ? { componente } : {}), ...(magazin && magazin !== "herbalife" ? { magazin } : {}) })),
     subtotal: o.subtotal, transport: o.transport, total: o.total, vp_total: o.vp_total,
     livrare: { nume: o.client.nume, prenume: o.client.prenume, telefon: o.client.telefon, judet: o.client.judet, localitate: o.client.localitate, adresa: o.client.adresa, cod_postal: o.client.cod_postal },
     firma: o.firma || null, factura: o.factura || null,

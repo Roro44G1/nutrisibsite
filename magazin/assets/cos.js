@@ -1,13 +1,19 @@
 /* NutriSib – coș de cumpărături (fără dependențe) */
 (function () {
   'use strict';
-  var KEY = 'nutrisib_cos_v1';
+  /* Coșuri separate: fiecare magazin are coșul și comanda lui. Paginile LR au <body data-magazin="lr">. */
+  var KEYS = { herbalife: 'nutrisib_cos_v1', lr: 'nutrisib_cos_lr_v1' };
+  var COS_URL = { herbalife: '/magazin/cos/', lr: '/magazin/lr/cos/' };
+  var NUME = { herbalife: 'Herbalife', lr: 'LR' };
+  var MAG = document.body && document.body.getAttribute('data-magazin') === 'lr' ? 'lr' : 'herbalife';
+  var KEY = KEYS[MAG];
   var PRAG_VP = 125, TRANSPORT = 25, TRANSPORT_LR = 25;   /* suprascrise din catalog.json → config */
   var catalogPromise = null;
 
   function read() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; } }
   function write(c) { try { localStorage.setItem(KEY, JSON.stringify(c)); } catch (e) {} updateCount(); }
   function count(c) { var n = 0; for (var k in c) n += c[k]; return n; }
+  function readKey(k) { try { return JSON.parse(localStorage.getItem(k)) || {}; } catch (e) { return {}; } }
   function updateCount() {
     var n = count(read());
     document.querySelectorAll('.mz-cart-count').forEach(function (el) { el.textContent = n; el.setAttribute('data-n', n); });
@@ -23,9 +29,9 @@
   function pretPachet(s) { var t = Math.floor(s * 95 / 100), x = Math.floor(t / 100) * 100 + 99; while (x > t) x -= 50; return x; }
   /* linie de coș: produs simplu (cheie = SKU) sau pachet (cheie = "PK01:sku,sku,...") */
   function linie(cat, key) {
-    if (key.indexOf(':') < 0) { var p = cat.bySku[key]; return p ? { key: key, nume: p.denumire, meta: (p.varianta ? p.varianta + ' · ' : '') + 'cod ' + p.sku, url: p.url, img: p.img_mic, pret: p.pret, vp: p.vp, magazin: p.magazin } : null; }
+    if (key.indexOf(':') < 0) { var p = cat.bySku[key]; return p && (p.magazin || 'herbalife') === MAG ? { key: key, nume: p.denumire, meta: (p.varianta ? p.varianta + ' · ' : '') + 'cod ' + p.sku, url: p.url, img: p.img_mic, pret: p.pret, vp: p.vp, magazin: p.magazin } : null; }
     var parts = key.split(':'), pk = cat.pk[parts[0]], skus = parts[1].split(',');
-    if (!pk || skus.length !== pk.unitati.length) return null;
+    if (MAG !== 'herbalife' || !pk || skus.length !== pk.unitati.length) return null;
     var sum = 0, vp = 0, sub = [];
     for (var i = 0; i < skus.length; i++) {
       var p2 = cat.bySku[skus[i]]; if (!p2 || pk.unitati[i].optiuni.indexOf(skus[i]) < 0) return null;
@@ -143,11 +149,10 @@
     var emptyEl = root.querySelector('[data-empty]'), filledEls = document.querySelectorAll('[data-filled]');
 
     function render(cat) {
-      var c = read(), lines = [], sub = 0, vp = 0, areLR = false, areHL = false;
+      var c = read(), lines = [], sub = 0, vp = 0;
       Object.keys(c).forEach(function (key) {
         var p = linie(cat, key); if (!p) { delete c[key]; return; }
         var q = c[key]; sub += bani(p.pret) * q; vp += p.vp * q; lines.push({ p: p, q: q });
-        if (p.magazin === 'lr') areLR = true; else areHL = true;
       });
       var has = lines.length > 0; sub = sub / 100; write(c);
       emptyEl.style.display = has ? 'none' : 'block';
@@ -160,12 +165,14 @@
           '<div class="mz-qty"><button type="button" data-sku="' + esc(l.p.key) + '" data-d="-1" aria-label="Scade">−</button><input type="number" value="' + l.q + '" readonly aria-label="Cantitate"><button type="button" data-sku="' + esc(l.p.key) + '" data-d="1" aria-label="Crește">+</button></div></div>' +
           '<div class="mz-line-right"><div class="mz-price" style="font-size:1rem">' + lei(bani(l.p.pret) * l.q / 100) + '</div><button type="button" class="mz-remove" data-rm="' + esc(l.p.key) + '">Elimină</button></div></div>';
       }).join('');
-      /* transport: produsele LR au tarif fix (o singură livrare și pentru coșurile mixte); doar Herbalife → gratuit de la PRAG_VP */
-      var free = !areLR && vp >= PRAG_VP, ship = has ? (areLR ? TRANSPORT_LR : (free ? 0 : TRANSPORT)) : 0, pct = Math.min(100, vp / PRAG_VP * 100);
-      var vpInfo = areLR
-        ? '<div class="mz-vp-text">Comenzile cu produse LR au transport de <strong>' + lei(TRANSPORT_LR) + '</strong>' + (areHL ? ', o singură livrare pentru tot coșul.' : '.') + '</div>'
+      /* transport: LR are tarif fix pe comandă; Herbalife e gratuit de la PRAG_VP */
+      var lr = MAG === 'lr', free = !lr && vp >= PRAG_VP, ship = has ? (lr ? TRANSPORT_LR : (free ? 0 : TRANSPORT)) : 0, pct = Math.min(100, vp / PRAG_VP * 100);
+      var alt = lr ? 'herbalife' : 'lr', nAlt = count(readKey(KEYS[alt]));
+      var vpInfo = (lr
+        ? '<div class="mz-vp-text">Transportul pentru comenzile LR costă <strong>' + lei(TRANSPORT_LR) + '</strong>, indiferent de valoare.</div>'
         : '<div class="mz-vp-bar" aria-hidden="true"><i style="width:' + pct + '%"></i></div>' +
-          '<div class="mz-vp-text">' + (free ? '<strong>Transport gratuit</strong> – ai ' + vpFmt(vp) + ' VP.' : 'Ai <strong>' + vpFmt(vp) + ' VP</strong>. Mai ai <strong>' + vpFmt(PRAG_VP - vp) + ' VP</strong> până la transport gratuit (' + PRAG_VP + ' VP).') + '</div>';
+          '<div class="mz-vp-text">' + (free ? '<strong>Transport gratuit</strong> – ai ' + vpFmt(vp) + ' VP.' : 'Ai <strong>' + vpFmt(vp) + ' VP</strong>. Mai ai <strong>' + vpFmt(PRAG_VP - vp) + ' VP</strong> până la transport gratuit (' + PRAG_VP + ' VP).') + '</div>') +
+        (nAlt ? '<div class="mz-vp-text">Ai și ' + nAlt + (nAlt === 1 ? ' produs' : ' produse') + ' în <a href="' + COS_URL[alt] + '">coșul ' + NUME[alt] + '</a>, care se comandă separat.</div>' : '');
       sumEl.innerHTML =
         '<div class="mz-sum-row"><span>Subtotal produse</span><span>' + lei(sub) + '</span></div>' +
         '<div class="mz-sum-row"><span>Transport</span><span>' + (free ? 'Gratuit' : lei(ship)) + '</span></div>' +
@@ -220,7 +227,7 @@
 
   function initSuccess() {
     if (!document.querySelector('[data-mz-success]')) return;
-    if (/[?&]session_id=/.test(location.search)) { try { localStorage.removeItem(KEY); } catch (e) {} updateCount(); }
+    if (/[?&]session_id=/.test(location.search)) { var m = /[?&]magazin=lr(&|$)/.test(location.search) ? 'lr' : 'herbalife'; try { localStorage.removeItem(KEYS[m]); } catch (e) {} updateCount(); }
   }
 
   function esc(s) { return String(s).replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]; }); }

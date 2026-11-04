@@ -11,82 +11,7 @@ ID_FIRMA = (f"<strong>{E(FIRMA['denumire'])}</strong>, cu sediul în {camp(FIRMA
             f"e-mail <a href=\"mailto:{FIRMA['email']}\">{FIRMA['email']}</a>{', telefon ' + E(FIRMA['telefon']) if FIRMA['telefon'] else ''}")
 
 # ======================= coș + checkout =======================
-JUDETE = ['Alba','Arad','Argeș','Bacău','Bihor','Bistrița-Năsăud','Botoșani','Brașov','Brăila','București','Buzău','Caraș-Severin','Călărași','Cluj','Constanța','Covasna','Dâmbovița','Dolj','Galați','Giurgiu','Gorj','Harghita','Hunedoara','Ialomița','Iași','Ilfov','Maramureș','Mehedinți','Mureș','Neamț','Olt','Prahova','Satu Mare','Sălaj','Sibiu','Suceava','Teleorman','Timiș','Tulcea','Vaslui','Vâlcea','Vrancea']
-opt_jud = '<option value="">Alege județul</option>' + ''.join(f'<option>{j}</option>' for j in JUDETE)
-def fld(name, label, typ='text', req=True, full=False, extra='', ac=''):
-    return (f'<div class="mz-field{" full" if full else ""}"><label for="f-{name}">{label}{" <span class=req>*</span>" if req else ""}</label>'
-            f'<input id="f-{name}" name="{name}" type="{typ}"{" required" if req else ""}{f" autocomplete={ac}" if ac else ""} {extra}></div>')
-cur_year = datetime.date.today().year
-body = f'''<div class="mz-crumbs-wrap">{crumbs([('Magazin', '/magazin/'), ('Coș', None)])[0]}</div>
-<div data-mz-cart>
-<section class="content-card" data-empty style="display:none;text-align:center">
-  <h1 class="mz-p-title">Coșul este gol</h1>
-  <p>Adaugă produse din magazin și revino aici pentru comandă.</p>
-  <p><a class="mz-btn" style="display:inline-flex;flex:none" href="/magazin/herbalife/">Vezi produsele Herbalife</a></p>
-</section>
-<div class="mz-checkout" data-filled>
-    <section class="content-card mz-co-lines">
-      <h1 class="mz-section-title">Coșul tău</h1>
-      <div data-lines></div>
-    </section>
-    <aside class="content-card mz-summary">
-      <h2 class="mz-section-title">Sumar comandă</h2>
-      <div data-summary></div>
-      <p class="mz-buy-note">Prețurile sunt finale, în lei. Livrarea se face prin curier, pe teritoriul României.</p>
-    </aside>
-    <section class="content-card mz-co-form">
-      <form class="mz-form" data-mz-form novalidate>
-        <div class="mz-account-bar" data-account-bar>Poți comanda și fără cont. <a href="/magazin/cont/">Conectează-te</a> pentru date precompletate și istoricul comenzilor.</div>
-        <fieldset>
-          <legend>Date de contact și livrare</legend>
-          <div class="mz-fields">
-            {fld('nume', 'Nume', ac='family-name')}{fld('prenume', 'Prenume', ac='given-name')}
-            {fld('email', 'E-mail', 'email', ac='email')}{fld('telefon', 'Telefon', 'tel', ac='tel', extra='pattern="[0-9+ ]{{10,15}}" title="Număr de telefon valid"')}
-            <div class="mz-field"><label for="f-judet">Județ <span class=req>*</span></label><select id="f-judet" name="judet" required>{opt_jud}</select></div>
-            {fld('localitate', 'Localitate', ac='address-level2')}
-            {fld('adresa', 'Adresă (stradă, număr, bloc, scară, apartament)', full=True, ac='street-address')}
-            {fld('cod_postal', 'Cod poștal', req=False, ac='postal-code', extra='inputmode="numeric" maxlength="6"')}
-            <div class="mz-field full"><label for="f-observatii">Observații pentru livrare</label><textarea id="f-observatii" name="observatii" rows="2" maxlength="400"></textarea></div>
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>Facturare</legend>
-          <div class="mz-fields" data-pf>
-            <div class="mz-field"><label for="f-cnp">CNP (opțional)</label><input id="f-cnp" name="cnp" inputmode="numeric" maxlength="13" pattern="[0-9]{{13}}" title="CNP-ul are 13 cifre" autocomplete="off"></div>
-            <p class="mz-field-note">Completează-l doar dacă vrei ca CNP-ul să apară pe factură. Dacă îl lași gol, factura se emite fără CNP, conform legii. Nu îl salvăm în cont.</p>
-          </div>
-          <label class="mz-check"><input type="checkbox" name="pe_firma"> <span>Vreau factură pe firmă (persoană juridică)</span></label>
-          <div class="mz-fields" data-firma style="display:none;margin-top:.75rem">
-            <div class="mz-field full"><label for="f-firma">Denumirea firmei <span class=req>*</span></label><input id="f-firma" name="firma_denumire" data-req></div>
-            <div class="mz-field"><label for="f-cui">CUI / CIF <span class=req>*</span></label><input id="f-cui" name="firma_cui" data-req></div>
-            <div class="mz-field"><label for="f-rc">Nr. Registrul Comerțului</label><input id="f-rc" name="firma_regcom"></div>
-            <div class="mz-field full"><label for="f-fadr">Adresa sediului social <span class=req>*</span></label><input id="f-fadr" name="firma_adresa" data-req></div>
-          </div>
-        </fieldset>
-        <fieldset>
-          <details class="mz-optional" data-profil>
-            <summary>Profilul tău nutrițional (opțional)</summary>
-            <p>Dacă vrei ca recomandările NutriSib să țină cont de obiectivele tale, poți completa datele de mai jos. Nu sunt necesare pentru comandă. Fiind date legate de sănătate, le prelucrăm doar cu acordul tău explicit (art. 9 GDPR) și le poți retrage oricând.</p>
-            <div class="mz-fields">
-              {fld('greutate_actuala', 'Greutate actuală (kg)', 'number', False, extra='min="30" max="300" step="0.1"')}
-              {fld('greutate_dorita', 'Greutate dorită (kg)', 'number', False, extra='min="30" max="300" step="0.1"')}
-              {fld('inaltime', 'Înălțime (cm)', 'number', False, extra='min="100" max="230"')}
-              {fld('an_nastere', 'Anul nașterii', 'number', False, extra=f'min="{cur_year-100}" max="{cur_year-18}"')}
-              <div class="mz-field"><label for="f-sex">Sex</label><select id="f-sex" name="sex"><option value="">–</option><option>Feminin</option><option>Masculin</option></select></div>
-            </div>
-            <label class="mz-check"><input type="checkbox" name="consimtamant_profil"> <span>Sunt de acord ca {E(VANZATOR)} să prelucreze datele din profilul nutrițional în scopul recomandărilor personalizate, conform <a href="/magazin/confidentialitate/" target="_blank">politicii de confidențialitate</a>.</span></label>
-          </details>
-        </fieldset>
-        <label class="mz-check" data-save-account style="display:none"><input type="checkbox" name="salveaza_in_cont" checked> <span>Salvează adresa și datele de facturare în contul meu, pentru comenzile viitoare.</span></label>
-        <label class="mz-check"><input type="checkbox" name="accept_termeni" required> <span>Am citit și accept <a href="/magazin/termeni-si-conditii/" target="_blank">Termenii și condițiile</a> și <a href="/magazin/confidentialitate/" target="_blank">Politica de confidențialitate</a>. Am luat la cunoștință <a href="/magazin/retur/" target="_blank">dreptul de retragere</a>. <span class=req>*</span></span></label>
-        <div class="mz-error" role="alert"></div>
-        <button type="submit" class="mz-btn gold" style="width:100%;margin-top:1rem">Continuă spre plată</button>
-        <p class="mz-secure">🔒 Plata se face pe pagina securizată Stripe. Comanda implică obligația de plată.</p>
-      </form>
-    </section>
-</div>
-</div>
-'''
+body = cos_body()
 build_page(os.path.join(OUT, 'cos', 'index.html'), 'Coșul de cumpărături | Magazin NutriSib', 'Coșul de cumpărături NutriSib.', '/magazin/cos/', body, robots='noindex, follow', scripts=SB_SCRIPTS)
 
 body = '''<section class="content-card" data-mz-success style="text-align:center;max-width:760px;margin-left:auto;margin-right:auto">
@@ -175,7 +100,7 @@ legal('termeni-si-conditii', 'Termeni și condiții', 'Termenii și condițiile 
 <h2>2. Produse și informații</h2>
 <p>Descrierile, ingredientele, informațiile nutriționale și imaginile produselor provin de la producător. Imaginile au caracter informativ; alimentele prezentate în imagini sunt ilustrative și nu fac parte din conținutul produsului. Suplimentele alimentare nu înlocuiesc o dietă variată și echilibrată și un stil de viață sănătos. Dacă ai o afecțiune, urmezi un tratament, ești însărcinată sau alăptezi, cere părerea medicului înainte de a consuma suplimente.</p>
 <h2>3. Prețuri</h2>
-<p>Prețurile sunt exprimate în lei (RON) și sunt prețuri finale pentru produs. Vânzătorul nu este înregistrat în scopuri de TVA, astfel că facturile se emit fără TVA. Costul transportului se afișează separat în coș, înainte de plată: transportul este gratuit pentru comenzile Herbalife care însumează minimum {PRAG_VP} VP (valoarea VP a fiecărui produs este afișată pe pagina lui) și costă {TRANSPORT} lei pentru comenzile sub acest prag. Pentru comenzile care conțin produse LR, transportul costă {TRANSPORT_LR} lei, indiferent de valoarea comenzii; produsele Herbalife și LR din aceeași comandă se livrează împreună, cu un singur cost de transport. Prețul valabil este cel afișat în momentul plasării comenzii.</p>
+<p>Prețurile sunt exprimate în lei (RON) și sunt prețuri finale pentru produs. Vânzătorul nu este înregistrat în scopuri de TVA, astfel că facturile se emit fără TVA. Costul transportului se afișează separat în coș, înainte de plată: transportul este gratuit pentru comenzile Herbalife care însumează minimum {PRAG_VP} VP (valoarea VP a fiecărui produs este afișată pe pagina lui) și costă {TRANSPORT} lei pentru comenzile sub acest prag. Produsele LR și cele Herbalife se comandă separat, din coșul fiecărui magazin. Pentru comenzile LR, transportul costă {TRANSPORT_LR} lei, indiferent de valoarea comenzii. Prețul valabil este cel afișat în momentul plasării comenzii.</p>
 <h2>4. Comanda și încheierea contractului</h2>
 <p>Comanda se plasează din coș, prin completarea datelor de livrare și facturare, acceptarea acestor termeni și plata online. Contractul se consideră încheiat în momentul în care primești pe e-mail confirmarea comenzii. Dacă un produs comandat nu mai este disponibil, te informăm și îți rambursăm integral suma aferentă în cel mult 14 zile.</p>
 <h2>5. Plata</h2>
@@ -195,7 +120,7 @@ legal('termeni-si-conditii', 'Termeni și condiții', 'Termenii și condițiile 
 ''')
 
 legal('livrare', 'Livrare', 'Costuri și condiții de livrare pentru comenzile din magazinul NutriSib.', f'''
-<div class="mz-box"><p style="margin:0"><strong>Transport gratuit</strong> pentru comenzile Herbalife de minimum <strong>{PRAG_VP} VP</strong>. Sub acest prag, transportul costă <strong>{TRANSPORT} lei</strong>.</p><p style="margin:.5rem 0 0">Pentru comenzile care conțin <strong>produse LR</strong>, transportul costă <strong>{TRANSPORT_LR} lei</strong>, indiferent de valoare. Produsele Herbalife și LR din aceeași comandă se livrează împreună, cu un singur cost de transport.</p></div>
+<div class="mz-box"><p style="margin:0"><strong>Transport gratuit</strong> pentru comenzile Herbalife de minimum <strong>{PRAG_VP} VP</strong>. Sub acest prag, transportul costă <strong>{TRANSPORT} lei</strong>.</p><p style="margin:.5rem 0 0">Pentru comenzile <strong>LR</strong>, transportul costă <strong>{TRANSPORT_LR} lei</strong>, indiferent de valoare. Produsele LR și cele Herbalife se comandă separat, fiecare comandă cu transportul ei.</p></div>
 <h2>Ce este VP</h2>
 <p>VP (valoarea în volum) este o valoare atribuită de Herbalife fiecărui produs. O găsești pe pagina fiecărui produs și în coș, unde VP-ul produselor se adună automat. Când totalul ajunge la {PRAG_VP} VP, transportul devine gratuit.</p>
 <h2>Unde livrăm</h2>

@@ -7,7 +7,7 @@ Surse:
 Rulare din rădăcina repo-ului:  python3 scripts/magazin_lr.py
 scripts/magazin_build.py (Herbalife) apelează la final integreaza(), ca hub-ul, catalogul și sitemap-ul să păstreze LR.
 """
-import os, re, json, sys
+import os, re, json, sys, shutil
 from collections import Counter
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from magazin_comun import *
@@ -132,18 +132,22 @@ def incarca():
     data = json.load(open(os.path.join(SRC, 'lr-sanatate.json'), encoding='utf-8'))
     cur = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lr_produse.json'), encoding='utf-8'))
     # categorii în ordinea meniului LR: grupă -> subcategorii (fără paginile de prezentare, care n-au produse)
+    exclus = {a for a, k in cur['produse'].items() if k.get('exclus')}
     cats = {}
     for c in data['categorii']:
         g = cur['grupe'][c['grup']]
         cat = cats.setdefault(g['slug'], {'slug': g['slug'], 'nume': g['nume'], 'sub': []})
-        if c['produse']: cat['sub'].append({'nume': cur['subcategorii'].get(c['nume'], c['nume']), 'sku': c['produse']})
+        sku = [a for a in c['produse'] if a not in exclus]
+        if sku: cat['sub'].append({'nume': cur['subcategorii'].get(c['nume'], c['nume']), 'sku': sku})
     categorii = list(cats.values())
     produse = []
     for alias, s in data['produse'].items():
+        if alias in exclus: continue
         k = cur['produse'][alias]
         pret, unitar, pv = pret_din_sursa(s['price_box'])
         cantitate = re.sub(r'^.*Cod produs: \S+\s*', '', s['name_box']) or None
-        if 'cantitate' in k and k['cantitate'] is None: cantitate, unitar = None, None
+        if 'cantitate' in k: cantitate = k['cantitate']
+        if 'pret_unitar' in k: unitar = k['pret_unitar']
         gama = k.get('gama') or (s['crumbs'][4] if len(s['crumbs']) > 5 else '')
         cat, sub = next((c, sb) for c in categorii for sb in c['sub'] if alias in sb['sku'])
         slug = slugify(f"{k['denumire']} {k['varianta']}") + '-' + slugify(alias)
@@ -161,8 +165,8 @@ def incarca():
 # ---------------- pagini ----------------
 SOON = ('<div class="mz-soon-box"><strong>Comenzile pentru produsele LR se deschid în curând.</strong> '
         'Poți consulta de pe acum catalogul și prețurile.</div>')
-SHIP_LR = (f'<div class="mz-ship-note"><strong>Transport: {TRANSPORT_LR} lei</strong> pentru fiecare comandă cu produse LR, '
-           'livrare prin curier oriunde în România.</div>')
+SHIP_LR = (f'<div class="mz-ship-note"><strong>Transport: {TRANSPORT_LR} lei</strong> pentru fiecare comandă LR, '
+           'livrare prin curier oriunde în România. Produsele LR au coșul lor și se comandă separat de cele Herbalife.</div>')
 
 
 def hero(eyebrow, titlu, lead):
@@ -176,8 +180,11 @@ def hero(eyebrow, titlu, lead):
 </section>'''
 
 
-def pagina(path, title, desc, canon, body, og_img=None, extra=''):
-    write(path, head(title, desc, canon, og_img, extra, None if LR_ACTIV else 'noindex, follow') + body + foot())
+def pagina(path, title, desc, canon, body, og_img=None, extra='', robots=None, scripts=''):
+    """Paginile LR folosesc coșul LR (separat de cel Herbalife): <body data-magazin="lr"> + linkurile „Coș” spre /magazin/lr/cos/."""
+    h = head(title, desc, canon, og_img, extra, robots or (None if LR_ACTIV else 'noindex, follow'))
+    h = h.replace('<body>', '<body data-magazin="lr">', 1).replace('href="/magazin/cos/"', f'href="{BASE}cos/"')
+    write(path, h + body + foot(scripts))
 
 
 def pagina_produs(p, fam):
@@ -211,7 +218,7 @@ def pagina_produs(p, fam):
           <button type="button" class="mz-btn" data-add>Adaugă în coș</button>
         </div>
         <div class="mz-added">Produsul a fost adăugat. <a href="/magazin/cos/">Vezi coșul →</a></div>
-        <p class="mz-buy-note">Transportul costă {TRANSPORT_LR} lei pentru fiecare comandă cu produse LR. <a href="/magazin/livrare/">Detalii livrare</a></p>'''
+        <p class="mz-buy-note">Transportul costă {TRANSPORT_LR} lei pentru fiecare comandă LR. Produsele LR se comandă separat de cele Herbalife. <a href="/magazin/livrare/">Detalii livrare</a></p>'''
         buy_attr = f' data-mz-buy="{p["sku"]}"'
     else:
         cumpara, buy_attr = SOON, ''
@@ -348,6 +355,18 @@ def genereaza():
         pagina(os.path.join(LRD, c['slug'], 'index.html'), f"{c['nume']} – LR | Magazin NutriSib",
                f"{c['nume']} – produse LR Health & Beauty: {subs}. {len(skus)} produse, prețuri finale.",
                f"{BASE}{c['slug']}/", body, BYSKU[skus[0]]['img'], cr_ld + jsonld(ld))
+
+    # --- coșul LR (separat de coșul Herbalife; aceeași comandă/checkout, câte un magazin pe comandă) ---
+    pagina(os.path.join(LRD, 'cos', 'index.html'), 'Coșul LR | Magazin NutriSib', 'Coșul de cumpărături pentru produsele LR.',
+           f'{BASE}cos/', cos_body('lr'), robots='noindex, follow', scripts=SB_SCRIPTS)
+
+    # --- curățare: pagini și imagini rămase de la produse redenumite sau excluse ---
+    pastreaza = {p['slug'] for p in produse} | {c['slug'] for c in categorii} | {'img', 'cos'}
+    for d_ in os.listdir(LRD):
+        if os.path.isdir(os.path.join(LRD, d_)) and d_ not in pastreaza: shutil.rmtree(os.path.join(LRD, d_))
+    imgs = {os.path.basename(p[k]) for p in produse for k in ('img', 'img_mic') if p[k]}
+    for f_ in os.listdir(os.path.join(LRD, 'img')):
+        if f_ not in imgs: os.remove(os.path.join(LRD, 'img', f_))
 
     # --- date pentru catalog.json, hub și sitemap ---
     thumbs = [BYSKU[s_]['img_mic'] for s_ in ('81000-10', '81180-99', '81241-18')]

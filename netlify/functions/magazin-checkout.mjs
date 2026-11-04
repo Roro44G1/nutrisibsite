@@ -1,4 +1,4 @@
-// NutriSib – inițiere comandă magazin fizic (Herbalife, LR): validează coșul pe server,
+// NutriSib – inițiere comandă magazin fizic (Herbalife sau LR – comenzi separate): validează coșul pe server,
 // salvează comanda în Netlify Blobs și creează sesiunea Stripe Checkout.
 import Stripe from "stripe";
 import { getStore } from "@netlify/blobs";
@@ -57,10 +57,12 @@ export default async function handler(req) {
   // Sume în bani (întregi): prețurile LR au zecimale (ex. 171,79 lei).
   const subtotal = lines.reduce((s, l) => s + Math.round(l.pret * 100) * l.qty, 0) / 100;
   const vpTotal = Math.round(lines.reduce((s, l) => s + l.vp * l.qty, 0) * 100) / 100;
-  const magazin = [...new Set(lines.map((l) => l.magazin || "herbalife"))].sort().join("+");   // "herbalife", "lr" sau "herbalife+lr"
-  // Transport: LR are tarif fix (o singură livrare și pentru coșurile mixte); doar Herbalife → gratuit de la PRAG_VP.
-  const areLR = lines.some((l) => l.magazin === "lr");
-  const transport = areLR ? cat.transportLR : vpTotal >= PRAG_VP ? 0 : TRANSPORT;
+  // Coșuri și comenzi separate: o comandă conține produse dintr-un singur magazin (fiecare are coșul lui pe site).
+  const magazine = [...new Set(lines.map((l) => l.magazin || "herbalife"))];
+  if (magazine.length > 1) return bad("Produsele LR și Herbalife se comandă separat, fiecare din coșul magazinului său. Reîncarcă pagina coșului.");
+  const magazin = magazine[0];
+  // Transport: LR are tarif fix pe comandă; Herbalife e gratuit de la PRAG_VP.
+  const transport = magazin === "lr" ? cat.transportLR : vpTotal >= PRAG_VP ? 0 : TRANSPORT;
 
   // ---- date client ----
   const c = body.client || {};
@@ -148,8 +150,8 @@ export default async function handler(req) {
       }],
       metadata: { magazin, order_id: id, vp_total: String(vpTotal) },
       payment_intent_data: { description: `Comanda NutriSib ${id}`, metadata: { magazin, order_id: id } },
-      success_url: `${origin}/magazin/comanda-confirmata/?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/magazin/cos/`,
+      success_url: `${origin}/magazin/comanda-confirmata/?session_id={CHECKOUT_SESSION_ID}${magazin === "lr" ? "&magazin=lr" : ""}`,
+      cancel_url: `${origin}${magazin === "lr" ? "/magazin/lr/cos/" : "/magazin/cos/"}`,
     });
     order.stripe_session = session.id;
     await store.setJSON(id, order);

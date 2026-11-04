@@ -57,14 +57,16 @@
           return '<details class="mz-order"><summary><span><strong>' + esc(o.id) + '</strong> · ' + new Date(o.creata).toLocaleDateString('ro-RO') + '</span><span>' + esc(st) + ' · <strong>' + lei(o.total) + '</strong></span></summary>' +
             '<ul>' + (o.produse || []).map(function (l) { return '<li>' + l.qty + ' × ' + esc(l.denumire) + ' ' + esc(l.varianta || '') + ' – ' + lei(l.pret * l.qty) + '</li>'; }).join('') + '</ul>' +
             '<p class="mz-buy-note">Transport: ' + (Number(o.transport) ? lei(o.transport) : 'gratuit') + (Number(o.vp_total) ? ' · ' + esc(o.vp_total) + ' VP' : '') + f + '</p>' +
-            '<button type="button" class="mz-btn ghost" data-reorder=\'' + esc(JSON.stringify((o.produse || []).map(function (l) { return [l.sku, l.qty]; }))) + '\'>Comandă din nou</button></details>';
+            '<button type="button" class="mz-btn ghost" data-magazin="' + ((o.produse || []).some(function (l) { return l.magazin === 'lr'; }) ? 'lr' : 'herbalife') + '" data-reorder=\'' + esc(JSON.stringify((o.produse || []).map(function (l) { return [l.sku, l.qty]; }))) + '\'>Comandă din nou</button></details>';
         }).join('');
         el.querySelectorAll('[data-reorder]').forEach(function (b) {
           b.addEventListener('click', function () {
-            var c = {}; try { c = JSON.parse(localStorage.getItem('nutrisib_cos_v1')) || {}; } catch (e) {}
-            JSON.parse(b.getAttribute('data-reorder')).forEach(function (x) { c[x[0]] = Math.min(99, (c[x[0]] || 0) + x[1]); });
-            try { localStorage.setItem('nutrisib_cos_v1', JSON.stringify(c)); } catch (e) {}
-            location.href = '/magazin/cos/';
+            var items = JSON.parse(b.getAttribute('data-reorder')), lr = b.getAttribute('data-magazin') === 'lr';
+            var key = lr ? 'nutrisib_cos_lr_v1' : 'nutrisib_cos_v1';   /* coșuri separate pe magazin */
+            var c = {}; try { c = JSON.parse(localStorage.getItem(key)) || {}; } catch (e) {}
+            items.forEach(function (x) { c[x[0]] = Math.min(99, (c[x[0]] || 0) + x[1]); });
+            try { localStorage.setItem(key, JSON.stringify(c)); } catch (e) {}
+            location.href = lr ? '/magazin/lr/cos/' : '/magazin/cos/';
           });
         });
       });
