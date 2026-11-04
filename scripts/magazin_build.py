@@ -442,11 +442,11 @@ body = f'''<section class="hero-card mz-hero">
 <section class="content-card">
   <h2 class="mz-section-title">Alege magazinul</h2>
   <div class="mz-stores">
-    <a class="mz-store" href="/magazin/herbalife/">
-      <div><span class="mz-pill gold">Disponibil</span><h2>Herbalife</h2>
-      <p>Shake-uri Formula 1, proteine, nutriție sportivă H24, suplimente alimentare și îngrijirea pielii – {len(produse)} produse și variante, cu etichetă în limba română.</p></div>
-      <div class="mz-store-foot"><div class="mz-store-thumbs">{thumbs}</div><span class="mz-go">Intră în magazin →</span></div>
-    </a>
+    <div class="mz-store is-soon" aria-disabled="true">
+      <div><span class="mz-pill gold">În curând</span><h2>Herbalife</h2>
+      <p>Se deschide în curând, cu oferte speciale de deschidere. Shake-uri Formula 1, proteine, nutriție sportivă H24, suplimente alimentare și îngrijirea pielii – {len(produse)} produse și variante, cu etichetă în limba română.</p></div>
+      <div class="mz-store-foot"><div class="mz-store-thumbs">{thumbs}</div><span class="mz-go" style="color:#8a6d0f">Oferte speciale de deschidere</span></div>
+    </div>
     <a class="mz-store" href="/shop/">
       <div><span class="mz-pill">Acces instant</span><h2>NutriSib Digital</h2>
       <p>Ghiduri PDF, seria BIOS și kit-uri de transformare dezvoltate de dr.ing. Radu Pascu, livrate imediat pe email.</p></div>
