@@ -9,8 +9,9 @@ Scrie două fișiere separate, tab-delimitate, UTF-8:
 
 Toate datele vin din paginile generate (JSON-LD + textul taburilor) și din
 magazin/catalog.json, ca prețul, titlul și imaginile să fie identice cu pagina.
-- Cât timp un magazin e inactiv (config.<magazin>.activ = false), produsele sunt
-  „preorder” cu availability_date = DATA_DESCHIDERE; după activare devin „in_stock”.
+- Disponibilitate: „in_stock” pentru toate produsele, la decizia lui Radu (2026-11-05),
+  inclusiv înainte de deschiderea comenzilor online din 17.11.2026. Până la activare,
+  paginile au încă PreOrder în JSON-LD, deci Merchant Center poate semnala nepotrivirea.
 - Transportul general (25 lei) se setează în contul Merchant Center. Fluxul Herbalife
   suprascrie cu 0 lei doar produsele/pachetele care au singure cel puțin 125 VP.
 - Nu se trimite google_product_category (Google o atribuie automat). GTIN-urile vin doar
@@ -25,7 +26,6 @@ import html, json, os, re, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = "https://nutrisib.club"
-DATA_DESCHIDERE = "2026-11-17T00:00+0200"
 OUT_DIR = os.path.join(ROOT, "magazin", "feed")
 MAX_IMG_EXTRA = 10
 
@@ -174,8 +174,7 @@ def build_row(item_id, prod, crumbs, desc, brand_prefix, activ, shipping_free, i
         "link": offer["url"],
         "image_link": imgs[0] if imgs else "",
         "additional_image_link": imgs[1 : 1 + MAX_IMG_EXTRA],
-        "availability": "in_stock" if activ else "preorder",
-        "availability_date": "" if activ else DATA_DESCHIDERE,
+        "availability": "in_stock",
         "price": fmt_price(offer["price"]),
         "brand": prod.get("brand", {}).get("name", ""),
         "gtin": gtin or "",
@@ -188,7 +187,7 @@ def build_row(item_id, prod, crumbs, desc, brand_prefix, activ, shipping_free, i
     return row
 
 
-COLUMNS = ["id", "title", "description", "link", "image_link", "availability", "availability_date",
+COLUMNS = ["id", "title", "description", "link", "image_link", "availability",
            "price", "brand", "gtin", "mpn", "condition", "product_type", "is_bundle", "shipping(country:price)"]
 
 
@@ -263,8 +262,8 @@ def main():
     write_tsv(os.path.join(OUT_DIR, "google-merchant-herbalife.tsv"), hl, with_bundle=True, with_shipping=True)
     write_tsv(os.path.join(OUT_DIR, "google-merchant-lr.tsv"), lr, with_bundle=False, with_shipping=False)
     print(f"Herbalife: {len(hl)} rânduri ({sum(1 for r in hl if r['is_bundle'])} pachete), "
-          f"{'in_stock' if hl_activ else 'preorder'}; transport 0 lei pe {sum(1 for r in hl if r['shipping(country:price)'])}")
-    print(f"LR: {len(lr)} rânduri, {'in_stock' if lr_activ else 'preorder'}")
+          f"in_stock; transport 0 lei pe {sum(1 for r in hl if r['shipping(country:price)'])}")
+    print(f"LR: {len(lr)} rânduri, in_stock")
     for e in excluse:
         print("   exclus:", e)
     for e in fara_text:
