@@ -7,7 +7,7 @@ Surse:
 Rulare din rădăcina repo-ului:  python3 scripts/magazin_lr.py
 scripts/magazin_build.py (Herbalife) apelează la final integreaza(), ca hub-ul, catalogul și sitemap-ul să păstreze LR.
 """
-import os, re, json, sys, shutil
+import os, re, json, sys, shutil, datetime
 from collections import Counter
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from magazin_comun import *
@@ -27,9 +27,20 @@ BRAND = 'LR Health & Beauty'
 ACCESORII = {'70102-1', '8135-2'}   # nu sunt suplimente alimentare
 
 
-def lei2(n):
-    """Preț cu bani, ca în magazinul LR: 1189.9 -> '1.189,90 lei'."""
-    return f'{n:,.2f}'.replace(',', ' ').replace('.', ',').replace(' ', '.') + ' lei'
+def pret_nutrisib(pret_lr):
+    """Prețul NutriSib = prețul LR rotunjit în sus la următorul număr întreg terminat în 9, fără zecimale
+    (decizia lui Radu, 05.11.2026): 250,58 → 259; 257,00 → 259; 259,00 → 259; 260,10 → 269."""
+    bani = round(pret_lr * 100); c = -(-bani // 100)      # în sus, la leu întreg
+    return c + (9 - c % 10) % 10
+
+
+def pret_unitar(pret, cantitate):
+    """Prețul pe litru / kilogram, calculat din prețul NutriSib și cantitatea ambalajului („1.000 ml”, „17 g”)."""
+    m = re.fullmatch(r'([\d.]+) (ml|g)', cantitate or '')
+    if not m: return None
+    v = pret / (int(m.group(1).replace('.', '')) / 1000)
+    s = lei(int(v)) if v == int(v) else f'{v:,.2f}'.replace(',', ' ').replace('.', ',').replace(' ', '.') + ' lei'
+    return f"{s} / {'l' if m.group(2) == 'ml' else 'kg'}"
 
 
 def num(s): return float(s.replace('.', '').replace(',', '.'))
@@ -144,15 +155,16 @@ def incarca():
     for alias, s in data['produse'].items():
         if alias in exclus: continue
         k = cur['produse'][alias]
-        pret, unitar, pv = pret_din_sursa(s['price_box'])
+        pret_lr, _, pv = pret_din_sursa(s['price_box'])
+        pret = pret_nutrisib(pret_lr)
         cantitate = re.sub(r'^.*Cod produs: \S+\s*', '', s['name_box']) or None
         if 'cantitate' in k: cantitate = k['cantitate']
-        if 'pret_unitar' in k: unitar = k['pret_unitar']
+        unitar = pret_unitar(pret, cantitate)
         gama = k.get('gama') or (s['crumbs'][4] if len(s['crumbs']) > 5 else '')
         cat, sub = next((c, sb) for c in categorii for sb in c['sub'] if alias in sb['sku'])
         slug = slugify(f"{k['denumire']} {k['varianta']}") + '-' + slugify(alias)
         p = dict(sku=alias, slug=slug, denumire=k['denumire'], varianta=k['varianta'], aroma=k.get('aroma', ''), gama=gama,
-                 cantitate=cantitate, pret=pret, unitar=unitar, pv=pv, cat=cat['slug'], cat_label=cat['nume'], subcat=sub['nume'],
+                 cantitate=cantitate, pret=pret, pret_lr=pret_lr, unitar=unitar, pv=pv, cat=cat['slug'], cat_label=cat['nume'], subcat=sub['nume'],
                  url=f'{BASE}{slug}/', sursa=s['href'].split('?')[0] + f'?productAlias={alias}', h1_sursa=s['h1'],
                  intro=intro_html(s['short_md']),
                  tabs=[(TAB_NUME.get(t['t'], t['t']), tab_html(t['t'], t['md'], s['h1']), t['t']) for t in s['tabs']])
@@ -164,6 +176,8 @@ def incarca():
 
 # ---------------- pagini ----------------
 SOON = precomanda_box('LR')
+OFERTA_URL, OFERTA_PDF = f'{BASE}oferta/', f'{BASE}oferta/oferta-nutrisib-lr.pdf'
+OFERTA_LINK = f'<p class="mz-offer-link"><a href="{OFERTA_URL}">📄 Oferta NutriSib – lista completă de prețuri (cu PDF descărcabil) →</a></p>'
 SHIP_LR = (f'<div class="mz-ship-note"><strong>Transport: {TRANSPORT_LR} lei</strong> pentru fiecare comandă LR, '
            'livrare prin curier oriunde în România. Produsele LR au coșul lor și se comandă separat de cele Herbalife.</div>')
 
@@ -191,16 +205,15 @@ def pagina_produs(p, fam):
     title = f"{p['denumire']}{' – ' + p['varianta'] if p['varianta'] else ''} | LR | NutriSib"
     txt = re.sub(r'<[^>]+>', ' ', p['intro'] or (p['tabs'][0][1] if p['tabs'] else '')).replace('&lt;', '<').replace('&gt;', '>')
     desc = re.sub(r'\s+', ' ', txt).strip()[:300]
-    pret_txt = f"{p['pret']:.2f}".replace('.', ',')
     if len(desc) < 70:  # textul din sursă e prea scurt (seturi) – descriere generată din datele produsului
         desc = (f"{p['denumire']}{' – ' + p['varianta'] if p['varianta'] else ''} – LR, cod {p['sku']}, "
-                f"preț final {pret_txt} lei. Precomenzi la telefon sau e-mail.")
+                f"preț final {lei(p['pret'])}. Precomenzi la telefon sau e-mail.")
     cr_html, cr_ld = crumbs([('Magazin', '/magazin/'), ('LR', BASE), (p['cat_label'], f"{BASE}{p['cat']}/"), (p['denumire'], None)])
     disp = 'https://schema.org/InStock' if LR_ACTIV else 'https://schema.org/PreOrder'
     prod_ld = {'@context': 'https://schema.org', '@type': 'Product', 'name': f"{p['denumire']} {p['varianta']}".strip(), 'sku': p['sku'],
                'mpn': p['sku'], 'brand': {'@type': 'Brand', 'name': BRAND}, 'category': p['cat_label'],
                'image': [SITE + p['img']] if p['img'] else [], 'description': desc,
-               'offers': {'@type': 'Offer', 'url': SITE + p['url'], 'priceCurrency': 'RON', 'price': f"{p['pret']:.2f}",
+               'offers': {'@type': 'Offer', 'url': SITE + p['url'], 'priceCurrency': 'RON', 'price': str(p['pret']),
                           'availability': disp, 'itemCondition': 'https://schema.org/NewCondition',
                           'seller': {'@type': 'Organization', 'name': 'NutriSib'},
                           'shippingDetails': {'@type': 'OfferShippingDetails', 'shippingDestination': {'@type': 'DefinedRegion', 'addressCountry': 'RO'},
@@ -252,7 +265,7 @@ def pagina_produs(p, fam):
       <div class="mz-p-specs">{specs}</div>
       {var_html}
       <div class="mz-buybox"{buy_attr}>
-        <div class="mz-price">{lei2(p['pret'])}</div>
+        <div class="mz-price">{lei(p['pret'])}</div>
         {unitar}
         {cumpara}
       </div>
@@ -274,7 +287,7 @@ def genereaza():
 
     for p in produse: pagina_produs(p, fam)
 
-    def card(nume, vs):
+    def card(nume, vs, eticheta):
         p0 = vs[0]; pmin, pmax = min(v['pret'] for v in vs), max(v['pret'] for v in vs)
         arome = sorted({v['aroma'] for v in vs if v['aroma']})
         meta = f'{len(arome)} arome' if len(arome) > 1 else (f'{len(vs)} variante' if len(vs) > 1 else (p0['varianta'] or p0['gama']))
@@ -282,10 +295,10 @@ def genereaza():
         return f'''<a class="mz-card" href="{p0['url']}" data-text="{E(text)}">
   <div class="mz-card-img"><img src="{p0['img_mic']}" alt="{E(nume)}" loading="lazy" width="420" height="420"></div>
   <div class="mz-card-body">
-    <span class="mz-card-cat">{E(p0['subcat'] or p0['cat_label'])}</span>
+    <span class="mz-card-cat">{E(eticheta)}</span>
     <h3 class="mz-card-title">{E(nume)}</h3>
     <span class="mz-card-meta">{E(meta)}</span>
-    <div class="mz-card-foot"><span class="mz-price">{'<small>de la</small>' if pmin != pmax else ''}{lei2(pmin)}</span><span class="mz-card-more">Detalii →</span></div>
+    <div class="mz-card-foot"><span class="mz-price">{'<small>de la</small>' if pmin != pmax else ''}{lei(pmin)}</span><span class="mz-card-more">Detalii →</span></div>
   </div>
 </a>'''
 
@@ -296,25 +309,38 @@ def genereaza():
             if p and p['denumire'] not in out: out[p['denumire']] = fam[p['denumire']]
         return out
 
-    def sectiune(c, h='h2'):
-        blocks = []
+    def sectiune(c, vazute, h='h2'):
+        """Secțiunea unei grupe LR. LR pune același produs în mai multe categorii; aici fiecare produs apare o singură dată
+        pe pagină, în prima subcategorie (în ordinea meniului LR) în care apare. `vazute` = familiile deja afișate pe pagină."""
+        blocks, n_prod = [], 0
         for sub in c['sub']:
-            fs = familii_din(sub['sku'])
-            if fs: blocks.append(f'<div class="mz-subsec"><h3 class="mz-sub-title">{E(sub["nume"])}</h3><div class="mz-grid">{"".join(card(n, v) for n, v in fs.items())}</div></div>')
-        n_prod = len({s_ for sub in c['sub'] for s_ in sub['sku'] if s_ in BYSKU})
+            fs = {k: v for k, v in familii_din(sub['sku']).items() if k not in vazute}
+            if not fs: continue
+            vazute.update(fs); n_prod += sum(len(v) for v in fs.values())
+            blocks.append(f'<div class="mz-subsec"><h3 class="mz-sub-title">{E(sub["nume"])}</h3><div class="mz-grid">{"".join(card(n, v, sub["nume"]) for n, v in fs.items())}</div></div>')
+        if not blocks: return ''
+        n_tot = len(fam_grupa(c))
+        cnt = (f'<a href="{BASE}{c["slug"]}/">Toate cele {n_tot} produse →</a>' if n_prod < n_tot
+               else f"{n_prod} {'produs' if n_prod == 1 else 'produse'}")
         return f'''<section class="content-card mz-catsec" id="{c['slug']}">
-  <div class="mz-cat-head"><{h} class="mz-cat-title"><a href="{BASE}{c['slug']}/">{E(c['nume'])}</a></{h}><span class="mz-cat-count">{n_prod} {'produs' if n_prod == 1 else 'produse'}</span></div>
+  <div class="mz-cat-head"><{h} class="mz-cat-title"><a href="{BASE}{c['slug']}/">{E(c['nume'])}</a></{h}><span class="mz-cat-count">{cnt}</span></div>
   {''.join(blocks)}
 </section>'''
+
+    def fam_grupa(c):
+        """Toate variantele familiilor care apar într-o grupă (fiecare o singură dată)."""
+        fs = familii_din([s_ for sub in c['sub'] for s_ in sub['sku']])
+        return [v for vs in fs.values() for v in vs]
 
     def nav(activ=None):
         items = [(BASE, 'Toate', activ is None)] + [(f'{BASE}{c["slug"]}/', c['nume'], activ == c['slug']) for c in categorii]
         return '<nav class="mz-chips mz-catnav" aria-label="Categorii LR">' + ''.join(
             f'<a class="mz-chip{" active" if a else ""}" href="{u}"{CUR if a else ""}>{E(t)}</a>' for u, t, a in items) + '</nav>'
 
-    top = SHIP_LR + ('' if LR_ACTIV else SOON)
+    top = SHIP_LR + ('' if LR_ACTIV else SOON) + OFERTA_LINK
 
-    # --- catalogul LR ---
+    # --- catalogul LR (fiecare produs o singură dată, în prima lui categorie din meniul LR) ---
+    VAZUTE = set()
     cr_html, cr_ld = crumbs([('Magazin', '/magazin/'), ('LR', None)])
     item_ld = {'@context': 'https://schema.org', '@type': 'ItemList', 'name': 'Produse LR – NutriSib', 'numberOfItems': len(fam),
                'itemListElement': [{'@type': 'ListItem', 'position': i + 1, 'url': SITE + vs[0]['url'], 'name': n} for i, (n, vs) in enumerate(sorted(fam.items()))]}
@@ -328,7 +354,7 @@ def genereaza():
   </div>
 </section>
 <div data-mz-grid>
-{chr(10).join(sectiune(c) for c in categorii)}
+{chr(10).join(sectiune(c, VAZUTE) for c in categorii)}
 </div>
 <p class="mz-empty content-card">Niciun produs nu corespunde căutării.</p>
 '''
@@ -339,7 +365,7 @@ def genereaza():
     # --- pagini de categorie ---
     for c in categorii:
         cr_html, cr_ld = crumbs([('Magazin', '/magazin/'), ('LR', BASE), (c['nume'], None)])
-        skus = list(dict.fromkeys(s_ for sub in c['sub'] for s_ in sub['sku'] if s_ in BYSKU))
+        skus = [v['sku'] for v in fam_grupa(c)]
         subs = ', '.join(sub['nume'] for sub in c['sub'])
         fams = familii_din(skus)
         ld = {'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': f"{c['nume']} – LR", 'url': f"{SITE}{BASE}{c['slug']}/",
@@ -352,19 +378,58 @@ def genereaza():
   <div class="mz-toolbar" style="margin-top:1.25rem">{nav(c['slug'])}</div>
 </section>
 <div data-mz-grid>
-{sectiune(c)}
+{sectiune(c, set())}
 </div>
 '''
         pagina(os.path.join(LRD, c['slug'], 'index.html'), f"{c['nume']} – LR | Magazin NutriSib",
                f"{c['nume']} – produse LR Health & Beauty: {subs}. {len(skus)} produse, prețuri finale.",
                f"{BASE}{c['slug']}/", body, BYSKU[skus[0]]['img'], cr_ld + jsonld(ld))
 
+    # --- lista de prețuri LR (Oferta NutriSib), ca /magazin/oferta/ la Herbalife; PDF: node scripts/oferta_pdf.mjs lr ---
+    data_oferta = datetime.date.today().strftime('%d.%m.%Y')
+    sec, vazute = '', set()
+    for c in categorii:
+        rows = ''
+        for sub in c['sub']:
+            fs = {k: v for k, v in familii_din(sub['sku']).items() if k not in vazute}
+            if not fs: continue
+            vazute.update(fs)
+            rows += f'<tr class="mz-of-subhead"><td colspan="4">{E(sub["nume"])}</td></tr>'
+            for vs in fs.values():
+                for v in vs:
+                    rows += (f'<tr><td class="cod">{v["sku"]}</td><td><a href="{SITE}{v["url"]}">{E(v["denumire"])}</a></td>'
+                             f'<td>{E(v["varianta"])}</td><td class="num"><strong>{lei(v["pret"])}</strong></td></tr>')
+        if rows:
+            sec += f'''<h2 class="mz-of-cat">{E(c['nume'])}</h2>
+<table class="mz-of"><thead><tr><th>Cod</th><th>Produs</th><th>Variantă</th><th class="num">Preț</th></tr></thead><tbody>{rows}</tbody></table>'''
+    body = f'''<div class="mz-crumbs-wrap">{crumbs([('Magazin', '/magazin/'), ('LR', BASE), ('Oferta NutriSib', None)])[0]}</div>
+<section class="content-card mz-oferta">
+  <div class="mz-of-head">
+    <div><span class="mz-eyebrow" style="color:#8a6d0f">Oferta NutriSib · LR</span>
+    <h1 class="mz-p-title">Lista de prețuri</h1>
+    <p class="mz-buy-note" style="margin:0">Valabilă de la {data_oferta}. Prețuri finale, în lei. Transport {TRANSPORT_LR} lei pe comandă. {E(VANZATOR)}, CUI 38416337 – neplătitor de TVA.</p>
+    <p class="mz-buy-note" style="margin:.4rem 0 0"><strong>Precomenzi și informații:</strong> <a href="tel:{CONTACT_TEL}">{CONTACT_TEL_AFIS}</a> · <a href="mailto:{CONTACT_EMAIL}">{CONTACT_EMAIL}</a></p></div>
+    <img src="/magazin/assets/lr-logo.svg" alt="LR Health &amp; Beauty" class="mz-of-logo mz-of-logo-lr">
+  </div>
+  <div class="mz-of-actions no-print">
+    <a class="mz-btn" style="flex:none" href="{OFERTA_PDF}" download>⬇ Descarcă PDF</a>
+    <button type="button" class="mz-btn ghost" style="flex:none" onclick="window.print()">Tipărește</button>
+  </div>
+  <p class="mz-buy-note">Fiecare denumire este un link către pagina produsului. Fiecare produs apare o singură dată, în prima lui categorie din meniul LR.</p>
+  {sec}
+</section>
+'''
+    pagina(os.path.join(LRD, 'oferta', 'index.html'), 'Oferta NutriSib – lista de prețuri LR',
+           f'Lista completă de prețuri NutriSib pentru produsele LR Health & Beauty, valabilă de la {data_oferta}. Descarcă oferta în format PDF.',
+           OFERTA_URL, body)
+    assert len(vazute) == len(fam), 'lista de prețuri trebuie să conțină toate familiile, o singură dată'
+
     # --- coșul LR (separat de coșul Herbalife; aceeași comandă/checkout, câte un magazin pe comandă) ---
     pagina(os.path.join(LRD, 'cos', 'index.html'), 'Coșul LR | Magazin NutriSib', 'Coșul de cumpărături pentru produsele LR.',
            f'{BASE}cos/', cos_body('lr'), robots='noindex, follow', scripts=SB_SCRIPTS)
 
     # --- curățare: pagini și imagini rămase de la produse redenumite sau excluse ---
-    pastreaza = {p['slug'] for p in produse} | {c['slug'] for c in categorii} | {'img', 'cos'}
+    pastreaza = {p['slug'] for p in produse} | {c['slug'] for c in categorii} | {'img', 'cos', 'oferta'}
     for d_ in os.listdir(LRD):
         if os.path.isdir(os.path.join(LRD, d_)) and d_ not in pastreaza: shutil.rmtree(os.path.join(LRD, d_))
     imgs = {os.path.basename(p[k]) for p in produse for k in ('img', 'img_mic') if p[k]}
@@ -423,7 +488,7 @@ def integreaza():
     sp = os.path.join(ROOT, 'sitemap-magazin.xml'); x = open(sp, encoding='utf-8').read()
     x = re.sub(r'  <!-- LR -->\n.*?  <!-- /LR -->\n', '', x, flags=re.S)
     if True:
-        urls = [(BASE, '0.8')] + [(f'{BASE}{c}/', '0.75') for c in d['categorii']] + [(p['url'], '0.7') for p in d['produse']]
+        urls = [(BASE, '0.8')] + [(f'{BASE}{c}/', '0.75') for c in d['categorii']] + [(f'{BASE}oferta/', '0.6')] + [(p['url'], '0.7') for p in d['produse']]
         rows = ''.join(f'  <url><loc>{SITE}{u}</loc><lastmod>{d["generat"]}</lastmod><priority>{pr}</priority>'
                        + (f'<image:image><image:loc>{SITE}{d["imagini"][u]}</image:loc></image:image>' if u in d['imagini'] else '') + '</url>\n'
                        for u, pr in urls)
