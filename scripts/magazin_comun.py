@@ -19,6 +19,24 @@ E = lambda s: html.escape(str(s or ''), quote=True)
 CUR = ' aria-current="page"'
 def vp_fmt(v): return f'{v:.2f}'.replace('.', ',')
 def lei(n): return f'{n:,}'.replace(',', '.') + ' lei'
+def lei_l(n):
+    """Preț cu bani (ex. 279,50 lei); fără bani când e întreg."""
+    if n is None: return ''
+    if float(n) == int(n): return lei(int(n))
+    return f'{n:,.2f}'.replace(',', ' ').replace('.', ',').replace(' ', '.') + ' lei'
+def pret_lista_tva(r):
+    """Prețul de listă Herbalife cu TVA, din rândul listei oficiale (herbalife-preturi.pdf).
+    Coloana „Preț unitar de listă” e fără TVA: coloanele 25%/35%/42%/50% = listă × (1+TVA) − discount × bază × (1+TVA).
+    Cota TVA (21% sau 11%) se deduce din diferența dintre coloanele 25% și 35%."""
+    if not r or not r.get('lista') or not r.get('baza') or r.get('p25') is None or r.get('p35') is None: return None
+    tva = round((r['p25'] - r['p35']) / (0.1 * r['baza']) - 1, 2)
+    if tva not in (0.21, 0.11, 0.19, 0.09, 0.05): return None
+    return round(r['lista'] * (1 + tva), 2)
+def sub_lista(p):
+    """(preț de listă, economie în lei, procent) când prețul NutriSib e sub prețul de listă Herbalife; altfel None."""
+    l = p.get('lista')
+    if not l or l <= p['pret']: return None
+    return l, round(l - p['pret'], 2), round((l - p['pret']) * 100 / l)
 def write(path, s):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     open(path, 'w', encoding='utf-8').write(s)

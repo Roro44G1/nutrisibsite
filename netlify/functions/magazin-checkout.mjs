@@ -7,7 +7,7 @@ import { getStore } from "@netlify/blobs";
 let CACHE = null;
 async function loadCatalog(origin) {
   if (CACHE && Date.now() - CACHE.t < 5 * 60 * 1000) return CACHE;
-  const r = await fetch(`${origin}/magazin/catalog.json`);
+  const r = await fetch(`${origin}/magazin/catalog.json`, { headers: { "user-agent": "NutriSib-checkout/1.0" } });
   if (!r.ok) throw new Error(`catalog HTTP ${r.status}`);
   const d = await r.json();
   CACHE = { t: Date.now(), bySku: Object.fromEntries(d.produse.map((p) => [p.sku, p])), pk: Object.fromEntries((d.pachete || []).map((p) => [p.id, p])), prag: d.config.prag_vp, transport: d.config.transport,

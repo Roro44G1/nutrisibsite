@@ -12,6 +12,7 @@ lei = lambda n: f'{n:,}'.replace(',', '.') + ' lei'
 # LR: prețul = prețul curent din magazinul LR România (produse/lr/lr-sanatate.json), cu bani
 sys.path.insert(0, 'scripts')
 import magazin_lr as LR
+from magazin_comun import lei_l, pret_lista_tva
 lr_src = json.load(open('produse/lr/lr-sanatate.json', encoding='utf-8'))['produse'] if os.path.exists('produse/lr/lr-sanatate.json') else None
 lr_cfg = cat['config'].get('lr', {})
 def verifica_lr(s, p):
@@ -33,6 +34,7 @@ def verifica_lr(s, p):
     else:
         if 'data-mz-buy' in h or 'mz-soon-box' not in h: bad(f'LR {s}: pagina „în curând” are buton de coș sau nu are caseta de precomandă')
     ok += 1
+OFERTA_HTML = open('magazin/oferta/index.html', encoding='utf-8').read() if os.path.exists('magazin/oferta/index.html') else ''
 # 1) prețuri produse = coloana 25% rotunjită la cel mai apropiat multiplu de 10
 for s, p in P.items():
     if p.get('magazin') == 'lr': verifica_lr(s, p); continue
@@ -45,6 +47,11 @@ for s, p in P.items():
     h = open(f, encoding='utf-8').read()
     if f'<div class="mz-price">{lei(p["pret"])}</div>' not in h: bad(f'{s}: prețul {lei(p["pret"])} nu apare în pagina produsului')
     if f'"price": "{p["pret"]}"' not in h: bad(f'{s}: JSON-LD cu alt preț')
+    lt = pret_lista_tva(src[s]) if src else None
+    if lt and lt > p['pret']:  # prețul de listă Herbalife cu TVA, tăiat, pe pagină și în ofertă
+        tl = f'<s>{lei_l(lt)}</s>'
+        if tl not in h: bad(f'{s}: lipsește prețul de listă tăiat {lei_l(lt)}')
+        if tl not in OFERTA_HTML: bad(f'{s}: prețul de listă lipsește din ofertă')
     vp = f'{p["vp"]:.2f}'.replace('.', ',')
     if vp + ' VP' not in h: bad(f'{s}: VP {vp} nu apare în pagină')
     ok += 1

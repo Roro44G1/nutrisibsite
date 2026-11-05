@@ -100,7 +100,7 @@ legal('termeni-si-conditii', 'Termeni și condiții', 'Termenii și condițiile 
 <h2>2. Produse și informații</h2>
 <p>Descrierile, ingredientele, informațiile nutriționale și imaginile produselor provin de la producător. Imaginile au caracter informativ; alimentele prezentate în imagini sunt ilustrative și nu fac parte din conținutul produsului. Suplimentele alimentare nu înlocuiesc o dietă variată și echilibrată și un stil de viață sănătos. Dacă ai o afecțiune, urmezi un tratament, ești însărcinată sau alăptezi, cere părerea medicului înainte de a consuma suplimente.</p>
 <h2>3. Prețuri</h2>
-<p>Prețurile sunt exprimate în lei (RON) și sunt prețuri finale pentru produs. Vânzătorul nu este înregistrat în scopuri de TVA, astfel că facturile se emit fără TVA. Costul transportului se afișează separat în coș, înainte de plată: transportul este gratuit pentru comenzile Herbalife care însumează minimum {PRAG_VP} VP (valoarea VP a fiecărui produs este afișată pe pagina lui) și costă {TRANSPORT} lei pentru comenzile sub acest prag. Produsele LR și cele Herbalife se comandă separat, din coșul fiecărui magazin. Pentru comenzile LR, transportul costă {TRANSPORT_LR} lei, indiferent de valoarea comenzii. Prețul valabil este cel afișat în momentul plasării comenzii.</p>
+<p>Prețurile sunt exprimate în lei (RON) și sunt prețuri finale pentru produs. Vânzătorul nu este înregistrat în scopuri de TVA, astfel că facturile se emit fără TVA. Costul transportului se afișează separat în coș, înainte de plată: transportul este gratuit pentru comenzile Herbalife care însumează minimum {PRAG_VP} VP (valoarea VP a fiecărui produs este afișată pe pagina lui) și costă {TRANSPORT} lei pentru comenzile sub acest prag. Produsele LR și cele Herbalife se comandă separat, din coșul fiecărui magazin. Pentru comenzile LR, transportul costă {TRANSPORT_LR} lei, indiferent de valoarea comenzii. Prețul valabil este cel afișat în momentul plasării comenzii. Pentru produsele Herbalife, pe pagina produsului și în oferta NutriSib apare, tăiat, și prețul de listă din lista oficială de prețuri Herbalife România (TVA inclus), ca preț de referință al producătorului; acesta nu este un preț practicat anterior de vânzător.</p>
 <h2>4. Comanda și încheierea contractului</h2>
 <p>Comanda se plasează din coș, prin completarea datelor de livrare și facturare, acceptarea acestor termeni și plata online. Contractul se consideră încheiat în momentul în care primești pe e-mail confirmarea comenzii. Dacă un produs comandat nu mai este disponibil, te informăm și îți rambursăm integral suma aferentă în cel mult 14 zile.</p>
 <h2>5. Plata</h2>
@@ -117,6 +117,8 @@ legal('termeni-si-conditii', 'Termeni și condiții', 'Termenii și condițiile 
 <p>Reclamațiile se trimit la <a href="mailto:{FIRMA['email']}">{FIRMA['email']}</a> și primesc răspuns în cel mult 30 de zile. Dacă nu ajungem la o soluție amiabilă, te poți adresa Autorității Naționale pentru Protecția Consumatorilor (ANPC), inclusiv prin procedura de <a href="https://anpc.ro/ce-este-sal/" target="_blank" rel="nofollow noopener">Soluționare Alternativă a Litigiilor (SAL)</a>, sau instanțelor competente din România. Platforma europeană de soluționare online a litigiilor (SOL/ODR) nu mai funcționează din 20 iulie 2025.</p>
 <h2>11. Legea aplicabilă</h2>
 <p>Acești termeni sunt guvernați de legea română, inclusiv OUG nr. 34/2014 privind drepturile consumatorilor în cadrul contractelor încheiate cu profesioniștii.</p>
+<h2>12. Utilizarea conținutului site-ului</h2>
+<p>Structura magazinului, textele proprii, selecția și organizarea produselor, pachetele, prețurile și oferta NutriSib sunt protejate de legislația privind dreptul de autor și drepturile asupra bazelor de date (Legea nr. 8/1996). Copierea sau extragerea automată a conținutului (scraping, roboți, colectare pentru antrenarea sistemelor de inteligență artificială) este interzisă fără acordul scris al vânzătorului. În conformitate cu art. 4 alin. (3) din Directiva (UE) 2019/790, vânzătorul își rezervă în mod expres drepturile privind extragerea de text și date; rezervarea este exprimată și în format citibil automat (robots.txt și TDMRep). Indexarea de către motoarele de căutare este permisă. Denumirile, imaginile și descrierile produselor Herbalife și LR aparțin producătorilor.</p>
 ''')
 
 legal('livrare', 'Livrare', 'Costuri și condiții de livrare pentru comenzile din magazinul NutriSib.', f'''
@@ -198,12 +200,15 @@ for c in CATEGORII:
     for sub in c['sub']:
         skus = [s_ for s_ in sub['sku'] if s_ in BYSKU]
         if not skus: continue
-        if sub['nume']: rows += f'<tr class="mz-of-subhead"><td colspan="5">{E(sub["nume"])}</td></tr>'
+        if sub['nume']: rows += f'<tr class="mz-of-subhead"><td colspan="7">{E(sub["nume"])}</td></tr>'
         for s_ in skus:
             p = BYSKU[s_]
-            rows += f'<tr><td class="cod">{p["sku"]}</td><td><a href="{SITE}{p["url"]}">{E(p["denumire"])}</a></td><td>{E(p["varianta"])}</td><td class="num">{_vp(p["vp"])}</td><td class="num"><strong>{lei(p["pret"])}</strong></td></tr>'
+            sl = sub_lista(p)
+            rows += (f'<tr><td class="cod">{p["sku"]}</td><td><a href="{SITE}{p["url"]}">{E(p["denumire"])}</a></td><td>{E(p["varianta"])}</td><td class="num">{_vp(p["vp"])}</td>'
+                     f'<td class="num">{f"<s>{lei_l(sl[0])}</s>" if sl else "–"}</td><td class="num"><strong>{lei(p["pret"])}</strong></td>'
+                     f'<td class="num">{f"−{lei_l(sl[1])}<br><small>{sl[2]}%</small>" if sl else "–"}</td></tr>')
     sec_prod += f'''<h2 class="mz-of-cat">{E(c['nume'])}</h2>
-<table class="mz-of"><thead><tr><th>Cod</th><th>Produs</th><th>Variantă</th><th class="num">VP</th><th class="num">Preț</th></tr></thead><tbody>{rows}</tbody></table>'''
+<table class="mz-of"><thead><tr><th>Cod</th><th>Produs</th><th>Variantă</th><th class="num">VP</th><th class="num">Preț de listă</th><th class="num">Preț NutriSib</th><th class="num">Economie</th></tr></thead><tbody>{rows}</tbody></table>'''
 body = f'''<div class="mz-crumbs-wrap">{crumbs([('Magazin', '/magazin/'), ('Oferta NutriSib', None)])[0]}</div>
 <section class="content-card mz-oferta">
   <div class="mz-of-head">
@@ -217,7 +222,7 @@ body = f'''<div class="mz-crumbs-wrap">{crumbs([('Magazin', '/magazin/'), ('Ofer
     <a class="mz-btn" style="flex:none" href="/magazin/oferta/oferta-nutrisib-herbalife.pdf" download>⬇ Descarcă PDF</a>
     <button type="button" class="mz-btn ghost" style="flex:none" onclick="window.print()">Tipărește</button>
   </div>
-  <p class="mz-buy-note">Fiecare denumire este un link către pagina produsului sau a pachetului, unde poți comanda.</p>
+  <p class="mz-buy-note">Fiecare denumire este un link către pagina produsului sau a pachetului, unde poți comanda. <strong>Preț de listă</strong> = prețul unitar de listă din lista oficială de prețuri Herbalife România (iulie 2026), cu TVA inclus; <strong>Preț NutriSib</strong> = prețul final la care vindem.</p>
   <h2 class="mz-of-cat">Pachete la ofertă</h2>
   <table class="mz-of mz-of-pk"><thead><tr><th>Pachet</th><th class="num">Preț separat</th><th class="num">Preț pachet</th><th class="num">Economie</th><th class="num">VP</th></tr></thead><tbody>{rows_pk}</tbody></table>
   <p class="mz-buy-note">Pentru pachetele cu variante (aromă, tip de Protein Drink Mix), prețul afișat corespunde variantelor implicite; prețul exact apare pe pagina pachetului după alegerea variantelor.</p>

@@ -92,7 +92,7 @@ def load_products():
         aroma = meta.get('aroma') or ''
         p = dict(slug=slug, sku=sku, denumire=meta['denumire'], aroma=aroma, marime=meta.get('marime') or '',
                  cat=k, cat_label=lab, subcat=subcat, meta_desc=meta.get('meta_descriere') or '', intro=intro, secs=secs, disc=disc,
-                 pret=pr['pret'], vp=pr['vp'], url=f'/magazin/herbalife/{slug}/')
+                 pret=pr['pret'], vp=pr['vp'], lista=pret_lista_tva(pr), url=f'/magazin/herbalife/{slug}/')
         p['varianta'] = ' · '.join(x for x in [aroma if aroma != 'Original' else '', p['marime']] if x)
         p['src_ambalaj'] = imgs.get('ambalaj')
         p['img'] = webp(imgs.get('ambalaj'), slug + '-ambalaj', 900, True)
@@ -114,6 +114,12 @@ json.dump({'generat': TODAY, 'config': {'prag_vp': PRAG_VP, 'transport': TRANSPO
           open(os.path.join(OUT, 'catalog.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 # ======================= pagini produs =======================
+def pret_box(p):
+    sl = sub_lista(p)
+    if not sl: return f'<div class="mz-price">{lei(p["pret"])}</div>'
+    l, ec, pc = sl
+    return (f'<div class="mz-price-row"><div class="mz-price">{lei(p["pret"])}</div><span class="mz-off">−{pc}%</span></div>'
+            f'<div class="mz-list-price">Preț de listă Herbalife: <s>{lei_l(l)}</s> · economisești <strong>{lei_l(ec)}</strong></div>')
 from collections import Counter
 _DESC_N = Counter(scurt((p['meta_desc'] or p['intro'])[:300]) for p in produse)
 for p in produse:
@@ -129,6 +135,8 @@ for p in produse:
                'mpn': p['sku'], 'brand': {'@type': 'Brand', 'name': 'Herbalife'}, 'category': p['cat_label'],
                'image': [SITE + g for g, _ in p['galerie']], 'description': desc,
                'offers': {'@type': 'Offer', 'url': SITE + p['url'], 'priceCurrency': 'RON', 'price': str(p['pret']),
+                          **({'priceSpecification': [{'@type': 'UnitPriceSpecification', 'priceType': 'https://schema.org/ListPrice',
+                                                      'price': f"{p['lista']:.2f}", 'priceCurrency': 'RON'}]} if sub_lista(p) else {}),
                           'availability': DISP_HL, 'itemCondition': 'https://schema.org/NewCondition',
                           'seller': {'@type': 'Organization', 'name': 'NutriSib'},
                           'shippingDetails': {'@type': 'OfferShippingDetails', 'shippingDestination': {'@type': 'DefinedRegion', 'addressCountry': 'RO'},
@@ -160,7 +168,7 @@ for p in produse:
       <div class="mz-p-specs">{specs}</div>
       {var_html}
       <div class="mz-buybox"{f' data-mz-buy="{p["sku"]}"' if HL_ACTIV else ''}>
-        <div class="mz-price">{lei(p['pret'])}</div>
+        {pret_box(p)}
         {BUY_ROW if HL_ACTIV else SOON_HL}
         <p class="mz-buy-note">Acest produs are <strong>{vp_fmt(p['vp'])} VP</strong>. Transport gratuit pentru comenzile de minimum {PRAG_VP} VP; sub prag, transportul costă {TRANSPORT} lei. <a href="/magazin/livrare/">Detalii livrare</a></p>
       </div>
@@ -183,16 +191,17 @@ BYSKU = {p['sku']: p for p in produse}
 def card(nume, vs):
     mod = Counter(v['pret'] for v in vs).most_common(1)[0][0]
     p0 = next(v for v in vs if v['pret'] == mod); pmin, pmax, n = min(v['pret'] for v in vs), max(v['pret'] for v in vs), len(vs)
+    sl = sub_lista(min(vs, key=lambda v: (v['pret'], v['varianta'])))  # prețul de listă al variantei afișate („de la”)
     arome = sorted({v['aroma'] for v in vs if v['aroma'] and v['aroma'] != 'Original'})
     meta = f'{len(arome)} arome' if len(arome) > 1 else (f'{n} variante' if n > 1 else p0['varianta'])
     text = ' '.join([nume, p0['cat_label'], p0['subcat']] + [v['varianta'] + ' ' + v['sku'] for v in vs])
     return f'''<a class="mz-card" href="{p0['url']}" data-text="{E(text)}">
-  <div class="mz-card-img"><img src="{img_grup(nume, vs) or p0['img_mic']}" alt="{E(nume)}" loading="lazy" width="420" height="420"><span class="mz-card-vp">{vp_fmt(p0['vp'])} VP</span></div>
+  <div class="mz-card-img"><img src="{img_grup(nume, vs) or p0['img_mic']}" alt="{E(nume)}" loading="lazy" width="420" height="420"><span class="mz-card-vp">{vp_fmt(p0['vp'])} VP</span>{f'<span class="mz-card-off">−{sl[2]}%</span>' if sl else ''}</div>
   <div class="mz-card-body">
     <span class="mz-card-cat">{E(p0['subcat'] or p0['cat_label'])}</span>
     <h3 class="mz-card-title">{E(nume)}</h3>
     <span class="mz-card-meta">{E(meta)}</span>
-    <div class="mz-card-foot"><span class="mz-price">{'<small>de la</small>' if pmin != pmax else ''}{lei(pmin)}</span><span class="mz-card-more">Detalii →</span></div>
+    <div class="mz-card-foot"><span class="mz-price">{'<small>de la</small>' if pmin != pmax else ''}{f'<s class="mz-old" title="Preț de listă Herbalife">{lei_l(sl[0])}</s>' if sl else ''}{lei(pmin)}</span><span class="mz-card-more">Detalii →</span></div>
   </div>
 </a>'''
 

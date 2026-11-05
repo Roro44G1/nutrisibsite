@@ -10,6 +10,19 @@
     Access-Control-Allow-Headers = "*"
     Access-Control-Allow-Methods = "GET, POST, OPTIONS"
 
+# Magazin: catalog.json e folosit de coș, dar nu se indexează
+[[headers]]
+  for = "/magazin/catalog.json"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+# Rezervarea drepturilor de extragere de text și date (TDMRep, art. 4 Directiva UE 2019/790)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    tdm-reservation = "1"
+    tdm-policy = "https://nutrisib.club/magazin/termeni-si-conditii/"
+
 # SEO: secțiuni și fișiere care nu trebuie indexate (nu intră în sitemap; scripts/sitemap_build.py citește lista de aici)
 [[headers]]
   for = "/biohack"
