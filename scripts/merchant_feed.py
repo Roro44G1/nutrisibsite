@@ -13,8 +13,9 @@ magazin/catalog.json, ca prețul, titlul și imaginile să fie identice cu pagin
   „preorder” cu availability_date = DATA_DESCHIDERE; după activare devin „in_stock”.
 - Transportul general (25 lei) se setează în contul Merchant Center. Fluxul Herbalife
   suprascrie cu 0 lei doar produsele/pachetele care au singure cel puțin 125 VP.
-- Nu se trimite google_product_category (Google o atribuie automat) și nici GTIN
-  (nu există în datele sursă); identificatorii sunt brand + mpn (codul producătorului).
+- Nu se trimite google_product_category (Google o atribuie automat). GTIN-urile vin doar
+  din scripts/gtin.json (coduri scanate de pe ambalaje), validate; la pachete se folosește
+  GTIN-ul produsului principal. Restul au brand + mpn (codul producătorului).
 - Seturile LR „+ cadou” sunt excluse până se decide livrarea cadoului.
 - Descrierea = textul scurt de sub titlu + tabul „Prezentare generală”/„Caracteristici”
   (Herbalife) sau „Descriere” (LR; la seturi, descrierea variantei de bază), fără
@@ -117,6 +118,39 @@ def product_ld(h):
     return prod, names
 
 
+def gtin_valid(code):
+    """Returnează GTIN-ul în forma de 8/12/13 cifre dacă e valid, altfel None (cifra de control + prefixe interzise de Google)."""
+    c = re.sub(r"\s", "", str(code))
+    if not re.fullmatch(r"\d{8}|\d{12}|\d{13}|\d{14}", c):
+        return None
+    digits = [int(x) for x in c]
+    total = sum(d * (3 if i % 2 == 0 else 1) for i, d in enumerate(reversed(digits[:-1])))
+    if (10 - total % 10) % 10 != digits[-1]:
+        return None
+    if len(c) == 14 and c.startswith("0"):
+        c = c[1:]
+    g13 = c if len(c) == 13 else ("0" + c if len(c) == 12 else c)
+    if len(g13) == 13 and (g13[0] == "2" or g13[:2] in ("02", "04", "05", "98", "99")):
+        return None
+    return c
+
+
+def load_gtins():
+    path = os.path.join(ROOT, "scripts", "gtin.json")
+    if not os.path.exists(path):
+        return {}, []
+    data = json.load(open(path, encoding="utf-8"))
+    ok, bad = {}, []
+    for magazin in ("herbalife", "lr"):
+        for sku, code in data.get(magazin, {}).items():
+            v = gtin_valid(code)
+            if v:
+                ok[(magazin, sku)] = v
+            else:
+                bad.append(f"{magazin} {sku}: {code}")
+    return ok, bad
+
+
 def join_parts(*parts):
     out = []
     for p in parts:
@@ -126,7 +160,7 @@ def join_parts(*parts):
     return " ".join(out)
 
 
-def build_row(item_id, prod, crumbs, desc, brand_prefix, activ, shipping_free, is_bundle=False, title=None):
+def build_row(item_id, prod, crumbs, desc, brand_prefix, activ, shipping_free, is_bundle=False, title=None, gtin=""):
     name = prod["name"].replace(" · ", ", ").strip()
     if title is None:
         title = name if brand_prefix.lower() in name.lower() else f"{brand_prefix} {name}"
@@ -144,6 +178,7 @@ def build_row(item_id, prod, crumbs, desc, brand_prefix, activ, shipping_free, i
         "availability_date": "" if activ else DATA_DESCHIDERE,
         "price": fmt_price(offer["price"]),
         "brand": prod.get("brand", {}).get("name", ""),
+        "gtin": gtin or "",
         "mpn": "" if is_bundle else (prod.get("mpn") or prod.get("sku") or ""),
         "condition": "new",
         "product_type": " > ".join(c for c in crumbs[1:-1] if c),
@@ -154,7 +189,7 @@ def build_row(item_id, prod, crumbs, desc, brand_prefix, activ, shipping_free, i
 
 
 COLUMNS = ["id", "title", "description", "link", "image_link", "availability", "availability_date",
-           "price", "brand", "mpn", "condition", "product_type", "is_bundle", "shipping(country:price)"]
+           "price", "brand", "gtin", "mpn", "condition", "product_type", "is_bundle", "shipping(country:price)"]
 
 
 def write_tsv(path, rows, with_bundle, with_shipping):
@@ -181,6 +216,7 @@ def main():
     hl_activ = cfg.get("herbalife", {}).get("activ", False)
     lr_activ = cfg.get("lr", {}).get("activ", False)
 
+    gtins, gtin_bad = load_gtins()
     hl, lr, excluse, fara_text = [], [], [], []
     for p in cat["produse"]:
         h = page(p["url"])
@@ -193,7 +229,7 @@ def main():
             if feat and len(desc) + len(feat) < 4800:
                 desc = desc + " Caracteristici: " + feat
             hl.append(build_row(f"HL-{p['sku']}", prod, crumbs, clean_desc(desc), "Herbalife",
-                                hl_activ, p.get("vp", 0) >= prag))
+                                hl_activ, p.get("vp", 0) >= prag, gtin=gtins.get(("herbalife", p["sku"]))))
         else:
             # Seturile „+ cadou” promit un produs gratuit nedecis încă (vezi magazin-lr-decizii): nu intră în flux.
             if "cadou" in (p["denumire"] + " " + p["varianta"]).lower():
@@ -208,7 +244,8 @@ def main():
             if not desc:  # pagina nu are niciun text descriptiv: doar datele afișate pe ea
                 desc = f"{p['denumire']}, LR Health & Beauty, cod {p['sku']}."
                 fara_text.append(f"LR-{p['sku']} ({p['denumire']})")
-            lr.append(build_row(f"LR-{p['sku']}", prod, crumbs, clean_desc(desc), "LR", lr_activ, False))
+            lr.append(build_row(f"LR-{p['sku']}", prod, crumbs, clean_desc(desc), "LR", lr_activ, False,
+                                gtin=gtins.get(("lr", p["sku"]))))
 
     for k in cat["pachete"]:
         h = page(k["url"])
@@ -220,7 +257,8 @@ def main():
         title = (nume.replace("Pachet", "Pachet Herbalife", 1) if nume.lower().startswith("pachet")
                  else f"Pachet Herbalife {nume}")
         hl.append(build_row(f"HL-{k['id']}", prod, crumbs, desc, "Herbalife", hl_activ, pk_vp >= prag,
-                            is_bundle=True, title=title))
+                            is_bundle=True, title=title,
+                            gtin=gtins.get(("herbalife", (k.get("implicit") or [""])[0]))))  # produsul principal
 
     write_tsv(os.path.join(OUT_DIR, "google-merchant-herbalife.tsv"), hl, with_bundle=True, with_shipping=True)
     write_tsv(os.path.join(OUT_DIR, "google-merchant-lr.tsv"), lr, with_bundle=False, with_shipping=False)
@@ -231,6 +269,10 @@ def main():
         print("   exclus:", e)
     for e in fara_text:
         print("   fără text descriptiv pe pagină:", e)
+    n_g = sum(1 for r in hl + lr if r["gtin"])
+    print(f"GTIN: {n_g} rânduri cu cod din scripts/gtin.json")
+    for e in gtin_bad:
+        print("   GTIN INVALID, ignorat:", e)
 
 
 if __name__ == "__main__":
