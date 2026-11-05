@@ -382,7 +382,7 @@ body = f'''<section class="hero-card mz-hero">
   <div class="mz-principles">
     <div class="mz-principle"><h3>Prețuri finale</h3><p>Prețul afișat este prețul plătit. Transportul este gratuit pentru comenzile Herbalife de minimum {PRAG_VP} VP; sub prag costă {TRANSPORT} lei.</p></div>
     <div class="mz-principle"><h3>Plată securizată</h3><p>Plata cu cardul se face prin Stripe. Datele cardului nu ajung pe serverele NutriSib.</p></div>
-    <div class="mz-principle"><h3>Oferta NutriSib</h3><p>Toate prețurile produselor și pachetelor într-o singură listă, cu link la fiecare produs. <a href="/magazin/oferta/">Vezi oferta</a> sau <a href="/magazin/oferta/oferta-nutrisib-herbalife.pdf">descarcă PDF-ul</a>.</p></div>
+    <div class="mz-principle"><h3>Oferta NutriSib</h3><p>Toate prețurile, câte o listă pentru fiecare magazin, cu link la fiecare produs. Herbalife: <a href="/magazin/oferta/">vezi oferta</a> sau <a href="/magazin/oferta/oferta-nutrisib-herbalife.pdf">descarcă PDF-ul</a>. LR: <a href="/magazin/lr/oferta/">vezi oferta</a> sau <a href="/magazin/lr/oferta/oferta-nutrisib-lr.pdf">descarcă PDF-ul</a>.</p></div>
     <div class="mz-principle"><h3>Alegere informată</h3><p>Fiecare produs are descrierea, ingredientele și tabelul nutrițional de la producător. Pentru recomandări personalizate, <a href="/evaluare.html">începe evaluarea</a>.</p></div>
   </div>
 </section>

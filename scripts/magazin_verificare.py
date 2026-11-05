@@ -17,15 +17,17 @@ lr_cfg = cat['config'].get('lr', {})
 def verifica_lr(s, p):
     global ok
     if lr_src:
-        pret, _, pv = LR.pret_din_sursa(lr_src[s]['price_box'])
-        if abs(p['pret'] - pret) > 1e-9: bad(f'LR {s}: preț {p["pret"]} ≠ sursa LR {pret}')
+        pret_lr, _, pv = LR.pret_din_sursa(lr_src[s]['price_box'])
+        # preț NutriSib = prețul LR rotunjit în sus la următorul întreg terminat în 9
+        if not (isinstance(p['pret'], int) and p['pret'] % 10 == 9 and pret_lr <= p['pret'] < pret_lr + 10):
+            bad(f'LR {s}: preț {p["pret"]} nu respectă regula (LR {pret_lr} → {LR.pret_nutrisib(pret_lr)})')
         if abs(p['pv'] - pv) > 1e-9: bad(f'LR {s}: PV {p["pv"]} ≠ sursa LR {pv}')
     if bool(p.get('inactiv')) == bool(lr_cfg.get('activ')): bad(f'LR {s}: starea inactiv nu corespunde cu config.lr.activ')
     f = 'magazin' + p['url'][len('/magazin'):] + 'index.html'
     if not os.path.exists(f): bad(f'LR {s}: lipsește pagina {p["url"]}'); return
     h = open(f, encoding='utf-8').read()
-    if f'<div class="mz-price">{LR.lei2(p["pret"])}</div>' not in h: bad(f'LR {s}: prețul {LR.lei2(p["pret"])} nu apare în pagină')
-    if f'"price": "{p["pret"]:.2f}"' not in h: bad(f'LR {s}: JSON-LD cu alt preț')
+    if f'<div class="mz-price">{lei(p["pret"])}</div>' not in h: bad(f'LR {s}: prețul {lei(p["pret"])} nu apare în pagină')
+    if f'"price": "{p["pret"]}"' not in h: bad(f'LR {s}: JSON-LD cu alt preț')
     if lr_cfg.get('activ'):
         if f'data-mz-buy="{s}"' not in h: bad(f'LR {s}: lipsește butonul de coș')
     else:
@@ -67,6 +69,20 @@ for s, p in P.items():
     if not re.search(re.escape(f'<td class="cod">{s}</td><td><a href="https://nutrisib.club{p["url"]}">') + r'.*?' + re.escape(f'<strong>{lei(p["pret"])}</strong>'), of): bad(f'oferta: {s} lipsește sau are alt preț')
 for pk in cat.get('pachete', []):
     if f'https://nutrisib.club{pk["url"]}' not in of: bad(f'oferta: pachetul {pk["id"]} lipsește')
+# 3b) LR: lista de prețuri are fiecare produs o singură dată, cu prețul corect; catalogul nu are carduri dublate
+LRP = {s: p for s, p in P.items() if p.get('magazin') == 'lr'}
+if LRP:
+    of_lr = open('magazin/lr/oferta/index.html', encoding='utf-8').read()
+    coduri = re.findall(r'<td class="cod">([^<]*)</td>', of_lr)
+    if sorted(coduri) != sorted(LRP): bad(f'oferta LR: codurile nu corespund catalogului ({len(coduri)} rânduri, {len(LRP)} produse)')
+    for s, p in LRP.items():
+        if not re.search(re.escape(f'<td class="cod">{s}</td><td><a href="https://nutrisib.club{p["url"]}">') + r'.*?' + re.escape(f'<strong>{lei(p["pret"])}</strong>'), of_lr): bad(f'oferta LR: {s} are alt preț sau link')
+    if not os.path.exists('magazin/lr/oferta/oferta-nutrisib-lr.pdf'): bad('oferta LR: lipsește PDF-ul (node scripts/oferta_pdf.mjs lr)')
+    for f in glob.glob('magazin/lr/*/index.html') + ['magazin/lr/index.html']:
+        h = open(f, encoding='utf-8').read()
+        titluri = re.findall(r'<h3 class="mz-card-title">([^<]*)</h3>', h)
+        if len(titluri) != len(set(titluri)): bad(f'{f}: produse afișate de mai multe ori')
+    if '/magazin/lr/oferta/' not in open('magazin/lr/index.html', encoding='utf-8').read(): bad('catalogul LR nu are linkul spre lista de prețuri')
 # 4) linkuri interne
 pages = glob.glob('magazin/**/*.html', recursive=True)
 for f in pages:
