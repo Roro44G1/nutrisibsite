@@ -65,8 +65,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet" />
 
     <!-- ═══ CSS ═══ -->
-    <link rel="stylesheet" href="celos.css" />
-
     <style>
     /* ─────────────────────────────────────────────
        NUTRISIB EXTENDED STYLES — lățime maximă
@@ -128,7 +126,7 @@
         font-family: 'Montserrat', sans-serif;
         flex-shrink: 0;
     }
-    .nav-brand img { height: 44px; width: auto; }
+    .nav-brand img { height: 52px; width: auto; max-width: 160px; display: block; }
     .nav-brand-text { display: flex; flex-direction: column; line-height: 1.1; }
     .nav-brand-name { font-size: 1rem; font-weight: 800; color: var(--color-navy); letter-spacing: -0.01em; }
     .nav-brand-tagline { font-size: 0.6rem; color: var(--color-brand-medium); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
@@ -186,7 +184,7 @@
         background: linear-gradient(160deg, #061220 0%, #0A2463 45%, #1B3A6B 100%);
         position: relative;
         overflow: hidden;
-        padding: 5rem 2rem 4rem;
+        padding: 5rem 2rem 7rem;
     }
     .hero-full::before {
         content: '';
@@ -201,9 +199,11 @@
         content: '';
         position: absolute;
         bottom: -1px; left: 0; right: 0;
-        height: 70px;
+        height: 52px;
         background: var(--color-pearl);
-        clip-path: ellipse(55% 100% at 50% 100%);
+        clip-path: ellipse(80% 100% at 50% 100%);
+        pointer-events: none;
+        z-index: 1;
     }
 
     .hero-grid {
@@ -1036,7 +1036,7 @@
         .mobile-menu-btn { display: block; }
         .navbar-inner { padding: 0.7rem 1.25rem; position: relative; }
 
-        .hero-full { padding: 3rem 1.25rem 3.5rem; }
+        .hero-full { padding: 3rem 1.25rem 5.5rem; }
         .hero-title-xl { font-size: 2rem; }
         .hero-btns { flex-direction: column; }
         .hero-btns a { width: 100%; justify-content: center; }
@@ -1053,12 +1053,16 @@
         .community-stat-row { grid-template-columns: 1fr 1fr 1fr; }
     }
     @media (max-width: 480px) {
+        .hero-full { padding-bottom: 5rem; }
         .hero-title-xl { font-size: 1.65rem; }
         .section-title-xl { font-size: 1.35rem; }
         .community-stat-row { grid-template-columns: 1fr; }
         .jurnal-phases { grid-template-columns: 1fr; }
     }
     </style>
+<script defer src="site-master-hero.js"></script>
+<link rel="stylesheet" href="nutrisib-theme.css">
+<script defer src="site-chrome.js"></script>
 </head>
 <body>
 <div class="page-wrapper">
@@ -1069,27 +1073,22 @@
 <header class="navbar-wrap" id="siteHeader" role="navigation" aria-label="Navigare principală">
     <nav class="navbar-inner">
         <a href="#acasa" class="nav-brand" aria-label="NutriSib — pagina principală">
-            <img src="https://nutrisib.club/logo/logo_navy_pearl.png"
-                 alt="Logo NutriSib" width="44" height="44"
-                 onerror="this.style.display='none'" />
-            <div class="nav-brand-text">
-                <span class="nav-brand-name">NutriSib</span>
-                <span class="nav-brand-tagline">Arhitectură biologică</span>
-            </div>
+            <img src="logo/logo_navy_pearl.png"
+                 alt="Sigla NutriSib" width="52" height="52" />
         </a>
 
         <button class="mobile-menu-btn" id="mobileBtn" aria-label="Meniu" aria-expanded="false" aria-controls="navMenu">☰</button>
 
-        <div class="nav-links" id="navMenu" role="menubar">
-            <a href="#acasa" role="menuitem">Acasă</a>
-            <a href="#povestea" role="menuitem">Povestea</a>
-            <a href="#metoda" role="menuitem">Metoda CELOS</a>
-            <a href="#evaluare" role="menuitem">Evaluare</a>
-            <a href="#servicii" role="menuitem">Servicii</a>
-			<a href="https://nutrisib.club/jurnal.html" role="menuitem" target="_blank" rel="noopener noreferrer">Jurnal</a>
-			<a href="https://nutrisib.club/blog" role="menuitem" target="_blank" rel="noopener noreferrer">Blog</a>
-			<a href="https://nutrisib.club/asistent.html" role="menuitem" target="_blank" rel="noopener noreferrer">Asistent AI!</a>
-			<a href="/magazin/" role="menuitem">Magazin</a>
+        <div class="nav-links" id="navMenu">
+            <a href="#acasa">Acasă</a>
+            <a href="servicii.html">Servicii</a>
+            <a href="#evaluare">Evaluare</a>
+            <a href="#metoda">Metoda C.E.L.O.S.</a>
+            <a href="blog/index.html">Blog și ghiduri</a>
+            <a href="#povestea">Despre</a>
+            <a href="asistent.html">Asistent AI</a>
+            <a href="/magazin/">Magazin</a>
+            <a href="programare.html" class="nav-cta-link">Programează-te ↗</a>
         </div>
     </nav>
 </header>
@@ -1099,7 +1098,7 @@
 <!-- ══════════════════════════════════════════════
      HERO
 ══════════════════════════════════════════════ -->
-<section class="hero-full" id="acasa" aria-labelledby="heroTitle">
+<section class="hero-full ns-uniform-hero" id="acasa" aria-labelledby="heroTitle">
     <div class="hero-grid">
         <div class="hero-content">
             <div class="hero-eyebrow">
@@ -1107,20 +1106,21 @@
             </div>
 
             <h1 class="hero-title-xl" id="heroTitle">
-                De la <em>zgomot informațional</em><br />la claritate biologică
+                Înțelege-ți corpul.<br /><em>Alege un plan pentru tine.</em>
             </h1>
 
             <p class="hero-sub">
-                Nu mai reparați simptome. Este timpul să vă reconstruiți arhitectura.
+                Evaluare corporală, nutriție personalizată și sprijin pentru obiceiuri care se potrivesc vieții tale.
             </p>
             <p class="hero-body">
-                Vă ghidez în procesul de a deveni „CEO-ul" propriei biologii, rulând
-                <strong style="color:rgba(255,255,255,0.85);">sistemul de operare C.E.L.O.S.</strong>,
-                fără diete generice, cu fricțiune decizională minimă și cu date reale despre
-                propriul sistem metabolic.
+                La NutriSib, lucrăm pornind de la obiectivele și rutina ta, folosind evaluări și recomandări adaptate. <strong style="color:rgba(255,255,255,0.85);">C.E.L.O.S.</strong> este metodologia care leagă evaluarea, alimentația și monitorizarea într-un parcurs coerent.
             </p>
 
-            <div class="hero-kpis" aria-label="Rezultate cheie">
+            <div class="ns-hero-actions" aria-label="Alege următorul pas">
+                <a class="ns-button ns-button-gold" href="servicii.html">Descoperă serviciile →</a>
+                <a class="ns-button ns-button-light" href="programare.html">Programează o evaluare ↗</a>
+            </div>
+            <div class="hero-kpis" aria-label="Date despre abordarea NutriSib">
                 <div>
                     <div class="hero-kpi-num">50 kg</div>
                     <div class="hero-kpi-label">Eliminați personal</div>
@@ -1177,6 +1177,19 @@
     </div>
 </section>
 
+
+<section class="ns-shortcuts" aria-labelledby="nsShortcutsTitle">
+  <div class="ns-wrap">
+    <p class="ns-kicker">Cum te putem ajuta</p>
+    <h2 id="nsShortcutsTitle">Găsește rapid ce ai nevoie</h2>
+    <p class="ns-lead">Nu trebuie să cunoști deja metoda C.E.L.O.S. Alege ce te interesează și vezi ce presupune fiecare serviciu.</p>
+    <div class="ns-shortcut-grid">
+      <a class="ns-shortcut" href="servicii.html"><span class="ns-symbol" aria-hidden="true">✦</span><strong>Servicii și programe</strong><span>Evaluări, recomandări nutriționale și opțiuni de monitorizare explicate simplu.</span><b>Explorează serviciile →</b></a>
+      <a class="ns-shortcut" href="evaluare.html"><span class="ns-symbol" aria-hidden="true">◉</span><strong>Prima evaluare</strong><span>Vezi cum se desfășoară o evaluare C.E.L.O.S. și care sunt pașii de început.</span><b>Despre evaluare →</b></a>
+      <a class="ns-shortcut" href="blog/index.html"><span class="ns-symbol" aria-hidden="true">▤</span><strong>Blog și ghiduri</strong><span>Articole despre alimentație, compoziție corporală și stil de viață.</span><b>Citește articolele →</b></a>
+    </div>
+  </div>
+</section>
 
 <!-- ══════════════════════════════════════════════
      PAIN POINTS
@@ -1482,8 +1495,8 @@
         </div>
 
         <!-- Audit complet + preț -->
-        <div class="sr" style="display:grid; grid-template-columns: 1fr 380px; gap:2rem; align-items:stretch;">
-            <div style="background:white; border-radius:var(--radius-card); box-shadow:var(--shadow-card); padding:2.5rem;">
+        <div class="sr ns-audit-layout">
+            <div class="ns-audit-main">
                 <h3 style="font-family:'Montserrat',sans-serif; font-size:1.3rem; font-weight:800; color:var(--color-navy); margin:0 0 1.25rem 0;">
                     Protocolul de Audit C.E.L.O.S. complet (~90 minute)
                 </h3>
@@ -1491,28 +1504,28 @@
                     Considerați această evaluare nu o vizită la nutriționist, ci o sesiune riguroasă de
                     <em>Data Acquisition</em> — punctul zero esențial pentru recalibrarea arhitecturii biologice.
                 </p>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem;">
-                    <div style="background:var(--color-brand-light); border-radius:8px; padding:0.85rem; display:flex; align-items:flex-start; gap:0.6rem;">
+                <div class="ns-audit-benefits">
+                    <div class="ns-audit-benefit">
                         <span style="font-size:1.2rem; flex-shrink:0;">🔍</span>
                         <span style="font-size:0.85rem; color:var(--color-text-medium); line-height:1.5;">Sesiune strategică de anamneză și calibrare a obiectivelor</span>
                     </div>
-                    <div style="background:var(--color-brand-light); border-radius:8px; padding:0.85rem; display:flex; align-items:flex-start; gap:0.6rem;">
+                    <div class="ns-audit-benefit">
                         <span style="font-size:1.2rem; flex-shrink:0;">⚡</span>
                         <span style="font-size:0.85rem; color:var(--color-text-medium); line-height:1.5;">Scanare structurală completă (Bioimpedanță Tanita)</span>
                     </div>
-                    <div style="background:var(--color-brand-light); border-radius:8px; padding:0.85rem; display:flex; align-items:flex-start; gap:0.6rem;">
+                    <div class="ns-audit-benefit">
                         <span style="font-size:1.2rem; flex-shrink:0;">🌐</span>
                         <span style="font-size:0.85rem; color:var(--color-text-medium); line-height:1.5;">Scanare energetică și funcțională (Biorezonanță)</span>
                     </div>
-                    <div style="background:var(--color-brand-light); border-radius:8px; padding:0.85rem; display:flex; align-items:flex-start; gap:0.6rem;">
+                    <div class="ns-audit-benefit">
                         <span style="font-size:1.2rem; flex-shrink:0;">📊</span>
                         <span style="font-size:0.85rem; color:var(--color-text-medium); line-height:1.5;">Dashboard biologic consolidat cu KPI-uri interpretate</span>
                     </div>
-                    <div style="background:var(--color-brand-light); border-radius:8px; padding:0.85rem; display:flex; align-items:flex-start; gap:0.6rem;">
+                    <div class="ns-audit-benefit">
                         <span style="font-size:1.2rem; flex-shrink:0;">🔗</span>
                         <span style="font-size:0.85rem; color:var(--color-text-medium); line-height:1.5;">Corelarea mecanismelor cauză-efect și arhitectura soluției</span>
                     </div>
-                    <div style="background:var(--color-brand-light); border-radius:8px; padding:0.85rem; display:flex; align-items:flex-start; gap:0.6rem;">
+                    <div class="ns-audit-benefit">
                         <span style="font-size:1.2rem; flex-shrink:0;">🧬</span>
                         <span style="font-size:0.85rem; color:var(--color-text-medium); line-height:1.5;">Arhitectură precisă de suplimentare (numai dacă datele o cer)</span>
                     </div>
@@ -1530,7 +1543,7 @@
                     <li>Sistemul de Operare C.E.L.O.S. (4–6 luni)</li>
                     <li>Primele recomandări practice imediate</li>
                 </ul>
-                <a href="https://tinyurl.com/ProgramareServicii" target="_blank" class="btn-gold-xl" style="width:100%; justify-content:center;">
+                <a href="programare.html" class="btn-gold-xl" style="width:100%; justify-content:center;">
                     Programează acum →
                 </a>
                 <p style="font-size:0.78rem; color:rgba(255,255,255,0.4); margin:0.75rem 0 0; text-align:center;">
@@ -1658,7 +1671,7 @@
                         <li>Ferestre temporale alimentare</li>
                         <li>Ajustare iterativă la KPI</li>
                     </ul>
-                    <a href="https://tinyurl.com/ProgramareServicii" target="_blank" class="btn-navy-std">Programează →</a>
+                    <a href="programare.html" class="btn-navy-std">Programează →</a>
                 </div>
             </article>
 
@@ -1682,7 +1695,7 @@
                         <li>Suplimente alimentare notificate ANSVSA</li>
                         <li>Monitorizare eficiență și ajustare</li>
                     </ul>
-                    <a href="https://tinyurl.com/ProgramareServicii" target="_blank" class="btn-navy-std">Consultanță →</a>
+                    <a href="programare.html" class="btn-navy-std">Consultanță →</a>
                 </div>
             </article>
 
@@ -1706,7 +1719,7 @@
                         <li>Suport decizional nutrițional</li>
                         <li>Acces la comunitatea Exploratorilor</li>
                     </ul>
-                    <a href="https://tinyurl.com/ProgramareServicii" target="_blank" class="btn-navy-std">Programează →</a>
+                    <a href="programare.html" class="btn-navy-std">Programează →</a>
                 </div>
             </article>
 
@@ -1730,7 +1743,7 @@
                         <li>Sesiune Zoom de interpretare</li>
                         <li>Dashboard biologic livrat digital</li>
                     </ul>
-                    <a href="https://tinyurl.com/ProgramareServicii" target="_blank" class="btn-navy-std">Programează →</a>
+                    <a href="programare.html" class="btn-navy-std">Programează →</a>
                 </div>
             </article>
 
@@ -1790,7 +1803,7 @@
         </div>
 
         <div style="display:flex; gap:1.25rem; justify-content:center; flex-wrap:wrap; margin-bottom:3rem;">
-            <a href="https://tinyurl.com/ProgramareServicii" target="_blank" class="btn-gold-xl">
+            <a href="programare.html" class="btn-gold-xl">
                 📅 Programează un audit strategic
             </a>
             <a href="https://t.me/+JoASPEPw5d45NTZk" target="_blank" class="btn-gold-xl">
@@ -1966,7 +1979,7 @@ window.addEventListener('click', e => {
 });
 
 /* ── Footer inject ── */
-fetch('https://nutrisib.club/footer.html')
+fetch('footer.html')
     .then(r => r.text())
     .then(d => { const c = document.getElementById('footer-placeholder'); if (c) c.innerHTML = d; })
     .catch(e => console.error('Footer:', e));
@@ -1988,8 +2001,8 @@ fetch('https://nutrisib.club/footer.html')
   }
 </script>
 
-<script src="https://nutrisib.club/script_protect.js" defer></script>
-<script src="https://nutrisib.club/cookies.js"></script>
+<script src="script_protect.js" defer></script>
+<script src="cookies.js"></script>
 
 
 </body>
