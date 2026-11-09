@@ -195,7 +195,7 @@ body { font-family: -apple-system, 'Inter', sans-serif; background: #0f172a; min
     </div>
     <div id="zone-proxy" style="display:none">
       <div class="proxy-label">URL Proxy Netlify</div>
-      <input type="text" class="proxy-input" id="proxyUrl" value="https://nutrisib.netlify.app/.netlify/functions/claude-proxy" placeholder="https://...">
+      <input type="text" class="proxy-input" id="proxyUrl" value="https://nutrisib.club/.netlify/functions/claude-proxy" placeholder="https://...">
       <div class="proxy-note">Proxy-ul tău Netlify trebuie să accepte POST cu body <code style="color:#94a3b8">{model,max_tokens,system,messages}</code> și să aibă ANTHROPIC_API_KEY în env vars.</div>
     </div>
   </div>
@@ -618,6 +618,11 @@ function updateKeyStatus(ok, msg) {
   el.className = 'key-status ' + (ok ? 'ok' : 'err');
   el.textContent = msg || (ok ? '✓ Cheie validă · stocată în sesiune' : '✗ Cheie invalidă');
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const f = document.getElementById('proxyUrl');
+  if (f && /nutrisib\.club\/\.netlify\/functions\/claude-proxy$/.test(f.value)) f.value = location.origin + '/.netlify/functions/claude-proxy';
+});
 
 function isReady() {
   if (apiSource === 'direct') return savedApiKey.startsWith('sk-ant-');
