@@ -18,6 +18,7 @@ const srv = createServer(async (req, res) => {
   res.writeHead(200, { "Content-Type": TYPES[extname(p)] || "application/octet-stream" }); res.end(buf);
 }).listen(8799);
 const b = await chromium.launch(); const pg = await b.newPage();
+await pg.route(/googletagmanager\.com|google-analytics\.com|connect\.facebook\.net/, (r) => r.abort());   // fără etichete de urmărire la generarea PDF-ului
 await pg.goto(`http://localhost:8799${OF.pagina}`, { waitUntil: "load" });
 await pg.emulateMedia({ media: "print" });
 await pg.pdf({ path: OF.pdf, format: "A4", printBackground: true,

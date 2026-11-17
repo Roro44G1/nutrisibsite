@@ -14,6 +14,10 @@
    - Pe PAGINA PRINCIPALĂ: arată banner cookie + încarcă tracking (dacă e consimțit)
    - Pe CELELALTE PAGINI: doar încarcă tracking (dacă e consimțit), fără banner
    - Butonul 🍪 apare pe TOATE paginile pentru re-editare consimțământ
+   - Eticheta Google (GTM-K8J357CV) e în <head>-ul fiecărei pagini, cu consimțământ
+     implicit „refuzat” (scripts/eticheta_google.py). La fiecare alegere din banner,
+     scriptul trimite gtag('consent','update', …): analytics → analytics_storage,
+     marketing → ad_storage, ad_user_data, ad_personalization.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 (function() {
@@ -93,6 +97,17 @@ function loadFBPixel() {
     fbq('init', CONFIG.FB_PIXEL);
     fbq('track', 'PageView');
     console.log('[NutriSib Cookies] ✅ FB Pixel activ');
+}
+
+function updateGoogleConsent(consent) {
+    // Google Consent Mode v2: comunică alegerea către eticheta Google (GTM) și GA4
+    window.dataLayer = window.dataLayer || [];
+    var g = window.gtag || function() { window.dataLayer.push(arguments); };
+    var mk = consent.marketing ? 'granted' : 'denied';
+    g('consent', 'update', {
+        analytics_storage: consent.analytics ? 'granted' : 'denied',
+        ad_storage: mk, ad_user_data: mk, ad_personalization: mk
+    });
 }
 
 function loadAllTracking(consent) {
@@ -427,6 +442,7 @@ function hideBanner() {
 
 function saveConsent(consent) {
     setCookie(CONFIG.COOKIE_NAME, consent, CONFIG.COOKIE_DAYS);
+    updateGoogleConsent(consent);
     loadAllTracking(consent);
     hideBanner();
 }

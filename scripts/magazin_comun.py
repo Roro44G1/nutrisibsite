@@ -2,6 +2,7 @@
 """Șabloane și constante comune magazinului NutriSib (Herbalife, LR, …).
 Importat de scripts/magazin_build.py (Herbalife) și scripts/magazin_lr.py (LR)."""
 import os, re, json, html, datetime, markdown
+from eticheta_google import GOOGLE_TAG   # eticheta Google (GTM) + consimțământ implicit, imediat după <head>
 SITE = 'https://nutrisib.club'
 TODAY = datetime.date.today().isoformat()
 PRAG_VP, TRANSPORT = 125, 25
@@ -56,6 +57,7 @@ def head(title, desc, canon, og_img=None, extra='', robots=None):
     return f'''<!DOCTYPE html>
 <html lang="ro">
 <head>
+{GOOGLE_TAG}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{E(title)}</title>
